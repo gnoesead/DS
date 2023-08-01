@@ -551,6 +551,7 @@ HRESULT CModel::Ready_HierarchyBones()
 		if (nullptr == pBone)
 			return E_FAIL;
 
+		pBone->Set_PivotMatrix(XMLoadFloat4x4(& m_PivotMatrix));
 		m_Bones.emplace_back(pBone);
 	}
 

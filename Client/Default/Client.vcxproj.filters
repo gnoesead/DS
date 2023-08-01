@@ -172,6 +172,9 @@
     <Filter Include="02. GameObjects\Effect\EffectPlayer">
       <UniqueIdentifier>{1fd423d2-4f55-41d4-a8b8-a9e94cbde288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Sword">
+      <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -296,13 +299,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_Tanjiro.h">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect.h">
       <Filter>02. GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player.h">
       <Filter>02. GameObjects\Character\Player</Filter>
- </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect_Mesh.h">
       <Filter>02. GameObjects\Effect\Effect\Mesh</Filter>
     </ClInclude>
@@ -317,9 +320,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\ParticleSystem.h">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sword.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SwordHome.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,7 +442,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Tanjiro.cpp">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Effect.cpp">
       <Filter>02. GameObjects\Effect</Filter>
     </ClCompile>
@@ -448,15 +457,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectPlayer.cpp">
       <Filter>02. GameObjects\Effect\EffectPlayer</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02. GameObjects\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ParticleSystem.cpp">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02. GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sword.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwordHome.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

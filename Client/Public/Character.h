@@ -69,6 +69,7 @@ protected:
 	CCollider* m_pColliderCom[CCollider::TYPE_END] = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 
+
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
