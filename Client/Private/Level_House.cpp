@@ -275,7 +275,7 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
         default:

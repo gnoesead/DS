@@ -31,7 +31,8 @@ private:
 	 CModel_Instance* m_pModelInstanceCom = { nullptr };
 
 private:
-	_float				m_fTimeDelta = { 0.f };
+	_float				m_fDir = { 1.f };
+	_float				m_fRatio = { 0.f };
 
 public:
 	static CInstanceMapObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

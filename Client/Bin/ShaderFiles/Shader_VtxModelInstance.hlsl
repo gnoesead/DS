@@ -4,7 +4,7 @@ matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
 float4			g_vCamPosition;
 
-float			g_fTimeDelta;
+float			g_fRatio;
 
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
@@ -65,8 +65,8 @@ VS_OUT VS_GRASS(VS_IN In)
 	matrix		matWVP = mul(matWV, g_ProjMatrix);
 	
 
-	vLocalPosition.x += vLocalPosition.y * g_fTimeDelta * 0.1f;
-	vLocalPosition.z += vLocalPosition.y * g_fTimeDelta * 0.1f;
+	vLocalPosition.x += vLocalPosition.y * g_fRatio * 0.05f;
+	vLocalPosition.z += vLocalPosition.y * g_fRatio * 0.05f;
 
 	Out.vPosition = mul(vLocalPosition, matWVP);
 	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
