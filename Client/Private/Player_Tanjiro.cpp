@@ -201,7 +201,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
 			}
 
-			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
 		{

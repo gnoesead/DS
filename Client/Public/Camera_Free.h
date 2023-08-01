@@ -10,6 +10,22 @@ BEGIN(Client)
 
 class CCamera_Free final : public CCamera
 {
+
+	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, AKAZA_FINISH, END_FINISH };
+
+	typedef struct Cut_In_Camera_Desc
+	{
+		_bool bTarget_Is_Player = {};
+		_bool bLookTarget_Is_Player = {};
+		_float Angle_Hori = {};
+		_float Angle_Verti = {};
+		_float fDistance = {};
+		_float fLifeTime = {};
+		_vector vOffSet = {};
+
+	}CutInCamDesc;
+
+
 private:
 	CCamera_Free(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera_Free(const CCamera_Free& rhs);
@@ -31,6 +47,8 @@ private:
 	void AdventureCamera(_double dTimeDelta);
 	void BattleCamera(_double dTimeDelta);
 	void CutInCamera(_double dTimeDelta);
+	void CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc);
+	void Ready_CutInFinish();
 
 private:
 	void Turn_Camera(_double TimeDelta);
@@ -61,6 +79,17 @@ private:
 	
 	_float          m_fLookDamping = { 7.f };
 
+// Cut_In_Cam	
+private:
+	vector<CutInCamDesc> m_Cut_In_Finish[END_FINISH];
+
+	_uint m_Cut_In_Finish_Type = { 0 };
+
+	_uint m_Cut_In_Finish_Cam_Num = { 0 };
+
+	_float m_Cut_In_Finish_TimeAcc = { 0.f };
+
+	_bool  m_Cut_In_IsDone = { false };
 
 public:
 	static CCamera_Free* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
