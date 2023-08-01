@@ -88,7 +88,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    /*if (GetKeyState(VK_RETURN) & 0x8000)
     {
         HRESULT hr = 0;
 
@@ -102,7 +102,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
         if (FAILED(hr))
             return;
-    }
+    }*/
 }
 
 HRESULT CLevel_FinalBoss::Render()
@@ -127,11 +127,11 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
     LightDesc.vLightAmbient     = _float4(0.5f, 0.5f, 0.5f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
-  /*  if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Direction_Light");
         return E_FAIL;
-    }*/
+    }
 
     Safe_Release(pGameInstance);
 

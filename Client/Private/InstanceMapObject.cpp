@@ -48,16 +48,19 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 
 	if (m_MapObject_Info.iInstanceType == INSTANCE_GRASS)
 	{
-		static _float	fDir = 1.f;
+		m_fRatio += (_float)TimeDelta * m_fDir;
 
-		m_fTimeDelta += 0.001f * fDir;
+		if (m_fRatio > 1.f)
+		{
+			m_fRatio = 1.f;
+			m_fDir = -1.f;
+		}
 
-		if (m_fTimeDelta <= -1.f)
-			fDir = 1.f;
-		if (m_fTimeDelta > 1.f)
-			fDir = -1.f;
-		if (m_fTimeDelta >= 2.f)
-			m_fTimeDelta = 0.f;
+		if (m_fRatio < -1.f)
+		{
+			m_fRatio = -1.f;
+			m_fDir = 1.f;
+		}
 	}
 
 	//m_pModelInstanceCom->Tick(TimeDelta);
@@ -70,7 +73,7 @@ void CInstanceMapObject::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 10.f))
+	if (pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 60.f))
 	{
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 			return;
@@ -128,6 +131,9 @@ HRESULT CInstanceMapObject::Add_Components()
 	tModelInstanceDesc.fRange = m_MapObject_Info.fRange;
 	tModelInstanceDesc.fMinSize = m_MapObject_Info.fMinSize;
 	tModelInstanceDesc.fMaxSize = m_MapObject_Info.fMaxSize;
+	tModelInstanceDesc.bRandomRatationY = m_MapObject_Info.bRandomRatationY;
+	tModelInstanceDesc.iArrangementType = m_MapObject_Info.iArrangementType;
+
 	
 	LEVELID eLevelID = LEVEL_END;
 
@@ -179,7 +185,7 @@ HRESULT CInstanceMapObject::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTimeDelta", &m_fTimeDelta , sizeof _float)))
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fRatio", &m_fRatio, sizeof _float)))
 		return E_FAIL;
 	
 
