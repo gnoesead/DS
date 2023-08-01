@@ -218,6 +218,7 @@
     <ClInclude Include="..\Public\SoundMgr.h" />
     <ClInclude Include="..\Public\StaticMapObject.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
+    <ClInclude Include="..\Public\World_UI_Hp.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -265,6 +266,7 @@
     <ClCompile Include="..\Private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
+    <ClCompile Include="..\Private\World_UI_Hp.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

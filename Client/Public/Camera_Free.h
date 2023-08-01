@@ -22,6 +22,7 @@ class CCamera_Free final : public CCamera
 		_float fDistance = {};
 		_float fLifeTime = {};
 		_vector vOffSet = {};
+		_bool bIs_Lerp = {};
 
 	}CutInCamDesc;
 

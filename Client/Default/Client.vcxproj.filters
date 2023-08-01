@@ -172,6 +172,63 @@
     <Filter Include="02. GameObjects\Effect\EffectPlayer">
       <UniqueIdentifier>{1fd423d2-4f55-41d4-a8b8-a9e94cbde288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI">
+      <UniqueIdentifier>{83794500-3eef-43d7-af6b-3d8241299e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Hp_Bar">
+      <UniqueIdentifier>{7c4d3dfc-0126-4bf0-a8f2-fe2fcda539fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Head_Sign">
+      <UniqueIdentifier>{e7195b5a-20e4-4391-81b3-18ee832c962b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Object_Sign">
+      <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Talk">
+      <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Quest">
+      <UniqueIdentifier>{8aa4b174-b287-49a1-9dab-ea39e81388f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map">
+      <UniqueIdentifier>{0e86ec12-a0e4-47d9-8d11-762bd00246c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map\Mini">
+      <UniqueIdentifier>{196a8218-dd1d-48ec-af3d-0905c9415e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\07.Cut_In_Effect">
+      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Mini_Game">
+      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI">
+      <UniqueIdentifier>{da294850-ab41-4dc0-8595-3688dcf29f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title">
+      <UniqueIdentifier>{1c7cb107-3f60-4626-a7a3-4ff99b14544b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading">
+      <UniqueIdentifier>{a0e5bb6b-cce6-4425-a366-032098bdd2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board">
+      <UniqueIdentifier>{d033310c-a2c6-45c6-a67a-84fa61a43b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option">
+      <UniqueIdentifier>{53ad77b6-fc16-4e82-8d85-dd029aed7add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Result">
+      <UniqueIdentifier>{842ea203-1e1b-49fa-97d3-e83de817bc64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause">
+      <UniqueIdentifier>{493ad216-5aa5-4c36-8e3f-c55767cdf314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Skill_Name">
+      <UniqueIdentifier>{7d783cb9-8601-4daf-910d-041f9e6648d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Skill_Name">
+      <UniqueIdentifier>{082f6c56-f777-4d12-b673-0c1f0a3be6af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -296,13 +353,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_Tanjiro.h">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect.h">
       <Filter>02. GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player.h">
       <Filter>02. GameObjects\Character\Player</Filter>
- </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect_Mesh.h">
       <Filter>02. GameObjects\Effect\Effect\Mesh</Filter>
     </ClInclude>
@@ -317,9 +374,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\ParticleSystem.h">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\World_UI_Hp.h">
+      <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -433,7 +493,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Tanjiro.cpp">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Effect.cpp">
       <Filter>02. GameObjects\Effect</Filter>
     </ClCompile>
@@ -448,15 +508,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectPlayer.cpp">
       <Filter>02. GameObjects\Effect\EffectPlayer</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02. GameObjects\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ParticleSystem.cpp">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02. GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\World_UI_Hp.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

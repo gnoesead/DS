@@ -36,6 +36,11 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 
 	Ready_CutInFinish();
 
+
+
+
+
+
 	return S_OK;
 }
 
@@ -393,8 +398,8 @@ void CCamera_Free::Ready_CutInFinish()
 	CutInCamDesc TanjiroCam1 = { true,true, 20.f, -20.f, 7.f, 0.8f };
 	CutInCamDesc TanjiroCam2 = { true,true, 20.f, -20.f, 2.f, 0.5f };
 	CutInCamDesc TanjiroCam3 = { true,true, 150.f, 20.f, 3.f, 0.8f };
-	CutInCamDesc TanjiroCam4 = { true,true, 20.f, 5.f, 8.f, 0.9f};
-	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.5f, {0.f,4.f,0.f} };
+	CutInCamDesc TanjiroCam4 = { true,true, 20.f, 5.f, 8.f, 1.2f};
+	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.3f, {0.f,4.f,0.f} };
 	CutInCamDesc TanjiroCam6 = { true,false, 0.f, -10.f, 1.f, 1.5f };
 
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam1);
