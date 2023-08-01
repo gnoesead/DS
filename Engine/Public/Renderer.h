@@ -50,6 +50,7 @@ private:
 
 private:
 	class CShader*			m_pShader = { nullptr };
+	class CShader*			m_pEffectShader = { nullptr };
 	class CVIBuffer_Rect*	m_pVIBuffer = { nullptr };
 	_float4x4				m_WorldMatrix;
 	_float4x4				m_ViewMatrix;

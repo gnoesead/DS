@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+//#include "Monster.h"
 #include "MapObject.h"
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
@@ -47,11 +48,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+  /*  if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
         return E_FAIL;
-    }
+    }*/
 
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
@@ -236,10 +237,10 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+  /*  CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
+    CMonster::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
@@ -263,27 +264,14 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(140.f, 0.f, 120.f, 1.f);
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-        TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+        MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
         return E_FAIL;
     }
+		
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-		return E_FAIL;
-	}
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-		return E_FAIL;
-	}
-
-    Safe_Release(pGameInstance);
+    Safe_Release(pGameInstance);*/
 
     return S_OK;
 }

@@ -46,7 +46,7 @@ HRESULT CMonster_Test::Initialize(void* pArg)
 
 void CMonster_Test::Tick(_double dTimeDelta)
 {
-	__super::Tick(dTimeDelta);
+	//__super::Tick(dTimeDelta);
 	
 	if (true == m_isDead)
 		return;
