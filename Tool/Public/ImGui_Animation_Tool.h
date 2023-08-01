@@ -70,7 +70,7 @@ private:
 	_double		m_dEnd_Time = { 0.0 };
 
 	// loop checkbox
-	_bool	m_isCombo = { false };
+	_bool	m_isCombo = { false };	
 	_int	m_iConnect_Combo_Index = { 0 };
 
 	// Connect index
@@ -84,8 +84,8 @@ private:
 	//Save
 	_bool	m_isSave = { false };
 
-	_bool	m_isGUINoMove[2] = { true, true };
-	_bool	m_isGUINoResize[2] = { true, true };
+	_bool	m_isGUINoMove[2] = { false, false };
+	_bool	m_isGUINoResize[2] = { false, false };
 
 public:
 	virtual void Free() override;

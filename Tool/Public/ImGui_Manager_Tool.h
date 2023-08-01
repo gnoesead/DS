@@ -67,8 +67,8 @@ private:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 
-	_bool	m_isGUINoMove = { true };
-	_bool	m_isGUINoResize = { true };
+	_bool	m_isGUINoMove = { false };
+	_bool	m_isGUINoResize = { false };
 
 public:
 	HRESULT Initialize_ImGui(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
