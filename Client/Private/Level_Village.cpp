@@ -175,8 +175,8 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
-
+    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 12.f, 236.f, 1.f);
+ 
     CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 
@@ -194,7 +194,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
-        TEXT("Prototype_GameObject_Player"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
@@ -207,7 +207,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_Village::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    //Load_MapObject_Info(TEXT("../../Data/Object/Acaza_Battle/Acaza_Battle.dat"), pLayerTag);
+    Load_MapObject_Info(TEXT("../../Data/Object/Village/Village.dat"), pLayerTag);
 
     return S_OK;
 }
