@@ -326,7 +326,7 @@ void CCamera_Free::CutInCamera(_double dTimeDelta)
 
 	CutInFinish(dTimeDelta, Cam);
 
-	m_Cut_In_Finish_TimeAcc += dTimeDelta;
+	m_Cut_In_Finish_TimeAcc += (_float)dTimeDelta;
 
 	if (m_Cut_In_Finish_TimeAcc > Cam.fLifeTime) {
 
@@ -403,7 +403,6 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam4);
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam5);
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam6);
-	
 }
 
 void CCamera_Free::Turn_Camera(_double TimeDelta)

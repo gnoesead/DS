@@ -126,13 +126,13 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;
 	}
 
-	if (m_isRenderDebugInfo) {
+	if (true == m_isRenderFPS)
+	{
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
+			return E_FAIL;
+	}
 
-		if (true == m_isRenderFPS)
-		{
-			if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
-				return E_FAIL;
-		}
+	if (m_isRenderDebugInfo) {
 
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num0 To OnOff StaticCam"), _float2(0.f, 620.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
@@ -231,7 +231,7 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	if (m_pGameInstance->Get_DIKeyDown(DIK_F8))
 		m_pRenderer->OnOff_RenderTarget();
 	
-	if (m_pGameInstance->Get_DIKeyDown(DIK_TAB))
+	if (m_pGameInstance->Get_DIKeyDown(DIK_LCONTROL))
 		m_isRenderDebugInfo = !m_isRenderDebugInfo;
 
 	if (m_pGameInstance->Get_DIKeyDown(DIK_P))

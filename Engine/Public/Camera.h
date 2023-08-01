@@ -10,11 +10,11 @@ class ENGINE_DLL CCamera abstract : public CGameObject
 public:
 	typedef struct tagCameraDesc{
 		
-		_float4		vEye;
-		_float4		vAt;
-		_float4		vAxisY;
+		_float4		vEye = {};
+		_float4		vAt = {};
+		_float4		vAxisY = {};
 		
-		_float		fFovY, fAspect, fNearZ, fFarZ;
+		_float		fFovY, fAspect, fNearZ, fFarZ = {};
 
 		_double		dSensitivity = { 0.5 };		//°¨µµ
 
