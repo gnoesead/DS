@@ -674,7 +674,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 2;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI_test"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -686,7 +686,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 3;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI_test2"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -905,6 +905,8 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 
     ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
     for (_uint i = 0; i < iSize; ++i)
     {
         CMapObject::MAPOBJECT_INFO tMapObject_Info;
@@ -935,22 +937,22 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;

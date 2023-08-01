@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Player.h"
 
+#include "AtkCollider.h"
+
 IMPLEMENT_SINGLETON(CColliderManager)
 
 CColliderManager::CColliderManager()
@@ -38,6 +40,75 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 	return S_OK;
 }
 
+HRESULT CColliderManager::Render()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_tchar szText[MAX_PATH] = { TEXT("") };
+
+	if (m_isColl[0])
+		wsprintf(szText, TEXT("PtoM : true"));
+	else
+		wsprintf(szText, TEXT("PtoM : false"));
+
+	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 0.f), _float2(0.5f, 0.5f))))
+		return E_FAIL;
+
+	if (m_isColl[1])
+		wsprintf(szText, TEXT("PAtoM : true, %d"), m_iPAtoMCount);
+	else
+		wsprintf(szText, TEXT("PAtoM : false"));
+
+	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 20.f), _float2(0.5f, 0.5f))))
+		return E_FAIL;
+
+	if (m_isColl[2])
+		wsprintf(szText, TEXT("MtoM : true"));
+	else
+		wsprintf(szText, TEXT("MtoM : false"));
+
+	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 40.f), _float2(0.5f, 0.5f))))
+		return E_FAIL;
+
+	list<CGameObject*>* pPlayerAtkColls = pGameInstance->Get_GameObjects(LEVEL_STATIC, TEXT("Layer_PlayerAtk"));
+
+	_uint iNum = { 0 };
+
+	if (nullptr != pPlayerAtkColls && 0 != pPlayerAtkColls->size())
+	{
+		for (auto& pAtkColl : (*pPlayerAtkColls))
+		{
+			_uint iCount = dynamic_cast<CAtkCollider*>(pAtkColl)->Get_CollCount();
+
+			_float fY = 20.f * iNum;
+
+			wsprintf(szText, TEXT("iCollCount : %d"), iCount);
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(900.f, fY), _float2(0.5f, 0.5f))))
+				return E_FAIL;
+
+			iNum++;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+	Reset_IsColl();
+
+	return S_OK;
+}
+
+void CColliderManager::Reset_IsColl()
+{
+	for (_uint i = 0; i < 3; i++)
+	{
+		m_isColl[i] = false;
+	}
+
+	m_iPAtoMCount = 0;
+}
+
 HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -63,6 +134,8 @@ HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTime
 
 				if (true == pMonsterCollider->Get_Coll())
 				{
+					Set_IsColl(0);
+
 					CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
 					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
 
@@ -111,6 +184,9 @@ HRESULT CColliderManager::Check_PlayerAtkToMonster(_uint iLevelIndex, _double dT
 
 						if (true == pMonsterCollider->Get_Coll())
 						{
+							Set_IsColl(1);
+
+							m_iPAtoMCount++;
 							//몬스터를 넉백
 							CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
 							CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
@@ -162,6 +238,8 @@ HRESULT CColliderManager::Check_MonsterToMonster(_uint iLevelIndex, _double dTim
 
 						if (true == pDestCollider->Get_Coll())
 						{
+							Set_IsColl(2);
+
 							CTransform* pSourTransform = dynamic_cast<CTransform*>(pSourMonster->Find_Component(TEXT("Com_Transform")));
 							CTransform* pDestTransform = dynamic_cast<CTransform*>(pDestMonster->Find_Component(TEXT("Com_Transform")));
 							

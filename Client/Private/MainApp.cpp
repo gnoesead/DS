@@ -115,8 +115,8 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
-
-#ifdef _DEBUG
+	
+	#ifdef _DEBUG
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
@@ -149,6 +149,9 @@ HRESULT CMainApp::Render()
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F8 To OnOff RenderTarget"), _float2(0.f, 700.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 
+
+		if (FAILED(CColliderManager::GetInstance()->Render()))
+			return E_FAIL;
 	}
 	
 #endif // _DEBUG

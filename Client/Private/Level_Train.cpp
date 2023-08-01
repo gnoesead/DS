@@ -229,6 +229,8 @@ HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
 
     ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
     for (_uint i = 0; i < iSize; ++i)
     {
         CMapObject::MAPOBJECT_INFO tMapObject_Info;
@@ -259,22 +261,22 @@ HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
         default:
