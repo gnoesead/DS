@@ -161,7 +161,7 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_Tool::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    Load_MapObject_Info(TEXT("../../Data/Object/Acaza_Battle/Acaza_Test.dat"), pLayerTag);
+    Load_MapObject_Info(TEXT("../../Data/Object/Acaza_Battle/Acaza_Tool.dat"), pLayerTag);
 
     return S_OK;
 }
