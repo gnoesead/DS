@@ -229,9 +229,6 @@
     <Filter Include="02. GameObjects\UI\03.World_UI\Interaction">
       <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\03.World_UI\Lock_On_Icon">
-      <UniqueIdentifier>{1e2974df-1950-40cc-a692-d797a386f4f4}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -387,6 +384,9 @@
     <ClInclude Include="..\Public\FIcon.h">
       <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Interaction.h">
+      <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -529,6 +529,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FIcon.cpp">
       <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Interaction.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

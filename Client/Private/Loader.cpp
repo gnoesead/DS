@@ -24,6 +24,7 @@
 #include "Player_Battle_Ult_Effect.h"
 #include "World_UI_Hp.h"
 #include "FIcon.h"
+#include "Interaction.h"
 
 
 #include "AtkCollider.h"
@@ -539,6 +540,11 @@ HRESULT CLoader::LoadingForGamePlay()
 	/* Prototype_GameObject_FIcon */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FIcon"),
 		CFIcon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_interaction */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Interaction"),
+		CInteraction::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

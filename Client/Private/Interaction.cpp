@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\Public\FIcon.h"
+#include "..\Public\Interaction.h"
 
 #include "GameInstance.h"
 #include "Camera_Free.h"
@@ -7,17 +7,17 @@
 #include "Player.h"
 
 
-CFIcon::CFIcon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CInteraction::CInteraction(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
 {
 }
 
-CFIcon::CFIcon(const CFIcon & rhs)
+CInteraction::CInteraction(const CInteraction & rhs)
 	: CUI(rhs)
 {
 }
 
-HRESULT CFIcon::Initialize_Prototype()
+HRESULT CInteraction::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,7 +25,7 @@ HRESULT CFIcon::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CFIcon::Initialize(void * pArg)
+HRESULT CInteraction::Initialize(void * pArg)
 {
 	if (pArg != nullptr)
 		m_UI_Desc = *(UIDESC*)pArg;
@@ -38,33 +38,34 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Main 0
+
+	// 배경
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 1.f;
-		m_UI_Layer = 5;
-		m_fZ = 0.12f;
+		m_Origin_X = 0.224f * 4.f;
+		m_Origin_Y = 0.052f * 4.f;
+		m_Size_Param = 0.608333f;
+		m_UI_Layer = 4;
+		m_fZ = 0.f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Main 1
+	// 상호작용
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
 		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 4;
-		m_fZ = 0.11f;
+		m_Origin_Y = 0.25f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 5;
+		m_fZ = 0.01f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Main 2
+	// 
 	if (m_UI_Desc.m_Type == 2) {
 		m_fX = 919;
 		m_fY = 65;
@@ -77,7 +78,7 @@ HRESULT CFIcon::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Mini 0 
+	// 
 	if (m_UI_Desc.m_Type == 3) {
 		m_fX = 919;
 		m_fY = 65;
@@ -90,7 +91,7 @@ HRESULT CFIcon::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 		
-	// Mini 1
+	// 
 	if (m_UI_Desc.m_Type == 4) {
 		m_fX = 919;
 		m_fY = 65;
@@ -103,7 +104,7 @@ HRESULT CFIcon::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Talk 0
+	// 
 	if (m_UI_Desc.m_Type == 5) {
 		m_fX = 919;
 		m_fY = 65;
@@ -116,7 +117,7 @@ HRESULT CFIcon::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Talk 1
+	// 
 	if (m_UI_Desc.m_Type == 6) {
 		m_fX = 919;
 		m_fY = 65;
@@ -129,7 +130,7 @@ HRESULT CFIcon::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Lock_On_Target
+	// 
 	if (m_UI_Desc.m_Type == 7) {
 		m_fX = 919;
 		m_fY = 65;
@@ -145,14 +146,31 @@ HRESULT CFIcon::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CFIcon::Tick(_double TimeDelta)
+void CInteraction::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	_float dist = Convert::GetLength(m_vPlayerPos - m_vBattle_Targt);
+
+	if (dist < 3.f) {
+
+		m_Alpha += (_float)TimeDelta * 1.5f;
+
+		if (m_Alpha > 1.f)
+			m_Alpha = 1.f;
+	}
+	else {
+		m_Alpha -= (_float)TimeDelta * 1.5f;
+
+		if (m_Alpha < 0.f)
+			m_Alpha = 0.f;
+	}
 	
+
+
 }
 
-void CFIcon::LateTick(_double TimeDelta)
+void CInteraction::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
@@ -161,7 +179,6 @@ void CFIcon::LateTick(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	// Camera
-	
 	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
@@ -169,12 +186,14 @@ void CFIcon::LateTick(_double TimeDelta)
 	m_pTransformCom->LookAt(m_vTargetPos);
 
 
-	// Monster
+	// Trigger
 	if (pGameInstance->Get_CurLevelIdx() == 7) {
 
-		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
+		CTransform* m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
-		m_vBattle_Targt = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		m_vBattle_Targt = { 130.f, 0.f, 140.f, 1.f };
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
 	}
@@ -193,7 +212,7 @@ void CFIcon::LateTick(_double TimeDelta)
 		return;
 }
 
-HRESULT CFIcon::Render()
+HRESULT CInteraction::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -201,13 +220,10 @@ HRESULT CFIcon::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	if (m_Is_Reverse == false) {
+	if (m_UI_Desc.m_Type == 0)
 		m_pShaderCom->Begin(1);
-	}
-	else {
-		m_pShaderCom->Begin(2);
-	}
-
+	else if(m_UI_Desc.m_Type == 1)
+		m_pShaderCom->Begin(6);
 	
 	if (m_Is_CutScene == false) {
 		m_pVIBufferCom->Render();
@@ -218,7 +234,7 @@ HRESULT CFIcon::Render()
 	return S_OK;
 }
 
-HRESULT CFIcon::Add_Components()
+HRESULT CInteraction::Add_Components()
 {
 
 	/* For.Com_Transform */
@@ -234,45 +250,29 @@ HRESULT CFIcon::Add_Components()
 
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"),
-		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))		
+		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxTex"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
-		return E_FAIL;	
+		return E_FAIL;
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-
-	if (m_UI_Desc.m_Type <= 2) {
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Main"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-	else if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Mini"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-	else if (m_UI_Desc.m_Type == 5 || m_UI_Desc.m_Type == 6) {
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-
-
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Interaction"),
+		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+	
 
 	return S_OK;
 }
 
-HRESULT CFIcon::SetUp_ShaderResources()
+HRESULT CInteraction::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;	
@@ -296,33 +296,21 @@ HRESULT CFIcon::SetUp_ShaderResources()
 		return E_FAIL;
 
 
-	if (m_UI_Desc.m_Type <= 2) {
-		
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
-			return E_FAIL;
-	}
-	else if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
-		
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 3)))
-			return E_FAIL;
-	}
-	else if (m_UI_Desc.m_Type == 5 || m_UI_Desc.m_Type == 6) {
-		
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 5)))
-			return E_FAIL;
-	}
+	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
+		return E_FAIL;
+	
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
 
-void CFIcon::Get_Boss_Info(_double TimeDelta)
+void CInteraction::Get_Boss_Info(_double TimeDelta)
 {
 	
 }
 
-void CFIcon::Set_Personal_Pos()
+void CInteraction::Set_Personal_Pos()
 {
 
 	_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
@@ -333,37 +321,37 @@ void CFIcon::Set_Personal_Pos()
 
 	Pos += {0.f,m_UI_Desc.m_Up_Mount, 0.f};
 
-	
+	Pos += vLook * m_fZ;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 }
 
-CFIcon * CFIcon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CInteraction * CInteraction::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CFIcon*		pInstance = new CFIcon(pDevice, pContext);
+	CInteraction*		pInstance = new CInteraction(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CFIcon");
+		MSG_BOX("Failed to Created : CInteraction");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
-CGameObject * CFIcon::Clone(void * pArg)
+CGameObject * CInteraction::Clone(void * pArg)
 {
-	CFIcon*		pInstance = new CFIcon(*this);
+	CInteraction*		pInstance = new CInteraction(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CFIcon");
+		MSG_BOX("Failed to Cloned : CInteraction");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CFIcon::Free()
+void CInteraction::Free()
 {
 	__super::Free();
 

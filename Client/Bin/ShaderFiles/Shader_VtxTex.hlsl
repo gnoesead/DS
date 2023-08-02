@@ -44,6 +44,20 @@ VS_OUT VS_MAIN_REVERSE(VS_IN In)
 	return Out;
 }
 
+VS_OUT VS_MAIN_REVERSE_X(VS_IN In)
+{
+	VS_OUT		Out = (VS_OUT)0;
+
+	matrix		matWV = mul(g_WorldMatrix, g_ViewMatrix);
+	matrix		matWVP = mul(matWV, g_ProjMatrix);
+
+	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+	Out.vTexUV.y = In.vTexUV.y;
+	Out.vTexUV.x = 1 - In.vTexUV.x;
+
+	return Out;
+}
+
 
 struct PS_IN
 {
@@ -182,5 +196,17 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_UV();
+	}
+
+	pass Alpha_Reverse_X
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN_REVERSE_X();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_ALPHA();
 	}
 }

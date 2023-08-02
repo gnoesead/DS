@@ -42,8 +42,8 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.1f;
-		m_Origin_Y = 0.020f * 6.3f;
+		m_Origin_X = 0.216f * 6.2f;
+		m_Origin_Y = 0.020f * 6.4f;
 		m_Size_Param = 1.f;
 		m_UI_Layer = 5;
 		m_fZ = 0.12f;
@@ -55,8 +55,8 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 5.3f;
+		m_Origin_X = 0.216f * 6.1f;
+		m_Origin_Y = 0.020f * 5.f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 4;
 		m_fZ = 0.11f;
@@ -68,8 +68,8 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 2) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 5.1f;
+		m_Origin_X = 0.216f * 6.1f;
+		m_Origin_Y = 0.020f * 5.f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 3;
 		m_fZ = 0.1f;
@@ -81,8 +81,8 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 3) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 6.2f;
+		m_Origin_X = 0.216f * 6.2f;
+		m_Origin_Y = 0.020f * 6.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -334,7 +334,7 @@ void CWorld_UI_Hp::Set_Personal_Pos()
 
 	_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	Pos += {0.f, 2.f, 0.f};
+	Pos += {0.f, m_UI_Desc.m_Up_Mount, 0.f};
 
 	if (m_UI_Desc.m_Type == 0 || m_UI_Desc.m_Type == 3)
 		Pos += vLook * m_fZ;

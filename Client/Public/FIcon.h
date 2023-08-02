@@ -21,6 +21,7 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
+		_float   m_Up_Mount = { 0.f };
 	}UIDESC;
 
 

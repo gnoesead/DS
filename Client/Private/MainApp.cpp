@@ -408,19 +408,24 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma region FIcon_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Main"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Main_%d.png"),3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Main_%d.dds"),3))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Mini"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Mini_%d.png"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Mini_%d.dds"), 2))))
 		return E_FAIL;
 	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Talk_%d.png"), 2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Talk_%d.dds"), 2))))
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Interaction_UI	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Interaction"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Interaction/Interaction_%d.dds"),2))))
+		return E_FAIL;
 
+#pragma endregion
 
 
 	Safe_AddRef(m_pRenderer);

@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CWorld_UI_Hp final : public CUI
+class CInteraction final : public CUI
 {
 
 public:
@@ -26,9 +26,9 @@ public:
 
 
 private:
-	CWorld_UI_Hp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CWorld_UI_Hp(const CWorld_UI_Hp& rhs);
-	virtual ~CWorld_UI_Hp() = default;
+	CInteraction(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CInteraction(const CInteraction& rhs);
+	virtual ~CInteraction() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -47,16 +47,7 @@ public:
 	void Get_Boss_Info(_double TimeDelta);
 	void Set_Personal_Pos();
 
-private:	
-	_double m_Boss_Max_Hp = { 1 };
-	_double m_Boss_Hp = { 1 };
 
-	_double m_Boss_Max_D_Hp = { 1 };
-	_double m_Boss_D_Hp = { 1 };
-
-	_double m_Delay_TimeAcc = { 0 };
-	_double m_Delay_Max_Time = { 3 };
-	_bool m_Delay_Down = { false };
 
 private:
 	UIDESC                  m_UI_Desc = {};
@@ -80,15 +71,16 @@ private:
 	_float m_fZ = {};
 
 	_vector m_vTargetPos = {};
+
+	_vector m_vPlayerPos = {};
+
 	_float m_Up_Move = { 3.f };
+
 	_float m_Right_Move = { 0.f };
 
 	_vector m_vBattle_Targt = {};
 
-	_float m_UV_Cull = { 0.0f };
-	_float m_D_UV_Cull = { 0.0f };
 
-	
 private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();
@@ -97,7 +89,7 @@ private:
 
 
 public:
-	static CWorld_UI_Hp* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CInteraction* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

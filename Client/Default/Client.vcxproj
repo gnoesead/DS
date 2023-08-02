@@ -193,6 +193,7 @@
     <ClInclude Include="..\Public\Effect_Texture.h" />
     <ClInclude Include="..\Public\FIcon.h" />
     <ClInclude Include="..\Public\InstanceMapObject.h" />
+    <ClInclude Include="..\Public\Interaction.h" />
     <ClInclude Include="..\Public\Level_FinalBoss.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_House.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="..\Private\Effect_Texture.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
     <ClCompile Include="..\Private\InstanceMapObject.cpp" />
+    <ClCompile Include="..\Private\Interaction.cpp" />
     <ClCompile Include="..\Private\Level_FinalBoss.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_House.cpp" />
