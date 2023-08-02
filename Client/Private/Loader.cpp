@@ -23,6 +23,7 @@
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
 #include "World_UI_Hp.h"
+#include "FIcon.h"
 
 
 #include "AtkCollider.h"
@@ -490,8 +491,6 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 #pragma region UI
-
-
 	/* Prototype_GameObject_Player Battle Frame */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
 		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
@@ -537,7 +536,10 @@ HRESULT CLoader::LoadingForGamePlay()
 		CWorld_UI_Hp::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
+	/* Prototype_GameObject_FIcon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FIcon"),
+		CFIcon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

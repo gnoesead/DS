@@ -103,9 +103,6 @@
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar">
       <UniqueIdentifier>{31189834-560c-4c54-963d-5759dcde14bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr">
-      <UniqueIdentifier>{f13d0d49-42ea-4e53-8dd2-9f26cf9f415b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Frame">
       <UniqueIdentifier>{99b17ca9-771c-4409-8058-387ba3f8c8cc}</UniqueIdentifier>
     </Filter>
@@ -120,12 +117,6 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar">
       <UniqueIdentifier>{51aaec38-0e7b-4a45-b88c-2f526de4b2fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Frame">
-      <UniqueIdentifier>{da25a8b7-bd41-458d-b89c-58daa3050c63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar">
-      <UniqueIdentifier>{aca9ca19-5fde-4f45-a001-619d29b09a21}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\UI\02.Combo_Info">
       <UniqueIdentifier>{3ffd5914-2d3f-4140-83f6-8b399a25f622}</UniqueIdentifier>
@@ -178,12 +169,6 @@
     <Filter Include="02. GameObjects\UI\03.World_UI\Hp_Bar">
       <UniqueIdentifier>{7c4d3dfc-0126-4bf0-a8f2-fe2fcda539fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\03.World_UI\Head_Sign">
-      <UniqueIdentifier>{e7195b5a-20e4-4391-81b3-18ee832c962b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\03.World_UI\Object_Sign">
-      <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\04.Talk">
       <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
     </Filter>
@@ -226,8 +211,26 @@
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Skill_Name">
       <UniqueIdentifier>{7d783cb9-8601-4daf-910d-041f9e6648d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Skill_Name">
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar">
+      <UniqueIdentifier>{f13d0d49-42ea-4e53-8dd2-9f26cf9f415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Frame">
+      <UniqueIdentifier>{da25a8b7-bd41-458d-b89c-58daa3050c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar">
+      <UniqueIdentifier>{aca9ca19-5fde-4f45-a001-619d29b09a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Skill_Name">
       <UniqueIdentifier>{082f6c56-f777-4d12-b673-0c1f0a3be6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\FIcon">
+      <UniqueIdentifier>{e7195b5a-20e4-4391-81b3-18ee832c962b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Interaction">
+      <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Lock_On_Icon">
+      <UniqueIdentifier>{1e2974df-1950-40cc-a692-d797a386f4f4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -334,10 +337,10 @@
       <Filter>02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Battle_Frame.h">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Frame</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Battle_Hp.h">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_Battle_Combo.h">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
@@ -380,6 +383,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\World_UI_Hp.h">
       <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FIcon.h">
+      <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -474,10 +480,10 @@
       <Filter>02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Frame</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
@@ -520,6 +526,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\World_UI_Hp.cpp">
       <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FIcon.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

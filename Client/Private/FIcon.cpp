@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\Public\World_UI_Hp.h"
+#include "..\Public\FIcon.h"
 
 #include "GameInstance.h"
 #include "Camera_Free.h"
@@ -7,17 +7,17 @@
 #include "Player.h"
 
 
-CWorld_UI_Hp::CWorld_UI_Hp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CFIcon::CFIcon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
 {
 }
 
-CWorld_UI_Hp::CWorld_UI_Hp(const CWorld_UI_Hp & rhs)
+CFIcon::CFIcon(const CFIcon & rhs)
 	: CUI(rhs)
 {
 }
 
-HRESULT CWorld_UI_Hp::Initialize_Prototype()
+HRESULT CFIcon::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,7 +25,7 @@ HRESULT CWorld_UI_Hp::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CWorld_UI_Hp::Initialize(void * pArg)
+HRESULT CFIcon::Initialize(void * pArg)
 {
 	if (pArg != nullptr)
 		m_UI_Desc = *(UIDESC*)pArg;
@@ -38,12 +38,12 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Hp_Bar
+	// Main 0
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.1f;
-		m_Origin_Y = 0.020f * 6.3f;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
 		m_Size_Param = 1.f;
 		m_UI_Layer = 5;
 		m_fZ = 0.12f;
@@ -51,12 +51,12 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Hp_Green
+	// Main 1
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 5.3f;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 4;
 		m_fZ = 0.11f;
@@ -64,12 +64,12 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Hp_Red
+	// Main 2
 	if (m_UI_Desc.m_Type == 2) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 5.1f;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 3;
 		m_fZ = 0.1f;
@@ -77,12 +77,12 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// Hp_Black
+	// Mini 0 
 	if (m_UI_Desc.m_Type == 3) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.216f * 6.f;
-		m_Origin_Y = 0.020f * 6.2f;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -90,19 +90,56 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 		
+	// Mini 1
+	if (m_UI_Desc.m_Type == 4) {
+		m_fX = 919;
+		m_fY = 65;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
+		m_Size_Param = 0.608333f;
+		m_UI_Layer = 2;
+		m_fZ = 0.09f;
 
+		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
+	}
+
+	// Talk 0
+	if (m_UI_Desc.m_Type == 5) {
+		m_fX = 919;
+		m_fY = 65;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
+		m_Size_Param = 0.608333f;
+		m_UI_Layer = 2;
+		m_fZ = 0.09f;
+
+		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
+	}
+
+	// Talk 1
+	if (m_UI_Desc.m_Type == 6) {
+		m_fX = 919;
+		m_fY = 65;
+		m_Origin_X = 0.5f;
+		m_Origin_Y = 0.5f;
+		m_Size_Param = 0.608333f;
+		m_UI_Layer = 2;
+		m_fZ = 0.09f;
+
+		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
+	}
 
 	return S_OK;
 }
 
-void CWorld_UI_Hp::Tick(_double TimeDelta)
+void CFIcon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
 	
 }
 
-void CWorld_UI_Hp::LateTick(_double TimeDelta)
+void CFIcon::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
@@ -135,59 +172,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 	Get_Boss_Info(TimeDelta);
 
-	if (m_Delay_Down == true) {
-		m_D_UV_Cull += TimeDelta * 0.3;
-		if (m_D_UV_Cull >= m_UV_Cull) {
-			m_D_UV_Cull = m_UV_Cull;
-			m_Delay_Down = false;
-		}
-	}
-
-	if (m_UV_Cull != m_D_UV_Cull && m_Delay_Down == false) {
-
-		m_Delay_TimeAcc += TimeDelta;
-
-		if (m_Delay_TimeAcc > m_Delay_Max_Time) {
-			m_Delay_TimeAcc = 0;
-			m_Delay_Down = true;
-		}
-	}
-
-	if (m_UI_Desc.m_Type == 1) {
-		_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-		_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-		m_fSizeX = (_double)(m_Origin_X * m_Boss_Hp);
-
-		m_pTransformCom->Scaling({ (_float)m_fSizeX, 0.020f * 6.f, 1.f });
-
-		_vector Pos = m_vBattle_Targt + vLook * m_fZ;
-
-		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (m_Boss_Max_Hp - m_Boss_Hp);
-		
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, NewPos);
-
-	}
-
-	if (m_UI_Desc.m_Type == 2) {
-		_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-		_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-		_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-		m_fSizeX = (_double)(m_Origin_X * m_Boss_D_Hp);
-
-		m_pTransformCom->Scaling({ (_float)m_fSizeX, 0.020f * 6.f, 1.f });
-
-		_vector Pos = m_vBattle_Targt + vLook * m_fZ;
-
-		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (m_Boss_Max_D_Hp - m_Boss_D_Hp);
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, NewPos);
-
-	}
-
-
+	
 	Set_Personal_Pos();
 	
 
@@ -195,7 +180,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 		return;
 }
 
-HRESULT CWorld_UI_Hp::Render()
+HRESULT CFIcon::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -204,25 +189,15 @@ HRESULT CWorld_UI_Hp::Render()
 		return E_FAIL;
 
 	if (m_Is_Reverse == false) {
-		if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
-			m_pShaderCom->Begin(4);
-		else {
-			m_pShaderCom->Begin(1);
-		}
+		m_pShaderCom->Begin(1);
 	}
 	else {
-		if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
-			m_pShaderCom->Begin(5);
-		else {
-			m_pShaderCom->Begin(2);
-		}
+		m_pShaderCom->Begin(2);
 	}
 
 	
 	if (m_Is_CutScene == false) {
-
 		m_pVIBufferCom->Render();
-
 	}
 	
 	
@@ -230,7 +205,7 @@ HRESULT CWorld_UI_Hp::Render()
 	return S_OK;
 }
 
-HRESULT CWorld_UI_Hp::Add_Components()
+HRESULT CFIcon::Add_Components()
 {
 
 	/* For.Com_Transform */
@@ -259,17 +234,32 @@ HRESULT CWorld_UI_Hp::Add_Components()
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_World_Hp"),
-		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+
+	if (m_UI_Desc.m_Type <= 2) {
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Main"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Mini"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 5 || m_UI_Desc.m_Type == 6) {
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 
 
 	return S_OK;
 }
 
-HRESULT CWorld_UI_Hp::SetUp_ShaderResources()
+HRESULT CFIcon::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;	
@@ -293,39 +283,33 @@ HRESULT CWorld_UI_Hp::SetUp_ShaderResources()
 		return E_FAIL;
 
 
-	if (m_UI_Desc.m_Type == 1) {
-		if (FAILED(m_pShaderCom->SetUp_RawValue("g_UV_Cull", &m_UV_Cull, sizeof(_float))))
+	if (m_UI_Desc.m_Type <= 2) {
+		
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
 			return E_FAIL;
 	}
-	else if (m_UI_Desc.m_Type == 2) {
-		if (FAILED(m_pShaderCom->SetUp_RawValue("g_UV_Cull", &m_D_UV_Cull, sizeof(_float))))
+	else if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 3)))
 			return E_FAIL;
 	}
-
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
-		return E_FAIL;
-
+	else if (m_UI_Desc.m_Type == 5 || m_UI_Desc.m_Type == 6) {
+		
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 5)))
+			return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
 
-void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
+void CFIcon::Get_Boss_Info(_double TimeDelta)
 {
-	if (GetKeyState('H') < 0) {
-
-		m_UV_Cull += TimeDelta * 0.5f;
-
-		if (m_UV_Cull > 1.f) {
-			m_UV_Cull = 1.f;
-		}
-
-
-	}
+	
 }
 
-void CWorld_UI_Hp::Set_Personal_Pos()
+void CFIcon::Set_Personal_Pos()
 {
 
 	_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
@@ -334,40 +318,39 @@ void CWorld_UI_Hp::Set_Personal_Pos()
 
 	_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	Pos += {0.f, 2.f, 0.f};
+	Pos += {0.f, 2.5f, 0.f};
 
-	if (m_UI_Desc.m_Type == 0 || m_UI_Desc.m_Type == 3)
-		Pos += vLook * m_fZ;
+	
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 }
 
-CWorld_UI_Hp * CWorld_UI_Hp::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CFIcon * CFIcon::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CWorld_UI_Hp*		pInstance = new CWorld_UI_Hp(pDevice, pContext);
+	CFIcon*		pInstance = new CFIcon(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CWorld_UI_Hp");
+		MSG_BOX("Failed to Created : CFIcon");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
-CGameObject * CWorld_UI_Hp::Clone(void * pArg)
+CGameObject * CFIcon::Clone(void * pArg)
 {
-	CWorld_UI_Hp*		pInstance = new CWorld_UI_Hp(*this);
+	CFIcon*		pInstance = new CFIcon(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CWorld_UI_Hp");
+		MSG_BOX("Failed to Cloned : CFIcon");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CWorld_UI_Hp::Free()
+void CFIcon::Free()
 {
 	__super::Free();
 

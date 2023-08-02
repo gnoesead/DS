@@ -15,9 +15,11 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+#include "FIcon.h"
+#include "World_UI_Hp.h"
 
 #include "ColliderManager.h"
-#include "World_UI_Hp.h"
+
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -766,6 +768,23 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+
+// FIcon (임시) 실제로는 Npc가 소유할거임
+
+	CFIcon::UIDESC UIDesc8;
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -870,7 +889,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
-
+#pragma region Monster_Hp
 	CWorld_UI_Hp::UIDESC UIDesc3;
 	ZeroMemory(&UIDesc, sizeof UIDesc3);
 
@@ -884,7 +903,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	}
 
 	ZeroMemory(&UIDesc, sizeof UIDesc3);
-
 	UIDesc3.m_Is_Reverse = false;
 	UIDesc3.m_Type = 1;
 
@@ -894,6 +912,27 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+#pragma endregion
 
 
 

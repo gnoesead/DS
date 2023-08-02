@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CWorld_UI_Hp final : public CUI
+class CFIcon final : public CUI
 {
 
 public:
@@ -25,9 +25,9 @@ public:
 
 
 private:
-	CWorld_UI_Hp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CWorld_UI_Hp(const CWorld_UI_Hp& rhs);
-	virtual ~CWorld_UI_Hp() = default;
+	CFIcon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CFIcon(const CFIcon& rhs);
+	virtual ~CFIcon() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -84,9 +84,7 @@ private:
 
 	_vector m_vBattle_Targt = {};
 
-	_float m_UV_Cull = { 0.0f };
-	_float m_D_UV_Cull = { 0.0f };
-
+	
 	
 private:
 	HRESULT Add_Components();
@@ -96,7 +94,7 @@ private:
 
 
 public:
-	static CWorld_UI_Hp* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CFIcon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
