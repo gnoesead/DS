@@ -47,7 +47,7 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_Size_Param = 1.f;
 		m_UI_Layer = 5;
 
-		m_pTransformCom->Scaling({ 0.216f * 5.f, 0.020f * 5.f, 2.f });
+		m_pTransformCom->Scaling({ 0.216f * 6.f, 0.020f * 6.f, 1.f });
 	}
 
 	// Hp_Green
@@ -58,6 +58,8 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_Origin_Y = 24;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 4;
+
+		m_pTransformCom->Scaling({ 0.216f * 6.f, 0.020f * 6.f, 1.f });
 	}
 
 	// Hp_Red
@@ -171,7 +173,7 @@ HRESULT CWorld_UI_Hp::Render()
 		return E_FAIL;
 
 	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(0);
+		m_pShaderCom->Begin(1);
 	else {
 		m_pShaderCom->Begin(2);
 	}

@@ -64,7 +64,7 @@ void CCamera_Free::Tick(_double dTimeDelta)
 		else if (true == m_bLockMouse)
 			m_bLockMouse = false;
 	}
-	if (pGameInstance->Get_DIKeyDown(DIK_Q))
+	if (pGameInstance->Get_DIKeyDown(DIK_R))
 	{
 		if (false == m_Is_Battle)
 			m_Is_Battle = true;
@@ -129,9 +129,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			// adventure
 			if (m_Is_Battle != true) {
 
-				m_fDistance = { 4.f };
-				m_vOffSet = { 0.f, 1.5f, 0.f, 0.f };
-				m_vLookOffSet = { 0.f, 1.7f, 0.f, 0.f };
+				m_fDistance = { 5.f };
+				m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
+				m_fLookDamping = { 5.f };
 
 				AdventureCamera(dTimeDelta);
 			}
@@ -141,6 +142,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				m_fDistance = { 6.f };
 				m_vOffSet = { 0.f, 2.3f, 0.f, 0.f };
 				m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
+				m_fLookDamping = { 7.f };
 
 				BattleCamera(dTimeDelta);
 			}
@@ -214,8 +216,6 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 
 	_float dist = XMVectorGetX(XMVector3Length(vDist));
 
-	_float Y = 0.08f + dist * 0.04f;
-
 	m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
 	m_vDist = XMVector3Normalize(m_vDist);
 
@@ -242,6 +242,8 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 	_float New_t = (_float)dTimeDelta * m_fLookDamping;
 
 	m_pTransformCom->LerpVector(NewLook, New_t);
+
+	
 	
 	Safe_Release(pGameInstance);
 }
@@ -272,26 +274,12 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 		m_bIs_Combo_On = false;
 	}
 
-	if (m_bIs_Combo_On)
-		m_vCameraAngle = 80.f + dist * 2.f;
-	else {
-		m_vCameraAngle = 15.f;
-	}
-
 	_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(-m_vCameraAngle));
 
 	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
-	_float Y;
+	m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
 
-	if (dist < 2.f) {
-		Y = 0.1f;
-	}
-	else {
-		Y = 0.3f - (1 / dist) * 0.2f;
-	}
-
-	m_vDist = { XMVectorGetX(m_vDist), Y ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
 	m_vDist = XMVector3Normalize(m_vDist);
 
 	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
@@ -299,20 +287,18 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 	_float t = (_float)dTimeDelta * m_fDamping;
 
 	_vector CamPos = XMVectorLerp(vCamPosition, vDest, t);
-
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
 
-	_vector NewLook = m_vBattleCenter + m_vLookOffSet - vCamPosition;
 
+	_vector NewLook = m_vBattleCenter + m_vLookOffSet - vCamPosition;
 
 	NewLook = { XMVectorGetX(NewLook), XMVectorGetY(NewLook) * 0.f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 	NewLook = XMVector3Normalize(NewLook);
 
 	_float New_t = (_float)dTimeDelta * m_fLookDamping;
-
-	
 	m_pTransformCom->LerpVector(NewLook, New_t);
 	
+
 
 	Safe_Release(pGameInstance);
 

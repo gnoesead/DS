@@ -883,7 +883,16 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
 
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 
