@@ -77,6 +77,8 @@ private:
 	_int m_Origin_Y = {};
 
 	_vector m_vTargetPos = {};
+	_float m_Up_Move = { 3.f };
+	_float m_Right_Move = { 0.f };
 
 	
 private:

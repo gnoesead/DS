@@ -61,7 +61,9 @@ PS_OUT  PS_MAIN(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	Out.vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
 
 	return Out;
 }
@@ -70,7 +72,7 @@ PS_OUT  PS_MAIN_FADE(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	vector	vColor = g_Texture.Sample(PointSampler, In.vTexUV);
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
 
 	vColor.w = g_Alpha;
 
@@ -83,7 +85,7 @@ PS_OUT  PS_MAIN_ALPHA(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	vector	vColor = g_Texture.Sample(PointSampler, In.vTexUV);
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
 
 	vColor.w *= g_Alpha;
 

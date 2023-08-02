@@ -44,8 +44,10 @@ HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 		m_fY = 65;
 		m_Origin_X = 612;
 		m_Origin_Y = 24;
-		m_Size_Param = 0.608333f;
+		m_Size_Param = 1.f;
 		m_UI_Layer = 5;
+
+		m_pTransformCom->Scaling({ 0.216f * 5.f, 0.020f * 5.f, 2.f });
 	}
 
 	// Hp_Green
@@ -87,14 +89,21 @@ void CWorld_UI_Hp::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	
+}
+
+void CWorld_UI_Hp::LateTick(_double TimeDelta)
+{
+	__super::LateTick(TimeDelta);
+
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	// Camera
-	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), TEXT("Com_Transform")));
-
-	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
-
+	
+	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
+	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_pTransformCom->Get_State(CTransform::STATE_POSITION)) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
 
 	m_pTransformCom->LookAt(m_vTargetPos);
@@ -105,19 +114,16 @@ void CWorld_UI_Hp::Tick(_double TimeDelta)
 
 		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION));
-	}
+		_vector Pos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
+	}
 
 	Set_Personal_Pos();
 
-
 	Safe_Release(pGameInstance);
-}
 
-void CWorld_UI_Hp::LateTick(_double TimeDelta)
-{
-	__super::LateTick(TimeDelta);
+
 
 	Get_Boss_Info(TimeDelta);
 
@@ -152,7 +158,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	
 	
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_WORLD_UI, this)))
 		return;
 }
 
@@ -165,7 +171,7 @@ HRESULT CWorld_UI_Hp::Render()
 		return E_FAIL;
 
 	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
+		m_pShaderCom->Begin(0);
 	else {
 		m_pShaderCom->Begin(2);
 	}
@@ -212,7 +218,7 @@ HRESULT CWorld_UI_Hp::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Hp"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_World_Hp"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
@@ -270,10 +276,14 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 void CWorld_UI_Hp::Set_Personal_Pos()
 {
 
+	_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
 
+	_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	Pos += {0.f, 2.f, 0.f};
 
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 }
 
 CWorld_UI_Hp * CWorld_UI_Hp::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -309,5 +319,6 @@ void CWorld_UI_Hp::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pTransformCom);
 
 }

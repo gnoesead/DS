@@ -13,6 +13,7 @@
 #include "RotationMapObject.h"
 #include "InstanceMapObject.h"
 #include "Sky.h"
+
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
 #include "Player_Battle_Mp.h"
@@ -21,6 +22,8 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+#include "World_UI_Hp.h"
+
 
 #include "AtkCollider.h"
 
@@ -435,47 +438,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-	/* Prototype_GameObject_Player Battle Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
-		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Hp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Hp"),
-		CPlayer_Battle_Hp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Mp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Mp"),
-		CPlayer_Battle_Mp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Ult Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"),
-		CPlayer_Battle_Ult_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Combo */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Combo"),
-		CPlayer_Battle_Combo::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Boss Battle Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Frame"),
-		CBoss_Battle_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Boss Battle Hp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Hp"),
-		CBoss_Battle_Hp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Ult Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"),
-		CPlayer_Battle_Ult_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-
+	
 
 
 
@@ -527,6 +490,54 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 #pragma region UI
+
+
+	/* Prototype_GameObject_Player Battle Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
+		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Hp"),
+		CPlayer_Battle_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Mp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Mp"),
+		CPlayer_Battle_Mp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Ult Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"),
+		CPlayer_Battle_Ult_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Combo */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Combo"),
+		CPlayer_Battle_Combo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Boss Battle Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Frame"),
+		CBoss_Battle_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Boss Battle Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Hp"),
+		CBoss_Battle_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Ult Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"),
+		CPlayer_Battle_Ult_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_World_UI_Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_World_UI_Hp"),
+		CWorld_UI_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 
 #pragma endregion
 

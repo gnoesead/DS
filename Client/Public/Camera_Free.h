@@ -42,6 +42,8 @@ public:
 
 public:
 	_float4		Get_CameraLook() { return m_fCameraLook; }
+	
+
 
 private:
 	void FreeCamera(_double dTimeDelta);

@@ -310,7 +310,6 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	}
 
 	/* Prototype_Component_Texture_UI */
-
 #pragma region Player_Battle_Bar_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Frame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/P/P_Frame.png")))))
@@ -399,6 +398,10 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Hp"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/B/Hp_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_World_Hp"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/M/M_Frame.dds")))))
 		return E_FAIL;
 
 

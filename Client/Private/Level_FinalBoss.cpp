@@ -17,6 +17,7 @@
 #include "Player_Battle_Ult_Effect.h"
 
 #include "ColliderManager.h"
+#include "World_UI_Hp.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -40,6 +41,12 @@ HRESULT CLevel_FinalBoss::Initialize()
         MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_FinalBoss");
         return E_FAIL;
     }
+
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 	{
@@ -71,11 +78,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-	{
-		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
-		return E_FAIL;
-	}
+	
 
     return S_OK;
 }
@@ -866,6 +869,23 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 
 #pragma endregion
+
+
+	CWorld_UI_Hp::UIDESC UIDesc3;
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+
 
 
 	Safe_Release(pGameInstance);
