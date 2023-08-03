@@ -16,7 +16,7 @@ BEGIN(Client)
 class CSword final : public CGameObject
 {
 public:
-	enum PlayerName {PLAYER_TANJIRO, PLAYER_KYOJURO, PLAYER_JENITSU, PLAYER_END};
+	enum PlayerName {PLAYER_TANJIRO, PLAYER_KYOJURO, PLAYER_ZENITSU, PLAYER_END};
 	
 	typedef struct tagSwordDesc
 	{
@@ -43,6 +43,8 @@ public:
 
 	_matrix Remove_Scale(_fmatrix TransformMatrix);
 
+	void	Set_SwordIn(_bool In) { m_isSwordIn = In; }
+
 protected:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources( );
@@ -55,6 +57,7 @@ protected:
 	CModel*		 m_pModelCom = { nullptr };
 
 protected:
+	_bool		m_isSwordIn = { false };
 
 	SWORDDESC			m_SwordDesc;
 	_float4x4				m_WorldMatrix;

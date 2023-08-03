@@ -6,6 +6,7 @@
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Player_Tanjiro.h"
+#include "Player_Zenitsu.h"
 #include "Monster_Test.h"
 
 #include "StaticMapObject.h"
@@ -320,6 +321,15 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword");
 		return E_FAIL;
 	}
+
+	// Prototype_Component_Model_Tanjiro_Sword_In
+	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword_In"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Tanjiro_Sword/Tanjiro_Sword.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword_In");
+		return E_FAIL;
+	}
 	
 	// Prototype_Component_Model_Tanjiro_SwordHome 
 	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
@@ -329,6 +339,44 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_SwordHome");
 		return E_FAIL;
 	}
+
+
+	/* Prototype_Component_Model_Zenitsu */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu");
+		return E_FAIL;
+	}
+
+	// Prototype_Component_Model_Zenitsu_Sword
+	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_Sword.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu_Sword");
+		return E_FAIL;
+	}
+
+	// Prototype_Component_Model_Zenitsu_Sword_In
+	// PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+	XMVECTOR pivotTranslation = XMVectorSet(0.0f, 0.0f, -30.0f, 0.0f);
+	PivotMatrix = XMMatrixTranslationFromVector(pivotTranslation) * XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword_In"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_Sword.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu_Sword_In");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_Tanjiro_SwordHome 
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_SwordHome"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_SwordHome.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_SwordHome");
+		return E_FAIL;
+	}
+
 
 #pragma endregion
 
@@ -447,6 +495,14 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Tanjiro");
 		return E_FAIL;
 	}
+	/* Prototype_GameObject_Player_Zenitsu */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Zenitsu"),
+		CPlayer_Zenitsu::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Zenitsu");
+		return E_FAIL;
+	}
+
 
 	/* Prototype_GameObject_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sword"),

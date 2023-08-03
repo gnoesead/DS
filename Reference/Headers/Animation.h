@@ -79,9 +79,11 @@ public:
 	//Set
 	void	Set_AnimationDesc(ANIMATIONDESC animdesc) { m_AnimationDesc = animdesc; }
 	void	Reset_TimeAcc() { m_AnimationDesc.m_dTimeAcc = 0.0; }
+	void	Reset_Finish() { m_AnimationDesc.m_isFinish = false; }
 
 	void	Set_ControlDesc(CONTROLDESC control) { m_ControlDesc = control; }
 	void	Set_EarlyEnd(_bool bEnd) { m_isEarlyEnd = bEnd; }
+
 
 
 private:

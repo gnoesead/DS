@@ -195,6 +195,22 @@ void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _f
 	}
 }
 
+void CCharacter::Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease)
+{
+	//서서히 느려지는 Transform 이동
+	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		Reset_Decleration(ResetSpeed);
+
+		m_pTransformCom->Go_Backward(dTimeDelta * m_fAtk_MoveControl);
+		m_fAtk_MoveControl -= fDecrease;
+		if (m_fAtk_MoveControl <= 0.0f)
+		{
+			m_fAtk_MoveControl = 0.0f;
+		}
+	}
+}
+
 void CCharacter::Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease)
 {
 	//서서히 느려지는 Transform 이동
@@ -251,6 +267,27 @@ void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float
 	}
 }
 
+void CCharacter::Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed)
+{
+	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pTransformCom->Go_Backward(dTimeDelta * constantSpeed);
+	}
+}
+
+void CCharacter::Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease)
+{
+	//서서히 느려지는 Transform 이동
+	Reset_Decleration(ResetSpeed);
+
+	m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl);
+	m_fAtk_MoveControl -= fDecrease;
+	if (m_fAtk_MoveControl <= 0.0f)
+	{
+		m_fAtk_MoveControl = 0.0f;
+	}
+}
+
 void CCharacter::Gravity(_double dTimeDelta)
 {
 	_float4 Pos;
@@ -290,6 +327,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 		
 		m_fJump_Acc = 0.0f;
 		m_isFirst_JumpAtk = true;
+		m_isJumpStop = false;
 	}
 	
 	

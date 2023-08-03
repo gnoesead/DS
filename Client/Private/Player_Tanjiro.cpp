@@ -366,7 +366,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_JUMP, m_fMove_Speed * 1.2f);
 		Go_Straight_Constant(dTimeDelta, 84, m_fMove_Speed * 1.2f);
 		Go_Straight_Constant(dTimeDelta, 85, m_fMove_Speed * 1.2f);
-		Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f, 0.16f); // Down
+		Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f, 0.36f); // Down
 	}
 	Ground_Animation_Play(85, 86);
 
@@ -843,7 +843,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	}
 	//점프 시 무빙제한
 	else if (ANIM_BATTLE_JUMP == iCurAnimIndex
-		|| 84 == iCurAnimIndex || 85 == iCurAnimIndex || 86 == iCurAnimIndex)
+		|| 84 == iCurAnimIndex || 85 == iCurAnimIndex )
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_Jump = true;

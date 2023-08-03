@@ -175,6 +175,9 @@
     <Filter Include="02. GameObjects\Character\Player\Sword">
       <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Zenitsu">
+      <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -330,6 +333,9 @@
     <ClInclude Include="..\Public\SwordHome.h">
       <Filter>02. GameObjects\Character\Player\Sword</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_Zenitsu.h">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -472,6 +478,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwordHome.cpp">
       <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Zenitsu.cpp">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -213,6 +213,7 @@
     <ClInclude Include="..\Public\Player_Battle_Ult_Effect.h" />
     <ClInclude Include="..\Public\Player_Battle_Ult_Frame.h" />
     <ClInclude Include="..\Public\Player_Tanjiro.h" />
+    <ClInclude Include="..\Public\Player_Zenitsu.h" />
     <ClInclude Include="..\Public\RotationMapObject.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundMgr.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="..\Private\Player_Battle_Ult_Effect.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Ult_Frame.cpp" />
     <ClCompile Include="..\Private\Player_Tanjiro.cpp" />
+    <ClCompile Include="..\Private\Player_Zenitsu.cpp" />
     <ClCompile Include="..\Private\RotationMapObject.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundMgr.cpp" />

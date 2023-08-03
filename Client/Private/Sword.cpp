@@ -59,28 +59,30 @@ void CSword::LateTick(_double TimeDelta)
 
 HRESULT CSword::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; ++i)
+	if (m_isSwordIn == false)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		if (FAILED(__super::Render()))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+
+		if (FAILED(SetUp_ShaderResources()))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-		m_pModelCom->Render(i);
+		for (_uint i = 0; i < iNumMeshes; ++i)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+				return E_FAIL;
+
+			m_pShaderCom->Begin(0);
+
+			m_pModelCom->Render(i);
+		}
 	}
-	
 	return S_OK;
 }
 
@@ -121,8 +123,16 @@ HRESULT CSword::Add_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
-
 	}
+	else if (m_SwordDesc.m_PlayerName == PLAYER_ZENITSU)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 

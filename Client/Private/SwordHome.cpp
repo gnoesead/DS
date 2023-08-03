@@ -44,6 +44,12 @@ HRESULT CSwordHome::Initialize(void* pArg)
 void CSwordHome::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	//if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+	//	return;
+
+	//if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+	//	return;
 }
 
 void CSwordHome::LateTick(_double TimeDelta)
@@ -55,6 +61,8 @@ void CSwordHome::LateTick(_double TimeDelta)
 		Remove_Scale(m_SwordDesc.pBone->Get_CombinedTransformationMatrix()) *
 		m_SwordDesc.pBone->Get_PivotMatrix() *
 		m_SwordDesc.pParentTransform->Get_WorldMatrix());
+
+	
 }
 
 HRESULT CSwordHome::Render()
@@ -80,6 +88,25 @@ HRESULT CSwordHome::Render()
 
 		m_pModelCom->Render(i);
 	}
+
+	if (m_isSwordIn)
+	{
+		_uint iNumMeshes_2 = m_pModelCom_Sword->Get_NumMeshes();
+
+		for (_uint i = 0; i < iNumMeshes_2; ++i)
+		{
+			if (FAILED(m_pModelCom_Sword->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom_Sword->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+				return E_FAIL;
+
+			m_pShaderCom->Begin(0);
+
+			m_pModelCom_Sword->Render(i);
+		}
+	}
+
 	
 	return S_OK;
 }
@@ -122,7 +149,22 @@ HRESULT CSwordHome::Add_Components()
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword_In"),
+			TEXT("Com_Model_Sword"), (CComponent**)&m_pModelCom_Sword)))
+			return E_FAIL;
 	}
+	else if (m_SwordDesc.m_PlayerName == PLAYER_ZENITSU)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_SwordHome"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword_In"),
+			TEXT("Com_Model_Sword"), (CComponent**)&m_pModelCom_Sword)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -193,4 +235,5 @@ void CSwordHome::Free()
 
 	
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pModelCom_Sword);
 }
