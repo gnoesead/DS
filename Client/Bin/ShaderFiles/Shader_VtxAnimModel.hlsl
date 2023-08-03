@@ -3,7 +3,7 @@
 
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-matrix		g_BoneMatrices[256];
+matrix		g_BoneMatrices[295];
 
 float4		g_vCamPosition;
 

@@ -41,7 +41,26 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CSword::SWORDDESC SwordDesc;
+	ZeroMemory(&SwordDesc, sizeof SwordDesc);
+	SwordDesc.m_PlayerName = CSword::PLAYER_TANJIRO;
+	SwordDesc.pParentTransform = m_pTransformCom;
+	SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
+	m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
+
+	CSwordHome::SWORDDESC SwordHomeDesc;
+	ZeroMemory(&SwordHomeDesc, sizeof SwordHomeDesc);
+	SwordHomeDesc.m_PlayerName = CSwordHome::PLAYER_TANJIRO;
+	SwordHomeDesc.pParentTransform = m_pTransformCom;
+	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
+	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
+
+	Safe_Release(pGameInstance);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
 
 	return S_OK;
 }
@@ -49,6 +68,10 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+	m_pSword->Tick(dTimeDelta);
+	m_pSwordHome->Tick(dTimeDelta);
+
 
 	if (true == m_isDead)
 		return;
@@ -72,8 +95,16 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	m_pSword->LateTick(dTimeDelta);
+	m_pSwordHome->LateTick(dTimeDelta);
+
 	Gravity(dTimeDelta);
 
+
+	if (GetAsyncKeyState('B'))
+	{
+		m_pModelCom->Set_Animation(0);
+	}
 	
 
 #ifdef _DEBUG
@@ -90,8 +121,12 @@ HRESULT CPlayer_Tanjiro::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+	m_pSword->Render();
+	m_pSwordHome->Render();
 
+#pragma region Player
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 	//Outline Render
 	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
 	{
@@ -108,7 +143,6 @@ HRESULT CPlayer_Tanjiro::Render()
 
 		m_pModelCom->Render(m_iMeshNum);
 	}
-
 	// Default Render
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
@@ -122,6 +156,8 @@ HRESULT CPlayer_Tanjiro::Render()
 
 		m_pModelCom->Render(i);
 	}
+#pragma endregion
+
 
 	return S_OK;
 }
@@ -169,7 +205,6 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
-
 
 
 		m_pShaderCom->Begin(3);
@@ -331,10 +366,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_JUMP, m_fMove_Speed * 1.2f);
 		Go_Straight_Constant(dTimeDelta, 84, m_fMove_Speed * 1.2f);
 		Go_Straight_Constant(dTimeDelta, 85, m_fMove_Speed * 1.2f);
-		Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f, 0.16f); // Down
+		Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f, 0.36f); // Down
 	}
 	Ground_Animation_Play(85, 86);
-
 
 
 	if (m_Moveset.m_Down_Battle_Jump)
@@ -809,7 +843,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	}
 	//점프 시 무빙제한
 	else if (ANIM_BATTLE_JUMP == iCurAnimIndex
-		|| 84 == iCurAnimIndex || 85 == iCurAnimIndex || 86 == iCurAnimIndex)
+		|| 84 == iCurAnimIndex || 85 == iCurAnimIndex )
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_Jump = true;
@@ -855,6 +889,7 @@ HRESULT CPlayer_Tanjiro::Add_Components()
 		MSG_BOX("Failed to Add_Com_Model : CPlayer_Tanjiro");
 		return E_FAIL;
 	}
+
 
 	/* for.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
@@ -931,5 +966,8 @@ CGameObject* CPlayer_Tanjiro::Clone(void* pArg)
 
 void CPlayer_Tanjiro::Free()
 {
+	Safe_Release(m_pSword);
+	Safe_Release(m_pSwordHome);
+
 	__super::Free();
 }

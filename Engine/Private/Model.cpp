@@ -242,11 +242,11 @@ HRESULT CModel::Bind_ShaderResource(_uint iMeshIndex, CShader* pShader, const ch
 
 HRESULT CModel::Bind_ShaderBoneMatrices(_uint iMeshIndex, CShader* pShader, const char* pConstantName)
 {
-	_float4x4	BoneMatrices[256];
+	_float4x4	BoneMatrices[295];
 
 	m_Meshes[iMeshIndex]->Get_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix), this);
 
-	return pShader->SetUp_Matrix_Array(pConstantName, BoneMatrices, 256);
+	return pShader->SetUp_Matrix_Array(pConstantName, BoneMatrices, 295);
 }
 
 HRESULT CModel::Ready_ModelData(const char* pModelFilePath, TYPE eModelType)
@@ -551,6 +551,7 @@ HRESULT CModel::Ready_HierarchyBones()
 		if (nullptr == pBone)
 			return E_FAIL;
 
+		pBone->Set_PivotMatrix(XMLoadFloat4x4(& m_PivotMatrix));
 		m_Bones.emplace_back(pBone);
 	}
 

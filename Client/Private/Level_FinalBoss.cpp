@@ -202,11 +202,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 
-    CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
+    CharacterDesc.TransformDesc.dSpeedPerSec = 5.0 * 0.8f;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 
     CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
@@ -222,12 +222,20 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
-        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
-        return E_FAIL;
-    }
+    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
+    //    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
+    //{
+    //    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+    //    return E_FAIL;
+    //}
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 

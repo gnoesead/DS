@@ -190,6 +190,12 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	{
 		m_isSpecialHit = true;
 	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_V))
+	{
+		m_isTestHit = true;
+	}
+
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
@@ -390,7 +396,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
+		if (m_dDelay_Charge_J < 0.02f && m_dDelay_Charge_W < 0.02f)
 		{
 			m_isCan_Charge = true;
 		}
@@ -421,6 +427,9 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
+		m_Moveset.m_Down_Skill_Normal = true;
 
 	if (false == m_Moveset.m_isRestrict_KeyInput)
 	{
