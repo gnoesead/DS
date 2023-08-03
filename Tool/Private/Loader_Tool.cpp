@@ -192,6 +192,26 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			return E_FAIL;
 		}
 
+		/* Prototype_Component_Model_Zenitsu */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Zenitsu"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_Zenitsu");
+			return E_FAIL;
+		}
+
+		
+
+		/* Prototype_Component_Model_NPC_Female */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_Female"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/NPC_Female/NPC_Female.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
+			return E_FAIL;
+		}
+
 #pragma endregion
 
 #pragma region NonCharacter
