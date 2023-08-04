@@ -60,7 +60,7 @@ private:
 private:
 	_bool			m_bCamChange = { true };
 	_bool			m_bLockMouse = { true };
-	_bool           m_Is_Battle = { true };
+	_bool           m_Is_Battle = { false };
 	_bool           m_Is_Cut_In = { false };
 	_bool           m_bIs_Combo_On = { false };
 

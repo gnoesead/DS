@@ -46,7 +46,7 @@ HRESULT CInteraction::Initialize(void * pArg)
 		m_Origin_X = 0.224f * 4.f;
 		m_Origin_Y = 0.052f * 4.f;
 		m_Size_Param = 0.608333f;
-		m_UI_Layer = 4;
+		m_UI_Layer = 6;
 		m_fZ = 0.f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
@@ -59,89 +59,13 @@ HRESULT CInteraction::Initialize(void * pArg)
 		m_Origin_X = 0.5f;
 		m_Origin_Y = 0.25f;
 		m_Size_Param = 1.f;
-		m_UI_Layer = 5;
+		m_UI_Layer = 7;
 		m_fZ = 0.01f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
 
-	// 
-	if (m_UI_Desc.m_Type == 2) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 3;
-		m_fZ = 0.1f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
-
-	// 
-	if (m_UI_Desc.m_Type == 3) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 2;
-		m_fZ = 0.09f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
-		
-	// 
-	if (m_UI_Desc.m_Type == 4) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 2;
-		m_fZ = 0.09f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
-
-	// 
-	if (m_UI_Desc.m_Type == 5) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 2;
-		m_fZ = 0.09f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
-
-	// 
-	if (m_UI_Desc.m_Type == 6) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 2;
-		m_fZ = 0.09f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
-
-	// 
-	if (m_UI_Desc.m_Type == 7) {
-		m_fX = 919;
-		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 2;
-		m_fZ = 0.09f;
-
-		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
-	}
+	
 
 	return S_OK;
 }

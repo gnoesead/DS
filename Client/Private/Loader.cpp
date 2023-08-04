@@ -25,6 +25,8 @@
 #include "World_UI_Hp.h"
 #include "FIcon.h"
 #include "Interaction.h"
+#include "Dialog.h"
+#include "Mission.h"
 
 
 #include "AtkCollider.h"
@@ -545,6 +547,16 @@ HRESULT CLoader::LoadingForGamePlay()
 	/* Prototype_GameObject_interaction */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Interaction"),
 		CInteraction::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Dialog */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dialog"),
+		CDialog::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Mission */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mission"),
+		CMission::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

@@ -32,6 +32,8 @@ HRESULT CCharacter::Initialize(void* pArg)
 		m_pTransformCom->Scaling(m_WorldInfo.vScale);
 		m_pTransformCom->Rotation(XMLoadFloat3(&m_WorldInfo.vAxis), m_WorldInfo.fDegree);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_WorldInfo.vPosition));
+		// 땅 Y값 설정
+		m_fLand_Y = m_CharacterDesc.Land_Y;
 	}
 
 	return S_OK;
@@ -256,6 +258,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 	_float4 Pos;
 	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
+	
 	//점프 상태
 	if (m_isJumpOn)
 	{
@@ -274,10 +277,10 @@ void CCharacter::Gravity(_double dTimeDelta)
 		m_dDelay_Fall += dTimeDelta;
 		if (m_dDelay_Fall > 0.1)
 		{
-			if (Pos.y <= 0.0)
+			if (Pos.y <= m_fLand_Y)
 			{
 				m_isJumpOn = false;
-				Pos.y = 0.0f;
+				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
 			}		
 		}
@@ -285,7 +288,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 	//땅 위 상태
 	else
 	{
-		Pos.y = 0.0f;
+		Pos.y = m_fLand_Y;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
 		
 		m_fJump_Acc = 0.0f;
@@ -302,7 +305,7 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-		if (Pos.y <= 0.0f)
+		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
 		}

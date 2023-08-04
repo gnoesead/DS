@@ -8,6 +8,20 @@
 #include "Player.h"
 #include "MapObject.h"
 
+#include "Player_Battle_Frame.h"
+#include "Player_Battle_Hp.h"
+#include "Player_Battle_Mp.h"
+#include "Boss_Battle_Frame.h"
+#include "Boss_Battle_Hp.h"
+#include "Player_Battle_Ult_Frame.h"
+#include "Player_Battle_Combo.h"
+#include "Player_Battle_Ult_Effect.h"
+#include "FIcon.h"
+#include "World_UI_Hp.h"
+#include "Interaction.h"
+#include "Dialog.h"
+#include "Mission.h"
+
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
 {
@@ -31,21 +45,29 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
-        return E_FAIL;
-    }
-
+    
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
         return E_FAIL;
     }
 
+   
+    if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Player_UI : CLevel_Village");
+        return E_FAIL;
+    }
+
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
         MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
         return E_FAIL;
     }
 
@@ -173,9 +195,9 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 12.f, 236.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 30.f, 236.f, 1.f);
  
     CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -191,7 +213,9 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(555.f, 10.f, 236.f, 1.f);
+
+    CharacterDesc.Land_Y = 4.5f;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -208,6 +232,118 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 HRESULT CLevel_Village::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
     Load_MapObject_Info(TEXT("../../Data/Object/Village/Village.dat"), pLayerTag);
+
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+
+// Dialog
+    CDialog::UIDESC UIDesc10;
+    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+    // Frame
+    UIDesc10.m_Is_Reverse = false;
+    UIDesc10.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+    // Name_Frame
+    UIDesc10.m_Is_Reverse = false;
+    UIDesc10.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+    // Arrow
+    UIDesc10.m_Is_Reverse = false;
+    UIDesc10.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+// Mission
+
+    CMission::UIDESC UIDesc;
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    // Main
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    // Sub
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+    
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    // Main_Icon
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    // Sub_Icon
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    // Sub_Check
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 4;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    Safe_Release(pGameInstance);
 
     return S_OK;
 }

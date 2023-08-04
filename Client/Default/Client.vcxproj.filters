@@ -169,12 +169,6 @@
     <Filter Include="02. GameObjects\UI\03.World_UI\Hp_Bar">
       <UniqueIdentifier>{7c4d3dfc-0126-4bf0-a8f2-fe2fcda539fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\04.Talk">
-      <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\05.Quest">
-      <UniqueIdentifier>{8aa4b174-b287-49a1-9dab-ea39e81388f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\06.Map">
       <UniqueIdentifier>{0e86ec12-a0e4-47d9-8d11-762bd00246c4}</UniqueIdentifier>
     </Filter>
@@ -228,6 +222,18 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\03.World_UI\Interaction">
       <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog">
+      <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission">
+      <UniqueIdentifier>{8aa4b174-b287-49a1-9dab-ea39e81388f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog\Dialog_Manager">
+      <UniqueIdentifier>{7dcfc00b-edb8-4728-9c69-2cf847708ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
+      <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -387,6 +393,12 @@
     <ClInclude Include="..\Public\Interaction.h">
       <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Dialog.h">
+      <Filter>02. GameObjects\UI\04.Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mission.h">
+      <Filter>02. GameObjects\UI\05.Mission</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -532,6 +544,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Interaction.cpp">
       <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dialog.cpp">
+      <Filter>02. GameObjects\UI\04.Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mission.cpp">
+      <Filter>02. GameObjects\UI\05.Mission</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

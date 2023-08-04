@@ -18,6 +18,7 @@
 #include "FIcon.h"
 #include "World_UI_Hp.h"
 #include "Interaction.h"
+#include "Dialog.h"
 
 #include "ColliderManager.h"
 
@@ -45,18 +46,13 @@ HRESULT CLevel_FinalBoss::Initialize()
         return E_FAIL;
     }
 
-	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-	{
-		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
-		return E_FAIL;
-	}
-
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
 		return E_FAIL;
 	}
 
+	
     if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
@@ -78,6 +74,12 @@ HRESULT CLevel_FinalBoss::Initialize()
 	if (FAILED(Ready_Layer_Boss_UI(TEXT("Layer_Boss_UI"))))
 	{
 		MSG_BOX("Failed to Ready_Boss_UI : CLevel_GamePlay");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
 		return E_FAIL;
 	}
 
@@ -208,7 +210,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 
@@ -227,6 +229,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
+	CharacterDesc.Land_Y = 0.0f;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -786,9 +789,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// È¯°æ Interaction UI
-
-
+// Interaction UI
 	CInteraction::UIDESC UIDesc9;
 	ZeroMemory(&UIDesc9, sizeof UIDesc9);
 
@@ -815,6 +816,47 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+
+// Dialog UI
+
+	CDialog::UIDESC UIDesc10;
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Frame
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 0;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Name_Frame
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Arrow
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
 
 	Safe_Release(pGameInstance);
