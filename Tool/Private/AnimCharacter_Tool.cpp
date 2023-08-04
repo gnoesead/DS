@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Zenitsu.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Akaza.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
