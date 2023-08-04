@@ -172,7 +172,7 @@
     <Filter Include="02. GameObjects\Effect\EffectPlayer">
       <UniqueIdentifier>{1fd423d2-4f55-41d4-a8b8-a9e94cbde288}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Monster_Akaza">
+    <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -288,9 +288,6 @@
     <ClInclude Include="..\Public\Player_Battle_Combo.h">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Monster.h">
-      <Filter>02. GameObjects\Character\Monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\AtkCollider.h">
       <Filter>02. GameObjects\AtkCollider</Filter>
     </ClInclude>
@@ -325,7 +322,7 @@
       <Filter>02. GameObjects\Character</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
-      <Filter>02. GameObjects\Character\Monster\Monster_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,9 +425,6 @@
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Monster.cpp">
-      <Filter>02. GameObjects\Character\Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\AtkCollider.cpp">
       <Filter>02. GameObjects\AtkCollider</Filter>
     </ClCompile>
@@ -465,7 +459,7 @@
       <Filter>02. GameObjects\Character</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
-      <Filter>02. GameObjects\Character\Monster\Monster_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

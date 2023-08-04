@@ -181,7 +181,7 @@
     <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Boss_Akaza.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Battle_Frame.h" />
     <ClInclude Include="..\Public\Boss_Battle_Hp.h" />
@@ -205,9 +205,6 @@
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
-    <ClInclude Include="..\Public\Monster.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -234,7 +231,7 @@
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp" />
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp" />
@@ -257,9 +254,6 @@
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
-    <ClCompile Include="..\Private\Monster.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />

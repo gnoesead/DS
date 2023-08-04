@@ -22,6 +22,7 @@ texture2D      g_SpecularTexture;
 texture2D      g_DepthTexture;
 texture2D      g_ShadowDepthTexture;
 texture2D      g_SSAOTexture;
+texture2D	   g_SSAOFinalTexture;
 texture2D      g_BlurTexture;
 texture2D      g_BlurXTexture;
 texture2D      g_BlurYTexture;
@@ -207,16 +208,17 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
-	vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
-
+	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+		
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
 	else if (g_bSSAOSwitch == true)
-		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
+		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
+		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
 
-	//Out.vShade *= vSSAO;
-	/*Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));*/
+	////Out.vShade *= vSSAO;
+	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(g_vLightDir), vNormal);
@@ -305,8 +307,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vShade = saturate(g_ShadeTexture.Sample(LinearSampler, In.vTexUV));
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
-	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
-	//vector      vSSAO = g_SSAOTexture.Sample(PointClampSampler, In.vTexUV);
+	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
+	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 	/*if (vDiffuse.a == 0.f)
@@ -325,7 +327,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		else if (vShade.r >= 0.41f && vShade.r <= 1.f)
 			vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
 
-	Out.vColor = (vDiffuse) * (vShade);
+	Out.vColor = vDiffuse * vShade;
+	
 
 	if (true == g_bGrayScale)
 		Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));

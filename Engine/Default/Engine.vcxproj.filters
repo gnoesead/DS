@@ -505,5 +505,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect.hlsl">
       <Filter>01. Utility\03. Component\Renderer</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl">
+      <Filter>01. Utility\03. Component\Renderer</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -51,6 +51,7 @@ private:
 private:
 	class CShader*			m_pShader = { nullptr };
 	class CShader*			m_pEffectShader = { nullptr };
+	class CShader*			m_pSSAOShader = { nullptr };
 	class CVIBuffer_Rect*	m_pVIBuffer = { nullptr };
 	_float4x4				m_WorldMatrix;
 	_float4x4				m_ViewMatrix;
@@ -112,7 +113,7 @@ private:
 	D3D11_VIEWPORT			m_VP; // Shadow
 
 	_float					m_fSSAOBias = { 0.0003f };
-	_float					m_fSSAORadius = { 0.0001f };
+	_float					m_fSSAORadius = { 0.000005f };
 public:
 	static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual CComponent* Clone(void* pArg) override;

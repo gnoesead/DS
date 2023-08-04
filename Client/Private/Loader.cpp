@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Player_Tanjiro.h"
 #include "Monster_Test.h"
+#include "Boss_Akaza.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -309,6 +310,16 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
 		return E_FAIL;
 	}
+
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Akaza"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Akaza/Akaza.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region NonCharacter
@@ -424,6 +435,14 @@ HRESULT CLoader::LoadingForGamePlay()
 		CPlayer_Tanjiro::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Tanjiro");
+		return E_FAIL;
+	}
+
+	/* Prototype_GameObject_Player_Tanjiro */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Akaza"),
+		CBoss_Akaza::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Akaza");
 		return E_FAIL;
 	}
 

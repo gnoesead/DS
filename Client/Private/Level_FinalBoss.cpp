@@ -6,7 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
-//#include "Monster.h"
+#include "Boss_Akaza.h"
 #include "MapObject.h"
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
@@ -48,11 +48,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-  /*  if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_Akaza : CLevel_FinalBoss");
         return E_FAIL;
-    }*/
+    }
 
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
@@ -123,8 +123,8 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 
     LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
     LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(0.5f, 0.5f, 0.5f, 0.5f);
-    LightDesc.vLightAmbient     = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
     if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -237,10 +237,10 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
 {
-  /*  CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CMonster::CHARACTERDESC CharacterDesc;
+    CBoss_Akaza::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
@@ -271,7 +271,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
     }
 		
 
-    Safe_Release(pGameInstance);*/
+    Safe_Release(pGameInstance);
 
     return S_OK;
 }

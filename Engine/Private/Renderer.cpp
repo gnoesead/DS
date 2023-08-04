@@ -237,13 +237,13 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectCombineBlur"), TEXT("Target_EffectCombineBlur"))))
 		return E_FAIL;
-	
+
 
 	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixScaling(Viewport.Width, Viewport.Height, 1.f));
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH(Viewport.Width, Viewport.Height, 0.f, 1.f));
 
-	
+
 	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXTEX_DECL::Elements, VTXTEX_DECL::iNumElements);
 	if (nullptr == m_pShader)
 		return E_FAIL;
@@ -251,7 +251,13 @@ HRESULT CRenderer::Initialize_Prototype()
 	m_pEffectShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect.hlsl"), VTXTEX_DECL::Elements, VTXTEX_DECL::iNumElements);
 	if (nullptr == m_pEffectShader)
 		return E_FAIL;
-	
+
+	m_pSSAOShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSAO.hlsl"), VTXTEX_DECL::Elements, VTXTEX_DECL::iNumElements);
+	if (nullptr == m_pSSAOShader)
+		return E_FAIL;
+
+
+
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
@@ -537,6 +543,20 @@ HRESULT CRenderer::End_DefaultRT()
 
 	m_pVIBuffer->Render();
 
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Default"), m_pSSAOShader, "g_Texture")))
+		return E_FAIL;
+
+	m_pSSAOShader->Begin(0);
+
+	m_pVIBuffer->Render();
+
 	return S_OK;
 }
 
@@ -704,11 +724,11 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_SSAO"))))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -729,35 +749,45 @@ HRESULT CRenderer::Render_SSAO()
 	{
 		m_fSSAOBias -= 0.0001f;
 	}
+	m_fSSAORadius = 0.000005f;
 
-	if (FAILED(m_pShader->SetUp_RawValue("g_fRadius", &m_fSSAORadius, sizeof(_float))))
+	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fRadius", &m_fSSAORadius, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_RawValue("g_fBias", &m_fSSAOBias, sizeof(_float))))
+	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fBias", &m_fSSAOBias, sizeof(_float))))
 		return E_FAIL;
 	Safe_Release(pGameInstance);
 
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Normal"), m_pShader, "g_NormalTexture")))
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Normal"), m_pSSAOShader, "g_NormalTexture")))
 		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Depth"), m_pSSAOShader, "g_DepthTexture")))
 		return E_FAIL;
 
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
 	Safe_AddRef(pPipeLine);
 
 	_float4x4 ViewMatrixInv = pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_VIEW);
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrixInv", &ViewMatrixInv)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrixInv", &ViewMatrixInv)))
 		return E_FAIL;
 	_float4x4 ProjMatrixInv = pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_PROJ);
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrixInv", &ProjMatrixInv)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrixInv", &ProjMatrixInv)))
 		return E_FAIL;
 
+	_float4x4 matViewInv = pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_VIEW);
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_matViewInv", &matViewInv)))
+		return E_FAIL;
+	_float4x4 matProjInv = pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_PROJ);
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_matProjInv", &matProjInv)))
+		return E_FAIL;
+
+
+
 	_float4 vCamPosition = pPipeLine->Get_CameraPosition();
-	if (FAILED(m_pShader->SetUp_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
 
 	Safe_Release(pPipeLine);
 
-	if (FAILED(m_pShader->Begin(5)))
+	if (FAILED(m_pSSAOShader->Begin(1)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->Render()))
@@ -780,22 +810,22 @@ HRESULT CRenderer::Render_SSAOBlurX()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_SSAOBlurX"))))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-	m_bSSAOBlur = true;
-	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAO", &m_bSSAOBlur, sizeof(_bool))))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
+	/*m_bSSAOBlur = true;
+	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_bSSAO", &m_bSSAOBlur, sizeof(_bool))))
+		return E_FAIL;*/
 
 
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_BlurTexture")))
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pSSAOShader, "g_BlurTexture")))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->Begin(6)))
+	if (FAILED(m_pSSAOShader->Begin(2)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->Render()))
@@ -816,21 +846,21 @@ HRESULT CRenderer::Render_SSAOBlurY()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_SSAOBlurY"))))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-
-	m_bSSAOBlur = true;
-	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAO", &m_bSSAOBlur, sizeof(_bool))))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_BlurXTexture")))
+	/*m_bSSAOBlur = true;
+	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_bSSAO", &m_bSSAOBlur, sizeof(_bool))))
+		return E_FAIL;*/
+
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pSSAOShader, "g_BlurXTexture")))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->Begin(7)))
+	if (FAILED(m_pSSAOShader->Begin(3)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->Render()))
@@ -850,25 +880,23 @@ HRESULT CRenderer::Render_SSAOFinal()
 
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_SSAOBlur"))))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlurX"), m_pShader, "g_BlurXTexture")))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlurY"), m_pShader, "g_BlurYTexture")))
-		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_Texture")))
-		return E_FAIL;
-
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_SSAOTexture")))
-		return E_FAIL;*/
 
 
-	if (FAILED(m_pShader->Begin(9)))
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlurX"), m_pSSAOShader, "g_BlurXTexture")))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlurY"), m_pSSAOShader, "g_BlurYTexture")))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pSSAOShader, "g_Texture")))
+		return E_FAIL;
+
+	if (FAILED(m_pSSAOShader->Begin(4)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->Render()))
@@ -1166,7 +1194,7 @@ HRESULT CRenderer::Render_Effect()
 
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
 		return E_FAIL;
-	
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_EFFECT])
 	{
 		if (nullptr != pGameObject)
@@ -1205,7 +1233,7 @@ HRESULT CRenderer::Render_Effect()
 	// 밝은 것만 추출작업
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectBloom"))))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
@@ -1223,7 +1251,7 @@ HRESULT CRenderer::Render_Effect()
 
 	if (FAILED(m_pVIBuffer->Render()))
 		return E_FAIL;
-		
+
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
 
@@ -1237,7 +1265,7 @@ HRESULT CRenderer::Render_Effect()
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BlurTexture")))
 		return E_FAIL;
 
@@ -1294,7 +1322,7 @@ HRESULT CRenderer::Render_Effect()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_Texture")))
 		return E_FAIL;
-	
+
 
 	if (FAILED(m_pEffectShader->Begin(4)))
 		return E_FAIL;
@@ -1319,7 +1347,7 @@ HRESULT CRenderer::Render_Effect()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_FinalTexture"))) // 디퍼드 최종 텍스처
 		return E_FAIL;
-	
+
 	if (FAILED(m_pEffectShader->Begin(8)))
 		return E_FAIL;
 
@@ -1361,6 +1389,11 @@ HRESULT CRenderer::Render_RenderTaget()
 	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
 	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_GameObject"), m_pShader, m_pVIBuffer)))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_LightAcc"), m_pShader, m_pVIBuffer)))
@@ -1375,8 +1408,9 @@ HRESULT CRenderer::Render_RenderTaget()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_CombineBlur"), m_pShader, m_pVIBuffer)))
 		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_SSAOBlur"), m_pShader, m_pVIBuffer)))
+	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_SSAO"), m_pSSAOShader, m_pVIBuffer)))
 		return E_FAIL;
+
 	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_ExportHDR"), m_pShader, m_pVIBuffer)))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Render_Debug(TEXT("MRT_HDR"), m_pShader, m_pVIBuffer)))
@@ -1421,7 +1455,7 @@ HRESULT CRenderer::Render_Lights()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
 		return E_FAIL;
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlur"), m_pShader, "g_SSAOTexture")))
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAOBlur"), m_pShader, "g_SSAOFinalTexture")))
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -1472,30 +1506,11 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_ShadowDepthTexture")))
 		return E_FAIL;
 
+
 	// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	/*if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		if (m_bInvert == false)
-			m_bInvert = true;
-		else if (m_bInvert == true)
-			m_bInvert = false;
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
-	{
-		if (m_bGrayScale == false)
-			m_bGrayScale = true;
-		else if (m_bGrayScale == true)
-			m_bGrayScale = false;
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		if (m_bSepia == false)
-			m_bSepia = true;
-		else if (m_bSepia == true)
-			m_bSepia = false;
-	}*/
+
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSepia", &m_bSepia, sizeof(_bool))))
@@ -1587,6 +1602,7 @@ void CRenderer::Free()
 
 	Safe_Release(m_pShader);
 	Safe_Release(m_pEffectShader);
+	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pLight_Manager);
