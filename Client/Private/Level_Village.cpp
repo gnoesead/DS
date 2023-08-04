@@ -268,17 +268,17 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
-    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+    //ZeroMemory(&UIDesc10, sizeof UIDesc10);
 
-    // Arrow
-    UIDesc10.m_Is_Reverse = false;
-    UIDesc10.m_Type = 2;
+    //// Arrow
+    //UIDesc10.m_Is_Reverse = false;
+    //UIDesc10.m_Type = 2;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+    //    TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+    //    Safe_Release(pGameInstance);
+    //    return E_FAIL;
+    //}
 
 // Mission
 

@@ -4,6 +4,9 @@
 #include "Level_Loading.h"
 #include "AtkCollManager.h"
 #include "ColliderManager.h"
+#include "DialogManager.h"
+#include "MissionManager.h"
+
 
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
@@ -309,7 +312,9 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
+
 	/* Prototype_Component_Texture_UI */
+
 #pragma region Player_Battle_Bar_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Frame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/P/P_Frame.png")))))
@@ -427,7 +432,6 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion
 
-
 #pragma region Dialog_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dialog"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Dialog/Dialog_%d.png"), 3))))
@@ -443,6 +447,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion
 
+	
 
 
 	Safe_AddRef(m_pRenderer);
@@ -495,5 +500,8 @@ void CMainApp::Free()
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
+	CDialogManager::GetInstance()->DestroyInstance();
+	CMissionManager::GetInstance()->DestroyInstance();
+
 	CGameInstance::Release_Engine();
 }

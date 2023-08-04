@@ -235,6 +235,12 @@
     <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
       <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Sword">
+      <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Zenitsu">
+      <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -399,6 +405,21 @@
     <ClInclude Include="..\Public\Mission.h">
       <Filter>02. GameObjects\UI\05.Mission</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sword.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SwordHome.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Zenitsu.h">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DialogManager.h">
+      <Filter>02. GameObjects\UI\04.Dialog\Dialog_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MissionManager.h">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -550,6 +571,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\Mission.cpp">
       <Filter>02. GameObjects\UI\05.Mission</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sword.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwordHome.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Zenitsu.cpp">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DialogManager.cpp">
+      <Filter>02. GameObjects\UI\04.Dialog\Dialog_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MissionManager.cpp">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

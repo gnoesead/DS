@@ -5,6 +5,7 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
+#include "MissionManager.h"
 
 
 CMission::CMission(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -123,10 +124,16 @@ HRESULT CMission::Initialize(void * pArg)
 
 	Set_UI();
 
-	m_szMain[0] = L"메인임무";
-	m_szMain_Sub[0] = L"달성상황";
-	m_szSub[0] = L"10시가 되면 집에 가세요";
+	m_szMain.push_back(L"메인임무1");
+	m_szMain.push_back(L"메인임무2");
+	m_szMain.push_back(L"메인임무3");
 
+	m_szMain_Sub.push_back(L"달성상황1");
+	m_szMain_Sub.push_back(L"달성상황2");
+	m_szMain_Sub.push_back(L"달성상황3");
+
+	m_szSub.push_back(L"10시가 되면 집에 가세요");
+	m_szSub.push_back(L"12시가 되면 집에 가세요");
 	
 
 	return S_OK;
@@ -164,7 +171,12 @@ void CMission::LateTick(_double TimeDelta)
 		m_Is_Out = true;
 		m_Is_Font_Render = false;
 	}*/
-		
+
+
+	m_Main_Type = CMissionManager::GetInstance()->Get_Main_Mission_Type();
+	m_Sub_Type = CMissionManager::GetInstance()->Get_Sub_Mission_Type();
+
+	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
 
 	Safe_Release(pGameInstance);
 
@@ -202,15 +214,15 @@ HRESULT CMission::Render()
 
 		if (m_UI_Desc.m_Type == 1) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szSub[0].c_str(), _float2((_float)m_fX - (_float)m_szSub[0].size() * 11.f , (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szSub[m_Sub_Type].c_str(), _float2((_float)m_fX - 150.f , (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
 				return E_FAIL;
 		}
 		else if (m_UI_Desc.m_Type == 0) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain[0].c_str(), _float2((_float)m_fX - (_float)m_szMain[0].size() * 3.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain[m_Main_Type].c_str(), _float2((_float)m_fX  - 10.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
 				return E_FAIL;
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain_Sub[0].c_str(), _float2((_float)m_fX - (_float)m_szMain_Sub[0].size() * 3.f, (_float)m_fY + 20.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain_Sub[m_Main_Type].c_str(), _float2((_float)m_fX  - 10.f, (_float)m_fY + 20.f), _float2(0.5f, 0.5f))))
 				return E_FAIL;
 		}
 

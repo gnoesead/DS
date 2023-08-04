@@ -22,7 +22,6 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
-		_uint    m_Dialog_Type = { 0 };
 	}UIDESC;
 
 
@@ -54,10 +53,15 @@ public:
 private:
 	wstring					m_szName[NAME_END] = {};
 
-	wstring			        m_szText_1[10] = {};
-	
+	vector<wstring>			m_szText_1 = {};
 
+	vector<wstring>			m_szText_2 = {};
 
+	_uint                   m_Dialog_Type = { 0 };
+
+	_uint                   m_Cur_Num = { 0 };
+
+	_int                    m_Name_Type = { 1 };
 
 private:
 	_bool m_Is_In = { false };

@@ -20,7 +20,6 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
-		_uint    m_Dialog_Type = { 0 };
 	}UIDESC;
 
 
@@ -50,12 +49,16 @@ public:
 
 
 private:
-	wstring			        m_szMain[10] = {};
-	wstring			        m_szMain_Sub[10] = {};
+	vector<wstring>			m_szMain = {};
+	vector<wstring>			m_szMain_Sub = {};
+	vector<wstring>		    m_szMain_Sub_Check = {};
 
-	wstring			        m_szSub[10] = {};
-	
+	vector<wstring>			m_szSub = {};
+	vector<wstring>			m_szSub_Check = {};
 
+	_uint    m_Main_Type = { 0 };
+	_uint    m_Sub_Type = { 0 };
+	_bool    m_Is_Dialog_On = { false };
 
 
 private:

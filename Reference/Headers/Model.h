@@ -38,7 +38,10 @@ public://Get
 
 	_bool	Get_AnimFinish(_int AnimIndex) {
 		
-		return m_Animations[AnimIndex]->Get_AnimationDesc().m_isFinish;
+		_bool	bFinish = m_Animations[AnimIndex]->Get_AnimationDesc().m_isFinish;
+		m_Animations[AnimIndex]->Reset_Finish();
+
+		return bFinish;
 		
 	}
 

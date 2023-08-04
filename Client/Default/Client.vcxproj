@@ -187,6 +187,7 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderManager.h" />
     <ClInclude Include="..\Public\Dialog.h" />
+    <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
     <ClInclude Include="..\Public\EffectPlayer.h" />
     <ClInclude Include="..\Public\Effect_Mesh.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
     <ClInclude Include="..\Public\Mission.h" />
+    <ClInclude Include="..\Public\MissionManager.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
@@ -217,10 +219,13 @@
     <ClInclude Include="..\Public\Player_Battle_Ult_Effect.h" />
     <ClInclude Include="..\Public\Player_Battle_Ult_Frame.h" />
     <ClInclude Include="..\Public\Player_Tanjiro.h" />
+    <ClInclude Include="..\Public\Player_Zenitsu.h" />
     <ClInclude Include="..\Public\RotationMapObject.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundMgr.h" />
     <ClInclude Include="..\Public\StaticMapObject.h" />
+    <ClInclude Include="..\Public\Sword.h" />
+    <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
     <ClInclude Include="..\Public\World_UI_Hp.h" />
     <ClInclude Include="Client.h" />
@@ -239,6 +244,7 @@
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ColliderManager.cpp" />
     <ClCompile Include="..\Private\Dialog.cpp" />
+    <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
     <ClCompile Include="..\Private\EffectPlayer.cpp" />
     <ClCompile Include="..\Private\Effect_Mesh.cpp" />
@@ -258,6 +264,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
     <ClCompile Include="..\Private\Mission.cpp" />
+    <ClCompile Include="..\Private\MissionManager.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
@@ -269,10 +276,13 @@
     <ClCompile Include="..\Private\Player_Battle_Ult_Effect.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Ult_Frame.cpp" />
     <ClCompile Include="..\Private\Player_Tanjiro.cpp" />
+    <ClCompile Include="..\Private\Player_Zenitsu.cpp" />
     <ClCompile Include="..\Private\RotationMapObject.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
+    <ClCompile Include="..\Private\Sword.cpp" />
+    <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
     <ClCompile Include="..\Private\World_UI_Hp.cpp" />
     <ClCompile Include="Client.cpp" />

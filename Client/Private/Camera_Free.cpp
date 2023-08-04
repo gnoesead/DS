@@ -130,8 +130,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			// adventure
 			if (m_Is_Battle != true) {
 
-				m_fDistance = { 5.f };
-				m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
+				m_fDistance = { 4.3f };
+				m_vOffSet = { 0.f, 1.6f, 0.f, 0.f };
 				m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
 				m_fLookDamping = { 5.f };
 
@@ -140,7 +140,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			// Battle
 			else if (m_Is_Battle == true) {
 
-				m_fDistance = { 6.f };
+				m_fDistance = { 5.5f };
 				m_vOffSet = { 0.f, 2.3f, 0.f, 0.f };
 				m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
 				m_fLookDamping = { 7.f };

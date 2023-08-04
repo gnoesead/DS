@@ -5,6 +5,8 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
+#include "DialogManager.h"
+#include "MissionManager.h"
 
 
 CDialog::CDialog(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -93,7 +95,19 @@ HRESULT CDialog::Initialize(void * pArg)
 	Set_UI();
 
 
-	m_szText_1[0] = L"대화창 생성 : F , 대화창 소멸 : G";
+	m_szText_1.push_back(L"탄지로와 소녀");
+	m_szText_1.push_back(L"1");
+	m_szText_1.push_back(L"245");
+	m_szText_1.push_back(L"이게 맞아?  이게 맞냐고");
+	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G");
+	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
+
+	m_szText_2.push_back(L"탄지로와 어머니");
+	m_szText_2.push_back(L"탄지로");
+	m_szText_2.push_back(L"245");
+	m_szText_2.push_back(L"이게 맞아?  이게 맞냐고");
+	m_szText_2.push_back(L"대화창 생성 : F");
+
 
 	m_szName[TANJIRO] = L"카마도 탄지로";
 	m_szName[MOTHER] = L"어머니";
@@ -128,16 +142,46 @@ void CDialog::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	
+
+	m_Dialog_Type = CDialogManager::GetInstance()->Get_Dialog_Type();
+
+	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true) {
+
+		m_Cur_Num++;
+		m_Name_Type *= -1;
+
+		if (m_Dialog_Type == 0) {
+			if (m_Cur_Num > m_szText_1.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 1) {
+			if (m_Cur_Num > m_szText_2.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+
+	}
+
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false) {
 		m_Is_In = true;
 		m_Is_Font_Render = true;
 	}
-	
-	if (pGameInstance->Get_DIKeyDown(DIK_G) && m_Is_In == false && m_Is_Out == false) {
-		m_Is_Out = true;
-		m_Is_Font_Render = false;
+
+	if (m_Is_Font_Render == true)
+		CMissionManager::GetInstance()->Set_Is_Dialog_On(true);
+	else {
+		CMissionManager::GetInstance()->Set_Is_Dialog_On(false);
 	}
-		
+
+
 
 	Safe_Release(pGameInstance);
 
@@ -174,14 +218,42 @@ HRESULT CDialog::Render()
 
 
 		if (m_UI_Desc.m_Type == 0) {
+			if (m_Dialog_Type == 0) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szText_1[0].c_str(), _float2((_float)m_fX - (_float)m_szText_1[0].size() * 5.4f , (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
-				return E_FAIL;
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 8.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 1) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 8.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
 		}
 		else if (m_UI_Desc.m_Type == 1) {
+			if (m_Dialog_Type == 0) {
+				
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				
+			}
+			else if (m_Dialog_Type == 1) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - (_float)m_szText_1[0].size() * 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
-				return E_FAIL;
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[MOTHER].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
 		}
 
 
