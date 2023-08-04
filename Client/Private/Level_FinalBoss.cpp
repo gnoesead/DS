@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+#include "Boss_Akaza.h"
 #include "MapObject.h"
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
@@ -49,7 +50,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 
     if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_Akaza : CLevel_FinalBoss");
         return E_FAIL;
     }
 
@@ -122,8 +123,8 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 
     LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
     LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(0.5f, 0.5f, 0.5f, 0.5f);
-    LightDesc.vLightAmbient     = _float4(0.5f, 0.5f, 0.5f, 1.f);
+    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
     if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
@@ -247,7 +248,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
+    CBoss_Akaza::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
@@ -271,25 +272,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(140.f, 0.f, 120.f, 1.f);
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-        TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+        MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
         return E_FAIL;
     }
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-		return E_FAIL;
-	}
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Test"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-		return E_FAIL;
-	}
+		
 
     Safe_Release(pGameInstance);
 
