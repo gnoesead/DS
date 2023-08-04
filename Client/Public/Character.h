@@ -46,10 +46,15 @@ protected:
 
 	//이동 관련
 	void	Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
+	void	Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+
+	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
+
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
@@ -70,9 +75,13 @@ protected:
 	CCollider* m_pColliderCom[CCollider::TYPE_END] = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 
+
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+
+	//스케일값 비율
+	_float		m_fFix_Size = { 0.80f };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };

@@ -68,7 +68,7 @@ void CMonster_Test::Tick(_double dTimeDelta)
 
 void CMonster_Test::LateTick(_double dTimeDelta)
 {
-	__super::LateTick(dTimeDelta);
+	//__super::LateTick(dTimeDelta);
 
 	
 

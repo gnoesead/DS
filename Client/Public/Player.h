@@ -156,12 +156,17 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_isLeft = { false };
 	_bool	m_isRight = { false };
 
+	//젠이츠 벽력용
+	_bool	m_isCan_Air_Hekireki = { false };
+
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
 
+	//히트용
+	_bool	m_isTestHit = { false };
 
 
 protected:

@@ -3,6 +3,9 @@
 #include "Client_Defines.h"
 #include "Player.h"
 
+#include "Sword.h"
+#include "SwordHome.h"
+
 BEGIN(Engine)
 
 END
@@ -65,6 +68,10 @@ private: //애니메이션 제어용 함수들
 	void	Moving_Restrict();
 
 
+private:
+	CSword* m_pSword = { nullptr };
+	CSwordHome* m_pSwordHome = { nullptr };
+
 
 private: //애니메이션 제어용 변수들
 	//Move
@@ -103,6 +110,7 @@ private:
 private:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();
+	
 
 public:
 	static CPlayer_Tanjiro* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

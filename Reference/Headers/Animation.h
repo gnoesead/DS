@@ -89,6 +89,7 @@ public:
 	void	Set_EarlyEnd(_bool bEnd) { m_isEarlyEnd = bEnd; }
 
 
+
 private:
 	ANIMATIONDESC	m_AnimationDesc;
 	CONTROLDESC		m_ControlDesc;

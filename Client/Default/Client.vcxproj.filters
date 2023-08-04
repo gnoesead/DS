@@ -175,6 +175,12 @@
     <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Sword">
+      <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Zenitsu">
+      <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -321,6 +327,15 @@
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sword.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SwordHome.h">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player_Zenitsu.h">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
     </ClInclude>
@@ -457,6 +472,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02. GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sword.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwordHome.cpp">
+      <Filter>02. GameObjects\Character\Player\Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Zenitsu.cpp">
+      <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>

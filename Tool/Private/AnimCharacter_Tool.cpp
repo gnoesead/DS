@@ -40,17 +40,14 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 
 	m_pModelCom->Set_Animation(0);
 
-
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
-	
-	
 	
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Akaza.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Zenitsu.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -90,8 +87,10 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 
 		fin.close();
 	
-	Safe_Release(pGameInstance);
 
+
+	Safe_Release(pGameInstance);
+	
 	return S_OK;
 }
 
@@ -440,6 +439,7 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
+	//★
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{

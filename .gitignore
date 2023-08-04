@@ -442,6 +442,7 @@ Client/Bin/*
 !Client/Bin/Sound
 !Client/Bin/fmodex64.dll
 Client/Bin/Resources/Models/Character/Akaza/Akaza.bin
+Client/Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin
 Client/Bin/Resources/Models/Character/Tanjiro/Tanjiro.bin
 !Engine/Bin
 Engine/Bin/*

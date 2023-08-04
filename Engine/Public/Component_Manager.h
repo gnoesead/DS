@@ -15,6 +15,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Model.h"
+#include "Bone.h"
 #include "Model_Instance.h"
 
 BEGIN(Engine)

@@ -16,12 +16,20 @@ public:
 
 	_matrix Get_CombinedTransformationMatrix() const { return XMLoadFloat4x4(&m_CombinedTransformationMatrix); }
 
+	_matrix Get_PivotMatrix() const {
+		return XMLoadFloat4x4(&m_PivotMatrix);
+	}
+
 	void Set_TransformationMatrix(_fmatrix TransformationMatrix) {
 		XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix);
 	}
 
 	void Set_OffsetMatrix(_fmatrix OffsetMatrix) {
 		XMStoreFloat4x4(&m_OffsetMatrix, OffsetMatrix);
+	}
+
+	void Set_PivotMatrix(_fmatrix PivotMatrix) {
+		XMStoreFloat4x4(&m_PivotMatrix, PivotMatrix);
 	}
 
 public:
@@ -34,6 +42,7 @@ private:
 	_float4x4	m_TransformationMatrix;
 	_float4x4	m_CombinedTransformationMatrix;
 	_int		m_iParentIndex = { -1 };
+	_float4x4	m_PivotMatrix;
 
 public:
 	static CBone* Create(BONEDATA* pModelData);
