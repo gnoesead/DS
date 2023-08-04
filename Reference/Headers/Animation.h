@@ -76,6 +76,10 @@ public:
 	
 	vector<KEYFRAME> Get_LastKeys();
 
+	_bool	Check_AnimRatio(_double Ratio, _double TimeDelta);
+	_bool	Get_AnimRatio(_double Ratio);
+
+
 	//Set
 	void	Set_AnimationDesc(ANIMATIONDESC animdesc) { m_AnimationDesc = animdesc; }
 	void	Reset_TimeAcc() { m_AnimationDesc.m_dTimeAcc = 0.0; }

@@ -146,6 +146,8 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 		m_isCombo_Trigger = false;
 	}
 
+	//m_Animations[m_iPreAnimIndex]->Reset_Finish();
+
 	//콤보애니메이션이 아닐시 combo_doing강제 초기화
 	if (false == m_Animations[m_iCurrentAnimIndex]->Get_ControlDesc().m_isCombo)
 	{
@@ -203,6 +205,8 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 				m_LastKeys = m_Animations[m_iCurrentAnimIndex]->Get_LastKeys();
 
 				m_isCombo_Doing = false;
+
+				m_iPreAnimIndex = m_iSaveAnimIndex;
 			}
 
 			//콤보 진행이 아닐시 트리거가 안들어오면,
@@ -217,7 +221,7 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 
 		m_isCombo_Trigger = false;
 	}
-
+	
 	m_iSaveAnimIndex = m_iCurrentAnimIndex;
 
 	return S_OK;

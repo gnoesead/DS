@@ -65,8 +65,8 @@ VS_OUT VS_GRASS(VS_IN In)
 	matrix		matWVP = mul(matWV, g_ProjMatrix);
 	
 
-	vLocalPosition.x += vLocalPosition.y * g_fRatio * 0.05f;
-	vLocalPosition.z += vLocalPosition.y * g_fRatio * 0.05f;
+	/*vLocalPosition.x += vLocalPosition.y * g_fRatio * 0.05f;
+	vLocalPosition.z += vLocalPosition.y * g_fRatio * 0.05f;*/
 
 	Out.vPosition = mul(vLocalPosition, matWVP);
 	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));

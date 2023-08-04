@@ -60,6 +60,7 @@ protected:
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
+	
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -100,7 +101,10 @@ protected:
 
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
+	
 
+	//몬스터전용
+	_bool	m_bFirst_Monster = { true };
 
 protected:
 	HRESULT Add_Components();
