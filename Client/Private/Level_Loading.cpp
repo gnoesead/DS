@@ -40,7 +40,6 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 
     ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
     UIDesc.m_Type = 0;
 
     m_pBack->Initialize(&UIDesc);
@@ -53,7 +52,6 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 
     ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
     UIDesc.m_Type = 1;
 
     m_pCircle->Initialize(&UIDesc);
@@ -67,7 +65,6 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 
     ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
     UIDesc.m_Type = 2;
 
     m_pRect->Initialize(&UIDesc);
@@ -81,11 +78,63 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 
     ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
     UIDesc.m_Type = 8;
 
     m_pTitle->Initialize(&UIDesc);
 
+    // Cloud_LT
+    m_pCloud_LT = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_LT)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 9;
+  
+    m_pCloud_LT->Initialize(&UIDesc);
+
+
+    // Cloud_RT
+    m_pCloud_RT = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_RT)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 10;
+   
+
+    m_pCloud_RT->Initialize(&UIDesc);
+
+    // Cloud_LD
+    m_pCloud_LD = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_LD)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 11;
+    UIDesc.m_Is_Y_Reverse = true;
+
+    m_pCloud_LD->Initialize(&UIDesc);
+
+
+    // Cloud_RD
+    m_pCloud_RD = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_RD)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 12;
+    UIDesc.m_Is_X_Reverse = true;
+    UIDesc.m_Is_Y_Reverse = true;
+
+    m_pCloud_RD->Initialize(&UIDesc);
 
 
 
@@ -118,6 +167,18 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
     m_pTitle->Tick(dTimeDelta);
     m_pTitle->LateTick(dTimeDelta);
+
+    m_pCloud_LT->Tick(dTimeDelta);
+    m_pCloud_LT->LateTick(dTimeDelta);
+
+    m_pCloud_RT->Tick(dTimeDelta);
+    m_pCloud_RT->LateTick(dTimeDelta);
+
+    m_pCloud_LD->Tick(dTimeDelta);
+    m_pCloud_LD->LateTick(dTimeDelta);
+
+    m_pCloud_RD->Tick(dTimeDelta);
+    m_pCloud_RD->LateTick(dTimeDelta);
 
     if (true == m_pLoader->Get_Finished())
     {
@@ -197,6 +258,10 @@ void CLevel_Loading::Free()
     Safe_Release(m_pCircle);
     Safe_Release(m_pRect);
     Safe_Release(m_pTitle);
+    Safe_Release(m_pCloud_LT);
+    Safe_Release(m_pCloud_RT);
+    Safe_Release(m_pCloud_LD);
+    Safe_Release(m_pCloud_RD);
 
 
     Safe_Release(m_pLoader);

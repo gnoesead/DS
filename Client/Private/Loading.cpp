@@ -31,7 +31,6 @@ HRESULT CLoading::Initialize(void* pArg)
 	if (pArg != nullptr)
 		m_UI_Desc = *(UIDESC*)pArg;
 
-	m_Is_Reverse = m_UI_Desc.m_Is_Reverse;
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -46,6 +45,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 360;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
 		m_Origin_X = 1280.f;
 		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
@@ -57,6 +58,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 360;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
 		m_Origin_X = 1000.f;
 		m_Origin_Y = 1000.f;
 		m_Size_Param = 0.7f;
@@ -68,6 +71,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 365;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
 		m_Origin_X = 860.f;
 		m_Origin_Y = 592.f;
 		m_Size_Param = 0.69f;
@@ -75,11 +80,14 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Alpha = 0.2f;
 	}
 
+
 	// Title
 	if (m_UI_Desc.m_Type == 8) {
 
 		m_fX = 640;
 		m_fY = 146;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
 		m_Origin_X = 520.f;
 		m_Origin_Y = 68.f;
 		m_Size_Param = 0.69f;
@@ -87,7 +95,58 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Alpha = 1.f;
 	}
 
-	
+	// Cloud_LT
+	if (m_UI_Desc.m_Type == 9) {
+		m_fX = 90;
+		m_fY = 2;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+	}
+	// Cloud_RT
+	if (m_UI_Desc.m_Type == 10) {
+
+		m_fX = 1210;
+		m_fY = 35;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
+		m_Origin_X = 848.f;
+		m_Origin_Y = 308.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+	}
+	// Cloud_LD
+	if (m_UI_Desc.m_Type == 11) {
+
+		m_fX = 290;
+		m_fY = 715;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+	}
+	// Cloud_RD
+	if (m_UI_Desc.m_Type == 12) {
+
+		m_fX = 1150;
+		m_fY = 625;
+		m_Origin_PosX = m_fX;
+		m_Origin_PosY = m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+	}
+
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -98,6 +157,36 @@ HRESULT CLoading::Initialize(void* pArg)
 void CLoading::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+
+	// Cloud_LT
+	if (m_UI_Desc.m_Type == 9) {
+		
+		//m_fX += dTimeDelta * 10.f;
+
+
+	}
+	// Cloud_RT
+	if (m_UI_Desc.m_Type == 10) {
+
+	
+
+
+	}
+	// Cloud_LD
+	if (m_UI_Desc.m_Type == 11) {
+
+
+
+	
+	}
+	// Cloud_RD
+	if (m_UI_Desc.m_Type == 12) {
+
+		
+
+
+	}
 
 
 	Set_UI();
@@ -149,7 +238,20 @@ HRESULT CLoading::Render()
 		m_pShaderCom->Begin(8);
 	}
 	else {
-		m_pShaderCom->Begin(1);
+
+		if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
+			m_pShaderCom->Begin(6);
+		}
+		else if(m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(9);
+		}
+		else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(5);
+		}
+		else {
+			m_pShaderCom->Begin(1);
+		}
+		
 	}
 	
 
@@ -248,8 +350,20 @@ HRESULT CLoading::SetUp_ShaderResources()
 		return E_FAIL;
 
 	
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
-		return E_FAIL;
+	if (m_UI_Desc.m_Type == 9 || m_UI_Desc.m_Type == 11 || m_UI_Desc.m_Type == 12) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 9)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 10) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 10)))
+			return E_FAIL;
+	}
+	else {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
+			return E_FAIL;
+	}
+
+	
 	
 	
 	return S_OK;

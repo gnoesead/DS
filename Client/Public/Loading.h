@@ -17,7 +17,9 @@ class CLoading final : public CUI
 public:
 	typedef struct tagUIDesc
 	{
-		_bool    m_Is_Reverse = { false };
+		_bool    m_Is_X_Reverse = { false };
+		_bool    m_Is_Y_Reverse = { false };
+
 		_uint    m_Type = { 0 };
 	}UIDESC;
 
@@ -60,7 +62,8 @@ private:
 	_float                  m_Origin_Y = {};
 	_float                  m_Size_Param = { 1.f };
 	
-
+	_float                  m_Origin_PosX = {};
+	_float                  m_Origin_PosY = {};
 
 private:
 	_bool                   m_Select = { 0 };

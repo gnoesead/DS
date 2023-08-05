@@ -26,6 +26,10 @@ private:
 	class CLoading* m_pCircle = { nullptr };
 	class CLoading* m_pRect = { nullptr };
 	class CLoading* m_pTitle = { nullptr };
+	class CLoading* m_pCloud_LT= { nullptr };
+	class CLoading* m_pCloud_RT = { nullptr };
+	class CLoading* m_pCloud_LD = { nullptr };
+	class CLoading* m_pCloud_RD = { nullptr };
 
 
 public:
