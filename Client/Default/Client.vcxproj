@@ -204,8 +204,10 @@
     <ClInclude Include="..\Public\Level_Train.h" />
     <ClInclude Include="..\Public\Level_Village.h" />
     <ClInclude Include="..\Public\Loader.h" />
+    <ClInclude Include="..\Public\Loading.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
+    <ClInclude Include="..\Public\Mini_Map.h" />
     <ClInclude Include="..\Public\Mission.h" />
     <ClInclude Include="..\Public\MissionManager.h" />
     <ClInclude Include="..\Public\Monster.h" />
@@ -227,6 +229,8 @@
     <ClInclude Include="..\Public\Sword.h" />
     <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
+    <ClInclude Include="..\Public\Title.h" />
+    <ClInclude Include="..\Public\Title_Manager.h" />
     <ClInclude Include="..\Public\World_UI_Hp.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
@@ -261,8 +265,10 @@
     <ClCompile Include="..\Private\Level_Train.cpp" />
     <ClCompile Include="..\Private\Level_Village.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
+    <ClCompile Include="..\Private\Loading.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
+    <ClCompile Include="..\Private\Mini_Map.cpp" />
     <ClCompile Include="..\Private\Mission.cpp" />
     <ClCompile Include="..\Private\MissionManager.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
@@ -284,6 +290,8 @@
     <ClCompile Include="..\Private\Sword.cpp" />
     <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
+    <ClCompile Include="..\Private\Title.cpp" />
+    <ClCompile Include="..\Private\Title_Manager.cpp" />
     <ClCompile Include="..\Private\World_UI_Hp.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">

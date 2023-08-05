@@ -52,9 +52,17 @@ private:
 	vector<wstring>			m_szMain = {};
 	vector<wstring>			m_szMain_Sub = {};
 	vector<wstring>		    m_szMain_Sub_Check = {};
+	vector<wstring>			m_szMain_Sub_Num_Total = {};
+	vector<_uint>           m_Main_Sub_Num_Total = { 0 };
+	_tchar                  m_szMain_Sub_Num[MAX_PATH] = {};
+	_uint                   m_Main_Sub_Num = { 0 };
 
 	vector<wstring>			m_szSub = {};
 	vector<wstring>			m_szSub_Check = {};
+	vector<wstring>			m_szSub_Num_Total = {};
+	vector<_uint>           m_Sub_Num_Total = { 0 };
+	_tchar                  m_szSub_Num[MAX_PATH] = {};
+	_uint                   m_Sub_Num = { 0 };
 
 	_uint    m_Main_Type = { 0 };
 	_uint    m_Sub_Type = { 0 };
@@ -77,7 +85,7 @@ private:
 
 	_bool                   m_Is_Reverse = { false };
 
-	_float                  m_Alpha = { 1.f };
+	_float                  m_Alpha = { 0.f };
 
 	_uint m_Level_Index = { 0 };
 

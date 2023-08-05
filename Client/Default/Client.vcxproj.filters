@@ -241,6 +241,9 @@
     <Filter Include="02. GameObjects\Character\Player\Zenitsu">
       <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title\Title_Manager">
+      <UniqueIdentifier>{6a398fac-b43b-461a-a46d-0a180b3a9c9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -420,6 +423,18 @@
     <ClInclude Include="..\Public\MissionManager.h">
       <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Mini_Map.h">
+      <Filter>02. GameObjects\UI\06.Map\Mini</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title\Title_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Loading.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -586,6 +601,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\MissionManager.cpp">
       <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mini_Map.cpp">
+      <Filter>02. GameObjects\UI\06.Map\Mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title\Title_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Loading.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

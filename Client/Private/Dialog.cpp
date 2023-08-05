@@ -106,7 +106,7 @@ HRESULT CDialog::Initialize(void * pArg)
 	m_szText_2.push_back(L"탄지로");
 	m_szText_2.push_back(L"245");
 	m_szText_2.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_2.push_back(L"대화창 생성 : F");
+	m_szText_2.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
 
 
 	m_szName[TANJIRO] = L"카마도 탄지로";
@@ -220,12 +220,12 @@ HRESULT CDialog::Render()
 		if (m_UI_Desc.m_Type == 0) {
 			if (m_Dialog_Type == 0) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 8.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 1) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 8.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 		}
@@ -233,11 +233,11 @@ HRESULT CDialog::Render()
 			if (m_Dialog_Type == 0) {
 				
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				
@@ -245,11 +245,11 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 1) {
 
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szName[MOTHER].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 7.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[MOTHER].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 

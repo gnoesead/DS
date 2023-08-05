@@ -28,6 +28,9 @@
 #include "Interaction.h"
 #include "Dialog.h"
 #include "Mission.h"
+#include "Mini_Map.h"
+#include "Title.h"
+#include "Loading.h"
 
 
 #include "Sword.h"
@@ -246,6 +249,23 @@ HRESULT CLoader::LoadingForLogo()
 		MSG_BOX("Failed to Add_Prototype_GameObject_BackGround");
 		return E_FAIL;
 	}
+
+	/* Protoype_GameObject_Title*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
+		CTitle::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Title");
+		return E_FAIL;
+	}
+
+	/* Protoype_GameObject_Loading*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),
+		CLoading::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Particale
@@ -645,6 +665,11 @@ HRESULT CLoader::LoadingForGamePlay()
 	/* Prototype_GameObject_Mission */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mission"),
 		CMission::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Mini_Map */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mini_Map"),
+		CMini_Map::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

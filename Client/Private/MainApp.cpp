@@ -6,6 +6,7 @@
 #include "ColliderManager.h"
 #include "DialogManager.h"
 #include "MissionManager.h"
+#include "Title_Manager.h"
 
 
 #include "SoundMgr.h"
@@ -63,6 +64,12 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_DM"), TEXT("../Bin/Resources/Fonts/DMex.spritefont"))))
+	{
+		MSG_BOX("Failed to Add_Font");
+		return E_FAIL;
+	}
+
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 	{
 		MSG_BOX("Failed to Ready_Prototype_Component_For_Static");
@@ -87,6 +94,8 @@ void CMainApp::Tick(_double dTimeDelta)
 		return;
 
 	m_pGameInstance->Tick_Engine(dTimeDelta);
+
+	CTitleManager::GetInstance()->Tick();
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -315,6 +324,30 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 	/* Prototype_Component_Texture_UI */
 
+#pragma region Title_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Title_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Select"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Title_Select_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Eff"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Eff_%d.png"), 2))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Loading_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Loading_%d.png"), 11))))
+		return E_FAIL;
+
+#pragma endregion
+
 #pragma region Player_Battle_Bar_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Frame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/P/P_Frame.png")))))
@@ -447,7 +480,13 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion
 
-	
+#pragma region Map_UI	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mini_Map"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 3))))
+		return E_FAIL;
+
+#pragma endregion	
 
 
 	Safe_AddRef(m_pRenderer);
@@ -502,6 +541,7 @@ void CMainApp::Free()
 	CSoundMgr::Get_Instance()->Destroy_Instance();
 	CDialogManager::GetInstance()->DestroyInstance();
 	CMissionManager::GetInstance()->DestroyInstance();
+	CTitleManager::GetInstance()->DestroyInstance();
 
 	CGameInstance::Release_Engine();
 }

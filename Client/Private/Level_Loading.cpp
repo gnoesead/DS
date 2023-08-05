@@ -9,6 +9,8 @@
 #include "Level_FinalBoss.h"
 #include "GameInstance.h"
 #include "BackGround.h"
+#include "Loading.h"
+
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -21,11 +23,71 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
-    m_pBackGround = CBackGround::Create(m_pDevice, m_pContext);
+   /* m_pBackGround = CBackGround::Create(m_pDevice, m_pContext);
     if (nullptr == m_pBackGround)
         return E_FAIL;
 
-    m_pBackGround->Initialize(nullptr);
+    m_pBackGround->Initialize(nullptr);*/
+
+
+    CLoading::UIDESC UIDesc;
+
+    // Back
+    m_pBack = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pBack)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 0;
+
+    m_pBack->Initialize(&UIDesc);
+
+    // Circle
+    m_pCircle = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCircle)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 1;
+
+    m_pCircle->Initialize(&UIDesc);
+
+
+    // Rect
+    m_pRect = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pRect)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 2;
+
+    m_pRect->Initialize(&UIDesc);
+
+
+    // Title
+    m_pTitle = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pTitle)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 8;
+
+    m_pTitle->Initialize(&UIDesc);
+
+
+
 
     m_eNextLevelID = eNextLevelID;
 
@@ -40,11 +102,22 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    m_pBackGround->Set_TextureIndex(g_iLoadingTextureIndex % 3);
-  
+   /* m_pBackGround->Set_TextureIndex(g_iLoadingTextureIndex % 3);
     m_pBackGround->Tick(dTimeDelta);
+    m_pBackGround->LateTick(dTimeDelta);*/
 
-    m_pBackGround->LateTick(dTimeDelta);
+
+    m_pBack->Tick(dTimeDelta);
+    m_pBack->LateTick(dTimeDelta);
+
+    m_pCircle->Tick(dTimeDelta);
+    m_pCircle->LateTick(dTimeDelta);
+
+    m_pRect->Tick(dTimeDelta);
+    m_pRect->LateTick(dTimeDelta);
+
+    m_pTitle->Tick(dTimeDelta);
+    m_pTitle->LateTick(dTimeDelta);
 
     if (true == m_pLoader->Get_Finished())
     {
@@ -119,6 +192,12 @@ void CLevel_Loading::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pBackGround);
+    //Safe_Release(m_pBackGround);
+    Safe_Release(m_pBack);
+    Safe_Release(m_pCircle);
+    Safe_Release(m_pRect);
+    Safe_Release(m_pTitle);
+
+
     Safe_Release(m_pLoader);
 }

@@ -21,6 +21,8 @@
 #include "Interaction.h"
 #include "Dialog.h"
 #include "Mission.h"
+#include "Mini_Map.h"
+
 
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -342,6 +344,45 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+// Mini_Map
+    CMini_Map::UIDESC UIDesc2;
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+   
+    // Bg
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Wire
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Frame
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
 
     Safe_Release(pGameInstance);
 

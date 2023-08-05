@@ -41,8 +41,8 @@ private:
 	_double					m_TimeAcc = { 0.0 };
 	
 
-	_bool					m_isRenderFPS = { true };
-	_bool                   m_isRenderDebugInfo = { true };
+	_bool					m_isRenderFPS = { false };
+	_bool                   m_isRenderDebugInfo = { false };
 #endif
 
 private:

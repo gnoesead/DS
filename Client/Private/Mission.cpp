@@ -42,15 +42,15 @@ HRESULT CMission::Initialize(void * pArg)
 	// Main
 	if (m_UI_Desc.m_Type == 0) {
 
-		m_fX = 50;
-		m_fY = 70;
-		m_Origin_PosX = 70;
-		m_Origin_PosY = 70;
-		m_Start_PosX = 50;
-		m_Start_PosY = 70;
+		m_fX = 180;
+		m_fY = 50;
+		m_Origin_PosX = 180;
+		m_Origin_PosY = 50;
+		m_Start_PosX = 150;
+		m_Start_PosY = 50;
 
-		m_Origin_X = 200.f;
-		m_Origin_Y = 76.f;
+		m_Origin_X = 535.f;
+		m_Origin_Y = 138.f;
 		m_Size_Param = 0.666678f;
 		m_UI_Layer = 1;
 	}
@@ -59,11 +59,11 @@ HRESULT CMission::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 1) {
 
 		m_fX = 210;
-		m_fY = 160;
-		m_Origin_PosX = 220;
-		m_Origin_PosY = 160;
-		m_Start_PosX = 210;
-		m_Start_PosY = 160;
+		m_fY = 140;
+		m_Origin_PosX = 210;
+		m_Origin_PosY = 140;
+		m_Start_PosX = 180;
+		m_Start_PosY = 140;
 
 		m_Origin_X = 356 * 1.9f;
 		m_Origin_Y = 64;
@@ -74,12 +74,12 @@ HRESULT CMission::Initialize(void * pArg)
 	// Main_Icon
 	if (m_UI_Desc.m_Type == 2) {
 
-		m_fX = 30;
-		m_fY = 67;
+		m_fX = 50;
+		m_fY = 47;
 		m_Origin_PosX = 50;
-		m_Origin_PosY = 67;
-		m_Start_PosX = 30;
-		m_Start_PosY = 67;
+		m_Origin_PosY = 47;
+		m_Start_PosX = 20;
+		m_Start_PosY = 47;
 
 		m_Origin_X = 50;
 		m_Origin_Y = 50;
@@ -91,11 +91,11 @@ HRESULT CMission::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 3) {
 
 		m_fX = 50;
-		m_fY = 160;
-		m_Origin_PosX = 80;
-		m_Origin_PosY = 160;
-		m_Start_PosX = 50;
-		m_Start_PosY = 160;
+		m_fY = 140;
+		m_Origin_PosX = 50;
+		m_Origin_PosY = 140;
+		m_Start_PosX = 20;
+		m_Start_PosY = 140;
 
 		m_Origin_X = 64;
 		m_Origin_Y = 64;
@@ -107,11 +107,11 @@ HRESULT CMission::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 4) {
 
 		m_fX = 363;
-		m_fY = 157;
-		m_Origin_PosX = 370;
-		m_Origin_PosY = 157;
-		m_Start_PosX = 363;
-		m_Start_PosY = 157;
+		m_fY = 137;
+		m_Origin_PosX = 363;
+		m_Origin_PosY = 137;
+		m_Start_PosX = 333;
+		m_Start_PosY = 137;
 
 		m_Origin_X = 64;
 		m_Origin_Y = 64;
@@ -124,16 +124,36 @@ HRESULT CMission::Initialize(void * pArg)
 
 	Set_UI();
 
-	m_szMain.push_back(L"메인임무1");
+	// 메인
+	m_szMain.push_back(L"혈귀가 남긴 냄새를 수색해라");
 	m_szMain.push_back(L"메인임무2");
 	m_szMain.push_back(L"메인임무3");
 
-	m_szMain_Sub.push_back(L"달성상황1");
+	// 메인 서브
+	m_szMain_Sub.push_back(L"혈귀가 남긴 냄새");
 	m_szMain_Sub.push_back(L"달성상황2");
 	m_szMain_Sub.push_back(L"달성상황3");
 
-	m_szSub.push_back(L"10시가 되면 집에 가세요");
-	m_szSub.push_back(L"12시가 되면 집에 가세요");
+	// 메인 서브 달성률
+	m_szMain_Sub_Num_Total.push_back(L"/4");
+	m_Main_Sub_Num_Total.push_back(4);
+	m_szMain_Sub_Num_Total.push_back(L"/3");
+	m_Main_Sub_Num_Total.push_back(3);
+	m_szMain_Sub_Num_Total.push_back(L"/5");
+	m_Main_Sub_Num_Total.push_back(5);
+
+	// 서브
+	m_szSub.push_back(L"걱정하고 있는 마을 사람들");
+	m_szSub.push_back(L"하고 있는 마을 사람들");
+	m_szSub.push_back(L"마을 사람들");
+
+	// 서브 달성률
+	m_szSub_Num_Total.push_back(L"/2");
+	m_Sub_Num_Total.push_back(2);
+	m_szSub_Num_Total.push_back(L"/4");
+	m_Sub_Num_Total.push_back(4);
+	m_szSub_Num_Total.push_back(L"/3");
+	m_Sub_Num_Total.push_back(3);
 	
 
 	return S_OK;
@@ -162,21 +182,23 @@ void CMission::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/*if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false) {
+	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+
+	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
 		m_Is_In = true;
 		m_Is_Font_Render = true;
 	}
-	
-	if (pGameInstance->Get_DIKeyDown(DIK_G) && m_Is_In == false && m_Is_Out == false) {
+
+	if (m_Is_Dialog_On == true && m_Is_In == false && m_Is_Out == false) {
 		m_Is_Out = true;
 		m_Is_Font_Render = false;
-	}*/
+	}
 
 
 	m_Main_Type = CMissionManager::GetInstance()->Get_Main_Mission_Type();
 	m_Sub_Type = CMissionManager::GetInstance()->Get_Sub_Mission_Type();
 
-	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+	
 
 	Safe_Release(pGameInstance);
 
@@ -214,15 +236,31 @@ HRESULT CMission::Render()
 
 		if (m_UI_Desc.m_Type == 1) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szSub[m_Sub_Type].c_str(), _float2((_float)m_fX - 150.f , (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub[m_Sub_Type].c_str(), _float2((_float)m_fX - 151.f , (_float)m_fY - 13.f), _float2(0.45f, 0.45f))))
+				return E_FAIL;
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_Num_Total[m_Sub_Type].c_str(), _float2((_float)m_fX + 105.f, (_float)m_fY - 13.f), _float2(0.45f, 0.45f))))
+				return E_FAIL;
+
+			wsprintf(m_szSub_Num, TEXT("%d"), m_Sub_Num);
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_Num, _float2((_float)m_fX + 95.f, (_float)m_fY - 13.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 		}
 		else if (m_UI_Desc.m_Type == 0) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain[m_Main_Type].c_str(), _float2((_float)m_fX  - 10.f, (_float)m_fY - 9.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain[m_Main_Type].c_str(), _float2((_float)m_fX  - 120.f, (_float)m_fY - 13.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), m_szMain_Sub[m_Main_Type].c_str(), _float2((_float)m_fX  - 10.f, (_float)m_fY + 20.f), _float2(0.5f, 0.5f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub[m_Main_Type].c_str(), _float2((_float)m_fX  - 120.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+				return E_FAIL;
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num_Total[m_Main_Type].c_str(), _float2((_float)m_fX + 23.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+				return E_FAIL;
+
+			wsprintf(m_szMain_Sub_Num, TEXT("%d"), m_Main_Sub_Num);
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num , _float2((_float)m_fX + 13.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 		}
 
@@ -322,15 +360,15 @@ void CMission::Fade_In(_double TimeDelta)
 		m_Alpha = 1.f;
 	}
 
-	m_fY -= TimeDelta * 120.0;
+	m_fX += TimeDelta * 120.0;
 
-	if (m_fY <= m_Origin_PosY)
+	if (m_fX >= m_Origin_PosX)
 	{
-		m_fY = m_Origin_PosY;
+		m_fX = m_Origin_PosX;
 		
 	}
 
-	if (m_Alpha >= 1.f && m_fY <= m_Origin_PosY) {
+	if (m_Alpha >= 1.f && m_fX >= m_Origin_PosX) {
 		m_Is_In = false;
 	}
 
@@ -347,15 +385,15 @@ void CMission::Fade_Out(_double TimeDelta)
 		m_Alpha = 0.f;
 	}
 
-	m_fY += TimeDelta * 100.0;
+	m_fX -= TimeDelta * 100.0;
 
-	if (m_fY >= m_Start_PosY)
+	if (m_fX <= m_Start_PosX)
 	{
-		m_fY = m_Start_PosY;
+		m_fX = m_Start_PosX;
 		
 	}
 
-	if (m_Alpha <= 0.f && m_fY >= m_Start_PosY) {
+	if (m_Alpha <= 0.f && m_fX <= m_Start_PosX) {
 		m_Is_Out = false;
 	}
 
