@@ -14,6 +14,7 @@ private:
 public:
 	virtual HRESULT Initialize_Prototype(const _float3 * pPoints);
 	virtual HRESULT Initialize(void* pArg) override;
+	virtual HRESULT Render() override;
 
 public:
 	static CVIBuffer_Cell* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _float3 * pPoints);

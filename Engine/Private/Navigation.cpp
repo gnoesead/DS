@@ -1,28 +1,47 @@
 #include "..\Public\Navigation.h"
+#include "Cell.h"
+#include "Shader.h"
+#include "PipeLine.h"
+#include "GameInstance.h"
 #include "Transform.h"
 
 CNavigation::CNavigation(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CComponent(pDevice, pContext)
+	:CComponent(pDevice, pContext)
+
 {
 }
 
 CNavigation::CNavigation(const CNavigation& rhs)
 	: CComponent(rhs)
 	, m_Cells(rhs.m_Cells)
+#ifdef _DEBUG
+	, m_pShader(rhs.m_pShader)
+#endif // _DEBUG
 {
 	for (auto& pCell : m_Cells)
 		Safe_AddRef(pCell);
+#ifdef _DEBUG
+	Safe_AddRef(m_pShader);
+#endif // _DEBUG
 }
 
 HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFile)
 {
-	_ulong		dwByte = { 0 };
-	HANDLE		hFile = CreateFile(pNavigationDataFile, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+#ifdef _DEBUG
+	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOS_DECL::Elements, VTXPOS_DECL::iNumElements);
+	if (nullptr == m_pShader)
+		return E_FAIL;
+#endif // _DEBUG 
 
+	_ulong	dwByte = { 0 };
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	
+	HANDLE	hFile = CreateFile(pNavigationDataFile, GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (0 == hFile)
 		return E_FAIL;
 
-	_float3 vPoints[CCell::POINT_END];
+	_float3		vPoints[CCell::POINT_END];
 
 	while (true)
 	{
@@ -32,13 +51,17 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFile)
 
 		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_uint)m_Cells.size());
 		if (nullptr == pCell)
-			break;
+			return E_FAIL;
 
 		m_Cells.push_back(pCell);
 	}
 
+
+	CloseHandle(hFile);
+
 	if (FAILED(SetUp_Neighbors()))
 		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -46,7 +69,9 @@ HRESULT CNavigation::Initialize_Prototype(const _tchar* pNavigationDataFile)
 HRESULT CNavigation::Initialize(void* pArg)
 {
 	if (nullptr != pArg)
+	{
 		m_NaviDesc = *(NAVIDESC*)pArg;
+	}
 
 	return S_OK;
 }
@@ -76,25 +101,25 @@ HRESULT CNavigation::SetUp_Neighbors()
 			}
 		}
 	}
-
+	
 	return S_OK;
 }
 
-_bool CNavigation::is_MoveOnNavigation(_fvector vPosition, CTransform* pTransform)
+_bool CNavigation::is_MoveOnNavigation(_fvector& vPosition)
 {
 	if (-1 == m_NaviDesc.iCurrentIndex)
 		return false;
 
-	_int iNeighborIndex = { -1 };
+	_int	iNeighborIndex = { -1 };
 
-	//셀 안에 있다
-	if (true == m_Cells[m_NaviDesc.iCurrentIndex]->isIn(vPosition, &iNeighborIndex))
+	if (true == m_Cells[m_NaviDesc.iCurrentIndex]->isIn(vPosition, &iNeighborIndex))		// 셀들중 플레이어가 존재하는 셀에게 vPosition이 아직 너 안에 있냐 라고 물어보는것이다.
 	{
 		return true;
 	}
-	else //셀 안에 없다(나갔다)
+	else /* 밖으로 나갔다. */
 	{
-		if (-1 != iNeighborIndex)	//나간 방향에 이웃이 있다
+		/* 나간방향에 iNeighborInex 이웃이 있다. */
+		if (-1 != iNeighborIndex)
 		{
 			while (true)
 			{
@@ -105,76 +130,80 @@ _bool CNavigation::is_MoveOnNavigation(_fvector vPosition, CTransform* pTransfor
 					break;
 			}
 
-			m_NaviDesc.iCurrentIndex = iNeighborIndex;
+			m_NaviDesc.iCurrentIndex = iNeighborIndex;		// 현재 인덱스 갱신
 			return true;
-
 		}
-		else //나간 방향에 이웃이 없다
+		else /* 이웃이 없다 */
 		{
-			// 슬라이딩 벡터를 타게 만들 것
-			//_vector vSliding = m_Cells[m_NaviDesc.iCurrentIndex]->Sliding(vPosition, pTransform->Get_State(CTransform::STATE_POSITION));
+			// 필요하면 벽타라
 
-			//pTransform->Set_State(CTransform::STATE_POSITION, pTransform->Get_State(CTransform::STATE_POSITION) + (vSliding));
-
+			//Get_SlidingVector(vPosition, vLook, m_NaviDesc.iCurrentIndex);
 			return false;
 		}
 	}
-
 	return _bool();
 }
 
-#ifdef _DEBUG
+_fvector CNavigation::Compute_Height(CTransform* pOwnerTransform)
+{
+	_vector vPlane;
 
+	_vector vOwnerPos = pOwnerTransform->Get_State(CTransform::STATE_POSITION);
+
+	vPlane = XMPlaneFromPoints(m_Cells[m_NaviDesc.iCurrentIndex]->Get_PointVector(CCell::POINT_A),
+		m_Cells[m_NaviDesc.iCurrentIndex]->Get_PointVector(CCell::POINT_B),
+		m_Cells[m_NaviDesc.iCurrentIndex]->Get_PointVector(CCell::POINT_C));
+
+	// y = (-ax -cz - d) / b
+
+	_float		fHeight = (-XMVectorGetX(vPlane) * XMVectorGetX(vOwnerPos)
+		- XMVectorGetZ(vPlane) * XMVectorGetZ(vOwnerPos)
+		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane);
+
+	return vOwnerPos = XMVectorSetY(vOwnerPos, fHeight);
+}
+
+
+
+#ifdef _DEBUG
 HRESULT CNavigation::Render()
 {
-	if (-1 == m_NaviDesc.iCurrentIndex)
-	{
-		for (auto& pCell : m_Cells)
-		{
-			if (nullptr != pCell)
-			{
-				_float4 fColor = { 0.f,1.f,0.f,1.f };
-				pCell->Render_Debug(&fColor, 0.f);
-			}
-		}
-	}
-	else
-	{
-		_float4 fColor = { 1.f,0.f,0.f,1.f };
-		m_Cells[m_NaviDesc.iCurrentIndex]->Render_Debug(&fColor, 0.01f);
-	}
+
+	_float4x4		WorldMatrix;
+	XMStoreFloat4x4(&WorldMatrix, XMMatrixIdentity());
+
+	CPipeLine* pPipeLine = CPipeLine::GetInstance();
+	Safe_AddRef(pPipeLine);
+
+	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &WorldMatrix)))
+		return E_FAIL;
+
+	_float4x4 ViewMatrix = pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW);
+	_float4x4 ProjMatrix = pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
+	_float4	 vColor = { 0.f, 1.f, 0.f, 1.f };
+
+	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &ViewMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShader->SetUp_RawValue("g_vColor", &vColor, sizeof(_float4))))
+		return E_FAIL;
+
+	Safe_Release(pPipeLine);
+
+	m_pShader->Begin(0);
+
+	for (auto& pCell : m_Cells)
+		pCell->Render_Debug();
 
 	return S_OK;
 }
-
 #endif // _DEBUG
 
-_int CNavigation::CheckIndex(_fvector vPosition)
-{
-	_int iNeighborIndex = { -1 };
-	_int iIndex = { 0 };
 
-	if (false == m_Cells[m_NaviDesc.iCurrentIndex]->isIn(vPosition, &iNeighborIndex))
-	{
-		for (auto& pCell : m_Cells)
-		{
-			if (true == pCell->isIn(vPosition, &iNeighborIndex))
-				break;
-
-			iIndex++;
-		}
-	}
-	else
-		iIndex = m_NaviDesc.iCurrentIndex;
-	
-
-	if (m_Cells.size() <= iIndex)
-		iIndex = 0;
-	
-	return iIndex;
-}
-
-CNavigation* CNavigation::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pNavigationDataFile)
+CNavigation* CNavigation::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext , const _tchar* pNavigationDataFile)
 {
 	CNavigation* pInstance = new CNavigation(pDevice, pContext);
 
@@ -208,4 +237,8 @@ void CNavigation::Free()
 		Safe_Release(pCell);
 
 	m_Cells.clear();
+
+#ifdef _DEBUG
+	Safe_Release(m_pShader);
+#endif // _DEBUG
 }

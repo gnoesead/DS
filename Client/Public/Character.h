@@ -25,6 +25,8 @@ public:
 		CCollider::COLLIDERDESC		ColliderDesc[COLL_END];
 		CTransform::TRANSFORMDESC	TransformDesc;
 		CNavigation::NAVIDESC		NaviDesc;
+		_float						Land_Y;
+		NAVI_TYPE					eCurNavi;
 	}CHARACTERDESC;
 protected:
 	CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -91,6 +93,7 @@ protected:
 	_double m_dDelay_Fall = { 0.0 };
 	_bool	m_isJumpOn = { false };
 	_float	m_fJump_Acc = { 0.0f };
+	_float	m_fLand_Y = { 0.0f };
 
 	_bool	m_isJumpStop = { false };
 	_double m_dTime_JumpStop = { 0.0 };
@@ -100,7 +103,6 @@ protected:
 
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
-
 
 protected:
 	HRESULT Add_Components();
