@@ -36,14 +36,16 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(LEVEL_FINALBOSS, TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 	Safe_Release(pGameInstance);
 
-
 	m_eCurAnimIndex = ANIM_IDEL;
+	m_eCurstate = STATE_IDLE;
+	m_eCurPhase = PHASE_1;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 
 	return S_OK;
@@ -57,57 +59,21 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
+#ifdef _DEBUG
+	Debug_State(dTimeDelta);
+#endif // _DEBUG
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	Update_TriggerTime(dTimeDelta);
 	Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
-
 	m_pModelCom->Play_Animation(dTimeDelta);
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		/*m_eCurstate = STATE_AIRGUN;
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);*/
-		/*m_eCurstate = STATE_DASHPUNCH;
-		m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
-		m_pModelCom->Set_AnimisFinish(ANIM_CHARGE_ROOP);
-		m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-		m_pModelCom->Set_AnimisFinish(ANIM_DASH_PUNCH);
-		m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
-		m_bRunPunch = false;
-		m_bStep_B = false;
-		m_bDashOn = false;*/
-		m_eCurstate = STATE_AIRGUN;
-
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
-
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
-	{
-		m_eCurstate = STATE_NACHIM;
-		m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
-
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		m_eCurstate = STATE_PUSHAWAY;
-		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_F1))
-	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
-		m_eCurstate = STATE_IDLE;
-	}
 
 	Safe_Release(pGameInstance);
-
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -119,8 +85,6 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 void CBoss_Akaza::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
-
-
 	Update_AnimIndex(m_eCurAnimIndex);
 	Gravity(dTimeDelta);
 }
@@ -222,6 +186,165 @@ HRESULT CBoss_Akaza::Render_ShadowDepth()
 	return S_OK;
 }
 
+void CBoss_Akaza::Debug_State(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_F1))
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
+		m_iTriggerCnt = 0;
+		m_iIdleCnt = 0;
+		m_eCurstate = STATE_IDLE;
+	}
+	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_DASHPUNCH;
+			m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
+			m_pModelCom->Set_AnimisFinish(ANIM_CHARGE_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH_PUNCH);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+			m_bRunPunch = false;
+			m_bStep_B = false;
+			m_bDashOn = false;
+			m_bCharge = false;
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_2))
+		{
+			m_eCurstate = STATE_AIRGUN;
+			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
+			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
+			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN2);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN3);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_3))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_DASHKICK;
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_4))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_DASHKICK;
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_5))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_JUMPAIRGUN;
+			m_bJump = false;
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN);
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN2);
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN3);
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPLAND);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_6))
+		{
+			m_eCurstate = STATE_JUMPSTOMP;
+			m_pModelCom->Set_AnimisFinish(ANIM_SKILL_UP);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_SKILL_UP);
+			m_dJumpStompTime = 0.0;
+			m_dLandStompTime = 0.0;
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_7))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_UPPERKICK;
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_UP);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_8))
+		{
+			m_eCurstate = STATE_AWAKE_COMBOPUNCH;
+
+			m_bDashOn = false;
+			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_0))
+		{
+			m_eCurstate = STATE_NACHIM;
+			m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_Q))
+		{
+			m_eCurstate = STATE_PUSHAWAY;
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_W))
+		{
+			m_eCurstate = STATE_HEAL;
+			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_E))
+		{
+			m_eCurstate = STATE_AWAKE;
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_START);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_R))
+		{
+			m_eCurstate = STATE_ESCAPE;
+			m_bStep_B = false;
+			m_iRandomDirNum = Random::Generate_Int(1, 2);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT2);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT);
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT2);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_T))
+		{
+			m_eCurstate = STATE_NEXTPHASE2;
+
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_Y))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_eCurstate = STATE_NEXTPHASE3;
+			m_bAnimFinish = false;
+			m_bStep_B = false;
+			m_bHeal = false;
+
+			m_iPunchCount = 0;
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+			m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
+
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+
+
+		}
+	}
+	Safe_Release(pGameInstance);
+}
+
 void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 {
 	if (m_eCurAnimIndex != m_ePreAnimIndex)
@@ -233,7 +356,7 @@ void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 {
 
-	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	Safe_Release(pGameInstance);
@@ -254,14 +377,6 @@ void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 		break;
 	}
 
-	if (false == m_bBegin)
-	{
-		m_eCurstate = STATE_BEGIN;
-
-	}*/
-
-
-
 }
 
 void CBoss_Akaza::Update_TriggerTime(_double dTimeDelta)
@@ -279,11 +394,6 @@ void CBoss_Akaza::Update_Reset(_double dTimeDelta)
 
 void CBoss_Akaza::Update_State(_double dTimeDelta)
 {
-	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
-
 
 	switch (m_eCurstate)
 	{
@@ -337,6 +447,9 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_AWAKE:
 		Update_Awake(dTimeDelta);
 		break;
+	case CBoss_Akaza::STATE_AWAKE_COMBOPUNCH:
+		Update_Awake_ComboPunch(dTimeDelta);
+		break;
 	case CBoss_Akaza::STATE_NACHIM:
 		Update_Nachim(dTimeDelta);
 		break;
@@ -354,7 +467,85 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Idle(_double dTimeDelta)
 {
-	m_eCurAnimIndex = ANIM_IDEL;
+
+	if (m_eCurPhase == PHASE_1)
+	{
+
+		m_eCurAnimIndex = ANIM_IDEL;
+
+		if (m_iHp > 50)
+		{
+			if (m_bPatternStart == false)
+			{
+				if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+					m_iIdleCnt++;
+
+				if (m_iIdleCnt == 1)
+				{
+					m_iIdleCnt = 0;
+					m_bTrigger = false;
+					m_iTriggerCnt++;
+					if (m_iTriggerCnt >= 5)
+					{
+						m_iTriggerCnt = 0;
+						m_bPatternStart = true;
+					}
+				}
+			}
+			if (m_bPatternStart == true)
+			{
+				_float fDistance = Calculate_Distance();
+				m_dTriggerTime += dTimeDelta;
+				if(1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+					m_iIdleCnt++;
+
+				/*if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.90, dTimeDelta))
+					m_iIdleCnt++;*/
+
+				if (m_iIdleCnt == 1)
+				{
+					m_dTriggerTime = 0.0;
+					m_iIdleCnt = 0;
+					m_iRandomPatternNum = Random::Generate_Int(1, 10);
+
+
+					if (fDistance <= 5.f)
+					{
+						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
+						{
+							m_iTriggerCnt = 4;
+							m_bTrigger = false;
+						}
+						if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
+						{
+							m_iTriggerCnt = 2;
+							m_bTrigger = false;
+						}
+					}
+					if (fDistance > 5.f)
+					{
+						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+						{
+							m_iTriggerCnt = 2;
+							m_bTrigger = false;
+						}
+						if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
+						{
+							m_iTriggerCnt = 3;
+							m_bTrigger = false;
+						}
+					}
+				}
+			}
+		}
+		/*if (m_iHp <= 50)
+		{
+
+		}*/
+
+	}
+
+
 }
 
 void CBoss_Akaza::Update_Begin(_double dTimeDelta)
@@ -371,7 +562,40 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 {
-	m_eCurstate = STATE_DASHPUNCH;
+	if (m_bTrigger == false)
+	{
+		if (m_iHp > 50)
+		{
+
+			switch (m_iTriggerCnt)
+			{
+			case 1:
+				Trigger_Idle();
+				break;
+			case 2:
+				Trigger_DashPunch();
+				break;
+			case 3:
+				Trigger_AirGun();
+				break;
+
+			case 4:
+				Trigger_Escape();
+				break;
+			}
+
+
+		}
+		if (m_iHp <= 50)
+		{
+
+		}
+		if (m_iHp <= 0)
+		{
+			Trigger_NextPhase2();
+		}
+	}
+
 }
 
 void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
@@ -382,16 +606,248 @@ void CBoss_Akaza::Update_Phase_3(_double dTimeDelta)
 {
 }
 
+void CBoss_Akaza::Trigger_Idle()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_IDLE;
+}
+
+void CBoss_Akaza::Trigger_Begin()
+{
+
+	m_eCurstate = STATE_BEGIN;
+}
+
+void CBoss_Akaza::Trigger_Escape()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ESCAPE;
+	m_bStep_B = false;
+	m_iRandomDirNum = Random::Generate_Int(1, 2);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT2);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT2);
+}
+
+void CBoss_Akaza::Trigger_DashPunch()
+{
+	m_bTrigger = true;
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_eCurstate = STATE_DASHPUNCH;
+	m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
+	m_pModelCom->Set_AnimisFinish(ANIM_CHARGE_ROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+	m_pModelCom->Set_AnimisFinish(ANIM_DASH_PUNCH);
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+	m_bRunPunch = false;
+	m_bStep_B = false;
+	m_bDashOn = false;
+	m_bCharge = false;
+}
+
+void CBoss_Akaza::Trigger_Guard()
+{
+	m_bTrigger = true;
+}
+
+void CBoss_Akaza::Trigger_AirGun()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_AIRGUN;
+	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
+	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
+	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN2);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN3);
+
+}
+
+void CBoss_Akaza::Trigger_PushAway()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_PUSHAWAY;
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+}
+
+void CBoss_Akaza::Trigger_Nachim()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_NACHIM;
+	m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+}
+
+void CBoss_Akaza::Trigger_ComboPunch()
+{
+	m_bTrigger = true;
+}
+
+void CBoss_Akaza::Trigger_JumpStomp()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_JUMPSTOMP;
+	m_pModelCom->Set_AnimisFinish(ANIM_SKILL_UP);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_SKILL_UP);
+	m_dJumpStompTime = 0.0;
+	m_dLandStompTime = 0.0;
+}
+
+void CBoss_Akaza::Trigger_DashKick()
+{
+	m_bTrigger = true;
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_eCurstate = STATE_DASHKICK;
+	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+	m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+}
+
+void CBoss_Akaza::Trigger_JumpAirGun()
+{
+	m_bTrigger = true;
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_eCurstate = STATE_JUMPAIRGUN;
+	m_bJump = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN);
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN2);
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN3);
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPLAND);
+}
+
+void CBoss_Akaza::Trigger_Dash_ComboPunch()
+{
+	m_bTrigger = true;
+}
+
+void CBoss_Akaza::Trigger_UpperKick()
+{
+	m_bTrigger = true;
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_eCurstate = STATE_UPPERKICK;
+	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+	m_pModelCom->Set_AnimisFinish(ANIM_COMBO_UP);
+}
+
+void CBoss_Akaza::Trigger_NextPhase2()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_NEXTPHASE2;
+
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+}
+
+void CBoss_Akaza::Trigger_NextPhase3()
+{
+	m_bTrigger = true;
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_eCurstate = STATE_NEXTPHASE3;
+	m_bAnimFinish = false;
+	m_bStep_B = false;
+	m_bHeal = false;
+
+	m_iPunchCount = 0;
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+	m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
+
+	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+}
+
+void CBoss_Akaza::Trigger_Heal()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_HEAL;
+	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+}
+
+void CBoss_Akaza::Trigger_Awake()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_AWAKE;
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_START);
+}
+
+void CBoss_Akaza::Trigger_Awake_ComboPunch()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_AWAKE_COMBOPUNCH;
+
+	m_bDashOn = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
+	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+}
+
+void CBoss_Akaza::Trigger_Nachim_ComboPunch()
+{
+}
+
+void CBoss_Akaza::Trigger_Nachim_AirGun()
+{
+}
+
 void CBoss_Akaza::Update_Escape(_double dTimeDelta)
 {
+
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND) == false)
+		m_eCurAnimIndex = ANIM_STEP_BEHIND;
+
+	if (m_iRandomDirNum == 1)
+	{
+
+		if (m_bStep_B == false && m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND))
+		{
+			m_bStep_B = true;
+			m_eCurAnimIndex = ANIM_STEP_LEFT;
+		}
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_STEP_LEFT, 0.950, dTimeDelta))
+			m_eCurAnimIndex = ANIM_STEP_LEFT2;
+	}
+	if (m_iRandomDirNum == 2)
+	{
+
+		if (m_bStep_B == false && m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND))
+		{
+			m_bStep_B = true;
+			m_eCurAnimIndex = ANIM_STEP_RIGHT;
+		}
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_STEP_RIGHT, 0.950, dTimeDelta))
+			m_eCurAnimIndex = ANIM_STEP_RIGHT2;
+	}
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_STEP_LEFT2) || m_pModelCom->Get_AnimFinish(ANIM_STEP_RIGHT2))
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
+
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.7);
+	Go_Dir_Constant(dTimeDelta, DIR_LEFT, ANIM_STEP_LEFT, 2.0f, 0.0, 0.7);
+	Go_Dir_Constant(dTimeDelta, DIR_LEFT, ANIM_STEP_LEFT2, 2.0f, 0.0, 0.7);
+	Go_Dir_Constant(dTimeDelta, DIR_RIGHT, ANIM_STEP_RIGHT, 2.0f, 0.0, 0.7);
+	Go_Dir_Constant(dTimeDelta, DIR_RIGHT, ANIM_STEP_RIGHT2, 2.0f, 0.0, 0.7);
+
 }
 
 void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 {
-	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+
+
+	_vector vDir = Calculate_Dir();
+	_float fDistance = Calculate_Distance();
 
 	if (fDistance > 10.f && m_bStep_B == false && m_bDashOn == false)
 	{
@@ -408,12 +864,13 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 
 	if (true == m_bStep_B && m_bDashOn == false)
 	{
-		Go_Straight_Deceleration(dTimeDelta, ANIM_STEP_BEHIND, 3.f, 0.2f);
 		m_eCurAnimIndex = ANIM_STEP_BEHIND;
+
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.7);
 		if (m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND) == true)
 		{
-			m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
-
+			//m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
+			//m_eCurAnimIndex = ANIM_CHARGE;
 			//m_bStep_B = false;
 			m_bDashOn = true;
 		}
@@ -426,8 +883,11 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 			if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE) == false)
 				m_eCurAnimIndex = ANIM_CHARGE;
 		}
-		if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE) == true || m_bStep_B == true)
+		if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE) == true && m_bCharge == false || m_bStep_B == true && m_bCharge == false)
+		{
+			m_bCharge = true;
 			m_eCurAnimIndex = ANIM_CHARGE_ROOP;
+		}
 
 		if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE_ROOP) == true)
 			m_eCurAnimIndex = ANIM_DASH;
@@ -450,33 +910,27 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 
 		Go_Straight_Constant(dTimeDelta, ANIM_DASH, 13.f);
 		Go_Straight_Deceleration(dTimeDelta, ANIM_DASH_PUNCH, 3.f, 0.2f);
+
 	}
 
 }
 
 void CBoss_Akaza::Update_Guard(_double dTimeDelta)
 {
+
 }
 
 void CBoss_Akaza::Update_AirGun(_double dTimeDelta)
 {
+
 	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN) == false)
 		m_eCurAnimIndex = ANIM_AIRGUN;
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN) == true &&
-		m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == false)
-		m_eCurAnimIndex = ANIM_AIRGUN2;
-
-	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == true &&
-		m_pModelCom->Get_AnimFinish(ANIM_AIRGUN3) == false)
-		m_eCurAnimIndex = ANIM_AIRGUN3;
-
-	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN3) == true)
+	//if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN) == true)
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AIRGUN,0.950,dTimeDelta))
 	{
-		//m_eCurstate = STATE_DASHPUNCH;
 		m_eCurAnimIndex = ANIM_IDEL;
 		m_eCurstate = STATE_IDLE;
-
 	}
 
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -495,10 +949,8 @@ void CBoss_Akaza::Update_PushAway(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Nachim(_double dTimeDelta)
 {
-	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+
+	_float fDistance = Calculate_Distance();
 
 	m_eCurAnimIndex = ANIM_NACHIM;
 
@@ -506,15 +958,16 @@ void CBoss_Akaza::Update_Nachim(_double dTimeDelta)
 	{
 		m_eCurstate = STATE_AIRGUN;
 		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
 		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
+		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN);
+		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN3);
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_NACHIM, 0.95, dTimeDelta) && fDistance <= 10.f)
 	{
 		m_eCurstate = STATE_COMBO_PUNCH;
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
-		m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
+		m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
+		m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST2);
+
 	}
 
 }
@@ -536,38 +989,292 @@ void CBoss_Akaza::Update_ComboPunch(_double dTimeDelta)
 
 void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 {
+
+	m_eCurAnimIndex = ANIM_SKILL_UP;
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_UP, 0.65f, dTimeDelta))
+	{
+		Jumping(12.0f, 0.1f);
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_UP) == true)
+	{
+		m_eCurAnimIndex = ANIM_SKILL_DOWN;
+		m_dJumpStompTime += dTimeDelta;
+
+		if (0.10 < m_dJumpStompTime && m_dJumpStompTime <= 0.10 + dTimeDelta)
+			JumpStop(3.0);
+		if (m_dJumpStompTime <= 3.0)
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			m_pTransformCom->Go_Straight(dTimeDelta * 1.0);
+		}
+
+		if (m_dJumpStompTime > 3.10)
+			m_pTransformCom->Go_Down(dTimeDelta * 15.0);
+
+		// 땅에 떨어졌을 때 임시코드
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (Pos.y <= 0.f)
+		{
+			m_dLandStompTime += dTimeDelta;
+			Pos.y = 0.0f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+			if (0.70 < m_dLandStompTime && m_dLandStompTime <= 0.70 + dTimeDelta)
+			{
+				m_dJumpStompTime = 0.0;
+				m_eCurAnimIndex = ANIM_IDEL;
+				m_eCurstate = STATE_IDLE;
+			}
+		}
+	}
+
+
+
+
 }
 
 void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 {
+	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == false)
+	{
+		m_eCurAnimIndex = ANIM_DASH;
+
+	}
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
+		m_eCurAnimIndex = ANIM_COMBO_DOWN;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
+	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_COMBO_DOWN, 1.f, 0.2f);
+
+
 }
 
 void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 {
+	if (m_bJump == false)
+	{
+		m_bJump = true;
+		m_eCurAnimIndex = ANIM_JUMPAIRGUN;
+		Jumping(5.0f, 0.2f);
+	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_JUMPAIRGUN, 0.25, dTimeDelta))
+		JumpStop(2.0);
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_JUMPAIRGUN, 0.95, dTimeDelta))
+		m_eCurAnimIndex = ANIM_JUMPAIRGUN2;
+
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_JUMPAIRGUN2, 0.95, dTimeDelta))
+		m_eCurAnimIndex = ANIM_JUMPAIRGUN3;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_JUMPAIRGUN3))
+	{
+		m_eCurAnimIndex = ANIM_JUMPROOP;
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (Pos.y <= 0.f)
+		{
+			m_eCurAnimIndex = ANIM_JUMPLAND;
+			Pos.y = 0.0f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+		}
+
+		if (m_pModelCom->Get_AnimFinish(ANIM_JUMPLAND))
+		{
+			m_eCurAnimIndex = ANIM_IDEL;
+			m_eCurstate = STATE_IDLE;
+		}
+	}
 }
 
 void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 {
+
 }
 
 void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 {
+	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == false)
+	{
+		m_eCurAnimIndex = ANIM_DASH;
+
+	}
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
+		m_eCurAnimIndex = ANIM_COMBO_UP;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_UP) == true)
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
+
+	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_COMBO_DOWN, 1.f, 0.2f);
+
 }
 
 void CBoss_Akaza::Update_NextPhase2(_double dTimeDelta)
 {
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == false)
+		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_PUSHAWAY, 0.95, dTimeDelta))
+		m_eCurstate = STATE_HEAL;
+
+	if (m_pModelCom->Get_AnimFinish(STATE_HEAL) == true)
+		m_eCurPhase = PHASE_2;
 }
 
 void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 {
+	//회천 // 나침 // 순간이동 // awake펀치 // 힐
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == false)
+		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true &&
+		m_bAnimFinish == false)
+	{
+		m_pModelCom->Set_AnimResetTimeAcc(ANIM_NACHIM);
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_NACHIM;
+	}
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_NACHIM, 0.95, dTimeDelta) &&
+		m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == false)
+	{
+
+		m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+		_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vDir = Calculate_Dir();
+		_float fDistance = Calculate_Distance() - 2.f;
+		_vector vChangePos = vMonsterPos + (vDir * fDistance);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vChangePos);
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
+
+	}
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true &&
+		m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == false)
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
+	{
+
+		if (m_iPunchCount < 3)
+			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.90, dTimeDelta))
+			m_iPunchCount++;
+
+		if (m_iPunchCount >= 3)
+		{
+			if (m_bStep_B == false)
+			{
+				m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_END;
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_END) == true &&
+				m_bStep_B == false)
+			{
+				m_bStep_B = true;
+
+			}
+
+			if (m_bStep_B == true && m_bHeal == false)
+			{
+				m_bHeal = true;
+
+				if (m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND) == false)
+					m_eCurAnimIndex = ANIM_STEP_BEHIND;
+
+			}
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_STEP_BEHIND, 0.90, dTimeDelta))
+			{
+				m_eCurAnimIndex = ANIM_HEAL;
+			}
+
+			if (m_pModelCom->Get_AnimFinish(ANIM_HEAL) == true)
+			{
+				m_eCurPhase = PHASE_3;
+				m_eCurAnimIndex = ANIM_IDEL;
+				m_eCurstate = STATE_IDLE;
+			}
+
+		}
+	}
+
+	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
+		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
+
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.70);
+
+
 }
 
 void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 {
+	m_eCurAnimIndex = ANIM_HEAL;
+	if (m_pModelCom->Get_AnimFinish(ANIM_HEAL))
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
 }
 
 void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 {
+	m_eCurAnimIndex = ANIM_AWAKE_START;
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_START))
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
+}
+
+void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
+{
+	if (m_bDashOn == false)
+	{
+		m_bDashOn = true;
+		m_eCurAnimIndex = ANIM_DASH;
+	}
+
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_DASH, 0.950, dTimeDelta))
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH;
+
+
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH, 0.950, dTimeDelta))
+		m_eCurAnimIndex = ANIM_AIRGUN2;
+
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AIRGUN2, 0.950, dTimeDelta))
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.950, dTimeDelta))
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_END;
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_END) == true)
+	{
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurstate = STATE_IDLE;
+	}
+
+	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
+
+	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
+		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
+
 }
 
 void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
@@ -577,6 +1284,25 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 void CBoss_Akaza::Update_Nachim_AirGun(_double dTimeDelta)
 {
 
+}
+
+_float CBoss_Akaza::Calculate_Distance()
+{
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+
+	return fDistance;
+}
+
+_vector CBoss_Akaza::Calculate_Dir()
+{
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+
+	return vDir;
 }
 
 HRESULT CBoss_Akaza::Add_Components()
