@@ -45,8 +45,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 360;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1280.f;
 		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
@@ -58,8 +58,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 360;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1000.f;
 		m_Origin_Y = 1000.f;
 		m_Size_Param = 0.7f;
@@ -71,8 +71,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 365;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 860.f;
 		m_Origin_Y = 592.f;
 		m_Size_Param = 0.69f;
@@ -86,8 +86,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 640;
 		m_fY = 146;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 520.f;
 		m_Origin_Y = 68.f;
 		m_Size_Param = 0.69f;
@@ -99,8 +99,8 @@ HRESULT CLoading::Initialize(void* pArg)
 	if (m_UI_Desc.m_Type == 9) {
 		m_fX = 90;
 		m_fY = 2;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
@@ -112,8 +112,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 1210;
 		m_fY = 35;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 848.f;
 		m_Origin_Y = 308.f;
 		m_Size_Param = 0.69f;
@@ -125,8 +125,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 290;
 		m_fY = 715;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
@@ -138,14 +138,18 @@ HRESULT CLoading::Initialize(void* pArg)
 
 		m_fX = 1150;
 		m_fY = 625;
-		m_Origin_PosX = m_fX;
-		m_Origin_PosY = m_fY;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
 	}
+
+	m_szTitle.push_back(L"시련돌파");
+	m_szContent.push_back(L"로딩중");
+
 
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -162,54 +166,68 @@ void CLoading::Tick(_double dTimeDelta)
 	// Cloud_LT
 	if (m_UI_Desc.m_Type == 9) {
 		
-		//m_fX += dTimeDelta * 10.f;
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
 
-
+		if (m_fX - m_Origin_PosX >=  20.f) {
+			
+			m_PosX_Dir *= -1.f;
+		}
+		
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 	}
 	// Cloud_RT
 	if (m_UI_Desc.m_Type == 10) {
 
-	
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 
 
 	}
 	// Cloud_LD
 	if (m_UI_Desc.m_Type == 11) {
 
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
 
+		if (m_fX - m_Origin_PosX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 
 	
 	}
 	// Cloud_RD
 	if (m_UI_Desc.m_Type == 12) {
 
-		
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 
 
 	}
 
 
 	Set_UI();
-
-	if (m_UI_Desc.m_Type == 5) {
-		m_Time_X += (_float)dTimeDelta * 0.1f;
-
-
-		m_Alpha += (_float)dTimeDelta * 0.2f * m_Alpha_Dir;
-
-		if (m_Alpha > 0.9f) {
-			m_Alpha = 0.9f;
-			m_Alpha_Dir *= -1.f;
-		}
-
-		if (m_Alpha < 0.4f) {
-			m_Alpha = 0.4f;
-			m_Alpha_Dir *= -1.f;
-		}
-
-	}
-
-	
 
 
 }
@@ -231,29 +249,22 @@ HRESULT CLoading::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	if (m_UI_Desc.m_Type == 1) {
-		m_pShaderCom->Begin(7);
+
+	if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
+		m_pShaderCom->Begin(6);
 	}
-	else if (m_UI_Desc.m_Type == 5) {
-		m_pShaderCom->Begin(8);
+	else if (m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
+		m_pShaderCom->Begin(9);
+	}
+	else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
+		m_pShaderCom->Begin(5);
 	}
 	else {
-
-		if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
-			m_pShaderCom->Begin(6);
-		}
-		else if(m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
-			m_pShaderCom->Begin(9);
-		}
-		else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
-			m_pShaderCom->Begin(5);
-		}
-		else {
-			m_pShaderCom->Begin(1);
-		}
-		
+		m_pShaderCom->Begin(1);
 	}
-	
+
+
+
 
 	m_pVIBufferCom->Render();
 
@@ -262,13 +273,13 @@ HRESULT CLoading::Render()
 
 	if (m_UI_Desc.m_Type == 8) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle, _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
+		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Loading_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
 			return E_FAIL;
 	}
 
 	if (m_UI_Desc.m_Type == 2) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent, _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent[m_Loading_Index].c_str(), _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
 			return E_FAIL;
 	}
 

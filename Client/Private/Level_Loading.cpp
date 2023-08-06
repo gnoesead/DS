@@ -155,30 +155,32 @@ void CLevel_Loading::Tick(_double dTimeDelta)
     m_pBackGround->Tick(dTimeDelta);
     m_pBackGround->LateTick(dTimeDelta);*/
 
+    if (g_iLoadingTextureIndex > 0) {
 
-    m_pBack->Tick(dTimeDelta);
-    m_pBack->LateTick(dTimeDelta);
+        m_pBack->Tick(dTimeDelta);
+        m_pBack->LateTick(dTimeDelta);
 
-    m_pCircle->Tick(dTimeDelta);
-    m_pCircle->LateTick(dTimeDelta);
+        m_pCircle->Tick(dTimeDelta);
+        m_pCircle->LateTick(dTimeDelta);
 
-    m_pRect->Tick(dTimeDelta);
-    m_pRect->LateTick(dTimeDelta);
+        m_pRect->Tick(dTimeDelta);
+        m_pRect->LateTick(dTimeDelta);
 
-    m_pTitle->Tick(dTimeDelta);
-    m_pTitle->LateTick(dTimeDelta);
+        m_pTitle->Tick(dTimeDelta);
+        m_pTitle->LateTick(dTimeDelta);
 
-    m_pCloud_LT->Tick(dTimeDelta);
-    m_pCloud_LT->LateTick(dTimeDelta);
+        m_pCloud_LT->Tick(dTimeDelta);
+        m_pCloud_LT->LateTick(dTimeDelta);
 
-    m_pCloud_RT->Tick(dTimeDelta);
-    m_pCloud_RT->LateTick(dTimeDelta);
+        m_pCloud_RT->Tick(dTimeDelta);
+        m_pCloud_RT->LateTick(dTimeDelta);
 
-    m_pCloud_LD->Tick(dTimeDelta);
-    m_pCloud_LD->LateTick(dTimeDelta);
+        m_pCloud_LD->Tick(dTimeDelta);
+        m_pCloud_LD->LateTick(dTimeDelta);
 
-    m_pCloud_RD->Tick(dTimeDelta);
-    m_pCloud_RD->LateTick(dTimeDelta);
+        m_pCloud_RD->Tick(dTimeDelta);
+        m_pCloud_RD->LateTick(dTimeDelta);
+    }
 
     if (true == m_pLoader->Get_Finished())
     {
@@ -211,7 +213,7 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             if (nullptr == pLevel)
                 return;
 
-            g_iLoadingTextureIndex += 2;
+            g_iLoadingTextureIndex += 1;
 
             HRESULT hr = 0;
 

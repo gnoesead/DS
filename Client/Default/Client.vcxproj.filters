@@ -244,6 +244,9 @@
     <Filter Include="02. GameObjects\UI\09.Main_UI\Title\Title_Manager">
       <UniqueIdentifier>{6a398fac-b43b-461a-a46d-0a180b3a9c9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager">
+      <UniqueIdentifier>{47b281f5-fff1-49d3-b33f-a6f5a869ade8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -435,6 +438,9 @@
     <ClInclude Include="..\Public\Loading.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Story_Board.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -613,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Loading.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Story_Board.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

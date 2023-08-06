@@ -16,6 +16,7 @@
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
 #include "ColliderManager.h"
+#include "Story_Board.h"
 
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
@@ -31,11 +32,11 @@ HRESULT CLevel_GamePlay::Initialize()
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
-    if (FAILED(Ready_Lights()))
+    /*if (FAILED(Ready_Lights()))
     {
         MSG_BOX("Failed to Ready_Lights : CLevel_GamePlay");
         return E_FAIL;
-    }
+    }*/
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
@@ -43,7 +44,7 @@ HRESULT CLevel_GamePlay::Initialize()
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+    /*if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
         return E_FAIL;
@@ -77,7 +78,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	{
 		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_GamePlay");
 		return E_FAIL;
-	}
+	}*/
 
     return S_OK;
 }
@@ -86,9 +87,9 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
+    //CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
 
-    SetWindowText(g_hWnd, TEXT("Tuto"));
+    SetWindowText(g_hWnd, TEXT("Story_Board"));
 
     if (GetKeyState(VK_RETURN) & 0x8000)
     {
@@ -152,13 +153,108 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+	CStory_Board::UIDESC UIDesc;
+
+	// Bg
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Bg_Deco_Top
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Bg_Deco_Bot
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Title
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 8;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Line
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 14;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_LT_Dark
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 10;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_LT
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 9;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_RT_Dark
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 12;
+	UIDesc.m_Is_Y_Reverse = true;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_RT
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 11;
+	UIDesc.m_Is_Y_Reverse = true;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+
+
+
+
+
 
     Safe_Release(pGameInstance);
 

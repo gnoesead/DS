@@ -348,6 +348,46 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion
 
+#pragma region Story_Board_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_%d.png"), 5))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Deco"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_Deco_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Mask"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_Mask_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Cloud"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Cloud_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Cursor"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Cursor.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Icon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Icon_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Line"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Line.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Mini_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Mini_Title.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Title_%d.png"), 5))))
+		return E_FAIL;
+
+#pragma endregion
+
 #pragma region Player_Battle_Bar_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Frame"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/P/P_Frame.png")))))

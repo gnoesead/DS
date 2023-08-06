@@ -31,6 +31,7 @@
 #include "Mini_Map.h"
 #include "Title.h"
 #include "Loading.h"
+#include "Story_Board.h"
 
 
 #include "Sword.h"
@@ -670,6 +671,11 @@ HRESULT CLoader::LoadingForGamePlay()
 	/* Prototype_GameObject_Mini_Map */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mini_Map"),
 		CMini_Map::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Story_Board */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Story_Board"),
+		CStory_Board::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
