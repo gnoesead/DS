@@ -1,6 +1,7 @@
 #include "..\Public\LandObject.h"
 
 #include "GameInstance.h"
+#include "Cell.h"
 
 CLandObject::CLandObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -54,7 +55,7 @@ _vector CLandObject::Compute_Height(_fvector vPos)
 
 	_float3 vPoints[CCell::POINT_END];
 
-	m_pNavigationCom->Get_CurrentPoints(vPoints);
+	//m_pNavigationCom->Get_CurrentPoints(vPoints);
 
 	_vector vPlane = XMPlaneFromPoints(XMLoadFloat3(&vPoints[CCell::POINT_A]),
 										XMLoadFloat3(&vPoints[CCell::POINT_B]),
@@ -69,11 +70,16 @@ _vector CLandObject::Compute_Height(_fvector vPos)
 					/ XMVectorGetY(vPlane);
 
 	return XMVectorSetY(vPos, fHeight);
+
+
 }
 
 void CLandObject::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pNavigationCom);
+	
+	for (_uint i = 0; i < NAVI_END; ++i)
+	{
+		Safe_Release(m_pNavigationCom[i]);
+	}
 }
