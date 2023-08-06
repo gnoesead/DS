@@ -136,7 +136,33 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 
     m_pCloud_RD->Initialize(&UIDesc);
 
+    // Door
+    m_pDoor = CLoading::Create(m_pDevice, m_pContext);
 
+    if (nullptr == m_pDoor)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 13;
+   
+    m_pDoor->Initialize(&UIDesc);
+
+
+    // Walk
+    m_pWalk = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pWalk)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 14;
+
+    m_pWalk->Initialize(&UIDesc);
+
+
+    //g_iLoadingTextureIndex += 1;
 
     m_eNextLevelID = eNextLevelID;
 
@@ -180,6 +206,12 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
         m_pCloud_RD->Tick(dTimeDelta);
         m_pCloud_RD->LateTick(dTimeDelta);
+
+        m_pDoor->Tick(dTimeDelta);
+        m_pDoor->LateTick(dTimeDelta);
+
+        m_pWalk->Tick(dTimeDelta);
+        m_pWalk->LateTick(dTimeDelta);
     }
 
     if (true == m_pLoader->Get_Finished())
@@ -264,6 +296,9 @@ void CLevel_Loading::Free()
     Safe_Release(m_pCloud_RT);
     Safe_Release(m_pCloud_LD);
     Safe_Release(m_pCloud_RD);
+    Safe_Release(m_pDoor);
+    Safe_Release(m_pWalk);
+  
 
 
     Safe_Release(m_pLoader);

@@ -7,6 +7,7 @@
 #include "DialogManager.h"
 #include "MissionManager.h"
 #include "Title_Manager.h"
+#include "Story_Manager.h"
 
 
 #include "SoundMgr.h"
@@ -96,6 +97,8 @@ void CMainApp::Tick(_double dTimeDelta)
 	m_pGameInstance->Tick_Engine(dTimeDelta);
 
 	CTitleManager::GetInstance()->Tick();
+	CStoryManager::GetInstance()->Tick();
+
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -181,6 +184,7 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	HRESULT hr = 0;
 	if (true == m_pGameInstance->Get_IsStage())
 	{
+		
 		if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL) & 0x80)
 		{
 			if (m_pGameInstance->Get_DIKeyDown(DIK_1))
@@ -193,8 +197,8 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_LOGO);
 			}
-
-			if (m_pGameInstance->Get_DIKeyDown(DIK_2))
+			// 로비로 이동
+			if (m_pGameInstance->Get_DIKeyDown(DIK_F9))
 			{
 				if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
 				{
@@ -204,7 +208,6 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
 			}
-
 			if (m_pGameInstance->Get_DIKeyDown(DIK_3))
 			{
 				if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_VILLAGE))
@@ -344,6 +347,14 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Loading_%d.png"), 11))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Door"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Door/Door_%d.png"), 7))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Walk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Walk/Walk_%d.png"), 6))))
 		return E_FAIL;
 
 #pragma endregion
@@ -496,6 +507,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Talk_%d.dds"), 2))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_LockOn"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_LockOn_%d.dds"), 2))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Interaction_UI	
@@ -582,6 +598,7 @@ void CMainApp::Free()
 	CDialogManager::GetInstance()->DestroyInstance();
 	CMissionManager::GetInstance()->DestroyInstance();
 	CTitleManager::GetInstance()->DestroyInstance();
+	CStoryManager::GetInstance()->DestroyInstance();
 
 	CGameInstance::Release_Engine();
 }

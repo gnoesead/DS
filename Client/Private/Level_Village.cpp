@@ -82,6 +82,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     SetWindowText(g_hWnd, TEXT("Village"));
 
+   
     if (GetKeyState(VK_RETURN) & 0x8000)
     {
         HRESULT hr = 0;

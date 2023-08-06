@@ -29,6 +29,10 @@ private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
 	HRESULT LoadEffects(const _tchar* pPath);
 
+private:
+	_uint  m_Select = { 0 };
+
+
 public:
 	static			CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void	Free() override;

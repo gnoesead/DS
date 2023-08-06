@@ -75,7 +75,7 @@ private:
 	vector<wstring>         m_szTitle = { };
 	vector<wstring>         m_szContent = { };
 
-	_uint                   m_Story_Index = { 1 };
+	_uint                   m_Story_Index = { 0 };
 
 private:
 	_float                  m_Time_X = {};

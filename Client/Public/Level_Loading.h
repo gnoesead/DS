@@ -30,6 +30,8 @@ private:
 	class CLoading* m_pCloud_RT = { nullptr };
 	class CLoading* m_pCloud_LD = { nullptr };
 	class CLoading* m_pCloud_RD = { nullptr };
+	class CLoading* m_pDoor = { nullptr };
+	class CLoading* m_pWalk = { nullptr };
 
 
 public:

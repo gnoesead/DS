@@ -95,21 +95,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
-    /*if (GetKeyState(VK_RETURN) & 0x8000)
-    {
-        HRESULT hr = 0;
-
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
-
-        Safe_Release(pGameInstance);
-
-        if (FAILED(hr))
-            return;
-    }*/
+	
 }
 
 HRESULT CLevel_FinalBoss::Render()
@@ -787,7 +773,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
 	UIDesc8.m_Is_Reverse = false;
-	UIDesc8.m_Type = 3;
+	UIDesc8.m_Type = 7;
 	UIDesc8.m_Up_Mount = 2.35f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),

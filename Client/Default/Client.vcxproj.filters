@@ -441,6 +441,9 @@
     <ClInclude Include="..\Public\Story_Board.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Story_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -622,6 +625,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Story_Board.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Story_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

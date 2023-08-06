@@ -83,6 +83,12 @@ private:
 	_float                  m_UV_Speed_Y = {};
 
 private:
+	_float                  m_Door_Sprite = { 0.f };
+	_float                  m_Walk_Sprite = { 0.f };
+
+
+
+private:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();
 

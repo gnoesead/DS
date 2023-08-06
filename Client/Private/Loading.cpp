@@ -38,8 +38,8 @@ HRESULT CLoading::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-	
 
+	
 	// Bg
 	if (m_UI_Desc.m_Type == 0) {
 
@@ -106,6 +106,7 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RT
 	if (m_UI_Desc.m_Type == 10) {
@@ -119,6 +120,7 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_LD
 	if (m_UI_Desc.m_Type == 11) {
@@ -132,6 +134,7 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RD
 	if (m_UI_Desc.m_Type == 12) {
@@ -144,6 +147,35 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
+	}
+
+	// Door
+	if (m_UI_Desc.m_Type == 13) {
+
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1000.f;
+		m_Origin_Y = 1000.f;
+		m_Size_Param = 0.7f;
+		m_UI_Layer = 5;
+		m_Alpha = 1.f;
+	}
+
+	// Walk
+	if (m_UI_Desc.m_Type == 14) {
+
+		m_fX = 1150;
+		m_fY = 600;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 244.f;
+		m_Origin_Y = 256.f;
+		m_Size_Param = 0.8f;
+		m_UI_Layer = 5;
 		m_Alpha = 1.f;
 	}
 
@@ -161,6 +193,53 @@ HRESULT CLoading::Initialize(void* pArg)
 void CLoading::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+	
+
+	// Door
+	if (m_UI_Desc.m_Type == 13) {
+
+	
+		m_Door_Sprite += dTimeDelta * 15.f;
+
+		if (m_Door_Sprite > 6.f) {
+			m_Door_Sprite = 6.f;
+			m_Alpha = 0.f;
+		}
+
+		if ((_uint)m_Door_Sprite == 1.f) {
+			m_Size_Param = 0.69f;
+		}
+		if ((_uint)m_Door_Sprite == 2.f) {
+			m_Size_Param = 0.666f;
+		}
+		if ((_uint)m_Door_Sprite == 3.f) {
+			m_Size_Param = 0.67f;
+		}
+		if ((_uint)m_Door_Sprite == 4.f) {
+			m_Size_Param = 0.663f;
+		}
+		if ((_uint)m_Door_Sprite == 5.f) {
+			m_Size_Param = 0.6625f;
+		}
+		if ((_uint)m_Door_Sprite == 6.f) {
+			m_Size_Param = 0.663f;
+		}
+
+
+	}
+
+	// Walk
+	if (m_UI_Desc.m_Type == 14) {
+
+		m_Walk_Sprite += dTimeDelta * 10.f;
+
+		if (m_Walk_Sprite > 5) {
+			m_Walk_Sprite = 0;
+		}
+	}
+
+
 
 
 	// Cloud_LT
@@ -250,6 +329,7 @@ HRESULT CLoading::Render()
 		return E_FAIL;
 
 
+
 	if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
 		m_pShaderCom->Begin(6);
 	}
@@ -262,6 +342,8 @@ HRESULT CLoading::Render()
 	else {
 		m_pShaderCom->Begin(1);
 	}
+
+
 
 
 
@@ -326,9 +408,24 @@ HRESULT CLoading::Add_Components()
 		return E_FAIL;
 	
 	
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
-		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (m_UI_Desc.m_Type == 13) {
+
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Door"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 14) {
+
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Walk"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else {
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	
 	
 	
 
@@ -338,6 +435,11 @@ HRESULT CLoading::Add_Components()
 HRESULT CLoading::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_R", &m_Is_Side_Cut_R, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_L", &m_Is_Side_Cut_L, sizeof(_bool))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_Alpha, sizeof(_float))))
@@ -367,6 +469,16 @@ HRESULT CLoading::SetUp_ShaderResources()
 	}
 	else if (m_UI_Desc.m_Type == 10) {
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 10)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 13) {
+
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Door_Sprite)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 14) {
+
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Walk_Sprite)))
 			return E_FAIL;
 	}
 	else {

@@ -133,11 +133,24 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 7) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 0.608333f;
+		m_Origin_X = 0.45f;
+		m_Origin_Y = 0.45f;
+		m_Size_Param = 0.4f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
+
+		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
+	}
+
+	// Lock_On_Target_Glow
+	if (m_UI_Desc.m_Type == 8) {
+		m_fX = 919;
+		m_fY = 65;
+		m_Origin_X = 0.45f;
+		m_Origin_Y = 0.45f;
+		m_Size_Param = 0.4f;
+		m_UI_Layer = 2;
+		m_fZ = 0.08f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
@@ -266,7 +279,12 @@ HRESULT CFIcon::Add_Components()
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-
+	else if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_LockOn"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 
 	return S_OK;
@@ -276,7 +294,10 @@ HRESULT CFIcon::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;	
-
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_R", &m_Is_Side_Cut_R, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_L", &m_Is_Side_Cut_L, sizeof(_bool))))
+		return E_FAIL;
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -309,6 +330,10 @@ HRESULT CFIcon::SetUp_ShaderResources()
 	else if (m_UI_Desc.m_Type == 5 || m_UI_Desc.m_Type == 6) {
 		
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 5)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 7)))
 			return E_FAIL;
 	}
 

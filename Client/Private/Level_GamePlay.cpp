@@ -20,6 +20,7 @@
 
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
+#include "Story_Manager.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -91,20 +92,91 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 
     SetWindowText(g_hWnd, TEXT("Story_Board"));
 
+
+	m_Select = CStoryManager::GetInstance()->Get_Select_Type();
+
+	
     if (GetKeyState(VK_RETURN) & 0x8000)
     {
-        HRESULT hr = 0;
 
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
+		if (m_Select == 0) {
 
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
+			/*HRESULT hr = 0;
 
-        Safe_Release(pGameInstance);
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
 
-        if (FAILED(hr))
-            return;
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TUTO), false, false);
+
+			Safe_Release(pGameInstance);
+
+			if (FAILED(hr))
+				return;*/
+		}
+		else if (m_Select == 1) {
+
+			HRESULT hr = 0;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
+
+			Safe_Release(pGameInstance);
+
+			if (FAILED(hr))
+				return;
+		}
+		else if (m_Select == 2) {
+
+			HRESULT hr = 0;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
+
+			Safe_Release(pGameInstance);
+
+			if (FAILED(hr))
+				return;
+		}
+		else if (m_Select == 3) {
+
+			HRESULT hr = 0;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
+
+			Safe_Release(pGameInstance);
+
+			if (FAILED(hr))
+				return;
+			
+		}
+		else if (m_Select == 4) {
+
+			HRESULT hr = 0;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
+
+			Safe_Release(pGameInstance);
+
+			if (FAILED(hr))
+				return;
+			
+		}
+        
     }
 }
 
@@ -248,12 +320,65 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	// Icon_0
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
+	UIDesc.m_Type = 3;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
+	// Icon_1
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
+	UIDesc.m_Type = 4;
 
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
+	// Icon_2
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
+	UIDesc.m_Type = 5;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_3
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_4
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cursor
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 15;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
     Safe_Release(pGameInstance);

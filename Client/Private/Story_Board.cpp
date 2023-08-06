@@ -2,6 +2,7 @@
 #include "..\Public\Story_Board.h"
 
 #include "GameInstance.h"
+#include "Story_Manager.h"
 
 
 
@@ -39,6 +40,7 @@ HRESULT CStory_Board::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	
 
 	// Bg
 	if (m_UI_Desc.m_Type == 0) {
@@ -82,62 +84,62 @@ HRESULT CStory_Board::Initialize(void* pArg)
 	// Icon_0
 	if (m_UI_Desc.m_Type == 3) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 110;
+		m_fY = 535;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 96.f;
 		m_Origin_Y = 96.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_Size_Param = 0.9f;
+		m_UI_Layer = 6;
 	}
 	// Icon_1
 	if (m_UI_Desc.m_Type == 4) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 510;
+		m_fY = 605;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 96.f;
 		m_Origin_Y = 96.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_Size_Param = 0.8f;
+		m_UI_Layer = 6;
 	}
 	// Icon_2
 	if (m_UI_Desc.m_Type == 5) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 860;
+		m_fY = 550;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 96.f;
 		m_Origin_Y = 96.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_Size_Param = 0.9f;
+		m_UI_Layer = 6;
 	}
 	// Icon_3
 	if (m_UI_Desc.m_Type == 6) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 1050;
+		m_fY = 580;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 96.f;
 		m_Origin_Y = 96.f;
 		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 6;
 	}
 	// Icon_4
 	if (m_UI_Desc.m_Type == 7) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 1107;
+		m_fY = 445;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 96.f;
 		m_Origin_Y = 96.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_Size_Param = 1.1f;
+		m_UI_Layer = 6;
 	}
 
 	// Title
@@ -163,6 +165,7 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 3;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_LT_Dark
 	if (m_UI_Desc.m_Type == 10) {
@@ -176,6 +179,7 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 2;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RD
 	if (m_UI_Desc.m_Type == 11) {
@@ -187,8 +191,9 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_Origin_X = 848.f;
 		m_Origin_Y = 308.f;
 		m_Size_Param = 0.7f;
-		m_UI_Layer = 6;
+		m_UI_Layer = 3;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_RD_Dark
 	if (m_UI_Desc.m_Type == 12) {
@@ -202,6 +207,7 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_Size_Param = 0.73f;
 		m_UI_Layer = 2;
 		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
 	}
 
 	// Mini_Title
@@ -233,14 +239,14 @@ HRESULT CStory_Board::Initialize(void* pArg)
 	// Cursor
 	if (m_UI_Desc.m_Type == 15) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 110;
+		m_fY = 535;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 180.f;
 		m_Origin_Y = 180.f;
 		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 7;
 	}
 
 	// Mask_0
@@ -282,6 +288,41 @@ void CStory_Board::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	m_Story_Index = CStoryManager::GetInstance()->Get_Select_Type();
+
+
+	if (m_UI_Desc.m_Type == 15) {
+
+		if (m_Story_Index == 0) {
+			m_fX = 110;
+			m_fY = 535;
+		}
+		if (m_Story_Index == 1) {
+
+			m_fX = 510;
+			m_fY = 605;
+		}
+		if (m_Story_Index == 2) {
+
+			m_fX = 860;
+			m_fY = 550;
+		}
+		if (m_Story_Index == 3) {
+
+			m_fX = 1050;
+			m_fY = 580;
+		}
+		if (m_Story_Index == 4) {
+
+			m_fX = 1107;
+			m_fY = 445;
+		}
+	}
+
+
+
+
+
 	if (m_UI_Desc.m_Type == 8) {
 		
 		if (m_Story_Index == 0) {
@@ -302,68 +343,67 @@ void CStory_Board::Tick(_double dTimeDelta)
 	}
 
 
-	//// Cloud_LT
-	//if (m_UI_Desc.m_Type == 9) {
+	// Cloud_LT
+	if (m_UI_Desc.m_Type == 9) {
 
-	//	m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
 
-	//	if (m_fX - m_Origin_PosX >= 20.f) {
+		if (m_fX - m_Origin_PosX >= 15.f) {
 
-	//		m_PosX_Dir *= -1.f;
-	//	}
+			m_PosX_Dir *= -1.f;
+		}
 
-	//	if (m_fX <= m_Origin_PosX) {
-	//		m_PosX_Dir *= -1.f;
-	//	}
-	//}
-	//// Cloud_LT_Dark
-	//if (m_UI_Desc.m_Type == 10) {
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+	}
+	// Cloud_LT_Dark
+	if (m_UI_Desc.m_Type == 10) {
 
-	//	m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
 
-	//	if (m_Origin_PosX - m_fX >= 20.f) {
+		if (m_Origin_PosX - m_fX >= 15.f) {
 
-	//		m_PosX_Dir *= -1.f;
-	//	}
+			m_PosX_Dir *= -1.f;
+		}
 
-	//	if (m_fX >= m_Origin_PosX) {
-	//		m_PosX_Dir *= -1.f;
-	//	}
-
-
-	//}
-	//// Cloud_RD
-	//if (m_UI_Desc.m_Type == 11) {
-
-	//	m_fX += dTimeDelta * 5.f * m_PosX_Dir;
-
-	//	if (m_fX - m_Origin_PosX >= 20.f) {
-
-	//		m_PosX_Dir *= -1.f;
-	//	}
-
-	//	if (m_fX <= m_Origin_PosX) {
-	//		m_PosX_Dir *= -1.f;
-	//	}
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 
 
-	//}
-	//// Cloud_RD_Dark
-	//if (m_UI_Desc.m_Type == 12) {
+	}
 
-	//	m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+	// Cloud_RD
+	if (m_UI_Desc.m_Type == 11) {
 
-	//	if (m_Origin_PosX - m_fX >= 20.f) {
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
 
-	//		m_PosX_Dir *= -1.f;
-	//	}
+		if (m_fX - m_Origin_PosX >= 15.f) {
 
-	//	if (m_fX >= m_Origin_PosX) {
-	//		m_PosX_Dir *= -1.f;
-	//	}
+			m_PosX_Dir *= -1.f;
+		}
 
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
 
-	//}
+	}
+	// Cloud_RD_Dark
+	if (m_UI_Desc.m_Type == 12) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 15.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+	}
 
 
 	Set_UI();
@@ -387,6 +427,7 @@ HRESULT CStory_Board::Render()
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
+
 
 
 	if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
@@ -418,7 +459,7 @@ HRESULT CStory_Board::Render()
 			return E_FAIL;*/
 	}
 
-	
+
 	Safe_Release(pGameInstance);
 
 
@@ -534,6 +575,13 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_R", &m_Is_Side_Cut_R, sizeof(_bool))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_L", &m_Is_Side_Cut_L, sizeof(_bool))))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_Alpha, sizeof(_float))))
 		return E_FAIL;
 
@@ -572,8 +620,26 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 	// 아이콘
 	else if (m_UI_Desc.m_Type >= 3 && m_UI_Desc.m_Type <= 7) {
 
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))  //임시
-			return E_FAIL;
+		if (m_UI_Desc.m_Type == 3) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))  
+				return E_FAIL;
+		}
+		if (m_UI_Desc.m_Type == 4) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
+				return E_FAIL;
+		}
+		if (m_UI_Desc.m_Type == 5) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 2)))
+				return E_FAIL;
+		}
+		if (m_UI_Desc.m_Type == 6) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		}
+		if (m_UI_Desc.m_Type == 7) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 2)))
+				return E_FAIL;
+		}
 
 	}
 	// 타이틀

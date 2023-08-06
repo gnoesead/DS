@@ -227,6 +227,7 @@
     <ClInclude Include="..\Public\SoundMgr.h" />
     <ClInclude Include="..\Public\StaticMapObject.h" />
     <ClInclude Include="..\Public\Story_Board.h" />
+    <ClInclude Include="..\Public\Story_Manager.h" />
     <ClInclude Include="..\Public\Sword.h" />
     <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
@@ -289,6 +290,7 @@
     <ClCompile Include="..\Private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\Story_Board.cpp" />
+    <ClCompile Include="..\Private\Story_Manager.cpp" />
     <ClCompile Include="..\Private\Sword.cpp" />
     <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
