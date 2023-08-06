@@ -165,6 +165,7 @@ HRESULT CLevel_Train_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
     CCharacter_Tool::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
+   
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
     CharacterDesc.WorldInfo.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
@@ -184,6 +185,7 @@ HRESULT CLevel_Train_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+
 
     // AnimTool¿ë
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,

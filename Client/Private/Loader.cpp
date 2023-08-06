@@ -7,8 +7,10 @@
 #include "Player.h"
 #include "Player_Tanjiro.h"
 #include "Player_Zenitsu.h"
+
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
+#include "Monster_Spider.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -23,6 +25,9 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+
+#include "NPC_Female.h"
+
 
 #include "Sword.h"
 #include "SwordHome.h"
@@ -378,16 +383,34 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-
-
+	// Prototype_Component_Model_Akaza
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	//PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Akaza"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Akaza/Akaza.bin", PivotMatrix))))
 	{
-		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
+		MSG_BOX("Failed to Add_Prototype_Model_Spider");
 		return E_FAIL;
 	}
+
+	// Prototype_Component_Model_Spider
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Spider"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Spider/Spider.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Spider");
+		return E_FAIL;
+	}
+
+	// Prototype_Component_Model_NPC_Female
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_NPC_Female"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/NPC_Female/NPC_Female.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
+		return E_FAIL;
+	}
+	
+
 
 #pragma endregion
 
@@ -514,6 +537,16 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
+	/* Prototype_GameObject_NPC_Female */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Female"),
+		CNPC_Female::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_Female");
+		return E_FAIL;
+	}
+	
+	
+
 
 	/* Prototype_GameObject_Sword */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sword"),
@@ -531,11 +564,19 @@ HRESULT CLoader::LoadingForGamePlay()
 	}
 
 
-	/* Prototype_GameObject_Player_Tanjiro */
+	/* Prototype_GameObject_Boss_Akaza */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Akaza"),
 		CBoss_Akaza::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Akaza");
+		return E_FAIL;
+	}
+
+	/* Prototype_GameObject_Monster_Spider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Spider"),
+		CMonster_Spider::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Spider");
 		return E_FAIL;
 	}
 

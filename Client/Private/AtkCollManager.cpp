@@ -23,7 +23,6 @@ void CAtkCollManager::CreateAtkColl(const _tchar* pLayerTag, CAtkCollider::ATKCO
 	}
 }
 
-
 void CAtkCollManager::Collect_Collider(CGameObject* pGameObject)
 {
 	if (nullptr == pGameObject)
@@ -43,7 +42,6 @@ void CAtkCollManager::Reuse_Collider(const _tchar* pLayerTag, CAtkCollider::ATKC
 	{
 		CreateAtkColl(pLayerTag, pAtkCollDesc, pGameInstance);
 		++m_iCount;
-
 	}
 	else
 	{

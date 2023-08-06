@@ -207,7 +207,6 @@ private: //애니메이션 제어용 변수들
 	_bool		m_isFirst_Special_Jump = { true };
 	_bool		m_isSecond_Special_Jump = { true };
 
-	// 
 	_bool  m_bFirstAnim = { false };
 
 	// 태훈

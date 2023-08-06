@@ -205,7 +205,12 @@
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
+    <ClInclude Include="..\Public\Monster.h" />
+    <ClInclude Include="..\Public\MonsterManager.h" />
+    <ClInclude Include="..\Public\Monster_Spider.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
+    <ClInclude Include="..\Public\NPC.h" />
+    <ClInclude Include="..\Public\NPC_Female.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Player_Battle_Combo.h" />
@@ -257,7 +262,12 @@
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
+    <ClCompile Include="..\Private\Monster.cpp" />
+    <ClCompile Include="..\Private\MonsterManager.cpp" />
+    <ClCompile Include="..\Private\Monster_Spider.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
+    <ClCompile Include="..\Private\NPC.cpp" />
+    <ClCompile Include="..\Private\NPC_Female.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp" />

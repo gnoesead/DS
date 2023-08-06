@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 
+#include "AtkCollManager.h"
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject(pDevice, pContext)
@@ -21,11 +22,16 @@ HRESULT CCharacter::Initialize(void* pArg)
 		memcpy(&m_CharacterDesc, pArg, sizeof m_CharacterDesc);
 	}
 
+	m_CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.WorldInfo.fDegree = 0.f;
+
 	if (FAILED(__super::Initialize(&m_CharacterDesc.WorldInfo)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
+
+
 
 	if (nullptr != pArg)
 	{//초기 위치 설정
@@ -179,6 +185,7 @@ void CCharacter::Reset_Decleration(_float fResetSpeed)
 	}
 }
 
+
 void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease)
 {
 	//서서히 느려지는 Transform 이동
@@ -256,6 +263,14 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 		{
 			m_fAtk_MoveControl = 0.0f;
 		}
+	}
+}
+
+void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir)
+{
+	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
 	}
 }
 
@@ -364,6 +379,27 @@ void CCharacter::JumpStop(_double dDuration)
 	m_dTime_JumpStop = 0.0;
 }
 
+void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg)
+{
+	CAtkCollider::ATKCOLLDESC AtkCollDesc;
+	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
+
+	AtkCollDesc.ColliderDesc.vSize = Size;
+	AtkCollDesc.ColliderDesc.vPosition = Pos;
+
+	AtkCollDesc.dLifeTime = DurationTime;
+
+	AtkCollDesc.pTransform = m_pTransformCom;
+
+	AtkCollDesc.eAtkType = AtkType;
+
+	AtkCollDesc.fDamage = fDmg;
+
+	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
+
+	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
+}
+
 
 HRESULT CCharacter::Add_Components()
 {
@@ -374,8 +410,11 @@ HRESULT CCharacter::Add_Components()
 		MSG_BOX("Failed to Add_Com_Renderer : CCharacter");
 		return E_FAIL;
 	}
-		
-	/* for.Com_Transform */
+
+	/*
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
+	// for.Com_Transform 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
 	{
@@ -383,7 +422,10 @@ HRESULT CCharacter::Add_Components()
 		return E_FAIL;
 	}
 
-	/* for.Com_AABB */
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
+	//for.Com_AABB 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
 	{
@@ -391,7 +433,12 @@ HRESULT CCharacter::Add_Components()
 		return E_FAIL;
 	}
 
-	/* for.Com_OBB */
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
+	//for.Com_OBB 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
 	{
@@ -399,7 +446,12 @@ HRESULT CCharacter::Add_Components()
 		return E_FAIL;
 	}
 
-	/* for.Com_Sphere */
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
+	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
+	// for.Com_Sphere 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
 	{
@@ -407,6 +459,11 @@ HRESULT CCharacter::Add_Components()
 		return E_FAIL;
 	}
 
+	*/
+
+
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+	m_CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 	/* for.Com_Navigation */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
 		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &m_CharacterDesc.NaviDesc)))

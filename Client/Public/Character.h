@@ -6,6 +6,8 @@
 #include "Transform.h"
 #include "Collider.h"
 
+#include "AtkCollider.h"
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -17,7 +19,7 @@ BEGIN(Client)
 class CCharacter abstract : public CLandObject
 {
 public:
-	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
+	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE,  COLL_END };
 public:
 	typedef struct tagCharacterDesc
 	{
@@ -26,6 +28,19 @@ public:
 		CTransform::TRANSFORMDESC	TransformDesc;
 		CNavigation::NAVIDESC		NaviDesc;
 	}CHARACTERDESC;
+
+	typedef struct tagCharacterStatusDesc
+	{
+		_float  fHp = { 100.0f };
+		_float	fHp_Max = { 100.0f };
+		_float	fMp = { 100.0f };
+		_float	fMp_Max = { 100.0f };
+
+		_int	iSpecial_Cnt = { 0 };
+		_float  fSpecial = { 0.0f };
+		_float	fSpecial_Max = { 100.0f };
+	}CHAR_STATUS;
+
 protected:
 	CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCharacter(const CCharacter& rhs);
@@ -44,12 +59,16 @@ protected:
 	_bool	EventCallProcess( );
 	void	Reset_Decleration(_float fResetSpeed);
 
+	//방향 보간
+	void	Dir_Linear(_double dTimeDelta);
+
 	//이동 관련
 	void	Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
+	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 
@@ -60,7 +79,8 @@ protected:
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
-	
+	//콜라이더 관련
+	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg);
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -77,8 +97,10 @@ protected:
 
 
 protected:
-	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+	CHAR_STATUS  m_StatusDesc;
 
+protected:
+	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	//스케일값 비율
 	_float		m_fFix_Size = { 0.80f };
