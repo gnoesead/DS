@@ -172,7 +172,7 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 
@@ -190,7 +190,6 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
         TEXT("Prototype_GameObject_Player"), &CharacterDesc)))
@@ -252,6 +251,11 @@ HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);

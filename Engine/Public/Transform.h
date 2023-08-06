@@ -41,10 +41,10 @@ public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const char* pConstantName);
 
 public:
-	void Go_Straight(_double dTimeDelta);
-	void Go_Backward(_double dTimeDelta);
-	void Go_Right(_double dTimeDelta);
-	void Go_Left(_double dTimeDelta);
+	void Go_Straight(_double dTimeDelta , class CNavigation* pNavigation = nullptr);
+	void Go_Backward(_double dTimeDelta, class CNavigation* pNavigation = nullptr);
+	void Go_Right(_double dTimeDelta, class CNavigation* pNavigation = nullptr);
+	void Go_Left(_double dTimeDelta, class CNavigation* pNavigation = nullptr);
 	void Go_Up(_double dTimeDelta);
 	void Go_Down(_double dTimeDelta);
 	void Go_Dir(_double dTimeDelta, _fvector vDirection);	//vDirection 방향으로 이동

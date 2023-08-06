@@ -48,13 +48,10 @@ void CPlayer::Tick(_double dTimeDelta)
 void CPlayer::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
-
-	
 }
 
 HRESULT CPlayer::Render()
 {
-
 	return S_OK;
 }
 
@@ -659,6 +656,101 @@ void CPlayer::Key_Input_Battle_Special(_double dTimeDelta)
 
 HRESULT CPlayer::Add_Components()
 {
+	/* for.Com_Navigation_Village_MainRoad1 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
+		TEXT("Com_Navigation_Village_MainRoad1"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_MAINROAD1], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_MainRoad1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_MainRoad2 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad2"),
+		TEXT("Com_Navigation_Village_MainRoad2"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_MAINROAD2], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_MainRoad2 : CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_InsideWall1*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall1"),
+		TEXT("Com_Navigation_Village_InsideWall1"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_INSIDEWALL1], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_InsideWall1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_InsideWall2*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall2"),
+		TEXT("Com_Navigation_Village_InsideWall2"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_INSIDEWALL2], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_InsideWall2: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_Roof*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Roof"),
+		TEXT("Com_Navigation_Village_Roof"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_ROOF], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_Roof: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_Wall*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Wall"),
+		TEXT("Com_Navigation_Village_Wall"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_WALL], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_Wall: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_0_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_0_0"),
+		TEXT("Com_Navigation_House_0_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_0_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_0_0: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_1_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_1_0"),
+		TEXT("Com_Navigation_House_1_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_1_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_1_0: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_1_1*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_1_1"),
+		TEXT("Com_Navigation_House_1_1"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_1_1], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_1_1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_3_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_3_0"),
+		TEXT("Com_Navigation_House_3_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_3_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_3_0: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_4_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
+		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Acaza*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
+		TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

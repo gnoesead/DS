@@ -407,6 +407,110 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion
 
+#pragma region Navigation
+	// Village Map
+
+	/* Prototype_Component_Navigation_Village_MainRoad1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_MainRoad1.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_MainRoad1");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_MainRoad2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad2"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_MainRoad2.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_MainRoad2");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_InsideWall1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall1"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_InsideWall1.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_InsideWall1");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_InsideWall2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall2"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_InsideWall2.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_InsideWall2");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_Roof */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Roof"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_Roof.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_Roof");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_Wall */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Wall"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_Wall.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_Wall");
+		return E_FAIL;
+	}
+
+	// House Map
+	/* Prototype_Component_Navigation_House_0_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_0_0"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_0_0.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_0_0");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_House_1_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_1_0"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_1_0.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_1_0");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_House_1_1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_1_1"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_1_1.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_1_1");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_House_3_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_3_0"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_3_0.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_3_0");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_House_4_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_4_0.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_4_0");
+		return E_FAIL;
+	}
+
+	// Acaza Map
+
+	/* Prototype_Component_Navigation_Acaza */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Acaza/Navi_Acaza.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Acaza");
+		return E_FAIL;
+	}
+
+
+#pragma endregion
 
 	Safe_AddRef(m_pRenderer);
 
