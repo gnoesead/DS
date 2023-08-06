@@ -68,7 +68,10 @@ HRESULT CMapObject::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (5 == m_MapObject_Info.iRenderGroup)
+			m_pShaderCom->Begin(4);
+		else 
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}

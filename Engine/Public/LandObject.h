@@ -7,6 +7,10 @@ BEGIN(Engine)
 
 class ENGINE_DLL CLandObject abstract : public CGameObject
 {
+public:
+enum NAVI_TYPE { NAVI_VILLAGE_MAINROAD1,NAVI_VILLAGE_MAINROAD2, NAVI_VILLAGE_INSIDEWALL1, NAVI_VILLAGE_INSIDEWALL2 , NAVI_VILLAGE_ROOF , NAVI_VILLAGE_WALL , 
+	NAVI_HOUSE_0_0,NAVI_HOUSE_1_0,NAVI_HOUSE_1_1,NAVI_HOUSE_3_0,NAVI_HOUSE_4_0, NAVI_ACAZA, NAVI_END };
+
 protected:
 	CLandObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLandObject(const CLandObject& rhs);
@@ -20,7 +24,10 @@ public:
 	//virtual HRESULT Render() override;
 
 protected:
-	class CNavigation* m_pNavigationCom = { nullptr };
+	CNavigation* m_pNavigationCom[NAVI_END] = {nullptr};
+
+	//NaviMesh
+	NAVI_TYPE		m_eCurNavi = { NAVI_END };
 
 protected:
 	_vector Compute_Height(_fvector vPos);

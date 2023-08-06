@@ -173,9 +173,9 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 12.f, 236.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
  
     CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -190,8 +190,8 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
     CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 
-    CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.Land_Y = 4.5f;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -251,6 +251,10 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
         ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);

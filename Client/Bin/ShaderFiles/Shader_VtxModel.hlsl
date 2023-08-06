@@ -148,6 +148,36 @@ PS_OUT  PS_Ramp(PS_IN _In)
 	return Out;
 };
 
+PS_OUT  PS_BLOOD(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (vMtrlDiffuse.a < 0.1f)
+		discard;
+
+	/* 이 노멀아르 정의하기위한 로컬스페이스(x:Tangent, y:biNormal, z:Normal)에 정의되어있는 상태이다. */
+	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexUV);
+
+	float3	vNormal = vNormalDesc.xyz * 2.f - 1.f;
+
+	float3x3	WorldMatrix = float3x3(In.vTangent.xyz, In.vBinormal.xyz, In.vNormal.xyz);
+
+	vNormal = mul(vNormal, WorldMatrix);
+
+	if (vMtrlDiffuse.r < 0.3f)
+		discard;
+
+	Out.vDiffuse = vMtrlDiffuse;
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	pass General
@@ -200,6 +230,18 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Ramp();
+	}
+
+	pass Blood // 4
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_BLOOD();
 	}
 };
 

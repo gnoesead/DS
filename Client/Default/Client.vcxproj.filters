@@ -225,9 +225,6 @@
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player.h">
-      <Filter>02. GameObjects\Character\Player</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ColliderManager.h">
       <Filter>04. ColliderManager</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
+      <Filter>02. GameObjects\Character\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

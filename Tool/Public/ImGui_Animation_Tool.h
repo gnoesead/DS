@@ -19,7 +19,7 @@ private:
 	virtual ~CImGui_Animation_Tool() = default;
 
 
-public: // ÇÔ¼ö
+public: // í•¨ìˆ˜
 	void Animation_ImGui_Main();
 
 	
@@ -46,16 +46,16 @@ public: // GetSet
 	void	Set_iTest(_int i) { m_iTest = i; }
 
 private: 
-	// Àç»ı play
+	// ì¬ìƒ play
 	_bool	m_isPlay = { false };
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç º¯È­ ½ÅÈ£ÁÖ±â
+	// ì• ë‹ˆë©”ì´ì…˜ ë³€í™” ì‹ í˜¸ì£¼ê¸°
 	_bool	m_Signal_to_Change_Anim = { false };
 
 	//root
 	_bool	m_isRootAnimation = { false };
 
-	// º¯¼ö
+	// ë³€ìˆ˜
 	_bool	m_isFirst_ListBox = { true };
 
 	CAnimation*		m_pAnimation = { nullptr };
@@ -64,7 +64,7 @@ private:
 	_int	m_iAnimIndex = { 0 };
 	_int	m_iSave_AnimIndex = { 0 };
 
-	//Slider º¯¼ö
+	//Slider ë³€ìˆ˜
 	_double		m_dFixed_Time = { 0.0 };
 	_double		m_dCur_Time = { 0.0 };
 	_double		m_dEnd_Time = { 0.0 };
@@ -84,8 +84,8 @@ private:
 	//Save
 	_bool	m_isSave = { false };
 
-	_bool	m_isGUINoMove[2] = { true, true };
-	_bool	m_isGUINoResize[2] = { true, true };
+	_bool	m_isGUINoMove[2] = { false, false };
+	_bool	m_isGUINoResize[2] = { false, false };
 
 public:
 	virtual void Free() override;
