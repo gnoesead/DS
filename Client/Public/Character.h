@@ -17,6 +17,7 @@ BEGIN(Client)
 class CCharacter abstract : public CLandObject
 {
 public:
+	enum DIR { DIR_UP, DIR_DOWN, DIR_RIGHT, DIR_LEFT };
 	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
 public:
 	typedef struct tagCharacterDesc
@@ -54,14 +55,19 @@ protected:
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
+
+	void Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
 
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
+	
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }

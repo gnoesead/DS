@@ -130,6 +130,8 @@ _int CAnimation::Invalidate_TransformationMatrices(CModel* pModel, _double dTime
 	// 애니메이션이 끝날 때, 루프애님이 아니면,  다음 애니메이션 인덱스를 return
 	if (m_AnimationDesc.m_isFinish)
 	{
+
+
 		// EventCall 초기화
 		for (auto& event : m_ControlDesc.m_vecTime_Event)
 		{
@@ -183,6 +185,7 @@ _bool CAnimation::Invalidate_Linear_TransformationMatrices(CModel* pModel, _doub
 	// 애니메이션이 끝날 때, 선형보간 끝. false 리턴
 	if (m_AnimationDesc.m_isFinish)
 	{
+		
 		return false;
 	}
 	// 선형보간 계속 진행 true 리턴
@@ -243,6 +246,24 @@ vector<KEYFRAME> CAnimation::Get_LastKeys()
 	}
 
 	return LastKeys;
+}
+
+_bool CAnimation::Check_AnimRatio(_double Ratio, _double TimeDelta)
+{
+	if (Ratio > 1.0)
+		return false;
+
+	return (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration <= Ratio && Ratio < (m_AnimationDesc.m_dTimeAcc + TimeDelta * m_AnimationDesc.m_dTickPerSecond * m_ControlDesc.m_fAnimationSpeed) / m_AnimationDesc.m_dDuration);
+}
+
+_bool CAnimation::Get_AnimRatio(_double Ratio)
+{
+	if (Ratio > 1.0)
+		return false;
+	if (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration >= Ratio)
+		return true;
+	else
+		return false;
 }
 
 CAnimation* CAnimation::Create(ANIMATIONDATA* pAnimationData, class CModel* pModel)

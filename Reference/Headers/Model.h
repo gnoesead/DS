@@ -38,11 +38,20 @@ public://Get
 
 	_bool	Get_AnimFinish(_int AnimIndex) {
 		
-		_bool	bFinish = m_Animations[AnimIndex]->Get_AnimationDesc().m_isFinish;
-		m_Animations[AnimIndex]->Reset_Finish();
-
-		return bFinish;
+		_bool Finish = m_Animations[AnimIndex]->Get_AnimationDesc().m_isFinish;
 		
+
+		return Finish;
+		
+	}
+	_bool	Check_PickAnimRatio(_uint iAnimIndex, _double Ratio, _double dTimeDelta) {
+		return m_Animations[iAnimIndex]->Check_AnimRatio(Ratio, dTimeDelta);
+	}
+	_bool Get_AnimRatio(_uint iAnimIndex, _double Ratio) {
+		return m_Animations[iAnimIndex]->Get_AnimRatio(Ratio);
+	}
+	_bool Get_CurAnimRatio(_double Ratio) {
+		return m_Animations[m_iCurrentAnimIndex]->Get_AnimRatio(Ratio);
 	}
 
 public://Set
@@ -54,6 +63,8 @@ public://Set
 	}
 
 	void	Set_EarlyEnd(_int index, _bool bEnd) { m_Animations[index]->Set_EarlyEnd(bEnd); }
+	void	Set_AnimisFinish(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_Finish(); }
+	void	Set_AnimResetTimeAcc(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_TimeAcc(); }
 
 public:
 	HRESULT Initialize_Prototype(TYPE eModelType, const char* pModelFilePath, _fmatrix PivotMatrix);
@@ -116,6 +127,7 @@ private:
 private:
 	_uint						m_iCurrentAnimIndex = { 0 };
 	_uint						m_iSaveAnimIndex = { 0 };
+	_uint						m_iPreAnimIndex = { 0 };
 
 	_uint						m_iNumAnimations = { 0 };
 	vector<class CAnimation*>	m_Animations;
