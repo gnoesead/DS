@@ -96,9 +96,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	{
 		// adventure
 		if (m_Is_Battle != true) {
-			m_fDistance = { 4.f };
+			m_fDistance = { 3.0f };
 			m_vOffSet = { 0.f, 1.5f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 1.7f, 0.f, 0.f };
+			m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
 
 			AdventureCamera(dTimeDelta);
 		}
