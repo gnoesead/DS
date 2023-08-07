@@ -17,11 +17,7 @@ protected:
 	virtual ~CLandObject() = default;
 
 public:
-	//virtual HRESULT Initialize_Prototype() override;
-	//virtual HRESULT Initialize(void* pArg) override;
-	//virtual void	Tick(_double dTimeDelta) override;
-	//virtual void	LateTick(_double dTimeDelta) override;
-	//virtual HRESULT Render() override;
+	void		Change_NaviMesh(NAVI_TYPE eNaviType) { m_eCurNavi = eNaviType; }
 
 protected:
 	CNavigation* m_pNavigationCom[NAVI_END] = {nullptr};

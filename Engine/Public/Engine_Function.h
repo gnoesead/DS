@@ -235,4 +235,19 @@ namespace Engine
 		}
 	
 	};
+
+	class Compute
+	{
+	public:
+		static bool   DistCheck(FXMVECTOR vSour, FXMVECTOR vDest, const float fDist)
+		{//fDist보다 거리가 가깝거나 같으면 ture 반환
+			float fDis = XMVectorGetX(XMVector3Length(vSour - vDest));
+
+			if (fDist >= fDis)
+				return true;
+			else
+				return false;
+		}
+	};
+
 }
