@@ -10,6 +10,7 @@ CAnimation::CAnimation()
 
 CAnimation::CAnimation(const CAnimation& rhs)
 	: m_AnimationDesc(rhs.m_AnimationDesc)
+	, m_ControlDesc(rhs.m_ControlDesc)
 	/*m_dDuration(rhs.m_dDuration)
 	, m_dTickPerSecond(rhs.m_dTickPerSecond)
 	, m_dTimeAcc(rhs.m_dTimeAcc)
@@ -18,10 +19,17 @@ CAnimation::CAnimation(const CAnimation& rhs)
 	, m_Channels(rhs.m_Channels)
 	, m_iCurrentKeyFrames(rhs.m_iCurrentKeyFrames)*/
 {
-	for (auto& pChannel : m_AnimationDesc.m_Channels)
-		Safe_AddRef(pChannel);
+	//for (auto& pChannel : m_AnimationDesc.m_Channels)
+	//	Safe_AddRef(pChannel);
 
 	strcpy_s(m_AnimationDesc.m_szName, rhs.m_AnimationDesc.m_szName);
+
+	m_RootPosition = rhs.m_RootPosition;
+	m_Save_RootPos = rhs.m_Save_RootPos;
+	m_isFirst_EventCall = rhs.m_isFirst_EventCall;
+	m_isFirst_ComboDuration = rhs.m_isFirst_ComboDuration;
+	m_isEarlyEnd = rhs.m_isEarlyEnd;
+
 }
 
 HRESULT CAnimation::Initialize(ANIMATIONDATA* pAnimationData, CModel* pModel)
@@ -281,13 +289,27 @@ CAnimation* CAnimation::Create(ANIMATIONDATA* pAnimationData, class CModel* pMod
 
 CAnimation* CAnimation::Clone()
 {
-	return new CAnimation(*this);
+	CAnimation* pInstance = new CAnimation(*this);
+
+	// m_AnimationDesc.m_Channels에 있는 모든 CChannel 객체를 복사
+	for (size_t i = 0; i < m_AnimationDesc.m_Channels.size(); i++)
+	{
+		pInstance->m_AnimationDesc.m_Channels[i] = new CChannel(*m_AnimationDesc.m_Channels[i]);
+		
+	}
+
+	return pInstance;
 }
 
 void CAnimation::Free()
 {
 	for (auto& pChannel : m_AnimationDesc.m_Channels)
 		Safe_Release(pChannel);
-
+	
+	
 	m_AnimationDesc.m_Channels.clear();
+
+
+
+	
 }

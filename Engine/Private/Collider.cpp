@@ -172,25 +172,25 @@ _bool CCollider::Intersect(CCollider* pTargetCollider)
 		if (TYPE_AABB == pTargetCollider->m_eColliderType)
 			m_isColl = m_pAABB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pAABB[DATA_CURRENT]);
 		if (TYPE_OBB == pTargetCollider->m_eColliderType)
-			m_isColl = m_pOBB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pOBB[DATA_CURRENT]);
+			m_isColl = m_pAABB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pOBB[DATA_CURRENT]);
 		if (TYPE_SPHERE == pTargetCollider->m_eColliderType)
-			m_isColl = m_pSphere[DATA_CURRENT]->Intersects(*pTargetCollider->m_pSphere[DATA_CURRENT]);
+			m_isColl = m_pAABB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pSphere[DATA_CURRENT]);
 	}
 	if (TYPE_OBB == m_eColliderType)
 	{
 		if (TYPE_AABB == pTargetCollider->m_eColliderType)
-			m_isColl = m_pAABB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pAABB[DATA_CURRENT]);
+			m_isColl = m_pOBB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pAABB[DATA_CURRENT]);
 		if (TYPE_OBB == pTargetCollider->m_eColliderType)
 			m_isColl = m_pOBB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pOBB[DATA_CURRENT]);
 		if (TYPE_SPHERE == pTargetCollider->m_eColliderType)
-			m_isColl = m_pSphere[DATA_CURRENT]->Intersects(*pTargetCollider->m_pSphere[DATA_CURRENT]);
+			m_isColl = m_pOBB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pSphere[DATA_CURRENT]);
 	}
 	if (TYPE_SPHERE == m_eColliderType)
 	{
 		if (TYPE_AABB == pTargetCollider->m_eColliderType)
-			m_isColl = m_pAABB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pAABB[DATA_CURRENT]);
+			m_isColl = m_pSphere[DATA_CURRENT]->Intersects(*pTargetCollider->m_pAABB[DATA_CURRENT]);
 		if (TYPE_OBB == pTargetCollider->m_eColliderType)
-			m_isColl = m_pOBB[DATA_CURRENT]->Intersects(*pTargetCollider->m_pOBB[DATA_CURRENT]);
+			m_isColl = m_pSphere[DATA_CURRENT]->Intersects(*pTargetCollider->m_pOBB[DATA_CURRENT]);
 		if (TYPE_SPHERE == pTargetCollider->m_eColliderType)
 			m_isColl = m_pSphere[DATA_CURRENT]->Intersects(*pTargetCollider->m_pSphere[DATA_CURRENT]);
 	}

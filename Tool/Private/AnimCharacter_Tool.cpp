@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Akaza.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Spider.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -87,8 +87,6 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 
 		fin.close();
 	
-
-
 	Safe_Release(pGameInstance);
 	
 	return S_OK;
@@ -100,6 +98,8 @@ void CAnimCharacter_Tool::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	ImGUI_Control(dTimeDelta);
 
@@ -185,10 +185,10 @@ void CAnimCharacter_Tool::ImGUI_Control(_double dTimeDelta)
 
 			// Imgui 초기값 넣어주기.
 			// ★Connect 초기값 넣어주기.
-			//CAnimation::CONTROLDESC control = pAnim->Get_ControlDesc();
-			//control.m_iConnect_Anim = index;
-			//pAnim->Set_ControlDesc(control);
-
+			/*CAnimation::CONTROLDESC control = pAnim->Get_ControlDesc();
+			control.m_iConnect_Anim = index;
+			pAnim->Set_ControlDesc(control);*/
+			
 
 			index++;
 		}
@@ -263,7 +263,7 @@ void CAnimCharacter_Tool::Save_Animations()
 	char FindFile[MAX_PATH] = { "" };
 	WIN32_FIND_DATAA fdFind;
 	//★
-	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Akaza/*.bin", &fdFind);
+	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Spider/*.bin", &fdFind);
 	if (hFindOut != INVALID_HANDLE_VALUE)
 	{
 		do
@@ -440,7 +440,7 @@ HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
 	//★
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Spider"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CAnimCharacter_Tool");
