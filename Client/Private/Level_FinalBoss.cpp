@@ -207,6 +207,8 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 
    
+	CharacterDesc.Land_Y = 0.f;
+	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
     //if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
     //    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -895,6 +897,11 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
         ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+
+		ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+		ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);

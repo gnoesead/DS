@@ -915,6 +915,10 @@ HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* 
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
 
+		ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+		ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);

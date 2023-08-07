@@ -174,7 +174,10 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
  
-    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 12.f, 236.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
+
+    CharacterDesc.Land_Y = 4.5f;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
  
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -234,6 +237,10 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
         ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);

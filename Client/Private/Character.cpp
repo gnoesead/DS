@@ -34,10 +34,14 @@ HRESULT CCharacter::Initialize(void* pArg)
 
 
 	if (nullptr != pArg)
-	{//초기 위치 설정
+	{
+		//초기 위치 설정
 		m_pTransformCom->Scaling(m_WorldInfo.vScale);
 		m_pTransformCom->Rotation(XMLoadFloat3(&m_WorldInfo.vAxis), m_WorldInfo.fDegree);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_WorldInfo.vPosition));
+
+		m_fLand_Y = m_CharacterDesc.Land_Y;
+		m_eCurNavi = m_CharacterDesc.eCurNavi;
 	}
 
 	return S_OK;
@@ -193,7 +197,7 @@ void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _f
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl);
+		m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl , m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -209,7 +213,7 @@ void CCharacter::Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _f
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Backward(dTimeDelta * m_fAtk_MoveControl);
+		m_pTransformCom->Go_Backward(dTimeDelta * m_fAtk_MoveControl, m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -225,7 +229,7 @@ void CCharacter::Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Left(dTimeDelta * m_fAtk_MoveControl);
+		m_pTransformCom->Go_Left(dTimeDelta * m_fAtk_MoveControl, m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -241,7 +245,7 @@ void CCharacter::Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _floa
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Right(dTimeDelta * m_fAtk_MoveControl);
+		m_pTransformCom->Go_Right(dTimeDelta * m_fAtk_MoveControl, m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -278,7 +282,7 @@ void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -286,7 +290,7 @@ void CCharacter::Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Backward(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Backward(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -295,7 +299,7 @@ void CCharacter::Go_Straight_Deceleration_Common(_double dTimeDelta, _float Rese
 	//서서히 느려지는 Transform 이동
 	Reset_Decleration(ResetSpeed);
 
-	m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl);
+	m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl , m_pNavigationCom[m_eCurNavi]);
 	m_fAtk_MoveControl -= fDecrease;
 	if (m_fAtk_MoveControl <= 0.0f)
 	{
@@ -326,10 +330,10 @@ void CCharacter::Gravity(_double dTimeDelta)
 		m_dDelay_Fall += dTimeDelta;
 		if (m_dDelay_Fall > 0.1)
 		{
-			if (Pos.y <= 0.0)
+			if (Pos.y <= m_fLand_Y)
 			{
 				m_isJumpOn = false;
-				Pos.y = 0.0f;
+				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
 			}		
 		}
@@ -337,7 +341,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 	//땅 위 상태
 	else
 	{
-		Pos.y = 0.0f;
+		Pos.y = m_fLand_Y;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
 		
 		m_fJump_Acc = 0.0f;
@@ -355,7 +359,7 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-		if (Pos.y <= 0.0f)
+		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
 		}
@@ -462,15 +466,15 @@ HRESULT CCharacter::Add_Components()
 	*/
 
 
-	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
-	m_CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-	/* for.Com_Navigation */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &m_CharacterDesc.NaviDesc)))
-	{
-		MSG_BOX("Failed to Add_Com_Navigation : CCharacter");
-		return E_FAIL;
-	}
+	//m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+	////m_CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+	///* for.Com_Navigation */
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+	//	TEXT("Com_Navigation"), (CComponent**)&m_pNavigationCom, &m_CharacterDesc.NaviDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_Com_Navigation : CCharacter");
+	//	return E_FAIL;
+	//}
 
 	return S_OK;
 }

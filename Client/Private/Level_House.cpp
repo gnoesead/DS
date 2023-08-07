@@ -173,11 +173,13 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
    
-    CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
 
+    CharacterDesc.Land_Y = 0.f;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-        TEXT("Prototype_GameObject_Player"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_House");
         return E_FAIL;
@@ -190,7 +192,7 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    Load_MapObject_Info(TEXT("../../Data/Object/Room1.dat"), pLayerTag);
+    Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
 
     return S_OK;
 }
@@ -235,6 +237,9 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
 
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);

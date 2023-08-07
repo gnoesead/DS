@@ -233,7 +233,7 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 
 		/* Prototype_Component_Navigation */
 		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Navigation"),
-			CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Data/Navigation.dat")))))
+			CNavigation::Create(m_pDevice, m_pContext , TEXT("../../Data/NaviMesh/Acaza/Navi_Acaza.dat")))))
 		{
 			MSG_BOX("Failed to Add_Prototype_Component_Navigation");
 			return E_FAIL;

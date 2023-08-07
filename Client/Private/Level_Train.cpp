@@ -177,7 +177,7 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
-        TEXT("Prototype_GameObject_Player"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_Train");
         return E_FAIL;
@@ -234,6 +234,11 @@ HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);

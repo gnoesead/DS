@@ -73,7 +73,7 @@ void CInstanceMapObject::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 60.f))
+	if (m_MapObject_Info.iArrangementType != ARRANGEMENT_RECT || pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 60.f))
 	{
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 			return;

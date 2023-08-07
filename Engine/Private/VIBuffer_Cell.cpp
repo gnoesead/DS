@@ -3,11 +3,13 @@
 CVIBuffer_Cell::CVIBuffer_Cell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer(pDevice, pContext)
 {
+
 }
 
 CVIBuffer_Cell::CVIBuffer_Cell(const CVIBuffer_Cell& rhs)
 	: CVIBuffer(rhs)
 {
+
 }
 
 HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
@@ -20,6 +22,7 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 	m_eIndexFormat = DXGI_FORMAT_R16_UINT;
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_LINESTRIP;
 
+	/* 버텍스 버퍼를 할당한다. */
 #pragma region VERTEXBUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
@@ -33,7 +36,7 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 	VTXPOS* pVertices = new VTXPOS[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXPOS) * m_iNumVertices);
 
-	for (_uint i = 0; i < 3; i++)
+	for (_uint i = 0; i < 3; ++i)
 		pVertices[i].vPosition = pPoints[i];
 
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);
@@ -46,7 +49,7 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 #pragma endregion
 
 
-#pragma region INDEXBUFFER
+#pragma region INDEXBUFFER	
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 
 	m_BufferDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
@@ -67,10 +70,12 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);
 	m_SubresourceData.pSysMem = pIndices;
 
+	/* 인덱스 버퍼를 할당한다. */
 	if (FAILED(m_pDevice->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pIB)))
 		return E_FAIL;
 
 	Safe_Delete_Array(pIndices);
+
 #pragma endregion
 
 	return S_OK;
@@ -78,6 +83,31 @@ HRESULT CVIBuffer_Cell::Initialize_Prototype(const _float3* pPoints)
 
 HRESULT CVIBuffer_Cell::Initialize(void* pArg)
 {
+	return S_OK;
+}
+
+HRESULT CVIBuffer_Cell::Render()
+{
+	ID3D11Buffer* pVertexBuffers[] = {
+		m_pVB,
+	};
+
+	_uint				iStrides[] = {
+		m_iStride,
+	};
+
+	_uint				iOffsets[] = {
+		0,
+	};
+
+	m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers, pVertexBuffers, iStrides, iOffsets);
+
+	m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
+
+	m_pContext->IASetPrimitiveTopology(m_eTopology);
+
+	m_pContext->DrawIndexed(4, 0, 0);
+
 	return S_OK;
 }
 
@@ -93,7 +123,6 @@ CVIBuffer_Cell* CVIBuffer_Cell::Create(ID3D11Device* pDevice, ID3D11DeviceContex
 
 	return pInstance;
 }
-
 CComponent* CVIBuffer_Cell::Clone(void* pArg)
 {
 	CVIBuffer_Cell* pInstance = new CVIBuffer_Cell(*this);
@@ -110,4 +139,6 @@ CComponent* CVIBuffer_Cell::Clone(void* pArg)
 void CVIBuffer_Cell::Free()
 {
 	__super::Free();
+
+
 }
