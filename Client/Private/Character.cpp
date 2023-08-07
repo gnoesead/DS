@@ -22,7 +22,7 @@ HRESULT CCharacter::Initialize(void* pArg)
 		memcpy(&m_CharacterDesc, pArg, sizeof m_CharacterDesc);
 	}
 
-	m_CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
 	m_CharacterDesc.WorldInfo.fDegree = 0.f;
 
 	if (FAILED(__super::Initialize(&m_CharacterDesc.WorldInfo)))
@@ -116,7 +116,7 @@ HRESULT CCharacter::Read_Animation_Control_File(const char* szBinfilename)
 		m_pModelCom->Set_Animation_Control(i, ControlDesc);
 	}
 	fin.close();
-	
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -155,7 +155,7 @@ void CCharacter::RootAnimation(_double dTimeDelta)
 	}
 }
 
-_bool CCharacter::EventCallProcess( )
+_bool CCharacter::EventCallProcess()
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
 
@@ -188,6 +188,7 @@ void CCharacter::Reset_Decleration(_float fResetSpeed)
 		m_fAtk_MoveControl = fResetSpeed;
 	}
 }
+
 
 
 void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease)
@@ -294,6 +295,22 @@ void CCharacter::Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float
 	}
 }
 
+void CCharacter::Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed)
+{
+	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pTransformCom->Go_Left(dTimeDelta * constantSpeed);
+	}
+}
+
+void CCharacter::Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed)
+{
+	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pTransformCom->Go_Right(dTimeDelta * constantSpeed);
+	}
+}
+
 void CCharacter::Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease)
 {
 	//서서히 느려지는 Transform 이동
@@ -305,6 +322,40 @@ void CCharacter::Go_Straight_Deceleration_Common(_double dTimeDelta, _float Rese
 	{
 		m_fAtk_MoveControl = 0.0f;
 	}
+}
+
+void CCharacter::Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio, _double dEndRatio)
+{
+	// 원하는 애니메이션의 비율만큼 이동
+	switch (Dir)
+	{
+	case DIR_UP:
+	{
+		if (m_pModelCom->Get_AnimRatio(iAnimindex, dStartRatio) && !m_pModelCom->Get_AnimRatio(iAnimindex, dEndRatio))
+			Go_Straight_Constant(dTimeDelta, iAnimindex, fSpeed);
+	}
+	break;
+	case DIR_DOWN:
+	{
+		if (m_pModelCom->Get_AnimRatio(iAnimindex, dStartRatio) && !m_pModelCom->Get_AnimRatio(iAnimindex, dEndRatio))
+			Go_Backward_Constant(dTimeDelta, iAnimindex, fSpeed);
+	}
+	break;
+	case DIR_RIGHT:
+	{
+		if (m_pModelCom->Get_AnimRatio(iAnimindex, dStartRatio) && !m_pModelCom->Get_AnimRatio(iAnimindex, dEndRatio))
+			Go_Right_Constant(dTimeDelta, iAnimindex, fSpeed);
+	}
+	break;
+	case DIR_LEFT:
+	{
+		if (m_pModelCom->Get_AnimRatio(iAnimindex, dStartRatio) && !m_pModelCom->Get_AnimRatio(iAnimindex, dEndRatio))
+			Go_Left_Constant(dTimeDelta, iAnimindex, fSpeed);
+	}
+	break;
+
+	}
+	
 }
 
 void CCharacter::Gravity(_double dTimeDelta)
@@ -335,7 +386,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 				m_isJumpOn = false;
 				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
-			}		
+			}
 		}
 	}
 	//땅 위 상태
@@ -343,13 +394,13 @@ void CCharacter::Gravity(_double dTimeDelta)
 	{
 		Pos.y = m_fLand_Y;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
-		
+
 		m_fJump_Acc = 0.0f;
 		m_isFirst_JumpAtk = true;
 		m_isJumpStop = false;
 	}
-	
-	
+
+
 }
 
 void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
@@ -367,7 +418,7 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 
 }
 
-void CCharacter::Jumping( _float ResetSpeed, _float fFallDecrease)
+void CCharacter::Jumping(_float ResetSpeed, _float fFallDecrease)
 {
 	m_fJump_Acc = ResetSpeed;
 	m_isJumpOn = true;

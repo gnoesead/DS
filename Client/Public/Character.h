@@ -19,7 +19,8 @@ BEGIN(Client)
 class CCharacter abstract : public CLandObject
 {
 public:
-	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE,  COLL_END };
+	enum DIR { DIR_UP, DIR_DOWN, DIR_RIGHT, DIR_LEFT };
+	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
 public:
 	typedef struct tagCharacterDesc
 	{
@@ -61,9 +62,6 @@ protected:
 	_bool	EventCallProcess( );
 	void	Reset_Decleration(_float fResetSpeed);
 
-	//방향 보간
-	void	Dir_Linear(_double dTimeDelta);
-
 	//이동 관련
 	void	Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
@@ -73,8 +71,12 @@ protected:
 	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
+
+	void Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
 
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);

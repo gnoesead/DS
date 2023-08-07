@@ -261,7 +261,7 @@ _bool CAnimation::Check_AnimRatio(_double Ratio, _double TimeDelta)
 	if (Ratio > 1.0)
 		return false;
 
-	return (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration <= Ratio && Ratio < (m_AnimationDesc.m_dTimeAcc + TimeDelta * m_AnimationDesc.m_dTickPerSecond) / m_AnimationDesc.m_dDuration);
+	return (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration <= Ratio && Ratio < (m_AnimationDesc.m_dTimeAcc + TimeDelta * m_AnimationDesc.m_dTickPerSecond * m_ControlDesc.m_fAnimationSpeed) / m_AnimationDesc.m_dDuration);
 }
 
 _bool CAnimation::Get_AnimRatio(_double Ratio)
