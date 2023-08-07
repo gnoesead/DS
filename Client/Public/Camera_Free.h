@@ -51,6 +51,7 @@ private:
 	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
+	_vector			m_vMonsterPos = {};
 	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleCenter = {};
 
