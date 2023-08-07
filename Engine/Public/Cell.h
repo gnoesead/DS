@@ -54,7 +54,8 @@ public:
 	_bool	isIn(_fvector vPosition, _int * pNeighborIndex);
 	_bool	Check_Point(_float * pPoint, _float fRadius);
 
-	void Get_SlidingVector(_fvector & vPosition, _fvector vLook);
+	//void Get_SlidingVector(_fvector & vPosition, _fvector vLook);
+	_vector Get_SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex);
 
 #ifdef _DEBUG
 public:

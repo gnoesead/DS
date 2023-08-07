@@ -43,7 +43,9 @@ public:
 public: /* 네비게이션을 구성하는 각각의 셀들의 이웃(최대3개)를 셋팅한다.*/
 	HRESULT	SetUp_Neighbors();
 	_bool	is_MoveOnNavigation(_fvector & vPositio);
+	_vector	MoveOnNavigation(_fvector& vPosition, _fvector vLook);
 	_fvector Compute_Height(class CTransform* pOwnerTransform);
+	_vector  SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex);
 
 private:
 	vector<class CCell*>			m_Cells;
