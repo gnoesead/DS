@@ -16,9 +16,6 @@
     <Filter Include="01. Levels\00. Logo">
       <UniqueIdentifier>{643e17f7-e651-420b-8a17-797b1e533224}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\01. GamePlay">
-      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects">
       <UniqueIdentifier>{b1936517-b52e-47b1-97ba-676614916358}</UniqueIdentifier>
     </Filter>
@@ -66,18 +63,6 @@
     </Filter>
     <Filter Include="02. GameObjects\Environment\Sky">
       <UniqueIdentifier>{ac119d15-7984-4f75-be10-6b17bb2a1a34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\02. Village">
-      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\03. House">
-      <UniqueIdentifier>{b72ed52c-d331-417a-a807-1a5bd490af58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\04. Train">
-      <UniqueIdentifier>{42122498-728c-4179-bbfa-1b3af44a2ba1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\05. FinalBoss">
-      <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
     </Filter>
     <Filter Include="01. Levels\99. Loadiing">
       <UniqueIdentifier>{5aa88866-07ca-4355-aa7d-849bf2a38ae9}</UniqueIdentifier>
@@ -247,6 +232,24 @@
     <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager">
       <UniqueIdentifier>{47b281f5-fff1-49d3-b33f-a6f5a869ade8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Levels\02. GamePlay">
+      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\03. Village">
+      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\04. House">
+      <UniqueIdentifier>{b72ed52c-d331-417a-a807-1a5bd490af58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\05. Train">
+      <UniqueIdentifier>{42122498-728c-4179-bbfa-1b3af44a2ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\06. FinalBoss">
+      <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\01.Lobby">
+      <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -274,7 +277,7 @@
       <Filter>01. Levels\00. Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_GamePlay.h">
-      <Filter>01. Levels\01. GamePlay</Filter>
+      <Filter>01. Levels\02. GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01. Levels\99. Loadiing</Filter>
@@ -316,16 +319,16 @@
       <Filter>05. SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Village.h">
-      <Filter>01. Levels\02. Village</Filter>
+      <Filter>01. Levels\03. Village</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_FinalBoss.h">
-      <Filter>01. Levels\05. FinalBoss</Filter>
+      <Filter>01. Levels\06. FinalBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_House.h">
-      <Filter>01. Levels\03. House</Filter>
+      <Filter>01. Levels\04. House</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Train.h">
-      <Filter>01. Levels\04. Train</Filter>
+      <Filter>01. Levels\05. Train</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InstanceMapObject.h">
       <Filter>02. GameObjects\Environment\MapObject\InstanceMapObject</Filter>
@@ -444,6 +447,9 @@
     <ClInclude Include="..\Public\Story_Manager.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Level_Lobby.h">
+      <Filter>01. Levels\01.Lobby</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -459,7 +465,7 @@
       <Filter>01. Levels\00. Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_GamePlay.cpp">
-      <Filter>01. Levels\01. GamePlay</Filter>
+      <Filter>01. Levels\02. GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01. Levels\99. Loadiing</Filter>
@@ -501,16 +507,16 @@
       <Filter>05. SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Village.cpp">
-      <Filter>01. Levels\02. Village</Filter>
+      <Filter>01. Levels\03. Village</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_FinalBoss.cpp">
-      <Filter>01. Levels\05. FinalBoss</Filter>
+      <Filter>01. Levels\06. FinalBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_House.cpp">
-      <Filter>01. Levels\03. House</Filter>
+      <Filter>01. Levels\04. House</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Train.cpp">
-      <Filter>01. Levels\04. Train</Filter>
+      <Filter>01. Levels\05. Train</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\InstanceMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\InstanceMapObject</Filter>
@@ -628,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Story_Manager.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Lobby.cpp">
+      <Filter>01. Levels\01.Lobby</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

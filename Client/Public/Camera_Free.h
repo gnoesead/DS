@@ -43,7 +43,10 @@ public:
 public:
 	_float4		Get_CameraLook() { return m_fCameraLook; }
 	
+	_vector		Get_Battle_Target_Pos() { return m_vBattleTargetPos; }
 
+	_bool       Get_Is_Battle() { return m_Is_Battle; }
+	_bool       Get_Is_Cut_In() { return m_Is_Cut_In; }
 
 private:
 	void FreeCamera(_double dTimeDelta);
@@ -72,7 +75,7 @@ private:
 	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
-	_vector         m_vBattleTargetPos = { 150.f,0.f,140.f };
+	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleCenter = {};
 
 	_float          m_vCameraAngle = { 15.f };

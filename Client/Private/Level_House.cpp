@@ -57,24 +57,7 @@ void CLevel_House::Tick(_double dTimeDelta)
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("House"));
 
-
-    if (GetKeyState(VK_F9) & 0x8000)
-    {
-        HRESULT hr = 0;
-
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
-
-        Safe_Release(pGameInstance);
-
-        if (FAILED(hr))
-            return;
-
-    }
-
+   
     if (GetKeyState(VK_RETURN) & 0x8000)
     {
         HRESULT hr = 0;

@@ -73,6 +73,8 @@ private:
 	_bool m_Is_CutScene = false;
 
 	_float m_Size_Param = {};
+	_float m_Size_Param_Dir = { 1.f };
+
 
 	_float m_Origin_X = {};
 	_float m_Origin_Y = {};

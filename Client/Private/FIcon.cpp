@@ -146,11 +146,11 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 8) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.45f;
-		m_Origin_Y = 0.45f;
-		m_Size_Param = 0.4f;
-		m_UI_Layer = 2;
-		m_fZ = 0.08f;
+		m_Origin_X = 0.6f;
+		m_Origin_Y = 0.6f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 1;
+		m_fZ = 0.07f;
 
 		m_pTransformCom->Scaling({ m_Origin_X, m_Origin_Y , 1.f });
 	}
@@ -161,7 +161,11 @@ HRESULT CFIcon::Initialize(void * pArg)
 void CFIcon::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+	if (m_UI_Desc.m_Type == 8) {
 
+		m_pTransformCom->Scaling({ m_Origin_X * m_Size_Param, m_Origin_Y * m_Size_Param, 1.f });
+
+	}
 	
 }
 
@@ -170,11 +174,26 @@ void CFIcon::LateTick(_double TimeDelta)
 	__super::LateTick(TimeDelta);
 
 
+	if (m_UI_Desc.m_Type == 8) {
+
+		m_Size_Param += TimeDelta * m_Size_Param_Dir;
+
+		if (m_Size_Param > 1.5f) {
+			m_Size_Param = 1.5f;
+			m_Size_Param_Dir *= -1.f;
+		}
+
+		if (m_Size_Param < 1.f) {
+			m_Size_Param = 1.f;
+			m_Size_Param_Dir *= -1.f;
+		}
+	}
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
 	// Camera
-	
 	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
@@ -183,13 +202,19 @@ void CFIcon::LateTick(_double TimeDelta)
 
 
 	// Monster
-	if (pGameInstance->Get_CurLevelIdx() == 7) {
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
-		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
+		CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
 
-		m_vBattle_Targt = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vBattle_Targt = pCamera->Get_Battle_Target_Pos();
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+
+
+		if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
+			m_Is_Render = pCamera->Get_Is_Battle();
+		}
+
 	}
 
 
@@ -222,7 +247,7 @@ HRESULT CFIcon::Render()
 	}
 
 	
-	if (m_Is_CutScene == false) {
+	if (m_Is_CutScene == false && m_Is_Render == true) {
 		m_pVIBufferCom->Render();
 	}
 	
@@ -358,7 +383,7 @@ void CFIcon::Set_Personal_Pos()
 
 	Pos += {0.f,m_UI_Desc.m_Up_Mount, 0.f};
 
-	
+	Pos += vLook * m_fZ;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 }

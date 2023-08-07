@@ -22,6 +22,10 @@ public:
 
 		_uint    m_Type = { 0 };
 		_uint    m_Icon_Type = { 0 };
+		_uint    m_Back_Type = { 0 };
+		_float   m_Back_Layer = { 0 };
+
+
 	}UIDESC;
 
 
@@ -46,6 +50,7 @@ public:
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
+	CTexture* m_pTextureMaskCom = { nullptr };
 	CRenderer* m_pRendererCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
@@ -76,12 +81,32 @@ private:
 	vector<wstring>         m_szContent = { };
 
 	_uint                   m_Story_Index = { 0 };
+	_uint                   m_Pre_Story_Index = { 0 };
+
 
 private:
 	_float                  m_Time_X = {};
 	_float                  m_UV_Speed_X = {};
 	_float                  m_Time_Y = {};
 	_float                  m_UV_Speed_Y = {};
+
+	_float                  m_Time_Mask_X = {};
+	_float                  m_Time_Mask_Dir = { 1.f };
+
+	_float                  m_Tone = { 0.f };
+
+
+	_bool                   m_Mask_Pass = { false };
+	_bool                   m_Mask_Gray_Pass = { false };
+
+	_uint                   m_Title_Story_Index = { 0 };
+	_bool                   m_Title_Alpha_Change = { false };
+
+	_uint                   m_Mini_Title_Story_Index = { 0 };
+	_bool                   m_Mini_Title_Alpha_Change = { false };
+	_bool                   m_Mini_Title_Change = { false };
+
+
 
 private:
 	HRESULT Add_Components();

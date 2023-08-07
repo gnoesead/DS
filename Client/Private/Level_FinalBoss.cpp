@@ -770,11 +770,25 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 // FIcon (임시) 실제로는 객체가 파츠로 소유할거임
 
 	CFIcon::UIDESC UIDesc8;
+	// 락온 아이콘
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
 	UIDesc8.m_Is_Reverse = false;
 	UIDesc8.m_Type = 7;
-	UIDesc8.m_Up_Mount = 2.35f;
+	UIDesc8.m_Up_Mount = 2.5f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// 락온 글로우
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 8;
+	UIDesc8.m_Up_Mount = 2.5f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {

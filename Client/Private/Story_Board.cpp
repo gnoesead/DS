@@ -52,7 +52,20 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_Origin_X = 1280.f;
 		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
-		m_UI_Layer = 0;
+		m_UI_Layer = m_UI_Desc.m_Back_Layer;
+	}
+
+	// Bg_Swap
+	if (m_UI_Desc.m_Type == 16) {
+
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = m_UI_Desc.m_Back_Layer;
 	}
 
 	// Bg_Deco_1
@@ -213,14 +226,14 @@ HRESULT CStory_Board::Initialize(void* pArg)
 	// Mini_Title
 	if (m_UI_Desc.m_Type == 13) {
 
-		m_fX = 640;
-		m_fY = 360;
+		m_fX = 150;
+		m_fY = 385;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 232.f;
 		m_Origin_Y = 96.f;
 		m_Size_Param = 1.f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 7;
 	}
 
 	// Line
@@ -249,33 +262,21 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_UI_Layer = 7;
 	}
 
-	// Mask_0
-	if (m_UI_Desc.m_Type == 16) {
+	
 
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_PosX = (_float)m_fX;
-		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 3080.f;
-		m_Origin_Y = 1080.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
-	}
+	m_szTitle.push_back(L"튜토리얼");
+	m_szContent.push_back(L"북서쪽 마을로");
 
-	// Mask_1
-	if (m_UI_Desc.m_Type == 17) {
+	m_szTitle.push_back(L"북서쪽 마을");
+	m_szContent.push_back(L"북서쪽 마을로");
 
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_PosX = (_float)m_fX;
-		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 3080.f;
-		m_Origin_Y = 1080.f;
-		m_Size_Param = 0.7f;
-		m_UI_Layer = 2;
-	}
+	m_szTitle.push_back(L"실내 저택");
+	m_szContent.push_back(L"북서쪽 마을로");
 
-	m_szTitle.push_back(L"시나리오");
+	m_szTitle.push_back(L"무한열차");
+	m_szContent.push_back(L"북서쪽 마을로");
+
+	m_szTitle.push_back(L"아카자 vs 렌고쿠");
 	m_szContent.push_back(L"북서쪽 마을로");
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -288,9 +289,7 @@ void CStory_Board::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	m_Story_Index = CStoryManager::GetInstance()->Get_Select_Type();
-
-
+	
 	if (m_UI_Desc.m_Type == 15) {
 
 		if (m_Story_Index == 0) {
@@ -319,29 +318,7 @@ void CStory_Board::Tick(_double dTimeDelta)
 		}
 	}
 
-
-
-
-
-	if (m_UI_Desc.m_Type == 8) {
-		
-		if (m_Story_Index == 0) {
-			m_Origin_X = 432.f;
-			m_Origin_Y = 212.f;
-			m_Size_Param = 0.6f;
-			m_fX = 120;
-			m_fY = 90;
-		}
-		else {
-			m_Origin_X = 596.f;
-			m_Origin_Y = 290.f;
-			m_Size_Param = 0.55f;
-			m_fX = 184;
-			m_fY = 100;
-		}
-		
-	}
-
+	
 
 	// Cloud_LT
 	if (m_UI_Desc.m_Type == 9) {
@@ -406,14 +383,159 @@ void CStory_Board::Tick(_double dTimeDelta)
 	}
 
 
-	Set_UI();
+	m_Time_Mask_X += (_float)dTimeDelta * 4.f * m_Time_Mask_Dir;
 
-
+	
 }
 
 void CStory_Board::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
+
+	m_Story_Index = CStoryManager::GetInstance()->Get_Select_Type();
+
+	if (m_Pre_Story_Index != m_Story_Index) {
+
+
+		if (m_Pre_Story_Index < m_Story_Index) {
+
+			if (m_UI_Desc.m_Type == 0) {
+				m_UI_Desc.m_Back_Type = m_Pre_Story_Index;
+				m_UI_Desc.m_Back_Layer = -1;
+				m_Mask_Pass = true;
+				m_Mask_Gray_Pass = false;
+			}
+			if (m_UI_Desc.m_Type == 16) {
+				m_UI_Desc.m_Back_Type = m_Story_Index;
+				m_UI_Desc.m_Back_Layer = 0;
+				m_Mask_Pass = false;
+				m_Mask_Gray_Pass = true;
+			}
+
+			m_Time_Mask_X = -0.9f;
+			m_Time_Mask_Dir = 1.f;
+		}
+		else {
+			if (m_UI_Desc.m_Type == 0) {
+				m_UI_Desc.m_Back_Type = m_Story_Index;
+				m_UI_Desc.m_Back_Layer = -1;
+				m_Mask_Pass = true;
+				m_Mask_Gray_Pass = false;
+			}
+			if (m_UI_Desc.m_Type == 16) {
+				m_UI_Desc.m_Back_Type = m_Pre_Story_Index;
+				m_UI_Desc.m_Back_Layer = 0;
+				m_Mask_Pass = false;
+				m_Mask_Gray_Pass = true;
+			}
+
+			m_Time_Mask_X = 0.9f;
+			m_Time_Mask_Dir = -1.f;
+		}
+
+
+		m_Pre_Story_Index = m_Story_Index;
+		m_Title_Alpha_Change = true;
+		m_Mini_Title_Alpha_Change = true;
+		
+	}
+
+	if (m_Title_Alpha_Change == true) {
+		
+		if (m_UI_Desc.m_Type == 8) {
+			m_Alpha -= (_float)dTimeDelta * 5.f * m_Alpha_Dir;
+
+			if (m_Alpha < 0.f) {
+				m_Alpha = 0.f;
+			    m_Alpha_Dir *= -1.f;
+				m_Title_Story_Index = m_Story_Index;
+			}
+
+			if (m_Alpha > 1.f) {
+				m_Alpha = 1.f;
+				m_Alpha_Dir *= -1.f;
+				m_Title_Alpha_Change = false;
+			}
+		
+		}
+
+	}
+
+	if (m_UI_Desc.m_Type == 8) {
+
+		if (m_Title_Story_Index == 0) {
+			m_Origin_X = 432.f;
+			m_Origin_Y = 212.f;
+			m_Size_Param = 0.6f;
+			m_fX = 120;
+			m_fY = 90;
+		}
+		else {
+			m_Origin_X = 596.f;
+			m_Origin_Y = 290.f;
+			m_Size_Param = 0.55f;
+			m_fX = 184;
+			m_fY = 100;
+		}
+
+	}
+
+
+	if (m_Mini_Title_Alpha_Change == true) {
+
+		if (m_UI_Desc.m_Type == 13) {
+			m_Alpha -= (_float)dTimeDelta * 3.5f * m_Alpha_Dir;
+
+			if (m_Alpha < 0.f) {
+				m_Alpha = 0.f;
+				m_Alpha_Dir *= -1.f;
+				m_Mini_Title_Change = true;
+			}
+
+			if (m_Alpha > 1.f) {
+				m_Alpha = 1.f;
+				m_Alpha_Dir *= -1.f;
+				m_Mini_Title_Alpha_Change = false;
+			}
+
+		}
+	}
+
+	if (m_UI_Desc.m_Type == 13 && m_Mini_Title_Change == true) {
+
+		if (m_Story_Index == 0) {
+			m_Mini_Title_Story_Index = m_Story_Index;
+			m_fX = 150;
+			m_fY = 385;
+		}
+		if (m_Story_Index == 1) {
+			m_Mini_Title_Story_Index = m_Story_Index;
+			m_fX = 510;
+			m_fY = 455;
+		}
+		if (m_Story_Index == 2) {
+			m_Mini_Title_Story_Index = m_Story_Index;
+			m_fX = 860;
+			m_fY = 400;
+		}
+		if (m_Story_Index == 3) {
+			m_Mini_Title_Story_Index = m_Story_Index;
+			m_fX = 1050;
+			m_fY = 430;
+		}
+		if (m_Story_Index == 4) {
+			m_Mini_Title_Story_Index = m_Story_Index;
+			m_fX = 1080;
+			m_fY = 295;
+		}
+
+		m_Mini_Title_Change = false;
+	}
+
+
+	Set_UI();
+
+	
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -428,23 +550,28 @@ HRESULT CStory_Board::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-
-
-	if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
-		m_pShaderCom->Begin(6);
+	if ((m_UI_Desc.m_Type == 0 || m_UI_Desc.m_Type == 16) && m_Mask_Pass == true) {
+		m_pShaderCom->Begin(11);
 	}
-	else if (m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
-		m_pShaderCom->Begin(9);
-	}
-	else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
-		m_pShaderCom->Begin(5);
+	else if ((m_UI_Desc.m_Type == 0 || m_UI_Desc.m_Type == 16) && m_Mask_Gray_Pass == true) {
+		m_pShaderCom->Begin(12);
 	}
 	else {
-		m_pShaderCom->Begin(1);
+		if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
+			m_pShaderCom->Begin(6);
+		}
+		else if (m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(9);
+		}
+		else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(5);
+		}
+		else {
+			m_pShaderCom->Begin(1);
+		}
 	}
 
-
-
+	
 	m_pVIBufferCom->Render();
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -452,10 +579,10 @@ HRESULT CStory_Board::Render()
 
 	if (m_UI_Desc.m_Type == 13) {
 
-		/*if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Story_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 30.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
+		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Mini_Title_Story_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 20.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
 			return E_FAIL;
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent[m_Story_Index].c_str(), _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+		/*if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent[m_Story_Index].c_str(), _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
 			return E_FAIL;*/
 	}
 
@@ -503,7 +630,11 @@ HRESULT CStory_Board::Add_Components()
 		return E_FAIL;
 
 
-	if (m_UI_Desc.m_Type == 0) {
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Mask"),
+		TEXT("Com_Texture_Mask"), (CComponent**)&m_pTextureMaskCom)))
+		return E_FAIL;
+
+	if (m_UI_Desc.m_Type == 0 || m_UI_Desc.m_Type == 16) {
 
 		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -559,13 +690,7 @@ HRESULT CStory_Board::Add_Components()
 			return E_FAIL;
 
 	}
-	else if (m_UI_Desc.m_Type == 16 || m_UI_Desc.m_Type == 17) {
 
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Mask"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-
-	}
 
 	return S_OK;
 }
@@ -575,6 +700,9 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
 
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Time_Mask_X", &m_Time_Mask_X, sizeof(_float))))
+		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_R", &m_Is_Side_Cut_R, sizeof(_bool))))
 		return E_FAIL;
@@ -605,10 +733,19 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 		return E_FAIL;
 
 
+	if (FAILED(m_pTextureMaskCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture_Mask", 1)))
+		return E_FAIL;
+
 	// 백그라운드
 	if (m_UI_Desc.m_Type == 0) {
 
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Story_Index)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Back_Type)))
+			return E_FAIL;
+	}
+	// 백그라운드 스왑
+	else if (m_UI_Desc.m_Type == 16) {
+
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Back_Type)))
 			return E_FAIL;
 	}
 	// 백그라운드 데코
@@ -645,7 +782,7 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 	// 타이틀
 	else if (m_UI_Desc.m_Type == 8) {
 
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Story_Index)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Title_Story_Index)))
 			return E_FAIL;
 
 	}
@@ -735,6 +872,7 @@ void CStory_Board::Free()
 	__super::Free();
 
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextureMaskCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);

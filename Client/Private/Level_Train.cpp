@@ -58,6 +58,7 @@ void CLevel_Train::Tick(_double dTimeDelta)
     SetWindowText(g_hWnd, TEXT("Train"));
 
    
+   
 
     if (GetKeyState(VK_RETURN) & 0x8000)
     {

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\Public\Level_GamePlay.h"
+#include "..\Public\Level_Lobby.h"
 
 #include "GameInstance.h"
 #include "Level_Loading.h"
@@ -22,69 +22,69 @@
 #include "ParticleSystem.h"
 #include "Story_Manager.h"
 
-CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_Lobby::CLevel_Lobby(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
 {
 
 }
 
-HRESULT CLevel_GamePlay::Initialize()
+HRESULT CLevel_Lobby::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
     /*if (FAILED(Ready_Lights()))
     {
-        MSG_BOX("Failed to Ready_Lights : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Lights : CLevel_Lobby");
         return E_FAIL;
     }*/
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
-        MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_Lobby");
         return E_FAIL;
     }
 
     /*if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Lobby");
         return E_FAIL;
     }
 
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Lobby");
         return E_FAIL;
     }
 
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
-        MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_GamePlay");
+        MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_Lobby");
         return E_FAIL;
     }
 
 	if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
 	{
-		MSG_BOX("Failed to Ready_Player_UI : CLevel_GamePlay");
+		MSG_BOX("Failed to Ready_Player_UI : CLevel_Lobby");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Layer_Boss_UI(TEXT("Layer_Boss_UI"))))
 	{
-		MSG_BOX("Failed to Ready_Boss_UI : CLevel_GamePlay");
+		MSG_BOX("Failed to Ready_Boss_UI : CLevel_Lobby");
 		return E_FAIL;
 	}
 
 	if (FAILED(Ready_Layer_Effect()))
 	{
-		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_GamePlay");
+		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_Lobby");
 		return E_FAIL;
 	}*/
 
     return S_OK;
 }
 
-void CLevel_GamePlay::Tick(_double dTimeDelta)
+void CLevel_Lobby::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
@@ -181,7 +181,7 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
     }
 }
 
-HRESULT CLevel_GamePlay::Render()
+HRESULT CLevel_Lobby::Render()
 {
     if (FAILED(__super::Render()))
         return E_FAIL;
@@ -189,7 +189,7 @@ HRESULT CLevel_GamePlay::Render()
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Lights()
+HRESULT CLevel_Lobby::Ready_Lights()
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -221,7 +221,7 @@ HRESULT CLevel_GamePlay::Ready_Lights()
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -413,7 +413,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar* pLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_Camera(const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -446,7 +446,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar* pLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_Player(const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -477,7 +477,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+        MSG_BOX("Failed to Add_GameObject : CLevel_Lobby");
         return E_FAIL;
     }
 
@@ -486,14 +486,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_MapObject(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
   //  Load_MapObject_Info(TEXT("../../Data/Object/Acaza_Battle/Acaza_Test.dat"), pLayerTag);
 	
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -980,7 +980,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -1083,19 +1083,19 @@ HRESULT CLevel_GamePlay::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Effect()
+HRESULT CLevel_Lobby::Ready_Layer_Effect()
 {
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Test_Two.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : CLevel_GamePlay");
+		MSG_BOX("Failed to Load Effect : CLevel_Lobby");
 		return E_FAIL;
 	}
 
 	return 	S_OK;
 }
 
-HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
+HRESULT CLevel_Lobby::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -1174,7 +1174,7 @@ HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* 
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
+HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath)
 {
 	char szFilePathChar[MAX_PATH] = "";
 	WideCharToMultiByte(CP_ACP, 0, pPath, MAX_PATH, szFilePathChar, MAX_PATH, nullptr, nullptr);
@@ -1532,20 +1532,20 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 	return S_OK;
 }
 
-CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_Lobby* CLevel_Lobby::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CLevel_GamePlay* pInstance = new CLevel_GamePlay(pDevice, pContext);
+    CLevel_Lobby* pInstance = new CLevel_Lobby(pDevice, pContext);
     
     if (FAILED(pInstance->Initialize()))
     {
-        MSG_BOX("Failed to Created : CLevel_GamePlay");
+        MSG_BOX("Failed to Created : CLevel_Lobby");
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CLevel_GamePlay::Free()
+void CLevel_Lobby::Free()
 {
     __super::Free();
 }

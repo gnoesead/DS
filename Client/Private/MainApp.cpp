@@ -97,7 +97,7 @@ void CMainApp::Tick(_double dTimeDelta)
 	m_pGameInstance->Tick_Engine(dTimeDelta);
 
 	CTitleManager::GetInstance()->Tick();
-	CStoryManager::GetInstance()->Tick();
+	
 
 
 #ifdef _DEBUG
@@ -197,8 +197,7 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_LOGO);
 			}
-			// 로비로 이동
-			if (m_pGameInstance->Get_DIKeyDown(DIK_F9))
+			if (m_pGameInstance->Get_DIKeyDown(DIK_2))
 			{
 				if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
 				{
@@ -396,6 +395,8 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Title"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Title_%d.png"), 5))))
 		return E_FAIL;
+
+	
 
 #pragma endregion
 
