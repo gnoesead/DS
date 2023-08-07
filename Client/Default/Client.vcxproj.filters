@@ -181,6 +181,18 @@
     <Filter Include="02. GameObjects\Character\Player\Zenitsu">
       <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\NPC">
+      <UniqueIdentifier>{f27e214a-4bc3-47d4-986b-68b66d972785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_Female">
+      <UniqueIdentifier>{cc786053-573e-4188-a117-9b54e118a1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Spider">
+      <UniqueIdentifier>{1d5240fc-0302-47fd-b572-9b57c0d25c6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Manager">
+      <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -336,8 +348,20 @@
     <ClInclude Include="..\Public\Boss_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Player.h">
-      <Filter>02. GameObjects\Character\Player</Filter>
+    <ClInclude Include="..\Public\NPC.h">
+      <Filter>02. GameObjects\Character\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_Female.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_Female</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Spider.h">
+      <Filter>02. GameObjects\Character\Monster\Spider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MonsterManager.h">
+      <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -484,6 +508,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC.cpp">
+      <Filter>02. GameObjects\Character\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Female.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_Female</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Spider.cpp">
+      <Filter>02. GameObjects\Character\Monster\Spider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MonsterManager.cpp">
+      <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

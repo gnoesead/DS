@@ -20,6 +20,16 @@ CModel::CModel(const CModel& rhs)
 	, m_PivotMatrix(rhs.m_PivotMatrix)
 	, m_iCurrentAnimIndex(rhs.m_iCurrentAnimIndex)
 	, m_iNumAnimations(rhs.m_iNumAnimations)
+
+	, m_isPlay(rhs.m_isPlay)
+	, m_isCombo_Trigger(rhs.m_isCombo_Trigger)
+	, m_isCombo_Doing(rhs.m_isCombo_Doing)
+	, m_iCombo_AnotherRoute(rhs.m_iCombo_AnotherRoute)
+	, m_isCombo_Another(rhs.m_isCombo_Another)
+	, m_isLinearOn(rhs.m_isLinearOn)
+	, m_LastKeys(rhs.m_LastKeys)
+	, m_iSaveAnimIndex(rhs.m_iSaveAnimIndex)
+	, m_iPreAnimIndex(rhs.m_iPreAnimIndex)
 {
 	for (auto& pPrototypeBone : rhs.m_Bones)
 		m_Bones.emplace_back(pPrototypeBone->Clone());
@@ -34,7 +44,9 @@ CModel::CModel(const CModel& rhs)
 	}
 
 	for (auto& pPrototypeAnim : rhs.m_Animations)
+	{
 		m_Animations.emplace_back(pPrototypeAnim->Clone());
+	}
 }
 
 CBone* CModel::Get_Bone(const char* pBoneName)
@@ -133,6 +145,9 @@ HRESULT CModel::Initialize_Prototype(TYPE eModelType, const char* pModelFilePath
 
 HRESULT CModel::Initialize(void* pArg)
 {
+
+
+
 	return S_OK;
 }
 
@@ -141,6 +156,10 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 	//애니메이션이 바뀔 시에 기존 애니메이션의 timeacc초기화
 	if (m_iSaveAnimIndex != m_iCurrentAnimIndex)
 	{
+		m_isLinearOn = true;
+		m_LastKeys.clear();
+		m_LastKeys = m_Animations[m_iSaveAnimIndex]->Get_LastKeys();
+
 		m_Animations[m_iSaveAnimIndex]->Reset_TimeAcc();
 		m_iSaveAnimIndex = m_iCurrentAnimIndex;
 		m_isCombo_Trigger = false;
@@ -220,9 +239,12 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 		m_Animations[m_iSaveAnimIndex]->Reset_TimeAcc(); // 기존 애니메이션 초기화
 
 		m_isCombo_Trigger = false;
+
+		//aa
+		m_iSaveAnimIndex = m_iCurrentAnimIndex;
 	}
 	
-	m_iSaveAnimIndex = m_iCurrentAnimIndex;
+	
 
 	return S_OK;
 }

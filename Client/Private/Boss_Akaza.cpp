@@ -25,10 +25,11 @@ HRESULT CBoss_Akaza::Initialize_Prototype()
 
 HRESULT CBoss_Akaza::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
 
 	if (FAILED(Add_Components()))
+		return E_FAIL;
+
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Read_Animation_Control_File("Akaza.bin")))
@@ -47,6 +48,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	m_eCurstate = STATE_IDLE;
 	m_eCurPhase = PHASE_1;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
+
+	
 
 	return S_OK;
 
@@ -1511,6 +1514,55 @@ HRESULT CBoss_Akaza::Add_Components()
 		MSG_BOX("Failed to Add_Com_Shader : CBoss_Akaza_Akaza");
 		return E_FAIL;
 	}
+
+
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
+	// for.Com_Transform 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Transform : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
+	//for.Com_AABB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
+	{
+		MSG_BOX("Failed to Add_Com_AABB : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
+	//for.Com_OBB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
+	{
+		MSG_BOX("Failed to Add_Com_OBB : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
+	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
+	// for.Com_Sphere 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
+	{
+		MSG_BOX("Failed to Add_Com_Sphere : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 

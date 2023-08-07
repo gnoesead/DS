@@ -24,6 +24,9 @@ public:
 
 	KEYFRAME Get_LastKeyFrame();
 
+	vector<KEYFRAME> Get_KeyFrames() { return m_KeyFrames; }
+	void	Set_KeyFrames(vector<KEYFRAME> keyFrames) { m_KeyFrames = keyFrames; }
+
 private:
 	char			m_szName[MAX_PATH] = { "" };
 

@@ -184,6 +184,7 @@ HRESULT CLevel_House_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
 
+   
     // AnimTool¿ë
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_AnimCharacter_Tool"), &CharacterDesc)))
