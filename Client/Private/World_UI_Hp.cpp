@@ -120,7 +120,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 
 	// Monster
-	if (pGameInstance->Get_CurLevelIdx() == 7) {
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
 		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
 

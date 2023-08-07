@@ -33,19 +33,19 @@ HRESULT CLevel_GamePlay::Initialize()
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
-    /*if (FAILED(Ready_Lights()))
+    if (FAILED(Ready_Lights()))
     {
         MSG_BOX("Failed to Ready_Lights : CLevel_GamePlay");
         return E_FAIL;
-    }*/
+    }
 
-    if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+   /* if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
         MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_GamePlay");
         return E_FAIL;
-    }
+   }*/
 
-    /*if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_GamePlay");
         return E_FAIL;
@@ -79,7 +79,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	{
 		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_GamePlay");
 		return E_FAIL;
-	}*/
+	}
 
     return S_OK;
 }
@@ -88,97 +88,29 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    //CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
+    CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
 
-    SetWindowText(g_hWnd, TEXT("Story_Board"));
+    SetWindowText(g_hWnd, TEXT("Tuto"));
 
-	CStoryManager::GetInstance()->Tick();
 
-	m_Select = CStoryManager::GetInstance()->Get_Select_Type();
+	if (GetKeyState(VK_RETURN) & 0x8000)
+	{
+		HRESULT hr = 0;
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Clear_Light();
+		hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
+
+		Safe_Release(pGameInstance);
+
+		if (FAILED(hr))
+			return;
+	}
+
 
 	
-    if (GetKeyState(VK_RETURN) & 0x8000)
-    {
-		if (m_Select == 0) {
-
-			/*HRESULT hr = 0;
-
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TUTO), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
-				return;*/
-
-		}
-		else if (m_Select == 1) {
-
-			HRESULT hr = 0;
-
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
-				return;
-		}
-		else if (m_Select == 2) {
-
-			HRESULT hr = 0;
-
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
-				return;
-		}
-		else if (m_Select == 3) {
-
-			HRESULT hr = 0;
-
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
-				return;
-			
-		}
-		else if (m_Select == 4) {
-
-			HRESULT hr = 0;
-
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
-				return;
-			
-		}
-        
-    }
 }
 
 HRESULT CLevel_GamePlay::Render()

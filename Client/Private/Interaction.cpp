@@ -111,7 +111,7 @@ void CInteraction::LateTick(_double TimeDelta)
 
 
 	// Trigger
-	if (pGameInstance->Get_CurLevelIdx() == 7) {
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
 		CTransform* m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 

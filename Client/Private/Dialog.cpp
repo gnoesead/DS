@@ -143,7 +143,6 @@ void CDialog::LateTick(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	
-
 	m_Dialog_Type = CDialogManager::GetInstance()->Get_Dialog_Type();
 
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true) {

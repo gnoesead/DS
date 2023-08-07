@@ -98,7 +98,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	// Monster
-	if (pGameInstance->Get_CurLevelIdx() == 7) {
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
 		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
 

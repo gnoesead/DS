@@ -2,6 +2,7 @@
 #include "..\Public\Level_Loading.h"
 #include "Loader.h"
 #include "Level_Logo.h"
+#include "Level_Lobby.h"
 #include "Level_GamePlay.h"
 #include "Level_Village.h"
 #include "Level_House.h"
@@ -224,6 +225,9 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             {
             case LEVEL_LOGO:
                 pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_LOBBY:
+                pLevel = CLevel_Lobby::Create(m_pDevice, m_pContext);
                 break;
             case LEVEL_GAMEPLAY:
                 pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);

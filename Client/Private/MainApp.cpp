@@ -266,11 +266,6 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	if (m_pGameInstance->Get_DIKeyDown(DIK_LCONTROL))
 		m_isRenderDebugInfo = !m_isRenderDebugInfo;
 
-	if (m_pGameInstance->Get_DIKeyDown(DIK_P))
-		CEffectPlayer::Get_Instance()->Play("hjd");
-	if (m_pGameInstance->Get_DIKeyDown(DIK_O))
-		CEffectPlayer::Get_Instance()->Stop("hjd");
-
 }
 #endif // _DEBUG
 

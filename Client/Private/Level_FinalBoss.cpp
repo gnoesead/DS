@@ -217,12 +217,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
 	CharacterDesc.Land_Y = 0.0f;
 
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
-    //    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
-    //    return E_FAIL;
-    //}
+    /*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
+        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+        return E_FAIL;
+    }*/
 
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,

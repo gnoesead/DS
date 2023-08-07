@@ -77,6 +77,16 @@ unsigned int APIENTRY Loading_Main(void* pArg)
 			pLoader->Set_Finished();
 		}
 		break;
+	case LEVEL_LOBBY:
+		if (false == pLoader->Get_Loaded())
+		{
+			hr = pLoader->LoadingForLobby();
+		}
+		else
+		{
+			pLoader->Set_Finished();
+		}
+		break;
 	case LEVEL_GAMEPLAY:
 		if (false == pLoader->Get_Loaded())
 		{
@@ -289,8 +299,9 @@ HRESULT CLoader::LoadingForLogo()
 	return S_OK;
 }
 
-HRESULT CLoader::LoadingForGamePlay()
+HRESULT CLoader::LoadingForLobby()
 {
+	
 	SetWindowText(g_hWnd, TEXT("LoadingForStage"));
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -300,7 +311,7 @@ HRESULT CLoader::LoadingForGamePlay()
 
 	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
 #pragma region Texture
-		
+
 #pragma region EnvironmentTexture
 
 
@@ -324,13 +335,13 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma region Model
 
 #pragma region Buffer
-	
+
 #pragma endregion
 	_matrix		PivotMatrix = XMMatrixIdentity();
 #pragma region Effect
 
 #pragma endregion
-	
+
 #pragma region Character
 	/* Prototype_Component_Model_Tanjiro */
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -340,7 +351,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
 		return E_FAIL;
 	}
-	
+
 	// Prototype_Component_Model_Tanjiro_Sword
 	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword"),
@@ -358,7 +369,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword_In");
 		return E_FAIL;
 	}
-	
+
 	// Prototype_Component_Model_Tanjiro_SwordHome 
 	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_SwordHome"),
@@ -409,7 +420,7 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 #pragma region NonCharacter
-	
+
 #pragma endregion
 
 #pragma region Terrain
@@ -452,7 +463,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -556,7 +567,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-	
+
 
 #pragma endregion
 
@@ -600,6 +611,8 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Sky");
 		return E_FAIL;
 	}
+
+
 #pragma endregion
 
 #pragma region UI
@@ -691,6 +704,425 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 	Safe_Release(pGameInstance);
+
+	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
+	m_isFinished = true;
+
+	return S_OK;
+	
+
+
+	
+
+	Safe_Release(pGameInstance);
+
+	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::LoadingForGamePlay()
+{
+	SetWindowText(g_hWnd, TEXT("LoadingForStage"));
+
+//	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+//	Safe_AddRef(pGameInstance);
+//
+//#pragma region COMPONENTS
+//
+//	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
+//#pragma region Texture
+//		
+//#pragma region EnvironmentTexture
+//
+//
+//#pragma endregion
+//
+//#pragma region RampTexture
+//
+//#pragma endregion
+//
+//#pragma region EffectTexture
+//
+//#pragma endregion
+//
+//#pragma region UITexture
+//
+//#pragma endregion
+//
+//#pragma endregion
+//
+//	SetWindowText(g_hWnd, TEXT("Loading Model..."));
+//#pragma region Model
+//
+//#pragma region Buffer
+//	
+//#pragma endregion
+//	_matrix		PivotMatrix = XMMatrixIdentity();
+//#pragma region Effect
+//
+//#pragma endregion
+//	
+//#pragma region Character
+//	/* Prototype_Component_Model_Tanjiro */
+//	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Tanjiro/Tanjiro.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
+//		return E_FAIL;
+//	}
+//	
+//	// Prototype_Component_Model_Tanjiro_Sword
+//	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Tanjiro_Sword/Tanjiro_Sword.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword");
+//		return E_FAIL;
+//	}
+//
+//	// Prototype_Component_Model_Tanjiro_Sword_In
+//	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword_In"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Tanjiro_Sword/Tanjiro_Sword.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword_In");
+//		return E_FAIL;
+//	}
+//	
+//	// Prototype_Component_Model_Tanjiro_SwordHome 
+//	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_SwordHome"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Tanjiro_Sword/Tanjiro_SwordHome.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_SwordHome");
+//		return E_FAIL;
+//	}
+//
+//
+//	/* Prototype_Component_Model_Zenitsu */
+//	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu");
+//		return E_FAIL;
+//	}
+//
+//	// Prototype_Component_Model_Zenitsu_Sword
+//	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_Sword.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu_Sword");
+//		return E_FAIL;
+//	}
+//
+//	// Prototype_Component_Model_Zenitsu_Sword_In
+//	// PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+//	XMVECTOR pivotTranslation = XMVectorSet(0.0f, 0.0f, -30.0f, 0.0f);
+//	PivotMatrix = XMMatrixTranslationFromVector(pivotTranslation) * XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_Sword_In"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_Sword.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu_Sword_In");
+//		return E_FAIL;
+//	}
+//	// Prototype_Component_Model_Tanjiro_SwordHome 
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_SwordHome"),
+//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_SwordHome.bin", PivotMatrix))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_SwordHome");
+//		return E_FAIL;
+//	}
+//
+//
+//#pragma endregion
+//
+//#pragma region NonCharacter
+//	
+//#pragma endregion
+//
+//#pragma region Terrain
+//
+//	/* Prototype_Component_Navigation */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+//		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/Data/Navigation.dat")))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Navigation");
+//		return E_FAIL;
+//	}
+//
+//#pragma endregion
+//
+//#pragma endregion
+//
+//	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
+//#pragma region Shader
+//	/* Prototype_Component_Shader_VtxNorTex */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
+//		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX_DECL::Elements, VTXNORTEX_DECL::iNumElements))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxNorTex");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_Component_Shader_VtxModel */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
+//		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMODEL_DECL::Elements, VTXMODEL_DECL::iNumElements))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxModel");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_Component_Shader_VtxAnimModel */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+//		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimModel.hlsl"), VTXANIMMODEL_DECL::Elements, VTXANIMMODEL_DECL::iNumElements))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxAnimModel");
+//		return E_FAIL;
+//	}
+//
+//	
+//#pragma endregion
+//
+//	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
+//#pragma region Etc
+//
+//	/* Prototype_Component_Collider_AABB */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+//		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Collider_AABB");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_Component_Collider_OBB */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+//		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Collider_OBB");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_Component_Collider_Sphere */
+//	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+//		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_Component_Collider_Sphere");
+//		return E_FAIL;
+//	}
+//
+//
+//#pragma endregion
+//
+//#pragma endregion
+//
+//#pragma region GAMEOBJECTS
+//
+//	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+//
+//	/* Prototype_GameObject_AtkCollider */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AtkCollider"),
+//		CAtkCollider::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_AtkCollider");
+//		return E_FAIL;
+//	}
+//
+//#pragma region Object
+//	/* Prototype_GameObject_Camera_Free */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Camera_Free"),
+//		CCamera_Free::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Camera_Free");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_GameObject_Player */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
+//		CPlayer::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Player");
+//		return E_FAIL;
+//	}
+//
+//	/* Prototype_GameObject_Player_Tanjiro */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Tanjiro"),
+//		CPlayer_Tanjiro::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Tanjiro");
+//		return E_FAIL;
+//	}
+//	/* Prototype_GameObject_Player_Zenitsu */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Zenitsu"),
+//		CPlayer_Zenitsu::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Zenitsu");
+//		return E_FAIL;
+//	}
+//
+//
+//	/* Prototype_GameObject_Sword */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sword"),
+//		CSword::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Sword");
+//		return E_FAIL;
+//	}
+//	/* Prototype_GameObject_SwordHome */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SwordHome"),
+//		CSwordHome::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_SwordHome");
+//		return E_FAIL;
+//	}
+//
+//
+//	/* Prototype_GameObject_Monster_Test */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Test"),
+//		CMonster_Test::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Test");
+//		return E_FAIL;
+//	}
+//
+//	
+//
+//#pragma endregion
+//
+//#pragma region Environment
+//	/* For.Prototype_GameObject_StaticMapObject */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticMapObject"),
+//		CStaticMapObject::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_StaticMapObject");
+//		return E_FAIL;
+//	}
+//
+//	/* For.Prototype_GameObject_TerrainMapObject */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TerrainMapObject"),
+//		CTerrainMapObject::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_TerrainMapObject");
+//		return E_FAIL;
+//	}
+//
+//	/* For.Prototype_GameObject_RotationMapObject */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RotationMapObject"),
+//		CRotationMapObject::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_RotationMapObject");
+//		return E_FAIL;
+//	}
+//
+//	/* For.Prototype_GameObject_InstanceMapObject */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InstanceMapObject"),
+//		CInstanceMapObject::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_InstanceMapObject");
+//		return E_FAIL;
+//	}
+//
+//	/* For.Prototype_GameObject_Sky */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+//		CSky::Create(m_pDevice, m_pContext))))
+//	{
+//		MSG_BOX("Failed to Add_Prototype_GameObject_Sky");
+//		return E_FAIL;
+//	}
+//
+//	
+//#pragma endregion
+//
+//#pragma region UI
+//	/* Prototype_GameObject_Player Battle Frame */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
+//		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Player Battle Hp */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Hp"),
+//		CPlayer_Battle_Hp::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Player Battle Mp */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Mp"),
+//		CPlayer_Battle_Mp::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Player Battle Ult Frame */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"),
+//		CPlayer_Battle_Ult_Frame::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Player Battle Combo */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Combo"),
+//		CPlayer_Battle_Combo::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Boss Battle Frame */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Frame"),
+//		CBoss_Battle_Frame::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Boss Battle Hp */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Hp"),
+//		CBoss_Battle_Hp::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Player Battle Ult Frame */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"),
+//		CPlayer_Battle_Ult_Effect::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_World_UI_Hp */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_World_UI_Hp"),
+//		CWorld_UI_Hp::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_FIcon */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FIcon"),
+//		CFIcon::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_interaction */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Interaction"),
+//		CInteraction::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Dialog */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dialog"),
+//		CDialog::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Mission */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mission"),
+//		CMission::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//	/* Prototype_GameObject_Mini_Map */
+//	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mini_Map"),
+//		CMini_Map::Create(m_pDevice, m_pContext))))
+//		return E_FAIL;
+//
+//
+//
+//#pragma endregion
+//
+//#pragma region Particale
+//
+//#pragma endregion
+//
+//#pragma region Effect
+//
+//#pragma endregion
+//
+//#pragma endregion
+//
+//	Safe_Release(pGameInstance);
 
 	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
 	m_isFinished = true;

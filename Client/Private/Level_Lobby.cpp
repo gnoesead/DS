@@ -88,7 +88,7 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    //CColliderManager::GetInstance()->Check_Collider(LEVEL_GAMEPLAY, dTimeDelta);
+    //CColliderManager::GetInstance()->Check_Collider(LEVEL_LOBBY, dTimeDelta);
 
     SetWindowText(g_hWnd, TEXT("Story_Board"));
 
@@ -101,18 +101,18 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
     {
 		if (m_Select == 0) {
 
-			/*HRESULT hr = 0;
+			HRESULT hr = 0;
 
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
 
 			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TUTO), false, false);
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
 
 			Safe_Release(pGameInstance);
 
 			if (FAILED(hr))
-				return;*/
+				return;
 
 		}
 		else if (m_Select == 1) {
@@ -235,7 +235,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 	UIDesc.m_Back_Type = 0;
 	UIDesc.m_Back_Layer = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -247,19 +247,17 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 	UIDesc.m_Back_Type = 1;
 	UIDesc.m_Back_Layer = -1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
-
-	
 
 	// Bg_Deco_Top
 	ZeroMemory(&UIDesc, sizeof UIDesc);
 
 	UIDesc.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -269,7 +267,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -279,7 +277,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 8;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -289,7 +287,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 13;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -299,7 +297,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 14;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -309,7 +307,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 10;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -319,7 +317,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 9;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -331,7 +329,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 	UIDesc.m_Is_Y_Reverse = true;
 
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -342,7 +340,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 	UIDesc.m_Type = 11;
 	UIDesc.m_Is_Y_Reverse = true;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -352,7 +350,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 3;
 	
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -362,7 +360,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 4;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -372,7 +370,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 5;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -382,7 +380,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 6;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -392,7 +390,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 7;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -402,7 +400,7 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 
 	UIDesc.m_Type = 15;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -434,7 +432,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, 
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Camera_Free");
@@ -474,7 +472,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
     CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_Lobby");
@@ -505,7 +503,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc.m_Is_Reverse = false;
 	UIDesc.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -517,7 +515,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc.m_Type = 1;
 	UIDesc.m_C_Num = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -529,7 +527,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc.m_Type = 2;
 	UIDesc.m_C_Num = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -545,7 +543,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -556,7 +554,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = true;
 	UIDesc2.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -567,7 +565,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = true;
 	UIDesc2.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -578,7 +576,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = true;
 	UIDesc2.m_Type = 3;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -593,7 +591,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc3.m_Is_Reverse = false;
 	UIDesc3.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -604,7 +602,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc3.m_Is_Reverse = false;
 	UIDesc3.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -615,7 +613,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc3.m_Is_Reverse = false;
 	UIDesc3.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -629,7 +627,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		UIDesc3.m_Type = 3;
 		UIDesc3.m_Scale_Type = i;
 
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 			TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
 			Safe_Release(pGameInstance);
 			return E_FAIL;
@@ -647,7 +645,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -658,7 +656,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -669,7 +667,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -680,7 +678,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 3;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -691,7 +689,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 4;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -702,7 +700,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 5;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -713,7 +711,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 6;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -724,7 +722,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 7;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -735,7 +733,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 9;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -746,7 +744,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 10;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -757,7 +755,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 11;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -768,7 +766,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 12;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -779,7 +777,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc4.m_Is_Reverse = false;
 	UIDesc4.m_Type = 13;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -795,7 +793,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc5.m_Type = 0;
 	UIDesc5.m_Combo_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -807,7 +805,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc5.m_Type = 1;
 	UIDesc5.m_Combo_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -819,7 +817,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc5.m_Type = 2;
 	UIDesc5.m_Combo_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -831,7 +829,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc5.m_Type = 3;
 	UIDesc5.m_Combo_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -848,7 +846,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 0;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -860,7 +858,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 1;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -872,7 +870,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 2;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -884,7 +882,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Type = 3;
 	UIDesc6.m_Combo_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -901,7 +899,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -912,7 +910,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -923,7 +921,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -934,7 +932,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 3;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -945,7 +943,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 4;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -956,7 +954,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 5;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -967,7 +965,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc7.m_Is_Reverse = false;
 	UIDesc7.m_Type = 6;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -993,7 +991,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc.m_Is_Reverse = false;
 	UIDesc.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1005,7 +1003,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc.m_Type = 1;
 	UIDesc.m_C_Num = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1017,7 +1015,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc.m_Type = 2;
 	UIDesc.m_C_Num = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1034,7 +1032,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 0;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1045,7 +1043,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 1;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1056,7 +1054,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 2;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1067,7 +1065,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 3;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Boss_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_Boss_UI"),
 		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1143,22 +1141,22 @@ HRESULT CLevel_Lobby::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
