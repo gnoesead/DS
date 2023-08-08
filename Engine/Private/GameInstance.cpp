@@ -206,12 +206,12 @@ CLevel* CGameInstance::Get_CulLevel() const
 	return m_pLevel_Manager->Get_CulLevel();
 }
 
-_uint CGameInstance::Get_CurLevelIdx() const
+_uint CGameInstance::Get_CurLevelIdx(_bool isIncludeLoading) const
 {
 	if (nullptr == m_pLevel_Manager)
-		return false;
+		return 0;
 
-	return m_pLevel_Manager->Get_CurLevelIdx();
+	return m_pLevel_Manager->Get_CurLevelIdx(isIncludeLoading);
 }
 
 CLevel* CGameInstance::Get_LoadedStage(_uint iLevelIndex) const
