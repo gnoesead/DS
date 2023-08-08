@@ -58,7 +58,7 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	Calculate_To_Player(LEVEL_GAMEPLAY);
+	Calculate_To_Player();
 	
 	if (true == m_isDead)
 		return;

@@ -121,6 +121,7 @@ HRESULT CMainApp::Render()
 
 	if (m_TimeAcc >= 1.0)
 	{
+
 		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iRenderCnt);
 		m_iRenderCnt = 0;
 		m_TimeAcc = 0.0;

@@ -243,7 +243,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	
-	for (_int i = 0; i < 40; i++)
+	for (_int i = 0; i < 10; i++)
 	{
 		CPlayer::CHARACTERDESC CharacterDesc;
 		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);

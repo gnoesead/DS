@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Character.h"
-
+#include "Monster.h"
 
 BEGIN(Engine)
 
@@ -10,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CBoss_Akaza final : public CCharacter
+class CBoss_Akaza final : public CMonster
 {
 public:
 	
@@ -220,9 +219,9 @@ private: //패턴 함수들
 	void Update_Nachim_AirGun(_double dTimeDelta);
 
 private: /* Calculate */
-	_float Calculate_Distance();
+	/*_float Calculate_Distance();
 	_vector Calculate_Dir();
-	_vector Calculate_Dir_FixY();
+	_vector Calculate_Dir_FixY();*/
 
 
 #pragma endregion
@@ -283,7 +282,7 @@ private: // 렌더 아웃라인
 	_uint	m_iMeshNum = { 0 };
 #pragma endregion
 private:
-	CTransform* m_pPlayerTransformCom = { nullptr };
+	//CTransform* m_pPlayerTransformCom = { nullptr };
 	
 private:
 	HRESULT Add_Components();

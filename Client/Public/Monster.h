@@ -28,7 +28,15 @@ public:
 	virtual HRESULT Render_ShadowDepth();
 
 public:
-	void  Calculate_To_Player(_int Level);
+	void Get_PlayerComponent();
+
+public: // Calculate
+	void  Calculate_To_Player();
+
+	_bool Check_Distance(_float fDistance);
+	_float Calculate_Distance();
+	_vector Calculate_Dir();
+	_vector Calculate_Dir_FixY();
 
 protected:
 	//플레이어 정보 calculate
@@ -58,6 +66,8 @@ protected:
 	_float	m_fOutlineThickness = 0.9f;
 	// Outline Face
 	_float	m_fOutlineFaceThickness = 0.3f;
+protected:
+	CTransform* m_pPlayerTransformCom = { nullptr };
 
 
 protected:

@@ -76,8 +76,8 @@ protected:
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
 
-	void Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
-
+	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
+	
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
