@@ -70,7 +70,7 @@ private:
 	_double		m_dEnd_Time = { 0.0 };
 
 	// loop checkbox
-	_bool	m_isCombo = { false };
+	_bool	m_isCombo = { false };	
 	_int	m_iConnect_Combo_Index = { 0 };
 
 	// Connect index

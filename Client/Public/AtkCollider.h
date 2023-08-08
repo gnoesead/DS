@@ -36,6 +36,9 @@ private:
 	virtual ~CAtkCollider() = default;
 
 public:
+	_uint Get_CollCount() {
+		return m_iCollCount;
+	}
 	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
 
 public:
@@ -55,6 +58,8 @@ private:
 private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
+
+	_uint			m_iCollCount = { 0 };
 
 #ifdef _DEBUG
 private:

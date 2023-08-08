@@ -16,9 +16,7 @@ public:
         return m_pCurrentLevel; 
     }
 
-    _uint   Get_CurLevelIdx() const {
-        return m_iLevelIndex;
-    }
+    _uint   Get_CurLevelIdx(_bool isIncludeLoading) const;
 
     CLevel* Get_LoadedStage(_uint iLevelIndex) const {
         return m_pLoadedLevels[iLevelIndex];

@@ -10,6 +10,8 @@ protected:
 	virtual ~CLevel() = default;
 
 public:
+	virtual _uint	Get_NextLevel() { return 0; }
+
 	_bool	Get_IsStage()  const {
 		return m_isStage;
 	}
@@ -26,6 +28,7 @@ protected:
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 
 	_bool	m_isStage = { false };
+
 public:
 	virtual void Free() override;
 };
