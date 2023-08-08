@@ -45,6 +45,9 @@ HRESULT CTerrainMapObject::Initialize(void* pArg)
 void CTerrainMapObject::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	if (SCENE_TRAIN == m_MapObject_Info.iSceneType)
+		Scroll(TimeDelta);
 }
 
 void CTerrainMapObject::LateTick(_double TimeDelta)

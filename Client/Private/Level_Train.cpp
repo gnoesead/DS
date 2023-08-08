@@ -173,7 +173,8 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
    
-    CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(206.75f, 7.3f, 300.63f, 1.f);
+    CharacterDesc.Land_Y = 7.3f;
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
@@ -190,7 +191,7 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_Train::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    //Load_MapObject_Info(TEXT("../../Data/Object/Acaza_Battle/Acaza_Battle.dat"), pLayerTag);
+    Load_MapObject_Info(TEXT("../../Data/Object/Train/Train.dat"), pLayerTag);
 
     return S_OK;
 }

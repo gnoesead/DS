@@ -98,6 +98,14 @@ HRESULT CSky::Add_Components()
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	
+
+
+	Safe_Release(pGameInstance);
+
 	/* For.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_FINALBOSS, TEXT("Prototype_Component_Model_Sky"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
