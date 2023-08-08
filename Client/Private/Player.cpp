@@ -82,6 +82,9 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	//135degree look
 	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
 	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
+#ifdef DEBUG
+
+
 
 	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 	{
@@ -95,7 +98,7 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	{
 		m_pRendererCom->Set_Sepia();
 	}
-
+#endif // DEBUG
 	if (Reverse)
 	{
 		v45Rotate = -v45Rotate;

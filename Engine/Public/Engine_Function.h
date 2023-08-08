@@ -248,6 +248,13 @@ namespace Engine
 			else
 				return false;
 		}
+
+		static XMVECTOR Dir_FixY(FXMVECTOR vTargetPos, FXMVECTOR vOwnerPos)
+		{// vSour -> Target포지션 vDest -> 본인 포지션 
+			XMVECTOR vTargetPosition = XMVectorSetY(vTargetPos, XMVectorGetY(vOwnerPos));
+			XMVECTOR vDir = XMVector3Normalize(vTargetPosition - vOwnerPos);
+			return vDir;
+		}
 	};
 
 }

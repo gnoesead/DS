@@ -53,6 +53,9 @@ public://Get
 	_bool Get_CurAnimRatio(_double Ratio) {
 		return m_Animations[m_iCurrentAnimIndex]->Get_AnimRatio(Ratio);
 	}
+	_double Get_dAnimRatio(_uint iAnimIndex) {
+		return m_Animations[iAnimIndex]->Get_dAnimRatio();
+	}
 
 public://Set
 	void Set_Animation(_uint iAnimIndex) { m_iCurrentAnimIndex = iAnimIndex; }
@@ -72,6 +75,7 @@ public:
 
 public:
 	HRESULT Play_Animation(_double dTimeDelta);
+	HRESULT Play_Animation_For_Boss(_double dTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 	HRESULT Bind_ShaderResource(_uint iMeshIndex, class CShader* pShader, const char* pConstantName, MESHMATERIALS::TEXTURETYPE eType);
 	HRESULT Bind_ShaderBoneMatrices(_uint iMeshIndex, class CShader* pShader, const char* pConstantName);
