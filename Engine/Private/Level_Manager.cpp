@@ -79,12 +79,12 @@ HRESULT CLevel_Manager::Swap_Level(_uint iLevelIndex)
 
 	m_pCurrentLevel = m_pLoadedLevels[iLevelIndex];
 
+	m_iLevelIndex = iLevelIndex;
+
 	if (FAILED(m_pCurrentLevel->Initialize()))
 	{
 		MSG_BOX("Failed to Swap_Level : CLevel_Manager");
 	}
-
-	m_iLevelIndex = iLevelIndex;
 
 	return S_OK;
 }

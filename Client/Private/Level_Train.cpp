@@ -57,21 +57,28 @@ void CLevel_Train::Tick(_double dTimeDelta)
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("Train"));
 
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
         HRESULT hr = 0;
-
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
-
-        Safe_Release(pGameInstance);
+       
+        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_FINALBOSS))
+        {
+            pGameInstance->Clear_Light();
+            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
+        }
+        else
+            hr = pGameInstance->Swap_Level(LEVEL_FINALBOSS);
 
         if (FAILED(hr))
+        {
+            Safe_Release(pGameInstance);
             return;
+        }
     }
+    Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Train::Render()
