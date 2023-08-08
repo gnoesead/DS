@@ -10,6 +10,7 @@ CAnimation::CAnimation()
 
 CAnimation::CAnimation(const CAnimation& rhs)
 	: m_AnimationDesc(rhs.m_AnimationDesc)
+	, m_ControlDesc(rhs.m_ControlDesc)
 	/*m_dDuration(rhs.m_dDuration)
 	, m_dTickPerSecond(rhs.m_dTickPerSecond)
 	, m_dTimeAcc(rhs.m_dTimeAcc)
@@ -18,10 +19,17 @@ CAnimation::CAnimation(const CAnimation& rhs)
 	, m_Channels(rhs.m_Channels)
 	, m_iCurrentKeyFrames(rhs.m_iCurrentKeyFrames)*/
 {
-	for (auto& pChannel : m_AnimationDesc.m_Channels)
-		Safe_AddRef(pChannel);
+	//for (auto& pChannel : m_AnimationDesc.m_Channels)
+	//	Safe_AddRef(pChannel);
 
 	strcpy_s(m_AnimationDesc.m_szName, rhs.m_AnimationDesc.m_szName);
+
+	m_RootPosition = rhs.m_RootPosition;
+	m_Save_RootPos = rhs.m_Save_RootPos;
+	m_isFirst_EventCall = rhs.m_isFirst_EventCall;
+	m_isFirst_ComboDuration = rhs.m_isFirst_ComboDuration;
+	m_isEarlyEnd = rhs.m_isEarlyEnd;
+
 }
 
 HRESULT CAnimation::Initialize(ANIMATIONDATA* pAnimationData, CModel* pModel)
@@ -130,6 +138,8 @@ _int CAnimation::Invalidate_TransformationMatrices(CModel* pModel, _double dTime
 	// 애니메이션이 끝날 때, 루프애님이 아니면,  다음 애니메이션 인덱스를 return
 	if (m_AnimationDesc.m_isFinish)
 	{
+
+
 		// EventCall 초기화
 		for (auto& event : m_ControlDesc.m_vecTime_Event)
 		{
@@ -183,6 +193,7 @@ _bool CAnimation::Invalidate_Linear_TransformationMatrices(CModel* pModel, _doub
 	// 애니메이션이 끝날 때, 선형보간 끝. false 리턴
 	if (m_AnimationDesc.m_isFinish)
 	{
+		
 		return false;
 	}
 	// 선형보간 계속 진행 true 리턴
@@ -245,6 +256,24 @@ vector<KEYFRAME> CAnimation::Get_LastKeys()
 	return LastKeys;
 }
 
+_bool CAnimation::Check_AnimRatio(_double Ratio, _double TimeDelta)
+{
+	if (Ratio > 1.0)
+		return false;
+
+	return (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration <= Ratio && Ratio < (m_AnimationDesc.m_dTimeAcc + TimeDelta * m_AnimationDesc.m_dTickPerSecond * m_ControlDesc.m_fAnimationSpeed) / m_AnimationDesc.m_dDuration);
+}
+
+_bool CAnimation::Get_AnimRatio(_double Ratio)
+{
+	if (Ratio > 1.0)
+		return false;
+	if (m_AnimationDesc.m_dTimeAcc / m_AnimationDesc.m_dDuration >= Ratio)
+		return true;
+	else
+		return false;
+}
+
 CAnimation* CAnimation::Create(ANIMATIONDATA* pAnimationData, class CModel* pModel)
 {
 	CAnimation* pInstance = new CAnimation();
@@ -260,13 +289,27 @@ CAnimation* CAnimation::Create(ANIMATIONDATA* pAnimationData, class CModel* pMod
 
 CAnimation* CAnimation::Clone()
 {
-	return new CAnimation(*this);
+	CAnimation* pInstance = new CAnimation(*this);
+
+	// m_AnimationDesc.m_Channels에 있는 모든 CChannel 객체를 복사
+	for (size_t i = 0; i < m_AnimationDesc.m_Channels.size(); i++)
+	{
+		pInstance->m_AnimationDesc.m_Channels[i] = new CChannel(*m_AnimationDesc.m_Channels[i]);
+		
+	}
+
+	return pInstance;
 }
 
 void CAnimation::Free()
 {
 	for (auto& pChannel : m_AnimationDesc.m_Channels)
 		Safe_Release(pChannel);
-
+	
+	
 	m_AnimationDesc.m_Channels.clear();
+
+
+
+	
 }

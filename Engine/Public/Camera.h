@@ -32,6 +32,7 @@ public:
 
 	void	Set_Fov(_float fFovY) { m_CameraDesc.fFovY += fFovY; }
 
+	 CTransform* Get_Transform() {return m_pTransformCom;}
 
 public:
 	virtual HRESULT Initialize_Prototype();

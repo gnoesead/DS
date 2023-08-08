@@ -85,10 +85,17 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-
+	CTransform* m_pMonsterTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	if (m_pMonsterTransformCom != nullptr)
+	m_vMonsterPos = m_pMonsterTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if(m_pMonsterTransformCom != nullptr)
+	m_vBattleTargetPos = m_vMonsterPos; // ¿”Ω√¡¬«•
+	else
 	m_vBattleTargetPos = { 140.f,0.f,120.f,1.f }; // ¿”Ω√¡¬«•
+
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	
@@ -96,9 +103,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	{
 		// adventure
 		if (m_Is_Battle != true) {
-			m_fDistance = { 4.f };
+			m_fDistance = { 3.0f };
 			m_vOffSet = { 0.f, 1.5f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 1.7f, 0.f, 0.f };
+			m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
 
 			AdventureCamera(dTimeDelta);
 		}
@@ -322,7 +329,7 @@ void CCamera_Free::LockMouse()
 
 	ClientToScreen(g_hWnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
-	ShowCursor(false);
+	//ShowCursor(false);
 }
 
 CCamera_Free* CCamera_Free::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

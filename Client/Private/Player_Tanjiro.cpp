@@ -28,11 +28,13 @@ HRESULT CPlayer_Tanjiro::Initialize_Prototype()
 
 HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 {
+	
+	if (FAILED(Add_Components()))
+		return E_FAIL;
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	if (FAILED(Add_Components()))
-		return E_FAIL;
 
 	m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
 
@@ -177,7 +179,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
 	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
@@ -229,6 +231,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
+	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
@@ -239,6 +243,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.2f, 1.2f, 1.2f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 
 			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
@@ -250,12 +258,20 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.2f, 1.2f, 1.2f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.2f, 1.2f, 1.2f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			
 		}
@@ -266,6 +282,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.2f, 1.2f, 1.2f), _float3(0.f, 1.0f, 1.5f), 0.1, 
+					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
 			}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -275,6 +295,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.8f), 0.1, 
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
 			}
 		}
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
@@ -467,21 +491,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 
-		//=======================AtkCollTest=======================
-
-		CAtkCollider::ATKCOLLDESC AtkCollDesc;
-		ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
-
-		AtkCollDesc.ColliderDesc.vSize = _float3(3.f, 1.f, 1.f);
-		AtkCollDesc.ColliderDesc.vPosition = _float3(0.f, 0.f, 0.f);
-
-		AtkCollDesc.dLifeTime = 1.0;
-
-		AtkCollDesc.pTransform = m_pTransformCom;
-
-		CAtkCollManager::GetInstance()->Reuse_Collider(TEXT("Layer_PlayerAtk"), &AtkCollDesc);
-
-		//=========================================================
+	
 	}
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f, 0.3f);
@@ -901,6 +911,53 @@ HRESULT CPlayer_Tanjiro::Add_Components()
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Shader : CPlayer_Tanjiro");
+		return E_FAIL;
+	}
+
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
+	// for.Com_Transform 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Transform : CPlayer_Tanjiro");
+		return E_FAIL;
+	}
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
+	//for.Com_AABB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
+	{
+		MSG_BOX("Failed to Add_Com_AABB : CPlayer_Tanjiro");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
+	//for.Com_OBB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
+	{
+		MSG_BOX("Failed to Add_Com_OBB : CPlayer_Tanjiro");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
+	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
+	// for.Com_Sphere 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
+	{
+		MSG_BOX("Failed to Add_Com_Sphere : CPlayer_Tanjiro");
 		return E_FAIL;
 	}
 

@@ -27,6 +27,9 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	m_pTransformCom = m_AtkCollDesc.pTransform;
 	Safe_AddRef(m_pTransformCom);
 
+	Setting_AtkCollDesc();
+
+
 	m_pColliderCom->ReMake_Collider(m_AtkCollDesc.ColliderDesc.vPosition, m_AtkCollDesc.ColliderDesc.vSize.x, m_pTransformCom->Get_WorldMatrix());
 	Set_Dead(false);
 	m_dTimeAcc = 0.0;
@@ -113,6 +116,28 @@ HRESULT CAtkCollider::Render()
 	return S_OK;
 }
 
+void CAtkCollider::Setting_AtkCollDesc()
+{
+	//풀링메모리 재사용하는거라 초기화 필요
+	m_pColliderCom->Set_Hit_Small(false);
+	m_pColliderCom->Set_Hit_Big(false);
+	m_pColliderCom->Set_Hit_Blow(false);
+	m_pColliderCom->Set_Hit_Spin(false);
+
+	//값 넣어주기
+	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Small(true);
+	else if (TYPE_BIG == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Big(true);
+	else if (TYPE_BLOW == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Blow(true);
+	else if (TYPE_SPIN == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Spin(true);
+
+	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
+	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
+}
+
 HRESULT CAtkCollider::Add_Components()
 {
 	/* for.Com_Sphere */
@@ -122,6 +147,8 @@ HRESULT CAtkCollider::Add_Components()
 		MSG_BOX("Failed to Add_Com_Sphere : CAtkCollider");
 		return E_FAIL;
 	}
+	Setting_AtkCollDesc();
+
 
 #ifdef _DEBUG
 	/* for.Com_Renderer */

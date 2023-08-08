@@ -8,10 +8,13 @@ CBone::CBone()
 HRESULT CBone::Initialize(BONEDATA* pModelData)
 {
 	strcpy_s(m_szName, pModelData->szName);
+
+	
 	m_TransformationMatrix = pModelData->TransformationMatrix;
-	m_iParentIndex = pModelData->iParentIndex;
+
 	XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_OffsetMatrix, XMMatrixIdentity());
+	m_iParentIndex = pModelData->iParentIndex;
 
 	return S_OK;
 }
