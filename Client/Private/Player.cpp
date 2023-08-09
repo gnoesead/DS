@@ -31,12 +31,19 @@ HRESULT CPlayer::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	BOXJUMP BoxJump;
+	BoxJump.BoxPos = { 593.44f, 4.5f, 280.47f, 1.0f };
+	BoxJump.RoofOn = true;
+	BoxJump.Dir_SecondJump = {0.0f, 0.0f, 1.0f, 0.0f};
+	m_vecBoxPos.emplace_back(BoxJump);
+
 	return S_OK;
 }
 
 void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
 
 	if (true == m_isDead)
 		return;
@@ -48,6 +55,11 @@ void CPlayer::Tick(_double dTimeDelta)
 void CPlayer::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
+
+	if (m_isLand_Roof)
+		m_fLand_Y = 7.45f;
+	else
+		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
 }
 
 HRESULT CPlayer::Render()
@@ -83,18 +95,7 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
 	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_pRendererCom->Set_Invert();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
-	{
-		m_pRendererCom->Set_GrayScale();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		m_pRendererCom->Set_Sepia();
-	}
+	
 
 	if (Reverse)
 	{
@@ -148,16 +149,30 @@ void CPlayer::Dir_Setting(_bool Reverse)
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	
-	//임시 히트
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_Moveset.m_Down_Dmg_Small = true;
-	}
 
-	Safe_Release(pGameInstance);
+	if (m_Moveset.m_isHitMotion == false)
+	{
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+
+			m_Moveset.m_Down_Dmg_Small = true;
+		}
+
+	
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+
+			m_Moveset.m_Down_Dmg_Blow = true;
+		}
+	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+	}
+	
+
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -193,32 +208,74 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		m_isTestHit = true;
 	}
 
+	if (pGameInstance->Get_DIKeyDown(DIK_V))
+	{
+		if (m_isCanNavi)
+			m_isCanNavi = false;
+		else
+			m_isCanNavi = true;
+	}
+
+	
+
+	if (pGameInstance->Get_DIKeyDown(DIK_Z))
+	{
+		m_pRendererCom->Set_Invert();
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	{
+		m_pRendererCom->Set_GrayScale();
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_C))
+	{
+		m_pRendererCom->Set_Sepia();
+	}
+
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
-	Trigger_Hit(dTimeDelta);
+
+	
+		Trigger_Hit(dTimeDelta);
 
 	if (m_Moveset.m_isHitMotion == false)
 	{
-		Key_Input_Battle_Move(dTimeDelta);
+		if (m_Moveset.m_isRestrict_Adventure == false)
+		{
+			Key_Input_Battle_Move(dTimeDelta);
+		}
 
-		Key_Input_Battle_Jump(dTimeDelta);
 
-		Key_Input_Battle_Attack(dTimeDelta);
+		if (m_ePlayerState == PLAYER_ADVENTURE)
+		{
+			Key_Input_Adventure(dTimeDelta);
+		}
+		else if (m_ePlayerState == PLAYER_BATTLE)
+		{
+			Key_Input_Battle_Jump(dTimeDelta);
 
-		Key_Input_Battle_ChargeAttack(dTimeDelta);
+			Key_Input_Battle_Attack(dTimeDelta);
 
-		Key_Input_Battle_Skill(dTimeDelta);
+			Key_Input_Battle_ChargeAttack(dTimeDelta);
 
-		Key_Input_Battle_Guard(dTimeDelta);
+			Key_Input_Battle_Skill(dTimeDelta);
 
-		Key_Input_Battle_Dash(dTimeDelta);
+			Key_Input_Battle_Guard(dTimeDelta);
 
-		Key_Input_Battle_Awaken(dTimeDelta);
+			Key_Input_Battle_Dash(dTimeDelta);
 
-		Key_Input_Battle_Special(dTimeDelta);
+			Key_Input_Battle_Awaken(dTimeDelta);
 
+			Key_Input_Battle_Special(dTimeDelta);
+		}
 	}
+	else
+	{
+		Key_Input_Down(dTimeDelta);
+	}
+	
+	
+
 	Safe_Release(pGameInstance);
 }
 
@@ -653,6 +710,114 @@ void CPlayer::Key_Input_Battle_Special(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
+void CPlayer::Key_Input_Down(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_Moveset.m_isDownMotion)
+	{
+		m_dDelay_GetUp += dTimeDelta;
+
+		if (m_dDelay_GetUp > 0.8f && m_Moveset.m_isGetUpMotion == false)
+		{
+			if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+			{
+				m_dDelay_GetUp = 0.0;
+				m_Moveset.m_Down_GetUp_Move = true;
+				Dir_Setting(false);
+
+
+			}
+
+			if (pGameInstance->Get_DIKeyDown(DIK_K))
+			{
+				m_dDelay_GetUp = 0.0;
+				m_Moveset.m_Down_GetUp = true;
+			}
+		}
+	}
+
+	if (m_Moveset.m_isGetUpMotion)
+	{
+		if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+		{
+			m_Moveset.m_isPressing_While_Restrict = true;
+		}
+		else
+		{
+			m_Moveset.m_isPressing_While_Restrict = false;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void CPlayer::Key_Input_Adventure(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	//박스 위치
+	_int index = 0;
+	_bool Check_Box = false;
+	for (auto BoxJump : m_vecBoxPos)
+	{
+		_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vBoxPos = XMLoadFloat4(&BoxJump.BoxPos);
+
+		_vector Difference = XMVectorSubtract(vBoxPos, vPlayerPos);
+		_vector squaredDistance = XMVector3LengthSq(Difference);
+
+		XMStoreFloat4(&m_vPlayerToBoxDir, XMVector4Normalize(Difference));
+
+		
+		XMStoreFloat(&m_fDistanceTo_Box, XMVectorSqrt(squaredDistance));
+
+		if (m_fDistanceTo_Box < 3.1)
+		{
+			m_isCan_Jump_To_Box = true;
+			m_isCan_Jump_RoofOn = BoxJump.RoofOn;
+			m_iBoxIndex = index;
+			m_Dir_ScondJump_Box = BoxJump.Dir_SecondJump;
+
+			Check_Box = true;
+		}
+
+		if (Check_Box == false)
+		{
+			m_isCan_Jump_To_Box = false;
+		}
+
+		index++;
+	}
+
+	//박스에 점프하기
+	if (m_Moveset.m_isRestrict_Adventure == false )
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_K) && m_isCan_Jump_To_Box)
+		{
+			m_isCan_Jump_To_Box = false;
+
+			m_Moveset.m_Down_ADV_Jump_To_Object = true;
+		}
+	}
+	else
+	{
+		if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+		{
+			m_Moveset.m_isPressing_While_Restrict = true;
+		}
+		else
+		{
+			m_Moveset.m_isPressing_While_Restrict = false;
+		}
+	}
+	
+	
+	
+	Safe_Release(pGameInstance);
+}
 
 HRESULT CPlayer::Add_Components()
 {

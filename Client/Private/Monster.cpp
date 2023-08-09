@@ -76,10 +76,17 @@ void CMonster::Calculate_To_Player(_int Level)
 
 	_vector vDistance = XMVectorSubtract(m_pTransformCom->Get_State(CTransform::STATE_POSITION), vPlayerPos);
 	_vector vDir_To_Player = XMVector3Normalize(vDistance);
+
+	//FixY
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vTargetPosition = XMVectorSetY(vPlayerPos, XMVectorGetY(vMonsterPos));
+	_vector vDir_FixY = XMVector3Normalize(vTargetPosition - vMonsterPos);
 	
 	m_fDistance_To_Player = XMVectorGetX(XMVector3Length(vDistance));
 	XMStoreFloat4(&m_PlayerPos, vPlayerPos);
-	XMStoreFloat4(&m_Dir_To_Player, vDir_To_Player);
+	XMStoreFloat4(&m_Dir_To_Monster, vDir_To_Player);
+	XMStoreFloat4(&m_Dir_To_Player, -vDir_To_Player);
+	XMStoreFloat4(&m_Dir_To_Player_FixY, vDir_FixY);
 
 	Safe_Release(pGameInstance);
 }

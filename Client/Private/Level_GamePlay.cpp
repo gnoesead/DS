@@ -22,6 +22,8 @@
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
 
+#include "MonsterManager.h"
+
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
 {
@@ -113,6 +115,9 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
         if (FAILED(hr))
             return;
     }
+
+
+
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -215,7 +220,13 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
    
+
+
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+
+	CharacterDesc.Land_Y = 0.f;
+	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
+
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
@@ -243,7 +254,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	
-	for (_int i = 0; i < 40; i++)
+	for (_int i = 0; i < 35; i++)
 	{
 		CPlayer::CHARACTERDESC CharacterDesc;
 		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);

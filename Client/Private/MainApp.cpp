@@ -4,6 +4,7 @@
 #include "Level_Loading.h"
 #include "AtkCollManager.h"
 #include "ColliderManager.h"
+#include "MonsterManager.h"
 
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
@@ -556,6 +557,8 @@ void CMainApp::Free()
 	CSoundMgr::Get_Instance()->StopAll();
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
+	CMonsterManager::GetInstance()->DestroyInstance();
+
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();
 	CSoundMgr::Get_Instance()->Destroy_Instance();

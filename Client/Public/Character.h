@@ -76,8 +76,9 @@ protected:
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
 
-	void Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
+	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
 
+	void	Navigation_To_Ground(_double dTimeDelta);
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
@@ -103,11 +104,12 @@ protected:
 protected:
 	CHAR_STATUS  m_StatusDesc;
 
+
+
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	//스케일값 비율
-	_float		m_fFix_Size = { 0.80f };
+	
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };
@@ -118,7 +120,9 @@ protected:
 	_double m_dDelay_Fall = { 0.0 };
 	_bool	m_isJumpOn = { false };
 	_float	m_fJump_Acc = { 0.0f };
-	_float	m_fLand_Y = { 0.0f };
+	
+	_float	m_fLand_Y = { 0.0f }; // 땅의 y위치임.
+	_bool	m_isLand_Roof = { false };
 
 	_bool	m_isJumpStop = { false };
 	_double m_dTime_JumpStop = { 0.0 };

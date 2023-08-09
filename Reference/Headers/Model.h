@@ -72,6 +72,7 @@ public:
 
 public:
 	HRESULT Play_Animation(_double dTimeDelta);
+	HRESULT Play_Animation_For_Boss(_double dTimeDelta);
 	HRESULT Render(_uint iMeshIndex);
 	HRESULT Bind_ShaderResource(_uint iMeshIndex, class CShader* pShader, const char* pConstantName, MESHMATERIALS::TEXTURETYPE eType);
 	HRESULT Bind_ShaderBoneMatrices(_uint iMeshIndex, class CShader* pShader, const char* pConstantName);

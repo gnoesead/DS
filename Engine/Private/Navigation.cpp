@@ -144,7 +144,7 @@ _bool CNavigation::is_MoveOnNavigation(_fvector& vPosition)
 	return _bool();
 }
 
-_fvector CNavigation::Compute_Height(CTransform* pOwnerTransform)
+_float CNavigation::Compute_Height(CTransform* pOwnerTransform)
 {
 	_vector vPlane;
 
@@ -160,7 +160,7 @@ _fvector CNavigation::Compute_Height(CTransform* pOwnerTransform)
 		- XMVectorGetZ(vPlane) * XMVectorGetZ(vOwnerPos)
 		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane);
 
-	return vOwnerPos = XMVectorSetY(vOwnerPos, fHeight);
+	return fHeight;
 }
 
 

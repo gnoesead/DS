@@ -45,6 +45,8 @@ public:
 
 
 private: //애니메이션 제어용 함수
+	void	MonsterManaging();
+
 	void	EventCall_Control(_double dTimeDelta);
 
 	void	Trigger();
@@ -81,6 +83,10 @@ private: //애니메이션 제어용 변수들
 
 	_float4		m_Hit_AtkDir = { 0.0f, 0.0f, 0.0f ,0.0f };
 
+
+	//Monstermanager
+	_bool	m_isFirst_AttackOn = { true };
+	_bool	m_isFirst_AttackOff = { false };
 
 	//Down
 	_double		m_dDelay_Down = { 0.0 };

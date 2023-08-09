@@ -176,7 +176,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
  
     CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
 
-    CharacterDesc.Land_Y = 4.5f;
+    CharacterDesc.Land_Y = 0.0f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
  
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
