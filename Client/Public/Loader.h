@@ -30,6 +30,7 @@ public:
     HRESULT LoadingForAllStage();
 
     HRESULT LoadingForLogo();
+    HRESULT LoadingForLobby();
 
     HRESULT LoadingForGamePlay();
     HRESULT LoadingForVillage();

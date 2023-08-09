@@ -56,6 +56,7 @@ HRESULT CPlayer_Battle_Frame::Initialize(void * pArg)
 		m_Origin_Y = 240;
 		m_Size_Param = 0.349990f;
 		m_UI_Layer = 0;
+		m_Is_Side_Cut_L = true;
 	}
 
 	// Name
@@ -214,7 +215,10 @@ HRESULT CPlayer_Battle_Frame::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;	
-
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_R", &m_Is_Side_Cut_R, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Is_Side_Cut_L", &m_Is_Side_Cut_L, sizeof(_bool))))
+		return E_FAIL;
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_Alpha, sizeof(_float))))
 		return E_FAIL;
 
