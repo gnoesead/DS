@@ -60,7 +60,7 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 
 	MonsterManaging();
 
-	Calculate_To_Player(LEVEL_GAMEPLAY);
+	Calculate_To_Player();
 	
 	if (true == m_isDead)
 		return;
