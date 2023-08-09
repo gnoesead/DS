@@ -2,6 +2,7 @@
 #include "..\Public\Level_Loading.h"
 #include "Loader.h"
 #include "Level_Logo.h"
+#include "Level_Lobby.h"
 #include "Level_GamePlay.h"
 #include "Level_Village.h"
 #include "Level_House.h"
@@ -9,6 +10,8 @@
 #include "Level_FinalBoss.h"
 #include "GameInstance.h"
 #include "BackGround.h"
+#include "Loading.h"
+
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -21,11 +24,146 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
-    m_pBackGround = CBackGround::Create(m_pDevice, m_pContext);
+   /* m_pBackGround = CBackGround::Create(m_pDevice, m_pContext);
     if (nullptr == m_pBackGround)
         return E_FAIL;
 
-    m_pBackGround->Initialize(nullptr);
+    m_pBackGround->Initialize(nullptr);*/
+
+
+    CLoading::UIDESC UIDesc;
+
+    // Back
+    m_pBack = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pBack)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 0;
+
+    m_pBack->Initialize(&UIDesc);
+
+    // Circle
+    m_pCircle = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCircle)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 1;
+
+    m_pCircle->Initialize(&UIDesc);
+
+
+    // Rect
+    m_pRect = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pRect)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 2;
+
+    m_pRect->Initialize(&UIDesc);
+
+
+    // Title
+    m_pTitle = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pTitle)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 8;
+
+    m_pTitle->Initialize(&UIDesc);
+
+    // Cloud_LT
+    m_pCloud_LT = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_LT)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 9;
+  
+    m_pCloud_LT->Initialize(&UIDesc);
+
+
+    // Cloud_RT
+    m_pCloud_RT = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_RT)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 10;
+   
+
+    m_pCloud_RT->Initialize(&UIDesc);
+
+    // Cloud_LD
+    m_pCloud_LD = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_LD)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 11;
+    UIDesc.m_Is_Y_Reverse = true;
+
+    m_pCloud_LD->Initialize(&UIDesc);
+
+
+    // Cloud_RD
+    m_pCloud_RD = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pCloud_RD)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 12;
+    UIDesc.m_Is_X_Reverse = true;
+    UIDesc.m_Is_Y_Reverse = true;
+
+    m_pCloud_RD->Initialize(&UIDesc);
+
+    // Door
+    m_pDoor = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pDoor)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 13;
+   
+    m_pDoor->Initialize(&UIDesc);
+
+
+    // Walk
+    m_pWalk = CLoading::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pWalk)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Type = 14;
+
+    m_pWalk->Initialize(&UIDesc);
+
+
+    //g_iLoadingTextureIndex += 1;
 
     m_eNextLevelID = eNextLevelID;
 
@@ -40,11 +178,42 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    m_pBackGround->Set_TextureIndex(g_iLoadingTextureIndex % 3);
-  
+   /* m_pBackGround->Set_TextureIndex(g_iLoadingTextureIndex % 3);
     m_pBackGround->Tick(dTimeDelta);
+    m_pBackGround->LateTick(dTimeDelta);*/
 
-    m_pBackGround->LateTick(dTimeDelta);
+    if (g_iLoadingTextureIndex > 0) {
+
+        m_pBack->Tick(dTimeDelta);
+        m_pBack->LateTick(dTimeDelta);
+
+        m_pCircle->Tick(dTimeDelta);
+        m_pCircle->LateTick(dTimeDelta);
+
+        m_pRect->Tick(dTimeDelta);
+        m_pRect->LateTick(dTimeDelta);
+
+        m_pTitle->Tick(dTimeDelta);
+        m_pTitle->LateTick(dTimeDelta);
+
+        m_pCloud_LT->Tick(dTimeDelta);
+        m_pCloud_LT->LateTick(dTimeDelta);
+
+        m_pCloud_RT->Tick(dTimeDelta);
+        m_pCloud_RT->LateTick(dTimeDelta);
+
+        m_pCloud_LD->Tick(dTimeDelta);
+        m_pCloud_LD->LateTick(dTimeDelta);
+
+        m_pCloud_RD->Tick(dTimeDelta);
+        m_pCloud_RD->LateTick(dTimeDelta);
+
+        m_pDoor->Tick(dTimeDelta);
+        m_pDoor->LateTick(dTimeDelta);
+
+        m_pWalk->Tick(dTimeDelta);
+        m_pWalk->LateTick(dTimeDelta);
+    }
 
     if (true == m_pLoader->Get_Finished())
     {
@@ -56,6 +225,9 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             {
             case LEVEL_LOGO:
                 pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_LOBBY:
+                pLevel = CLevel_Lobby::Create(m_pDevice, m_pContext);
                 break;
             case LEVEL_GAMEPLAY:
                 pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
@@ -77,7 +249,7 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             if (nullptr == pLevel)
                 return;
 
-            g_iLoadingTextureIndex += 2;
+            g_iLoadingTextureIndex += 1;
 
             HRESULT hr = 0;
 
@@ -119,6 +291,19 @@ void CLevel_Loading::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pBackGround);
+    //Safe_Release(m_pBackGround);
+    Safe_Release(m_pBack);
+    Safe_Release(m_pCircle);
+    Safe_Release(m_pRect);
+    Safe_Release(m_pTitle);
+    Safe_Release(m_pCloud_LT);
+    Safe_Release(m_pCloud_RT);
+    Safe_Release(m_pCloud_LD);
+    Safe_Release(m_pCloud_RD);
+    Safe_Release(m_pDoor);
+    Safe_Release(m_pWalk);
+  
+
+
     Safe_Release(m_pLoader);
 }

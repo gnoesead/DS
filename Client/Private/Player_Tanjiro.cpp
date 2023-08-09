@@ -6,6 +6,9 @@
 #include "EffectPlayer.h"
 
 #include "AtkCollManager.h"
+#include "DialogManager.h"
+#include "MissionManager.h"
+
 
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -71,6 +74,14 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+	// Npc 에서 해야함
+	CDialogManager::GetInstance()->Set_Dialog_Type(1);
+
+	// Npc or 트리거로 처리
+	CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
+	CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
+
 
 	m_pSword->Tick(dTimeDelta);
 	m_pSwordHome->Tick(dTimeDelta);
@@ -249,7 +260,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 
-			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
 		{

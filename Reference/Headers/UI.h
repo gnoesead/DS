@@ -23,7 +23,11 @@ public:
 	}
 
 protected:
-	_double					m_fX, m_fY, m_fSizeX, m_fSizeY = {};
+	_double					m_fX = {};
+	_double                 m_fY = {};
+	_double                 m_fSizeX = {};
+	_double                 m_fSizeY = {};
+
 	_float4x4				m_ProjMatrix = {};
 
 	_int                   m_ScreenWidth = {};
@@ -32,6 +36,8 @@ protected:
 	_int                   m_MouseY = {};
 
 	_bool                  m_Is_Render = { true };
+	_bool                  m_Is_Side_Cut_R = { false };
+	_bool                  m_Is_Side_Cut_L = { false };
 
 protected:
 	_bool	Pt_InUI();

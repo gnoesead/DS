@@ -48,7 +48,7 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 
 	if (m_MapObject_Info.iInstanceType == INSTANCE_GRASS)
 	{
-		m_fRatio += (_float)TimeDelta * m_fDir;
+		/*m_fRatio += (_float)TimeDelta * m_fDir;
 
 		if (m_fRatio > 1.f)
 		{
@@ -60,7 +60,7 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 		{
 			m_fRatio = -1.f;
 			m_fDir = 1.f;
-		}
+		}*/
 	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
