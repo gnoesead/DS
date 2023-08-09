@@ -88,21 +88,28 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
-	/*if (GetKeyState(VK_RETURN) & 0x8000)
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 	{
 		HRESULT hr = 0;
-
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		pGameInstance->Clear_Light();
-		hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
-
-		Safe_Release(pGameInstance);
+		
+		if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
+		{
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
+		}
+		else
+			hr = pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
 
 		if (FAILED(hr))
+		{
+			Safe_Release(pGameInstance);
 			return;
-	}*/
+		}
+	}
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_FinalBoss::Render()
@@ -879,10 +886,12 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 
 	ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
-	for (_uint i = 0; i < iSize; ++i)
-	{
-		CMapObject::MAPOBJECT_INFO tMapObject_Info;
-		ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+    for (_uint i = 0; i < iSize; ++i)
+    {
+        CMapObject::MAPOBJECT_INFO tMapObject_Info;
+        ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
 
 		ReadFile(hFile, &tMapObject_Info.vPos, sizeof(_float4), &dwByte, nullptr);
 		ReadFile(hFile, &tMapObject_Info.vRotAngle, sizeof(_float3), &dwByte, nullptr);
@@ -911,32 +920,32 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 
 		const _tchar* pMapObjectTypeTag = TEXT("");
 
-		switch (tMapObject_Info.iMapObjectType)
-		{
-		case CMapObject::MAPOBJECT_STATIC:
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
-				TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
-				return E_FAIL;
-			break;
-		case CMapObject::MAPOBJECT_TERRAIN:
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
-				TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
-				return E_FAIL;
-			break;
-		case CMapObject::MAPOBJECT_ROTATION:
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
-				TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
-				return E_FAIL;
-			break;
-		case CMapObject::MAPOBJECT_INSTANCE:
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_MapObject"),
-				TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
-				return E_FAIL;
-			break;
-		default:
-			break;
-		}
-	}
+        switch (tMapObject_Info.iMapObjectType)
+        {
+        case CMapObject::MAPOBJECT_STATIC:
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+                TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
+                return E_FAIL;
+            break;
+        case CMapObject::MAPOBJECT_TERRAIN:
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+                TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
+                return E_FAIL;
+            break;
+        case CMapObject::MAPOBJECT_ROTATION:
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+                TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
+                return E_FAIL;
+            break;
+        case CMapObject::MAPOBJECT_INSTANCE:
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+                TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
+                return E_FAIL;
+            break;
+        default:
+            break;
+        }
+    }
 
 	CloseHandle(hFile);
 

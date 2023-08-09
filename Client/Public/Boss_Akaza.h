@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "Character.h"
-
+#include "Monster.h"
 
 BEGIN(Engine)
 
@@ -10,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CBoss_Akaza final : public CCharacter
+class CBoss_Akaza final : public CMonster
 {
 public:
 	
@@ -61,12 +60,16 @@ public:
 		ANIM_CHARGE = 6, // 7,8 //기모으기
 		ANIM_CHARGE_ROOP = 7,
 		ANIM_CHARGE_END = 8,
+		ANIM_COMBO1 = 12,
+		ANIM_COMBO2 = 13,
+		ANIM_COMBO3 = 14,
 		ANIM_COMBO_DOWN = 15, // 발로 땅 내려찍기
-		ANIM_COMBO_PIST = 16, // 18 주먹 와다다닥
+		ANIM_COMBO_PIST = 16, // 18 주먹 와다다닥 -> COMBO1234
+		ANIM_COMBO_UP = 17, // 하단발차기 후 올려차기
 		ANIM_COMBO_PIST2 = 18,
 
 		ANIM_AWAKE_COMBO_PIST = 28, // 28~32 완전개방? 했을 때
-		ANIM_COMBO_UP = 17, // 하단발차기 후 올려차기
+		
 		ANIM_AREA_COMBO = 20, // 21 영역펼쳤을 때 안에 있으면 써짐
 
 		ANIM_AIRGUN = 22, // 23,24 장풍
@@ -81,6 +84,7 @@ public:
 
 		ANIM_SKILL_UP = 34, // 빙글돌고 올라감
 		ANIM_SKILL_DOWN = 35, // 34랑 연계 내려오는 동작
+		ANIM_SKILL_DOWNEND = 36, // 35랑 연계 떨어지고 아이들동작 이어짐
 
 		ANIM_DASH_PUNCH = 39, // 대쉬랑 연계기
 
@@ -215,8 +219,9 @@ private: //패턴 함수들
 	void Update_Nachim_AirGun(_double dTimeDelta);
 
 private: /* Calculate */
-	_float Calculate_Distance();
+	/*_float Calculate_Distance();
 	_vector Calculate_Dir();
+	_vector Calculate_Dir_FixY();*/
 
 
 #pragma endregion
@@ -245,7 +250,6 @@ private: // _bool
 	
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
-	_double m_dLandStompTime = { 0.0 };
 	_double m_dAwakePunchTime = { 0.0 };
 
 	_double m_dTriggerTime = { 0.0 };
@@ -278,7 +282,7 @@ private: // 렌더 아웃라인
 	_uint	m_iMeshNum = { 0 };
 #pragma endregion
 private:
-	CTransform* m_pPlayerTransformCom = { nullptr };
+	//CTransform* m_pPlayerTransformCom = { nullptr };
 	
 private:
 	HRESULT Add_Components();

@@ -100,24 +100,28 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 
     SetWindowText(g_hWnd, TEXT("Tuto"));
 
-    if (GetKeyState(VK_RETURN) & 0x8000)
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
         HRESULT hr = 0;
 
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
+		if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_VILLAGE))
+		{
+			pGameInstance->Clear_Light();
+			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
+		}
+		else
+			hr = pGameInstance->Swap_Level(LEVEL_VILLAGE);
 
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
-
-        Safe_Release(pGameInstance);
-
-        if (FAILED(hr))
-            return;
+		if (FAILED(hr))
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
     }
-
-
-
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -254,7 +258,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	Safe_AddRef(pGameInstance);
 
 	
-	for (_int i = 0; i < 35; i++)
+	for (_int i = 0; i < 10; i++)
 	{
 		CPlayer::CHARACTERDESC CharacterDesc;
 		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
@@ -905,6 +909,8 @@ HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* 
 
     ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
     for (_uint i = 0; i < iSize; ++i)
     {
         CMapObject::MAPOBJECT_INFO tMapObject_Info;
@@ -939,22 +945,22 @@ HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* 
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;

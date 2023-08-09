@@ -39,7 +39,7 @@ public: /*for Input_Device*/
 
 public: /*for Level_Manager*/
     class CLevel*   Get_CulLevel() const;
-    _uint           Get_CurLevelIdx() const;
+    _uint           Get_CurLevelIdx(_bool isIncludeLoading = false) const;
     class CLevel*   Get_LoadedStage(_uint iLevelIndex) const;
     _bool           Get_IsStage() const;
     _bool           Get_IsLoadForAll() const;

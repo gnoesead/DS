@@ -31,14 +31,14 @@ HRESULT CMonster::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	
+
 	return S_OK;
 }
 
 void CMonster::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
-
-
 
 	if (true == m_isDead)
 		return;
@@ -55,7 +55,6 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
-
 	return S_OK;
 }
 
@@ -65,12 +64,23 @@ HRESULT CMonster::Render_ShadowDepth()
 	return S_OK;
 }
 
-void CMonster::Calculate_To_Player(_int Level)
+void CMonster::Get_PlayerComponent()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(Level, TEXT("Layer_Player"), TEXT("Com_Transform")));
+	m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	//m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(LEVEL_FINALBOSS, TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+	Safe_Release(pGameInstance);
+}
+
+void CMonster::Calculate_To_Player()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 	_vector vPlayerPos = pTransform->Get_State(CTransform::STATE_POSITION);
 
@@ -89,6 +99,52 @@ void CMonster::Calculate_To_Player(_int Level)
 	XMStoreFloat4(&m_Dir_To_Player_FixY, vDir_FixY);
 
 	Safe_Release(pGameInstance);
+}
+
+
+_bool CMonster::Check_Distance(_float fDistance)
+{
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+}
+
+_float CMonster::Calculate_Distance()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+
+	return fDistance;
+}
+
+_vector CMonster::Calculate_Dir()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+
+	return vDir;
+}
+
+_vector CMonster::Calculate_Dir_FixY()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
 }
 
 void CMonster::Dir_Setting(_bool Reverse)
@@ -113,19 +169,7 @@ void CMonster::Dir_Setting(_bool Reverse)
 	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
 	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_pRendererCom->Set_Invert();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
-	{
-		m_pRendererCom->Set_GrayScale();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		m_pRendererCom->Set_Sepia();
-	}
-
+	
 	if (Reverse)
 	{
 		v45Rotate = -v45Rotate;

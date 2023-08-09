@@ -116,12 +116,13 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
-
-#ifdef _DEBUG
+	
+	#ifdef _DEBUG
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
 	{
+
 		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iRenderCnt);
 		m_iRenderCnt = 0;
 		m_TimeAcc = 0.0;
@@ -149,7 +150,6 @@ HRESULT CMainApp::Render()
 
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("F8 To OnOff RenderTarget"), _float2(0.f, 700.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
-
 	}
 	
 #endif // _DEBUG
@@ -253,10 +253,10 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	if (m_pGameInstance->Get_DIKeyDown(DIK_TAB))
 		m_isRenderDebugInfo = !m_isRenderDebugInfo;
 
-	if (m_pGameInstance->Get_DIKeyDown(DIK_P))
+	/*if (m_pGameInstance->Get_DIKeyDown(DIK_P))
 		CEffectPlayer::Get_Instance()->Play("hjd");
 	if (m_pGameInstance->Get_DIKeyDown(DIK_O))
-		CEffectPlayer::Get_Instance()->Stop("hjd");
+		CEffectPlayer::Get_Instance()->Stop("hjd");*/
 
 }
 #endif // _DEBUG

@@ -25,8 +25,17 @@ private:
 public:
 	HRESULT Inititalize();
 	HRESULT Check_Collider(_uint iLevelIndex, _double dTimeDelta);
+	HRESULT Render();
 
 private:
+	void Set_IsColl(_uint iIndex) {
+		m_isColl[iIndex] = true;
+	}
+	void Reset_IsColl();
+
+private:
+	_bool	m_isColl[3] = {};
+	_uint	m_iPAtoMCount = { 0 };
 
 private:
 	HRESULT Check_PlayerToMonster(_uint iLevelIndex, _double dTimeDelta);

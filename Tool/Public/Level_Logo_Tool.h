@@ -11,6 +11,11 @@ private:
 	virtual ~CLevel_Logo_Tool() = default;
 
 public:
+	virtual _uint	Get_NextLevel() {
+		return (_uint)LEVEL_LOADING;
+	};
+
+public:
 	virtual HRESULT		Initialize() override;
 	virtual void		Tick(_double dTimeDelta) override;
 	virtual HRESULT		Render() override;

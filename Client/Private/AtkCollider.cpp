@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "AtkCollManager.h"
+#include "Player_Battle_Combo.h"
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -70,6 +71,11 @@ void CAtkCollider::Tick(_double dTimeDelta)
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
 	m_dTimeAcc += dTimeDelta;
+
+	if (m_pColliderCom->Get_Coll())
+	{
+		++m_iCollCount;
+	}
 }
 
 void CAtkCollider::LateTick(_double dTimeDelta)
@@ -80,6 +86,8 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	{
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
 		m_dTimeAcc = 0.0;
+
+		m_iCollCount = 0;
 		Set_Dead();
 	}
 
@@ -93,6 +101,17 @@ HRESULT CAtkCollider::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_tchar szText[MAX_PATH] = { TEXT("") };
+
+	wsprintf(szText, TEXT("CollCount : %d"), m_iCollCount);
+
+	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 60.f), _float2(0.5f, 0.5f))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
