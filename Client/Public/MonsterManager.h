@@ -20,21 +20,12 @@ private:
 	virtual ~CMonsterManager() = default;
 
 public:
-
-public:
-	_bool	Check_Can_Attack();
-
-	void	Attack_Cnt_Up() { m_iCnt_Attack++; }
-	void	Attack_Cnt_Down() { 
-		m_iCnt_Attack--; 
-		if (m_iCnt_Attack <= 0)
-			m_iCnt_Attack = 0;
-	}
-
-	
+	void	Cnt_AttackOn_Up() { m_iCnt_AttackOn++; }
+	void	Cnt_AttackOn_Down() { m_iCnt_AttackOn--; }
+	_bool	Can_Attack();
 
 private:
-	_int				m_iCnt_Attack = { 0 };
+	_int	m_iCnt_AttackOn = { 0 };
 
 public:
 	virtual void Free() override;
