@@ -119,24 +119,27 @@ _bool CCell::Check_Point(_float* pPoint, _float fRadius)
 
 }
 
-void CCell::Get_SlidingVector(_fvector& vPosition, _fvector vLook)
+_vector CCell::Get_SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex)
 {
 	_vector vSlidingVector;
 	for (_uint i = 0; i < LINE_END; ++i)
 	{
-		_vector vSour = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
-		_vector vDest = XMVector3Normalize(XMLoadFloat3(&m_vNormals[i]));
-		_float Scalar = XMVectorGetX(XMVector3Dot(vSour, vDest));
-
-		if (0.f < Scalar)
+		_vector		vSour = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
+		_vector		vDest = XMVector3Normalize(XMLoadFloat3(&m_vNormals[i]));
+		_double     Scalar = XMVectorGetX(XMVector3Dot(vSour, vDest));
+		if (0.f < (Scalar))
 		{
 			if (0.f < XMVectorGetX(XMVector3Dot(vLook, vDest)))
 				vSlidingVector = (vLook - (XMVector3Dot(vLook, XMVector3Normalize(vDest)) * XMVector3Normalize(vDest)));
 			else
 				vSlidingVector = vLook;
 		}
+
 	}
+	return vSlidingVector;
+		
 }
+
 
 #ifdef _DEBUG
 

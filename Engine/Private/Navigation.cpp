@@ -144,6 +144,47 @@ _bool CNavigation::is_MoveOnNavigation(_fvector& vPosition)
 	return _bool();
 }
 
+_vector CNavigation::MoveOnNavigation(_fvector& vPosition, _fvector vLook)
+{
+	if (-1 == m_NaviDesc.iCurrentIndex)
+		return  SlidingVector(vPosition, vLook, &m_NaviDesc.iCurrentIndex);
+
+	_int	iNeighborIndex = { -1 };
+
+	if (true == m_Cells[m_NaviDesc.iCurrentIndex]->isIn(vPosition, &iNeighborIndex))
+	{
+
+		return vLook;
+	}
+	else	 /* 밖으로 나갔다. */
+	{
+
+		/* 나간방향에 iNeighborIndex 이웃이 있다. */
+		if (-1 < iNeighborIndex)
+		{
+			while (true)
+			{
+				if (-1 == iNeighborIndex)
+					return  SlidingVector(vPosition, vLook, &m_NaviDesc.iCurrentIndex);
+
+				if (true == m_Cells[iNeighborIndex]->isIn(vPosition, &iNeighborIndex))
+					break;
+			}
+
+			m_NaviDesc.iCurrentIndex = iNeighborIndex;
+			return vLook;
+		}
+		else
+		{
+			/*if (false == m_Cells[m_NaviDesc.iCurrentIndex]->isOut(vPosition, &m_NaviDesc.iCurrentIndex))
+				return vLook;*/
+			return  SlidingVector(vPosition, vLook, &m_NaviDesc.iCurrentIndex);
+		}
+	}
+
+	return  XMVectorSet(0.f, 0.f, 0.f, 0.f);
+}
+
 _float CNavigation::Compute_Height(CTransform* pOwnerTransform)
 {
 	_vector vPlane;
@@ -161,6 +202,14 @@ _float CNavigation::Compute_Height(CTransform* pOwnerTransform)
 		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane);
 
 	return fHeight;
+}
+
+_vector CNavigation::SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex)
+{
+	_vector SlidingVector;
+	//if(m_NaviDesc.iCurrentIndex > -1)
+	SlidingVector = m_Cells[*pNeighborIndex]->Get_SlidingVector(vPosition, vLook, pNeighborIndex);
+	return SlidingVector;
 }
 
 

@@ -165,7 +165,6 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 		m_isCombo_Trigger = false;
 	}
 
-	//m_Animations[m_iPreAnimIndex]->Reset_Finish();
 
 	//콤보애니메이션이 아닐시 combo_doing강제 초기화
 	if (false == m_Animations[m_iCurrentAnimIndex]->Get_ControlDesc().m_isCombo)
@@ -244,7 +243,100 @@ HRESULT CModel::Play_Animation(_double dTimeDelta)
 		m_iSaveAnimIndex = m_iCurrentAnimIndex;
 	}
 	
+
+	return S_OK;
+}
+
+HRESULT CModel::Play_Animation_For_Boss(_double dTimeDelta)
+{
+	//애니메이션이 바뀔 시에 기존 애니메이션의 timeacc초기화
+	if (m_iSaveAnimIndex != m_iCurrentAnimIndex)
+	{
+		
+		m_Animations[m_iSaveAnimIndex]->Reset_TimeAcc();
+		m_iSaveAnimIndex = m_iCurrentAnimIndex;
+		m_isCombo_Trigger = false;
+	}
+
 	
+
+	//콤보애니메이션이 아닐시 combo_doing강제 초기화
+	if (false == m_Animations[m_iCurrentAnimIndex]->Get_ControlDesc().m_isCombo)
+	{
+		m_isCombo_Doing = false;
+	}
+
+
+	_int	NextAnim = -1;
+	// 선형보간 invalidate
+	if (m_isLinearOn)
+	{
+		m_isLinearOn = m_Animations[m_iCurrentAnimIndex]->Invalidate_Linear_TransformationMatrices(this, dTimeDelta, m_isPlay, m_LastKeys);
+	}
+	// 일반 invalidate
+	else
+	{
+		NextAnim = m_Animations[m_iCurrentAnimIndex]->Invalidate_TransformationMatrices(this, dTimeDelta, m_isPlay, m_isCombo_Trigger);
+	}
+
+	/* 현재 재생해야할 애니메이션 번호 n == m_iCurrentAnimIndex
+	*  n번의 애니메이션의 행렬 상태로 Trans행렬을 갱신한다.
+	*/
+
+	//위에서 갱신한 Trans를 이용하여 모든 뼈의 Combined를 갱신한다
+	for (auto& pBone : m_Bones)
+	{
+		pBone->Invalidate_CombinedTransformationMatrix(this);
+	}
+
+
+	// 애니메이션이 끝나서 다음 애니메이션 리턴받을 시
+	if (0 <= NextAnim)
+	{
+		//Combo애니메이션일 경우 여기로 진행
+		if (m_isCombo_Trigger)
+		{
+			// 트리거가 켜지면 여기에 함수
+
+			//콤보 분기 일경우,
+			if (m_isCombo_Another)
+			{
+				m_isCombo_Another = false;
+				NextAnim = m_iCombo_AnotherRoute;
+			}
+		}
+		//그냥 애니메이션 진행
+		else
+		{
+			//현재 애님과 바뀐 애님이 같지 않을 경우 선형보간
+			if (m_iCurrentAnimIndex != NextAnim)
+			{
+				m_isLinearOn = true;
+
+				m_LastKeys.clear();
+				m_LastKeys = m_Animations[m_iCurrentAnimIndex]->Get_LastKeys();
+
+				m_isCombo_Doing = false;
+
+				m_iPreAnimIndex = m_iSaveAnimIndex;
+			}
+
+			//콤보 진행이 아닐시 트리거가 안들어오면,
+			if (m_isCombo_Doing)
+			{
+				m_isCombo_Doing = false;
+			}
+		}
+
+		m_iCurrentAnimIndex = NextAnim;
+		m_Animations[m_iSaveAnimIndex]->Reset_TimeAcc(); // 기존 애니메이션 초기화
+
+		m_isCombo_Trigger = false;
+
+		//aa
+		m_iSaveAnimIndex = m_iCurrentAnimIndex;
+	}
+
 
 	return S_OK;
 }
