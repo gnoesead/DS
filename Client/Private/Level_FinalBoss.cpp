@@ -16,8 +16,13 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+#include "FIcon.h"
+#include "World_UI_Hp.h"
+#include "Interaction.h"
+#include "Dialog.h"
 
 #include "ColliderManager.h"
+
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -88,28 +93,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
-	{
-		HRESULT hr = 0;
-		
-		if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
-		{
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
-		}
-		else
-			hr = pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
-
-		if (FAILED(hr))
-		{
-			Safe_Release(pGameInstance);
-			return;
-		}
-	}
-	Safe_Release(pGameInstance);
+	
 }
 
 HRESULT CLevel_FinalBoss::Render()
@@ -758,6 +742,107 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+
+// FIcon (임시) 실제로는 객체가 파츠로 소유할거임
+
+	CFIcon::UIDESC UIDesc8;
+	// 락온 아이콘
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 7;
+	UIDesc8.m_Up_Mount = 2.f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// 락온 글로우
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 8;
+	UIDesc8.m_Up_Mount = 2.f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Interaction UI
+	CInteraction::UIDESC UIDesc9;
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// 배경
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 0;
+	UIDesc9.m_Up_Mount = 2.f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// F 상호작용
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 1;
+	UIDesc9.m_Up_Mount = 2.f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Dialog UI
+
+	CDialog::UIDESC UIDesc10;
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Frame
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 0;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Name_Frame
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// Arrow
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -861,6 +946,56 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 
 #pragma endregion
+
+#pragma region Monster_Hp
+	CWorld_UI_Hp::UIDESC UIDesc3;
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 0;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 1;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 2;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 3;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+#pragma endregion
+
 
 
 	Safe_Release(pGameInstance);

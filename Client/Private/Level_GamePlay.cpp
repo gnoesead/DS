@@ -16,11 +16,13 @@
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
 #include "ColliderManager.h"
+#include "Story_Board.h"
 
 #include "Monster_Spider.h"
 
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
+#include "Story_Manager.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -39,11 +41,11 @@ HRESULT CLevel_GamePlay::Initialize()
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+   /* if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
         MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_GamePlay");
         return E_FAIL;
-    }
+   }*/
 
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
@@ -167,13 +169,187 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+	CStory_Board::UIDESC UIDesc;
+
+	// Bg
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 0;
+	UIDesc.m_Back_Type = 0;
+	UIDesc.m_Back_Layer = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Bg_Swap
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 16;
+	UIDesc.m_Back_Type = 1;
+	UIDesc.m_Back_Layer = -1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	
+
+	// Bg_Deco_Top
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Bg_Deco_Bot
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Title
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 8;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Mini_Title
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 13;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Line
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 14;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_LT_Dark
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 10;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_LT
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 9;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_RT_Dark
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 12;
+	UIDesc.m_Is_Y_Reverse = true;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cloud_RT
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 11;
+	UIDesc.m_Is_Y_Reverse = true;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_0
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 3;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_1
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_2
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 5;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_3
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Icon_4
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Cursor
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 15;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
     Safe_Release(pGameInstance);
 
@@ -223,7 +399,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 
    
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
-
+	CharacterDesc.Land_Y = 0.f;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))

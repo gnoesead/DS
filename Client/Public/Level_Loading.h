@@ -25,6 +25,20 @@ private:
 	class CLoader*		m_pLoader = { nullptr };
 	class CBackGround*	m_pBackGround = { nullptr };
 
+
+private:
+	class CLoading* m_pBack = { nullptr };
+	class CLoading* m_pCircle = { nullptr };
+	class CLoading* m_pRect = { nullptr };
+	class CLoading* m_pTitle = { nullptr };
+	class CLoading* m_pCloud_LT= { nullptr };
+	class CLoading* m_pCloud_RT = { nullptr };
+	class CLoading* m_pCloud_LD = { nullptr };
+	class CLoading* m_pCloud_RD = { nullptr };
+	class CLoading* m_pDoor = { nullptr };
+	class CLoading* m_pWalk = { nullptr };
+
+
 public:
 	static			CLevel_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void	Free() override;

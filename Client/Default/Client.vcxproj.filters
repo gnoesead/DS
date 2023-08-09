@@ -16,9 +16,6 @@
     <Filter Include="01. Levels\00. Logo">
       <UniqueIdentifier>{643e17f7-e651-420b-8a17-797b1e533224}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\01. GamePlay">
-      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects">
       <UniqueIdentifier>{b1936517-b52e-47b1-97ba-676614916358}</UniqueIdentifier>
     </Filter>
@@ -67,18 +64,6 @@
     <Filter Include="02. GameObjects\Environment\Sky">
       <UniqueIdentifier>{ac119d15-7984-4f75-be10-6b17bb2a1a34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\02. Village">
-      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\03. House">
-      <UniqueIdentifier>{b72ed52c-d331-417a-a807-1a5bd490af58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\04. Train">
-      <UniqueIdentifier>{42122498-728c-4179-bbfa-1b3af44a2ba1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. Levels\05. FinalBoss">
-      <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Levels\99. Loadiing">
       <UniqueIdentifier>{5aa88866-07ca-4355-aa7d-849bf2a38ae9}</UniqueIdentifier>
     </Filter>
@@ -103,9 +88,6 @@
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar">
       <UniqueIdentifier>{31189834-560c-4c54-963d-5759dcde14bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr">
-      <UniqueIdentifier>{f13d0d49-42ea-4e53-8dd2-9f26cf9f415b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Frame">
       <UniqueIdentifier>{99b17ca9-771c-4409-8058-387ba3f8c8cc}</UniqueIdentifier>
     </Filter>
@@ -120,12 +102,6 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar">
       <UniqueIdentifier>{51aaec38-0e7b-4a45-b88c-2f526de4b2fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Frame">
-      <UniqueIdentifier>{da25a8b7-bd41-458d-b89c-58daa3050c63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar">
-      <UniqueIdentifier>{aca9ca19-5fde-4f45-a001-619d29b09a21}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\UI\02.Combo_Info">
       <UniqueIdentifier>{3ffd5914-2d3f-4140-83f6-8b399a25f622}</UniqueIdentifier>
@@ -172,6 +148,78 @@
     <Filter Include="02. GameObjects\Effect\EffectPlayer">
       <UniqueIdentifier>{1fd423d2-4f55-41d4-a8b8-a9e94cbde288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI">
+      <UniqueIdentifier>{83794500-3eef-43d7-af6b-3d8241299e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Hp_Bar">
+      <UniqueIdentifier>{7c4d3dfc-0126-4bf0-a8f2-fe2fcda539fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map">
+      <UniqueIdentifier>{0e86ec12-a0e4-47d9-8d11-762bd00246c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map\Mini">
+      <UniqueIdentifier>{196a8218-dd1d-48ec-af3d-0905c9415e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\07.Cut_In_Effect">
+      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Mini_Game">
+      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI">
+      <UniqueIdentifier>{da294850-ab41-4dc0-8595-3688dcf29f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title">
+      <UniqueIdentifier>{1c7cb107-3f60-4626-a7a3-4ff99b14544b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading">
+      <UniqueIdentifier>{a0e5bb6b-cce6-4425-a366-032098bdd2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board">
+      <UniqueIdentifier>{d033310c-a2c6-45c6-a67a-84fa61a43b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option">
+      <UniqueIdentifier>{53ad77b6-fc16-4e82-8d85-dd029aed7add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Result">
+      <UniqueIdentifier>{842ea203-1e1b-49fa-97d3-e83de817bc64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause">
+      <UniqueIdentifier>{493ad216-5aa5-4c36-8e3f-c55767cdf314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Skill_Name">
+      <UniqueIdentifier>{7d783cb9-8601-4daf-910d-041f9e6648d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar">
+      <UniqueIdentifier>{f13d0d49-42ea-4e53-8dd2-9f26cf9f415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Frame">
+      <UniqueIdentifier>{da25a8b7-bd41-458d-b89c-58daa3050c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar">
+      <UniqueIdentifier>{aca9ca19-5fde-4f45-a001-619d29b09a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Skill_Name">
+      <UniqueIdentifier>{082f6c56-f777-4d12-b673-0c1f0a3be6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\FIcon">
+      <UniqueIdentifier>{e7195b5a-20e4-4391-81b3-18ee832c962b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Interaction">
+      <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog">
+      <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission">
+      <UniqueIdentifier>{8aa4b174-b287-49a1-9dab-ea39e81388f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog\Dialog_Manager">
+      <UniqueIdentifier>{7dcfc00b-edb8-4728-9c69-2cf847708ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
+      <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
@@ -180,6 +228,42 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Player\Zenitsu">
       <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title\Title_Manager">
+      <UniqueIdentifier>{6a398fac-b43b-461a-a46d-0a180b3a9c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager">
+      <UniqueIdentifier>{47b281f5-fff1-49d3-b33f-a6f5a869ade8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\02. GamePlay">
+      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\03. Village">
+      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\04. House">
+      <UniqueIdentifier>{b72ed52c-d331-417a-a807-1a5bd490af58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\05. Train">
+      <UniqueIdentifier>{42122498-728c-4179-bbfa-1b3af44a2ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\06. FinalBoss">
+      <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\01.Lobby">
+      <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
+      <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause\Pause_Manager">
+      <UniqueIdentifier>{a4d9dedf-5ff4-4ed4-9201-b1494b2a0ab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option\Option_Manager">
+      <UniqueIdentifier>{77e19af2-afba-4242-9190-38f5013fb4f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager">
+      <UniqueIdentifier>{05100fc0-dd63-41ed-8f22-3b2b40242d05}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Character\NPC">
       <UniqueIdentifier>{f27e214a-4bc3-47d4-986b-68b66d972785}</UniqueIdentifier>
@@ -220,7 +304,7 @@
       <Filter>01. Levels\00. Logo</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_GamePlay.h">
-      <Filter>01. Levels\01. GamePlay</Filter>
+      <Filter>01. Levels\02. GamePlay</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Loading.h">
       <Filter>01. Levels\99. Loadiing</Filter>
@@ -259,16 +343,16 @@
       <Filter>05. SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Village.h">
-      <Filter>01. Levels\02. Village</Filter>
+      <Filter>01. Levels\03. Village</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_FinalBoss.h">
-      <Filter>01. Levels\05. FinalBoss</Filter>
+      <Filter>01. Levels\06. FinalBoss</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_House.h">
-      <Filter>01. Levels\03. House</Filter>
+      <Filter>01. Levels\04. House</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Train.h">
-      <Filter>01. Levels\04. Train</Filter>
+      <Filter>01. Levels\05. Train</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InstanceMapObject.h">
       <Filter>02. GameObjects\Environment\MapObject\InstanceMapObject</Filter>
@@ -295,10 +379,10 @@
       <Filter>02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Battle_Frame.h">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Frame</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Frame</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Battle_Hp.h">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player_Battle_Combo.h">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
@@ -336,6 +420,21 @@
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\World_UI_Hp.h">
+      <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FIcon.h">
+      <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Interaction.h">
+      <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Dialog.h">
+      <Filter>02. GameObjects\UI\04.Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mission.h">
+      <Filter>02. GameObjects\UI\05.Mission</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Sword.h">
       <Filter>02. GameObjects\Character\Player\Sword</Filter>
     </ClInclude>
@@ -344,6 +443,36 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_Zenitsu.h">
       <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\DialogManager.h">
+      <Filter>02. GameObjects\UI\04.Dialog\Dialog_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MissionManager.h">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mini_Map.h">
+      <Filter>02. GameObjects\UI\06.Map\Mini</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Title_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title\Title_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Loading.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Story_Board.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Story_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_Lobby.h">
+      <Filter>01. Levels\01.Lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Pause.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
@@ -378,7 +507,7 @@
       <Filter>01. Levels\00. Logo</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_GamePlay.cpp">
-      <Filter>01. Levels\01. GamePlay</Filter>
+      <Filter>01. Levels\02. GamePlay</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Loading.cpp">
       <Filter>01. Levels\99. Loadiing</Filter>
@@ -420,16 +549,16 @@
       <Filter>05. SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Village.cpp">
-      <Filter>01. Levels\02. Village</Filter>
+      <Filter>01. Levels\03. Village</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_FinalBoss.cpp">
-      <Filter>01. Levels\05. FinalBoss</Filter>
+      <Filter>01. Levels\06. FinalBoss</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_House.cpp">
-      <Filter>01. Levels\03. House</Filter>
+      <Filter>01. Levels\04. House</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Train.cpp">
-      <Filter>01. Levels\04. Train</Filter>
+      <Filter>01. Levels\05. Train</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\InstanceMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\InstanceMapObject</Filter>
@@ -456,10 +585,10 @@
       <Filter>02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Frame</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Frame</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp">
-      <Filter>02. GameObjects\UI\01.Boss_Battle_BAr\Hp_Bar</Filter>
+      <Filter>02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
@@ -497,6 +626,21 @@
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02. GameObjects\Character</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\World_UI_Hp.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\Hp_Bar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FIcon.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\FIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Interaction.cpp">
+      <Filter>02. GameObjects\UI\03.World_UI\Interaction</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dialog.cpp">
+      <Filter>02. GameObjects\UI\04.Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mission.cpp">
+      <Filter>02. GameObjects\UI\05.Mission</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Sword.cpp">
       <Filter>02. GameObjects\Character\Player\Sword</Filter>
     </ClCompile>
@@ -505,6 +649,36 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Zenitsu.cpp">
       <Filter>02. GameObjects\Character\Player\Zenitsu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\DialogManager.cpp">
+      <Filter>02. GameObjects\UI\04.Dialog\Dialog_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MissionManager.cpp">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mini_Map.cpp">
+      <Filter>02. GameObjects\UI\06.Map\Mini</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Title_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Title\Title_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Loading.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Story_Board.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Story_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_Lobby.cpp">
+      <Filter>01. Levels\01.Lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pause.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
       <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>

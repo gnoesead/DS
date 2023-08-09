@@ -73,6 +73,11 @@ HRESULT CCharacter::Render()
 	return S_OK;
 }
 
+CTransform* CCharacter::Get_TransformCom()
+{
+	return m_pTransformCom;
+}
+
 HRESULT CCharacter::Read_Animation_Control_File(const char* szBinfilename)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -363,6 +368,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 	_float4 Pos;
 	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
+	
 	//점프 상태
 	if (m_isJumpOn)
 	{

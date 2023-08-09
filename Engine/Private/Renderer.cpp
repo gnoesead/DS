@@ -462,11 +462,20 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
 	}
+
 	/*if (FAILED(Render_Effect()))
 	{
 		MSG_BOX("Failed to Render_Effect");
 		return E_FAIL;
-	}*/
+	}
+	*/
+
+	if (FAILED(Render_World_UI()))
+	{
+		MSG_BOX("Failed to Render_World_UI");
+		return E_FAIL;
+	}
+
 	if (FAILED(Render_UI()))
 	{
 		MSG_BOX("Failed to Render_UI");
@@ -1357,6 +1366,28 @@ HRESULT CRenderer::Render_Effect()
 
 
 
+
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_World_UI()
+{
+	m_RenderObjects[RENDER_WORLD_UI].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CUI*>(pDest)->Get_UI_Layer() < dynamic_cast<CUI*>(pSrc)->Get_UI_Layer();
+
+	});
+
+	for (auto& pGameObject : m_RenderObjects[RENDER_WORLD_UI])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+
+	}
+
+	m_RenderObjects[RENDER_WORLD_UI].clear();
 
 
 	return S_OK;

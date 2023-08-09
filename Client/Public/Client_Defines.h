@@ -8,7 +8,7 @@ namespace Client
 	static const unsigned int g_iWinSizeY = 720;
 	static int				g_iLoadingTextureIndex = { 0 };
 
-	enum LEVELID { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO
+	enum LEVELID { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO , LEVEL_LOBBY
 				, LEVEL_GAMEPLAY, LEVEL_VILLAGE, LEVEL_HOUSE, LEVEL_TRAIN, LEVEL_FINALBOSS, LEVEL_END };
 }
 

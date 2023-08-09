@@ -23,6 +23,9 @@ HRESULT CUI::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	m_Is_Side_Cut_R = false;
+	m_Is_Side_Cut_L = false;
+
 	return S_OK;
 }
 
