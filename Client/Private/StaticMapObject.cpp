@@ -139,8 +139,8 @@ void CStaticMapObject::Interaction_DoorOpen_Manual(_double TimeDelta)
 			return;
 		}
 
-		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);	
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);		// 
 
 		// 문과의 거리 체크
 		if (Compute::DistCheck(vPlayerPos, vMyPos, 2.f))

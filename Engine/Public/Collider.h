@@ -52,6 +52,8 @@ public:
 	void	Set_AtkDir(_float4 Dir) { m_AtkDir = Dir; }
 	void	Set_fDamage(_float fDmg) { m_fDamage = fDmg; }
 	void	Set_Death(_bool Dead) { m_isDeath = Dead; }
+
+	void	Set_Color(_float4 vColor) { m_vColor = vColor; }
 public:
 	void ReMake_Collider(TYPE eColliderType, _fmatrix TransformMatrix);
 	void ReMake_Collider(_float fRadius);
@@ -91,6 +93,9 @@ private:
 	_float		m_fDamage = { 0.0f };
 	
 	_bool		m_isDeath = { false };
+
+	// For. Color Collider
+	_float4		m_vColor = { 0.f , 1.f , 0.f  , 1.f };
 
 #ifdef _DEBUG
 private:
