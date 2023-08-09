@@ -68,10 +68,10 @@ void CCamera_Free::Tick(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_R))
 	{
-		/*if (false == m_Is_Battle)
+		if (false == m_Is_Battle)
 			m_Is_Battle = true;
 		else if (true == m_Is_Battle)
-			m_Is_Battle = false;*/
+			m_Is_Battle = false;
 	}
 
 	if (true == m_bLockMouse)
@@ -94,7 +94,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Player
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-
+	CTransform* m_pMonsterTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	// Monster
@@ -109,13 +109,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 
+
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
 
 
 	// Lock_On_Change
-	if (pGameInstance->Get_DIKeyDown(DIK_LSHIFT)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_RSHIFT)) {
 		
 		m_Battle_Target_Num++;
 
@@ -125,7 +126,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 	// Combo_On
-	if (pGameInstance->Get_DIKeyDown(DIK_R) && dist <= 7.f) {
+	if (pGameInstance->Get_DIKeyDown(DIK_LSHIFT) && dist <= 7.f) {
 		if (m_bIs_Combo_On == true)
 			m_bIs_Combo_On = false;
 		else {
@@ -505,7 +506,7 @@ void CCamera_Free::LockMouse()
 
 	ClientToScreen(g_hWnd, &ptMouse);
 	SetCursorPos(ptMouse.x, ptMouse.y);
-	ShowCursor(false);
+	//ShowCursor(false);
 }
 
 CCamera_Free* CCamera_Free::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

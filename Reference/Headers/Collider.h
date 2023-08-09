@@ -30,11 +30,28 @@ public:
 		return m_isColl;
 	}
 
+	_bool	Get_SphereOff() { return m_isSphereOff; }
+	_bool	Get_Hit_Small() { return m_isHit_Small; }
+	_bool	Get_Hit_Big() { return m_isHit_Big; }
+	_bool	Get_Hit_Blow() { return m_isHit_Blow; }
+	_bool	Get_Hit_Spin() { return m_isHit_Spin; }
+	_float4		Get_AtkDir() { return m_AtkDir; }
+	_float	Get_fDamage() { return m_fDamage; }
+	_bool	Get_Death() { return m_isDeath; }
 public:
 	void	Set_Coll(_bool isColl) {
 		m_isColl = isColl;
 	}
 
+
+	void	Set_SphereOff(_bool SphereOff) { m_isSphereOff = SphereOff; }
+	void	Set_Hit_Small(_bool Hit) { m_isHit_Small = Hit; }
+	void	Set_Hit_Big(_bool Hit) { m_isHit_Big = Hit; }
+	void	Set_Hit_Blow(_bool	Hit) { m_isHit_Blow = Hit; }
+	void	Set_Hit_Spin(_bool Hit) { m_isHit_Spin = Hit; }
+	void	Set_AtkDir(_float4 Dir) { m_AtkDir = Dir; }
+	void	Set_fDamage(_float fDmg) { m_fDamage = fDmg; }
+	void	Set_Death(_bool Dead) { m_isDeath = Dead; }
 public:
 	void ReMake_Collider(TYPE eColliderType, _fmatrix TransformMatrix);
 	void ReMake_Collider(_float fRadius);
@@ -63,6 +80,17 @@ private:
 	COLLIDERDESC			m_ColliderDesc;
 	_bool					m_isColl = { false };
 	_double					m_dCoolTime = { 3.0 };
+
+	//For. Attack Collider
+	_bool		m_isSphereOff = { false };
+	_bool		m_isHit_Small = { false };
+	_bool		m_isHit_Big = { false };
+	_bool		m_isHit_Blow = { false };
+	_bool		m_isHit_Spin = { false };
+	_float4		m_AtkDir = { 0.f, 0.f, 0.f, 0.f };
+	_float		m_fDamage = { 0.0f };
+	
+	_bool		m_isDeath = { false };
 
 #ifdef _DEBUG
 private:

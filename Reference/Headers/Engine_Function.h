@@ -235,4 +235,26 @@ namespace Engine
 		}
 	
 	};
+
+	class Compute
+	{
+	public:
+		static bool   DistCheck(FXMVECTOR vSour, FXMVECTOR vDest, const float fDist)
+		{//fDist보다 거리가 가깝거나 같으면 ture 반환
+			float fDis = XMVectorGetX(XMVector3Length(vSour - vDest));
+
+			if (fDist >= fDis)
+				return true;
+			else
+				return false;
+		}
+
+		static XMVECTOR Dir_FixY(FXMVECTOR vTargetPos, FXMVECTOR vOwnerPos)
+		{// vSour -> Target포지션 vDest -> 본인 포지션 
+			XMVECTOR vTargetPosition = XMVectorSetY(vTargetPos, XMVectorGetY(vOwnerPos));
+			XMVECTOR vDir = XMVector3Normalize(vTargetPosition - vOwnerPos);
+			return vDir;
+		}
+	};
+
 }

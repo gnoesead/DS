@@ -8,6 +8,23 @@ CLevel_Manager::CLevel_Manager()
 {
 }
 
+_uint CLevel_Manager::Get_CurLevelIdx(_bool isIncludeLoading) const
+{
+	if (true == isIncludeLoading)
+		return m_iLevelIndex;
+	else
+	{
+		if (1 != m_iLevelIndex)
+			return m_iLevelIndex;
+		else
+		{
+			return m_pCurrentLevel->Get_NextLevel();
+		}
+	}
+
+	return 0;
+}
+
 HRESULT CLevel_Manager::Reserve_Containers(_uint iNumLevels)
 {
 	m_pLoadedLevels.resize(iNumLevels);
@@ -62,12 +79,12 @@ HRESULT CLevel_Manager::Swap_Level(_uint iLevelIndex)
 
 	m_pCurrentLevel = m_pLoadedLevels[iLevelIndex];
 
+	m_iLevelIndex = iLevelIndex;
+
 	if (FAILED(m_pCurrentLevel->Initialize()))
 	{
 		MSG_BOX("Failed to Swap_Level : CLevel_Manager");
 	}
-
-	m_iLevelIndex = iLevelIndex;
 
 	return S_OK;
 }

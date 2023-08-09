@@ -33,11 +33,7 @@ HRESULT CLevel_Lobby::Initialize()
     if (FAILED(__super::Initialize()))
         return E_FAIL;
 
-    /*if (FAILED(Ready_Lights()))
-    {
-        MSG_BOX("Failed to Ready_Lights : CLevel_Lobby");
-        return E_FAIL;
-    }*/
+   
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
@@ -45,41 +41,7 @@ HRESULT CLevel_Lobby::Initialize()
         return E_FAIL;
     }
 
-    /*if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Lobby");
-        return E_FAIL;
-    }
-
-    if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Lobby");
-        return E_FAIL;
-    }
-
-    if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_Lobby");
-        return E_FAIL;
-    }
-
-	if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
-	{
-		MSG_BOX("Failed to Ready_Player_UI : CLevel_Lobby");
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Layer_Boss_UI(TEXT("Layer_Boss_UI"))))
-	{
-		MSG_BOX("Failed to Ready_Boss_UI : CLevel_Lobby");
-		return E_FAIL;
-	}
-
-	if (FAILED(Ready_Layer_Effect()))
-	{
-		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_Lobby");
-		return E_FAIL;
-	}*/
+  
 
     return S_OK;
 }
@@ -88,7 +50,9 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
 
-    //CColliderManager::GetInstance()->Check_Collider(LEVEL_LOBBY, dTimeDelta);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 
     SetWindowText(g_hWnd, TEXT("Story_Board"));
 
@@ -97,88 +61,101 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 	m_Select = CStoryManager::GetInstance()->Get_Select_Type();
 
 	
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
 		if (m_Select == 0) {
 
 			HRESULT hr = 0;
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
 
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
 				return;
+			}
+				
 
 		}
 		else if (m_Select == 1) {
 
 			HRESULT hr = 0;
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_VILLAGE))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_VILLAGE);
 
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else if (m_Select == 2) {
 
 			HRESULT hr = 0;
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_HOUSE))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_HOUSE);
 
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else if (m_Select == 3) {
 
 			HRESULT hr = 0;
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_TRAIN))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
 
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
 				return;
+			}
 			
 		}
 		else if (m_Select == 4) {
 
 			HRESULT hr = 0;
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_FINALBOSS))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_FINALBOSS);
 
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
-
-			Safe_Release(pGameInstance);
-
-			if (FAILED(hr))
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
 				return;
+			}
 			
 		}
         
     }
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Lobby::Render()
@@ -452,26 +429,10 @@ HRESULT CLevel_Lobby::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.WorldInfo.fDegree = 0.f;
+    
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 5.f, 140.f, 1.f);
 
-    CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
-    CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
-
-    CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
-
+    
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {

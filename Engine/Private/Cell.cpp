@@ -4,8 +4,7 @@
 #include "PipeLine.h"
 #include "Shader.h"
 #include "VIBuffer_Cell.h"
-#endif // _DEBUG
-
+#endif
 
 CCell::CCell(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -19,22 +18,30 @@ HRESULT CCell::Initialize(const _float3* pPoints, _uint iIndex)
 {
 	memcpy(m_vPoints, pPoints, sizeof(_float3) * POINT_END);
 
-	m_iIndex = iIndex; 
+	_float2 vTemp = { 0.f , 0.f };
 
-	//기존 벡터에 x, z를 바꾸고 x에 -를 붙여 Normal을 만듦
+	m_iIndex = iIndex;
+
 	XMStoreFloat3(&m_vNormals[LINE_AB], XMLoadFloat3(&m_vPoints[POINT_B]) - XMLoadFloat3(&m_vPoints[POINT_A]));
-	m_vNormals[LINE_AB] = _float3(m_vNormals[LINE_AB].z * -1.f, 0.0f, m_vNormals[LINE_AB].x);
+	vTemp = { m_vNormals[LINE_AB].x , m_vNormals[LINE_AB].z };
+	XMStoreFloat2(&vTemp, XMVector2Normalize(XMLoadFloat2(&vTemp)));
+	m_vNormals[LINE_AB] = _float3(vTemp.y * -1.f, 0.f, vTemp.x);
 
 	XMStoreFloat3(&m_vNormals[LINE_BC], XMLoadFloat3(&m_vPoints[POINT_C]) - XMLoadFloat3(&m_vPoints[POINT_B]));
-	m_vNormals[LINE_BC] = _float3(m_vNormals[LINE_BC].z * -1.f, 0.0f, m_vNormals[LINE_BC].x);
+	vTemp = { m_vNormals[LINE_BC].x , m_vNormals[LINE_BC].z };
+	XMStoreFloat2(&vTemp, XMVector2Normalize(XMLoadFloat2(&vTemp)));
+	m_vNormals[LINE_BC] = _float3(vTemp.y * -1.f, 0.f, vTemp.x);
 
 	XMStoreFloat3(&m_vNormals[LINE_CA], XMLoadFloat3(&m_vPoints[POINT_A]) - XMLoadFloat3(&m_vPoints[POINT_C]));
-	m_vNormals[LINE_CA] = _float3(m_vNormals[LINE_CA].z * -1.f, 0.0f, m_vNormals[LINE_CA].x);
+	vTemp = { m_vNormals[LINE_CA].x , m_vNormals[LINE_CA].z };
+	XMStoreFloat2(&vTemp, XMVector2Normalize(XMLoadFloat2(&vTemp)));
+	m_vNormals[LINE_CA] = _float3(vTemp.y * -1.f, 0.f, vTemp.x);
+
 
 #ifdef _DEBUG
 	if (FAILED(Ready_Debug()))
 		return E_FAIL;
-#endif // _DEBUG
+#endif
 
 	return S_OK;
 }
@@ -42,35 +49,29 @@ HRESULT CCell::Initialize(const _float3* pPoints, _uint iIndex)
 _bool CCell::Compare_Points(const _float3* pSourPoint, const _float3* pDestPoint)
 {
 	if (true == XMVector3Equal(XMLoadFloat3(pSourPoint), XMLoadFloat3(&m_vPoints[POINT_A])))
-	{//SourPoint가 A점일 때
+	{
 		if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_B])))
-			//pDestPoint가 B점과 같으면 true
 			return true;
 
 		else if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_C])))
-			//pDestPoint가 C점과 같으면 true
 			return true;
 	}
 
 	if (true == XMVector3Equal(XMLoadFloat3(pSourPoint), XMLoadFloat3(&m_vPoints[POINT_B])))
-	{//SourPoint가 B점일 때
+	{
 		if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_C])))
-			//pDestPoint가 C점과 같으면 true
 			return true;
 
 		else if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_A])))
-			//pDestPoint가 A점과 같으면 true
 			return true;
 	}
 
 	if (true == XMVector3Equal(XMLoadFloat3(pSourPoint), XMLoadFloat3(&m_vPoints[POINT_C])))
-	{//SourPoint가 C점일 때
+	{
 		if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_A])))
-			//pDestPoint가 A점과 같으면 true
 			return true;
 
 		else if (true == XMVector3Equal(XMLoadFloat3(pDestPoint), XMLoadFloat3(&m_vPoints[POINT_B])))
-			//pDestPoint가 B점과 같으면 true
 			return true;
 	}
 
@@ -79,10 +80,10 @@ _bool CCell::Compare_Points(const _float3* pSourPoint, const _float3* pDestPoint
 
 _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
 {
-	for (_uint i = 0; i < LINE_END; i++)
+	for (_uint i = 0; i < LINE_END; ++i)
 	{
 		_vector		vSour = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
-		_vector		vDest = XMVector3Normalize(XMLoadFloat3(&m_vNormals[i]));
+		_vector		vDest = XMLoadFloat3(&m_vNormals[i]);
 
 		if (0.f < XMVectorGetX(XMVector3Dot(vSour, vDest)))
 		{
@@ -94,92 +95,53 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
 	return true;
 }
 
-_float3 CCell::CheckPoint(_float3 vTargetPos, _float fDistance)
+_bool CCell::Check_Point(_float* pPoint, _float fRadius)
 {
-	_int iIndex = { -1 };
-	_float fDis = D3D11_FLOAT32_MAX;
-	_float fMin = D3D11_FLOAT32_MAX;
-	for (_uint i = 0; i < POINT_END; i++)
+	_vector vSourPoint = { pPoint[0] , pPoint[1] ,pPoint[2] ,1.f };
+	_vector vDestPoint;
+
+	for (_uint i = 0; i < POINT_END; ++i)
 	{
-		fDis = XMVectorGetX(XMVector3Length(XMLoadFloat3(&m_vPoints[i]) - XMLoadFloat3(&vTargetPos)));
-		if (fDistance >= fDis)
+		vDestPoint = XMLoadFloat3(&m_vPoints[i]);
+
+		_float fLength = XMVectorGetX(XMVector3Length(vSourPoint - vDestPoint));
+
+		if (fLength <= fRadius)
 		{
-			if (D3D11_FLOAT32_MAX == fMin)
-			{
-				fMin = fDis;
-				iIndex = i;
-			}
-			
-			if (fMin > fDis)
-			{
-				fMin = fDis;
-				iIndex = i;
-			}
+			pPoint[0] = m_vPoints[i].x;
+			pPoint[1] = m_vPoints[i].y;
+			pPoint[2] = m_vPoints[i].z;
+			return true;
 		}
 	}
 
-	if (D3D11_FLOAT32_MAX != fMin)
-		return m_vPoints[iIndex];
-	else
-		return vTargetPos;
+	return false;
+
 }
 
-_vector CCell::Sliding(_fvector vPosition, _fvector vCurrentPos)
+_vector CCell::Get_SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex)
 {
-	for (_uint i = 0; i < LINE_END; i++)
+	_vector vSlidingVector;
+	for (_uint i = 0; i < LINE_END; ++i)
 	{
 		_vector		vSour = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
 		_vector		vDest = XMVector3Normalize(XMLoadFloat3(&m_vNormals[i]));
-
-		if (0.f < XMVectorGetX(XMVector3Dot(vSour, vDest)))
+		_double     Scalar = XMVectorGetX(XMVector3Dot(vSour, vDest));
+		if (0.f < (Scalar))
 		{
-			_vector vDir = XMVector3Normalize(vPosition - vCurrentPos);
-
-			_vector vSliding = (vDir + (XMVector3Dot(-vDir, -vDest)) * -vDest);
-
-			return vSliding;
+			if (0.f < XMVectorGetX(XMVector3Dot(vLook, vDest)))
+				vSlidingVector = (vLook - (XMVector3Dot(vLook, XMVector3Normalize(vDest)) * XMVector3Normalize(vDest)));
+			else
+				vSlidingVector = vLook;
 		}
-	}
 
-	return XMVectorSet(0.f, 0.f, 0.f, 0.f);
+	}
+	return vSlidingVector;
+		
 }
+
 
 #ifdef _DEBUG
-HRESULT CCell::Render_Debug(const _float4* pColor, _float fY)
-{
-	_float4x4		WorldMatrix;
-	XMStoreFloat4x4(&WorldMatrix, XMMatrixIdentity());
-
-
-	CPipeLine* pPipeLine = CPipeLine::GetInstance();
-	Safe_AddRef(pPipeLine);
-
-	WorldMatrix._42 += fY;
-
-	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &WorldMatrix)))
-		return E_FAIL;
-
-	_float4x4 ViewMatrix = pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW);
-
-	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &ViewMatrix)))
-		return E_FAIL;
-
-	_float4x4 ProjMatrix = pPipeLine->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
-
-	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pShader->SetUp_RawValue("g_vColor", pColor, sizeof(_float4))))
-		return E_FAIL;
-
-	Safe_Release(pPipeLine);
-
-	m_pShader->Begin(0);
-
-	m_pVIBuffer->Render();
-
-	return S_OK;
-}
 
 HRESULT CCell::Ready_Debug()
 {
@@ -187,14 +149,20 @@ HRESULT CCell::Ready_Debug()
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 
-	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOS_DECL::Elements, VTXPOS_DECL::iNumElements);
-	if (nullptr == m_pShader)
+	return S_OK;
+}
+
+#ifdef _DEBUG
+HRESULT CCell::Render_Debug()
+{
+	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
 
-	return S_OK;
+	return m_pVIBuffer->Render();
 }
 #endif // _DEBUG
 
+#endif
 CCell* CCell::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _float3* pPoints, _uint iIndex)
 {
 	CCell* pInstance = new CCell(pDevice, pContext);
@@ -207,14 +175,11 @@ CCell* CCell::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const
 
 	return pInstance;
 }
-
 void CCell::Free()
 {
 #ifdef _DEBUG
 	Safe_Release(m_pVIBuffer);
-	Safe_Release(m_pShader);
-#endif // _DEBUG
-
+#endif
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 }

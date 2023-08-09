@@ -41,7 +41,8 @@ public:
 private:    // ¸Ê ¿ÀºêÁ§Æ® ¸ðµ¨ (¿ø)
     HRESULT Load_MapObjectModel_AllStage(CGameInstance* pGameInstance);
     HRESULT Load_MapObjectModel_Village();
-    HRESULT Load_MapObjectModel_House();      
+    HRESULT Load_MapObjectModel_House();
+    HRESULT Load_MapObjectModel_Train();
     HRESULT Load_MapObjectModel_FinalBoss();     
 
     HRESULT LoadingForEffect();

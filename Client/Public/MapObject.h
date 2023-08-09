@@ -20,6 +20,10 @@ public:
 	enum INSTANCE_TYPE { INSTANCE_NONE, INSTANCE_DEFAULT, INSTANCE_GRASS, INSTANCE_END };
 	enum ARRAGNGEMENT_TYPE { ARRANGEMENT_RECT, ARRANGEMENT_LINEX, ARRANGEMENT_LINEY, ARRANGEMENT_END };
 	enum SCENETYPE { SCENE_STATIC, SCENE_GAMEPLAY, SCENE_VILLAGE, SCENE_HOUSE, SCENE_TRAIN, SCENE_FINALBOSS, SCENE_END };
+	enum INTERACTION_TYPE {
+		INTERACTION_NONE, INTERACTION_DOOROPEN_MANUAL_L, INTERACTION_DOOROPEN_MANUAL_R, INTERACTION_DOOROPEN_AUTO,
+		INTERACTION_ROOMCHANGE0, INTERACTION_ROOMCHANGE1, INTERACTION_ROOMCHANGE2, INTERACTION_END
+	};
 
 	typedef struct tagMapObjectInfo
 	{
@@ -41,6 +45,10 @@ public:
 		_uint		iArrangementType = 0;
 
 		_uint		iSceneType = 0;
+
+		_uint		iRenderGroup = 0;
+
+		_uint		iInteractionType = 0;
 
 	}MAPOBJECT_INFO;
 
@@ -68,6 +76,9 @@ public:
 protected:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();
+
+protected:
+	void	Scroll(_double TimeDelta);
 
 protected:
 	CShader* m_pShaderCom = { nullptr };

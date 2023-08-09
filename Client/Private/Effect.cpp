@@ -123,7 +123,7 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	Check_PassIndex();
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT, this)))
 		return;
 }
 

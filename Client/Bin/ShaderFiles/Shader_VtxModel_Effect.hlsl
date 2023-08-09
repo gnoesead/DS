@@ -125,7 +125,7 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
 
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
-
+		
 	if (vMtrlDiffuse.r < 0.1f)
 		discard;
 

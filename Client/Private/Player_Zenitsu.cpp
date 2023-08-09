@@ -27,10 +27,10 @@ HRESULT CPlayer_Zenitsu::Initialize_Prototype()
 
 HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 {
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	if (FAILED(Add_Components()))
+	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
@@ -60,7 +60,7 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 
 	return S_OK;
 }
@@ -124,6 +124,8 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
+
+	
 #endif
 }
 
@@ -171,6 +173,11 @@ HRESULT CPlayer_Zenitsu::Render()
 		m_pModelCom->Render(i);
 	}
 #pragma endregion
+	
+#ifdef _DEBUG
+	CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+	pNavi->Render();
+#endif
 
 
 	return S_OK;
@@ -352,7 +359,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 	{
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_fMove_Speed = 2.0f;
-		m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+		m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed , m_pNavigationCom[m_eCurNavi]);
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -650,9 +657,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		if (0.35f < m_dTime_Hekireki && m_dTime_Hekireki < 0.42f)
 		{
 			if(m_isHekireki_Hit)
-				m_pTransformCom->Go_Straight(dTimeDelta * 0.6f);
+				m_pTransformCom->Go_Straight(dTimeDelta * 0.6f , m_pNavigationCom[m_eCurNavi]);
 			else
-				m_pTransformCom->Go_Straight(dTimeDelta * 20.f);
+				m_pTransformCom->Go_Straight(dTimeDelta * 20.f , m_pNavigationCom[m_eCurNavi]);
 		}
 	}
 	else
@@ -1070,6 +1077,54 @@ HRESULT CPlayer_Zenitsu::Add_Components()
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Shader : CPlayer_Zenitsu");
+		return E_FAIL;
+	}
+
+
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
+	// for.Com_Transform 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Transform : CPlayer_Zenitsu");
+		return E_FAIL;
+	}
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
+	//for.Com_AABB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
+	{
+		MSG_BOX("Failed to Add_Com_AABB : CPlayer_Zenitsu");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
+	//for.Com_OBB 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
+	{
+		MSG_BOX("Failed to Add_Com_OBB : CPlayer_Zenitsu");
+		return E_FAIL;
+	}
+
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
+	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
+	// for.Com_Sphere 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
+	{
+		MSG_BOX("Failed to Add_Com_Sphere : CPlayer_Zenitsu");
 		return E_FAIL;
 	}
 

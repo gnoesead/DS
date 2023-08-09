@@ -167,8 +167,6 @@ HRESULT CLevel_FinalBoss_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
     CharacterDesc.ColliderDesc[CCharacter_Tool::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter_Tool::COLL_SPHERE].vSize.x, 0.f);
 
     CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-
     // AnimTool¿ë
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
         TEXT("Prototype_GameObject_AnimCharacter_Tool"), &CharacterDesc)))

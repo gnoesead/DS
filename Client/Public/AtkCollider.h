@@ -16,6 +16,8 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
+	enum ATK_TYPE { TYPE_SMALL, TYPE_BIG, TYPE_BLOW, TYPE_SPIN, TYPE_END };
+
 	typedef struct tagAtkCollDesc
 	{
 		CTransform* pTransform = { nullptr };
@@ -23,6 +25,10 @@ public:
 		_double		dLifeTime = { 0.0 };
 
 		_float		fDamage = { 0.0 };
+
+		ATK_TYPE	eAtkType = {TYPE_END};
+
+		_float4		AtkDir;
 	}ATKCOLLDESC;
 private:
 	CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -30,6 +36,9 @@ private:
 	virtual ~CAtkCollider() = default;
 
 public:
+	_uint Get_CollCount() {
+		return m_iCollCount;
+	}
 	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
 
 public:
@@ -39,6 +48,9 @@ public:
 	virtual void LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void	Setting_AtkCollDesc();
+
 private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
@@ -46,6 +58,8 @@ private:
 private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
+
+	_uint			m_iCollCount = { 0 };
 
 #ifdef _DEBUG
 private:

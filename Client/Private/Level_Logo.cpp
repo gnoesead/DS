@@ -28,20 +28,29 @@ void CLevel_Logo::Tick(_double dTimeDelta)
 
     SetWindowText(g_hWnd, TEXT("Logo"));
 
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
     if (GetKeyState(VK_RETURN) & 0x8000 && CTitleManager::GetInstance()->Get_Select_Type() == 0)
     {
         HRESULT hr = 0;
 
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-
-        Safe_Release(pGameInstance);
+        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+        {
+            pGameInstance->Clear_Light();
+            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+        }
+        else
+            hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 
         if (FAILED(hr))
+        {
+            Safe_Release(pGameInstance);
             return;
+        }
     }
+
+    Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Logo::Render()

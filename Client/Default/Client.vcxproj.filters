@@ -220,6 +220,9 @@
     <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
       <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
+      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObjects\Character\Player\Sword">
       <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
     </Filter>
@@ -261,6 +264,18 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager">
       <UniqueIdentifier>{05100fc0-dd63-41ed-8f22-3b2b40242d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\NPC">
+      <UniqueIdentifier>{f27e214a-4bc3-47d4-986b-68b66d972785}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_Female">
+      <UniqueIdentifier>{cc786053-573e-4188-a117-9b54e118a1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Spider">
+      <UniqueIdentifier>{1d5240fc-0302-47fd-b572-9b57c0d25c6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Manager">
+      <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +320,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Player.h">
-      <Filter>02. GameObjects\Character\Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ColliderManager.h">
       <Filter>04. ColliderManager</Filter>
@@ -374,9 +386,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_Battle_Combo.h">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Monster.h">
-      <Filter>02. GameObjects\Character\Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AtkCollider.h">
       <Filter>02. GameObjects\AtkCollider</Filter>
@@ -464,6 +473,24 @@
     </ClInclude>
     <ClInclude Include="..\Public\Pause.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boss_Akaza.h">
+      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC.h">
+      <Filter>02. GameObjects\Character\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_Female.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_Female</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Spider.h">
+      <Filter>02. GameObjects\Character\Monster\Spider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MonsterManager.h">
+      <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -566,9 +593,6 @@
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp">
       <Filter>02. GameObjects\UI\02.Combo_Info\Combo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Monster.cpp">
-      <Filter>02. GameObjects\Character\Monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\AtkCollider.cpp">
       <Filter>02. GameObjects\AtkCollider</Filter>
     </ClCompile>
@@ -655,6 +679,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pause.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_Akaza.cpp">
+      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC.cpp">
+      <Filter>02. GameObjects\Character\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Female.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_Female</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02. GameObjects\Character\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Spider.cpp">
+      <Filter>02. GameObjects\Character\Monster\Spider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MonsterManager.cpp">
+      <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

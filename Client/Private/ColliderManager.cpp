@@ -56,7 +56,11 @@ HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTime
 			if (nullptr != pMonster)
 			{
 				CCollider* pMonsterCollider = dynamic_cast<CCollider*>(pMonster->Find_Component(TEXT("Com_Sphere")));
-				pPlayerCollider->Intersect(pMonsterCollider);
+				
+				if(pMonsterCollider->Get_Death() == false)
+					pPlayerCollider->Intersect(pMonsterCollider);
+
+				
 
 				if (true == pPlayerCollider->Get_Coll())
 					iCollCount++;
@@ -64,12 +68,36 @@ HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTime
 				if (true == pMonsterCollider->Get_Coll())
 				{
 					CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
+
 					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+
+					/*
+					_vector vDir = pMonsterTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					pMonsterTransform->Go_Dir(dTimeDelta * 0.2, vDir);
+					pPlayerTransform->Go_Dir(dTimeDelta * 0.2, vDir * -1);
+					*/
+					_float fRad = pPlayerCollider->Get_Collider() + pMonsterCollider->Get_Collider();
 
 					_vector vDir = pMonsterTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
 
-					pMonsterTransform->Go_Dir(dTimeDelta * 0.5, vDir);
-					pPlayerTransform->Go_Dir(dTimeDelta * 0.5, vDir * -1);
+					_float fDis = Convert::GetLength(vDir);
+
+					if (fRad > fDis)
+					{
+						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+						_float fMoveDistance = (fRad - fDis - 0.01f) / 2.0f;
+						//_float fMoveDistance = fRad - fDis - 0.1f;
+						_vector vMove = vMoveDir * fMoveDistance;
+
+						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+						vPlayerPos -= vMove;
+						pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+
+						_vector vMonPos = pMonsterTransform->Get_State(CTransform::STATE_POSITION);
+						vMonPos += vMove;
+						pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonPos);
+					}
 				}
 			}
 		}
@@ -111,14 +139,34 @@ HRESULT CColliderManager::Check_PlayerAtkToMonster(_uint iLevelIndex, _double dT
 
 						if (true == pMonsterCollider->Get_Coll())
 						{
-							//몬스터를 넉백
+							if (pAtkCollider->Get_Hit_Small())
+							{
+								pMonsterCollider->Set_Hit_Small(true);
+							}
+							else if (pAtkCollider->Get_Hit_Big())
+							{
+								pMonsterCollider->Set_Hit_Big(true);
+							}
+							else if (pAtkCollider->Get_Hit_Blow())
+							{
+								pMonsterCollider->Set_Hit_Blow(true);
+							}
+							else if (pAtkCollider->Get_Hit_Spin())
+							{
+								pMonsterCollider->Set_Hit_Spin(true);
+							}
+
+							pMonsterCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
+							pMonsterCollider->Set_fDamage(pAtkCollider->Get_fDamage());
+
+							/*//몬스터를 넉백
 							CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
 							CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
 
 							_vector vDir = pMonsterTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
 
 							pMonsterTransform->Go_Dir(dTimeDelta * 0.5, vDir);
-							//pPlayerTransform->Go_Dir(dTimeDelta * 0.5, vDir * -1);
+							//pPlayerTransform->Go_Dir(dTimeDelta * 0.5, vDir * -1);*/
 						}
 					}
 				}
@@ -158,11 +206,40 @@ HRESULT CColliderManager::Check_MonsterToMonster(_uint iLevelIndex, _double dTim
 
 						CCollider* pSourCollider = dynamic_cast<CCollider*>(pSourMonster->Find_Component(TEXT("Com_Sphere")));
 						CCollider* pDestCollider = dynamic_cast<CCollider*>(pDestMonster->Find_Component(TEXT("Com_Sphere")));
-						pSourCollider->Intersect(pDestCollider);
+
+						if (pSourCollider->Get_SphereOff() == false && pDestCollider->Get_SphereOff() == false)
+						{
+							pSourCollider->Intersect(pDestCollider);
+						}
 
 						if (true == pDestCollider->Get_Coll())
 						{
 							CTransform* pSourTransform = dynamic_cast<CTransform*>(pSourMonster->Find_Component(TEXT("Com_Transform")));
+							CTransform* pDestTransform = dynamic_cast<CTransform*>(pDestMonster->Find_Component(TEXT("Com_Transform")));
+
+							_float fRad = pSourCollider->Get_Collider() + pDestCollider->Get_Collider();
+
+							_vector vDir = pDestTransform->Get_State(CTransform::STATE_POSITION) - pSourTransform->Get_State(CTransform::STATE_POSITION);
+
+							_float fDis = Convert::GetLength(vDir);
+
+							if (fRad > fDis)
+							{
+								_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+								_float fMoveDistance = (fRad - fDis - 0.01f) / 2.0f;
+								//_float fMoveDistance = fRad - fDis - 0.1f;
+								_vector vMove = vMoveDir * fMoveDistance;
+
+								_vector vPlayerPos = pSourTransform->Get_State(CTransform::STATE_POSITION);
+								vPlayerPos -= vMove;
+								pSourTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+
+								_vector vMonPos = pDestTransform->Get_State(CTransform::STATE_POSITION);
+								vMonPos += vMove;
+								pDestTransform->Set_State(CTransform::STATE_POSITION, vMonPos);
+							}
+
+							/*CTransform* pSourTransform = dynamic_cast<CTransform*>(pSourMonster->Find_Component(TEXT("Com_Transform")));
 							CTransform* pDestTransform = dynamic_cast<CTransform*>(pDestMonster->Find_Component(TEXT("Com_Transform")));
 							
 							_vector vDir = pDestTransform->Get_State(CTransform::STATE_POSITION) - pSourTransform->Get_State(CTransform::STATE_POSITION);
@@ -173,7 +250,7 @@ HRESULT CColliderManager::Check_MonsterToMonster(_uint iLevelIndex, _double dTim
 							}
 
 							pDestTransform->Go_Dir(dTimeDelta * 0.5, vDir);
-							pSourTransform->Go_Dir(dTimeDelta * 0.5, vDir * -1);
+							pSourTransform->Go_Dir(dTimeDelta * 0.5, vDir * -1);*/
 						}
 						iDestIndex++;
 					}

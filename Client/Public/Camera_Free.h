@@ -64,7 +64,7 @@ private:
 private:
 	_bool			m_bCamChange = { true };
 	_bool			m_bLockMouse = { true };
-	_bool           m_Is_Battle = { true };
+	_bool           m_Is_Battle = { false };
 	_bool           m_Is_Cut_In = { false };
 	_bool           m_bIs_Combo_On = { false };
 
@@ -76,6 +76,7 @@ private:
 	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
+	_vector			m_vMonsterPos = {};
 	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleCenter = {};
 

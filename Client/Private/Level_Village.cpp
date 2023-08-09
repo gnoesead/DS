@@ -82,23 +82,28 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     SetWindowText(g_hWnd, TEXT("Village"));
 
-    
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
 
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
         HRESULT hr = 0;
 
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
-
-        Safe_Release(pGameInstance);
+        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_HOUSE))
+        {
+            pGameInstance->Clear_Light();
+            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
+        }
+        else
+            hr = pGameInstance->Swap_Level(LEVEL_HOUSE);
 
         if (FAILED(hr))
+        {
+            Safe_Release(pGameInstance);
             return;
+        }
     }
+    Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Village::Render()
@@ -139,19 +144,13 @@ HRESULT CLevel_Village::Ready_Layer_BackGround(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-  /*  if (FAILED(pGameInstance->Add_GameObject(Level_Village, pLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+    /* For.Sky */
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Sky"))))
     {
-        MSG_BOX("Failed to Add_GameObject : Terrain");
+        MSG_BOX("Failed to Add_GameObject : Sky");
         return E_FAIL;
-    }*/
-
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+    }
 
     Safe_Release(pGameInstance);
 
@@ -199,28 +198,12 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
-    CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(555.f, 30.f, 236.f, 1.f);
  
-    CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
-    CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
-
-    CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(555.f, 10.f, 236.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
 
     CharacterDesc.Land_Y = 4.5f;
-
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
+ 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
@@ -409,6 +392,8 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
 
     ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
     for (_uint i = 0; i < iSize; ++i)
     {
         CMapObject::MAPOBJECT_INFO tMapObject_Info;
@@ -431,6 +416,10 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
 
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
@@ -440,21 +429,21 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;

@@ -68,7 +68,10 @@ HRESULT CMapObject::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (5 == m_MapObject_Info.iRenderGroup)
+			m_pShaderCom->Begin(4);
+		else 
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}
@@ -151,6 +154,18 @@ HRESULT CMapObject::SetUp_ShaderResources()
 
 	Safe_Release(pGameInstance);
 	return S_OK;
+}
+
+void CMapObject::Scroll(_double TimeDelta)
+{
+	m_pTransformCom->Set_Speed(200.0);
+
+	m_pTransformCom->Go_Dir(TimeDelta, XMVectorSet(0.f, 0.f, -1.f, 0.f));
+
+	_vector vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (XMVectorGetZ(vCurPos) < -330.0f)
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCurPos + XMVectorSet(0.f, 0.f, 990.0f, 0.f));
 }
 
 void CMapObject::Free()

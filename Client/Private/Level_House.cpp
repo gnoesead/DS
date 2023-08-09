@@ -57,22 +57,28 @@ void CLevel_House::Tick(_double dTimeDelta)
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("House"));
 
-   
-    if (GetKeyState(VK_RETURN) & 0x8000)
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
         HRESULT hr = 0;
 
-        CGameInstance* pGameInstance = CGameInstance::GetInstance();
-        Safe_AddRef(pGameInstance);
-
-        pGameInstance->Clear_Light();
-        hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
-
-        Safe_Release(pGameInstance);
+        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_TRAIN))
+        {
+            pGameInstance->Clear_Light();
+            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
+        }
+        else
+            hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
 
         if (FAILED(hr))
+        {
+            Safe_Release(pGameInstance);
             return;
+        }
     }
+    Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_House::Render()
@@ -173,28 +179,14 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+   
+    CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
 
-    CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
-    CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize = _float3(1.f, 2.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vRotation = _float3(0.f, XMConvertToRadians(45.f), 0.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_OBB].vSize.y * 0.5f, 0.f);
-
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.f, 1.f, 1.f);
-    CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
-
-    CharacterDesc.NaviDesc.iCurrentIndex = 0;
-    CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(130.f, 0.f, 140.f, 1.f);
+    CharacterDesc.Land_Y = 0.f;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-        TEXT("Prototype_GameObject_Player"), &CharacterDesc)))
+        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_House");
         return E_FAIL;
@@ -207,7 +199,7 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    Load_MapObject_Info(TEXT("../../Data/Object/Room1.dat"), pLayerTag);
+    Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
 
     return S_OK;
 }
@@ -229,6 +221,8 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
     CGameObject* pGameObject = { nullptr };
 
     ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
 
     for (_uint i = 0; i < iSize; ++i)
     {
@@ -252,6 +246,9 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
 
         ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
 
+        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
         ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
         ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
@@ -261,22 +258,22 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         switch (tMapObject_Info.iMapObjectType)
         {
         case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
                 return E_FAIL;
             break;
         case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_MapObject"),
+            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
                 TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
                 return E_FAIL;
         default:
