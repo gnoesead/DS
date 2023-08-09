@@ -78,6 +78,9 @@ protected:
 	HRESULT SetUp_ShaderResources();
 
 protected:
+	void	Scroll(_double TimeDelta);
+
+protected:
 	CShader* m_pShaderCom = { nullptr };
 	CRenderer* m_pRendererCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };

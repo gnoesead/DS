@@ -63,6 +63,14 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 		}
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if(LEVEL_TRAIN == pGameInstance->Get_CurLevelIdx())
+		Scroll(TimeDelta);
+	
+	Safe_Release(pGameInstance);
+		
 	//m_pModelInstanceCom->Tick(TimeDelta);
 }
 
