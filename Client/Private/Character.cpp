@@ -65,6 +65,11 @@ HRESULT CCharacter::Render()
 	return S_OK;
 }
 
+CTransform* CCharacter::Get_TransformCom()
+{
+	return m_pTransformCom;
+}
+
 HRESULT CCharacter::Read_Animation_Control_File(const char* szBinfilename)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

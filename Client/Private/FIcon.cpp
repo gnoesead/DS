@@ -133,8 +133,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 7) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.45f;
-		m_Origin_Y = 0.45f;
+		m_Origin_X = 0.45f * 0.6f;
+		m_Origin_Y = 0.45f * 0.6f;
 		m_Size_Param = 0.4f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -146,8 +146,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 8) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.6f;
-		m_Origin_Y = 0.6f;
+		m_Origin_X = 0.6f * 0.6f;
+		m_Origin_Y = 0.6f * 0.6f;
 		m_Size_Param = 1.f;
 		m_UI_Layer = 1;
 		m_fZ = 0.07f;

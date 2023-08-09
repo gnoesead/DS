@@ -95,7 +95,6 @@ private:
 
 	_float                  m_Tone = { 0.f };
 
-
 	_bool                   m_Mask_Pass = { false };
 	_bool                   m_Mask_Gray_Pass = { false };
 
@@ -105,7 +104,6 @@ private:
 	_uint                   m_Mini_Title_Story_Index = { 0 };
 	_bool                   m_Mini_Title_Alpha_Change = { false };
 	_bool                   m_Mini_Title_Change = { false };
-
 
 
 private:

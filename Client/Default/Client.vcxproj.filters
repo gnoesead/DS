@@ -250,6 +250,18 @@
     <Filter Include="01. Levels\01.Lobby">
       <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
+      <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause\Pause_Manager">
+      <UniqueIdentifier>{a4d9dedf-5ff4-4ed4-9201-b1494b2a0ab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option\Option_Manager">
+      <UniqueIdentifier>{77e19af2-afba-4242-9190-38f5013fb4f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager">
+      <UniqueIdentifier>{05100fc0-dd63-41ed-8f22-3b2b40242d05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -450,6 +462,9 @@
     <ClInclude Include="..\Public\Level_Lobby.h">
       <Filter>01. Levels\01.Lobby</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pause.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -637,6 +652,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_Lobby.cpp">
       <Filter>01. Levels\01.Lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Pause.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

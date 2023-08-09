@@ -52,6 +52,7 @@ private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);
 	void BattleCamera(_double dTimeDelta);
+	void SideCamera(_double dTimeDelta);
 	void CutInCamera(_double dTimeDelta);
 	void CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc);
 	void Ready_CutInFinish();
@@ -63,7 +64,7 @@ private:
 private:
 	_bool			m_bCamChange = { true };
 	_bool			m_bLockMouse = { true };
-	_bool           m_Is_Battle = { false };
+	_bool           m_Is_Battle = { true };
 	_bool           m_Is_Cut_In = { false };
 	_bool           m_bIs_Combo_On = { false };
 
@@ -80,10 +81,13 @@ private:
 
 	_float          m_vCameraAngle = { 15.f };
 	_float          m_vAdventureCameraAngle = { 0.f };
-
-	_float          m_fDamping = { 5.f };
 	
+	_float          m_fDamping = { 5.f };
 	_float          m_fLookDamping = { 7.f };
+
+	_uint           m_Battle_Target_Num = { 0 };
+	_uint           m_Battle_Target_MaxNum = { 0 };
+
 
 // Cut_In_Cam	
 private:

@@ -66,7 +66,7 @@ HRESULT CTitle::Initialize(void* pArg)
 	// ·Î°í
 	if (m_UI_Desc.m_Type == 2) {
 
-		m_fX = 952;
+		m_fX = 982;
 		m_fY = 240;
 		m_Origin_X = 860.f;
 		m_Origin_Y = 860.f;
@@ -77,7 +77,7 @@ HRESULT CTitle::Initialize(void* pArg)
 	// Select_Option
 	if (m_UI_Desc.m_Type == 3) {
 
-		m_fX = 960;
+		m_fX = 990;
 		m_fY = 555;
 		m_Origin_X = 784.f;
 		m_Origin_Y = 104.f;
@@ -88,7 +88,7 @@ HRESULT CTitle::Initialize(void* pArg)
 	// Select_GameStart
 	if (m_UI_Desc.m_Type == 4) {
 
-		m_fX = 960;
+		m_fX = 990;
 		m_fY = 497;
 		m_Origin_X = 784.f;
 		m_Origin_Y = 104.f;

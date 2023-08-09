@@ -437,7 +437,7 @@ void CStory_Board::LateTick(_double dTimeDelta)
 		m_Pre_Story_Index = m_Story_Index;
 		m_Title_Alpha_Change = true;
 		m_Mini_Title_Alpha_Change = true;
-		
+
 	}
 
 	if (m_Title_Alpha_Change == true) {
@@ -484,7 +484,7 @@ void CStory_Board::LateTick(_double dTimeDelta)
 	if (m_Mini_Title_Alpha_Change == true) {
 
 		if (m_UI_Desc.m_Type == 13) {
-			m_Alpha -= (_float)dTimeDelta * 3.5f * m_Alpha_Dir;
+			m_Alpha -= (_float)dTimeDelta * 5.f * m_Alpha_Dir;
 
 			if (m_Alpha < 0.f) {
 				m_Alpha = 0.f;
