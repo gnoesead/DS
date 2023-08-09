@@ -44,8 +44,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	m_eCurstate = STATE_IDLE;
 	m_eCurPhase = PHASE_1;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
-
-
+	m_eCurNavi = NAVI_ACAZA;
 
 	return S_OK;
 
@@ -130,15 +129,18 @@ HRESULT CBoss_Akaza::Render()
 		m_pModelCom->Render(i);
 	}
 
+#ifdef _DEBUG
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	_tchar	m_szFPS[MAX_PATH] = TEXT("");
-	wsprintf(m_szFPS, TEXT("HP : %d"), m_iHp);
+	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("HP : %.2f"), m_StatusDesc.fHp);
+	//wsprintf(m_szFPS, TEXT("HP : %.2f"), m_StatusDesc.fHp);
 	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
-
+#endif // DEBUG
 
 	return S_OK;
 }
@@ -213,11 +215,11 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_DELETE))
 		{
-			m_iHp -= 20;
+			m_StatusDesc.fHp -= 20.f;
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_INSERT))
 		{
-			m_iHp += 20;
+			m_StatusDesc.fHp += 20.f;
 		}
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
@@ -388,6 +390,24 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 		}
+		if (pGameInstance->Get_DIKeyDown(DIK_O))
+		{
+			m_bTrigger = true;
+			m_eCurstate = STATE_CINEMATIC;
+
+			m_bAnimFinish = false;
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC1);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC2);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC3);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC4);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC5);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC6);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC7);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC8);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC9);
+			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
+
+		}
 
 
 	}
@@ -448,7 +468,7 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	switch (m_eCurstate)
 	{
 	case CBoss_Akaza::STATE_IDLE:
-		Update_Idle(dTimeDelta);
+		Update_Interact(dTimeDelta);
 		break;
 	case CBoss_Akaza::STATE_BEGIN:
 		Update_Begin(dTimeDelta);
@@ -510,179 +530,35 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_NACHIM_AIRGUN:
 		Update_Nachim_AirGun(dTimeDelta);
 		break;
+	case CBoss_Akaza::STATE_CINEMATIC:
+		Update_Awake_Cinematic(dTimeDelta);
+		break;
 
 
 	}
 
 }
 
-void CBoss_Akaza::Update_Idle(_double dTimeDelta)
+void CBoss_Akaza::Update_Interact(_double dTimeDelta)
 {
 
 	if (m_eCurPhase == PHASE_1)
 	{
-
-		m_eCurAnimIndex = ANIM_IDEL;
-
-		if (m_iHp > 50)
-		{
-			if (m_bPatternStart == false)
-			{
-				if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
-					m_iIdleCnt++;
-
-				if (m_iIdleCnt == 1)
-				{
-					m_iIdleCnt = 0;
-					m_bTrigger = false;
-					m_iTriggerCnt++;
-					if (m_iTriggerCnt >= 5)
-					{
-						m_iTriggerCnt = 0;
-						m_bPatternStart = true;
-					}
-				}
-			}
-			if (m_bPatternStart == true)
-			{
-				_float fDistance = Calculate_Distance();
-				m_dTriggerTime += dTimeDelta;
-				if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
-					m_iIdleCnt++;
-
-				if (m_iIdleCnt == 1)
-				{
-					m_dTriggerTime = 0.0;
-					m_iIdleCnt = 0;
-					m_iRandomPatternNum = Random::Generate_Int(1, 10);
-
-
-					if (fDistance <= 5.f)
-					{
-						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
-						{
-							m_iTriggerCnt = 4;
-							m_bTrigger = false;
-						}
-						if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
-						{
-							m_iTriggerCnt = 3;
-							m_bTrigger = false;
-						}
-					}
-					if (fDistance > 5.f)
-					{
-						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-						{
-							m_iTriggerCnt = 2;
-							m_bTrigger = false;
-						}
-						if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
-						{
-							m_iTriggerCnt = 3;
-							m_bTrigger = false;
-						}
-					}
-				}
-			}
-		}
-		if (m_iHp <= 50 && m_iHp > 0)
-		{
-			if (m_bPatternStart == true)
-			{
-				if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
-					m_iIdleCnt++;
-
-				if (m_iIdleCnt == 1)
-				{
-					m_dTriggerTime = 0.0;
-					m_iIdleCnt = 0;
-					m_bTrigger = false;
-					m_iTriggerCnt = 0;
-					m_bPatternStart = false;
-
-				}
-			}
-			if (m_bPatternStart == false)
-			{
-				_float fDistance = Calculate_Distance();
-				m_dTriggerTime += dTimeDelta;
-				if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
-					m_iIdleCnt++;
-
-				if (m_iIdleCnt == 1)
-				{
-					m_dTriggerTime = 0.0;
-					m_iIdleCnt = 0;
-					m_iRandomPatternNum = Random::Generate_Int(1, 12);
-
-
-					if (fDistance <= 5.f)
-					{
-						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 9)
-						{
-							m_iTriggerCnt = 3;
-							m_bTrigger = false;
-						}
-						if (9 <= m_iRandomPatternNum && m_iRandomPatternNum >= 12)
-						{
-							m_iTriggerCnt = 4;
-							m_bTrigger = false;
-						}
-					}
-					if (fDistance > 5.f)
-					{
-						if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
-						{
-							m_iTriggerCnt = 1;
-							m_bTrigger = false;
-						}
-						if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-						{
-							m_iTriggerCnt = 2;
-							m_bTrigger = false;
-						}
-						if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
-						{
-							m_iTriggerCnt = 3;
-							m_bTrigger = false;
-						}
-						if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
-						{
-							m_iTriggerCnt = 4;
-							m_bTrigger = false;
-						}
-					}
-				}
-			}
-		}
-		if (m_iHp <= 0)
-		{
-			m_bTrigger = false;
-			m_bPatternStart = false;
-			m_iTriggerCnt = 5;
-			m_dTriggerTime = 0.0;
-			m_iIdleCnt = 0;
-
-		}
+		Trigger_Interact_Phase_1(dTimeDelta);
 	}
 	if (m_eCurPhase == PHASE_2)
 	{
-		m_eCurAnimIndex = ANIM_IDEL;
+		Trigger_Interact_Phase_2(dTimeDelta);
 	}
-
+	if (m_eCurPhase == PHASE_3)
+	{
+		Trigger_Interact_Phase_3(dTimeDelta);
+	}
 
 }
 
 void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 {
-	/*if (m_pModelCom->Get_AnimFinish(ANIM_BATTLE_START))
-	{
-		m_eCurAnimIndex = ANIM_BATTLE_START;
-		m_bSetAnim = true;
-	}*/
-
-	//m_bBegin = true;
 
 }
 
@@ -690,13 +566,13 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 {
 	if (m_bTrigger == false)
 	{
-		if (m_iHp > 50)
+		if (m_StatusDesc.fHp > 70.f)
 		{
 
 			switch (m_iTriggerCnt)
 			{
 			case 1:
-				Trigger_Idle();
+				Trigger_Interact();
 				break;
 			case 2:
 				Trigger_DashPunch();
@@ -712,7 +588,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 
 
 		}
-		if (m_iHp <= 50)
+		if (m_StatusDesc.fHp <= 70.f)
 		{
 			switch (m_iTriggerCnt)
 			{
@@ -743,13 +619,220 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 {
+	if (m_bTrigger == false)
+	{
+		if (m_StatusDesc.fHp > 50.f)
+		{
+
+			switch (m_iTriggerCnt)
+			{
+			case 1:
+				Trigger_JumpAirGun();
+				break;
+			case 2:
+				Trigger_AirGun();
+				break;
+			case 3:
+				Trigger_JumpStomp();
+				break;
+			case 4:
+				Trigger_DashKick();
+				break;
+			case 5:
+				Trigger_Escape();
+				break;
+			}
+
+
+		}
+		if (m_StatusDesc.fHp <= 50.f)
+		{
+			switch (m_iTriggerCnt)
+			{
+			case 0:
+				Trigger_Nachim();
+				break;
+			case 1:
+				Trigger_DashPunch();
+				break;
+			case 2:
+				Trigger_AirGun();
+				break;
+			case 3:
+				Trigger_Dash_ComboPunch();
+				break;
+			case 4:
+				Trigger_Escape();
+				break;
+			case 5:
+				Trigger_NextPhase2();
+				break;
+			}
+		}
+
+	}
 }
 
 void CBoss_Akaza::Update_Phase_3(_double dTimeDelta)
 {
 }
 
-void CBoss_Akaza::Trigger_Idle()
+void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
+{
+	m_eCurAnimIndex = ANIM_IDEL;
+
+	if (m_StatusDesc.fHp > 50.f)
+	{
+		if (m_bPatternStart == false)
+		{
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_iIdleCnt = 0;
+				m_bTrigger = false;
+				m_iTriggerCnt++;
+				if (m_iTriggerCnt >= 5)
+				{
+					m_iTriggerCnt = 0;
+					m_bPatternStart = true;
+				}
+			}
+		}
+		if (m_bPatternStart == true)
+		{
+			_float fDistance = Calculate_Distance();
+			m_dTriggerTime += dTimeDelta;
+			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_iRandomPatternNum = Random::Generate_Int(1, 10);
+
+
+				if (fDistance <= 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+				}
+				if (fDistance > 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+					{
+						m_iTriggerCnt = 2;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+				}
+			}
+		}
+	}
+	if (m_StatusDesc.fHp <= 50.f && m_StatusDesc.fHp > 0.f)
+	{
+		if (m_bPatternStart == true)
+		{
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_bTrigger = false;
+				m_iTriggerCnt = 0;
+				m_bPatternStart = false;
+
+			}
+		}
+		if (m_bPatternStart == false)
+		{
+			_float fDistance = Calculate_Distance();
+			m_dTriggerTime += dTimeDelta;
+			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_iRandomPatternNum = Random::Generate_Int(1, 12);
+
+
+				if (fDistance <= 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 9)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum >= 12)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+				}
+				if (fDistance > 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
+					{
+						m_iTriggerCnt = 1;
+						m_bTrigger = false;
+					}
+					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+					{
+						m_iTriggerCnt = 2;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+				}
+			}
+		}
+	}
+	if (m_StatusDesc.fHp <= 0.f)
+	{
+		m_bTrigger = false;
+		m_bPatternStart = false;
+		m_iTriggerCnt = 5;
+		m_dTriggerTime = 0.0;
+		m_iIdleCnt = 0;
+	}
+}
+
+void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
+{
+
+}
+
+void CBoss_Akaza::Trigger_Interact_Phase_3(_double dTimeDelta)
+{
+}
+
+void CBoss_Akaza::Trigger_Interact()
 {
 	m_bTrigger = true;
 	m_eCurstate = STATE_IDLE;
@@ -961,6 +1044,25 @@ void CBoss_Akaza::Trigger_Nachim_ComboPunch()
 
 void CBoss_Akaza::Trigger_Nachim_AirGun()
 {
+
+}
+
+void CBoss_Akaza::Trigger_Awake_Cinematic()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_CINEMATIC;
+
+	m_bAnimFinish = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC1);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC2);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC3);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC4);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC5);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC6);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC7);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC8);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC9);
+	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
 }
 
 void CBoss_Akaza::Update_Escape(_double dTimeDelta)
@@ -1228,6 +1330,7 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 
 void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 {
+
 	if (m_bJump == false)
 	{
 		m_bJump = true;
@@ -1444,22 +1547,22 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 {
 	if (m_bAnimFinish == false)
 	{
-		m_iHp = 0;
+		m_StatusDesc.fHp = 0.f;
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_HEAL;
 	}
 
-	
-	if(m_pModelCom->Get_AnimRatio(ANIM_HEAL,0.0) && !m_pModelCom->Get_AnimRatio(ANIM_HEAL,1.0))
+
+	if (m_pModelCom->Get_AnimRatio(ANIM_HEAL, 0.0) && !m_pModelCom->Get_AnimRatio(ANIM_HEAL, 1.0))
 	{
-		
+
 		_double dRatio = m_pModelCom->Get_dAnimRatio(ANIM_HEAL);
 		if (dRatio > 0.0)
 		{
 			if (dRatio > 0.97)
 				dRatio = 1.0;
 
-			m_iHp = 100 * dRatio;
+			m_StatusDesc.fHp = 100.f * (_float)dRatio;
 		}
 	}
 
@@ -1591,34 +1694,68 @@ void CBoss_Akaza::Update_Nachim_AirGun(_double dTimeDelta)
 
 }
 
-//_float CBoss_Akaza::Calculate_Distance()
-//{
-//	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-//	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-//	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-//	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
-//
-//	return fDistance;
-//}
-//
-//_vector CBoss_Akaza::Calculate_Dir()
-//{
-//
-//	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-//	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-//
-//	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-//
-//	return vDir;
-//}
-//
-//_vector CBoss_Akaza::Calculate_Dir_FixY()
-//{
-//	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-//	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-//
-//	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
-//}
+void CBoss_Akaza::Update_Awake_Cinematic(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_CINEMATIC1;
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC1) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC1);
+		m_eCurAnimIndex = ANIM_CINEMATIC2;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC2) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC2);
+		m_eCurAnimIndex = ANIM_CINEMATIC3;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC3) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC3);
+		m_eCurAnimIndex = ANIM_CINEMATIC4;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC4) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC4);
+		m_eCurAnimIndex = ANIM_CINEMATIC5;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC5) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC5);
+		m_eCurAnimIndex = ANIM_CINEMATIC6;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC6) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC6);
+		m_eCurAnimIndex = ANIM_CINEMATIC7;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC7) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC7);
+		m_eCurAnimIndex = ANIM_CINEMATIC8;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC8) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC8);
+		m_eCurAnimIndex = ANIM_CINEMATIC9;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC9) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC9);
+		m_eCurAnimIndex = ANIM_CINEMATIC10;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_CINEMATIC10) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
+		m_eCurAnimIndex = ANIM_IDEL;
+		Trigger_Interact();
+	}
+
+}
+
 
 HRESULT CBoss_Akaza::Add_Components()
 {
@@ -1685,6 +1822,17 @@ HRESULT CBoss_Akaza::Add_Components()
 		MSG_BOX("Failed to Add_Com_Sphere : CBoss_Akaza_Akaza");
 		return E_FAIL;
 	}
+
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 1;
+	/* for.Com_Navigation_Acaza*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
+		TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
+		return E_FAIL;
+	}
+
+
 
 	return S_OK;
 }

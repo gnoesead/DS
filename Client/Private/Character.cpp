@@ -275,7 +275,7 @@ void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float cons
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
+		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -299,7 +299,7 @@ void CCharacter::Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float con
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Left(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Left(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -307,7 +307,7 @@ void CCharacter::Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float co
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Right(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Right(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
