@@ -17,6 +17,7 @@
 #include "RotationMapObject.h"
 #include "InstanceMapObject.h"
 #include "Sky.h"
+
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
 #include "Player_Battle_Mp.h"
@@ -25,6 +26,15 @@
 #include "Player_Battle_Ult_Frame.h"
 #include "Player_Battle_Combo.h"
 #include "Player_Battle_Ult_Effect.h"
+#include "World_UI_Hp.h"
+#include "FIcon.h"
+#include "Interaction.h"
+#include "Dialog.h"
+#include "Mission.h"
+#include "Mini_Map.h"
+#include "Title.h"
+#include "Loading.h"
+#include "Story_Board.h"
 
 #include "NPC_Female.h"
 
@@ -66,6 +76,16 @@ unsigned int APIENTRY Loading_Main(void* pArg)
 		if (false == pLoader->Get_Loaded())
 		{
 			hr = pLoader->LoadingForLogo();
+		}
+		else
+		{
+			pLoader->Set_Finished();
+		}
+		break;
+	case LEVEL_LOBBY:
+		if (false == pLoader->Get_Loaded())
+		{
+			hr = pLoader->LoadingForLobby();
 		}
 		else
 		{
@@ -245,6 +265,23 @@ HRESULT CLoader::LoadingForLogo()
 		MSG_BOX("Failed to Add_Prototype_GameObject_BackGround");
 		return E_FAIL;
 	}
+
+	/* Protoype_GameObject_Title*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
+		CTitle::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Title");
+		return E_FAIL;
+	}
+
+	/* Protoype_GameObject_Loading*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),
+		CLoading::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region Particale
@@ -267,8 +304,9 @@ HRESULT CLoader::LoadingForLogo()
 	return S_OK;
 }
 
-HRESULT CLoader::LoadingForGamePlay()
+HRESULT CLoader::LoadingForLobby()
 {
+	
 	SetWindowText(g_hWnd, TEXT("LoadingForStage"));
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -278,7 +316,7 @@ HRESULT CLoader::LoadingForGamePlay()
 
 	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
 #pragma region Texture
-		
+
 #pragma region EnvironmentTexture
 
 
@@ -302,13 +340,13 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma region Model
 
 #pragma region Buffer
-	
+
 #pragma endregion
 	_matrix		PivotMatrix = XMMatrixIdentity();
 #pragma region Effect
 
 #pragma endregion
-	
+
 #pragma region Character
 	/* Prototype_Component_Model_Tanjiro */
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -318,7 +356,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
 		return E_FAIL;
 	}
-	
+
 	// Prototype_Component_Model_Tanjiro_Sword
 	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_Sword"),
@@ -336,7 +374,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_Sword_In");
 		return E_FAIL;
 	}
-	
+
 	// Prototype_Component_Model_Tanjiro_SwordHome 
 	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tanjiro_SwordHome"),
@@ -415,7 +453,7 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 #pragma region NonCharacter
-	
+
 #pragma endregion
 
 #pragma region Terrain
@@ -450,7 +488,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -580,45 +618,7 @@ HRESULT CLoader::LoadingForGamePlay()
 		return E_FAIL;
 	}
 
-	/* Prototype_GameObject_Player Battle Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
-		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
-	/* Prototype_GameObject_Player Battle Hp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Hp"),
-		CPlayer_Battle_Hp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Mp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Mp"),
-		CPlayer_Battle_Mp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Ult Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"),
-		CPlayer_Battle_Ult_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Combo */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Combo"),
-		CPlayer_Battle_Combo::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Boss Battle Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Frame"),
-		CBoss_Battle_Frame::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Boss Battle Hp */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Hp"),
-		CBoss_Battle_Hp::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_Player Battle Ult Frame */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"),
-		CPlayer_Battle_Ult_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
 #pragma endregion
 
@@ -662,9 +662,85 @@ HRESULT CLoader::LoadingForGamePlay()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Sky");
 		return E_FAIL;
 	}
+
+
 #pragma endregion
 
 #pragma region UI
+	/* Prototype_GameObject_Player Battle Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Frame"),
+		CPlayer_Battle_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Hp"),
+		CPlayer_Battle_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Mp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Mp"),
+		CPlayer_Battle_Mp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Ult Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"),
+		CPlayer_Battle_Ult_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Combo */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Combo"),
+		CPlayer_Battle_Combo::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Boss Battle Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Frame"),
+		CBoss_Battle_Frame::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Boss Battle Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Boss_Battle_Hp"),
+		CBoss_Battle_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Player Battle Ult Frame */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"),
+		CPlayer_Battle_Ult_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_World_UI_Hp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_World_UI_Hp"),
+		CWorld_UI_Hp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_FIcon */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FIcon"),
+		CFIcon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_interaction */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Interaction"),
+		CInteraction::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Dialog */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dialog"),
+		CDialog::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Mission */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mission"),
+		CMission::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Mini_Map */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mini_Map"),
+		CMini_Map::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Story_Board */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Story_Board"),
+		CStory_Board::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -675,6 +751,70 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma region Effect
 
 #pragma endregion
+
+#pragma endregion
+
+	Safe_Release(pGameInstance);
+
+	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
+	m_isFinished = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::LoadingForGamePlay()
+{
+	SetWindowText(g_hWnd, TEXT("LoadingForLogo"));
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+#pragma region COMPONENTS
+
+	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
+#pragma region Texture
+
+#pragma endregion
+
+	SetWindowText(g_hWnd, TEXT("Loading Model..."));
+#pragma region Model
+
+#pragma endregion
+
+	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
+#pragma region Shader
+
+#pragma endregion
+
+	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
+#pragma region Etc
+
+#pragma endregion
+
+
+#pragma endregion
+
+#pragma region GAMEOBJECTS
+
+	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+#pragma region Object
+
+#pragma endregion
+
+#pragma region UI
+	
+
+#pragma endregion
+
+#pragma region Particale
+
+#pragma endregion
+
+#pragma region Effect
+
+#pragma endregion
+
+
 
 #pragma endregion
 
@@ -937,7 +1077,7 @@ HRESULT CLoader::LoadingForTrain()
 #pragma endregion
 
 #pragma region Terrain
-
+	Load_MapObjectModel_Train();
 #pragma endregion
 
 #pragma endregion
@@ -1360,6 +1500,11 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	_matrix			PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+
+	/* For.Prototype_Component_Model_Sky_Village*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Sky_Village"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Sky_Village.bin", PivotMatrix))))
+		return E_FAIL;
 
 	/* For.Prototype_Component_Model_VillageTerrain*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_VillageTerrain"),
@@ -2583,6 +2728,66 @@ HRESULT CLoader::Load_MapObjectModel_House()
 
 	Safe_Release(pGameInstance);
 
+	return S_OK;
+}
+
+HRESULT CLoader::Load_MapObjectModel_Train()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_matrix			PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+
+	/* For.Prototype_Component_Model_Sky_Train*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Sky_Train"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Scrollground_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Scrollground_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Scrollground_01a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Scrollground_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Scrollground_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Scrollground_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Locomotive_01*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Locomotive_01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Locomotive_01.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Locomotive_02*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Locomotive_02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Locomotive_02.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Locomotive_03*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Locomotive_03"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Locomotive_03.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03c.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03d*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03d"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03d.bin", PivotMatrix))))
+		return E_FAIL;
+	 
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

@@ -4,6 +4,10 @@
 #include "Level_Loading.h"
 #include "AtkCollManager.h"
 #include "ColliderManager.h"
+#include "DialogManager.h"
+#include "MissionManager.h"
+#include "Title_Manager.h"
+#include "Story_Manager.h"
 #include "MonsterManager.h"
 
 #include "SoundMgr.h"
@@ -61,6 +65,12 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(m_pGameInstance->Add_Font(m_pDevice, m_pContext, TEXT("Font_DM"), TEXT("../Bin/Resources/Fonts/DMex.spritefont"))))
+	{
+		MSG_BOX("Failed to Add_Font");
+		return E_FAIL;
+	}
+
 	if (FAILED(Ready_Prototype_Component_For_Static()))
 	{
 		MSG_BOX("Failed to Ready_Prototype_Component_For_Static");
@@ -85,6 +95,10 @@ void CMainApp::Tick(_double dTimeDelta)
 		return;
 
 	m_pGameInstance->Tick_Engine(dTimeDelta);
+
+	CTitleManager::GetInstance()->Tick();
+	
+
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -128,13 +142,13 @@ HRESULT CMainApp::Render()
 		m_TimeAcc = 0.0;
 	}
 
-	if (m_isRenderDebugInfo) {
+	if (true == m_isRenderFPS)
+	{
+		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
+			return E_FAIL;
+	}
 
-		if (true == m_isRenderFPS)
-		{
-			if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
-				return E_FAIL;
-		}
+	if (m_isRenderDebugInfo) {
 
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_KR"), TEXT("Num0 To OnOff StaticCam"), _float2(0.f, 620.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
@@ -170,7 +184,18 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	HRESULT hr = 0;
 	if (true == m_pGameInstance->Get_IsStage())
 	{
-		if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL) & 0x80)
+		if (m_pGameInstance->Get_DIKeyDown(DIK_F9))
+		{
+			if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+			{
+				m_pGameInstance->Clear_Light();
+				hr = m_pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+			}
+			else
+				hr = m_pGameInstance->Swap_Level(LEVEL_LOBBY);
+		}
+
+		/*if (m_pGameInstance->Get_DIKeyState(DIK_LCONTROL) & 0x80)
 		{
 			if (m_pGameInstance->Get_DIKeyDown(DIK_1))
 			{
@@ -182,7 +207,6 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_LOGO);
 			}
-
 			if (m_pGameInstance->Get_DIKeyDown(DIK_2))
 			{
 				if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
@@ -193,7 +217,6 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
 			}
-
 			if (m_pGameInstance->Get_DIKeyDown(DIK_3))
 			{
 				if (nullptr == m_pGameInstance->Get_LoadedStage(LEVEL_VILLAGE))
@@ -237,7 +260,7 @@ void CMainApp::Key_Input(_double dTimeDelta)
 				else
 					hr = m_pGameInstance->Swap_Level(LEVEL_FINALBOSS);
 			}
-		}
+		}*/
 	}
 
 
@@ -250,13 +273,8 @@ void CMainApp::Key_Input(_double dTimeDelta)
 	if (m_pGameInstance->Get_DIKeyDown(DIK_F8))
 		m_pRenderer->OnOff_RenderTarget();
 	
-	if (m_pGameInstance->Get_DIKeyDown(DIK_TAB))
+	if (m_pGameInstance->Get_DIKeyDown(DIK_LCONTROL))
 		m_isRenderDebugInfo = !m_isRenderDebugInfo;
-
-	/*if (m_pGameInstance->Get_DIKeyDown(DIK_P))
-		CEffectPlayer::Get_Instance()->Play("hjd");
-	if (m_pGameInstance->Get_DIKeyDown(DIK_O))
-		CEffectPlayer::Get_Instance()->Stop("hjd");*/
 
 }
 #endif // _DEBUG
@@ -310,7 +328,82 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
+
 	/* Prototype_Component_Texture_UI */
+
+#pragma region Title_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Title_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Select"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Title_Select_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Eff"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Eff_%d.png"), 2))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Loading_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Loading_%d.png"), 11))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Door"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Door/Door_%d.png"), 7))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Walk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Loading/Walk/Walk_%d.png"), 6))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Story_Board_UI
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_%d.png"), 5))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Deco"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_Deco_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Bg_Mask"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Bg_Mask_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Cloud"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Cloud_%d.png"), 4))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Cursor"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Cursor.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Icon"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Icon_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Line"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Line.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Mini_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Mini_Title.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Title"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Title_%d.png"), 5))))
+		return E_FAIL;
+
+	
+
+#pragma endregion
 
 #pragma region Player_Battle_Bar_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Frame"),
@@ -318,12 +411,12 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Face"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/P/C_%d.png"), 5))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/P/C_%d.dds"), 5))))
 		return E_FAIL;
 
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Name"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/P/N_%d.png"), 5))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/P/N_%d.dds"), 5))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Hp"),
@@ -402,12 +495,65 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/B/Hp_%d.png"), 4))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_World_Hp"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/M/Hp_%d.dds"),4))))
+		return E_FAIL;
 
 #pragma endregion
 
-#pragma region Navigation
-	// Village Map
+#pragma region FIcon_UI	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Main"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Main_%d.dds"),3))))
+		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Mini"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Mini_%d.dds"), 2))))
+		return E_FAIL;
+	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Talk_%d.dds"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_LockOn"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_LockOn_%d.dds"), 2))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Interaction_UI	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Interaction"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Interaction/Interaction_%d.dds"),2))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Dialog_UI	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dialog"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Dialog/Dialog_%d.png"), 3))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Mission_UI	
+	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mission"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Mission/Mission_%d.dds"), 6))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Map_UI	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mini_Map"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 3))))
+		return E_FAIL;
+
+#pragma endregion	
+
+
+#pragma region Navigation
+
+	// Village Map
 	/* Prototype_Component_Navigation_Village_MainRoad1 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_MainRoad1.dat")))))
@@ -497,7 +643,16 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
-	// Acaza Map
+	// ========================Train Map======================================
+	/* Prototype_Component_Navigation_Train*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Train"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Train/Navi_Train.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Train");
+		return E_FAIL;
+	}
+
+	// ========================Acaza Map====================================
 
 	/* Prototype_Component_Navigation_Acaza */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
@@ -562,5 +717,10 @@ void CMainApp::Free()
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
+	CDialogManager::GetInstance()->DestroyInstance();
+	CMissionManager::GetInstance()->DestroyInstance();
+	CTitleManager::GetInstance()->DestroyInstance();
+	CStoryManager::GetInstance()->DestroyInstance();
+
 	CGameInstance::Release_Engine();
 }

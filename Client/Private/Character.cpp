@@ -73,6 +73,11 @@ HRESULT CCharacter::Render()
 	return S_OK;
 }
 
+CTransform* CCharacter::Get_TransformCom()
+{
+	return m_pTransformCom;
+}
+
 HRESULT CCharacter::Read_Animation_Control_File(const char* szBinfilename)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -461,6 +466,23 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
 
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
+}
+
+void CCharacter::Set_Height()
+{
+	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (LEVEL_TRAIN == pGameInstance->Get_CurLevelIdx())
+	{
+		_float vPosX = XMVectorGetX(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		m_fLand_Y -= fabsf(vPosX - 205.15f) * 0.15f;
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 

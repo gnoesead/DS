@@ -48,11 +48,26 @@ void CSky::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	_float4  vCamPos = pGameInstance->Get_CameraPosition();
+	_float4 vCameraPos = pGameInstance->Get_CameraPosition();
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&vCamPos));
+	_uint iCurLevelIdx = pGameInstance->Get_CurLevelIdx();
 
-	Safe_Release(pGameInstance);	
+	_vector vOffset = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+
+	switch (iCurLevelIdx)
+	{
+	case LEVEL_TRAIN:
+		vOffset = XMVectorSet(0.f, -2.5f, 0.f, 0.f);
+		break;
+	default:
+		break;
+	}
+	
+	_vector vCamPosition = XMLoadFloat4(&vCameraPos) + vOffset;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCamPosition);
+
+	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this)))
 		return;
@@ -99,9 +114,34 @@ HRESULT CSky::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_FINALBOSS, TEXT("Prototype_Component_Model_Sky"),
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-		return E_FAIL;
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iCurLevelIdx = pGameInstance->Get_CurLevelIdx();
+	
+	switch (iCurLevelIdx)
+	{
+	case LEVEL_VILLAGE:
+		if (FAILED(__super::Add_Component(iCurLevelIdx, TEXT("Prototype_Component_Model_Sky_Village"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+		break;
+	case LEVEL_TRAIN:
+		if (FAILED(__super::Add_Component(iCurLevelIdx, TEXT("Prototype_Component_Model_Sky_Train"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+		break;
+	case LEVEL_FINALBOSS:
+		if (FAILED(__super::Add_Component(iCurLevelIdx, TEXT("Prototype_Component_Model_Sky"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+		break;
+	default:
+		break;
+	}
+
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

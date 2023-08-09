@@ -56,6 +56,8 @@ void CPlayer::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	Set_Height();
+
 	if (m_isLand_Roof)
 		m_fLand_Y = 7.45f;
 	else
@@ -906,6 +908,14 @@ HRESULT CPlayer::Add_Components()
 		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Train*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Train"),
+		TEXT("Com_Navigation_Train"), (CComponent**)&m_pNavigationCom[NAVI_TRAIN], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Train: CPlayer");
 		return E_FAIL;
 	}
 

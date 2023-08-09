@@ -10,6 +10,23 @@ BEGIN(Client)
 
 class CCamera_Free final : public CCamera
 {
+
+	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, AKAZA_FINISH, END_FINISH };
+
+	typedef struct Cut_In_Camera_Desc
+	{
+		_bool bTarget_Is_Player = {};
+		_bool bLookTarget_Is_Player = {};
+		_float Angle_Hori = {};
+		_float Angle_Verti = {};
+		_float fDistance = {};
+		_float fLifeTime = {};
+		_vector vOffSet = {};
+		_bool bIs_Lerp = {};
+
+	}CutInCamDesc;
+
+
 private:
 	CCamera_Free(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera_Free(const CCamera_Free& rhs);
@@ -25,12 +42,20 @@ public:
 
 public:
 	_float4		Get_CameraLook() { return m_fCameraLook; }
+	
+	_vector		Get_Battle_Target_Pos() { return m_vBattleTargetPos; }
+
+	_bool       Get_Is_Battle() { return m_Is_Battle; }
+	_bool       Get_Is_Cut_In() { return m_Is_Cut_In; }
 
 private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);
 	void BattleCamera(_double dTimeDelta);
+	void SideCamera(_double dTimeDelta);
 	void CutInCamera(_double dTimeDelta);
+	void CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc);
+	void Ready_CutInFinish();
 
 private:
 	void Turn_Camera(_double TimeDelta);
@@ -39,7 +64,7 @@ private:
 private:
 	_bool			m_bCamChange = { true };
 	_bool			m_bLockMouse = { true };
-	_bool           m_Is_Battle = { true };
+	_bool           m_Is_Battle = { false };
 	_bool           m_Is_Cut_In = { false };
 	_bool           m_bIs_Combo_On = { false };
 
@@ -57,11 +82,25 @@ private:
 
 	_float          m_vCameraAngle = { 15.f };
 	_float          m_vAdventureCameraAngle = { 0.f };
-
-	_float          m_fDamping = { 5.f };
 	
+	_float          m_fDamping = { 5.f };
 	_float          m_fLookDamping = { 7.f };
 
+	_uint           m_Battle_Target_Num = { 0 };
+	_uint           m_Battle_Target_MaxNum = { 0 };
+
+
+// Cut_In_Cam	
+private:
+	vector<CutInCamDesc> m_Cut_In_Finish[END_FINISH];
+
+	_uint m_Cut_In_Finish_Type = { 0 };
+
+	_uint m_Cut_In_Finish_Cam_Num = { 0 };
+
+	_float m_Cut_In_Finish_TimeAcc = { 0.f };
+
+	_bool  m_Cut_In_IsDone = { false };
 
 public:
 	static CCamera_Free* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
