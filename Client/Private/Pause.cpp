@@ -40,7 +40,7 @@ HRESULT CPause::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Frame
+	// Frame_1
 	if (m_UI_Desc.m_Type == 0) {
 
 		m_fX = 640;
@@ -56,7 +56,7 @@ HRESULT CPause::Initialize(void * pArg)
 		m_UI_Layer = 1;
 	}
 
-	// Name_Frame
+	// Frame_2
 	if (m_UI_Desc.m_Type == 1) {
 
 		m_fX = 398;
@@ -72,8 +72,72 @@ HRESULT CPause::Initialize(void * pArg)
 		m_UI_Layer = 1;
 	}
 
-	// Arrow
+	// Top
 	if (m_UI_Desc.m_Type == 2) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 32;
+		m_Origin_Y = 32;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// Deco
+	if (m_UI_Desc.m_Type == 4) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 32;
+		m_Origin_Y = 32;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 로비로 돌아가기
+	if (m_UI_Desc.m_Type == 5) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 32;
+		m_Origin_Y = 32;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 옵션
+	if (m_UI_Desc.m_Type == 6) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 32;
+		m_Origin_Y = 32;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 백그라운드
+	if (m_UI_Desc.m_Type == 7) {
 
 		m_fX = 640;
 		m_fY = 740;
@@ -95,20 +159,11 @@ HRESULT CPause::Initialize(void * pArg)
 	Set_UI();
 
 
-	m_szText_1.push_back(L"탄지로와 소녀");
-	m_szText_1.push_back(L"1");
-	m_szText_1.push_back(L"245");
-	m_szText_1.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-	m_szText_2.push_back(L"탄지로와 어머니");
-	m_szText_2.push_back(L"탄지로");
-	m_szText_2.push_back(L"245");
-	m_szText_2.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_2.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-
+	m_szText_1.push_back(L"로비로 돌아가기");
+	
+	m_szText_2.push_back(L"옵션");
+	
+	
 
 	return S_OK;
 }
@@ -136,30 +191,12 @@ void CPause::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
-	
 
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true) {
 
-		m_Cur_Num++;
-		m_Name_Type *= -1;
-
-		if (m_Dialog_Type == 0) {
-			if (m_Cur_Num > m_szText_1.size() - 1) {
-				m_Cur_Num = 0;
-				m_Is_Out = true;
-				m_Is_Font_Render = false;
-				m_Name_Type = 1;
-			}
-		}
-		else if (m_Dialog_Type == 1) {
-			if (m_Cur_Num > m_szText_2.size() - 1) {
-				m_Cur_Num = 0;
-				m_Is_Out = true;
-				m_Is_Font_Render = false;
-				m_Name_Type = 1;
-			}
-		}
+		m_Is_Out = true;
+		m_Is_Font_Render = false;
+		m_Name_Type = 1;
 
 	}
 
@@ -210,29 +247,15 @@ HRESULT CPause::Render()
 		Safe_AddRef(pGameInstance);
 
 
-		if (m_UI_Desc.m_Type == 0) {
-			if (m_Dialog_Type == 0) {
+		if (m_UI_Desc.m_Type == 5) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
-					return E_FAIL;
-			}
-			else if (m_Dialog_Type == 1) {
-
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				return E_FAIL;
 		}
-		else if (m_UI_Desc.m_Type == 1) {
-			if (m_Dialog_Type == 0) {
-				
-				
-				
-			}
-			else if (m_Dialog_Type == 1) {
+		else if (m_UI_Desc.m_Type == 6) {
 
-				
-
-			}
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				return E_FAIL;
 		}
 
 
@@ -263,7 +286,7 @@ HRESULT CPause::Add_Components()
 
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dialog"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Pause"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
