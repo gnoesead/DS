@@ -158,7 +158,7 @@ HRESULT CMapObject::SetUp_ShaderResources()
 
 void CMapObject::Scroll(_double TimeDelta)
 {
-	m_pTransformCom->Set_Speed(160.0);
+	m_pTransformCom->Set_Speed(200.0);
 
 	m_pTransformCom->Go_Dir(TimeDelta, XMVectorSet(0.f, 0.f, -1.f, 0.f));
 

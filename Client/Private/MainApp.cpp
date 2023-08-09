@@ -404,8 +404,8 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma endregion
 
 #pragma region Navigation
-	// Village Map
 
+	// Village Map
 	/* Prototype_Component_Navigation_Village_MainRoad1 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_MainRoad1.dat")))))
@@ -495,7 +495,16 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
-	// Acaza Map
+	// ========================Train Map======================================
+	/* Prototype_Component_Navigation_Train*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Train"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Train/Navi_Train.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Train");
+		return E_FAIL;
+	}
+
+	// ========================Acaza Map====================================
 
 	/* Prototype_Component_Navigation_Acaza */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),

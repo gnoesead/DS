@@ -88,6 +88,10 @@ protected:
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
+
+protected:	 
+	// 네비매쉬 높이설정(안원추가)
+	void	Set_Height();
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;

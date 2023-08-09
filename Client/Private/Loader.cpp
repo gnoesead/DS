@@ -2627,7 +2627,26 @@ HRESULT CLoader::Load_MapObjectModel_Train()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Locomotive_03.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_FarHouse_03a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03a.bin", PivotMatrix))))
+		return E_FAIL;
 
+	/* For.Prototype_Component_Model_FarHouse_03b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03c.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_FarHouse_03d*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03d"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03d.bin", PivotMatrix))))
+		return E_FAIL;
+	 
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

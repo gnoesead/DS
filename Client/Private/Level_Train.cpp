@@ -125,13 +125,13 @@ HRESULT CLevel_Train::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }*/
 
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+    /* For.Sky */
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
+        TEXT("Prototype_GameObject_Sky"))))
+    {
+        MSG_BOX("Failed to Add_GameObject : Sky");
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 
@@ -153,7 +153,7 @@ HRESULT CLevel_Train::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(60.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+    CameraDesc.fFarZ = 300.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
@@ -181,7 +181,8 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
 
    
     CharacterDesc.WorldInfo.vPosition = _float4(206.75f, 7.3f, 300.63f, 1.f);
-    CharacterDesc.Land_Y = 7.3f;
+    CharacterDesc.Land_Y = 6.6f;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_TRAIN;
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
