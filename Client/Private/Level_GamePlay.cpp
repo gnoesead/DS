@@ -24,6 +24,8 @@
 #include "ParticleSystem.h"
 #include "Story_Manager.h"
 
+#include "MonsterManager.h"
+
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
 {
@@ -398,8 +400,15 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
    
+
+
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 	CharacterDesc.Land_Y = 0.f;
+
+	CharacterDesc.Land_Y = 0.f;
+	//CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
+
+
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))

@@ -100,7 +100,7 @@ _int CAnimation::Invalidate_TransformationMatrices(CModel* pModel, _double dTime
 	// 재생 duration 관련
 	if (m_ControlDesc.m_isCombo && Combo || m_isEarlyEnd)
 	{
-		_double ComboDuration = m_AnimationDesc.m_dDuration - 0.35f;
+		_double ComboDuration = m_AnimationDesc.m_dDuration * 0.8f;
 		if (ComboDuration <= m_AnimationDesc.m_dTimeAcc)
 		{
 			// 전체 재생시간보다 누적시간이 커졌다 == 애니메이션이 끝났다
@@ -110,12 +110,12 @@ _int CAnimation::Invalidate_TransformationMatrices(CModel* pModel, _double dTime
 	}
 	else
 	{
-	if (m_AnimationDesc.m_dDuration <= m_AnimationDesc.m_dTimeAcc)
-	{
-		// 전체 재생시간보다 누적시간이 커졌다 == 애니메이션이 끝났다
-		m_AnimationDesc.m_isFinish = true;
-		m_AnimationDesc.m_dTimeAcc = 0.0;
-	}
+		if (m_AnimationDesc.m_dDuration <= m_AnimationDesc.m_dTimeAcc)
+		{
+			// 전체 재생시간보다 누적시간이 커졌다 == 애니메이션이 끝났다
+			m_AnimationDesc.m_isFinish = true;
+			m_AnimationDesc.m_dTimeAcc = 0.0;
+		}
 	}
 
 
