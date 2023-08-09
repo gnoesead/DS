@@ -185,7 +185,7 @@ _vector CNavigation::MoveOnNavigation(_fvector& vPosition, _fvector vLook)
 	return  XMVectorSet(0.f, 0.f, 0.f, 0.f);
 }
 
-_fvector CNavigation::Compute_Height(CTransform* pOwnerTransform)
+_float CNavigation::Compute_Height(CTransform* pOwnerTransform)
 {
 	_vector vPlane;
 
@@ -201,7 +201,7 @@ _fvector CNavigation::Compute_Height(CTransform* pOwnerTransform)
 		- XMVectorGetZ(vPlane) * XMVectorGetZ(vOwnerPos)
 		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane);
 
-	return vOwnerPos = XMVectorSetY(vOwnerPos, fHeight);
+	return fHeight;
 }
 
 _vector CNavigation::SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeighborIndex)

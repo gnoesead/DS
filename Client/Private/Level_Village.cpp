@@ -120,19 +120,13 @@ HRESULT CLevel_Village::Ready_Layer_BackGround(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-  /*  if (FAILED(pGameInstance->Add_GameObject(Level_Village, pLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+    /* For.Sky */
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Sky"))))
     {
-        MSG_BOX("Failed to Add_GameObject : Terrain");
+        MSG_BOX("Failed to Add_GameObject : Sky");
         return E_FAIL;
-    }*/
-
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+    }
 
     Safe_Release(pGameInstance);
 

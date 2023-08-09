@@ -54,6 +54,14 @@ void CStaticMapObject::Tick(_double TimeDelta)
 	default:
 		break;
 	}
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (LEVEL_TRAIN == pGameInstance->Get_CurLevelIdx() && m_MapObject_Info.iRenderGroup != 1)
+		Scroll(TimeDelta);
+
+	Safe_Release(pGameInstance);
 }
 
 void CStaticMapObject::LateTick(_double TimeDelta)
