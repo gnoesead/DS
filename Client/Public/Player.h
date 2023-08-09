@@ -12,6 +12,7 @@ BEGIN(Client)
 class CPlayer : public CCharacter
 {
 public:
+	enum PLAYERSTATE { PLAYER_ADVENTURE, PLAYER_BATTLE, PLAYER_END };
 	typedef struct tagPlayerMoveset
 	{
 		//입력 방향
@@ -40,8 +41,16 @@ public:
 		_bool	m_isRestrict_DoubleStep = { false };
 		_bool	m_isRestrict_Special = { false };
 
+		_bool	m_isRestrict_Adventure = { false };
+
 		//히트모션 제한
 		_bool	m_isHitMotion = { false };
+		_bool	m_isDownMotion = { false };
+		_bool	m_isGetUpMotion = { false };
+
+		//기상 키인풋
+		_bool	m_Down_GetUp_Move = { false };
+		_bool	m_Down_GetUp = { false };
 
 
 		//달리기 키인풋
@@ -94,7 +103,18 @@ public:
 
 		//스페셜 오의 키인풋 
 		_bool	m_Down_Battle_Special = { false };
+
+		//어드벤처 모드
+		_bool	m_Down_ADV_Jump_To_Object = { false };
+
 	}PLAYERMOVESET;
+
+	typedef struct tagBoxJump
+	{
+		_float4 BoxPos;
+		_bool	RoofOn = { false };
+		_float4 Dir_SecondJump = { 0.0f, 1.0f ,0.0f, 0.0f };
+	}BOXJUMP;
 
 protected:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -115,6 +135,7 @@ protected: //애니메이션 제어용 함수들
 
 	void	Trigger_Hit(_double dTimeDelta);
 	void	Key_Input(_double dTimeDelta);
+
 	void	Key_Input_Battle_Move(_double dTimeDelta);
 	void	Key_Input_Battle_Jump(_double dTimeDelta);
 	void	Key_Input_Battle_Attack(_double dTimeDelta);
@@ -124,7 +145,12 @@ protected: //애니메이션 제어용 함수들
 	void	Key_Input_Battle_Dash(_double dTimeDelta);
 	void	Key_Input_Battle_Awaken(_double dTimeDelta);
 	void	Key_Input_Battle_Special(_double dTimeDelta);
+	void	Key_Input_Down(_double dTimeDelta);
 
+	void	Key_Input_Adventure(_double dTimeDelta);
+
+protected:
+	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
@@ -134,6 +160,9 @@ protected: // 애니메이션 제어용 변수들
 	//쿨타임 적용
 	_bool		m_isCool_MoveKey = { false };
 	_double		m_dTime_MoveKey = { 0.0 };
+
+	//기상 딜레이 
+	_double		m_dDelay_GetUp = { 0.0 };
 
 
 	//콤보 도중
@@ -168,6 +197,22 @@ protected:
 	//히트용
 	_bool	m_isTestHit = { false };
 
+	_bool	m_isCanNavi = { true };
+
+	//상자 위치
+	vector<BOXJUMP> m_vecBoxPos;
+	_int	m_iBoxIndex = { 0 };
+	_bool	m_isCan_Jump_To_Box = { false };
+
+	_bool	m_isFirst_Jump2_To_Box = { true };
+
+	_bool	m_isCan_Jump_RoofOn = { false };
+	_bool	m_isPlayerStatus_OnRoof = { false };
+
+	_float4		m_vPlayerToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
+	_float		m_fDistanceTo_Box = { 0.0f };
+
+	_float4		m_Dir_ScondJump_Box = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 protected:
 	// Outline Default
