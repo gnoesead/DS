@@ -261,9 +261,9 @@ private: // _bool
 	_bool	m_bJump = { false };
 
 	_bool	m_bTrigger = { false };
-
 	_bool	m_bPatternStart = { false };
 
+	_bool	m_bAwake = { false };
 	//_bool	m_bNextPhase = { false };
 
 private: // time

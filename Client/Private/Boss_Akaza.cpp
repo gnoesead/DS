@@ -59,6 +59,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
+			
 #endif // _DEBUG
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -226,10 +227,9 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		{
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 			m_eCurstate = STATE_DASHPUNCH;
-			m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
-			m_pModelCom->Set_AnimisFinish(ANIM_CHARGE_ROOP);
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH_PUNCH);
+			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR);
+			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR2);
+			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR3);
 			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 			m_bRunPunch = false;
 			m_bStep_B = false;
@@ -322,8 +322,11 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_E))
 		{
 			m_eCurstate = STATE_AWAKE;
+			m_bAnimFinish = false;
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_START);
-
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_END);
+			
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_R))
 		{
@@ -566,7 +569,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 {
 	if (m_bTrigger == false)
 	{
-		if (m_StatusDesc.fHp > 70.f)
+		if (m_StatusDesc.fHp > 50.f)
 		{
 
 			switch (m_iTriggerCnt)
@@ -588,7 +591,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 
 
 		}
-		if (m_StatusDesc.fHp <= 70.f)
+		if (m_StatusDesc.fHp <= 50.f)
 		{
 			switch (m_iTriggerCnt)
 			{
@@ -619,9 +622,10 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 {
+	
 	if (m_bTrigger == false)
 	{
-		if (m_StatusDesc.fHp > 50.f)
+		if (m_StatusDesc.fHp > 70.f)
 		{
 
 			switch (m_iTriggerCnt)
@@ -642,11 +646,10 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 				Trigger_Escape();
 				break;
 			}
-
-
 		}
-		if (m_StatusDesc.fHp <= 50.f)
+		if (m_StatusDesc.fHp <= 70.f)
 		{
+			Trigger_Awake();
 			switch (m_iTriggerCnt)
 			{
 			case 0:
@@ -666,6 +669,9 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 				break;
 			case 5:
 				Trigger_NextPhase2();
+				break;
+			case 6:
+				Trigger_Awake();
 				break;
 			}
 		}
@@ -825,7 +831,148 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 
 void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 {
+	m_eCurAnimIndex = ANIM_IDEL;
 
+	if (m_StatusDesc.fHp > 70.f)
+	{
+		if (m_bPatternStart == false)
+		{
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_iIdleCnt = 0;
+				m_bTrigger = false;
+				m_iTriggerCnt++;
+				if (m_iTriggerCnt >= 5)
+				{
+					m_iTriggerCnt = 0;
+					m_bPatternStart = true;
+				}
+			}
+		}
+		if (m_bPatternStart == true)
+		{
+			_float fDistance = Calculate_Distance();
+			m_dTriggerTime += dTimeDelta;
+			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_iRandomPatternNum = Random::Generate_Int(1, 10);
+
+
+				if (fDistance <= 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+				}
+				if (fDistance > 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+					{
+						m_iTriggerCnt = 2;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+				}
+			}
+		}
+	}
+	if (m_StatusDesc.fHp <= 70.f && m_StatusDesc.fHp > 0.f)
+	{
+		if (m_bPatternStart == true)
+		{
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_bTrigger = false;
+				m_iTriggerCnt = 0;
+				m_bPatternStart = false;
+
+			}
+		}
+		if (m_bPatternStart == false)
+		{
+			_float fDistance = Calculate_Distance();
+			m_dTriggerTime += dTimeDelta;
+			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+				m_iIdleCnt++;
+
+			if (m_iIdleCnt == 1)
+			{
+				m_dTriggerTime = 0.0;
+				m_iIdleCnt = 0;
+				m_iRandomPatternNum = Random::Generate_Int(1, 12);
+
+
+				if (fDistance <= 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 9)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum >= 12)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+				}
+				if (fDistance > 5.f)
+				{
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
+					{
+						m_iTriggerCnt = 1;
+						m_bTrigger = false;
+					}
+					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+					{
+						m_iTriggerCnt = 2;
+						m_bTrigger = false;
+					}
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
+					{
+						m_iTriggerCnt = 3;
+						m_bTrigger = false;
+					}
+					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
+					{
+						m_iTriggerCnt = 4;
+						m_bTrigger = false;
+					}
+				}
+			}
+		}
+	}
+	if (m_StatusDesc.fHp <= 0.f)
+	{
+		m_bTrigger = false;
+		m_bPatternStart = false;
+		m_iTriggerCnt = 5;
+		m_dTriggerTime = 0.0;
+		m_iIdleCnt = 0;
+	}
 }
 
 void CBoss_Akaza::Trigger_Interact_Phase_3(_double dTimeDelta)
@@ -836,6 +983,7 @@ void CBoss_Akaza::Trigger_Interact()
 {
 	m_bTrigger = true;
 	m_eCurstate = STATE_IDLE;
+	//m_pModelCom->Set_AnimResetTimeAcc(STATE_IDLE);
 }
 
 void CBoss_Akaza::Trigger_Begin()
@@ -862,10 +1010,9 @@ void CBoss_Akaza::Trigger_DashPunch()
 	m_bTrigger = true;
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_eCurstate = STATE_DASHPUNCH;
-	m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
-	m_pModelCom->Set_AnimisFinish(ANIM_CHARGE_ROOP);
-	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-	m_pModelCom->Set_AnimisFinish(ANIM_DASH_PUNCH);
+	m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR);
+	m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR2);
+	m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR3);
 	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 	m_bRunPunch = false;
 	m_bStep_B = false;
@@ -1009,7 +1156,9 @@ void CBoss_Akaza::Trigger_Awake()
 {
 	m_bTrigger = true;
 	m_eCurstate = STATE_AWAKE;
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_START);
+	m_bAnimFinish = false;
 }
 
 void CBoss_Akaza::Trigger_Awake_ComboPunch()
@@ -1100,7 +1249,7 @@ void CBoss_Akaza::Update_Escape(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_STEP_LEFT2) || m_pModelCom->Get_AnimFinish(ANIM_STEP_RIGHT2))
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.7);
@@ -1113,8 +1262,6 @@ void CBoss_Akaza::Update_Escape(_double dTimeDelta)
 
 void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 {
-
-
 	_vector vDir = Calculate_Dir_FixY();
 	_float fDistance = Calculate_Distance();
 
@@ -1137,49 +1284,43 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.7);
 		if (m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND) == true)
-		{
-			//m_pModelCom->Set_AnimisFinish(ANIM_CHARGE);
-			//m_eCurAnimIndex = ANIM_CHARGE;
-			//m_bStep_B = false;
+		{			
 			m_bDashOn = true;
 		}
 	}
 	if (m_bDashOn == true)
 	{
 		////애니메이션 제어
+		
+		// 수정
 		if (m_bStep_B == false)
 		{
-			if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE) == false)
-				m_eCurAnimIndex = ANIM_CHARGE;
+			if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR) == false)
+				m_eCurAnimIndex = ANIM_SUPERARMOR;
 		}
-		if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE) == true && m_bCharge == false || m_bStep_B == true && m_bCharge == false)
+		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR) == true && m_bCharge == false || m_bStep_B == true && m_bCharge == false)
 		{
 			m_bCharge = true;
-			m_eCurAnimIndex = ANIM_CHARGE_ROOP;
+			m_eCurAnimIndex = ANIM_SUPERARMOR2;
 		}
 
-		if (m_pModelCom->Get_AnimFinish(ANIM_CHARGE_ROOP) == true)
-			m_eCurAnimIndex = ANIM_DASH;
-
-		if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
-			m_eCurAnimIndex = ANIM_DASH_PUNCH;
-
-		if (m_pModelCom->Get_AnimFinish(ANIM_DASH_PUNCH) == true)
+		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR2) == true)
+			m_eCurAnimIndex = ANIM_SUPERARMOR3;
+		
+		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR3) == true)
 		{
 			m_eCurAnimIndex = ANIM_IDEL;
-			m_eCurstate = STATE_IDLE;
+			Trigger_Interact();
 		}
 
 		//행동제어
-		if (m_eCurAnimIndex != ANIM_DASH && m_eCurAnimIndex != ANIM_IDEL
-			&& m_eCurAnimIndex != ANIM_DASH_PUNCH)
+		if (m_eCurAnimIndex != ANIM_SUPERARMOR3 && m_eCurAnimIndex != ANIM_IDEL)
 		{
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
 
-		Go_Straight_Constant(dTimeDelta, ANIM_DASH, 13.f);
-		//Go_Straight_Deceleration(dTimeDelta, ANIM_DASH_PUNCH, 3.f, 0.2f);
-
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 13.f, 0.0, 0.3);
+		
 	}
 
 }
@@ -1199,7 +1340,7 @@ void CBoss_Akaza::Update_AirGun(_double dTimeDelta)
 		//if (m_pModelCom->Check_PickAnimRatio(ANIM_AIRGUN,0.950,dTimeDelta))
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -1212,7 +1353,7 @@ void CBoss_Akaza::Update_PushAway(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY))
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 }
 
@@ -1245,7 +1386,7 @@ void CBoss_Akaza::Update_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_PIST2) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 }
 
@@ -1296,7 +1437,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
 				m_eCurAnimIndex = ANIM_IDEL;
-				m_eCurstate = STATE_IDLE;
+				Trigger_Interact();
 			}
 		}
 	}
@@ -1320,7 +1461,7 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
 	Go_Straight_Deceleration(dTimeDelta, ANIM_COMBO_DOWN, 1.f, 0.2f);
@@ -1363,7 +1504,7 @@ void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 		if (m_pModelCom->Get_AnimFinish(ANIM_JUMPLAND))
 		{
 			m_eCurAnimIndex = ANIM_IDEL;
-			m_eCurstate = STATE_IDLE;
+			Trigger_Interact();
 		}
 	}
 }
@@ -1438,7 +1579,7 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_UP) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 
 	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
@@ -1529,7 +1670,7 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 					m_eCurPhase = PHASE_3;
 
 				m_eCurAnimIndex = ANIM_IDEL;
-				m_eCurstate = STATE_IDLE;
+				Trigger_Interact();
 			}
 
 		}
@@ -1568,24 +1709,40 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_HEAL))
 	{
-		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
-
 		if (m_eCurPhase == PHASE_1)
 			m_eCurPhase = PHASE_2;
 
-		if (m_eCurPhase == PHASE_2)
+		else if (m_eCurPhase == PHASE_2)
 			m_eCurPhase = PHASE_3;
+
+		m_eCurAnimIndex = ANIM_IDEL;
+		Trigger_Interact();
+				
 	}
 }
 
 void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 {
-	m_eCurAnimIndex = ANIM_AWAKE_START;
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_START))
+	if (m_bAnimFinish == false)
 	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+		m_eCurAnimIndex = ANIM_AWAKE_START;
+	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START,0.990,dTimeDelta))
+	{		
+		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
+		m_eCurAnimIndex = ANIM_AWAKE_END;		
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
+	{
+		m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END);
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 }
 
@@ -1616,7 +1773,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_END) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 
 	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
@@ -1677,7 +1834,7 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 			if (m_pModelCom->Check_PickAnimRatio(ANIM_STEP_BEHIND, 0.950, dTimeDelta))
 			{
 				m_eCurAnimIndex = ANIM_IDEL;
-				m_eCurstate = STATE_IDLE;
+				Trigger_Interact();
 			}
 
 		}

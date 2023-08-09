@@ -75,7 +75,14 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-
+#ifdef _DEBUG
+	// 슬라이딩 벡터 타는 순간 조건문
+	if (m_pNavigationCom[m_eCurNavi]->is_MoveOnNavigation(m_pTransformCom->Get_State(CTransform::STATE_POSITION)) == false)
+	{
+		//여기에 원하는 조건 넣어주면 됨	
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+	}
+#endif // _DEBUG
 	Animation_Control(dTimeDelta);
 
 	//애니메이션 처리
