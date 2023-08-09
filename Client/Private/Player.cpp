@@ -661,6 +661,8 @@ void CPlayer::Key_Input_Battle_Special(_double dTimeDelta)
 
 HRESULT CPlayer::Add_Components()
 {
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+
 	/* for.Com_Navigation_Village_MainRoad1 */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
 		TEXT("Com_Navigation_Village_MainRoad1"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_MAINROAD1], &m_CharacterDesc.NaviDesc)))
