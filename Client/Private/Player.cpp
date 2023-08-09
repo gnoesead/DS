@@ -33,7 +33,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	BOXJUMP BoxJump;
 	BoxJump.BoxPos = { 593.44f, 4.5f, 280.47f, 1.0f };
-	BoxJump.RoofOn = true;
+	BoxJump.RoofOn = false;
 	BoxJump.Dir_SecondJump = {0.0f, 0.0f, 1.0f, 0.0f};
 	m_vecBoxPos.emplace_back(BoxJump);
 
@@ -774,7 +774,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 		
 		XMStoreFloat(&m_fDistanceTo_Box, XMVectorSqrt(squaredDistance));
 
-		if (m_fDistanceTo_Box < 3.1)
+		if (m_fDistanceTo_Box < 3.2)
 		{
 			m_isCan_Jump_To_Box = true;
 			m_isCan_Jump_RoofOn = BoxJump.RoofOn;

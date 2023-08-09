@@ -910,16 +910,26 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 	if (0.1f < m_fDistanceTo_Box)
 	{
-		Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 1.0f);
-		Go_Straight_Constant(dTimeDelta, 2, 1.0f);
+		//올라갈때
+		if (m_isPlayerStatus_OnRoof == false)
+		{
+			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f);
+			Go_Straight_Constant(dTimeDelta, 2, 0.6f);
+		}
+		//내려갈때
+		else
+		{
+			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.4f);
+			Go_Straight_Constant(dTimeDelta, 2, 0.4f);
+		}
 	}
 
 	if (m_isPlayerStatus_OnRoof == false)
 	{
-		Go_Dir_Constant(dTimeDelta, 3, 1.0f, m_Dir_ScondJump_Box);
+		Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
 	}
 	else
-		Go_Dir_Constant(dTimeDelta, 3, 1.0f, m_ReverseDir);
+		Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_ReverseDir);
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 3 && m_isPlayerStatus_OnRoof == false)
 	{
