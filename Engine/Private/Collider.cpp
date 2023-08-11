@@ -141,7 +141,7 @@ HRESULT CCollider::Render()
 
 	m_pPrimitiveBatch->Begin();
 
-	_vector vColor = m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	_vector vColor = m_isColl == true ? XMVectorSet(1.f, 0.f, 0.f, 1.f) : XMLoadFloat4(&m_vColor);
 
 	switch (m_eColliderType)
 	{

@@ -81,10 +81,17 @@ HRESULT CSwordHome::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
-			return E_FAIL;
+		if (m_pModelCom->Get_IsNormalTexture(i))
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+				return E_FAIL;
+		}
 
-		m_pShaderCom->Begin(0);
+		if (m_pModelCom->Get_IsNormalTexture(i))
+			m_pShaderCom->Begin(1);
+		else
+			m_pShaderCom->Begin(0);
+
 
 		m_pModelCom->Render(i);
 	}
@@ -98,10 +105,16 @@ HRESULT CSwordHome::Render()
 			if (FAILED(m_pModelCom_Sword->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
 				return E_FAIL;
 
-			if (FAILED(m_pModelCom_Sword->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
-				return E_FAIL;
+			if (m_pModelCom->Get_IsNormalTexture(i))
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+					return E_FAIL;
+			}
 
-			m_pShaderCom->Begin(0);
+			if (m_pModelCom->Get_IsNormalTexture(i))
+				m_pShaderCom->Begin(1);
+			else
+				m_pShaderCom->Begin(0);
 
 			m_pModelCom_Sword->Render(i);
 		}

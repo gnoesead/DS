@@ -91,6 +91,10 @@ protected:
 
 	MAPOBJECT_INFO			m_MapObject_Info;
 
+protected:
+	_float					m_fTimeAcc = { 0.0f };
+	_float2					m_vPanningSpeed = { 0.f , 0.f };
+
 public:
 	virtual void Free() override;
 };

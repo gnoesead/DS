@@ -75,10 +75,16 @@ HRESULT CSword::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
 				return E_FAIL;
 
-			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
-				return E_FAIL;
+			if (m_pModelCom->Get_IsNormalTexture(i))
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+					return E_FAIL;
+			}
 
-			m_pShaderCom->Begin(0);
+			if (m_pModelCom->Get_IsNormalTexture(i))
+				m_pShaderCom->Begin(1);		// 노말 텍스쳐 적용 Pass	
+			else
+				m_pShaderCom->Begin(0);		// 노말 텍스쳐 미적용 Pass
 
 			m_pModelCom->Render(i);
 		}

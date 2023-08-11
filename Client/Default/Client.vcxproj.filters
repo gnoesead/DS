@@ -277,6 +277,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\CollisionBox">
+      <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -492,6 +495,9 @@
     <ClInclude Include="..\Public\MonsterManager.h">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CollisionBox.h">
+      <Filter>02. GameObjects\CollisionBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -697,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MonsterManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CollisionBox.cpp">
+      <Filter>02. GameObjects\CollisionBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -609,17 +609,21 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 			{
 				if (MESHMATERIALS::TextureType_NORMALS == j)
 				{
-					strcpy_s(szFilePath, "../../Client/Bin/Resources/Models/AlphaTexture.dds");
-					isNormal = false;
+					m_isNormalTexture[i] = false;
+					continue;
 				}
 				else
 					continue;
 			}
 			else
 			{
+				if (MESHMATERIALS::TextureType_NORMALS == j)
+					m_isNormalTexture[i] = true;
+
 				strcpy_s(szFilePath, m_ModelData.pMaterialData[iIndex].szName);
 			}
 
+			
 			//가져온 텍스처의 경로에 잘못된 값이 있을 수 있으므로 파일 이름과 경로를 다시 잡아주는 작업
 
 			char szDrive[MAX_PATH] = { "" };
