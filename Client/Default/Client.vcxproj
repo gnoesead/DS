@@ -192,6 +192,7 @@
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderManager.h" />
+    <ClInclude Include="..\Public\CollisionBox.h" />
     <ClInclude Include="..\Public\Dialog.h" />
     <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
@@ -267,6 +268,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ColliderManager.cpp" />
+    <ClCompile Include="..\Private\CollisionBox.cpp" />
     <ClCompile Include="..\Private\Dialog.cpp" />
     <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
