@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "..\Public\Character.h"
-
+#include "Camera_Free.h"
 #include "GameInstance.h"
 
 #include "AtkCollManager.h"
@@ -280,7 +280,7 @@ void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float cons
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
+		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -304,7 +304,7 @@ void CCharacter::Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float con
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Left(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Left(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -312,7 +312,7 @@ void CCharacter::Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float co
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Right(dTimeDelta * constantSpeed);
+		m_pTransformCom->Go_Right(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 	}
 }
 
@@ -485,6 +485,16 @@ void CCharacter::Set_Height()
 	Safe_Release(pGameInstance);
 }
 
+void CCharacter::Camera_Shake(_double dShakeTime, _uint iShakePower)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")));
+	pCamera->Shake(dShakeTime, iShakePower);
+
+	Safe_Release(pGameInstance);
+}
 
 HRESULT CCharacter::Add_Components()
 {

@@ -1259,7 +1259,9 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
-
+	// ½´ÆÛ¾Æ¸Ó »óÅÂ ³Ö¾îÁÖ¼À
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
+		return E_FAIL;*/
 
 
 

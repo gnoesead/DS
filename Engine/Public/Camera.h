@@ -46,7 +46,7 @@ public:
 	
 public:
 	void	Tick_Shake(_double TimeDelta);
-	void	Shake(const _double& ShakeTime = 0.3, const _int& iShakePower = 100); // default  time = 0.3 / power = 100
+	void	Shake(const _double& ShakeTime = 0.5, const _int& iShakePower = 100); // default  time = 0.5 / power = 100
 
 protected:
 	CTransform*			m_pTransformCom = { nullptr };
