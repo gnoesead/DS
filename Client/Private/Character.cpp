@@ -42,8 +42,7 @@ HRESULT CCharacter::Initialize(void* pArg)
 
 		m_fLand_Y = m_CharacterDesc.Land_Y;
 		m_eCurNavi = m_CharacterDesc.eCurNavi;
-
-		
+		m_eNextNavi = m_eCurNavi;
 	}
 
 	return S_OK;

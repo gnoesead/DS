@@ -30,6 +30,10 @@ public:
 		return m_isColl;
 	}
 
+	COLLIDERDESC Get_Desc() {
+		return m_ColliderDesc;
+	}
+
 	_bool	Get_SphereOff() { return m_isSphereOff; }
 	_bool	Get_Hit_Small() { return m_isHit_Small; }
 	_bool	Get_Hit_Big() { return m_isHit_Big; }

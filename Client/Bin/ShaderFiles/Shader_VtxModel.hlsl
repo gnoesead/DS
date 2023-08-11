@@ -11,6 +11,9 @@ texture2D	g_RampTexture;
 
 float		g_fFar = 300.f;
 
+float			g_fTimeAcc;
+float2			g_vPanningSpeed;
+
 struct VS_IN
 {
 	float3		vPosition	: POSITION;
@@ -90,7 +93,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	return Out;
 };
 
-PS_OUT  PS_TEST(PS_IN _In)
+PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
@@ -103,6 +106,9 @@ PS_OUT  PS_TEST(PS_IN _In)
 	float3x3	WorldMatrix = float3x3(_In.vTangent.xyz, _In.vBinormal.xyz, _In.vNormal.xyz);
 
 	vNormal = mul(vNormal, WorldMatrix);
+
+	if (vMtrlDiffuse.a < 0.1f)
+		discard;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -178,6 +184,51 @@ PS_OUT  PS_BLOOD(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_JUMPEFFECT(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	Out.vDiffuse.a = vMtrlDiffuse.r;
+
+	Out.vDiffuse.b += 0.5f;
+
+
+	if (Out.vDiffuse.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT  PS_SMELL(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	Out.vDiffuse.a = vMtrlDiffuse.r;
+
+	Out.vDiffuse.g = 0.f;
+	Out.vDiffuse.b = 0.f;
+
+
+	if (Out.vDiffuse.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	pass General
@@ -203,7 +254,7 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		HullShader = NULL;
 		DomainShader = NULL;
-		PixelShader = compile ps_5_0 PS_TEST();
+		PixelShader = compile ps_5_0 PS_Main_NormalTexture();
 	}
 
 	pass Blend
@@ -242,6 +293,30 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_BLOOD();
+	}
+
+	pass JumpEffect // 5
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_JUMPEFFECT();
+	}
+
+	pass Smell // 6
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_SMELL();
 	}
 };
 

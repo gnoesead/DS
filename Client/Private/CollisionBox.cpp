@@ -60,7 +60,6 @@ void CCollisionBox::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), TimeDelta);
-	
 }
 
 void CCollisionBox::LateTick(_double TimeDelta)
@@ -91,14 +90,14 @@ HRESULT CCollisionBox::Add_Components()
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	/* For.Com_AABB */
+	/* For.Com_Sphere */
 	CCollider::COLLIDERDESC		ColliderDesc;
 	ZeroMemory(&ColliderDesc, sizeof ColliderDesc);
 	ColliderDesc.vSize = m_CollisionBoxInfo.vScale;
 	ColliderDesc.vPosition = _float3(0.f, ColliderDesc.vSize.y * 0.5f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom, &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
