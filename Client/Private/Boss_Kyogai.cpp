@@ -2,7 +2,7 @@
 #include "Boss_Kyogai.h"
 #include "GameInstance.h"
 #include "SoundMgr.h"
-
+#include "RotationMapObject.h"
 #include "AtkCollManager.h"
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

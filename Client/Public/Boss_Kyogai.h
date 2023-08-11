@@ -65,32 +65,24 @@ public:
 #ifdef _DEBUG
 	void Debug_State(_double dTimeDelta);
 #endif //_DEBUG
-
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
 	
 	//	void Update_Begin(_double dTimeDelta);
 	void Update_Phase_1(_double dTimeDelta);
-	void Update_Phase_2(_double dTimeDelta);
-	
+	void Update_Phase_2(_double dTimeDelta);	
 
 	void Trigger_Interact_Phase_1(_double dTimeDelta);
-	void Trigger_Interact_Phase_2(_double dTimeDelta);
-	
+	void Trigger_Interact_Phase_2(_double dTimeDelta);	
 
 	void Trigger_Interact();
 	void Trigger_Begin();
-	void Trigger_Guard();
-
-	
-	void Trigger_PushAway();
-	
-	void Trigger_NextPhase();
-	
+	void Trigger_Guard();	
+	void Trigger_PushAway();	
+	void Trigger_NextPhase();	
 	void Trigger_Heal();
 	void Trigger_Awake();
-
 	void Trigger_Awake_Cinematic();
 
 #pragma endregion
