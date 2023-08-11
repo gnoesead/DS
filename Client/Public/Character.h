@@ -96,6 +96,8 @@ protected:
 protected:	 
 	// 네비매쉬 높이설정(안원추가)
 	void	Set_Height();
+protected: // 카메라 쉐이크
+	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;
@@ -144,7 +146,6 @@ protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();
 	void	Tick_Collider(_double dTimeDelta);
-
 
 public:
 	//virtual CGameObject* Clone(void* pArg) override = 0;

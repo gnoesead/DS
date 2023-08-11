@@ -2,19 +2,23 @@
 #include "Shader_Defines.hpp"
 
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-
 matrix		g_BoneMatrices[295];
-
 float4		g_vCamPosition;
 
 texture2D	g_DiffuseTexture;
+
+
+
 
 float		g_fFar = 300.f;
 
 //OutLineColor_JH
 float4			g_lineColor = float4(0.f, 0.f, 0.f, 1.f);
+float4			g_HitlineColor = float4(1.f, 0.f, 0.f, 1.f);
+float4			g_SuperArmorColor = float4(1.f, 0.f, 0.f, 1.f);
 float			g_OutlineThickness;
 float			g_OutlineFaceThickness;
+bool			g_bSuperArmor;
 
 //외곽선 쉐이딩
 float3x3      Kx = { -1, 0, 1,
@@ -92,7 +96,7 @@ VS_OUT VS_Outline(VS_IN In)
 	/* 로컬스페이스 내에서 애님움직임에 ㅁ맞도록 정점을 변환시키낟. */
 	vector		vPosition = mul(vector(In.vPosition.xyz + In.vNormal.xyz * g_OutlineThickness, 1.f), BoneMatrix);
 	vector		vNormal = mul(vector(In.vNormal, 0.f), BoneMatrix);
-	
+
 
 	Out.vPosition = mul(vPosition, matWVP);
 	Out.vNormal = normalize(mul(vNormal, g_WorldMatrix));
@@ -210,8 +214,11 @@ PS_OUT  PS_Outline(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	
-	float4 outlineColor = g_lineColor;
+	float4 outlineColor = { 0.f, 0.f, 0.f, 0.f };
+	if (g_bSuperArmor == true)
+		outlineColor = g_SuperArmorColor;
+	else
+		outlineColor = g_lineColor;
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -226,6 +233,7 @@ PS_OUT  PS_Outline(PS_IN In)
 	float blendFactor = smoothstep(0.f, 1.f, outlineFactor); // smoothstep(float edge0, float edge1, float x); edge 0 : 보간시작 edge 1 : 보간 끝나느 값 x: 보간대상
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
+
 
 	Out.vDiffuse = Color;
 
@@ -246,7 +254,7 @@ PS_OUT_DEFERRED PS_MAIN_SHADOW(PS_IN In)
 
 	return Out;
 }
-	
+
 
 technique11 DefaultTechnique
 {
@@ -262,7 +270,7 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Main();
 	}
-	
+
 	pass Outline // 1
 	{
 		SetRasterizerState(RS_CULL_CW);

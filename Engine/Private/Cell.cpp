@@ -127,9 +127,9 @@ _vector CCell::Get_SlidingVector(_fvector vPosition, _fvector vLook, _int* pNeig
 		_vector		vSour = XMVector3Normalize(vPosition - XMLoadFloat3(&m_vPoints[i]));
 		_vector		vDest = XMVector3Normalize(XMLoadFloat3(&m_vNormals[i]));
 		_double     Scalar = XMVectorGetX(XMVector3Dot(vSour, vDest));
-		if (0.f < (Scalar))
+		if (0.0 < (Scalar))
 		{
-			if (0.f < XMVectorGetX(XMVector3Dot(vLook, vDest)))
+			if (0.0 < XMVectorGetX(XMVector3Dot(vLook, vDest)))
 				vSlidingVector = (vLook - (XMVector3Dot(vLook, XMVector3Normalize(vDest)) * XMVector3Normalize(vDest)));
 			else
 				vSlidingVector = vLook;
