@@ -75,6 +75,7 @@ private:
 	CSword* m_pSword = { nullptr };
 	CSwordHome* m_pSwordHome = { nullptr };
 
+	_float m_fScaleChange = { 0.8f };
 
 	vector<_double> m_vecTest;
 	

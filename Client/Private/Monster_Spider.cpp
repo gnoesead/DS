@@ -58,6 +58,8 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	MonsterManaging();
+
 	Calculate_To_Player();
 	
 	if (true == m_isDead)
@@ -191,6 +193,32 @@ HRESULT CMonster_Spider::Render_ShadowDepth()
 }
 
 
+void CMonster_Spider::MonsterManaging()
+{
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	//공격중일때,
+	if (iCurAnim == ANIM_ATK_0 || iCurAnim == 5 || iCurAnim == ANIM_ATK_1 || iCurAnim == 7 || iCurAnim == 8)
+	{
+		if (m_isFirst_AttackOn)
+		{
+			m_isFirst_AttackOn = false;
+			m_isFirst_AttackOff = true;
+			CMonsterManager::GetInstance()->Cnt_AttackOn_Up();
+		}
+	}
+	else
+	{
+		if (m_isFirst_AttackOff)
+		{
+			m_isFirst_AttackOn = true;
+			m_isFirst_AttackOff = false;
+			CMonsterManager::GetInstance()->Cnt_AttackOn_Down();
+		}
+	}
+	
+}
+
 void CMonster_Spider::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
@@ -201,18 +229,24 @@ void CMonster_Spider::EventCall_Control(_double dTimeDelta)
 
 	if (EventCallProcess())
 	{
-#pragma region Animation_0
-		/*if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
+#pragma region Attack
+		if (ANIM_ATK_0 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 1.0f, 1.1f), 0.1,
+					CAtkCollider::TYPE_SMALL, XMLoadFloat4(&m_Dir_To_Player), 10.0f);
 			}
+		}
 
-			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
-		}*/
+		if (8 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.6f, 0.6f, 0.6f), _float3(0.f, 1.0f, 1.1f), 0.1,
+					CAtkCollider::TYPE_BLOW, XMLoadFloat4(&m_Dir_To_Player), 10.0f);
+			}
+		}
 		
 #pragma endregion
 		m_iEvent_Index++;
@@ -261,7 +295,8 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 	_float4 PlayerPos_FixY = m_PlayerPos;
 	PlayerPos_FixY.y = 0.0f;
 
-	m_pTransformCom->LerpVector(-XMLoadFloat4(&m_Dir_To_Player), 0.1f);
+
+	m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_To_Player_FixY), 0.1f);
 
 	//거미의 이동
 	m_dDelay_Spider += dTimeDelta;
@@ -269,7 +304,7 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 	{
 		if (m_fDistance_To_Player < 3.5f)
 		{
-			m_pTransformCom->Go_Backward(dTimeDelta * 0.2f);
+			m_pTransformCom->Go_Backward(dTimeDelta * 0.3f);
 
 			if (m_isFirst_Spider_0)
 			{
@@ -296,7 +331,7 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 		}
 		else if (7.0f <= m_fDistance_To_Player)
 		{
-			m_pTransformCom->Go_Straight(dTimeDelta * 0.5f);
+			m_pTransformCom->Go_Straight(dTimeDelta * 0.55f);
 
 			if (m_isFirst_Spider_0)
 			{
@@ -310,12 +345,17 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 		}
 	}
 
-
+	
 	if (m_dCoolTime_Attack > m_fAttack)
 	{
 		m_dCoolTime_Attack = 0.0;
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_Attack = true;
+
+		if (CMonsterManager::GetInstance()->Can_Attack())
+		{
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_Attack = true;
+		}
+		
 	}
 
 }
@@ -323,11 +363,12 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 void CMonster_Spider::Animation_Control_Attack(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
-
-
+	if (iCurAnim == 0)
+		m_pModelCom->Set_Animation(ANIM_IDLE);
+	
 	if (0 == (rand() % 2))
 	{
-		if (m_isFirst_Attack)
+		if (m_isFirst_Attack )
 		{
 			m_isFirst_Attack = false;
 			m_pModelCom->Set_Animation(ANIM_ATK_1);
@@ -335,20 +376,24 @@ void CMonster_Spider::Animation_Control_Attack(_double dTimeDelta)
 			m_pModelCom->Set_AnimResetTimeAcc(8);
 
 			m_pColliderCom[COLL_SPHERE]->Set_SphereOff(true);
+			
+			
 		}
 		if (iCurAnim == 6 || iCurAnim == 7)
 		{
 			//_float4 PlayerPos_FixY = m_PlayerPos;
 			//PlayerPos_FixY.y = 0.0f;
 			//m_pTransformCom->LookAt(XMLoadFloat4(&PlayerPos_FixY));
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&m_Dir_To_Player), 0.1f);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_To_Player_FixY), 0.1f);
 		}
 		if (iCurAnim == 8)
 		{
 			m_dDelay_Attack += dTimeDelta;
 			if (0.41f < m_dDelay_Attack && m_dDelay_Attack < 0.8f)
 				Go_Straight_Constant(dTimeDelta, 8, 4.0f);
+
 		}
+		
 	}
 	else
 	{
@@ -364,27 +409,30 @@ void CMonster_Spider::Animation_Control_Attack(_double dTimeDelta)
 			//_float4 PlayerPos_FixY = m_PlayerPos;
 			//PlayerPos_FixY.y = 0.0f;
 			//m_pTransformCom->LookAt(XMLoadFloat4(&PlayerPos_FixY));
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&m_Dir_To_Player), 0.1f);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_To_Player_FixY), 0.1f);
+			
 		}
-		if (iCurAnim == ANIM_ATK_0 )
+		if (iCurAnim == ANIM_ATK_0)
 			Go_Straight_Constant(dTimeDelta, ANIM_ATK_0, 2.8f);
 		if (iCurAnim == 5)
 		{
 			m_dDelay_Attack += dTimeDelta;
-			if(m_dDelay_Attack < 0.25f)
+			if (m_dDelay_Attack < 0.25f)
 				Go_Straight_Constant(dTimeDelta, 5, 2.8f);
 		}
 	}
-	
-	
+
+
 	if (iCurAnim == ANIM_IDLE)
 	{
 		m_eCurState = STATE_IDLE;
 		m_dDelay_Attack = 0.0;
 
 		m_pColliderCom[COLL_SPHERE]->Set_SphereOff(false);
+		m_isFirst_Spider_0 = true;
+		m_isFirst_Spider_1 = true;
 	}
-
+	
 }
 
 void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
@@ -461,10 +509,10 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		
 	}
 
-	Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, m_Dir_To_Player);
+	Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, m_Dir_To_Monster);
 	//m_pModelCom->Set_EarlyEnd(ANIM_BLOW, true);
-	Go_Dir_Constant(dTimeDelta, 17, 1.5f, m_Dir_To_Player);
-	Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, m_Dir_To_Player);
+	Go_Dir_Constant(dTimeDelta, 17, 1.5f, m_Dir_To_Monster);
+	Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, m_Dir_To_Monster);
 
 
 	if (iCurAnim == ANIM_DOWN)

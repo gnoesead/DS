@@ -9,9 +9,12 @@ CMonsterManager::CMonsterManager()
 {
 }
 
-_bool CMonsterManager::Check_Can_Attack()
+
+
+
+_bool CMonsterManager::Can_Attack()
 {
-	if (2 < m_iCnt_Attack)
+	if (m_iCnt_AttackOn >= 2)
 	{
 		return false;
 	}
@@ -19,6 +22,7 @@ _bool CMonsterManager::Check_Can_Attack()
 	{
 		return true;
 	}
+
 }
 
 void CMonsterManager::Free()

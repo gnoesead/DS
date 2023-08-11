@@ -16,6 +16,14 @@ class CPlayer_Tanjiro final : public CPlayer
 {
 public:
 	enum ANIM {
+		ANIM_ADV_IDLE = 0,
+		ANIM_ADV_JUMP = 1, //1~4
+		ANIM_ADV_SWORD_PUTOUT = 5, ANIM_ADV_SWORD_PUTIN = 6, 
+		ANIM_ADV_RUN = 9, ANIM_ADV_RUN_END = 10,
+		ANIM_ADV_RUN_SAPUN = 11, ANIM_ADV_RUN_SAPUN_END = 12, 
+		ANIM_ADV_SLIDE = 15,
+		ANIM_ADV_TALK = 16,
+		ANIM_ADV_TOUCH = 17, //17~19
 		ANIM_ATK_COMBO = 21,
 		ANIM_ATK_AIRCOMBO = 29,
 		ANIM_ATK_CHARGE = 31,
@@ -31,7 +39,13 @@ public:
 		ANIM_BATTLE_STEP_AB = 91, ANIM_BATTLE_STEP_AF = 92, ANIM_BATTLE_STEP_AL = 93, ANIM_BATTLE_STEP_AR = 94,
 		ANIM_BATTLE_STEP_B = 95, ANIM_BATTLE_STEP_F = 96, ANIM_BATTLE_STEP_L = 97, ANIM_BATTLE_STEP_R = 99,
 		ANIM_ATK_SPECIAL_CUTSCENE = 101, ANIM_ATK_SPECIAL_READY = 107,
-		ANIM_DMG_SMALL = 74, 
+		ANIM_DMG_SMALL = 74, ANIM_DMG_SMALL_RETURN = 62, ANIM_DMG_BIG_RETURN = 61, ANIM_DMG_BIG = 129,
+		ANIM_DMG_SMALL_UPPER = 130, 
+		ANIM_DMG_BLOW = 119, // 119~121
+		ANIM_DMG_SPIN = 131, // 131~133
+		ANIM_DOWN = 136,
+		ANIM_DOWN_GETUP_MOVE = 137, // 137~138, 82
+		ANIM_DOWN_GETUP = 134, //134~135, 61, 82
 		ANIM_END = 116
 	};
 
@@ -65,6 +79,9 @@ private: //애니메이션 제어용 함수들
 
 	void	Animation_Control_Battle_Dmg(_double dTimeDelta);
 
+	void	Animation_Control_Adventure_Move(_double dTimeDelta);
+	void	Animation_Control_Adventure_Act(_double dTimeDelta);
+
 	void	Moving_Restrict();
 
 
@@ -72,10 +89,13 @@ private:
 	CSword* m_pSword = { nullptr };
 	CSwordHome* m_pSwordHome = { nullptr };
 
+	//스케일 조정
+	_float m_fScaleChange = { 0.8f };
+
 
 private: //애니메이션 제어용 변수들
 	//Move
-	_float	m_fMove_Speed = { 2.f };
+	_float	m_fMove_Speed = { 20.0f  }; 
 
 	_bool	m_isJump_Move = { false };
 
@@ -91,12 +111,21 @@ private: //애니메이션 제어용 변수들
 	_bool		m_isFirst_Special_Jump = { true };
 	_bool		m_isSecond_Special_Jump = { true };
 
+
+	//어드벤처 점프
+	_bool		m_isBoxJumping = { false };
+	_double		m_dDelay_BoxJump = { 0.0 };
+	
+	_float4		m_vTanjrioToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
+	
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
 
+	
 
 
 private:
