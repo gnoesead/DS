@@ -77,11 +77,11 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 		return;
 #ifdef _DEBUG
 	// 슬라이딩 벡터 타는 순간 조건문
-	if (m_pNavigationCom[m_eCurNavi]->is_MoveOnNavigation(m_pTransformCom->Get_State(CTransform::STATE_POSITION)) == false)
-	{
-		//여기에 원하는 조건 넣어주면 됨	
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
-	}
+	//if (m_pNavigationCom[m_eCurNavi]->is_MoveOnNavigation(m_pTransformCom->Get_State(CTransform::STATE_POSITION)) == false)
+	//{
+	//	//여기에 원하는 조건 넣어주면 됨	
+	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+	//}
 #endif // _DEBUG
 	Animation_Control(dTimeDelta);
 
@@ -1165,6 +1165,9 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
+	// 슈퍼아머 상태 넣어주셈
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
+		return E_FAIL;*/
 
 
 	Safe_Release(pGameInstance);

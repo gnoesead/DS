@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "..\Public\Character.h"
-
+#include "Camera_Free.h"
 #include "GameInstance.h"
 
 #include "AtkCollManager.h"
@@ -478,6 +478,16 @@ void CCharacter::Set_Height()
 	Safe_Release(pGameInstance);
 }
 
+void CCharacter::Camera_Shake(_double dShakeTime, _uint iShakePower)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")));
+	pCamera->Shake(dShakeTime, iShakePower);
+
+	Safe_Release(pGameInstance);
+}
 
 HRESULT CCharacter::Add_Components()
 {

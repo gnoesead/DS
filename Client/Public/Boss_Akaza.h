@@ -13,11 +13,11 @@ class CBoss_Akaza final : public CMonster
 {
 public:
 
-	enum PHASE
+	enum  PHASE
 	{
 		BEGIN, PHASE_1, PHASE_2, PHASE_3
 	};
-	enum STATE
+	enum  STATE
 	{
 		STATE_IDLE, STATE_BEGIN,
 		STATE_ESCAPE, STATE_DASHPUNCH, STATE_GUARD, STATE_AIRGUN, STATE_PUSHAWAY, STATE_COMBO_PUNCH,
@@ -32,7 +32,7 @@ public:
 	};
 
 #pragma region AnimIndex
-	enum ANIM {
+	enum  ANIM {
 		////////////////// ±âº» MOVE///////////////////
 
 		ANIM_IDEL = 0,
@@ -173,7 +173,7 @@ public:
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
-	void Update_Reset(_double dTimeDelta);
+	
 	//	void Update_Begin(_double dTimeDelta);
 	void Update_Phase_1(_double dTimeDelta);
 	void Update_Phase_2(_double dTimeDelta);
@@ -264,11 +264,13 @@ private: // _bool
 	_bool	m_bPatternStart = { false };
 
 	_bool	m_bAwake = { false };
+	_bool	m_bFirstAwake = { false };
+	_bool	m_bSecondAwake = { false };
 	//_bool	m_bNextPhase = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
-	_double m_dAwakePunchTime = { 0.0 };
+	_double m_dAwakeTime = { 0.0 };
 
 	_double m_dTriggerTime = { 0.0 };
 

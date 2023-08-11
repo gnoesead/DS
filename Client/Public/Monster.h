@@ -29,7 +29,7 @@ public:
 
 public:
 	void Get_PlayerComponent();
-
+		
 public: // Calculate
 	void  Calculate_To_Player();
 
@@ -68,8 +68,7 @@ protected:
 	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-
-
+	
 protected:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();
