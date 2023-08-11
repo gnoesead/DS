@@ -218,6 +218,7 @@
     <ClInclude Include="..\Public\MonsterManager.h" />
     <ClInclude Include="..\Public\Monster_Spider.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
+    <ClInclude Include="..\Public\Monster_Zako.h" />
     <ClInclude Include="..\Public\NPC.h" />
     <ClInclude Include="..\Public\NPC_Female.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
@@ -290,6 +291,7 @@
     <ClCompile Include="..\Private\MonsterManager.cpp" />
     <ClCompile Include="..\Private\Monster_Spider.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
+    <ClCompile Include="..\Private\Monster_Zako.cpp" />
     <ClCompile Include="..\Private\NPC.cpp" />
     <ClCompile Include="..\Private\NPC_Female.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />

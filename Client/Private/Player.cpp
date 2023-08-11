@@ -58,10 +58,13 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 	Set_Height();
 
-	if (m_isLand_Roof)
-		m_fLand_Y = 7.45f;
-	else
-		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
+	//if (m_isLand_Roof)
+	//	m_fLand_Y = 7.45f;
+	//else
+	//	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
+
+	//юс╫ц
+	m_fLand_Y = 0.0f;
 }
 
 HRESULT CPlayer::Render()

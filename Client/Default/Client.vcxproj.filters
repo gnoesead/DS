@@ -277,6 +277,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Zako">
+      <UniqueIdentifier>{2f82684d-c2d3-42c4-bb1f-d62c045030f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -492,6 +495,9 @@
     <ClInclude Include="..\Public\MonsterManager.h">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_Zako.h">
+      <Filter>02. GameObjects\Character\Monster\Zako</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -697,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MonsterManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Zako.cpp">
+      <Filter>02. GameObjects\Character\Monster\Zako</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

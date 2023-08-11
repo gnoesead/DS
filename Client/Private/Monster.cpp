@@ -147,6 +147,22 @@ _vector CMonster::Calculate_Dir_FixY()
 	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
 }
 
+_vector CMonster::Calculate_Dir_Cross()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+
+	_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+	_vector vCross = XMVector3Normalize( XMVector3Cross(vDir, vUp));
+
+
+	return vCross;
+}
+
 void CMonster::Dir_Setting(_bool Reverse)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

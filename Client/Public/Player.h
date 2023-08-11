@@ -150,7 +150,7 @@ protected: //애니메이션 제어용 함수들
 	void	Key_Input_Adventure(_double dTimeDelta);
 
 protected:
-	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	PLAYERSTATE		m_ePlayerState = { PLAYER_BATTLE };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
