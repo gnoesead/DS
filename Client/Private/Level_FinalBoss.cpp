@@ -165,7 +165,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Camera(const _tchar* pLayerTag)
 	CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-	CameraDesc.fFovY = XMConvertToRadians(60.f);
+	CameraDesc.fFovY = XMConvertToRadians(50.f);
 	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	CameraDesc.fNearZ = 0.3f;
 	CameraDesc.fFarZ = 400.f;
@@ -173,6 +173,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Camera(const _tchar* pLayerTag)
 	CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
 	CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
 	CameraDesc.dSensitivity = 0.1;
+	
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -201,12 +202,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
-	//    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
-	//{
-	//    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
-	//    return E_FAIL;
-	//}
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
+	    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
+	{
+	    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+	    return E_FAIL;
+	}*/
 
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,

@@ -492,6 +492,12 @@
     <ClInclude Include="..\Public\MonsterManager.h">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Fade_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Fade.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -697,6 +703,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\MonsterManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fade_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fade.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -39,7 +39,7 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 	Ready_CutInFinish();
 
 
-
+	
 
 
 
@@ -114,6 +114,12 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_bIs_LockFree = false;
+	}
+	else {
+		m_bIs_LockFree = true;
+	}
 
 	// Lock_On_Change
 	if (pGameInstance->Get_DIKeyDown(DIK_RSHIFT)) {
@@ -160,13 +166,23 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			// adventure
 			if (m_Is_Battle != true) {
 
-				m_fDistance = { 4.3f };
-				m_vOffSet = { 0.f, 1.6f, 0.f, 0.f };
-				m_vLookOffSet = { 0.f, 1.5f, 0.f, 0.f };
-				m_fLookDamping = { 5.f };
-				m_fDamping = { 5.f };
+				if (m_bIs_LockFree != true) {
+					m_fDistance = { 3.f };
+					m_vOffSet = { 0.f, 1.2f, 0.f, 0.f };
+					m_vLookOffSet = { 0.f, 1.2f, 0.f, 0.f };
+					m_fLookDamping = { 6.f };
+					m_fDamping = { 7.f };
+				}
+				else {
+					m_fDistance = { 6.f };
+					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
+					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
+					m_fLookDamping = { 7.f };
+					m_fDamping = { 5.f };
+				}
 
 				AdventureCamera(dTimeDelta);
+
 			}
 			// Battle
 			else if (m_Is_Battle == true) {
@@ -174,17 +190,17 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				// Side
 				if (m_bIs_Combo_On == true) {
 
-					m_fDistance = { 3.7f };
-					m_vOffSet = { 0.f, 1.5f, 0.f, 0.f };
-					m_vLookOffSet = { 0.f, 4.f, 0.f, 0.f };
+					m_fDistance = { 5.3f };
+					m_vOffSet = { 0.f, 1.1f, 0.f, 0.f };
+					m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };
 					m_fDamping = { 6.f };
 
 					SideCamera(dTimeDelta);
 				}
 				else {
-					m_fDistance = { 5.5f };
-					m_vOffSet = { 0.f, 2.3f, 0.f, 0.f };
+					m_fDistance = { 6.f };
+					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };
 					m_fDamping = { 5.f };
@@ -353,6 +369,9 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 	m_vDist = XMVector3Normalize(m_vDist);
 
+	_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(8.f));
+
+	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
 	_vector vDest = m_vBattleCenter + m_vOffSet + (m_vDist * m_fDistance);
 
@@ -365,7 +384,7 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 	_vector NewLook = m_vBattleCenter + m_vLookOffSet - vCamPosition;
 
-	NewLook = { XMVectorGetX(NewLook), XMVectorGetY(NewLook) * 0.f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
+	NewLook = { XMVectorGetX(NewLook), 0.5f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 	NewLook = XMVector3Normalize(NewLook);
 
 	_float New_t = (_float)dTimeDelta * m_fLookDamping;
@@ -504,8 +523,8 @@ void CCamera_Free::LockMouse()
 {
 	POINT		ptMouse{ g_iWinSizeX >> 1, g_iWinSizeY >> 1 };
 
-	ClientToScreen(g_hWnd, &ptMouse);
-	SetCursorPos(ptMouse.x, ptMouse.y);
+	//ClientToScreen(g_hWnd, &ptMouse);
+	//SetCursorPos(ptMouse.x, ptMouse.y);
 	//ShowCursor(false);
 }
 

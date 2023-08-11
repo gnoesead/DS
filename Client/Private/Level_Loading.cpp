@@ -11,6 +11,8 @@
 #include "GameInstance.h"
 #include "BackGround.h"
 #include "Loading.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -163,7 +165,19 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
     m_pWalk->Initialize(&UIDesc);
 
 
-    //g_iLoadingTextureIndex += 1;
+    // Fade
+    CFade::UIDESC UIDesc2;
+    m_pFade = CFade::Create(m_pDevice, m_pContext);
+
+    if (nullptr == m_pFade)
+        return E_FAIL;
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    UIDesc2.m_Type = 0;
+
+    m_pFade->Initialize(&UIDesc2);
+
 
     m_eNextLevelID = eNextLevelID;
 
@@ -213,12 +227,27 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
         m_pWalk->Tick(dTimeDelta);
         m_pWalk->LateTick(dTimeDelta);
+
+        m_pFade->Tick(dTimeDelta);
+        m_pFade->LateTick(dTimeDelta);
+
     }
+
+   
 
     if (true == m_pLoader->Get_Finished())
     {
         if (GetKeyState(VK_SPACE) & 0x8000)
         {
+            if (g_iLoadingTextureIndex > 0) {
+
+                CFadeManager::GetInstance()->Set_Fade_Out(true);
+
+            }
+        }
+
+        if (g_iLoadingTextureIndex == 0) {
+
             CLevel* pLevel = { nullptr };
 
             switch (m_eNextLevelID)
@@ -261,8 +290,55 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
             if (FAILED(hr))
                 return;
-
         }
+        else if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+            CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+            CLevel* pLevel = { nullptr };
+
+            switch (m_eNextLevelID)
+            {
+            case LEVEL_LOGO:
+                pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_LOBBY:
+                pLevel = CLevel_Lobby::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_GAMEPLAY:
+                pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_VILLAGE:
+                pLevel = CLevel_Village::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_HOUSE:
+                pLevel = CLevel_House::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_TRAIN:
+                pLevel = CLevel_Train::Create(m_pDevice, m_pContext);
+                break;
+            case LEVEL_FINALBOSS:
+                pLevel = CLevel_FinalBoss::Create(m_pDevice, m_pContext);
+                break;
+            }
+
+            if (nullptr == pLevel)
+                return;
+
+            g_iLoadingTextureIndex += 1;
+
+            HRESULT hr = 0;
+
+            CGameInstance* pGameInstance = CGameInstance::GetInstance();
+            Safe_AddRef(pGameInstance);
+
+            hr = pGameInstance->Open_Level(m_eNextLevelID, pLevel, true);
+            Safe_Release(pGameInstance);
+
+            if (FAILED(hr))
+                return;
+        }
+
     }
 }
 
@@ -302,7 +378,8 @@ void CLevel_Loading::Free()
     Safe_Release(m_pCloud_RD);
     Safe_Release(m_pDoor);
     Safe_Release(m_pWalk);
-  
+    Safe_Release(m_pFade);
+
 
 
     Safe_Release(m_pLoader);

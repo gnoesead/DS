@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Player.h"
 #include "MapObject.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -49,6 +51,8 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
+
+    
     return S_OK;
 }
 
@@ -60,24 +64,32 @@ void CLevel_House::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
+    if (pGameInstance->Get_DIKeyDown(DIK_F9))
     {
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
+
+    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
         HRESULT hr = 0;
 
-        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_TRAIN))
+        if (true == pGameInstance->Get_IsStage())
         {
-            pGameInstance->Clear_Light();
-            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
-        }
-        else
-            hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
 
-        if (FAILED(hr))
-        {
-            Safe_Release(pGameInstance);
-            return;
+            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+            }
+            else
+                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
         }
     }
+
     Safe_Release(pGameInstance);
 }
 
@@ -150,7 +162,7 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(60.f);
+    CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
     CameraDesc.fFarZ = 400.f;
@@ -158,6 +170,8 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
+    //CameraDesc.bIs_Battle = false;
+
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))

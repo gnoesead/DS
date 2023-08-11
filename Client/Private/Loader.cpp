@@ -36,6 +36,7 @@
 #include "Loading.h"
 #include "Story_Board.h"
 #include "Pause.h"
+#include "Fade.h"
 
 
 #include "NPC_Female.h"
@@ -283,6 +284,11 @@ HRESULT CLoader::LoadingForLogo()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
 		return E_FAIL;
 	}
+
+	/* Prototype_GameObject_Fade */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Fade"),
+		CFade::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -748,6 +754,8 @@ HRESULT CLoader::LoadingForLobby()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Pause"),
 		CPause::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	
 
 #pragma endregion
 

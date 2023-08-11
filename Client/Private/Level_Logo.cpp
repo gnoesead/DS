@@ -4,6 +4,9 @@
 #include "Level_Loading.h"
 #include "Title.h"
 #include "Title_Manager.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
+
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -33,6 +36,14 @@ void CLevel_Logo::Tick(_double dTimeDelta)
 
     if (GetKeyState(VK_RETURN) & 0x8000 && CTitleManager::GetInstance()->Get_Select_Type() == 0)
     {
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
+
+    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+
+        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
         HRESULT hr = 0;
 
         if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
@@ -48,7 +59,10 @@ void CLevel_Logo::Tick(_double dTimeDelta)
             Safe_Release(pGameInstance);
             return;
         }
+
     }
+
+
 
     Safe_Release(pGameInstance);
 }
@@ -137,6 +151,22 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+
+
+
+    CFade::UIDESC UIDesc2;
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+   
 
     Safe_Release(pGameInstance);
 

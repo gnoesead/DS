@@ -24,6 +24,7 @@ HRESULT CStory_Board::Initialize_Prototype()
 		return E_FAIL;
 	}
 
+
 	return S_OK;
 }
 
@@ -40,7 +41,7 @@ HRESULT CStory_Board::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	
+	m_Story_Index = CStoryManager::GetInstance()->Get_Select_Type();
 
 	// Bg
 	if (m_UI_Desc.m_Type == 0) {
@@ -262,7 +263,18 @@ HRESULT CStory_Board::Initialize(void* pArg)
 		m_UI_Layer = 7;
 	}
 
-	
+	// Line_2
+	if (m_UI_Desc.m_Type == 17) {
+
+		m_fX = 1920;
+		m_fY = 360;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 6;
+	}
 
 	m_szTitle.push_back(L"튜토리얼");
 	m_szContent.push_back(L"북서쪽 마을로");
@@ -319,6 +331,32 @@ void CStory_Board::Tick(_double dTimeDelta)
 	}
 
 	
+	// Move
+	if (m_bIs_Line_Move == true) {
+
+		if (m_UI_Desc.m_Type == 14 || m_UI_Desc.m_Type == 17 || (m_UI_Desc.m_Type >= 3 && m_UI_Desc.m_Type <= 7)) {
+
+			m_fX -= dTimeDelta * m_Move_Speed * m_PosX_Dir;
+
+			if (m_Origin_PosX - m_fX >= 180.f) {
+
+				m_PosX_Dir = -1.f;
+				m_Move_Speed = 3600.f;
+
+				if (m_UI_Desc.m_Type == 14) {
+					CStoryManager::GetInstance()->Set_Line_Move_Done(true);
+				}
+			}
+
+			if (m_fX >= m_Origin_PosX) {
+				m_fX = m_Origin_PosX;
+				m_PosX_Dir =  1.f;
+				m_Move_Speed = 2300.f;
+				m_bIs_Line_Move = false;
+			}
+		}
+	}
+
 
 	// Cloud_LT
 	if (m_UI_Desc.m_Type == 9) {
@@ -383,7 +421,7 @@ void CStory_Board::Tick(_double dTimeDelta)
 	}
 
 
-	m_Time_Mask_X += (_float)dTimeDelta * 4.f * m_Time_Mask_Dir;
+	m_Time_Mask_X += (_float)dTimeDelta * 6.f * m_Time_Mask_Dir;
 
 	
 }
@@ -437,13 +475,16 @@ void CStory_Board::LateTick(_double dTimeDelta)
 		m_Pre_Story_Index = m_Story_Index;
 		m_Title_Alpha_Change = true;
 		m_Mini_Title_Alpha_Change = true;
+		m_bIs_Line_Move = true;
+		CStoryManager::GetInstance()->Set_Line_Move_Done(false);
 
 	}
+
 
 	if (m_Title_Alpha_Change == true) {
 		
 		if (m_UI_Desc.m_Type == 8) {
-			m_Alpha -= (_float)dTimeDelta * 5.f * m_Alpha_Dir;
+			m_Alpha -= (_float)dTimeDelta * 7.f * m_Alpha_Dir;
 
 			if (m_Alpha < 0.f) {
 				m_Alpha = 0.f;
@@ -481,20 +522,27 @@ void CStory_Board::LateTick(_double dTimeDelta)
 	}
 
 
+
 	if (m_Mini_Title_Alpha_Change == true) {
 
 		if (m_UI_Desc.m_Type == 13) {
+
+			if (CStoryManager::GetInstance()->Get_Line_Move_Done() == true) {
+				m_Alpha_Dir = -1.f;
+				m_Mini_Title_Change = true;
+			}
+			else {
+				m_Alpha_Dir = 1.f;
+			}
+
 			m_Alpha -= (_float)dTimeDelta * 5.f * m_Alpha_Dir;
 
 			if (m_Alpha < 0.f) {
 				m_Alpha = 0.f;
-				m_Alpha_Dir *= -1.f;
-				m_Mini_Title_Change = true;
 			}
 
 			if (m_Alpha > 1.f) {
 				m_Alpha = 1.f;
-				m_Alpha_Dir *= -1.f;
 				m_Mini_Title_Alpha_Change = false;
 			}
 
@@ -676,7 +724,7 @@ HRESULT CStory_Board::Add_Components()
 			return E_FAIL;
 
 	}
-	else if (m_UI_Desc.m_Type == 14) {
+	else if (m_UI_Desc.m_Type == 14 || m_UI_Desc.m_Type == 17) {
 
 		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Line"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -828,14 +876,13 @@ HRESULT CStory_Board::SetUp_ShaderResources()
 			return E_FAIL;
 
 	}
-	// 마스크 텍스쳐
-	else if (m_UI_Desc.m_Type == 16 || m_UI_Desc.m_Type == 17) {
+	// 라인_2
+	else if (m_UI_Desc.m_Type == 17) {
 
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 16)))
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
 			return E_FAIL;
 
 	}
-
 
 
 	return S_OK;

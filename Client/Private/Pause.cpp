@@ -186,29 +186,21 @@ void CPause::LateTick(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
-	if (pGameInstance->Get_DIKeyDown(DIK_RCONTROL)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_8)) {
 
 		if (m_Alpha == 1.f) {
 			m_Is_Out = true;
 			m_Is_Font_Render = false;
+			
 		}
 		else if (m_Alpha == 0.f) {
 			m_Is_In = true;
-			m_Is_Font_Render = true;
+		
 		}
 
 	}
 
 	
-
-	/*if (m_Is_Font_Render == true)
-		CMissionManager::GetInstance()->Set_Is_Dialog_On(true);
-	else {
-		CMissionManager::GetInstance()->Set_Is_Dialog_On(false);
-	}*/
-
-
-
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
@@ -354,6 +346,7 @@ void CPause::Fade_In(_double TimeDelta)
 	
 	if (m_Alpha >= 1.f) {
 		m_Is_In = false;
+		m_Is_Font_Render = true;
 	}
 
 }
@@ -371,6 +364,7 @@ void CPause::Fade_Out(_double TimeDelta)
 
 	if (m_Alpha <= 0.f) {
 		m_Is_Out = false;
+
 	}
 
 }
