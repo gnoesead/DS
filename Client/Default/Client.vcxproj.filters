@@ -220,9 +220,6 @@
     <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
       <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
-      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Player\Sword">
       <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
     </Filter>
@@ -276,6 +273,12 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza">
+      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Kyogai">
+      <UniqueIdentifier>{b4b6df4d-bb33-4b31-9e81-fafbf4444f20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -475,7 +478,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
-      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NPC.h">
       <Filter>02. GameObjects\Character\NPC</Filter>
@@ -491,6 +494,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\MonsterManager.h">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Boss_Kyogai.h">
+      <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -681,7 +687,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
-      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NPC.cpp">
       <Filter>02. GameObjects\Character\NPC</Filter>
@@ -697,6 +703,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MonsterManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Boss_Kyogai.cpp">
+      <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
