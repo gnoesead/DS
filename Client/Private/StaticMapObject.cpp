@@ -77,8 +77,16 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 
 		(true == pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 20.f)))
 	{
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
+		if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+				return;
+		}
+		else
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+				return;
+		}
 	}
 
 	Safe_Release(pGameInstance);
@@ -139,8 +147,8 @@ void CStaticMapObject::Interaction_DoorOpen_Manual(_double TimeDelta)
 			return;
 		}
 
-		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);	
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);		// 
 
 		// 문과의 거리 체크
 		if (Compute::DistCheck(vPlayerPos, vMyPos, 2.f))

@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Level_Loading.h"
+#include "ColliderManager.h"
 
 #include "Camera.h"
 #include "Player.h"
@@ -22,6 +23,7 @@
 #include "Dialog.h"
 #include "Mission.h"
 #include "Mini_Map.h"
+#include "CollisionBox.h"
 #include "Pause.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
@@ -69,6 +71,11 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_CollisionBox(TEXT("Layer_CollisionBox"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_CollisionBox : CLevel_Village");
+        return E_FAIL;
+    }
 
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
@@ -92,6 +99,9 @@ void CLevel_Village::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
+    CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
+
+   
     
     if (pGameInstance->Get_DIKeyDown(DIK_F9))
     {
@@ -122,6 +132,8 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
 
     Safe_Release(pGameInstance);
+
+   
 }
 
 HRESULT CLevel_Village::Render()
@@ -238,6 +250,13 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 HRESULT CLevel_Village::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
     Load_MapObject_Info(TEXT("../../Data/Object/Village/Village.dat"), pLayerTag);
+
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_CollisionBox(const _tchar* pLayerTag)
+{
+    Load_CollisionBox_Info(TEXT("../../Data/Collision/Village/Village_Collision.dat"), pLayerTag);
 
     return S_OK;
 }
@@ -531,6 +550,48 @@ HRESULT CLevel_Village::Load_MapObject_Info(const _tchar* pPath, const _tchar* p
         default:
             break;
         }
+    }
+
+    CloseHandle(hFile);
+
+    Safe_Release(pGameInstance);
+
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Load_CollisionBox_Info(const _tchar* pPath, const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (INVALID_HANDLE_VALUE == hFile)
+        return E_FAIL;
+
+    _ulong			dwByte = 0;
+    _uint			iSize = 0;
+
+    CGameObject* pGameObject = { nullptr };
+
+    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+    for (_uint i = 0; i < iSize; ++i)
+    {
+        CCollisionBox::COLLISIONBOX_INFO tCollisionBox_Info;
+        ZeroMemory(&tCollisionBox_Info, sizeof tCollisionBox_Info);
+
+        ReadFile(hFile, &tCollisionBox_Info.vPos, sizeof(_float4), &dwByte, nullptr);
+      
+        ReadFile(hFile, &tCollisionBox_Info.vScale, sizeof(_float3), &dwByte, nullptr);
+
+        ReadFile(hFile, &tCollisionBox_Info.iCollisionType, sizeof(_uint), &dwByte, nullptr);
+     
+        if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_CollisionBox"),
+            TEXT("Prototype_GameObject_CollisionBox"), &tCollisionBox_Info)))
+            return E_FAIL;
     }
 
     CloseHandle(hFile);

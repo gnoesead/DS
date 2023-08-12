@@ -12,26 +12,27 @@ BEGIN(Client)
 class CBoss_Akaza final : public CMonster
 {
 public:
-	
-	enum PHASE
+
+	enum  PHASE
 	{
 		BEGIN, PHASE_1, PHASE_2, PHASE_3
 	};
-	enum STATE
+	enum  STATE
 	{
 		STATE_IDLE, STATE_BEGIN,
 		STATE_ESCAPE, STATE_DASHPUNCH, STATE_GUARD, STATE_AIRGUN, STATE_PUSHAWAY, STATE_COMBO_PUNCH,
 		STATE_JUMPSTOMP, STATE_DASHKICK, STATE_JUMPAIRGUN, STATE_DASH_COMBO_PUNCH, STATE_UPPERKICK,
-		STATE_NEXTPHASE2,STATE_NEXTPHASE3,
+		STATE_NEXTPHASE2, STATE_NEXTPHASE3,
 		STATE_HEAL,
-		STATE_AWAKE,STATE_AWAKE_COMBOPUNCH,
-		
-		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN
-		
+		STATE_AWAKE, STATE_AWAKE_COMBOPUNCH,
+
+		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN,
+		STATE_CINEMATIC
+
 	};
 
 #pragma region AnimIndex
-	enum ANIM {
+	enum  ANIM {
 		////////////////// 기본 MOVE///////////////////
 
 		ANIM_IDEL = 0,
@@ -69,12 +70,12 @@ public:
 		ANIM_COMBO_PIST2 = 18,
 
 		ANIM_AWAKE_COMBO_PIST = 28, // 28~32 완전개방? 했을 때
-		
+
 		ANIM_AREA_COMBO = 20, // 21 영역펼쳤을 때 안에 있으면 써짐
 
 		ANIM_AIRGUN = 22, // 23,24 장풍
 		ANIM_AIRGUN2 = 23,
-		ANIM_AIRGUN3 = 24, 
+		ANIM_AIRGUN3 = 24,
 
 		ANIM_JUMPAIRGUN = 25, // 26,27
 		ANIM_JUMPAIRGUN2 = 26,
@@ -134,6 +135,17 @@ public:
 		ANIM_AWAKE_COMBOPUNCH_ROOP = 31,
 		ANIM_AWAKE_COMBOPUNCH_END = 32,
 
+		ANIM_CINEMATIC1 = 111,
+		ANIM_CINEMATIC2 = 112,
+		ANIM_CINEMATIC3 = 113,
+		ANIM_CINEMATIC4 = 114,
+		ANIM_CINEMATIC5 = 115,
+		ANIM_CINEMATIC6 = 116,
+		ANIM_CINEMATIC7 = 117,
+		ANIM_CINEMATIC8 = 118,
+		ANIM_CINEMATIC9 = 119,
+		ANIM_CINEMATIC10 = 120,
+		
 		ANIM_DEATH = 78, // 사망
 		ANIM_JUMP_PIST = 33, // 안쓸듯
 
@@ -161,20 +173,24 @@ public:
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
-	void Update_Reset(_double dTimeDelta);
-//	void Update_Begin(_double dTimeDelta);
+	
+	//	void Update_Begin(_double dTimeDelta);
 	void Update_Phase_1(_double dTimeDelta);
 	void Update_Phase_2(_double dTimeDelta);
 	void Update_Phase_3(_double dTimeDelta);
 
-	void Trigger_Idle();
+	void Trigger_Interact_Phase_1(_double dTimeDelta);
+	void Trigger_Interact_Phase_2(_double dTimeDelta);
+	void Trigger_Interact_Phase_3(_double dTimeDelta);
+
+	void Trigger_Interact();
 	void Trigger_Begin();
 	void Trigger_Escape();
-	void Trigger_DashPunch();//
+	void Trigger_DashPunch();
 	void Trigger_Guard();
-	void Trigger_AirGun();//
-	void Trigger_PushAway();//
-	void Trigger_Nachim();//
+	void Trigger_AirGun();
+	void Trigger_PushAway();
+	void Trigger_Nachim();
 	void Trigger_ComboPunch();
 	void Trigger_JumpStomp();
 	void Trigger_DashKick();
@@ -189,13 +205,14 @@ public:
 
 	void Trigger_Nachim_ComboPunch();
 	void Trigger_Nachim_AirGun();
+	void Trigger_Awake_Cinematic();
 
 #pragma endregion
 
 #pragma region Pattern
 private: //패턴 함수들
 	void Update_State(_double dTimeDelta);
-	void Update_Idle(_double dTimeDelta);
+	void Update_Interact(_double dTimeDelta);
 	void Update_Begin(_double dTimeDelta);
 	void Update_Escape(_double dTimeDelta);
 	void Update_DashPunch(_double dTimeDelta);
@@ -214,9 +231,10 @@ private: //패턴 함수들
 	void Update_Heal(_double dTimeDelta);
 	void Update_Awake(_double dTimeDelta);
 	void Update_Awake_ComboPunch(_double dTimeDelta);
-	
+
 	void Update_Nachim_ComboPunch(_double dTimeDelta);
 	void Update_Nachim_AirGun(_double dTimeDelta);
+	void Update_Awake_Cinematic(_double dTimeDelta);
 
 private: /* Calculate */
 	/*_float Calculate_Distance();
@@ -229,7 +247,7 @@ private: // _bool
 	_bool	m_bStart = { false };
 
 	_bool	m_bAnimFinish = { false };
-	
+
 	_bool	m_bHit = { false };
 
 	_bool	m_bDashPunch = { false };
@@ -239,18 +257,20 @@ private: // _bool
 	_bool	m_bDashOn = { false };
 
 	_bool	m_bHeal = { false };
-	
+
 	_bool	m_bJump = { false };
 
 	_bool	m_bTrigger = { false };
-
 	_bool	m_bPatternStart = { false };
 
+	_bool	m_bAwake = { false };
+	_bool	m_bFirstAwake = { false };
+	_bool	m_bSecondAwake = { false };
 	//_bool	m_bNextPhase = { false };
-	
+
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
-	_double m_dAwakePunchTime = { 0.0 };
+	_double m_dAwakeTime = { 0.0 };
 
 	_double m_dTriggerTime = { 0.0 };
 
@@ -283,7 +303,7 @@ private: // 렌더 아웃라인
 #pragma endregion
 private:
 	//CTransform* m_pPlayerTransformCom = { nullptr };
-	
+
 private:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();

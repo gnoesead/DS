@@ -47,7 +47,7 @@ public:
 	void Go_Left(_double dTimeDelta, class CNavigation* pNavigation = nullptr);
 	void Go_Up(_double dTimeDelta);
 	void Go_Down(_double dTimeDelta);
-	void Go_Dir(_double dTimeDelta, _fvector vDirection);	//vDirection 방향으로 이동
+	void Go_Dir(_double dTimeDelta, _fvector vDirection, class CNavigation* pNavigation = nullptr);	//vDirection 방향으로 이동
 	void Go_Arc(_double dTimeDelta, _fvector vStartPosition, _fvector vArrivePosition, _float fArriveTime, _float fAngle);
 
 

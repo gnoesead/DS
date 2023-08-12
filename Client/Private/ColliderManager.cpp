@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Player.h"
+#include "Collider.h"
 
 IMPLEMENT_SINGLETON(CColliderManager)
 
@@ -38,6 +39,12 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 	if (FAILED(Check_MonsterAtkToPlayer(iLevelIndex, dTimeDelta)))
 	{
 		MSG_BOX("Failed to Check_MonsterAtkToPlayer");
+		return E_FAIL;
+	}
+
+	if (FAILED(Check_PlayerToCollisionBox(iLevelIndex, dTimeDelta)))
+	{
+		MSG_BOX("Failed to Check_PlayerToCollisionBoxr");
 		return E_FAIL;
 	}
 
@@ -179,6 +186,78 @@ HRESULT CColliderManager::Check_PlayerAtkToMonster(_uint iLevelIndex, _double dT
 			}
 		}
 	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CColliderManager::Check_PlayerToCollisionBox(_uint iLevelIndex, _double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
+
+	list<CGameObject*>* pCollisionBoxes = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_CollisionBox"));
+
+	_int iCollCount = { 0 };
+
+	if (nullptr != pPlayerCollider && nullptr != pCollisionBoxes)
+	{
+		for (auto& pCollisionBox : (*pCollisionBoxes))
+		{
+			if (nullptr != pCollisionBox)
+			{
+				CCollider* pAABBBox = dynamic_cast<CCollider*>(pCollisionBox->Find_Component(TEXT("Com_Sphere")));
+
+				if (pAABBBox->Get_Death() == false)
+					pPlayerCollider->Intersect(pAABBBox);
+
+
+
+				if (true == pPlayerCollider->Get_Coll())
+					iCollCount++;
+
+				if (true == pAABBBox->Get_Coll())
+				{
+					CTransform* pAABBTransform = dynamic_cast<CTransform*>(pCollisionBox->Find_Component(TEXT("Com_Transform")));
+
+					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+
+					/*
+					_vector vDir = pMonsterTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					pMonsterTransform->Go_Dir(dTimeDelta * 0.2, vDir);
+					pPlayerTransform->Go_Dir(dTimeDelta * 0.2, vDir * -1);
+					*/
+					_float fRad = pPlayerCollider->Get_Collider() + pAABBBox->Get_Desc().vSize.x;
+
+					_vector vDir = pAABBTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					_float fDis = Convert::GetLength(vDir);
+
+					if (fRad > fDis)
+					{
+						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+						_float fMoveDistance = (fRad - fDis) / 6.0f;
+						//_float fMoveDistance = fRad - fDis - 0.02f;
+						_vector vMove = vMoveDir * fMoveDistance;
+						
+						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+						vPlayerPos -= vMove;
+						pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+
+					}
+				}
+			}
+		}
+	}
+
+	if (0 < iCollCount)
+		pPlayerCollider->Set_Coll(true);
+	else
+		pPlayerCollider->Set_Coll(false);
 
 	Safe_Release(pGameInstance);
 

@@ -40,6 +40,7 @@ private:
 private:
 	HRESULT Check_PlayerToMonster(_uint iLevelIndex, _double dTimeDelta);
 	HRESULT Check_PlayerAtkToMonster(_uint iLevelIndex, _double dTimeDelta);
+	HRESULT Check_PlayerToCollisionBox(_uint iLevelIndex, _double dTimeDelta);
 	HRESULT Check_MonsterToMonster(_uint iLevelIndex, _double dTimeDelta);
 	HRESULT Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dTimeDelta);
 

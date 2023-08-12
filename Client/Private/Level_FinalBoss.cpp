@@ -269,7 +269,8 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
     CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
 
    
-   // CharacterDesc.NaviDesc.iCurrentIndex = 0;
+   // CharacterDesc.
+   // .iCurrentIndex = 0;
     //CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(140.f, 0.f, 120.f, 1.f);
 
 

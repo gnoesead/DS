@@ -57,6 +57,10 @@ public://Get
 		return m_Animations[iAnimIndex]->Get_dAnimRatio();
 	}
 
+	_bool Get_IsNormalTexture(_uint iMaterialIdx) {
+		return m_isNormalTexture[iMaterialIdx];
+	}
+
 public://Set
 	void Set_Animation(_uint iAnimIndex) { m_iCurrentAnimIndex = iAnimIndex; }
 
@@ -135,6 +139,9 @@ private:
 
 	_uint						m_iNumAnimations = { 0 };
 	vector<class CAnimation*>	m_Animations;
+
+private:
+	_bool						m_isNormalTexture[50] = { false };
 	
 
 private:

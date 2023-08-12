@@ -901,10 +901,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//m_isBoxJumping = true;
 		//떨어지는
 		if (m_isPlayerStatus_OnRoof)
-			Jumping(1.0f, 0.07f);
+			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(2.0f, 0.08f);
+			Jumping(1.55f, 0.08f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -913,10 +913,19 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isLand_Roof = false;
 		}
 		m_vTanjrioToBoxDir = m_vPlayerToBoxDir;
-		if(m_isPlayerStatus_OnRoof == false)
+
+		if (m_isPlayerStatus_OnRoof == false)
+		{
 			m_pTransformCom->Set_Look(m_vPlayerToBoxDir);
+		}
 		else
+		{
+			// 지붕에 올라가있을때, dl
 			m_pTransformCom->Set_Look(m_ReverseDir);
+
+			m_eCurNavi = m_eNextNavi;
+
+		}
 	}
 
 	if (0.1f < m_fDistanceTo_Box)
@@ -937,8 +946,16 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 	if (m_isPlayerStatus_OnRoof == false)
 	{
-		Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
-		Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box);
+		if (NAVI_VILLAGE_WALL == m_eNextNavi)
+		{
+			Go_Dir_Constant(dTimeDelta, 3, 0.3f, m_Dir_ScondJump_Box);
+			Go_Dir_Constant(dTimeDelta, 85, 0.3f, m_Dir_ScondJump_Box);
+		}
+		else
+		{
+			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
+			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box);
+		}
 	}
 	else
 	{
@@ -956,7 +973,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->Set_Look(m_Dir_ScondJump_Box);
 			//떨어지는
 			if(m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.07f);
+				Jumping(1.1f, 0.07f);		// 두번째 올라갈때 점프(땅)
 			//올라가는
 			else
 				Jumping(2.15f, 0.08f);
@@ -966,9 +983,16 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		if (m_dDelay_BoxJump > 0.35f)
 		{
 			if (m_isCan_Jump_RoofOn)
+			{
 				m_isLand_Roof = true;
+			}
 			else
+			{
 				m_isLand_Roof = false;
+
+				//지붕 X  점프가 가장 고점일때임.
+				m_eCurNavi = m_eNextNavi;
+			}
 		}
 	}
 	else if (m_pModelCom->Get_iCurrentAnimIndex() == 3 && m_isPlayerStatus_OnRoof == true)
@@ -978,7 +1002,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isFirst_Jump2_To_Box = false;
 			//떨어지는
 			if (m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.08f);
+				Jumping(1.1f, 0.08f); // 지붕에서 내려갈때 두번째 점프
 			//올라가는
 			else
 				Jumping(2.45f, 0.08f);
@@ -1259,7 +1283,9 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
-
+	// 슈퍼아머 상태 넣어주셈
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
+		return E_FAIL;*/
 
 
 
