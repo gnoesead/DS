@@ -10,6 +10,7 @@
 #include "Story_Manager.h"
 #include "MonsterManager.h"
 #include "Fade_Manager.h"
+#include "Mini_Map_Manager.h"
 
 
 #include "SoundMgr.h"
@@ -138,7 +139,6 @@ HRESULT CMainApp::Render()
 
 	if (m_TimeAcc >= 1.0)
 	{
-
 		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iRenderCnt);
 		m_iRenderCnt = 0;
 		m_TimeAcc = 0.0;
@@ -478,7 +478,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma region Map_UI	
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mini_Map"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 7))))
 		return E_FAIL;
 
 #pragma endregion	
@@ -655,6 +655,8 @@ void CMainApp::Free()
 	CTitleManager::GetInstance()->DestroyInstance();
 	CStoryManager::GetInstance()->DestroyInstance();
 	CFadeManager::GetInstance()->DestroyInstance();
+	CMiniMapManager::GetInstance()->DestroyInstance();
+
 
 	CGameInstance::Release_Engine();
 }

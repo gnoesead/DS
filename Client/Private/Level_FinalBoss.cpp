@@ -22,7 +22,8 @@
 #include "Dialog.h"
 
 #include "ColliderManager.h"
-
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -83,6 +84,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
+	CFadeManager::GetInstance()->Set_Fade_In(true);
+
 	return S_OK;
 }
 
@@ -93,6 +96,37 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_F9))
+	{
+		CFadeManager::GetInstance()->Set_Fade_Out(true);
+	}
+
+	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+		CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+		HRESULT hr = 0;
+
+		if (true == pGameInstance->Get_IsStage())
+		{
+
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
+		}
+	}
+
+
+	Safe_Release(pGameInstance);
 	
 }
 
@@ -114,9 +148,9 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 
 	LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
 	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-	LightDesc.vLightDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vLightDiffuse = _float4(0.5f, 0.5f, 0.5f, 0.5f);
+	LightDesc.vLightAmbient = _float4(0.5f, 0.5f, 0.5f, 0.5f);
+	LightDesc.vLightSpecular = _float4(0.f, 0.f, 0.f, 0.f);
 
 	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
 	{
@@ -838,6 +872,28 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Fade
+	CFade::UIDESC UIDesc11;
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc11))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

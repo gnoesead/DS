@@ -94,7 +94,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Player
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
 	CTransform* m_pMonsterTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
+
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	// Monster

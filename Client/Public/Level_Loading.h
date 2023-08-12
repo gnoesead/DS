@@ -39,7 +39,6 @@ private:
 	class CLoading* m_pWalk = { nullptr };
 	class CFade*    m_pFade = { nullptr };
 
-
 public:
 	static			CLevel_Loading* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void	Free() override;

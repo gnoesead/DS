@@ -214,6 +214,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
     <ClInclude Include="..\Public\Mini_Map.h" />
+    <ClInclude Include="..\Public\Mini_Map_Manager.h" />
     <ClInclude Include="..\Public\Mission.h" />
     <ClInclude Include="..\Public\MissionManager.h" />
     <ClInclude Include="..\Public\Monster.h" />
@@ -288,6 +289,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
     <ClCompile Include="..\Private\Mini_Map.cpp" />
+    <ClCompile Include="..\Private\Mini_Map_Manager.cpp" />
     <ClCompile Include="..\Private\Mission.cpp" />
     <ClCompile Include="..\Private\MissionManager.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />

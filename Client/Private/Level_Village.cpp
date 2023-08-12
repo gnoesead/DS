@@ -69,6 +69,7 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+
     if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
@@ -413,20 +414,8 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     CPause::UIDESC UIDesc3;
     ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    UIDesc3.m_Is_Reverse = false;
+    /*UIDesc3.m_Is_Reverse = false;
     UIDesc3.m_Type = 0;
-
-
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
-
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 6;
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
@@ -445,8 +434,21 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
         Safe_Release(pGameInstance);
         return E_FAIL;
+    }*/
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 6;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
     }
 
+   
 
     Safe_Release(pGameInstance);
 

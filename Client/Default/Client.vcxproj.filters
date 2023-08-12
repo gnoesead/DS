@@ -277,6 +277,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager">
+      <UniqueIdentifier>{0cc59fe8-88a9-4669-bee0-e2d20d650935}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -498,6 +501,9 @@
     <ClInclude Include="..\Public\Fade.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Mini_Map_Manager.h">
+      <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -709,6 +715,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Fade.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mini_Map_Manager.cpp">
+      <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -105,7 +105,12 @@ void CFade::LateTick(_double TimeDelta)
 
 	Get_Info(TimeDelta);
 
-	
+	if (m_Alpha == 0.f) {
+		m_Is_Render = false;
+	}
+	else {
+		m_Is_Render = true;
+	}
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;

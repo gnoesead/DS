@@ -246,35 +246,12 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             }
         }
 
-        if (g_iLoadingTextureIndex == 0) {
+        if (g_iLoadingTextureIndex == 0 && m_eNextLevelID == LEVEL_LOGO) {
 
             CLevel* pLevel = { nullptr };
 
-            switch (m_eNextLevelID)
-            {
-            case LEVEL_LOGO:
-                pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_LOBBY:
-                pLevel = CLevel_Lobby::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_GAMEPLAY:
-                pLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_VILLAGE:
-                pLevel = CLevel_Village::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_HOUSE:
-                pLevel = CLevel_House::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_TRAIN:
-                pLevel = CLevel_Train::Create(m_pDevice, m_pContext);
-                break;
-            case LEVEL_FINALBOSS:
-                pLevel = CLevel_FinalBoss::Create(m_pDevice, m_pContext);
-                break;
-            }
-
+            pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
+            
             if (nullptr == pLevel)
                 return;
 
@@ -291,7 +268,7 @@ void CLevel_Loading::Tick(_double dTimeDelta)
             if (FAILED(hr))
                 return;
         }
-        else if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+        else if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true && m_eNextLevelID != LEVEL_LOGO) {
 
             CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
@@ -299,9 +276,6 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
             switch (m_eNextLevelID)
             {
-            case LEVEL_LOGO:
-                pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
-                break;
             case LEVEL_LOBBY:
                 pLevel = CLevel_Lobby::Create(m_pDevice, m_pContext);
                 break;
@@ -337,6 +311,8 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
             if (FAILED(hr))
                 return;
+
+
         }
 
     }

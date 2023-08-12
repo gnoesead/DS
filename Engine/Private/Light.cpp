@@ -53,6 +53,7 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 	else if (LIGHTDESC::TYPE_POINT == m_LightDesc.eType)
 	{
 		iPassIndex = 2;
+
 	}
 
 	if (FAILED(pShader->SetUp_RawValue("g_vLightDiffuse", &m_LightDesc.vLightDiffuse, sizeof(_float4))))

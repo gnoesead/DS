@@ -9,6 +9,8 @@
 #include "MapObject.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
+#include "Mini_Map.h"
+#include "Mission.h"
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -45,6 +47,12 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+        return E_FAIL;
+    }
+
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
         MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_House");
@@ -52,7 +60,8 @@ HRESULT CLevel_House::Initialize()
     }
 
 
-    
+    CFadeManager::GetInstance()->Set_Fade_In(true);
+
     return S_OK;
 }
 
@@ -195,7 +204,9 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 
    
     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(190.f, 0.f, 30.f, 1.f);
 
+    
     CharacterDesc.Land_Y = 0.f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
 
@@ -214,6 +225,131 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
     Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
+
+    return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    // Fade
+    CFade::UIDESC UIDesc;
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+ // Mini_Map
+    CMini_Map::UIDESC UIDesc2;
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Bg
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Wire
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Frame
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Map
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Player_Icon
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 4;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+ // Mission
+
+    CMission::UIDESC UIDesc3;
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    // Main
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    // Main_Icon
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+
+    Safe_Release(pGameInstance);
 
     return S_OK;
 }
