@@ -24,9 +24,13 @@
 #include "Mission.h"
 #include "Mini_Map.h"
 #include "CollisionBox.h"
+
 #include "Pause.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
+
+
+
 
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -100,6 +104,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
     Safe_AddRef(pGameInstance);
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
+
 
    
     
