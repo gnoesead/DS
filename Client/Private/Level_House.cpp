@@ -208,7 +208,7 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
    
     //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
-    // CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
     //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
 
