@@ -945,7 +945,6 @@ void CBoss_Kyogai::Update_Heal(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_HEAL;
 	}
 
-
 	if (m_pModelCom->Get_AnimRatio(ANIM_HEAL, 0.0) && !m_pModelCom->Get_AnimRatio(ANIM_HEAL, 1.0))
 	{
 

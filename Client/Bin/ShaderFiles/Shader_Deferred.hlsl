@@ -226,7 +226,6 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
 	float      fViewZ = vDepth.x * 300.f;
 
-
 	vector      vWorldPos;
 
 	/* 투영공간상에 위치 .*/
@@ -274,16 +273,12 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	/* 월드 스페이스상에 위치 .*/
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
-
 	vector      vLightDir = vWorldPos - g_vLightPos;
 
 	float      fDistance = length(vLightDir);
 
-
 	/* 0 ~ 1 */
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
-
-
 
 	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 	Out.vShade.a = 1.f;
@@ -297,9 +292,6 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	return Out;
 }
 
-
-
-
 PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
@@ -309,7 +301,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
-	vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
+	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 	/*if (vDiffuse.a == 0.f)
 		discard;*/
@@ -355,7 +347,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	//그림자 적용
 
 	vector      vDepthInfo = g_DepthTexture.Sample(DepthSampler, In.vTexUV);
-	float      fViewZ = vDepthInfo.x * 300.0f;
+	float      fViewZ = vDepthInfo.z * 300.0f;
 
 	vector      vPosition;
 
@@ -379,60 +371,60 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	vector      vShadowDepthInfo = g_ShadowDepthTexture.Sample(ShadowDepthSampler, vNewUV);
 
-	/*if (vPosition.z - 0.1f > vShadowDepthInfo.r * 300.0f)
+	/*if (vPosition.z  > vShadowDepthInfo.r * vDepthInfo.y * 300.0f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 1.f);
+		vector vColor = vector(0.5f, 0.5f, 0.5f, 1.f);
 		Out.vColor *= vColor;
 	}*/
 
 	if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.1f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 1.f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 1.f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.2f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.9f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.3f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.8f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.8f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.4f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.7f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.7f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.5f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.6f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.5f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.5f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.7f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.4f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.4f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.8f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.3f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.3f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.9f)
+	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.2f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.2f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 1.f)
 	{
-		vector vColor = vector(0.9f, 0.9f, 0.9f, 0.1f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.1f);
 		Out.vColor *= vColor;
 	}
 
@@ -510,6 +502,9 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 //==============================Blur======================================
 float m_TexW = 1280.f;
 float m_TexH = 720.f;
+
+float m_ShadowTexW = 12800.f;
+float m_ShadowTexH = 7200.f;
 
 static const float Weight[13] =
 {
@@ -639,6 +634,69 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	return Out;
 }
+
+
+PS_OUT PS_ShadowBlurX(PS_IN _In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	float2	t = _In.vTexUV;
+	float2	uv = 0;
+
+	float	tu = 1.f / m_ShadowTexW;
+
+	for (int i = -6; i < 6; ++i)
+	{
+		uv = t + float2(tu * i, 0);
+		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+	}
+
+	Out.vColor /= Total;
+
+
+	/*if (Out.vColor.a == 0.f)
+		discard;
+	if (Out.vColor.a == 1.f)
+		discard;
+	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+		discard;
+	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+		discard;*/
+
+	return Out;
+}
+
+PS_OUT PS_ShadowBlurY(PS_IN _In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	float2 t = _In.vTexUV;
+	float2 uv = 0;
+
+	float tv = 1.f / (m_ShadowTexH / 2.f);
+
+	for (int i = -6; i < 6; ++i)
+	{
+		uv = t + float2(0, tv * i);
+		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+	}
+
+
+	Out.vColor /= Total;
+
+
+	//if (Out.vColor.a == 0.f)
+	//	discard;
+	//if (Out.vColor.a == 1.f)
+	//	discard;
+	//if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+	//	discard;
+	//if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+	//	discard;
+
+	return Out;
+}
+
 PS_OUT PS_BlurX_3(PS_IN _In)
 {
 	PS_OUT         Out = (PS_OUT)0;
@@ -706,11 +764,11 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
+	//vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
 	if (vFinal.a == 0.f)
 		discard;
 
-	//vFinal *= vSSAO.r;
+	
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
 	/*if (Out.vColor.a == 0.f)
@@ -732,15 +790,15 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-
-	if (vFinal.a == 0.f)
-		discard;
+	/*if (vFinal.a == 0.f) // 0812
+		discard;*/
 
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
-	if (Out.vColor.a == 0.f)
-		discard;
+	//if (Out.vColor.a == 0.f) // 0812
+	//	discard;
+
 	/*if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
@@ -750,7 +808,32 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 
 	return Out;
 }
+PS_OUT PS_Combine_ShadowBlur(PS_IN In)
+{
+	PS_OUT      Out = (PS_OUT)0;
 
+	vector      vFinal = g_Texture.Sample(LinearSampler, In.vTexUV);
+	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
+	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
+
+	/*if (vFinal.a == 0.f) // 0812
+		discard;*/
+
+
+	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
+
+	//if (Out.vColor.a == 0.f) // 0812
+	//	discard;
+
+	/*if (Out.vColor.a == 1.f)
+		discard;
+	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+		discard;
+	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+		discard;*/
+
+	return Out;
+}
 //==============================SSAO======================================
 
 float3 randomNormal(float2 tex)
@@ -1017,4 +1100,41 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Apply_Bloom();
 	}
+	pass ShadowBlurX
+	{//14
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ShadowBlurX();
+	}
+	pass ShadowBlurY
+	{//15
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ShadowBlurY();
+	}
+	pass CombineShadowBlur
+	{//16
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Combine_ShadowBlur();
+	}
+
 }

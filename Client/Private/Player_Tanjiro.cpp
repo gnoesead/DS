@@ -187,12 +187,13 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 
-
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	_vector   vLightAt = vPlayerPos;
+	//_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
 
 
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
@@ -206,7 +207,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
@@ -294,7 +295,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1, 
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);

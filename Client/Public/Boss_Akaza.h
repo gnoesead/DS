@@ -100,14 +100,18 @@ public:
 		////////////////// 히트모션 ///////////////////
 
 		ANIM_HIT_BLOW = 79, // 80 뒤로 날아감 
+		ANIM_HIT_BLOW_ROOP = 80,
 		ANIM_HIT_BLOW_END = 81, // 뒤로 날아감 끝
 		ANIM_HIT_POWER_BLOW = 82, // 105 종잇장 마냥 날라감
 		ANIM_HIT_MIDDLE_BLOW = 83, // 105 날라감
-		ANIM_HIT_BOUNCD = 84, // 85 105 바운드
-		ANIM_HIT_DMGFALL = 86, // 87= IDLE
+		ANIM_HIT_BOUND = 84, // 85 105 바운드
+		ANIM_HIT_BOUND2 = 85, // 바운드 하고 옆으로 누움
+		ANIM_HIT_DMGFALL = 86, // U자 모양으로 떨어짐
+		ANIM_HIT_DMGFALL_ROOP = 87, // 86히트 다음으로 나오며 루프임
+		ANIM_HIT_DMGFALL_BOUND = 88, //? 바운드가 왜 또 있지 
 		ANIM_HIT_FALL = 89, // 모르겟음 HIT가 맞나? 공중에서 웅크리며 있음 IDLE상태
 
-		ANIM_HIT_GUARDBREAK = 90,
+		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크
 		ANIM_HIT_SPIN = 91, // 92, 93
 		ANIM_HIT_POWER_GUARDBREAK = 94, // 뒷걸음질 함
 		ANIM_HIT_RETURN_BIG = 95, // 반쯤 고개 숙인 상태에서 돌아옴
@@ -115,12 +119,13 @@ public:
 
 		ANIM_HIT_SMALL_AIR = 97, // 79,80 C자고역ㄱ 들어오고 날아감
 		ANIM_HIT_AIR_UPPER = 98, // 어퍼 맞고 떨어짐
-		ANIM_HIT_SMALL = 99,
-		ANIM_HIT_UPPER = 100, // 어퍼
+		ANIM_HIT_SMALL = 99, // 스몰공격 -> 96이랑 이어짐
+		ANIM_HIT_UPPER = 100, // 어퍼 -> 돌아오는건 96
 
-		ANIM_HIT_STUN = 101, // 102
+		ANIM_HIT_STUN = 101, // 102 스턴
+		ANIM_HIT_STUN2 = 102, // 스턴
 		ANIM_HIT_GETUP_DIZZY = 103, // 104랑 연결 돼있음 근데 95랑 연결이 맞는듯
-		ANIM_HIT_DOWNSTATE = 105, // 누워있음
+		ANIM_HIT_DOWNROOP = 105, // 누워있음
 		ANIM_HIT_GETUP_SPIN = 106, // 107
 
 		////////////////// 엔드모션 ///////////////////
@@ -169,8 +174,10 @@ public:
 #ifdef _DEBUG
 	void Debug_State(_double dTimeDelta);
 #endif //_DEBUG
+	void EventCall_Control(_double dTimeDelta);
 
 	void Update_AnimIndex(_uint iAnimIndex);
+	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
 	

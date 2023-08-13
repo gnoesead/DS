@@ -155,7 +155,7 @@ protected:
 	void	Add_BoxJump_Info();		// 상호작용(박스)(안원추가)
 
 protected:
-	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	PLAYERSTATE		m_ePlayerState = { PLAYER_BATTLE };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
