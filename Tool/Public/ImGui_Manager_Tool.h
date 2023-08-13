@@ -20,6 +20,7 @@ private:
 
 public:
 	void ImGui_Set();
+	void ImGui_Set2();
 	void ImGUI_ShowDemo();
 
 

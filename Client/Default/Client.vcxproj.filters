@@ -16,9 +16,6 @@
     <Filter Include="01. Levels\00. Logo">
       <UniqueIdentifier>{643e17f7-e651-420b-8a17-797b1e533224}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\01. GamePlay">
-      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects">
       <UniqueIdentifier>{b1936517-b52e-47b1-97ba-676614916358}</UniqueIdentifier>
     </Filter>
@@ -172,6 +169,9 @@
     <Filter Include="02. GameObjects\Effect\EffectPlayer">
       <UniqueIdentifier>{1fd423d2-4f55-41d4-a8b8-a9e94cbde288}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Levels\01. GamePlay">
+      <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -296,13 +296,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\Player_Tanjiro.h">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect.h">
       <Filter>02. GameObjects\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Player.h">
       <Filter>02. GameObjects\Character\Player</Filter>
- </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Effect_Mesh.h">
       <Filter>02. GameObjects\Effect\Effect\Mesh</Filter>
     </ClInclude>
@@ -317,7 +317,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\ParticleSystem.h">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Character.h">
       <Filter>02. GameObjects\Character</Filter>
     </ClInclude>
@@ -433,7 +433,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Tanjiro.cpp">
       <Filter>02. GameObjects\Character\Player\Tanjiro</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Effect.cpp">
       <Filter>02. GameObjects\Effect</Filter>
     </ClCompile>
@@ -448,13 +448,13 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectPlayer.cpp">
       <Filter>02. GameObjects\Effect\EffectPlayer</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02. GameObjects\Character\Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ParticleSystem.cpp">
       <Filter>02. GameObjects\Effect\ParticleSystem</Filter>
-      </ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Character.cpp">
       <Filter>02. GameObjects\Character</Filter>
     </ClCompile>

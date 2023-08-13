@@ -19,6 +19,7 @@
 
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
+#include "Effect_Texture.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -206,7 +207,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
+    CharacterDesc.WorldInfo.vScale = _float3(0.8f, 0.8f, 0.8f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
 
@@ -837,10 +838,69 @@ HRESULT CLevel_GamePlay::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 HRESULT CLevel_GamePlay::Ready_Layer_Effect()
 {
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Test_Two.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_BasicCombo1.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : CLevel_GamePlay");
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_BasicCombo2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_BasicCombo3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_BasicCombo4_Normal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Normal");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_Super1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_Super2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_Super3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_SurgeCombo1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1");
+		return E_FAIL;
+	}
+
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_SurgeCombo2.bin"))))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2");
+	//	return E_FAIL;
+	//}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_SurgeCombo3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro_SurgeCombo4.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4");
 		return E_FAIL;
 	}
 
@@ -942,6 +1002,8 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	CEffectPlayer* pEffectPlayer = CEffectPlayer::Get_Instance();
+
 	_ulong dwStrLen;
 	int iEnum = 0;
 	_float3 vFloat3 = { 0.f, 0.f, 0.f };
@@ -960,18 +1022,21 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 
 		inputFile.read(pTagName, dwStrLen);
 
-		CEffectPlayer::Get_Instance()->Add_EffectTag(pTagName);
+		pEffectPlayer->Add_EffectTag(pTagName);
 
 		CParticleSystem* pParentParticleSystem = nullptr;
 
 		_uint iLevelIndex = LEVEL_STATIC;
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
-			MSG_BOX("Failed to Add ParticleSystem");
-		size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ParticleSystem"));
-		pParentParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), (_uint)iSize - 1));
 
-		CEffectPlayer::Get_Instance()->Add_Effect(pTagName, pParentParticleSystem);
-		Safe_AddRef(pParentParticleSystem);
+		//if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
+		//	MSG_BOX("Failed to Add ParticleSystem");
+
+		//size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ParticleSystem"));
+		//pParentParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), (_uint)iSize - 1));
+		
+		pParentParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex));
+
+		pEffectPlayer->Add_Effect(pTagName, pParentParticleSystem);
 
 		int iNumEffects = 0;
 
@@ -983,13 +1048,15 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 		{
 			CParticleSystem* pParticleSystem = nullptr;
 			_uint iLevelIndex = LEVEL_STATIC;
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
-				MSG_BOX("Failed to Add ParticleSystem");
-			size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ChildParticleSystem"));
-			pParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), (_uint)iSize - 1));
+
+			//if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
+			//	MSG_BOX("Failed to Add ParticleSystem");
+			//size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ChildParticleSystem"));
+			//pParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), (_uint)iSize - 1));
+
+			pParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex));
 
 			pParentParticleSystem->Add_Parts(pParticleSystem);
-			Safe_AddRef(pParticleSystem);
 
 			// ParticleSystem - Transform
 			inputFile.read(reinterpret_cast<char*>(&vFloat3), sizeof(_float3));
@@ -1000,11 +1067,14 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			pParticleSystem->Set_Scale(vFloat3);
 
 			inputFile.read(reinterpret_cast<char*>(&iEnum), sizeof(int));
-			pParticleSystem->Create_Effect(iEnum);
+			//pParticleSystem->Create_Effect(iEnum);
+			pParticleSystem->Clone_Effect(iEnum);
 
 			//Effect
 			CEffect::EFFECTDESC EffectDesc;
 			ZeroMemory(&EffectDesc, sizeof EffectDesc);
+
+			EffectDesc.eEffectType = iEnum;
 
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
@@ -1045,6 +1115,8 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMax), sizeof(float));
 
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumBursts), sizeof(int));
+
+			pParticleSystem->Get_Effect()->Reserve_BurstList(EffectDesc.iNumBursts);
 
 			for (int k = 0; k < EffectDesc.iNumBursts; ++k)
 			{
@@ -1123,6 +1195,8 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			{
 				inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumSizes[k]), sizeof(int));
 
+				pParticleSystem->Get_Effect()->Reserve_SizeOverLifeTime(k, EffectDesc.iNumSizes[k]);
+
 				for (int l = 0; l < EffectDesc.iNumSizes[k]; ++l)
 				{
 					CEffect::LIFETIMEVALUE LifetimeValue;
@@ -1144,6 +1218,8 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			{
 				inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumRotations[k]), sizeof(int));
 
+				pParticleSystem->Get_Effect()->Reserve_RotationOverLifeTime(k, EffectDesc.iNumRotations[k]);
+
 				for (int l = 0; l < EffectDesc.iNumRotations[k]; ++l)
 				{
 					CEffect::LIFETIMEVALUE LifetimeValue;
@@ -1152,7 +1228,29 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
 					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
 
-					pParticleSystem->Get_Effect()->Add_SizeOverLifeTime(l, LifetimeValue);
+					pParticleSystem->Get_Effect()->Add_RotationOverLifeTime(k, LifetimeValue);
+				}
+			}
+
+			// Position over Lifetime
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPositionOverLifetime), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.ePosOverLifetimeOption), sizeof(int));
+
+			for (_uint k = 0; k < 3; ++k)
+			{
+				inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumPositions[k]), sizeof(int));
+
+				pParticleSystem->Get_Effect()->Reserve_PositionOverLifeTime(k, EffectDesc.iNumRotations[k]);
+
+				for (int l = 0; l < EffectDesc.iNumPositions[k]; ++l)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+					pParticleSystem->Get_Effect()->Add_PositionOverLifeTime(k, LifetimeValue);
 				}
 			}
 
@@ -1175,6 +1273,15 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMinParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
+			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
+			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
+			{
+				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());	
+				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
+				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
+			}
 
 			// Texture
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vFlip), sizeof(_float2));
@@ -1182,8 +1289,15 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCutOffSoftness), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vBurnColor), sizeof(_float4));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fBurnSize), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientTilling), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDissolveDelay), sizeof(float));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDissolveSpeed), sizeof(float));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiffuseTilling), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiffuseOffset), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientOffset), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientTilling), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingDelayStartEnd), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingSpeedStart), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingSpeedEnd), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDistortionStrength), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDistortionSpeed), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.hasSecondTexture), sizeof(bool));
@@ -1199,6 +1313,25 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRectangleMaskInnerRadius), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRectangleMaskSmoothness), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eCullMode), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiscardedPixelMin), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiscardedPixelMax), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPixelDiscardSpeedMin), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPixelDiscardSpeedMax), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fPixelDiscardDelay), sizeof(float));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumAlpha), sizeof(int));
+
+			pParticleSystem->Get_Effect()->Reserve_AlphaOverLifeTime(EffectDesc.iNumAlpha);
+
+			for (int k = 0; k < EffectDesc.iNumAlpha; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_AlphaOverLifeTime(LifetimeValue);
+			}
 
 			//Material
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eMaterialRenderingMode), sizeof(int));
@@ -1227,7 +1360,13 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 				MultiByteToWideChar(CP_ACP, 0, szTag, (int)dwStrLen, pTagName, MAX_PATH);
 
 				pParticleSystem->Add_Component_Model(LEVEL_STATIC, pTagName);
-				CEffectPlayer::Get_Instance()->Add_ModelTag(pTagName);
+
+				pParticleSystem->Get_Effect()->Set_ModelKey(pTagName);
+
+				if (!pEffectPlayer->Find_ModelKey(pTagName))
+					pEffectPlayer->Add_ModelTag(pTagName);
+				else
+					Safe_Delete_Array(pTagName);
 			}
 
 			for (_uint k = 0; k < CEffect::TEX_END; ++k)
@@ -1247,31 +1386,59 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 					{
 					case 0:		// TEX_DIFFUSE
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_DIFFUSE);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_DIFFUSE, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(0, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(0, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_DIFFUSE, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 1:		//TEX_MASK
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_MASK);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_MASK, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(1, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(1, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_MASK, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 2:		//TEX_RAMP
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_RAMP);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_RAMP, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(2, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(2, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_RAMP, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 3:		//TEX_NOISE
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NOISE);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NOISE, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(3, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(3, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_NOISE, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 4:		//TEX_NOISE2
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NOISE2);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NOISE2, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(4, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(4, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_NOISE2, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 5:		//TEX_DISTORTION
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_DISTORTION);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_DISTORTION, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(5, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(5, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_DISTORTION, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					case 6:		//TEX_NORMAL
 						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NORMAL);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NORMAL, pTagName);
+						pParticleSystem->Get_Effect()->Set_TextureKey(6, pTagName);
+						if (!pEffectPlayer->Find_TextureKey(6, pTagName))
+							pEffectPlayer->Add_TextureTag(CEffect::TEX_NORMAL, pTagName);
+						else
+							Safe_Delete_Array(pTagName);
 						break;
 					}
 				}
@@ -1299,5 +1466,5 @@ CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 
 void CLevel_GamePlay::Free()
 {
-    __super::Free();
+	__super::Free();
 }

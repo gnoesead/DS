@@ -49,6 +49,14 @@ HRESULT CEffect_Particle::Initialize(void* pArg)
 		m_fLifeTime = fRandNum;
 	}
 
+	if (m_eEffectDesc.isRandomStartDelay)
+	{
+		_float fRandNum = Random::Generate_Float(m_eEffectDesc.fStartDelayMin, m_eEffectDesc.fStartDelayMax);
+		m_fStartDelay = fRandNum;
+	}
+	else
+		m_fStartDelay = m_eEffectDesc.fStartDelayMin;
+
 	Check_PassIndex();
 
 	return S_OK;

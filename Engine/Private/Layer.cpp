@@ -62,6 +62,11 @@ void CLayer::Tick(_double dTimeDelta)
 				iter = m_GameObjects.erase(iter);
 				continue;
 			}
+			else if (true == (*iter)->Get_Collect())
+			{
+				iter = m_GameObjects.erase(iter);
+				continue;
+			}
 			++iter;
 		}
 	}
@@ -93,8 +98,9 @@ CLayer* CLayer::Create(_bool isKeep)
 
 	return pInstance;
 }
+ 
 
-void CLayer::Free()
+void CLayer::Free() 
 {
 	for (auto& pGameObject : m_GameObjects)
 		Safe_Release(pGameObject);

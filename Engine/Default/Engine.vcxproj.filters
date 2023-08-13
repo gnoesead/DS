@@ -169,6 +169,9 @@
     <Filter Include="01. Utility\03. Component\VIBuffer\Effect\VIBuffer_Point_Instance_Effect">
       <UniqueIdentifier>{1aea5868-f96d-473f-a2ae-0ad60599d889}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. GameObjects\MasterEffect">
+      <UniqueIdentifier>{47879f4c-4be5-4acb-bbfe-29c5169d6563}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
@@ -339,6 +342,9 @@
     <ClInclude Include="..\Public\VIBuffer_Point_Instance_Effect.h">
       <Filter>01. Utility\03. Component\VIBuffer\Effect\VIBuffer_Point_Instance_Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\MasterEffect.h">
+      <Filter>01. Utility\02. GameObjects\MasterEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -493,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Point_Instance_Effect.cpp">
       <Filter>01. Utility\03. Component\VIBuffer\Effect\VIBuffer_Point_Instance_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MasterEffect.cpp">
+      <Filter>01. Utility\02. GameObjects\MasterEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

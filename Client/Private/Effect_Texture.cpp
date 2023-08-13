@@ -48,6 +48,14 @@ HRESULT CEffect_Texture::Initialize(void* pArg)
 		m_fLifeTime = fRandNum;
 	}
 
+	if (m_eEffectDesc.isRandomStartDelay)
+	{
+		_float fRandNum = Random::Generate_Float(m_eEffectDesc.fStartDelayMin, m_eEffectDesc.fStartDelayMax);
+		m_fStartDelay = fRandNum;
+	}
+	else
+		m_fStartDelay = m_eEffectDesc.fStartDelayMin;
+
 	Check_PassIndex();
 
 	return S_OK;
@@ -113,6 +121,12 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 		{
 			if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSize", (void*)&m_eEffectDesc.vStartSizeMin, sizeof(_float3))))
 				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTextureOrder", (void*)&m_fTextureOrder, sizeof(float))))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
+				return E_FAIL;
 		}
 	}
 
@@ -135,9 +149,13 @@ void CEffect_Texture::Check_PassIndex(void)
 	{
 		if (nullptr != m_pTextures[TEX_RAMP])
 			m_iPassIndex = 3;
+		else
+			m_iPassIndex = 6;
 
 		if (nullptr != m_pTextures[TEX_DISTORTION])
 			m_iPassIndex = 5;
+		else
+			m_iPassIndex = 6;
 	}
 	else
 		m_iPassIndex = 0;
