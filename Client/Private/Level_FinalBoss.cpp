@@ -168,7 +168,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Camera(const _tchar* pLayerTag)
 	CameraDesc.fFovY = XMConvertToRadians(60.f);
 	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 	CameraDesc.fNearZ = 0.3f;
-	CameraDesc.fFarZ = 400.f;
+	CameraDesc.fFarZ = 300.f;
 
 	CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
 	CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);

@@ -51,7 +51,7 @@ void CMapObject::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-	m_fTimeAcc += TimeDelta;
+	m_fTimeAcc += (_float)TimeDelta;
 }
 
 HRESULT CMapObject::Render()

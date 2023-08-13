@@ -136,13 +136,27 @@ HRESULT CLevel_Village::Ready_Lights()
 
     LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
     LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vLightDiffuse     = _float4(0.3f, 0.3f, 0.3f, 1.f);
     LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
     LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
 
     if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Direction_Light");
+        return E_FAIL;
+    }
+
+    ZeroMemory(&LightDesc, sizeof LightDesc);
+    LightDesc.eType = LIGHTDESC::TYPE_POINT;
+    LightDesc.vLightPos = _float4(575.f, 6.f, 268.f, 1.f);
+    LightDesc.fLightRange = 7.f;
+    LightDesc.vLightDiffuse = _float4(1.f, 1.0f, 1.0f, 1.f);
+    LightDesc.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+    LightDesc.vLightSpecular = _float4(1.f, 1.0f, 1.0f, 1.f);
+
+    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Point_Light");
         return E_FAIL;
     }
 
@@ -184,7 +198,7 @@ HRESULT CLevel_Village::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(60.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+    CameraDesc.fFarZ = 300.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);

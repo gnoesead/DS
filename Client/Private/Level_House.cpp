@@ -109,6 +109,7 @@ HRESULT CLevel_House::Ready_Lights()
         return E_FAIL;
     }
 
+   
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -153,7 +154,7 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(60.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+    CameraDesc.fFarZ = 300.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
@@ -179,12 +180,12 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    // CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-    CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+   // CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
     CharacterDesc.Land_Y = 0.f;
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
+    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
