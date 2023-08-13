@@ -241,6 +241,37 @@ void CMini_Map::Tick(_double TimeDelta)
 				m_UV_Cut_MaxY = 1.f;
 
 		}
+
+		if (m_Map_Type == 3) {
+
+			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
+			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
+
+			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+
+			m_Origin_X = 1080;
+			m_Origin_Y = 1080;
+			m_Size_Param = 0.25f;
+			m_UI_Layer = 1.5;
+
+			m_UV_Cut_MinX = { m_UV_Centor_X - 0.3f };
+			if (m_UV_Cut_MinX <= 0.f)
+				m_UV_Cut_MinX = 0.f;
+
+			m_UV_Cut_MaxX = { m_UV_Centor_X + 0.3f };
+			if (m_UV_Cut_MaxX >= 1.f)
+				m_UV_Cut_MaxX = 1.f;
+
+			m_UV_Cut_MinY = { (1 - m_UV_Centor_Y) - 0.3f };
+			if (m_UV_Cut_MinY <= 0.f)
+				m_UV_Cut_MinY = 0.f;
+
+			m_UV_Cut_MaxY = { (1 - m_UV_Centor_Y) + 0.3f };
+			if (m_UV_Cut_MaxY >= 1.f)
+				m_UV_Cut_MaxY = 1.f;
+
+		}
 	}
 
 	// Player
@@ -262,6 +293,12 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1380 - (0.85 - m_UV_Player_X) * 440 * 0.8f - (1160 + (0.5 - 0.21) * 370 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
 
 			m_fY = 170 + (0.14 - m_UV_Player_Y) * 170 * 0.8f;
+		}
+
+		if (m_Map_Type == 3) {
+			m_fX = 1200 - (0.444 - m_UV_Player_X) * 280 * 0.8f - (1160 + (0.5 - 0.3) * 260 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
+
+			m_fY = 160 + (0.136 - m_UV_Player_Y) * 310 * 0.8f - (120 - (0.5 - 0.3) * 260 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_Y());
 		}
 	}
 
@@ -334,7 +371,23 @@ void CMini_Map::LateTick(_double TimeDelta)
 
 	}
 
+	if (m_Map_Type == 3) {
 
+		if (m_UV_Centor_X <= 0.3f) {
+			m_UV_Centor_X = 0.3f;
+		}
+		if (m_UV_Centor_X >= 0.7f) {
+			m_UV_Centor_X = 0.7f;
+		}
+
+		if (m_UV_Centor_Y <= 0.3f) {
+			m_UV_Centor_Y = 0.3f;
+		}
+		if (m_UV_Centor_Y >= 0.7f) {
+			m_UV_Centor_Y = 0.7f;
+		}
+
+	}
 	
 
 	Safe_Release(pGameInstance);
@@ -437,8 +490,16 @@ HRESULT CMini_Map::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (m_UI_Desc.m_Type == 3) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Map_Type + 3)))
-			return E_FAIL;
+
+		if (m_Map_Type == 3) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 7)))
+				return E_FAIL;
+		}
+		else {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Map_Type + 3)))
+				return E_FAIL;
+		}
+		
 	}
 	else if(m_UI_Desc.m_Type == 4) {
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 6)))
@@ -559,6 +620,9 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
+
+		m_Map_Type = 3;
+
 		_vector Trigger = { 600.f, 4.5f, 317.f };
 		_vector vDist = Pos - Trigger;
 
@@ -649,6 +713,38 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 		m_UV_Centor_Y = XMVectorGetZ(Pos);
 
 		m_UV_Centor_Y = (m_UV_Centor_Y - 25) / (63 - 25);
+
+		m_UV_Player_X = m_UV_Centor_X;
+		m_UV_Player_Y = m_UV_Centor_Y;
+
+		_vector Look = m_pTargetTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		Look = XMVectorSetY(Look, 0.f);
+
+		_vector Z = { 0.f,0.f,1.f };
+
+		Look = XMVector3Normalize(Look);
+
+		if (XMVectorGetY(XMVector3Cross(Z, Look)) > 0) {
+			m_Angle = acos(XMVectorGetY(XMVector3Dot(Z, Look)));
+		}
+		else {
+			m_Angle = acos(XMVectorGetY(XMVector3Dot(Z, -Look)));
+
+			m_Angle = m_Angle + XMConvertToRadians(180.f);
+		}
+
+	}
+
+	if (m_Map_Type == 3) {
+
+		m_UV_Centor_X = XMVectorGetX(Pos);
+
+		m_UV_Centor_X = (m_UV_Centor_X - 480) / (689 - 480);
+
+		m_UV_Centor_Y = XMVectorGetZ(Pos);
+
+		m_UV_Centor_Y = (m_UV_Centor_Y - 214) / (420 - 214);
 
 		m_UV_Player_X = m_UV_Centor_X;
 		m_UV_Player_Y = m_UV_Centor_Y;

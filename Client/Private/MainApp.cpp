@@ -478,7 +478,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma region Map_UI	
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mini_Map"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 7))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 8))))
 		return E_FAIL;
 
 #pragma endregion	
