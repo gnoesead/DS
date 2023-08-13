@@ -52,6 +52,18 @@ void CCharacter::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+	}
+	
+
+	Safe_Release(pGameInstance);
+
+
 	for (_uint i = 0; i < COLL_END; i++)
 		m_pColliderCom[i]->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 }

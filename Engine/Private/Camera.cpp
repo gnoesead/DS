@@ -36,6 +36,8 @@ HRESULT CCamera::Initialize(void* pArg)
 
 	m_pTransformCom->LookAt(XMLoadFloat4(&m_CameraDesc.vAt));
 
+	
+
 	return S_OK;
 }
 
@@ -50,6 +52,7 @@ void CCamera::Tick(_double dTimeDelta)
 
 	_float4x4 ProjMatrix;
 
+	
 	XMStoreFloat4x4(&ProjMatrix, XMMatrixPerspectiveFovLH(m_CameraDesc.fFovY, m_CameraDesc.fAspect, m_CameraDesc.fNearZ, m_CameraDesc.fFarZ));
 
 	m_pPipeLine->Set_Transform(CPipeLine::D3DTS_PROJ, ProjMatrix);

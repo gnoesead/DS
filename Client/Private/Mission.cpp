@@ -182,6 +182,7 @@ void CMission::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
 	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
 
 	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
@@ -243,7 +244,7 @@ HRESULT CMission::Render()
 				return E_FAIL;
 
 			wsprintf(m_szSub_Num, TEXT("%d"), m_Sub_Num);
-
+		
 			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_Num, _float2((_float)m_fX + 95.f, (_float)m_fY - 13.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 		}
@@ -259,7 +260,7 @@ HRESULT CMission::Render()
 				return E_FAIL;
 
 			wsprintf(m_szMain_Sub_Num, TEXT("%d"), m_Main_Sub_Num);
-
+			
 			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num , _float2((_float)m_fX + 13.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 		}
