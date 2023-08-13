@@ -46,7 +46,7 @@ public:
 	void Get_Player_Info(_double TimeDelta);
 	void Fade_In(_double TimeDelta);
 	void Fade_Out(_double TimeDelta);
-
+	
 
 private:
 	_bool    m_Is_Dialog_On = { false };
@@ -90,6 +90,21 @@ private:
 	_float m_Start_PosY = {};
 
 	_bool m_Is_Fix = { true };
+
+	_uint m_Map_Type = { 0 };
+
+	_float m_UV_Cut_MinX = {};
+	_float m_UV_Cut_MaxX = {};
+	_float m_UV_Cut_MinY = {};
+	_float m_UV_Cut_MaxY = {};
+
+	_float m_UV_Centor_X = {};
+	_float m_UV_Centor_Y = {};
+
+	_float m_UV_Player_X = {};
+	_float m_UV_Player_Y = {};
+
+	_float m_Angle = {};
 
 
 private:

@@ -274,6 +274,11 @@
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
+
+    <Filter Include="02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager">
+      <UniqueIdentifier>{0cc59fe8-88a9-4669-bee0-e2d20d650935}</UniqueIdentifier>
+    </Filter>
+
     <Filter Include="02. GameObjects\CollisionBox">
       <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
     </Filter>
@@ -498,6 +503,18 @@
     <ClInclude Include="..\Public\MonsterManager.h">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClInclude>
+
+    <ClInclude Include="..\Public\Fade_Manager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Fade.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Mini_Map_Manager.h">
+      <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
+    </ClInclude>
+
+
     <ClInclude Include="..\Public\Boss_Kyogai.h">
       <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClInclude>
@@ -710,6 +727,18 @@
     <ClCompile Include="..\Private\MonsterManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Manager</Filter>
     </ClCompile>
+
+    <ClCompile Include="..\Private\Fade_Manager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Fade.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Mini_Map_Manager.cpp">
+      <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
+    </ClCompile>
+
+
     <ClCompile Include="..\Private\Boss_Kyogai.cpp">
       <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClCompile>

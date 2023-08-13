@@ -70,6 +70,9 @@ private:
 
 	_float                  m_Origin_PosX = {};
 	_float                  m_Origin_PosY = {};
+	_float                  m_Move_Speed = { 2300.f };
+    _bool                   m_bIs_Line_Move = { false };
+
 	_float                  m_PosX_Dir = { 1.f };
 	_float                  m_PosY_Dir = { 1.f };
 

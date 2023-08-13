@@ -7,6 +7,10 @@
 #include "Camera.h"
 #include "Player.h"
 #include "MapObject.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
+#include "Mini_Map.h"
+#include "Mission.h"
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -43,11 +47,20 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+        return E_FAIL;
+    }
+
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
         MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_House");
         return E_FAIL;
     }
+
+
+    CFadeManager::GetInstance()->Set_Fade_In(true);
 
     return S_OK;
 }
@@ -60,24 +73,32 @@ void CLevel_House::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
+    if (pGameInstance->Get_DIKeyDown(DIK_F9))
     {
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
+
+    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
         HRESULT hr = 0;
 
-        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_TRAIN))
+        if (true == pGameInstance->Get_IsStage())
         {
-            pGameInstance->Clear_Light();
-            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
-        }
-        else
-            hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
 
-        if (FAILED(hr))
-        {
-            Safe_Release(pGameInstance);
-            return;
+            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+            }
+            else
+                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
         }
     }
+
     Safe_Release(pGameInstance);
 }
 
@@ -150,7 +171,7 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(60.f);
+    CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
     CameraDesc.fFarZ = 400.f;
@@ -158,6 +179,8 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
+    //CameraDesc.bIs_Battle = false;
+
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -179,12 +202,21 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    // CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-    CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+
+   
+    CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+   
+    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+
+    //CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+
 
     CharacterDesc.Land_Y = 0.f;
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
+    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+
+    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -201,6 +233,131 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
     Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
+
+    return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    // Fade
+    CFade::UIDESC UIDesc;
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+ // Mini_Map
+    CMini_Map::UIDESC UIDesc2;
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Bg
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Wire
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Frame
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Map
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+    // Player_Icon
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 4;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+ // Mission
+
+    CMission::UIDESC UIDesc3;
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    // Main
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    // Main_Icon
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+
+    Safe_Release(pGameInstance);
 
     return S_OK;
 }

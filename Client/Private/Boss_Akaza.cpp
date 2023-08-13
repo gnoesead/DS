@@ -69,6 +69,8 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
+	//m_eCurAnimIndex = ANIM_IDEL;
+
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
