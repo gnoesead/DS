@@ -15,6 +15,32 @@ CCharacter::CCharacter(const CCharacter& rhs)
 {
 }
 
+void CCharacter::Add_HitCollider(CGameObject* pAtkColl)
+{
+	if (nullptr == pAtkColl)
+		return;
+
+	if (1 > m_HitCollider.size())
+		m_HitCollider.emplace_back(dynamic_cast<CAtkCollider*>(pAtkColl));
+	else
+	{
+		_uint iCount = { 0 };
+
+		for (auto iter = m_HitCollider.begin(); iter != m_HitCollider.end(); iter++)
+		{
+			if (pAtkColl == (*iter))
+				break;
+
+			iCount++;
+		}
+
+		if (m_HitCollider.size() <= iCount)
+		{
+			m_HitCollider.emplace_back(dynamic_cast<CAtkCollider*>(pAtkColl));
+		}
+	}
+}
+
 HRESULT CCharacter::Initialize(void* pArg)
 {
 	if (nullptr != pArg)
@@ -52,6 +78,8 @@ void CCharacter::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	Check_HitCollDead();
+	Check_HitType();
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -481,6 +509,48 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
+void CCharacter::Check_HitCollDead()
+{
+	for (auto iter = m_HitCollider.begin(); iter != m_HitCollider.end();)
+	{
+		if (true == (*iter)->Get_Dead())
+		{
+			iter = m_HitCollider.erase(iter);
+			continue;
+		}
+
+		++iter;
+	}
+}
+
+void CCharacter::Check_HitType()
+{
+	for (auto& pHitColl : m_HitCollider)
+	{
+		if (false == pHitColl->Get_IsAttack(this))
+		{
+			if (pHitColl->Get_Collider()->Get_Hit_Small())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Big())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Blow())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Spin())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(true);
+			}
+
+			pHitColl->Add_AtkObejct(this);
+		}
+	}
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
@@ -540,6 +610,8 @@ void CCharacter::Tick_Collider(_double dTimeDelta)
 void CCharacter::Free()
 {
 	__super::Free();
+
+	m_HitCollider.clear();
 
 	for (_uint i = 0; i < COLL_END; i++)
 		Safe_Release(m_pColliderCom[i]);

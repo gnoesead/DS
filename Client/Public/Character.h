@@ -50,6 +50,9 @@ protected:
 	virtual ~CCharacter() = default;
 
 public:
+	void Add_HitCollider(CGameObject* pAtkColl);
+
+public:
 	//virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Tick(_double dTimeDelta) override;
@@ -87,8 +90,10 @@ protected:
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
-	//콜라이더 관련
+	//콜라이더 관련`
 	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg);
+	void	Check_HitCollDead();
+	void	Check_HitType();
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -101,6 +106,7 @@ protected: // 카메라 쉐이크
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;
+	list<class CAtkCollider*>	m_HitCollider; 
 
 protected:
 	CModel* m_pModelCom = { nullptr };		
