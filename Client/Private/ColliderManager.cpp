@@ -162,6 +162,10 @@ HRESULT CColliderManager::Check_PlayerAtkToMonster(_uint iLevelIndex, _double dT
 							{
 								pMonsterCollider->Set_Hit_Spin(true);
 							}
+							else if (pAtkCollider->Get_Hit_Upper())
+							{
+								pMonsterCollider->Set_Hit_Upper(true);
+							}
 
 							pMonsterCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
 							pMonsterCollider->Set_fDamage(pAtkCollider->Get_fDamage());
@@ -314,6 +318,10 @@ HRESULT CColliderManager::Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dT
 							else if (pAtkCollider->Get_Hit_Spin())
 							{
 								pPlayerCollider->Set_Hit_Spin(true);
+							}
+							else if (pAtkCollider->Get_Hit_Upper())
+							{
+								pPlayerCollider->Set_Hit_Upper(true);
 							}
 
 							pPlayerCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());

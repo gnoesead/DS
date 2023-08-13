@@ -154,7 +154,6 @@ void CPlayer::Dir_Setting(_bool Reverse)
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
-
 	if (m_Moveset.m_isHitMotion == false)
 	{
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
@@ -177,7 +176,6 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 	}
 	
-
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)

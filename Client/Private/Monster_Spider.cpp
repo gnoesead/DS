@@ -259,7 +259,8 @@ void CMonster_Spider::Trigger()
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin())
+		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
+		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 	{
 		m_eCurState = STATE_HIT;
 	}

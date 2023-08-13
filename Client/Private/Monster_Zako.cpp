@@ -186,7 +186,6 @@ HRESULT CMonster_Zako::Render_ShadowDepth()
 	return S_OK;
 }
 
-
 void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
@@ -218,7 +217,8 @@ void CMonster_Zako::Trigger()
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin())
+		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
+		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 	{
 		m_eCurState = STATE_HIT;
 	}
@@ -243,7 +243,7 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
 		else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta);
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
 	}
 }
 
@@ -280,7 +280,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 
 		//ø∑ ¿Ãµø
 		m_dCoolTime_SideMove += dTimeDelta;
-		if (5.7f < m_dCoolTime_SideMove)
+		if (3.7f < m_dCoolTime_SideMove)
 		{
 			m_dCoolTime_SideMove = 0.0;
 
@@ -345,16 +345,126 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	Go_Straight_Constant(dTimeDelta, 69, 0.3f);
 	
 
-	// Attack CoolTime
-	m_dCoolTime_AtkPattern += dTimeDelta;
-	if (11.1f < m_dCoolTime_AtkPattern)
-	{
-		m_dCoolTime_AtkPattern = 0.0;
+	Idle_ATK_Pattern_Controler(dTimeDelta);
+}
 
+void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
+{
+	// Attack CoolTime
+	if(m_isCoolTime_On)
+		m_dCoolTime_AtkPattern += dTimeDelta;
+	
+
+	if (m_iAttackIndex == 0)
+	{
+		if (5.1f < m_dCoolTime_AtkPattern)
+		{
+			m_dCoolTime_AtkPattern = 0.0;
+
+			m_isCoolTime_On = false;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_CLAWS;
+		}
+	}
+	if (m_iAttackIndex == 1 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
 		m_eCurState = STATE_ATTACK;
 		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINKICK;
 	}
-	
+
+
+	if (m_iAttackIndex == 2 && m_isAtkFinish)
+	{
+		m_isCoolTime_On = true;
+		m_isAtkFinish = false;
+	}
+	if (m_iAttackIndex == 2)
+	{
+		if (7.1f < m_dCoolTime_AtkPattern)
+		{
+			m_dCoolTime_AtkPattern = 0.0;
+			m_isCoolTime_On = false;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_SPINMOVE;
+		}
+	}
+	if (m_iAttackIndex == 3 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_CLAWCROSS;
+	}
+	if (m_iAttackIndex == 4 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_BUTTERFLY;
+	}
+
+
+
+	if (m_iAttackIndex == 5 && m_isAtkFinish)
+	{
+		m_isCoolTime_On = true;
+		m_isAtkFinish = false;
+	}
+	if (m_iAttackIndex == 5)
+	{
+		if (7.1f < m_dCoolTime_AtkPattern)
+		{
+			m_dCoolTime_AtkPattern = 0.0;
+			m_isCoolTime_On = false;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_JUMPKICK;
+		}
+	}
+	if (m_iAttackIndex == 6 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_CLAWS;
+	}
+	if (m_iAttackIndex == 7 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_TACKLE;
+	}
+	if (m_iAttackIndex == 8 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_CLAWCROSS;
+	}
+	if (m_iAttackIndex == 9 && m_isAtkFinish)
+	{
+		m_isAtkFinish = false;
+		
+		m_iAttackIndex = 0;
+		m_isCoolTime_On = true;
+	}
 }
 
 void CMonster_Zako::Animation_Control_Attack(_double dTimeDelta, _int AttackIndex)
@@ -364,7 +474,26 @@ void CMonster_Zako::Animation_Control_Attack(_double dTimeDelta, _int AttackInde
 	case 0: //ANIM_ATK_CLAWS
 		Animation_Control_Attack_Claws(dTimeDelta);
 		break;
-	case 1:
+	case 1: // ANIM_ATK_TACKLE
+		Animation_Control_Attack_Tackle(dTimeDelta);
+		break;
+	case 2: // ANIM_ATK_SPINKICK
+		Animation_Control_Attack_Spinkick(dTimeDelta);
+		break;
+	case 3: // ANIM_ATK_JUMPKICK
+		Animation_Control_Attack_Jumpkick(dTimeDelta);
+		break;
+	case 4: // ANIM_ATK_BUTTERFLY
+		Animation_Control_Attack_ButterFly(dTimeDelta);
+		break;
+	case 5: // ANIM_ATK_CLAWCROSS
+		Animation_Control_Attack_Cross(dTimeDelta);
+		break;
+	case 6: // ANIM_ATK_SpinMove
+		Animation_Control_Attack_SpinMove(dTimeDelta);
+		break;
+	case 7: // Dash
+		
 		break;
 	default:
 		break;
@@ -376,6 +505,9 @@ void CMonster_Zako::Animation_Control_Attack(_double dTimeDelta, _int AttackInde
 		m_eCurState = STATE_IDLE;
 		m_isFirst_Move_0 = true;
 		m_isFirst_Move_1 = true;
+
+		m_isAtkFinish = true;
+		m_iAttackIndex++;
 	}
 }
 
@@ -385,10 +517,11 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 	{
 		m_isFirst_AtkPattern = false;
 
-		if (2.0f < Calculate_Distance())
+		if (2.5f < Calculate_Distance())
 			m_pModelCom->Set_Animation(ANIM_RUN);
 		else
 			m_pModelCom->Set_Animation(ANIM_ATK_CLAWS);
+
 		m_isFirst_ATK_0 = true;
 	}
 
@@ -398,7 +531,7 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 	if (iCurAnim == ANIM_RUN)
 	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.2f);
-		if (1.5f < Calculate_Distance())
+		if (2.5f < Calculate_Distance())
 			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.6f);
 		else
 		{
@@ -418,10 +551,271 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 
 }
 
+void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		if (3.5f < Calculate_Distance())
+			m_pModelCom->Set_Animation(ANIM_ATK_TACKLE);
+		else
+			m_pModelCom->Set_Animation(ANIM_ATK_CLAW_FROG);
+
+		m_isFirst_ATK_0 = true;
+	}
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_ATK_TACKLE )
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
+
+	if (iCurAnim == 8)
+	{
+		if (4.5f < Calculate_Distance())
+			m_pModelCom->Set_Animation(9);
+	}
+	Go_Straight_Constant(dTimeDelta, 8, 1.5f);
+
+	Go_Straight_Deceleration(dTimeDelta, 9, 1.5f, 0.015f);
+
+	if (iCurAnim == 10)
+	{
+		if (m_pModelCom->Get_AnimFinish(10))
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_CLAW_FROG);
+		}
+	}
+
+	if(iCurAnim == ANIM_ATK_CLAW_FROG || iCurAnim == 23 || iCurAnim == 24 || iCurAnim == 25 || iCurAnim == 26)
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
+	
+	Go_Straight_Deceleration(dTimeDelta, 26, 2.0f, 0.03f);
+}
+
+void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_SPINKICK);
+
+		m_isFirst_ATK_0 = true;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_ATK_SPINKICK || iCurAnim == 17 )
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
+
+	Go_Straight_Constant(dTimeDelta, 18, 2.0f);
+	Go_Straight_Constant(dTimeDelta, 19, 2.0f);
+	Go_Straight_Deceleration(dTimeDelta, 20, 2.0f, 0.034f);
+}
+
+void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_JUMPKICK);
+
+		m_isFirst_ATK_0 = true;
+		m_isFirst_ATK_1 = true;
+		m_isTime_ATK_0 = false;
+		m_dTime_ATK_0 = 0.0;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_ATK_JUMPKICK || iCurAnim == 12 )
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
+
+	if (iCurAnim == 12 && m_isFirst_ATK_0)
+	{
+		m_isFirst_ATK_0 = false;
+
+		Jumping(2.0f, 0.03f);
+	}
+	Go_Straight_Deceleration(dTimeDelta, 12, 2.0f, 0.04f);
+	
+	
+	if (iCurAnim == 13 && m_isFirst_ATK_1)
+	{
+		m_isFirst_ATK_1 = false;
+
+		JumpStop(0.2f);
+		Set_FallingStatus(4.0f, 0.0f);
+
+		m_isTime_ATK_0 = true;
+		m_dTime_ATK_0 = 0.0;
+	}
+
+	if (m_isTime_ATK_0)
+		m_dTime_ATK_0 += dTimeDelta;
+
+	if (m_dTime_ATK_0 <= 0.2f)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.55f);
+	}
+	else if (0.2f < m_dTime_ATK_0)
+	{
+		Go_Straight_Constant(dTimeDelta, 13, 4.5f);
+	}
+
+	Ground_Animation_Play(13, 14);
+}
+
+void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_BUTTERFLY);
+
+		m_isFirst_ATK_0 = true;
+		m_isFirst_ATK_1 = true;
+
+		m_isTime_ATK_0 = false;
+		m_dTime_ATK_0 = 0.0;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_ATK_BUTTERFLY || iCurAnim == 28 || iCurAnim == 29)
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+
+
+	if (iCurAnim == 28 && m_isFirst_ATK_0)
+	{
+		m_isFirst_ATK_0 = false;
+
+		Jumping(2.0f, 0.037f);
+	}
+	Go_Backward_Deceleration(dTimeDelta, 28, 3.5f, 0.037f);
+
+	if (iCurAnim == 29 && m_isFirst_ATK_1)
+	{
+		m_isFirst_ATK_1 = false;
+
+		JumpStop(0.4f);
+	}
+
+
+	Go_Straight_Constant(dTimeDelta, 30, 4.0f);
+	Go_Straight_Deceleration(dTimeDelta, 31, 4.0f, 0.075f);
+	
+
+}
+
+void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_CLAW_CROSS);
+
+		m_isFirst_ATK_0 = true;
+		m_isFirst_ATK_1 = true;
+
+		m_isTime_ATK_0 = true;
+		m_dTime_ATK_0 = 0.0;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if(iCurAnim == ANIM_ATK_CLAW_CROSS)
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
+
+	if (m_isTime_ATK_0)
+	{
+		m_dTime_ATK_0 += dTimeDelta;
+
+		if (0.45f <= m_dTime_ATK_0 && m_dTime_ATK_0 < 1.85f)
+		{
+			Go_Straight_Constant(dTimeDelta, ANIM_ATK_CLAW_CROSS, 0.8f);
+		}
+	}
+
+}
+
+void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
+{
+	if (m_isFirst_AtkPattern)
+	{
+		m_isFirst_AtkPattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_SPINPUNCH);
+		
+		m_isFirst_ATK_0 = true;
+		m_isFirst_ATK_1 = true;
+
+		m_isTime_ATK_0 = false;
+		m_dTime_ATK_0 = 0.0;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if(iCurAnim == ANIM_ATK_SPINPUNCH)
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
+
+	if (iCurAnim == 44 && m_isFirst_ATK_0)
+	{
+		m_isFirst_ATK_0 = false;
+
+		Jumping(1.5f, 0.07f);
+	}
+
+	if (iCurAnim == 44)
+	{
+		m_dTime_ATK_0 += dTimeDelta;
+		if (0.1f < m_dTime_ATK_0)
+			Ground_Animation_Play(44, 45);
+	}
+
+	Go_Straight_Constant(dTimeDelta, 44, 1.8f);
+	Go_Straight_Deceleration(dTimeDelta, 45, 1.8f, 0.045f);
+
+	
+
+}
+
 void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
+
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() && m_pColliderCom[COLL_SPHERE]->Get_CanHit())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_CanHit(false);
+
+		m_dDelay_ComboChain = 0.0;
+
+		if (m_iSmallHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
+			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_FRONT);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
+			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_LEFT);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 2)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
+			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_RIGHT);
+			m_iSmallHit_Index = 0;
+		}
+	}
+
+	m_dDelay_ComboChain += dTimeDelta;
+	if (m_dDelay_ComboChain)
+	{
+
+	}
 
 }
 
