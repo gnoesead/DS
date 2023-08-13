@@ -296,9 +296,9 @@ void CMini_Map::Tick(_double TimeDelta)
 		}
 
 		if (m_Map_Type == 3) {
-			m_fX = 1200 - (0.444 - m_UV_Player_X) * 280 * 0.8f - (1160 + (0.5 - 0.3) * 260 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
+			m_fX = 1203 - (0.444 - m_UV_Player_X) * 300 * 0.8f - (1160 + (0.5 - 0.3) * 250 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
 
-			m_fY = 160 + (0.136 - m_UV_Player_Y) * 310 * 0.8f - (120 - (0.5 - 0.3) * 260 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_Y());
+			m_fY = 170 + (0.136 - m_UV_Player_Y) * 340 * 0.8f - (120 - (0.5 - 0.3) * 268 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_Y());
 		}
 	}
 
