@@ -55,7 +55,9 @@ private:
 private:
 	_bool m_Is_In = { false };
 	_bool m_Is_Out = { false };
-	
+
+	_bool m_Is_In_2 = { false };
+	_bool m_Is_Out_2 = { false };
 
 	_float m_TimeAcc = { 0.f };
 
@@ -106,6 +108,13 @@ private:
 
 	_float m_Angle = {};
 
+	_bool m_Is_Boss_Encounter = { false };
+	_bool m_Is_Boss_Battle_Done = { false };
+
+	_bool m_Is_Mon_Encounter = { false };
+	_bool m_Is_Mon_Battle_Done = { false };
+
+	_float m_In_Out = { 1.f };
 
 private:
 	HRESULT Add_Components();

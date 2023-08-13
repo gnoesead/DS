@@ -201,21 +201,27 @@ void CFIcon::LateTick(_double TimeDelta)
 	m_pTransformCom->LookAt(m_vTargetPos);
 
 
-	// Monster
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+	// Monster (락온 UI만 이렇게)
+	if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
 
-		CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
-		m_vBattle_Targt = pCamera->Get_Battle_Target_Pos();
+			CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+			m_vBattle_Targt = pCamera->Get_Battle_Target_Pos();
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
 
 
-		if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
-			m_Is_Render = pCamera->Get_Is_Battle();
+			if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
+				m_Is_Render = pCamera->Get_Is_Battle();
+			}
+
 		}
-
 	}
+
+	// 나머지는 Npc가 파츠로 소유함 또는 그냥 특정 위치에 띄움
+	
 
 
 	Safe_Release(pGameInstance);

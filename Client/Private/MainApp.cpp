@@ -417,11 +417,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Face"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/B/C_%d.png"), 9))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/B/C_%d.png"), 10))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Name"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/B/N_%d.png"), 9))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/B/N_%d.png"), 10))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Hp"),

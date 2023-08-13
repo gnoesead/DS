@@ -29,7 +29,7 @@ public:
 
 	void Set_Fade_In(_bool Fade);
 	void Set_Fade_Out(_bool Fade);
-	void Set_Fade_OutIn(_bool Fade);
+	void Set_Fade_OutIn(_bool Fade, _float Time = 0.f);
 
 	_bool Get_Fade_In();
 	_bool Get_Fade_Out();
@@ -43,6 +43,13 @@ public:
 	_bool Get_Fade_Out_Done();
 	_bool Get_Fade_OutIn_Done();
 
+	_bool Get_Is_Battle();
+	void  Set_Is_Battle(_bool is);
+
+	_float Get_Delay_Time();
+
+	_bool Get_Is_House_Boss_On();
+	void  Set_Is_House_Boss_On(_bool is);
 	
 private:
 	_bool m_Is_Fade_In = { false };
@@ -53,7 +60,13 @@ private:
 	_bool m_Is_Fade_Out_Done = { false };
 	_bool m_Is_Fade_OutIn_Done = { false };
 
+	_bool m_Is_Battle = { false };
+	_bool m_Is_House_Boss_On = { false };
+
+
 	_uint m_Ink_Sprite = { 0 };
+
+	_float m_Delay_Time = { 0.f };
 
 public:
 	virtual void Free() override;

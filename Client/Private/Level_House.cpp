@@ -11,6 +11,19 @@
 #include "Fade_Manager.h"
 #include "Mini_Map.h"
 #include "Mission.h"
+#include "Player_Battle_Frame.h"
+#include "Player_Battle_Hp.h"
+#include "Player_Battle_Mp.h"
+#include "Boss_Battle_Frame.h"
+#include "Boss_Battle_Hp.h"
+#include "Player_Battle_Ult_Frame.h"
+#include "Player_Battle_Combo.h"
+#include "Player_Battle_Ult_Effect.h"
+#include "FIcon.h"
+#include "World_UI_Hp.h"
+#include "Interaction.h"
+#include "Dialog.h"
+
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -53,6 +66,18 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
+	if (FAILED(Ready_Layer_Player_Battle_UI(TEXT("Layer_Player_Battle_UI"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Layer_Boss_Battle_UI(TEXT("Layer_Boss_Battle_UI"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+		return E_FAIL;
+	}
+
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
         MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_House");
@@ -61,6 +86,7 @@ HRESULT CLevel_House::Initialize()
 
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
+	CFadeManager::GetInstance()->Set_Is_Battle(false);
 
     return S_OK;
 }
@@ -264,6 +290,16 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
 
  // Mini_Map
     CMini_Map::UIDESC UIDesc2;
@@ -357,9 +393,631 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 
 
+// Dialog
+	CDialog::UIDESC UIDesc4;
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	// Frame
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	// Name_Frame
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Dialog"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
     Safe_Release(pGameInstance);
 
     return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+#pragma region Player_Battle_Frame
+	CPlayer_Battle_Frame::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 1;
+	UIDesc.m_C_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 2;
+	UIDesc.m_C_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+#pragma endregion
+
+#pragma region Player_Battle_Hp
+	CPlayer_Battle_Hp::UIDESC UIDesc2;
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = true;
+	UIDesc2.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = true;
+	UIDesc2.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = true;
+	UIDesc2.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region Player_Battle_Mp
+
+	CPlayer_Battle_Mp::UIDESC UIDesc3;
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	for (int i = 0; i < 4; i++) {
+
+		ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+		UIDesc3.m_Is_Reverse = false;
+		UIDesc3.m_Type = 3;
+		UIDesc3.m_Scale_Type = i;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+			TEXT("Prototype_GameObject_Player_Battle_Mp"), &UIDesc3))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+	}
+
+#pragma endregion
+
+#pragma region Player_Battle_Ult_Frame
+
+	CPlayer_Battle_Ult_Frame::UIDESC UIDesc4;
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 5;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 9;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 10;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 11;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 12;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Is_Reverse = false;
+	UIDesc4.m_Type = 13;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Frame"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+#pragma endregion
+
+#pragma region Player_Battle_Combo_Hit	
+	CPlayer_Battle_Combo::UIDESC UIDesc5;
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Is_Reverse = false;
+	UIDesc5.m_Type = 0;
+	UIDesc5.m_Combo_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Is_Reverse = false;
+	UIDesc5.m_Type = 1;
+	UIDesc5.m_Combo_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Is_Reverse = false;
+	UIDesc5.m_Type = 2;
+	UIDesc5.m_Combo_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Is_Reverse = false;
+	UIDesc5.m_Type = 3;
+	UIDesc5.m_Combo_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+#pragma endregion
+
+#pragma region Player_Battle_Combo_Damage	
+	CPlayer_Battle_Combo::UIDESC UIDesc6;
+	ZeroMemory(&UIDesc6, sizeof UIDesc6);
+
+	UIDesc6.m_Is_Reverse = false;
+	UIDesc6.m_Type = 0;
+	UIDesc6.m_Combo_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc6, sizeof UIDesc6);
+
+	UIDesc6.m_Is_Reverse = false;
+	UIDesc6.m_Type = 1;
+	UIDesc6.m_Combo_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc6, sizeof UIDesc6);
+
+	UIDesc6.m_Is_Reverse = false;
+	UIDesc6.m_Type = 2;
+	UIDesc6.m_Combo_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc6, sizeof UIDesc6);
+
+	UIDesc6.m_Is_Reverse = false;
+	UIDesc6.m_Type = 3;
+	UIDesc6.m_Combo_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Combo"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+#pragma endregion
+
+#pragma region Player_Battle_Ult_Effect
+
+	CPlayer_Battle_Ult_Effect::UIDESC UIDesc7;
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 5;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Is_Reverse = false;
+	UIDesc7.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Player_Battle_Ult_Effect"), &UIDesc7))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+#pragma endregion
+
+
+	
+
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+
+}
+
+HRESULT CLevel_House::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+
+#pragma region Boss_Battle_Frame
+	CBoss_Battle_Frame::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 1;
+	UIDesc.m_C_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 2;
+	UIDesc.m_C_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Frame"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+#pragma endregion
+
+#pragma region Boss_Battle_Hp
+
+	CBoss_Battle_Hp::UIDESC UIDesc2;
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_UI"),
+		TEXT("Prototype_GameObject_Boss_Battle_Hp"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+#pragma endregion
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "MissionManager.h"
 #include "Mini_Map_Manager.h"
+#include "Fade_Manager.h"
 
 
 
@@ -54,7 +55,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 240.f;
 		m_Origin_Y = 240.f;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 1.f;
 	}
 
 	// Wire
@@ -70,7 +71,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 240.f;
 		m_Origin_Y = 240.f;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 2.f;
 	}
 
 	// Frame
@@ -86,7 +87,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 280;
 		m_Origin_Y = 272;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 3;
+		m_UI_Layer = 3.f;
 	}
 	
 	// Map
@@ -102,7 +103,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 280;
 		m_Origin_Y = 272;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 1.5;
+		m_UI_Layer = 1.5f;
 	}
 
 	// Player
@@ -118,7 +119,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 40;
 		m_Origin_Y = 40;
 		m_Size_Param = 0.6f;
-		m_UI_Layer = 1.6;
+		m_UI_Layer = 1.6f;
 	}
 
 
@@ -139,12 +140,11 @@ void CMini_Map::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if(m_Is_In == true)
+	if (m_Is_In == true)
 		Fade_In(TimeDelta);
 
 	if (m_Is_Out == true)
 		Fade_Out(TimeDelta);
-
 
 	// Map
 	if (m_UI_Desc.m_Type == 3) {
@@ -335,18 +335,8 @@ void CMini_Map::LateTick(_double TimeDelta)
 	}
 
 
-	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
-
-	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
-		m_Is_In = true;
-	}
-
-	if (m_Is_Dialog_On == true && m_Is_In == false && m_Is_Out == false) {
-		m_Is_Out = true;
-	}
-
-
 	
+
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
@@ -355,33 +345,36 @@ void CMini_Map::LateTick(_double TimeDelta)
 
 HRESULT CMini_Map::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_UI_Desc.m_Type == 3) {
-		m_pShaderCom->Begin(13);
-	}
-	else {
-		if (m_Is_Reverse == false)
-			m_pShaderCom->Begin(1);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_UI_Desc.m_Type == 3) {
+			m_pShaderCom->Begin(13);
+		}
 		else {
+			if (m_Is_Reverse == false)
+				m_pShaderCom->Begin(1);
+			else {
 
-			m_pShaderCom->Begin(2);
+				m_pShaderCom->Begin(2);
+
+			}
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
 
 		}
-	}
-
-	
-	if (m_Is_CutScene == false && m_Is_Render == true) {
-
-		m_pVIBufferCom->Render();
 
 	}
-
-	
 
 	return S_OK;
 }
@@ -511,21 +504,78 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
+	
+	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+
+
+	_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	
+	if (Is_Battle == true) {
+		m_Is_Dialog_On = true;
+	}
+
+
+	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
+		m_Is_In = true;
+	}
+
+	if (m_Is_Dialog_On == true && m_Is_In == false && m_Is_Out == false) {
+		m_Is_Out = true;
+	}
+
+
 	// Player
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (XMVectorGetX(Pos) > 34) {
-		m_Map_Type = 1;
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+
+		_vector Trigger = { 131.f, 3.f, 57.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (XMVectorGetX(Pos) > 34) {
+			m_Map_Type = 1;
+		}
+
+		if (XMVectorGetX(Pos) > 115) {
+			m_Map_Type = 2;
+		}
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
 	}
 
-	if (XMVectorGetX(Pos) > 115) {
-		m_Map_Type = 2;
-	}
-	
-	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
+		_vector Trigger = { 600.f, 4.5f, 317.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+	}
+
+	
 	if (m_Map_Type == 0) {
 
 		m_UV_Centor_X = XMVectorGetX(Pos);
@@ -642,11 +692,18 @@ void CMini_Map::Fade_In(_double TimeDelta)
 		m_fX = m_Origin_PosX;
 	}
 
-	if (m_Alpha >= 1.f && m_fX <= m_Origin_PosX) {
-		m_Is_In = false;
+	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		if (m_Alpha >= 1.f) {
+			m_Is_In = false;
+		
+		}
 	}
-
-
+	else {
+		if (m_Alpha >= 1.f && m_fX <= m_Origin_PosX) {
+			m_Is_In = false;
+		
+		}
+	}
 }
 
 void CMini_Map::Fade_Out(_double TimeDelta)
@@ -659,7 +716,7 @@ void CMini_Map::Fade_Out(_double TimeDelta)
 		m_Alpha = 0.f;
 	}
 
-	m_fX += TimeDelta * 100.0;
+	m_fX += TimeDelta * 120.0;
 
 	if (m_fX >= m_Start_PosX)
 	{
@@ -667,14 +724,21 @@ void CMini_Map::Fade_Out(_double TimeDelta)
 		
 	}
 
-	if (m_Alpha <= 0.f && m_fX >= m_Start_PosX) {
-		m_Is_Out = false;
+
+	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		if (m_Alpha <= 0.f) {
+			m_Is_Out = false;
+		
+		}
+	}
+	else {
+		if (m_Alpha <= 0.f && m_fX >= m_Start_PosX) {
+			m_Is_Out = false;
+		
+		}
 	}
 
 }
-
-
-
 
 
 CMini_Map * CMini_Map::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

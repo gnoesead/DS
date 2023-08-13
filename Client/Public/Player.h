@@ -13,6 +13,8 @@ class CPlayer : public CCharacter
 {
 public:
 	enum PLAYERSTATE { PLAYER_ADVENTURE, PLAYER_BATTLE, PLAYER_END };
+	enum PLAYERTYPE { PLAYER_TANJIRO, PLAYER_ZENITSU, PLAYER_RENGOKU , PLAYER_END };
+
 	typedef struct tagPlayerMoveset
 	{
 		//입력 방향
@@ -156,6 +158,8 @@ protected:
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	PLAYERTYPE		m_ePlayerType = { PLAYER_TANJIRO };
+
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;

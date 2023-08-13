@@ -5,7 +5,7 @@
 
 #include "Player.h"
 #include "Character.h"
-
+#include "Fade_Manager.h"
 
 CCamera_Free::CCamera_Free(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCamera(pDevice, pContext)
@@ -91,6 +91,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	//m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
 	// Player
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
