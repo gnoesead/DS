@@ -16,6 +16,34 @@ CAtkCollider::CAtkCollider(const CAtkCollider& rhs)
 {
 }
 
+_bool CAtkCollider::Get_IsAttack(CGameObject* pHitObj)
+{
+	if (nullptr == pHitObj)
+		return false;
+
+	if (1 > m_AtkObj.size())
+		return false;
+	else
+	{
+		_uint iCount = { 0 };
+
+		for (auto iter = m_AtkObj.begin(); iter != m_AtkObj.end(); iter++)
+		{
+			if (pHitObj == (*iter))
+				return true;
+
+			iCount++;
+		}
+
+		if (m_AtkObj.size() <= iCount)
+		{
+			return false;
+		}
+	}
+
+	return false;
+}
+
 void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 {
 	if (nullptr != m_pTransformCom)
@@ -33,6 +61,32 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	m_pColliderCom->ReMake_Collider(m_AtkCollDesc.ColliderDesc.vPosition, m_AtkCollDesc.ColliderDesc.vSize.x, m_pTransformCom->Get_WorldMatrix());
 	Set_Dead(false);
 	m_dTimeAcc = 0.0;
+}
+
+void CAtkCollider::Add_AtkObejct(CGameObject* pHitObj)
+{
+	if (nullptr == pHitObj)
+		return;
+
+	if (1 > m_AtkObj.size())
+		m_AtkObj.emplace_back(pHitObj);
+	else
+	{
+		_uint iCount = { 0 };
+
+		for (auto iter = m_AtkObj.begin(); iter != m_AtkObj.end(); iter++)
+		{
+			if (pHitObj == (*iter))
+				break;
+
+			iCount++;
+		}
+
+		if (m_AtkObj.size() <= iCount)
+		{
+			m_AtkObj.emplace_back(pHitObj);
+		}
+	}
 }
 
 HRESULT CAtkCollider::Initialize_Prototype()
@@ -85,6 +139,7 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
+		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
 
 		m_iCollCount = 0;
@@ -192,6 +247,8 @@ CGameObject* CAtkCollider::Clone(void* pArg)
 void CAtkCollider::Free()
 {
 	__super::Free();
+
+	m_AtkObj.clear();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
