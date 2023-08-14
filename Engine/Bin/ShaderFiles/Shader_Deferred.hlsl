@@ -28,6 +28,7 @@ texture2D      g_BlurXTexture;
 texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
 texture2D	   g_RadialBlurTexture;
+texture2D	   g_EmissiveTexture;
 
 texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
@@ -216,7 +217,12 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
-	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
+	
+	//Out.vShade = saturate(Out.vShade);
+	//Out.vShade = ceil(Out.vShade * 3) / 3.0f;
+
+	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
+		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
 
 ////Out.vShade *= vSSAO;
 //Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
@@ -242,8 +248,6 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	/* 월드 스페이스상에 위치 .*/
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
-
-
 	vector      vLook = vWorldPos - g_vCamPosition;
 
 	Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 30.f);
@@ -258,8 +262,13 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
-	float      fViewZ = vDepth.x * 300.f;
+	float       fViewZ = vDepth.x * 300.f;
 	vector      vWorldPos;
+
+	/* vDepth.x -> 플레이어랑 / 맵이랑 값이 달라.
+	무작정 x,z쓴다고 해결될 문제가 아니야.
+
+	 */
 
 	/* 투영공간상에 위치 .*/
 	vWorldPos.x = In.vTexUV.x * 2.f - 1.f;
@@ -298,10 +307,11 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	PS_OUT         Out = (PS_OUT)0;
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
-	vector      vShade = saturate(g_ShadeTexture.Sample(LinearSampler, In.vTexUV));
+	vector      vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 		/*if (vShade.r < 0.21f)
@@ -315,7 +325,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		discard;
 
 	Out.vColor = vDiffuse * vShade;
-
+	Out.vColor.rgb += vEmissive.rgb;
+	
 
 	if (true == g_bGrayScale)
 	{
@@ -481,7 +492,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.8f)
+	if (fBrightness >1.5f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -584,6 +595,10 @@ PS_OUT PS_RadialBlur(PS_IN In)
 //==============================Blur======================================
 float m_TexW = 1280.f;
 float m_TexH = 720.f;
+//float m_ShadowTexW = 1280.f;
+//float m_ShadowTexH = 720.f;
+float m_ShadowTexW = 12800.f;
+float m_ShadowTexH = 7200.f;
 
 float m_ShadowTexW = 12800.f;
 float m_ShadowTexH = 7200.f;
@@ -861,6 +876,67 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 			discard;
 		if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
 			discard;*/
+
+	return Out;
+}
+
+PS_OUT PS_ShadowBlurX(PS_IN _In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	float2	t = _In.vTexUV;
+	float2	uv = 0;
+
+	float	tu = 1.f / m_ShadowTexW;
+
+	for (int i = -6; i < 6; ++i)
+	{
+		uv = t + float2(tu * i, 0);
+		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+	}
+
+	Out.vColor /= Total;
+
+
+	if (Out.vColor.a == 0.f)
+		discard;
+	if (Out.vColor.a == 1.f)
+		discard;
+	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+		discard;
+	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+		discard;
+
+	return Out;
+}
+
+PS_OUT PS_ShadowBlurY(PS_IN _In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	float2 t = _In.vTexUV;
+	float2 uv = 0;
+
+	float tv = 1.f / (m_ShadowTexH / 2.f);
+
+	for (int i = -6; i < 6; ++i)
+	{
+		uv = t + float2(0, tv * i);
+		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+	}
+
+
+	Out.vColor /= Total;
+
+
+	if (Out.vColor.a == 0.f)
+		discard;
+	if (Out.vColor.a == 1.f)
+		discard;
+	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+		discard;
+	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+		discard;
 
 	return Out;
 }

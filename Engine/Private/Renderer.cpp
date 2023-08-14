@@ -173,6 +173,10 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_RadialBlur")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_RadialColor)))
 		return E_FAIL;
+	_float4 vColor_Emissive = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Emissive")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_Emissive)))
+		return E_FAIL;
 
 
 	/* For.MRT_GameObject */
@@ -181,6 +185,8 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Normal"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Depth"))))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Emissive"))))
 		return E_FAIL;
 
 
@@ -220,12 +226,12 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 
 	//그림자블러
-	/*if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurX"), TEXT("Target_ShadowBlurX"))))
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurX"), TEXT("Target_ShadowBlurX"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurY"), TEXT("Target_ShadowBlurY"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlur"), TEXT("Target_ShadowBlur"))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 		//HDR
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ExportHDR"), TEXT("Target_ExportFinal"))))
@@ -375,6 +381,22 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 	if (FAILED(Render_ShadowDepth()))
 	{
 		MSG_BOX("Failed to Render_ShadowDepth");
+		return E_FAIL;
+	}
+
+	if (FAILED(Render_ShadowBlurX()))
+	{
+		MSG_BOX("Failed to Render_ShadowBlurX");
+		return E_FAIL;
+	}
+	if (FAILED(Render_ShadowBlurY()))
+	{
+		MSG_BOX("Failed to Render_ShadowBlurY");
+		return E_FAIL;
+	}
+	if (FAILED(Render_ShadowBlur()))
+	{
+		MSG_BOX("Failed to Render_ShadowBlur");
 		return E_FAIL;
 	}
 
@@ -1586,6 +1608,9 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_ShadowDepthTexture")))
 		return E_FAIL;
 
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Emissive"), m_pShader, "g_EmissiveTexture")))
+		return E_FAIL;
+
 
 	// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -1635,7 +1660,7 @@ HRESULT CRenderer::Render_Deferred()
 	_matrix		LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4	FloatLightViewMatrix;
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
+	Safe_Release(pGameInstance);
 	if (FAILED(m_pShader->SetUp_Matrix("g_matLightView", &FloatLightViewMatrix)))
 		return E_FAIL;
 

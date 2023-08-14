@@ -183,6 +183,7 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
+	vector		vDepth2 : SV_TARGET3;
 };
 
 struct PS_OUT_DEFERRED

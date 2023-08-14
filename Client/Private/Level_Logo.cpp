@@ -166,6 +166,7 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+
    
 
     Safe_Release(pGameInstance);

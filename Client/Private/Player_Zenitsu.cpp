@@ -182,8 +182,8 @@ HRESULT CPlayer_Zenitsu::Render()
 #pragma endregion
 	
 #ifdef _DEBUG
-	CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();
+	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+	pNavi->Render();*/
 #endif
 
 
