@@ -12,7 +12,7 @@ BEGIN(Client)
 
 class CEffect_Particle final : public CEffect
 {
-protected:
+private:
 	CEffect_Particle(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	CEffect_Particle(const CEffect_Particle& rhs);
 	virtual ~CEffect_Particle() = default;
@@ -24,10 +24,10 @@ public:
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render(void) override;
 
-public:
+private:
 	CVIBuffer_Point_Instance_Effect* m_pVIBufferCom = { nullptr };
 
-protected:
+private:
 	HRESULT Add_Components(void);
 	HRESULT SetUp_ShaderResources(void);
 	virtual void Check_PassIndex(void) override;

@@ -237,7 +237,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
-	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
+	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0.0)
 	{
 		m_iEvent_Index = 0;
 	}
@@ -258,9 +258,16 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
-			}
 
-			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+
+
+				//CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3", m_pTransformCom);
+			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -270,24 +277,25 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
+				//else
+				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
 			}
-			else if (1 == m_iEvent_Index)
-			{
-				
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
-			}
-			
 		}
 		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3", m_pTransformCom);
 			}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -295,14 +303,69 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+			}
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
 			}
 		}
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			
+		}
+#pragma endregion
+
+#pragma region Super_Skill
+		if (ANIM_ATK_SKILL_NORMAL == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+			
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+			}
+		}
+
+		if (ANIM_ATK_SKILL_MOVE == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
+			}
+		}
+
+		if (ANIM_ATK_SKILL_GUARD == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+			}
 		}
 #pragma endregion
 
@@ -320,6 +383,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		m_iEvent_Index++;
 	}
+
+
 }
 
 void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)

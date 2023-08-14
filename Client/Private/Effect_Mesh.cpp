@@ -48,6 +48,14 @@ HRESULT CEffect_Mesh::Initialize(void* pArg)
 		m_fLifeTime = fRandNum;
 	}
 
+	if (m_eEffectDesc.isRandomStartDelay)
+	{
+		_float fRandNum = Random::Generate_Float(m_eEffectDesc.fStartDelayMin, m_eEffectDesc.fStartDelayMax);
+		m_fStartDelay = fRandNum;
+	}
+	else
+		m_fStartDelay = m_eEffectDesc.fStartDelayMin;
+
 	Check_PassIndex();
 
 	return S_OK;
@@ -96,6 +104,18 @@ HRESULT CEffect_Mesh::Add_Component_Model(_uint iLevelIndex, const _tchar* pComp
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CEffect_Mesh::Clear(void)
+{
+	__super::Clear();
+
+	Safe_Release(m_pModelCom);
+
+	Safe_Release(m_pModelCom);
+
+	if (Find_Component(TEXT("Com_Model")))
+		m_Components.erase(TEXT("Com_Model"));
 }
 
 HRESULT CEffect_Mesh::Add_Components(void)
@@ -151,6 +171,11 @@ void CEffect_Mesh::Check_PassIndex(void)
 	{
 		if (nullptr != m_pTextures[TEX_RAMP])
 			m_iPassIndex = 4;
+		else
+			m_iPassIndex = 6;
+
+		if (nullptr != m_pTextures[TEX_NOISE])
+			m_iPassIndex = 7;
 	}
 	else
 		m_iPassIndex = 0;

@@ -90,6 +90,18 @@ void CImGui_Manager_Tool::ImGui_Set()
     Safe_Release(pGameInstance);
 }
 
+void CImGui_Manager_Tool::ImGui_Set2()
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    ImGui::Begin("Tool");
+
+    ImGui::End();
+
+    Safe_Release(pGameInstance);
+}
+
 void CImGui_Manager_Tool::ImGUI_ShowDemo()
 {
 	_bool show_deme_window = true;

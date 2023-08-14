@@ -13,7 +13,7 @@ BEGIN(Client)
 
 class CEffect_Mesh final : public CEffect
 {
-protected:
+private:
 	CEffect_Mesh(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	CEffect_Mesh(const CEffect_Mesh& rhs);
 	virtual ~CEffect_Mesh() = default;
@@ -27,11 +27,12 @@ public:
 
 public:
 	HRESULT Add_Component_Model(_uint iLevelIndex, const _tchar* pComponentTag);
+	virtual void Clear(void);
 
-public:
+private:
 	class CModel* m_pModelCom = { nullptr };
 
-protected:
+private:
 	HRESULT Add_Components(void);
 	HRESULT SetUp_ShaderResources(void);
 	virtual void Check_PassIndex(void) override;
