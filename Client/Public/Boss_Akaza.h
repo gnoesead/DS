@@ -52,14 +52,14 @@ public:
 		ANIM_STEP_RIGHT2 = 77, // 우스텝2
 		ANIM_DASH = 38, // 대쉬
 		ANIM_RUNDASH = 50, // 개방 달리기?
-		ANIM_JUMPROOP = 61, // 점프루프
+		ANIM_JUMPLOOP = 61, // 점프루프
 		ANIM_JUMPLAND = 44, // 첨프착지
 
 		////////////////// 스킬 ///////////////////////
 
 		ANIM_HEAL = 5, // 체력 0 되고 다시 찰때
 		ANIM_CHARGE = 6, // 7,8 //기모으기
-		ANIM_CHARGE_ROOP = 7,
+		ANIM_CHARGE_LOOP = 7,
 		ANIM_CHARGE_END = 8,
 		ANIM_COMBO1 = 12,
 		ANIM_COMBO2 = 13,
@@ -100,14 +100,14 @@ public:
 		////////////////// 히트모션 ///////////////////
 
 		ANIM_HIT_BLOW = 79, // 80 뒤로 날아감 
-		ANIM_HIT_BLOW_ROOP = 80,
+		ANIM_HIT_BLOW_LOOP = 80,
 		ANIM_HIT_BLOW_END = 81, // 뒤로 날아감 끝
 		ANIM_HIT_POWER_BLOW = 82, // 105 종잇장 마냥 날라감
 		ANIM_HIT_MIDDLE_BLOW = 83, // 105 날라감
 		ANIM_HIT_BOUND = 84, // 85 105 바운드
 		ANIM_HIT_BOUND2 = 85, // 바운드 하고 옆으로 누움
 		ANIM_HIT_DMGFALL = 86, // U자 모양으로 떨어짐
-		ANIM_HIT_DMGFALL_ROOP = 87, // 86히트 다음으로 나오며 루프임
+		ANIM_HIT_DMGFALL_LOOP = 87, // 86히트 다음으로 나오며 루프임
 		ANIM_HIT_DMGFALL_BOUND = 88, //? 바운드가 왜 또 있지 
 		ANIM_HIT_FALL = 89, // 모르겟음 HIT가 맞나? 공중에서 웅크리며 있음 IDLE상태
 
@@ -125,7 +125,7 @@ public:
 		ANIM_HIT_STUN = 101, // 102 스턴
 		ANIM_HIT_STUN2 = 102, // 스턴
 		ANIM_HIT_GETUP_DIZZY = 103, // 104랑 연결 돼있음 근데 95랑 연결이 맞는듯
-		ANIM_HIT_DOWNROOP = 105, // 누워있음
+		ANIM_HIT_DOWNLOOP = 105, // 누워있음
 		ANIM_HIT_GETUP_SPIN = 106, // 107
 
 		////////////////// 엔드모션 ///////////////////
@@ -137,7 +137,7 @@ public:
 		ANIM_AWAKE_END = 49,
 		ANIM_AWAKE_COMBOPUNCH_Start = 29,
 		ANIM_AWAKE_COMBOPUNCH = 30,
-		ANIM_AWAKE_COMBOPUNCH_ROOP = 31,
+		ANIM_AWAKE_COMBOPUNCH_LOOP = 31,
 		ANIM_AWAKE_COMBOPUNCH_END = 32,
 
 		ANIM_CINEMATIC1 = 111,

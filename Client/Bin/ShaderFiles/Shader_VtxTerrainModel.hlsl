@@ -96,6 +96,7 @@ PS_OUT  PS_TERRAIN(PS_IN _In)
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
 	//Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 300.f, 0.f);
+
 	return Out;
 };
 

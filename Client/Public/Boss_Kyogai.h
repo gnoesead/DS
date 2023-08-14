@@ -28,22 +28,40 @@ public:
 #pragma region AnimIndex
 	enum  ANIM {
 		////////////////// 기본 MOVE///////////////////
-		ANIM_IDLE,
+		ANIM_IDLE = 41, // 아이들
+		ANIM_RUN = 43, // 런
+		ANIM_STEP_FRONT =  46, // 대시
+		ANIM_STEP_FRONT2 = 47, // 점프
+		ANIM_STEP_BACK = 45, // 뒷대시
+		ANIM_STEP_LEFT = 48, // 좌대시
+		ANIM_STEP_LEFT2 = 49, // 좌점프
+		ANIM_STEP_RIGHT = 50, // 우대시
+		ANIM_STEP_RIGHT2 = 51, // 우점프
+
 		
 
 		////////////////// 스킬 ///////////////////////
+		ANIM_ATKCMB1 = 1, // 배꼽에 있는 북 3연방 -> 톱날 세번나오는듯?
+		ANIM_ATKCMB2 = 2, // 두방침
+		ANIM_ATKCMB3 = 3, // 라스트
 
-		
+		ANIM_ATKSK_READY = 18, // 갈매기 레디
+		ANIM_ATKSK_LOOP = 19, // 레디 루프
+		ANIM_ATKSK_LB = 20, // 왼쪽 엉덩이 빵
+		ANIM_ATKSK_RB = 21, // 오른쪽 엉덩이 빵
+		ANIM_ATKSK_LF = 22, // 왼쪽 가슴
+		ANIM_ATKSK_RF = 23, // 오른쪽 가슴
 
+		//ANIM_ATKSK_
 		////////////////// 히트모션 ///////////////////
 
 	
 
 		////////////////// 엔드모션 ///////////////////
-		ANIM_HEAL
+		ANIM_HEAL,
 
 		////////////////// 컷신모션 ///////////////////
-	
+		ANIM_AWAKE = 0 // 개방신
 
 
 	};

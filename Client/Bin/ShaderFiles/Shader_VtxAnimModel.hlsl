@@ -198,8 +198,8 @@ PS_OUT  PS_Main(PS_IN _In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
 
-	//if (vMtrlDiffuse.a < 0.1f)
-	//	discard;
+	/*if (vMtrlDiffuse.a < 0.1f)
+		discard;*/
 
 	Out.vDiffuse = vMtrlDiffuse;
 	Out.vDiffuse.a = 1.f;

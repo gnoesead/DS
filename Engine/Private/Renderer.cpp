@@ -35,6 +35,10 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_Diffuse)))
 		return E_FAIL;
+	/*_float4 vColor_Diffuse = { 1.f, 0.f, 1.f, 0.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_Diffuse)))
+		return E_FAIL;*/
 	/* For.Target_Normal */
 	_float4 vColor_Normal = { 1.f, 1.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Normal")
@@ -136,12 +140,12 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 
 	/* For.Target_EffectDiffuse */
-	_float4 vColor_EffectDiffuse = { 1.f, 0.f, 0.f, 0.f };
+	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_EffectDiffuse)))
 		return E_FAIL;
 	/* For.Target_EffectBloom */
-	_float4 vColor_EffectBloom = { 0.f, 1.f, 0.f, 0.f };
+	_float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBloom")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBloom)))
 		return E_FAIL;
@@ -163,6 +167,11 @@ HRESULT CRenderer::Initialize_Prototype()
 	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectColor)))
+		return E_FAIL;
+
+	_float4 vColor_RadialColor = { 0.f, 0.f, 0.f, 0.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_RadialBlur")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_RadialColor)))
 		return E_FAIL;
 
 
@@ -206,16 +215,19 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_SSAOBlur"), TEXT("Target_SSAOBlur"))))
 		return E_FAIL;
+	//레디얼블러
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_RadialBlur"), TEXT("Target_RadialBlur"))))
+		return E_FAIL;
 
 	//그림자블러
-	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurX"), TEXT("Target_ShadowBlurX"))))
+	/*if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurX"), TEXT("Target_ShadowBlurX"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlurY"), TEXT("Target_ShadowBlurY"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ShadowBlur"), TEXT("Target_ShadowBlur"))))
-		return E_FAIL;
+		return E_FAIL;*/
 
-	//HDR
+		//HDR
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_ExportHDR"), TEXT("Target_ExportFinal"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_HDR"), TEXT("Target_HDR"))))
@@ -365,13 +377,13 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_ShadowDepth");
 		return E_FAIL;
 	}
-	
+
 	if (FAILED(Render_NonBlend()))
 	{
 		MSG_BOX("Failed to Render_NonBlend");
 		return E_FAIL;
 	}
-	if (FAILED(Render_ShadowBlurX()))
+	/*if (FAILED(Render_ShadowBlurX()))
 	{
 		MSG_BOX("Failed to Render_ShadowBlurX");
 		return E_FAIL;
@@ -385,7 +397,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 	{
 		MSG_BOX("Failed to Render_ShadowBlur");
 		return E_FAIL;
-	}
+	}*/
 	if (FAILED(Render_SSAO()))
 	{
 		MSG_BOX("Failed to Render_SSAO");
@@ -407,14 +419,12 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		return E_FAIL;
 	}
 
-
-
 	if (FAILED(Render_Lights()))
 	{
 		MSG_BOX("Failed to Render_Lights");
 		return E_FAIL;
 	}
-	
+
 
 	if (FAILED(Render_Deferred()))
 	{
@@ -453,7 +463,11 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_Bloom");
 		return E_FAIL;
 	}
-
+	if (FAILED(Render_RadialBlur())) // 최종적으로 그려짐
+	{
+		MSG_BOX("Failed to Render_RadialBlur");
+		return E_FAIL;
+	}
 	if (FAILED(Render_NonLight()))
 	{
 		MSG_BOX("Failed to Render_NonLight");
@@ -646,7 +660,7 @@ HRESULT CRenderer::Render_ShadowBlurX()
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_BlurTexture")))
 		return E_FAIL;
-	
+
 
 	if (FAILED(m_pShader->Begin(14)))
 		return E_FAIL;
@@ -1075,8 +1089,8 @@ HRESULT CRenderer::Render_Bloom()
 	if (nullptr == m_pTarget_Manager)
 		return E_FAIL;
 
-	/*if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_HDR"))))
-		return E_FAIL;*/
+	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_RadialBlur"))))
+		return E_FAIL;
 
 	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1092,13 +1106,15 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_CombineBlur"), m_pShader, "g_FinalTexture"))) // 디퍼드 최종 텍스처
 		return E_FAIL;
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_SSAOTexture")))
-		return E_FAIL;*/
+	
 
 	if (FAILED(m_pShader->Begin(13)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBuffer->Render()))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
 
 	return S_OK;
@@ -1181,6 +1197,33 @@ HRESULT CRenderer::Render_UI()
 	}
 
 	m_RenderObjects[RENDER_UI].clear();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_RadialBlur()
+{
+	if (nullptr == m_pTarget_Manager)
+		return E_FAIL;
+	
+
+	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_RadialBlur"), m_pShader, "g_RadialBlurTexture"))) // 블룸 + 블러 
+		return E_FAIL;
+	
+	if (FAILED(m_pShader->Begin(17)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBuffer->Render()))
+		return E_FAIL;
+
+	
 
 	return S_OK;
 }
@@ -1537,14 +1580,14 @@ HRESULT CRenderer::Render_Deferred()
 
 	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_ShadowDepthTexture")))
 		return E_FAIL;*/
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlurX"), m_pShader, "g_ShadowDepthTexture")))
-		return E_FAIL;*/
+		/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlurX"), m_pShader, "g_ShadowDepthTexture")))
+			return E_FAIL;*/
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_ShadowDepthTexture")))
 		return E_FAIL;
 
 
-		// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
+	// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -1554,7 +1597,7 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_RawValue("g_bGrayScale", &m_bGrayScale, sizeof(_bool))))
 		return E_FAIL;
-	
+
 
 	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_DepthTexture")))
 		return E_FAIL;*/
@@ -1575,7 +1618,7 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;
 
 	Safe_Release(pPipeLine);
-	
+
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 	_vector   vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
 	_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);

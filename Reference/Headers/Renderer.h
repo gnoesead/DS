@@ -89,6 +89,7 @@ private:
 	HRESULT Render_Effect(); // Effect
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();
+	HRESULT Render_RadialBlur();
 
 	HRESULT Render_CallBack();
 
@@ -102,8 +103,7 @@ private:
 	HRESULT Render_Lights();
 	HRESULT Render_Deferred();
 	HRESULT Render_Deferred2();
-	
-	
+		
 private:
 	_bool					m_bSSAOBlur = { false };
 	_bool					m_bSSAOSwitch = { false };
@@ -115,6 +115,7 @@ private:
 
 	_float					m_fSSAOBias = { 0.0003f };
 	_float					m_fSSAORadius = { 0.000005f };
+	//_float					m_fSSAORadius = { 0.0005f };
 public:
 	static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual CComponent* Clone(void* pArg) override;
