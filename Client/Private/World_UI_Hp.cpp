@@ -136,7 +136,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	Get_Boss_Info(TimeDelta);
 
 	if (m_Delay_Down == true) {
-		m_D_UV_Cull += TimeDelta * 0.3;
+		m_D_UV_Cull += (_float)TimeDelta * 0.3f;
 		if (m_D_UV_Cull >= m_UV_Cull) {
 			m_D_UV_Cull = m_UV_Cull;
 			m_Delay_Down = false;
@@ -145,7 +145,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 	if (m_UV_Cull != m_D_UV_Cull && m_Delay_Down == false) {
 
-		m_Delay_TimeAcc += TimeDelta;
+		m_Delay_TimeAcc += (_float)TimeDelta;
 
 		if (m_Delay_TimeAcc > m_Delay_Max_Time) {
 			m_Delay_TimeAcc = 0;
@@ -164,7 +164,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 		_vector Pos = m_vBattle_Targt + vLook * m_fZ;
 
-		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (m_Boss_Max_Hp - m_Boss_Hp);
+		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (_float)(m_Boss_Max_Hp - m_Boss_Hp);
 		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, NewPos);
 
@@ -181,7 +181,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 		_vector Pos = m_vBattle_Targt + vLook * m_fZ;
 
-		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (m_Boss_Max_D_Hp - m_Boss_D_Hp);
+		_vector NewPos = Pos + vRight * 0.5f * m_Origin_X * (_float)(m_Boss_Max_D_Hp - m_Boss_D_Hp);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, NewPos);
 
@@ -318,7 +318,7 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 {
 	if (GetKeyState('H') < 0) {
 
-		m_UV_Cull += TimeDelta * 0.5f;
+		m_UV_Cull += (_float)TimeDelta * 0.5f;
 
 		if (m_UV_Cull > 1.f) {
 			m_UV_Cull = 1.f;

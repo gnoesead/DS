@@ -11,6 +11,7 @@
 #include "MonsterManager.h"
 #include "Fade_Manager.h"
 #include "Mini_Map_Manager.h"
+#include "Camera_Manager.h"
 #include "Title.h"
 #include "Loading.h"
 #include "Fade.h"
@@ -102,7 +103,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	CTitleManager::GetInstance()->Tick();
 	
-
+	CCameraManager::GetInstance()->Tick(dTimeDelta);
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -679,6 +680,7 @@ void CMainApp::Free()
 	CStoryManager::GetInstance()->DestroyInstance();
 	CFadeManager::GetInstance()->DestroyInstance();
 	CMiniMapManager::GetInstance()->DestroyInstance();
+	CCameraManager::GetInstance()->DestroyInstance();
 
 
 	CGameInstance::Release_Engine();

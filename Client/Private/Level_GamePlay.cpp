@@ -453,8 +453,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 		CPlayer::CHARACTERDESC CharacterDesc;
 		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-		_float fX = (rand() % 20) + 130;
-		_float fZ = (rand() & 20) + 130;
+		_float fX = (_float)((rand() % 20) + 130);
+		_float fZ = (_float)((rand() & 20) + 130);
 
 		//140
 		CharacterDesc.WorldInfo.vPosition = _float4(fX, 0.f, fZ, 1.f);

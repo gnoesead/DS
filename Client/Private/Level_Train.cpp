@@ -271,6 +271,8 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     }
 
     Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_Train::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)

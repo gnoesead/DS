@@ -176,7 +176,7 @@ void CFIcon::LateTick(_double TimeDelta)
 
 	if (m_UI_Desc.m_Type == 8) {
 
-		m_Size_Param += TimeDelta * m_Size_Param_Dir;
+		m_Size_Param += (_float)TimeDelta * m_Size_Param_Dir;
 
 		if (m_Size_Param > 1.5f) {
 			m_Size_Param = 1.5f;

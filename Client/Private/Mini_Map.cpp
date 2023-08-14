@@ -8,6 +8,7 @@
 #include "MissionManager.h"
 #include "Mini_Map_Manager.h"
 #include "Fade_Manager.h"
+#include "Camera_Manager.h"
 
 
 
@@ -154,8 +155,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
 			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 1080;
@@ -185,8 +186,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
 			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 1080;
@@ -216,8 +217,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 370;
 			m_fY = 117;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 449;
@@ -247,8 +248,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
 			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 1080;
@@ -613,13 +614,11 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 		}
 
 		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
-
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		}
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
-
 
 		m_Map_Type = 3;
 
@@ -644,11 +643,11 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 		m_UV_Centor_X = XMVectorGetX(Pos);
 
-		m_UV_Centor_X = (m_UV_Centor_X - 1.2) / (36.5 - 1.2);
+		m_UV_Centor_X = _float((m_UV_Centor_X - 1.2) / (36.5 - 1.2));
 
 		m_UV_Centor_Y = XMVectorGetZ(Pos);
 
-		m_UV_Centor_Y = (m_UV_Centor_Y - 2.413) / (40.729 - 2.413);
+		m_UV_Centor_Y = _float((m_UV_Centor_Y - 2.413) / (40.729 - 2.413));
 
 		m_UV_Player_X = m_UV_Centor_X;
 		m_UV_Player_Y = m_UV_Centor_Y;
