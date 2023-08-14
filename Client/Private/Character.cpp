@@ -57,7 +57,24 @@ HRESULT CCharacter::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	// Á¡±¤¿ø ´Þ±â
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+	LIGHTDESC tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof tLightInfo);
+
+	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
+
+	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	tLightInfo.fLightRange = 10.f;
+	tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	pGameInstance->Add_Light(m_pDevice, m_pContext,tLightInfo ,  m_pTransformCom);
+
+	Safe_Release(pGameInstance);
 
 	if (nullptr != pArg)
 	{
@@ -317,19 +334,25 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 	}
 }
 
-void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir)
+void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn)
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		if(!bIsJumpOn)
+			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
 	}
 }
 
-void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed)
+void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _bool bIsJumpOn)
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
+		if(!bIsJumpOn)
+			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed);
 	}
 }
 
@@ -440,6 +463,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 				m_isJumpOn = false;
 				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+
 			}
 		}
 	}

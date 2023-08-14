@@ -173,8 +173,8 @@ HRESULT CPlayer_Tanjiro::Render()
 #pragma endregion
 
 #ifdef _DEBUG
-	CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();
+	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+	pNavi->Render();*/
 #endif
 
 	return S_OK;
@@ -190,8 +190,9 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
+	_vector	vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	_vector	vLightAt = vPlayerPos;
+	//_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
 
@@ -206,7 +207,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280) / _float(720), 0.2f, 300.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
@@ -260,13 +261,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 
 
-				//if (m_Moveset.m_iAwaken == 0)
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
 
-				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
 			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -323,9 +324,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
 
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 
-				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
 			}
 		}
 
@@ -341,9 +342,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
 
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
 
-				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
 			}
 		}
 
@@ -351,9 +352,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
 
-				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
 			}
 		}
 #pragma endregion
@@ -582,7 +583,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
-
 
 
 	if (m_isCharging && m_Moveset.m_State_Battle_Charge == false)
@@ -944,7 +944,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(1.55f, 0.08f);			
+			Jumping(1.55f, 0.06f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -973,10 +973,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//올라갈때
 		if (m_isPlayerStatus_OnRoof == false)
 		{
-			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f);
-			Go_Straight_Constant(dTimeDelta, 2, 0.6f);
+			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f , true);
+			Go_Straight_Constant(dTimeDelta, 2, 0.6f, true);
 		}
-		//내려갈때
+		//내려갈때 
 		else
 		{
 			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.4f);
@@ -993,8 +993,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		}
 		else
 		{
-			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
-			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box);
+			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box , true);
+			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box, true);
 		}
 	}
 	else

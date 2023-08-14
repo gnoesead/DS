@@ -122,12 +122,12 @@ HRESULT CSky::Add_Components()
 	switch (iCurLevelIdx)
 	{
 	case LEVEL_VILLAGE:
-		if (FAILED(__super::Add_Component(iCurLevelIdx, TEXT("Prototype_Component_Model_Sky_Village"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 		break;
 	case LEVEL_TRAIN:
-		if (FAILED(__super::Add_Component(iCurLevelIdx, TEXT("Prototype_Component_Model_Sky_Train"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 		break;

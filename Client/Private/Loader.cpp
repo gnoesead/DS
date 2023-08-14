@@ -206,6 +206,12 @@ HRESULT CLoader::LoadingForAllStage()
 		}
 
 		/*==========================================================================*/
+
+		/* For.Prototype_Component_Model_Sky_Train*/
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
+			return E_FAIL;
+
 		Load_MapObjectModel_AllStage(pGameInstance);
 		
 		LoadingForEffect();
@@ -263,35 +269,7 @@ HRESULT CLoader::LoadingForLogo()
 #pragma endregion
 
 #pragma region UI
-	/* Protoype_GameObject_BackGround */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_BackGround");
-		return E_FAIL;
-	}
-
-	/* Protoype_GameObject_Title*/
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
-		CTitle::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_Title");
-		return E_FAIL;
-	}
-
-	/* Protoype_GameObject_Loading*/
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),
-		CLoading::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
-		return E_FAIL;
-	}
-
-	/* Prototype_GameObject_Fade */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Fade"),
-		CFade::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
+	
 #pragma endregion
 
 #pragma region Particale
@@ -2343,10 +2321,20 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Stone_01b.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Lamp_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Lamp_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Lamp_01a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Lamp_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Lamp_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Lamp_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
 	// Instance
 	/* For.Prototype_Component_ModelInstance_WoodFence_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_ModelInstance_WoodFence_01a"),
-		CModel_Instance::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Environments/Map/Village/WoodFence_01a.bin", PivotMatrix, 1000))))
+		CModel_Instance::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Environments/Map/Village/WoodFence_01a.bin", PivotMatrix, 50))))
 		return E_FAIL;
 	 
 	/* For.Prototype_Component_ModelInstance_Wall_07a*/
@@ -2386,9 +2374,29 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Room_S_06.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Room_S_06b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Room_S_06b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Room_S_06b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Room_S_06c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Room_S_06c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Room_S_06c.bin", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_DoorShoji_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_01a"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_01a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_DoorShoji_01b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_01b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_01b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_DoorShoji_01c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_01c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_01c.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_DoorShoji_02a*/
@@ -2396,9 +2404,29 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_02a.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_DoorShoji_02b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_02b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_02b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_DoorShoji_02c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_02c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_02c.bin", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_DoorShoji_03a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_03a"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_03a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_DoorShoji_03b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_03b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_03b.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_DoorShoji_03c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_DoorShoji_03c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/DoorShoji_03c.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_DoorEntrance_01a*/
@@ -2451,6 +2479,11 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/RoomLight_01a.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_RoomLight_01b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_RoomLight_01b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/RoomLight_01b.bin", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_Lantern_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Lantern_01a"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Lantern_01a.bin", PivotMatrix))))
@@ -2482,6 +2515,11 @@ HRESULT CLoader::Load_MapObjectModel_House()
 	/* For.Prototype_Component_Model_Room_S_05*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Room_S_05"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Room_S_05.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Room_S_05b*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Room_S_05b"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Room_S_05b.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Room_S_07*/
@@ -2851,11 +2889,6 @@ HRESULT CLoader::Load_MapObjectModel_Train()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	_matrix			PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-
-	/* For.Prototype_Component_Model_Sky_Train*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Sky_Train"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
-		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Scrollground_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Scrollground_01a"),

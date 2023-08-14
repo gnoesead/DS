@@ -11,10 +11,12 @@
 #include "MonsterManager.h"
 #include "Fade_Manager.h"
 #include "Mini_Map_Manager.h"
-
-#include "EffectPlayer.h"
+#include "Camera_Manager.h"
+#include "Title.h"
+#include "Loading.h"
+#include "Fade.h"
 #include "SoundMgr.h"
-
+#include "EffectPlayer.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -101,7 +103,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	CTitleManager::GetInstance()->Tick();
 	
-
+	CCameraManager::GetInstance()->Tick(dTimeDelta);
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -249,7 +251,29 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	}
 
 
+
+
 	/* Prototype_Component_Texture_UI */
+
+	/* Protoype_GameObject_Title*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
+		CTitle::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Title");
+		return E_FAIL;
+	}
+	/* Protoype_GameObject_Loading*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),
+		CLoading::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
+		return E_FAIL;
+	}
+	/* Prototype_GameObject_Fade */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Fade"),
+		CFade::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #pragma region Title_UI
 
@@ -417,11 +441,11 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Face"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/B/C_%d.png"), 9))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Face/B/C_%d.png"), 10))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Name"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/B/N_%d.png"), 9))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Name/B/N_%d.png"), 10))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Boss_Battle_Hp"),
@@ -478,7 +502,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma region Map_UI	
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mini_Map"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 7))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Map/Mini/Mini_%d.dds"), 8))))
 		return E_FAIL;
 
 #pragma endregion	
@@ -656,6 +680,7 @@ void CMainApp::Free()
 	CStoryManager::GetInstance()->DestroyInstance();
 	CFadeManager::GetInstance()->DestroyInstance();
 	CMiniMapManager::GetInstance()->DestroyInstance();
+	CCameraManager::GetInstance()->DestroyInstance();
 
 
 	CGameInstance::Release_Engine();

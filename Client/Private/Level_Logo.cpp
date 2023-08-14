@@ -152,9 +152,6 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
-
-
-
     CFade::UIDESC UIDesc2;
     ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
@@ -165,6 +162,7 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
 
    
 

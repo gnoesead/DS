@@ -88,13 +88,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Layer_Effect()))
-	{
-		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_FinalBoss");
-		return E_FAIL;
-	}
-
 	CFadeManager::GetInstance()->Set_Fade_In(true);
+	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
 	return S_OK;
 }
@@ -150,25 +145,7 @@ HRESULT CLevel_FinalBoss::Render()
 
 HRESULT CLevel_FinalBoss::Ready_Lights()
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	LIGHTDESC LightDesc;
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-
-	LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
-	LightDesc.vLightDir = _float4(1.f, -1.f, 1.f, 0.f);
-	LightDesc.vLightDiffuse = _float4(0.5f, 0.5f, 0.5f, 0.5f);
-	LightDesc.vLightAmbient = _float4(0.5f, 0.5f, 0.5f, 0.5f);
-	LightDesc.vLightSpecular = _float4(0.f, 0.f, 0.f, 0.f);
-
-	if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : Direction_Light");
-		return E_FAIL;
-	}
-
-	Safe_Release(pGameInstance);
+	Load_Lights_Info(TEXT("../../Data/Light/Acaza/Light_Acaza.dat"));
 
 	return S_OK;
 }
@@ -797,7 +774,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	UIDesc8.m_Is_Reverse = false;
 	UIDesc8.m_Type = 7;
-	UIDesc8.m_Up_Mount = 2.f;
+	UIDesc8.m_Up_Mount = 1.95f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
@@ -810,7 +787,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	UIDesc8.m_Is_Reverse = false;
 	UIDesc8.m_Type = 8;
-	UIDesc8.m_Up_Mount = 2.f;
+	UIDesc8.m_Up_Mount = 1.95f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
@@ -847,45 +824,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-
-// Dialog UI
-
-	CDialog::UIDESC UIDesc10;
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Frame
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 0;
-	
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Name_Frame
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 1;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Arrow
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 2;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
 
 	// Fade
 	CFade::UIDESC UIDesc11;
@@ -1015,8 +953,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+
+
+// Àâ¸÷ÀÌ ÆÄÃ÷·Î µé°íÀÖ°Ô
+
 #pragma region Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
+	/*CWorld_UI_Hp::UIDESC UIDesc3;
 	ZeroMemory(&UIDesc, sizeof UIDesc3);
 
 	UIDesc3.m_Is_Reverse = false;
@@ -1060,7 +1002,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 #pragma endregion
 
@@ -1157,34 +1099,48 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 	return S_OK;
 }
 
-HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
+HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 {
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : ATK_Combo_Up");
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
 		return E_FAIL;
+
+	_ulong			dwByte = 0;
+	_uint			iSize = 0;
+
+	ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		LIGHTDESC tLight;
+		ZeroMemory(&tLight, sizeof tLight);
+
+
+		ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+
+		ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+
+
+		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+			return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_0.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_0");
-		return E_FAIL;
-	}
+	CloseHandle(hFile);
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_1.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Battle_ATaK_SuperArmor_1");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
-		return E_FAIL;
-	}
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
+
 
 HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 {

@@ -186,6 +186,7 @@
     <ClInclude Include="..\Public\Boss_Battle_Frame.h" />
     <ClInclude Include="..\Public\Boss_Battle_Hp.h" />
     <ClInclude Include="..\Public\Camera_Free.h" />
+    <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderManager.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp" />
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp" />
     <ClCompile Include="..\Private\Camera_Free.cpp" />
+    <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ColliderManager.cpp" />
     <ClCompile Include="..\Private\CollisionBox.cpp" />

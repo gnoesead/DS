@@ -6,6 +6,7 @@
 #include "Camera_Tool.h"
 #include "Player_Tool.h"
 #include "MapObject.h"
+#include "Transform.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)

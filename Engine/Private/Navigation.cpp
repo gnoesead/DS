@@ -199,7 +199,7 @@ _float CNavigation::Compute_Height(CTransform* pOwnerTransform)
 
 	_float		fHeight = (-XMVectorGetX(vPlane) * XMVectorGetX(vOwnerPos)
 		- XMVectorGetZ(vPlane) * XMVectorGetZ(vOwnerPos)
-		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane);
+		- XMVectorGetW(vPlane)) / XMVectorGetY(vPlane) - 0.1f;
 
 	return fHeight;
 }

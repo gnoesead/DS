@@ -8,11 +8,14 @@ float4		g_vCamPosition;
 texture2D	g_DiffuseTexture;
 texture2D   g_NormalTexture;
 texture2D	g_RampTexture;
+texture2D	g_EmissiveTexture;
+
 
 float		g_fFar = 300.f;
 
 float			g_fTimeAcc;
 float2			g_vPanningSpeed;
+float			g_fAlpha;
 
 struct VS_IN
 {
@@ -69,6 +72,7 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
+	vector		vEmissive : SV_TARGET3;
 };
 
 struct PS_NONDEFERRED
@@ -81,6 +85,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	PS_OUT	Out = (PS_OUT)0;
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV);
+	vector  vEmissive = g_EmissiveTexture.Sample(LinearSampler, _In.vTexUV);
 
 	if (vMtrlDiffuse.a < 0.1f)
 		discard;
@@ -89,6 +94,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vEmissive = vEmissive;
 
 	return Out;
 };
@@ -100,6 +106,8 @@ PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV);
 	
 	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, _In.vTexUV);
+
+	vector  vEmissive = g_EmissiveTexture.Sample(LinearSampler, _In.vTexUV);
 
 	float3	vNormal = vNormalDesc.xyz * 2.f - 1.f;
 
@@ -116,6 +124,7 @@ PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vEmissive = vEmissive;
 
 	return Out;
 };
@@ -217,7 +226,7 @@ PS_OUT  PS_SMELL(PS_IN In)
 
 	Out.vDiffuse = vMtrlDiffuse;
 
-	Out.vDiffuse.a = vMtrlDiffuse.r;
+	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
 
 	Out.vDiffuse.g = 0.f;
 	Out.vDiffuse.b = 0.f;

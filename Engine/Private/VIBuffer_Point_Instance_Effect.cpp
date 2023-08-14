@@ -222,11 +222,11 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
 			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
 			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
-			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation, vPos + vLook * m_pParticleDescriptions[i].fSpeed * TimeDelta);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation, vPos + vLook * m_pParticleDescriptions[i].fSpeed * (_float)TimeDelta);
 		}
 		break;
 		default:
-			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += m_pParticleDescriptions[i].fSpeed * TimeDelta;
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += m_pParticleDescriptions[i].fSpeed * (_float)TimeDelta;
 			break;
 		}
 		

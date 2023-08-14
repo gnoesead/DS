@@ -6,7 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "MissionManager.h"
-
+#include "Fade_Manager.h"
 
 CMission::CMission(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -179,11 +179,13 @@ void CMission::LateTick(_double TimeDelta)
 
 	Get_Player_Info(TimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-
 	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+
+	_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	if (Is_Battle == true) {
+		m_Is_Dialog_On = true;
+	}
 
 	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
 		m_Is_In = true;
@@ -195,11 +197,69 @@ void CMission::LateTick(_double TimeDelta)
 		m_Is_Font_Render = false;
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+	// Player
+	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+
+		// Boss
+		_vector Trigger = { 131.f, 3.f, 57.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+
+		// Monster
+		_vector Trigger_2 = { 67.f, 3.f, 19.9f };
+		_vector vDist_2 = Pos - Trigger_2;
+
+		_float dist_2 = XMVectorGetX(XMVector3Length(vDist_2));
+
+		if (dist_2 < 4.f && m_Is_Mon_Encounter == false) {
+			m_Is_Mon_Encounter = true;
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+
+	}
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+
+		_vector Trigger = { 600.f, 4.5f, 317.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+	}
+	
 	m_Main_Type = CMissionManager::GetInstance()->Get_Main_Mission_Type();
 	m_Sub_Type = CMissionManager::GetInstance()->Get_Sub_Mission_Type();
-
-	
 
 	Safe_Release(pGameInstance);
 
@@ -209,6 +269,7 @@ void CMission::LateTick(_double TimeDelta)
 
 HRESULT CMission::Render()
 {
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
