@@ -366,12 +366,12 @@ void CGameInstance::Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue)
 	m_pLight_Manager->Set_Light(iIndex, iOption, vLightValue);
 }
 
-HRESULT CGameInstance::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc)
+HRESULT CGameInstance::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc , CTransform* pOwnerTransform)
 {
 	if (nullptr == m_pLight_Manager)
 		return E_FAIL;
 
-	return m_pLight_Manager->Add_Light(pDevice, pContext, LightDesc);
+	return m_pLight_Manager->Add_Light(pDevice, pContext, LightDesc, pOwnerTransform);
 }
 
 HRESULT CGameInstance::Clear_Light()

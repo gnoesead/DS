@@ -171,6 +171,15 @@ HRESULT CTerrainMapObject::SetUp_ShaderResources()
 	if (FAILED(m_pMaskTexture->Bind_ShaderResourceViews(m_pShaderCom, "g_MaskTexture")))
 		return E_FAIL;
 
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+	_float fUVRatio = 1.f;
+
+	if (LEVEL_TRAIN == iLevelIdx)
+		fUVRatio = 0.1f;
+
+	if(FAILED(m_pShaderCom->SetUp_RawValue("g_fUVRatio" , &fUVRatio, sizeof _float)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

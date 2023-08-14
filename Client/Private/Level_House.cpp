@@ -138,25 +138,7 @@ HRESULT CLevel_House::Render()
 
 HRESULT CLevel_House::Ready_Lights()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
-
-    LIGHTDESC LightDesc;
-    ZeroMemory(&LightDesc, sizeof LightDesc);
-
-    LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
-    LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
-
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Direction_Light");
-        return E_FAIL;
-    }
-
-    Safe_Release(pGameInstance);
+    Load_Lights_Info(TEXT("../../Data/Light/Room/Light_Room.dat"));
 
     return S_OK;
 }
@@ -200,7 +182,7 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+    CameraDesc.fFarZ = 300.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
@@ -228,20 +210,11 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-
-   
-    CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-   
-    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
-
-    //CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
-
+     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+   // CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
     CharacterDesc.Land_Y = 0.f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
-
     //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
@@ -1095,6 +1068,53 @@ HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
         default:
             break;
         }
+    }
+
+    CloseHandle(hFile);
+
+    Safe_Release(pGameInstance);
+
+    return S_OK;
+}
+
+HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (INVALID_HANDLE_VALUE == hFile)
+        return E_FAIL;
+
+    _ulong			dwByte = 0;
+    _uint			iSize = 0;
+
+    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+    for (_uint i = 0; i < iSize; ++i)
+    {
+        LIGHTDESC tLight;
+        ZeroMemory(&tLight, sizeof tLight);
+
+
+        ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+
+        ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+
+        if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+        {
+            tLight.vLightDiffuse = _float4(0.05f, 0.05f, 0.05f, 1.f);
+        }
+
+
+        if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+            return E_FAIL;
     }
 
     CloseHandle(hFile);

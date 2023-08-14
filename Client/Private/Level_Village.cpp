@@ -161,25 +161,7 @@ HRESULT CLevel_Village::Render()
 
 HRESULT CLevel_Village::Ready_Lights()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
-
-    LIGHTDESC LightDesc;
-    ZeroMemory(&LightDesc, sizeof LightDesc);
-
-    LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
-    LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
-
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Direction_Light");
-        return E_FAIL;
-    }
-
-    Safe_Release(pGameInstance);
+    Load_Lights_Info(TEXT("../../Data/Light/Village/Light_Village.dat"));
 
     return S_OK;
 }
@@ -217,7 +199,7 @@ HRESULT CLevel_Village::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+    CameraDesc.fFarZ = 300.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
@@ -1241,6 +1223,57 @@ HRESULT CLevel_Village::Load_CollisionBox_Info(const _tchar* pPath, const _tchar
 
     return S_OK;
 }
+
+HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (INVALID_HANDLE_VALUE == hFile)
+        return E_FAIL;
+
+    _ulong			dwByte = 0;
+    _uint			iSize = 0;
+
+    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+    for (_uint i = 0; i < iSize; ++i)
+    {
+        LIGHTDESC tLight;
+        ZeroMemory(&tLight, sizeof tLight); 
+
+       
+        ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+
+       
+
+        ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+
+        if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+        {
+            tLight.vLightDiffuse = _float4(0.4f, 0.4f, 0.4f, 1.f);
+        }
+           
+
+        if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+            return E_FAIL;
+    }
+
+    CloseHandle(hFile);
+
+    Safe_Release(pGameInstance);
+
+    return S_OK;
+}
+
+
 
 CLevel_Village* CLevel_Village::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

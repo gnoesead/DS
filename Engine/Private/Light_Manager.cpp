@@ -1,5 +1,6 @@
 #include "..\Public\Light_Manager.h"
 #include "Light.h"
+#include "Transform.h"
 
 IMPLEMENT_SINGLETON(CLight_Manager)
 
@@ -34,11 +35,14 @@ void CLight_Manager::Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue)
 	(*iter)->Set_LightDesc(iOption, vLightValue);
 }
 
-HRESULT CLight_Manager::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc)
+HRESULT CLight_Manager::Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc , CTransform* pOwnerTransform)
 {
 	CLight* pLight = CLight::Create(pDevice, pContext, LightDesc);
 	if (nullptr == pLight)
 		return E_FAIL;
+
+	if (pOwnerTransform != nullptr)
+		pLight->Set_Transform(pOwnerTransform);
 
 	m_Lights.emplace_back(pLight);
 
