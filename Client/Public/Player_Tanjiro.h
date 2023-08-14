@@ -100,6 +100,8 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isJump_Move = { false };
 
 
+
+
 	//오의 용
 	_double		m_dTime_Special_Ready = { 0.0 };
 	_double		m_dTime_Special_CutScene = { 0.0 };
@@ -118,6 +120,7 @@ private: //애니메이션 제어용 변수들
 	
 	_float4		m_vTanjrioToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
 	
+
 
 private:
 	/* 임시 코드 */

@@ -45,7 +45,6 @@ public:
 	_float	Get_fDamage() { return m_fDamage; }
 	_bool	Get_Death() { return m_isDeath; }
 
-	_bool	Get_CanHit() { return m_isCanHit; }
 public:
 	void	Set_Coll(_bool isColl) {
 		m_isColl = isColl;
@@ -65,7 +64,6 @@ public:
 
 	void	Set_Color(_float4 vColor) { m_vColor = vColor; }
 
-	void	Set_CanHit(_bool CanHit) { m_isCanHit = CanHit; }
 public:
 	void ReMake_Collider(TYPE eColliderType, _fmatrix TransformMatrix);
 	void ReMake_Collider(_float fRadius);
@@ -103,7 +101,6 @@ private:
 	_bool		m_isHit_Spin = { false };
 	_bool		m_isHit_Upper = { false };
 
-	_bool		m_isCanHit = { true };
 
 	_float4		m_AtkDir = { 0.f, 0.f, 0.f, 0.f };
 	_float		m_fDamage = { 0.0f };

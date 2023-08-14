@@ -783,38 +783,53 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() && m_pColliderCom[COLL_SPHERE]->Get_CanHit())
+#pragma region Hit_Small
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
-		m_pColliderCom[COLL_SPHERE]->Set_CanHit(false);
 
-		m_dDelay_ComboChain = 0.0;
+		m_dDelay_ComboChain = 1.0;
 
 		if (m_iSmallHit_Index == 0)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
-			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_FRONT);
 			m_iSmallHit_Index++;
 		}
 		else if (m_iSmallHit_Index == 1)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
-			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_LEFT);
 			m_iSmallHit_Index++;
 		}
 		else if (m_iSmallHit_Index == 2)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
-			m_pModelCom->Set_AnimisFinish(ANIM_DMG_SMALL_RIGHT);
 			m_iSmallHit_Index = 0;
 		}
 	}
+#pragma endregion
 
-	m_dDelay_ComboChain += dTimeDelta;
-	if (m_dDelay_ComboChain)
+
+
+#pragma region Hit_Big
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
+		m_dDelay_ComboChain = 1.7;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
+	}
+#pragma endregion
+
+
+
+	m_dDelay_ComboChain -= dTimeDelta;
+	if (m_dDelay_ComboChain <= 0.0f)
+	{
+		m_dDelay_ComboChain = 0.0;
+		m_eCurState = STATE_IDLE;
+		m_isFirst_Move_0 = true;
+		m_isFirst_Move_1 = true;
 	}
 
 }

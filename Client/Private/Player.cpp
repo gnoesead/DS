@@ -157,6 +157,35 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	Safe_Release(pGameInstance);
 }
 
+_bool CPlayer::Get_LockOn_MonPos()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+	_vector MonPos = pCamera->Get_Battle_Target_Pos();
+	_bool	IsBattle = pCamera->Get_Is_Battle();
+	
+	if (IsBattle)
+		XMStoreFloat4(&m_LockOnPos, MonPos);
+
+	Safe_Release(pGameInstance);
+
+	return IsBattle;
+}
+
+_float CPlayer::Get_Distance_To_LockOnPos()
+{
+	Get_LockOn_MonPos();
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = XMLoadFloat4(&m_LockOnPos);
+	_vector vDir = XMVector3Normalize(vMonsterPos - vPlayerPos);
+	_float fDistance = Convert::GetLength(vMonsterPos - vPlayerPos);
+
+	return fDistance;
+}
+
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
 	if (m_Moveset.m_isHitMotion == false)
@@ -458,7 +487,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.02f && m_dDelay_Charge_W < 0.02f)
+		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
 		{
 			m_isCan_Charge = true;
 		}
