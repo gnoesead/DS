@@ -21,6 +21,8 @@
 #include "EffectPlayer.h"
 #include "ParticleSystem.h"
 #include "Story_Manager.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 CLevel_Lobby::CLevel_Lobby(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -34,36 +36,44 @@ HRESULT CLevel_Lobby::Initialize()
         return E_FAIL;
 
    
-
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
     {
         MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_Lobby");
         return E_FAIL;
     }
 
-  
-
+	CFadeManager::GetInstance()->Set_Fade_In(true);
+	
     return S_OK;
 }
 
 void CLevel_Lobby::Tick(_double dTimeDelta)
 {
-    __super::Tick(dTimeDelta);
+	__super::Tick(dTimeDelta);
 
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 
-    SetWindowText(g_hWnd, TEXT("Story_Board"));
+	SetWindowText(g_hWnd, TEXT("Story_Board"));
 
 	CStoryManager::GetInstance()->Tick();
 
 	m_Select = CStoryManager::GetInstance()->Get_Select_Type();
 
-	
-    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
-    {
-		if (m_Select == 0) {
+
+	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
+	{
+		CFadeManager::GetInstance()->Set_Fade_Out(true);
+	}
+
+	if (m_Select == 0) {
+
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 			HRESULT hr = 0;
 
@@ -75,14 +85,21 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 			else
 				hr = pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
 
-			if (FAILED(hr)) {
+			if (FAILED(hr))
+			{
 				Safe_Release(pGameInstance);
 				return;
 			}
-				
 
 		}
-		else if (m_Select == 1) {
+
+	}
+	else if (m_Select == 1) {
+
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 			HRESULT hr = 0;
 
@@ -99,7 +116,13 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				return;
 			}
 		}
-		else if (m_Select == 2) {
+	}
+	else if (m_Select == 2) {
+
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 			HRESULT hr = 0;
 
@@ -116,7 +139,13 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				return;
 			}
 		}
-		else if (m_Select == 3) {
+	}
+	else if (m_Select == 3) {
+
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 			HRESULT hr = 0;
 
@@ -132,9 +161,16 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				Safe_Release(pGameInstance);
 				return;
 			}
-			
+
 		}
-		else if (m_Select == 4) {
+
+	}
+	else if (m_Select == 4) {
+
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 			HRESULT hr = 0;
 
@@ -150,10 +186,12 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				Safe_Release(pGameInstance);
 				return;
 			}
-			
+
 		}
-        
-    }
+
+	}
+
+
 
 	Safe_Release(pGameInstance);
 }
@@ -279,6 +317,16 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	// Line
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Type = 17;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Story_Board"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 	// Cloud_LT_Dark
 	ZeroMemory(&UIDesc, sizeof UIDesc);
 
@@ -382,6 +430,28 @@ HRESULT CLevel_Lobby::Ready_Layer_BackGround(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+	// Fade
+	CFade::UIDESC UIDesc2;
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOBBY, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 

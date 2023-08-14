@@ -361,11 +361,11 @@ HRESULT CModel::Bind_ShaderResource(_uint iMeshIndex, CShader* pShader, const ch
 
 HRESULT CModel::Bind_ShaderBoneMatrices(_uint iMeshIndex, CShader* pShader, const char* pConstantName)
 {
-	_float4x4	BoneMatrices[295];
+	_float4x4	BoneMatrices[500];
 
 	m_Meshes[iMeshIndex]->Get_BoneMatrices(BoneMatrices, XMLoadFloat4x4(&m_PivotMatrix), this);
 
-	return pShader->SetUp_Matrix_Array(pConstantName, BoneMatrices, 295);
+	return pShader->SetUp_Matrix_Array(pConstantName, BoneMatrices, 500);
 }
 
 HRESULT CModel::Ready_ModelData(const char* pModelFilePath, TYPE eModelType)
@@ -528,7 +528,7 @@ HRESULT CModel::Ready_ModelData(const char* pModelFilePath, TYPE eModelType)
 
 					if (0 != m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames)
 					{
-						m_ModelData.pAnimationData[i].pChannelData[j].pKeyFrameData = new KEYFRAMEDATA[m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames];
+ 						m_ModelData.pAnimationData[i].pChannelData[j].pKeyFrameData = new KEYFRAMEDATA[m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames];
 
 						for (_uint k = 0; k < m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames; k++)
 						{
@@ -609,17 +609,21 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 			{
 				if (MESHMATERIALS::TextureType_NORMALS == j)
 				{
-					strcpy_s(szFilePath, "../../Client/Bin/Resources/Models/AlphaTexture.dds");
-					isNormal = false;
+					m_isNormalTexture[i] = false;
+					continue;
 				}
 				else
 					continue;
 			}
 			else
 			{
+				if (MESHMATERIALS::TextureType_NORMALS == j)
+					m_isNormalTexture[i] = true;
+
 				strcpy_s(szFilePath, m_ModelData.pMaterialData[iIndex].szName);
 			}
 
+			
 			//가져온 텍스처의 경로에 잘못된 값이 있을 수 있으므로 파일 이름과 경로를 다시 잡아주는 작업
 
 			char szDrive[MAX_PATH] = { "" };

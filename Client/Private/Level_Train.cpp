@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Player.h"
 #include "MapObject.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -43,11 +45,19 @@ HRESULT CLevel_Train::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Train");
+        return E_FAIL;
+    }
+
     if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
     {
         MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_Train");
         return E_FAIL;
     }
+
+    CFadeManager::GetInstance()->Set_Fade_In(true);
 
     return S_OK;
 }
@@ -60,24 +70,33 @@ void CLevel_Train::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
+    if (pGameInstance->Get_DIKeyDown(DIK_F9))
     {
-        HRESULT hr = 0;
-       
-        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_FINALBOSS))
-        {
-            pGameInstance->Clear_Light();
-            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
-        }
-        else
-            hr = pGameInstance->Swap_Level(LEVEL_FINALBOSS);
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
 
-        if (FAILED(hr))
+    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+        HRESULT hr = 0;
+
+        if (true == pGameInstance->Get_IsStage())
         {
-            Safe_Release(pGameInstance);
-            return;
+
+            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+            }
+            else
+                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
         }
     }
+
+
     Safe_Release(pGameInstance);
 }
 
@@ -150,7 +169,7 @@ HRESULT CLevel_Train::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(60.f);
+    CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
     CameraDesc.fFarZ = 300.f;
@@ -158,6 +177,7 @@ HRESULT CLevel_Train::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
+   
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -202,6 +222,36 @@ HRESULT CLevel_Train::Ready_Layer_MapObject(const _tchar* pLayerTag)
     Load_MapObject_Info(TEXT("../../Data/Object/Train/Train.dat"), pLayerTag);
 
     return S_OK;
+}
+
+HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    // Fade
+    CFade::UIDESC UIDesc;
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)

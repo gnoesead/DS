@@ -30,6 +30,10 @@ public:
 		return m_isColl;
 	}
 
+	COLLIDERDESC Get_Desc() {
+		return m_ColliderDesc;
+	}
+
 	_bool	Get_SphereOff() { return m_isSphereOff; }
 	_bool	Get_Hit_Small() { return m_isHit_Small; }
 	_bool	Get_Hit_Big() { return m_isHit_Big; }
@@ -58,6 +62,8 @@ public:
 	void	Set_AtkDir(_float4 Dir) { m_AtkDir = Dir; }
 	void	Set_fDamage(_float fDmg) { m_fDamage = fDmg; }
 	void	Set_Death(_bool Dead) { m_isDeath = Dead; }
+
+	void	Set_Color(_float4 vColor) { m_vColor = vColor; }
 
 	void	Set_CanHit(_bool CanHit) { m_isCanHit = CanHit; }
 public:
@@ -103,6 +109,9 @@ private:
 	_float		m_fDamage = { 0.0f };
 	
 	_bool		m_isDeath = { false };
+
+	// For. Color Collider
+	_float4		m_vColor = { 0.f , 1.f , 0.f  , 1.f };
 
 #ifdef _DEBUG
 private:

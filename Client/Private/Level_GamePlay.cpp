@@ -25,6 +25,8 @@
 #include "Story_Manager.h"
 
 #include "MonsterManager.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -91,6 +93,10 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 	}
 
+
+	CFadeManager::GetInstance()->Set_Fade_In(true);
+
+
     return S_OK;
 }
 
@@ -105,24 +111,32 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
-    {
-        HRESULT hr = 0;
+	if (pGameInstance->Get_DIKeyDown(DIK_F9))
+	{
+		CFadeManager::GetInstance()->Set_Fade_Out(true);
+	}
 
-		if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_VILLAGE))
-		{
-			pGameInstance->Clear_Light();
-			hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
-		}
-		else
-			hr = pGameInstance->Swap_Level(LEVEL_VILLAGE);
+	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
-		if (FAILED(hr))
+		CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+		HRESULT hr = 0;
+
+		if (true == pGameInstance->Get_IsStage())
 		{
-			Safe_Release(pGameInstance);
-			return;
+
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+			}
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
 		}
-    }
+	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -370,7 +384,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(60.f);
+    CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
     CameraDesc.fFarZ = 300.f;
@@ -378,6 +392,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
+	
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -955,6 +970,31 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 #pragma endregion
+
+
+	// Fade
+	CFade::UIDESC UIDesc8;
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
 
 	Safe_Release(pGameInstance);
 

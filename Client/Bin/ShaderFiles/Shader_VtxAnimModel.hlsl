@@ -2,7 +2,7 @@
 #include "Shader_Defines.hpp"
 
 matrix		g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-matrix		g_BoneMatrices[295];
+matrix		g_BoneMatrices[500];
 float4		g_vCamPosition;
 
 texture2D	g_DiffuseTexture;
