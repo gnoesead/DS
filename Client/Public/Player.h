@@ -134,8 +134,13 @@ public:
 	virtual HRESULT Render_ShadowDepth();
 
 
-protected: //애니메이션 제어용 함수들
+protected:
 	void	Dir_Setting(_bool Reverse);
+	_bool	Get_LockOn_MonPos();
+	_float	Get_Distance_To_LockOnPos();
+	
+
+protected: //애니메이션 제어용 함수들
 
 	void	Trigger_Hit(_double dTimeDelta);
 	void	Key_Input(_double dTimeDelta);
@@ -173,6 +178,8 @@ protected: // 애니메이션 제어용 변수들
 	//기상 딜레이 
 	_double		m_dDelay_GetUp = { 0.0 };
 
+	//스페셜 
+	_bool	m_isFirst_SpecialReady = { true };
 
 	//콤보 도중
 	_bool	m_isComboing = { false };
@@ -197,6 +204,9 @@ protected: // 애니메이션 제어용 변수들
 	//젠이츠 벽력용
 	_bool	m_isCan_Air_Hekireki = { false };
 
+	//Dash
+	_double		m_dDelay_Dash = { 0.0 };
+
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
@@ -207,6 +217,9 @@ protected:
 	_bool	m_isTestHit = { false };
 
 	_bool	m_isCanNavi = { true };
+
+	//LockOn_MonPos
+	_float4		m_LockOnPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	//상자 위치
 	vector<BOXJUMP> m_vecBoxPos;
