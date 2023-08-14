@@ -200,7 +200,7 @@ void CLoading::Tick(_double dTimeDelta)
 	if (m_UI_Desc.m_Type == 13) {
 
 	
-		m_Door_Sprite += dTimeDelta * 15.f;
+		m_Door_Sprite += (_float)dTimeDelta * 15.f;
 
 		if (m_Door_Sprite > 6.f) {
 			m_Door_Sprite = 6.f;
@@ -232,7 +232,7 @@ void CLoading::Tick(_double dTimeDelta)
 	// Walk
 	if (m_UI_Desc.m_Type == 14) {
 
-		m_Walk_Sprite += dTimeDelta * 10.f;
+		m_Walk_Sprite += (_float)dTimeDelta * 10.f;
 
 		if (m_Walk_Sprite > 5) {
 			m_Walk_Sprite = 0;

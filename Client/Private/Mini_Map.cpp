@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "MissionManager.h"
 #include "Mini_Map_Manager.h"
+#include "Fade_Manager.h"
+#include "Camera_Manager.h"
 
 
 
@@ -54,7 +56,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 240.f;
 		m_Origin_Y = 240.f;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 1.f;
 	}
 
 	// Wire
@@ -70,7 +72,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 240.f;
 		m_Origin_Y = 240.f;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 2.f;
 	}
 
 	// Frame
@@ -86,7 +88,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 280;
 		m_Origin_Y = 272;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 3;
+		m_UI_Layer = 3.f;
 	}
 	
 	// Map
@@ -102,7 +104,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 280;
 		m_Origin_Y = 272;
 		m_Size_Param = 0.67f;
-		m_UI_Layer = 1.5;
+		m_UI_Layer = 1.5f;
 	}
 
 	// Player
@@ -118,7 +120,7 @@ HRESULT CMini_Map::Initialize(void * pArg)
 		m_Origin_X = 40;
 		m_Origin_Y = 40;
 		m_Size_Param = 0.6f;
-		m_UI_Layer = 1.6;
+		m_UI_Layer = 1.6f;
 	}
 
 
@@ -139,12 +141,11 @@ void CMini_Map::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if(m_Is_In == true)
+	if (m_Is_In == true)
 		Fade_In(TimeDelta);
 
 	if (m_Is_Out == true)
 		Fade_Out(TimeDelta);
-
 
 	// Map
 	if (m_UI_Desc.m_Type == 3) {
@@ -154,8 +155,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
 			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 1080;
@@ -185,8 +186,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
 			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 1080;
@@ -216,8 +217,8 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 370;
 			m_fY = 117;
 
-			CMiniMapManager::GetInstance()->Set_MiniMap_X(m_fX);
-			CMiniMapManager::GetInstance()->Set_MiniMap_Y(m_fY);
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
 
 			m_Origin_X = 1080;
 			m_Origin_Y = 449;
@@ -237,6 +238,37 @@ void CMini_Map::Tick(_double TimeDelta)
 				m_UV_Cut_MinY = 0.f;
 
 			m_UV_Cut_MaxY = { (m_UV_Centor_Y) + 0.8f };
+			if (m_UV_Cut_MaxY >= 1.f)
+				m_UV_Cut_MaxY = 1.f;
+
+		}
+
+		if (m_Map_Type == 3) {
+
+			m_fX = 1160 + (0.5 - m_UV_Centor_X) * 260;
+			m_fY = 120 - (0.5 - m_UV_Centor_Y) * 260;
+
+			CMiniMapManager::GetInstance()->Set_MiniMap_X((_float)m_fX);
+			CMiniMapManager::GetInstance()->Set_MiniMap_Y((_float)m_fY);
+
+			m_Origin_X = 1080;
+			m_Origin_Y = 1080;
+			m_Size_Param = 0.25f;
+			m_UI_Layer = 1.5;
+
+			m_UV_Cut_MinX = { m_UV_Centor_X - 0.3f };
+			if (m_UV_Cut_MinX <= 0.f)
+				m_UV_Cut_MinX = 0.f;
+
+			m_UV_Cut_MaxX = { m_UV_Centor_X + 0.3f };
+			if (m_UV_Cut_MaxX >= 1.f)
+				m_UV_Cut_MaxX = 1.f;
+
+			m_UV_Cut_MinY = { (1 - m_UV_Centor_Y) - 0.3f };
+			if (m_UV_Cut_MinY <= 0.f)
+				m_UV_Cut_MinY = 0.f;
+
+			m_UV_Cut_MaxY = { (1 - m_UV_Centor_Y) + 0.3f };
 			if (m_UV_Cut_MaxY >= 1.f)
 				m_UV_Cut_MaxY = 1.f;
 
@@ -262,6 +294,12 @@ void CMini_Map::Tick(_double TimeDelta)
 			m_fX = 1380 - (0.85 - m_UV_Player_X) * 440 * 0.8f - (1160 + (0.5 - 0.21) * 370 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
 
 			m_fY = 170 + (0.14 - m_UV_Player_Y) * 170 * 0.8f;
+		}
+
+		if (m_Map_Type == 3) {
+			m_fX = 1202 - (0.444 - m_UV_Player_X) * 300 * 0.8f - (1160 + (0.5 - 0.3) * 250 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_X());
+
+			m_fY = 170 + (0.136 - m_UV_Player_Y) * 340 * 0.8f - (120 - (0.5 - 0.3) * 268 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_Y());
 		}
 	}
 
@@ -334,19 +372,25 @@ void CMini_Map::LateTick(_double TimeDelta)
 
 	}
 
+	if (m_Map_Type == 3) {
 
-	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+		if (m_UV_Centor_X <= 0.3f) {
+			m_UV_Centor_X = 0.3f;
+		}
+		if (m_UV_Centor_X >= 0.7f) {
+			m_UV_Centor_X = 0.7f;
+		}
 
-	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
-		m_Is_In = true;
+		if (m_UV_Centor_Y <= 0.3f) {
+			m_UV_Centor_Y = 0.3f;
+		}
+		if (m_UV_Centor_Y >= 0.7f) {
+			m_UV_Centor_Y = 0.7f;
+		}
+
 	}
-
-	if (m_Is_Dialog_On == true && m_Is_In == false && m_Is_Out == false) {
-		m_Is_Out = true;
-	}
-
-
 	
+
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
@@ -355,33 +399,36 @@ void CMini_Map::LateTick(_double TimeDelta)
 
 HRESULT CMini_Map::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_UI_Desc.m_Type == 3) {
-		m_pShaderCom->Begin(13);
-	}
-	else {
-		if (m_Is_Reverse == false)
-			m_pShaderCom->Begin(1);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_UI_Desc.m_Type == 3) {
+			m_pShaderCom->Begin(13);
+		}
 		else {
+			if (m_Is_Reverse == false)
+				m_pShaderCom->Begin(1);
+			else {
 
-			m_pShaderCom->Begin(2);
+				m_pShaderCom->Begin(2);
+
+			}
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
 
 		}
-	}
-
-	
-	if (m_Is_CutScene == false && m_Is_Render == true) {
-
-		m_pVIBufferCom->Render();
 
 	}
-
-	
 
 	return S_OK;
 }
@@ -444,8 +491,16 @@ HRESULT CMini_Map::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (m_UI_Desc.m_Type == 3) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Map_Type + 3)))
-			return E_FAIL;
+
+		if (m_Map_Type == 3) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 7)))
+				return E_FAIL;
+		}
+		else {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_Map_Type + 3)))
+				return E_FAIL;
+		}
+		
 	}
 	else if(m_UI_Desc.m_Type == 4) {
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 6)))
@@ -511,30 +566,88 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
+	
+	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
+
+
+	_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	
+	if (Is_Battle == true) {
+		m_Is_Dialog_On = true;
+	}
+
+
+	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
+		m_Is_In = true;
+	}
+
+	if (m_Is_Dialog_On == true && m_Is_In == false && m_Is_Out == false) {
+		m_Is_Out = true;
+	}
+
+
 	// Player
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 
 	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (XMVectorGetX(Pos) > 34) {
-		m_Map_Type = 1;
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+
+		_vector Trigger = { 131.f, 3.f, 57.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (XMVectorGetX(Pos) > 34) {
+			m_Map_Type = 1;
+		}
+
+		if (XMVectorGetX(Pos) > 115) {
+			m_Map_Type = 2;
+		}
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
 	}
 
-	if (XMVectorGetX(Pos) > 115) {
-		m_Map_Type = 2;
-	}
-	
-	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
+		m_Map_Type = 3;
+
+		_vector Trigger = { 600.f, 4.5f, 317.f };
+		_vector vDist = Pos - Trigger;
+
+		_float dist = XMVectorGetX(XMVector3Length(vDist));
+
+		if (dist < 4.f && m_Is_Boss_Encounter == false) {
+			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		}
+	}
+
+	
 	if (m_Map_Type == 0) {
 
 		m_UV_Centor_X = XMVectorGetX(Pos);
 
-		m_UV_Centor_X = (m_UV_Centor_X - 1.2) / (36.5 - 1.2);
+		m_UV_Centor_X = _float((m_UV_Centor_X - 1.2) / (36.5 - 1.2));
 
 		m_UV_Centor_Y = XMVectorGetZ(Pos);
 
-		m_UV_Centor_Y = (m_UV_Centor_Y - 2.413) / (40.729 - 2.413);
+		m_UV_Centor_Y = _float((m_UV_Centor_Y - 2.413) / (40.729 - 2.413));
 
 		m_UV_Player_X = m_UV_Centor_X;
 		m_UV_Player_Y = m_UV_Centor_Y;
@@ -622,6 +735,38 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 	}
 
+	if (m_Map_Type == 3) {
+
+		m_UV_Centor_X = XMVectorGetX(Pos);
+
+		m_UV_Centor_X = (m_UV_Centor_X - 480) / (689 - 480);
+
+		m_UV_Centor_Y = XMVectorGetZ(Pos);
+
+		m_UV_Centor_Y = (m_UV_Centor_Y - 214) / (420 - 214);
+
+		m_UV_Player_X = m_UV_Centor_X;
+		m_UV_Player_Y = m_UV_Centor_Y;
+
+		_vector Look = m_pTargetTransformCom->Get_State(CTransform::STATE_LOOK);
+
+		Look = XMVectorSetY(Look, 0.f);
+
+		_vector Z = { 0.f,0.f,1.f };
+
+		Look = XMVector3Normalize(Look);
+
+		if (XMVectorGetY(XMVector3Cross(Z, Look)) > 0) {
+			m_Angle = acos(XMVectorGetY(XMVector3Dot(Z, Look)));
+		}
+		else {
+			m_Angle = acos(XMVectorGetY(XMVector3Dot(Z, -Look)));
+
+			m_Angle = m_Angle + XMConvertToRadians(180.f);
+		}
+
+	}
+
 
 	Safe_Release(pGameInstance);
 }
@@ -642,11 +787,18 @@ void CMini_Map::Fade_In(_double TimeDelta)
 		m_fX = m_Origin_PosX;
 	}
 
-	if (m_Alpha >= 1.f && m_fX <= m_Origin_PosX) {
-		m_Is_In = false;
+	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		if (m_Alpha >= 1.f) {
+			m_Is_In = false;
+		
+		}
 	}
-
-
+	else {
+		if (m_Alpha >= 1.f && m_fX <= m_Origin_PosX) {
+			m_Is_In = false;
+		
+		}
+	}
 }
 
 void CMini_Map::Fade_Out(_double TimeDelta)
@@ -659,7 +811,7 @@ void CMini_Map::Fade_Out(_double TimeDelta)
 		m_Alpha = 0.f;
 	}
 
-	m_fX += TimeDelta * 100.0;
+	m_fX += TimeDelta * 120.0;
 
 	if (m_fX >= m_Start_PosX)
 	{
@@ -667,14 +819,21 @@ void CMini_Map::Fade_Out(_double TimeDelta)
 		
 	}
 
-	if (m_Alpha <= 0.f && m_fX >= m_Start_PosX) {
-		m_Is_Out = false;
+
+	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+		if (m_Alpha <= 0.f) {
+			m_Is_Out = false;
+		
+		}
+	}
+	else {
+		if (m_Alpha <= 0.f && m_fX >= m_Start_PosX) {
+			m_Is_Out = false;
+		
+		}
 	}
 
 }
-
-
-
 
 
 CMini_Map * CMini_Map::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
