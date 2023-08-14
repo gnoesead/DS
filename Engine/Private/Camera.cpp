@@ -45,6 +45,7 @@ void CCamera::Tick(_double dTimeDelta)
 {
 	if (nullptr == m_pPipeLine)
 		return;
+
 	// Camera_Shake
 	Tick_Shake(dTimeDelta);
 

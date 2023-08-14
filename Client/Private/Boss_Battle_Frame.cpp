@@ -5,7 +5,7 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
-
+#include "Fade_Manager.h"
 
 CBoss_Battle_Frame::CBoss_Battle_Frame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -79,78 +79,74 @@ void CBoss_Battle_Frame::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+		m_UI_Desc.m_C_Num = 9;
+	}
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_UI_Desc.m_C_Num = 0;
+	}
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+		m_UI_Desc.m_C_Num = 8;
+	}
+
+	Safe_Release(pGameInstance);
+
 	if (m_UI_Desc.m_C_Num == 0) {
 
 		if (m_UI_Desc.m_Type == 1) {
-
+			m_fX = 1158;
+			m_fY = 37;
+			m_Origin_X = 240;
+			m_Origin_Y = 240;
+			m_Size_Param = 0.349990f;
+			m_UI_Layer = 0;
 		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 1) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 2) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
+		if (m_UI_Desc.m_Type == 2) {
+			m_fX = 1071;
+			m_fY = 48;
+			m_Origin_X = 264;
+			m_Origin_Y = 88;
+			m_Size_Param = 0.249815f;
+			m_UI_Layer = 2;
 		}
 	}
-	if (m_UI_Desc.m_C_Num == 3) {
+	if (m_UI_Desc.m_C_Num == 9) {
 		if (m_UI_Desc.m_Type == 1) {
-
+			m_fX = 1158;
+			m_fY = 37;
+			m_Origin_X = 240;
+			m_Origin_Y = 240;
+			m_Size_Param = 0.349990f;
+			m_UI_Layer = 0;
 		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 4) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 5) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 6) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 7) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
+		if (m_UI_Desc.m_Type == 2) {
+			m_fX = 1071;
+			m_fY = 48;
+			m_Origin_X = 216;
+			m_Origin_Y = 80;
+			m_Size_Param = 0.249815f;
+			m_UI_Layer = 2;
 		}
 	}
 	if (m_UI_Desc.m_C_Num == 8) {
 		if (m_UI_Desc.m_Type == 1) {
-
+			m_fX = 1158;
+			m_fY = 37;
+			m_Origin_X = 240;
+			m_Origin_Y = 240;
+			m_Size_Param = 0.349990f;
+			m_UI_Layer = 0;
 		}
-		else {
-
+		if (m_UI_Desc.m_Type == 2) {
+			m_fX = 1071;
+			m_fY = 48;
+			m_Origin_X = 224;
+			m_Origin_Y = 80;
+			m_Size_Param = 0.249815f;
+			m_UI_Layer = 2;
 		}
 	}
 
@@ -162,6 +158,16 @@ void CBoss_Battle_Frame::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+	m_Is_Render = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (CFadeManager::GetInstance()->Get_Is_House_Boss_On() == false && pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_Is_Render = false;
+	}
+
+	Safe_Release(pGameInstance);
 	
 	Get_Mouse_Pos();
 
@@ -176,26 +182,28 @@ void CBoss_Battle_Frame::LateTick(_double TimeDelta)
 
 HRESULT CBoss_Battle_Frame::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
 	}
-
-	
-	if (m_Is_CutScene == false) {
-
-		m_pVIBufferCom->Render();
-
-	}
-	
-	
 	
 	return S_OK;
 }

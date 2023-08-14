@@ -5,7 +5,7 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
-
+#include "Fade_Manager.h"
 
 CBoss_Battle_Hp::CBoss_Battle_Hp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -98,6 +98,18 @@ void CBoss_Battle_Hp::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+	m_Is_Render = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (CFadeManager::GetInstance()->Get_Is_House_Boss_On() == false && pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_Is_Render = false;
+	}
+
+	Safe_Release(pGameInstance);
+
+
 	Get_Boss_Info(TimeDelta);
 
 	if (m_Delay_Down == true) {
@@ -142,27 +154,29 @@ void CBoss_Battle_Hp::LateTick(_double TimeDelta)
 
 HRESULT CBoss_Battle_Hp::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
 	}
 
-	
-	if (m_Is_CutScene == false) {
-
-		m_pVIBufferCom->Render();
-
-	}
-	
-	
-	
 	return S_OK;
 }
 

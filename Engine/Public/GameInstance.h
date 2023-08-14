@@ -65,7 +65,7 @@ public: /*for Component_Manager*/
 public: /*for Light_Manager*/
     const LIGHTDESC*    Get_Light(_uint iIndex = 0) const;
     void                Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue);
-    HRESULT             Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc);
+    HRESULT             Add_Light(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const LIGHTDESC & LightDesc , class CTransform * pOwnerTransform = nullptr);
     HRESULT             Clear_Light();
 
 public: /* For.Font_Manager */

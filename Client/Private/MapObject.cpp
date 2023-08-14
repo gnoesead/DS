@@ -37,7 +37,7 @@ HRESULT CMapObject::Initialize(void* pArg)
 	m_pTransformCom->Rotation(m_MapObject_Info.vRotAngle);
 	m_pTransformCom->Scaling(m_MapObject_Info.vScale);
 
-	m_vPanningSpeed = { 0.1f , 0.1f };
+	m_vPanningSpeed = { 0.2f , 0.2f };
 
 	return S_OK;
 }
@@ -51,7 +51,7 @@ void CMapObject::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-	m_fTimeAcc += TimeDelta;
+	m_fTimeAcc += (_float)TimeDelta;
 }
 
 HRESULT CMapObject::Render()
@@ -74,6 +74,9 @@ HRESULT CMapObject::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
 				return E_FAIL;
 		}
+
+		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_EmissiveTexture", MESHMATERIALS::TextureType_EMISSIVE)))
+			return E_FAIL;
 
 		if (5 == m_MapObject_Info.iRenderGroup)
 			m_pShaderCom->Begin(4);
@@ -171,6 +174,9 @@ HRESULT CMapObject::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vPanningSpeed", &m_vPanningSpeed, sizeof _float2)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
+	
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

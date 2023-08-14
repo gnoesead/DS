@@ -5,7 +5,7 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
-
+#include "Fade_Manager.h"
 
 CPlayer_Battle_Hp::CPlayer_Battle_Hp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -98,6 +98,10 @@ void CPlayer_Battle_Hp::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+
+	m_Is_Render = CFadeManager::GetInstance()->Get_Is_Battle();
+
+
 	Get_Player_Info(TimeDelta);
 
 	if (m_Delay_Down == true) {
@@ -143,25 +147,29 @@ void CPlayer_Battle_Hp::LateTick(_double TimeDelta)
 
 HRESULT CPlayer_Battle_Hp::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
 	}
-
-	
-	if (m_Is_CutScene == false) {
-
-		m_pVIBufferCom->Render();
-
-	}
-	
 	
 	return S_OK;
 }

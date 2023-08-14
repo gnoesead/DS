@@ -144,6 +144,9 @@ private: //애니메이션 제어용 변수들
 	_double		m_dDelay_ComboChain = { 0.0 };
 	_int		m_iSmallHit_Index = { 0 };
 	
+
+	//Down
+	_double		m_dDelay_Down = { 0.0 };
 	
 private:
 	/* 임시 코드 */

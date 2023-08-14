@@ -261,26 +261,46 @@ void CFade::Fade_Out(_double TimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_Out_Done(true);
 	}
 
-
 }
 
 void CFade::Fade_OutIn(_double TimeDelta)
 {
-	m_Alpha += (_float)TimeDelta * 1.5f * m_Alpha_Dir;
+	m_Alpha += (_float)TimeDelta * 1.5f * m_Alpha_Dir * m_InOut_Speed;
 
 	if (m_Alpha >= 1.f)
 	{
 		m_Alpha = 1.f;
 		m_Alpha_Dir *= -1.f;
+		m_InOut_Speed = 1.f;
+		m_Delay_On = true;
+		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
 	}
+
 
 	if (m_Alpha <= 0.f)
 	{
 		m_Alpha = 0.f;
 		m_Alpha_Dir *= -1.f;
+		m_InOut_Speed = 1.f;
 		CFadeManager::GetInstance()->Set_Fade_OutIn(false);
 		CFadeManager::GetInstance()->Set_Fade_OutIn_Done(true);
 	}
+
+
+	if (m_Delay_On) {
+		m_Delay_TimeAcc += (_float)TimeDelta;
+
+		m_Alpha = 0.999f;
+
+		if (m_Delay_TimeAcc > CFadeManager::GetInstance()->Get_Delay_Time()) {
+			m_Delay_TimeAcc = 0.f;
+			m_Delay_On = false;
+		}
+	}
+
+
+
 }
 
 

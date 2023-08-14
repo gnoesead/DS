@@ -14,7 +14,7 @@ BEGIN(Client)
 
 class CFade final : public CUI
 {
-	
+
 public:
 	typedef struct tagUIDesc
 	{
@@ -35,11 +35,11 @@ public:
 	virtual void LateTick(_double TimeDelta) override;
 	virtual HRESULT Render() override;
 
-private: /* 내가 사용하고하는 컴포넌트의 기능을 검색없이 바로 사용할 수 있다. */	
-	CShader*				m_pShaderCom = { nullptr };
-	CTexture*				m_pTextureCom = { nullptr };
-	CRenderer*				m_pRendererCom = { nullptr };	
-	CVIBuffer_Rect*			m_pVIBufferCom = { nullptr };
+private: /* 내가 사용하고하는 컴포넌트의 기능을 검색없이 바로 사용할 수 있다. */
+	CShader* m_pShaderCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CRenderer* m_pRendererCom = { nullptr };
+	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
 public:
 	void Set_UI();
@@ -60,6 +60,12 @@ private:
 
 
 	_float m_TimeAcc = { 0.f };
+
+	_float m_InOut_Speed = { 1.f };
+	_float m_Delay_TimeAcc = { 0.f };
+	_bool  m_Delay_On = { false };
+	_float m_Delay_Time = { 1.f };
+
 
 private:
 	UIDESC                  m_UI_Desc = {};

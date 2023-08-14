@@ -603,7 +603,7 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 			_uint iSize = m_ModelData.pMaterialData[iIndex].iNameSize;
 			char szFilePath[MAX_PATH] = { "" };
 
-			_bool isNormal = { true };
+			_bool isEmissive = { true };
 
 			if (1 >= iSize)
 			{
@@ -611,6 +611,11 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 				{
 					m_isNormalTexture[i] = false;
 					continue;
+				}
+				else if (MESHMATERIALS::TextureType_EMISSIVE == j)
+				{
+					isEmissive = false;
+					strcpy_s(szFilePath, "../../Client/Bin/Resources/Models/Black.dds");
 				}
 				else
 					continue;
@@ -645,7 +650,7 @@ HRESULT CModel::Ready_Materials(const char* pModelFilePath)
 
 			_tchar	szConvertFullPath[MAX_PATH] = TEXT("");
 
-			if (true == isNormal)
+			if (true == isEmissive)
 				MultiByteToWideChar(CP_ACP, 0, szFullPath, (int)strlen(szFullPath), szConvertFullPath, MAX_PATH);
 			else
 				MultiByteToWideChar(CP_ACP, 0, szFilePath, (int)strlen(szFilePath), szConvertFullPath, MAX_PATH);

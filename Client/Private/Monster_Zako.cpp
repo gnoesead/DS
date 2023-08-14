@@ -781,7 +781,6 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 
 void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
-	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
 #pragma region Hit_Small
@@ -831,7 +830,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
-		m_dDelay_ComboChain = 2.0;
+		m_dDelay_ComboChain = 6.0;
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
 		Jumping(1.0f, 0.015f);
@@ -857,17 +856,19 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	Go_Dir_Constant(dTimeDelta, 92, 3.5f, AtkDir);
 	Ground_Animation_Play(92, 93);
 #pragma endregion
-
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	m_dDelay_ComboChain -= dTimeDelta;
 	if (m_dDelay_ComboChain <= 0.0f)
 	{
 		m_dDelay_ComboChain = 0.0;
-		m_eCurState = STATE_IDLE;
+
 		m_isFirst_Move_0 = true;
 		m_isFirst_Move_1 = true;
 		m_isCoolTime_On = true;
 
+		m_eCurState = STATE_IDLE;
+		
 		_int i = rand() % 3;
 		if (i == 0)
 			m_iAttackIndex = 0;
@@ -877,11 +878,45 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_iAttackIndex = 5;
 	}
 
+	if (iCurAnim == ANIM_DOWN_IDLE)
+	{
+		m_dDelay_ComboChain = 0.0;
+
+		m_isFirst_Move_0 = true;
+		m_isFirst_Move_1 = true;
+		m_isCoolTime_On = true;
+
+		m_eCurState = STATE_DOWN;
+
+		_int i = rand() % 3;
+		if (i == 0)
+			m_iAttackIndex = 0;
+		else if (i == 1)
+			m_iAttackIndex = 2;
+		else if (i == 2)
+			m_iAttackIndex = 5;
+	}
 }
 
 void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_DOWN_IDLE)
+	{
+		m_dDelay_Down += dTimeDelta;
+		if (m_dDelay_Down > 3.0f)
+		{
+			m_dDelay_Down = 0.0;
+
+			m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
+		}
+	}
+
+	if (iCurAnim == ANIM_IDLE)
+	{
+		m_eCurState = STATE_IDLE;
+	}
 
 }
 

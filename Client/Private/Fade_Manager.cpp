@@ -64,9 +64,12 @@ void CFadeManager::Set_Fade_Out(_bool Fade)
 	m_Is_Fade_Out = Fade;
 }
 
-void CFadeManager::Set_Fade_OutIn(_bool Fade)
+void CFadeManager::Set_Fade_OutIn(_bool Fade, _float Time)
 {
 	m_Is_Fade_OutIn = Fade;
+
+	if (Time != 0.f)
+		m_Delay_Time = Time;
 }
 
 _bool CFadeManager::Get_Fade_In()
@@ -97,6 +100,7 @@ void CFadeManager::Set_Fade_Out_Done(_bool Fade)
 void CFadeManager::Set_Fade_OutIn_Done(_bool Fade)
 {
 	m_Is_Fade_OutIn_Done = Fade;
+	
 }
 
 _bool CFadeManager::Get_Fade_In_Done()
@@ -113,3 +117,28 @@ _bool CFadeManager::Get_Fade_OutIn_Done()
 {
 	return m_Is_Fade_OutIn_Done;
 }
+
+_bool CFadeManager::Get_Is_Battle()
+{
+	return m_Is_Battle;
+}
+
+void CFadeManager::Set_Is_Battle(_bool is)
+{
+	m_Is_Battle = is;
+}
+
+_float CFadeManager::Get_Delay_Time()
+{
+	return m_Delay_Time;
+}
+
+_bool CFadeManager::Get_Is_House_Boss_On()
+{
+	return m_Is_House_Boss_On;
+}
+
+void CFadeManager::Set_Is_House_Boss_On(_bool is)
+{
+	m_Is_House_Boss_On = is;
+} 

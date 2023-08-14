@@ -170,6 +170,14 @@ HRESULT CColliderManager::Check_PlayerToCollisionBox(_uint iLevelIndex, _double 
 
 	CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
 
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(iLevelIndex, TEXT("Layer_Player")));
+
+	if (pPlayer->Get_IsJumpOn() == true)
+	{
+		Safe_Release(pGameInstance);
+		return S_OK;
+	}
+
 	list<CGameObject*>* pCollisionBoxes = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_CollisionBox"));
 
 	_int iCollCount = { 0 };

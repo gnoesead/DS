@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Camera_Free.h"
+#include "Fade_Manager.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -44,7 +45,9 @@ void CPlayer::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+	_bool m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+	if (m_Is_Battle == false) {
 		m_ePlayerState = { PLAYER_ADVENTURE };
 	}
 	else {
@@ -853,9 +856,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 
 			m_Moveset.m_Down_ADV_Jump_To_Object = true;
 
-			
 			m_eNextNavi = eNextNavi;
-
 		}
 	}
 	else
