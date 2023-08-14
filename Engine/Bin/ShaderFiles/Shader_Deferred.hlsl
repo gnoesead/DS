@@ -600,8 +600,6 @@ float m_TexH = 720.f;
 float m_ShadowTexW = 12800.f;
 float m_ShadowTexH = 7200.f;
 
-float m_ShadowTexW = 12800.f;
-float m_ShadowTexH = 7200.f;
 
 static const float Weight[13] =
 {
@@ -732,67 +730,6 @@ PS_OUT PS_BlurY(PS_IN _In)
 	return Out;
 }
 
-
-PS_OUT PS_ShadowBlurX(PS_IN _In)
-{
-	PS_OUT         Out = (PS_OUT)0;
-
-	float2	t = _In.vTexUV;
-	float2	uv = 0;
-
-	float	tu = 1.f / m_ShadowTexW;
-
-	for (int i = -6; i < 6; ++i)
-	{
-		uv = t + float2(tu * i, 0);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
-	}
-
-	Out.vColor /= Total;
-
-
-	/*if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;*/
-
-	return Out;
-}
-
-PS_OUT PS_ShadowBlurY(PS_IN _In)
-{
-	PS_OUT         Out = (PS_OUT)0;
-
-	float2 t = _In.vTexUV;
-	float2 uv = 0;
-
-	float tv = 1.f / (m_ShadowTexH / 2.f);
-
-	for (int i = -6; i < 6; ++i)
-	{
-		uv = t + float2(0, tv * i);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
-	}
-
-
-	Out.vColor /= Total;
-
-
-	//if (Out.vColor.a == 0.f)
-	//	discard;
-	//if (Out.vColor.a == 1.f)
-	//	discard;
-	//if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-	//	discard;
-	//if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-	//	discard;
-
-	return Out;
-}
 
 PS_OUT PS_BlurX_3(PS_IN _In)
 {

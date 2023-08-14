@@ -1652,7 +1652,6 @@ HRESULT CRenderer::Render_Deferred()
 		_vector   vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 		vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
 		vLightAt = vPlayerPos;
-
 	}
 
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
@@ -1672,7 +1671,7 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix)))
 		return E_FAIL;
-	Safe_Release(pGameInstance);
+	
 
 
 	m_pShader->Begin(3);
