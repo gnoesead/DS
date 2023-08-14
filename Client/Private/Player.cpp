@@ -829,9 +829,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 
 			m_Moveset.m_Down_ADV_Jump_To_Object = true;
 
-			
 			m_eNextNavi = eNextNavi;
-
 		}
 	}
 	else

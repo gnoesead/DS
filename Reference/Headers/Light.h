@@ -14,6 +14,8 @@ public:
 		return &m_LightDesc;
 	}
 	void Set_LightDesc(_uint iOption, _float4 vLightValue);
+
+	void Set_Transform(class CTransform* pOwnerTranform) { m_pOwnerTranform = pOwnerTranform; }
 public:
 	HRESULT		Initialize(const LIGHTDESC& LightDesc);
 	HRESULT		Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
@@ -22,6 +24,8 @@ private:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 	LIGHTDESC				m_LightDesc;
+
+	class CTransform*		m_pOwnerTranform = { nullptr };
 
 public:
 	static CLight* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc);

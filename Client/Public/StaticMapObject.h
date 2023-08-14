@@ -29,6 +29,7 @@ private:
 	void	Interaction_DoorOpen_Auto(_double TimeDelta);		// 문 열림 자동
 
 	void	Room_Change(_double TimeDelta, _uint iInteractionType);
+	void	Control_RenderSmell(_double TimeDelta);
 
 private:
 	_bool m_bKeyInput = { false };
@@ -42,6 +43,9 @@ private:
 	// 방 이동
 	_bool	m_bChangeRoomTrigger = { false };
 	_bool	m_bChageRoom = { false };
+	
+	// 냄새
+	_bool	m_bSmellOn = { false };
 };
 
 END

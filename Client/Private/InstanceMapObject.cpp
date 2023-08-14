@@ -102,7 +102,13 @@ HRESULT CInstanceMapObject::Render()
 		if (FAILED(m_pModelInstanceCom->Bind_ShaderResource(m_pShaderCom, i, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
 			return E_FAIL;
 
-		/*if (FAILED(m_pModelInstanceCom->Bind_ShaderResource(m_pShaderCom, i, "g_NormalTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		/*if (m_pModelCom->Get_IsNormalTexture(i))
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+				return E_FAIL;
+		}*/
+
+		/*if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_EmissiveTexture", MESHMATERIALS::TextureType_EMISSIVE)))
 			return E_FAIL;*/
 
 		if (m_MapObject_Info.iInstanceType == INSTANCE_GRASS)
