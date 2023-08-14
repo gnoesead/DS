@@ -106,12 +106,10 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	// Camera
-	
 	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
