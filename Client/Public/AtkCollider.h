@@ -36,10 +36,16 @@ private:
 	virtual ~CAtkCollider() = default;
 
 public:
+	CCollider* Get_Collider() {
+		return m_pColliderCom;
+	}
 	_uint Get_CollCount() {
 		return m_iCollCount;
 	}
+	_bool Get_IsAttack(CGameObject* pHitObj);
 	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
+
+	void Add_AtkObejct(CGameObject* pHitObj);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -54,6 +60,8 @@ public:
 private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
+
+	list<CGameObject*>	m_AtkObj;
 
 private:
 	ATKCOLLDESC		m_AtkCollDesc;

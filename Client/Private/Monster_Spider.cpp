@@ -443,7 +443,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 	m_dCoolTime_Collider += dTimeDelta;
 	
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() && m_dCoolTime_Collider > 0.2f)
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
@@ -464,7 +464,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 2.3f, 0.14f, m_Hit_AtkDir);
 
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big() && m_dCoolTime_Collider > 0.2f)
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
@@ -486,7 +486,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.10f, m_Hit_AtkDir);
 
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow() && m_dCoolTime_Collider > 0.2f)
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
@@ -497,7 +497,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
 	}
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin() && m_dCoolTime_Collider > 0.2f)
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin())
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 

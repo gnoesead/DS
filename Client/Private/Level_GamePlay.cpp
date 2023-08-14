@@ -451,8 +451,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	CPlayer::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 	
-	/*
-	for (_int i = 0; i < 10; i++)
+	
+	for (_int i = 0; i < 1; i++)
 	{
 		_float fX = (rand() % 20) + 130;
 		_float fZ = (rand() & 20) + 130;
@@ -467,8 +467,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 			return E_FAIL;
 		}
 	}
-	*/
-
+	
+	/*
 	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 140.f, 1.f);
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -476,7 +476,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
 	}
-
+	*/
 	Safe_Release(pGameInstance);
 
 	return S_OK;
