@@ -52,6 +52,7 @@ private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);
 	void BattleCamera(_double dTimeDelta);
+	void FocusCamera(_double dTimeDelta);
 	void SideCamera(_double dTimeDelta);
 	void CutInCamera(_double dTimeDelta);
 	void CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc);
@@ -66,8 +67,10 @@ private:
 	_bool			m_bLockMouse = { true };
 	_bool           m_Is_Battle = { false };
 	_bool           m_Is_Cut_In = { false };
+	_bool           m_Is_Focus_On = { false };
 	_bool           m_bIs_Combo_On = { false };
 	_bool           m_bIs_LockFree = { false };
+
 
 private:
 	_float4			m_fCameraLook = {};
@@ -77,6 +80,7 @@ private:
 	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
+	_vector         m_vFocusPos = {};
 	_vector			m_vMonsterPos = {};
 	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleCenter = {};

@@ -19,7 +19,7 @@ HRESULT CTitle::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Initialize_Prototype : BackGround");
+		MSG_BOX("Failed to Initialize_Prototype : CTitle");
 		return E_FAIL;
 	}
 
@@ -150,23 +150,18 @@ void CTitle::Tick(_double dTimeDelta)
 
 	}
 
-	
-
-
 }
 
 void CTitle::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
-		return;
-
 
 	m_Select = CTitleManager::GetInstance()->Get_Select_Type();
 
-	
-	
+
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
+		return;
 }
 
 HRESULT CTitle::Render()

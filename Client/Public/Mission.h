@@ -108,6 +108,11 @@ private:
 
 	_bool m_Is_Fix = { true };
 
+	_bool m_Is_Boss_Encounter = { false };
+	_bool m_Is_Boss_Battle_Done = { false };
+
+	_bool m_Is_Mon_Encounter = { false };
+	_bool m_Is_Mon_Battle_Done = { false };
 
 
 private:

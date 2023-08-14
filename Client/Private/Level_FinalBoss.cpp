@@ -85,6 +85,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 	}
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
+	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
 	return S_OK;
 }
@@ -769,7 +770,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	UIDesc8.m_Is_Reverse = false;
 	UIDesc8.m_Type = 7;
-	UIDesc8.m_Up_Mount = 2.f;
+	UIDesc8.m_Up_Mount = 1.95f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
@@ -782,7 +783,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	UIDesc8.m_Is_Reverse = false;
 	UIDesc8.m_Type = 8;
-	UIDesc8.m_Up_Mount = 2.f;
+	UIDesc8.m_Up_Mount = 1.95f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
@@ -819,45 +820,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-
-// Dialog UI
-
-	CDialog::UIDESC UIDesc10;
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Frame
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 0;
-	
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Name_Frame
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 1;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc10, sizeof UIDesc10);
-
-	// Arrow
-	UIDesc10.m_Is_Reverse = false;
-	UIDesc10.m_Type = 2;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-		TEXT("Prototype_GameObject_Dialog"), &UIDesc10))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
 
 	// Fade
 	CFade::UIDESC UIDesc11;
@@ -987,8 +949,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+
+
+// 잡몹이 파츠로 들고있게
+
 #pragma region Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
+	/*CWorld_UI_Hp::UIDESC UIDesc3;
 	ZeroMemory(&UIDesc, sizeof UIDesc3);
 
 	UIDesc3.m_Is_Reverse = false;
@@ -1032,7 +998,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 #pragma endregion
 
