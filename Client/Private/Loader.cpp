@@ -269,35 +269,7 @@ HRESULT CLoader::LoadingForLogo()
 #pragma endregion
 
 #pragma region UI
-	/* Protoype_GameObject_BackGround */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
-		CBackGround::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_BackGround");
-		return E_FAIL;
-	}
-
-	/* Protoype_GameObject_Title*/
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
-		CTitle::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_Title");
-		return E_FAIL;
-	}
-
-	/* Protoype_GameObject_Loading*/
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),
-		CLoading::Create(m_pDevice, m_pContext))))
-	{
-		MSG_BOX("Failed to Add_Prototype_GameObject_Loading");
-		return E_FAIL;
-	}
-
-	/* Prototype_GameObject_Fade */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Fade"),
-		CFade::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
+	
 #pragma endregion
 
 #pragma region Particale

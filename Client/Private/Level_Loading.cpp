@@ -237,7 +237,11 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
     if (true == m_pLoader->Get_Finished())
     {
-        if (GetKeyState(VK_SPACE) & 0x8000)
+
+        CGameInstance* pGameInstance = CGameInstance::GetInstance();
+        Safe_AddRef(pGameInstance);
+
+        if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
         {
             if (g_iLoadingTextureIndex > 0) {
 
@@ -245,6 +249,8 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
             }
         }
+
+        Safe_Release(pGameInstance);
 
         if (g_iLoadingTextureIndex == 0 && m_eNextLevelID == LEVEL_LOGO) {
 

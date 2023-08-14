@@ -31,6 +31,8 @@ private:
 	_float m_MiniMap_X = {};
 	_float m_MiniMap_Y = {};
 
+	_bool m_Village_Battle_On = { false };
+	_bool m_House_Battle_On = { false };
 
 public:
 	virtual void Free() override;
