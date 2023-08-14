@@ -528,7 +528,7 @@ HRESULT CModel::Ready_ModelData(const char* pModelFilePath, TYPE eModelType)
 
 					if (0 != m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames)
 					{
-						m_ModelData.pAnimationData[i].pChannelData[j].pKeyFrameData = new KEYFRAMEDATA[m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames];
+ 						m_ModelData.pAnimationData[i].pChannelData[j].pKeyFrameData = new KEYFRAMEDATA[m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames];
 
 						for (_uint k = 0; k < m_ModelData.pAnimationData[i].pChannelData[j].iNumKeyFrames; k++)
 						{

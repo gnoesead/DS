@@ -120,7 +120,6 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 		m_pModelCom->Set_Animation(0);
 	}
 	
-
 #ifdef _DEBUG
 	//if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		//return;
@@ -252,13 +251,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				//CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				//CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 
 			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
@@ -267,17 +262,15 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			
 		}
@@ -285,27 +278,37 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
 			}
 		}
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+
+		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
 		}
+		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+			}
+		}
+
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			
 		}
 #pragma endregion
+
 
 		if (ANIM_ATK_SKILL_MOVE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -314,7 +317,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
-
 
 			}
 		}
@@ -446,6 +448,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		m_Moveset.m_Down_Battle_Jump_Attack = false;
 		m_isJump_Move = false;
 
+		if(Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		//콤보 첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
@@ -473,6 +478,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_isFirst_JumpAtk = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 		JumpStop(0.3);
 		Set_FallingStatus(3.0f, 0.0f);
@@ -491,6 +499,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Combo = false;
 		m_isComboing = true;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		//첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
@@ -549,6 +560,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 	{
 		m_isCharging = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(33);
 	}
 	Go_Straight_Deceleration(dTimeDelta, 33, 4.5f * m_fScaleChange, 0.15f * m_fScaleChange);
@@ -561,6 +575,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Normal = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
 		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
 	}
@@ -571,6 +588,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	if (m_Moveset.m_Down_Skill_Move)
 	{
 		m_Moveset.m_Down_Skill_Move = false;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_MOVE);
 		Jumping(0.3f * m_fScaleChange, 0.07f * m_fScaleChange);
@@ -587,6 +607,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 		Jumping(3.0f * m_fScaleChange, 0.05f * m_fScaleChange);
 	}
@@ -599,6 +622,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 	if (m_Moveset.m_Down_Battle_Guard)
 	{
 		m_Moveset.m_Down_Battle_Guard = false;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
@@ -650,9 +676,30 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Dash = false;
 
+		m_dDelay_Dash = 0.0;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
 	Go_Straight_Constant(dTimeDelta, 80, 3.0f * m_fScaleChange);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
+	{
+		if (Get_Distance_To_LockOnPos() < 1.0f)
+		{
+			m_pModelCom->Set_Animation(81);
+		}
+		
+		m_dDelay_Dash += dTimeDelta;
+		if (m_dDelay_Dash > 2.0f)
+		{
+			m_pModelCom->Set_Animation(81);
+		}
+	}
+	Go_Straight_Deceleration(dTimeDelta, 81, 3.0f * m_fScaleChange, 0.03f);
+
 
 
 	if (m_Moveset.m_Down_Battle_Step)
@@ -673,12 +720,14 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
-					Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
+					//Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
 				}
 			}
 			else if (m_isRight)
@@ -688,12 +737,14 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
+					
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
-					Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
+					//Jumping(1.0f * m_fScaleChange, 0.06f * m_fScaleChange);
 				}
 			}
 		}
@@ -734,6 +785,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Special(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Special = false;
 
+		m_isFirst_SpecialReady = true;
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SPECIAL_READY);
 		m_dTime_Special_Ready = 0.0;
 	}
@@ -744,6 +797,14 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Special(_double dTimeDelta)
 	//Go_Straight_Constant(dTimeDelta, 108, 2.7f);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 108 || m_pModelCom->Get_iCurrentAnimIndex() == 109)
 	{
+		if (m_isFirst_SpecialReady)
+		{
+			m_isFirst_SpecialReady = false;
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
+
+
 		if (m_isSpecialHit)
 		{
 			m_isSpecialHit = false;
@@ -1120,7 +1181,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 	}
 	//대시 시 제한
-	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 80 == iCurAnimIndex || 81 == iCurAnimIndex)
+	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 80 == iCurAnimIndex /* || 81 == iCurAnimIndex */ )
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;

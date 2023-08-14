@@ -69,7 +69,10 @@ public://Set
 		m_Animations[index]->Set_ControlDesc(ControlDesc);
 	}
 
-	void	Set_EarlyEnd(_int index, _bool bEnd) { m_Animations[index]->Set_EarlyEnd(bEnd); }
+	void	Set_EarlyEnd(_int index, _bool bEnd, _float fEarlyRatio = 0.65) { 
+		m_Animations[index]->Set_EarlyEnd(bEnd); 
+		m_Animations[index]->Set_Ratio_EarlyEnd(fEarlyRatio);
+	}
 	void	Set_AnimisFinish(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_Finish(); }
 	void	Set_AnimResetTimeAcc(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_TimeAcc(); }
 
