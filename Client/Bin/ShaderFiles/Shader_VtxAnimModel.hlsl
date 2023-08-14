@@ -183,6 +183,7 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
+	vector		vDepth2 : SV_TARGET3;
 };
 
 struct PS_OUT_DEFERRED
@@ -198,13 +199,13 @@ PS_OUT  PS_Main(PS_IN _In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
 
-	//if (vMtrlDiffuse.a < 0.1f)
-	//	discard;
+	/*if (vMtrlDiffuse.a < 0.1f)
+		discard;*/
 
 	Out.vDiffuse = vMtrlDiffuse;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 1.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;

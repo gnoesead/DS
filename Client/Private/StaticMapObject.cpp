@@ -30,11 +30,17 @@ HRESULT CStaticMapObject::Initialize(void* pArg)
 
 	m_MapObject_Info.iMapObjectType = MAPOBJECT_STATIC;
 
+	if (7 == m_MapObject_Info.iRenderGroup)
+		m_fAlpha = 0.f;
+
 	return S_OK;
 }
 
 void CStaticMapObject::Tick(_double TimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	__super::Tick(TimeDelta);
 
 	switch (m_MapObject_Info.iInteractionType)
@@ -55,8 +61,9 @@ void CStaticMapObject::Tick(_double TimeDelta)
 		break;
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	if (7 == m_MapObject_Info.iRenderGroup)
+		Control_RenderSmell(TimeDelta);
+
 
 	if (LEVEL_TRAIN == pGameInstance->Get_CurLevelIdx() && m_MapObject_Info.iRenderGroup != 1)
 		Scroll(TimeDelta);
@@ -77,8 +84,16 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 
 		(true == pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 20.f)))
 	{
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
+		if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+				return;
+		}
+		else
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+				return;
+		}
 	}
 
 	Safe_Release(pGameInstance);
@@ -139,8 +154,8 @@ void CStaticMapObject::Interaction_DoorOpen_Manual(_double TimeDelta)
 			return;
 		}
 
-		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
-		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);	
+		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);		// 
 
 		// 문과의 거리 체크
 		if (Compute::DistCheck(vPlayerPos, vMyPos, 2.f))
@@ -192,7 +207,7 @@ void CStaticMapObject::Interaction_DoorOpen_Auto(_double TimeDelta)
 		_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		// 문과의 거리 체크
-		if (Compute::DistCheck(vPlayerPos, vMyPos, 8.f))
+		if (Compute::DistCheck(vPlayerPos, vMyPos, 6.f))
 			m_bOpen = true;
 	}
 
@@ -277,6 +292,34 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		pCameraTransform->Set_State(CTransform::STATE_POSITION, vCameraPos + vDist);
 
 		m_bChageRoom = false;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void CStaticMapObject::Control_RenderSmell(_double TimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	{
+		m_bSmellOn = !m_bSmellOn;
+	}
+
+	if (!m_bSmellOn)
+	{
+		m_fAlpha -= 1.f * (_float)TimeDelta;
+
+		if (m_fAlpha < 0.f)
+			m_fAlpha = 0.f;
+	}
+	else
+	{
+		m_fAlpha += 1.f * (_float)TimeDelta;
+
+		if (m_fAlpha > 1.f)
+			m_fAlpha = 1.f;
 	}
 
 	Safe_Release(pGameInstance);

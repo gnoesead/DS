@@ -111,9 +111,11 @@ public:
 
 	typedef struct tagBoxJump
 	{
-		_float4 BoxPos;
-		_bool	RoofOn = { false };
-		_float4 Dir_SecondJump = { 0.0f, 1.0f ,0.0f, 0.0f };
+		_float4		BoxPos;
+		_bool		RoofOn = { false };
+		_float4		Dir_SecondJump = { 0.0f, 1.0f ,0.0f, 0.0f };
+		NAVI_TYPE	eNextNavi = { NAVI_END };
+		NAVI_TYPE	eNextNavi2 = { NAVI_END };
 	}BOXJUMP;
 
 protected:
@@ -150,7 +152,10 @@ protected: //애니메이션 제어용 함수들
 	void	Key_Input_Adventure(_double dTimeDelta);
 
 protected:
-	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	void	Add_BoxJump_Info();		// 상호작용(박스)(안원추가)
+
+protected:
+	PLAYERSTATE		m_ePlayerState = { PLAYER_BATTLE };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
@@ -213,6 +218,8 @@ protected:
 	_float		m_fDistanceTo_Box = { 0.0f };
 
 	_float4		m_Dir_ScondJump_Box = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+
 
 protected:
 	// Outline Default

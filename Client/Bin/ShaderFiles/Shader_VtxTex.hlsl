@@ -13,6 +13,12 @@ bool            g_Is_Side_Cut_R = false;
 bool            g_Is_Side_Cut_L = false;
 float           g_Time_Mask_X;
 float           g_Tone;
+float           g_UV_Cut_MinX;
+float           g_UV_Cut_MaxX;
+float           g_UV_Cut_MinY;
+float           g_UV_Cut_MaxY;
+
+
 
 struct VS_IN
 {
@@ -144,6 +150,29 @@ PS_OUT  PS_MAIN_ALPHA(PS_IN In)
 	if (g_Is_Side_Cut_R == true && In.vTexUV.x >= 0.989)
 		vColor.w *= 0.f;
 	if (g_Is_Side_Cut_L == true && In.vTexUV.x <= 0.01)
+		vColor.w *= 0.f;
+
+	vColor.w *= g_Alpha;
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
+PS_OUT  PS_MAIN_ALPHA_CUT(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	if (In.vTexUV.x <= g_UV_Cut_MinX)
+		vColor.w *= 0.f;
+	if (In.vTexUV.x >= g_UV_Cut_MaxX)
+		vColor.w *= 0.f;
+
+	if (In.vTexUV.y <= g_UV_Cut_MinY)
+		vColor.w *= 0.f;
+	if (In.vTexUV.y >= g_UV_Cut_MaxY)
 		vColor.w *= 0.f;
 
 	vColor.w *= g_Alpha;
@@ -437,5 +466,17 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_MASK_GRAY();
+	}
+	// 13
+	pass Alpha_Basic_Cut
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_CUT();
 	}
 }

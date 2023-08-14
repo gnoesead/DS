@@ -2,6 +2,8 @@
 
 #include "Shader.h"
 #include "VIBuffer_Rect.h"
+#include "Transform.h"
+#include "GameInstance.h"
 
 CLight::CLight(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice(pDevice)
@@ -40,7 +42,17 @@ HRESULT CLight::Initialize(const LIGHTDESC& LightDesc)
 
 HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	_uint iPassIndex = { 0 };
+
+	if (LIGHTDESC::TYPE_POINT == m_LightDesc.eType && !pGameInstance->isIn_WorldSpace(XMLoadFloat4(&m_LightDesc.vLightPos), 8.f) && m_LightDesc.fLightRange < 20.f)
+	{
+		Safe_Release(pGameInstance);
+		return S_OK;
+	}
+
 
 	if (LIGHTDESC::TYPE_DIRECTION == m_LightDesc.eType)
 	{
@@ -53,6 +65,19 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 	else if (LIGHTDESC::TYPE_POINT == m_LightDesc.eType)
 	{
 		iPassIndex = 2;
+
+		if (nullptr != m_pOwnerTranform)
+		{
+			_vector vPos = m_pOwnerTranform->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 3.f, 0.f, 0.f);
+			XMStoreFloat4(&m_LightDesc.vLightPos, vPos);
+		}
+		
+
+		if (FAILED(pShader->SetUp_RawValue("g_vLightPos", &m_LightDesc.vLightPos, sizeof(_float4))))
+			return E_FAIL;
+
+		if (FAILED(pShader->SetUp_RawValue("g_fLightRange", &m_LightDesc.fLightRange, sizeof(_float))))
+			return E_FAIL;
 	}
 
 	if (FAILED(pShader->SetUp_RawValue("g_vLightDiffuse", &m_LightDesc.vLightDiffuse, sizeof(_float4))))
@@ -65,6 +90,8 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 	pShader->Begin(iPassIndex);
 
 	pVIBuffer->Render();
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

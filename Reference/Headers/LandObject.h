@@ -24,6 +24,7 @@ protected:
 
 	//NaviMesh
 	NAVI_TYPE		m_eCurNavi = { NAVI_END };
+	NAVI_TYPE		m_eNextNavi = { NAVI_END };
 
 protected:
 	_vector Compute_Height(_fvector vPos);

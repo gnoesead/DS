@@ -57,3 +57,13 @@ _uint CStoryManager::Get_Select_Type()
 {
 	return m_Select;
 }
+
+void CStoryManager::Set_Line_Move_Done(_bool b)
+{
+	m_Line_Move_Done = b;
+}
+
+_bool CStoryManager::Get_Line_Move_Done()
+{
+	return m_Line_Move_Done;
+}

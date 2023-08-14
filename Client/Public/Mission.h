@@ -109,6 +109,7 @@ private:
 	_bool m_Is_Fix = { true };
 
 
+
 private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();

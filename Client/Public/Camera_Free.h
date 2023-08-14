@@ -67,6 +67,7 @@ private:
 	_bool           m_Is_Battle = { false };
 	_bool           m_Is_Cut_In = { false };
 	_bool           m_bIs_Combo_On = { false };
+	_bool           m_bIs_LockFree = { false };
 
 private:
 	_float4			m_fCameraLook = {};
@@ -80,7 +81,7 @@ private:
 	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleCenter = {};
 
-	_float          m_vCameraAngle = { 15.f };
+	_float          m_vCameraAngle = { 10.f };
 	_float          m_vAdventureCameraAngle = { 0.f };
 	
 	_float          m_fDamping = { 5.f };

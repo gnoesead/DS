@@ -69,6 +69,8 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
+	//m_eCurAnimIndex = ANIM_IDEL;
+
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
@@ -280,7 +282,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN);
 			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN2);
 			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN3);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_JUMPLOOP);
 			m_pModelCom->Set_AnimisFinish(ANIM_JUMPLAND);
 
 		}
@@ -310,7 +312,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_0))
@@ -374,7 +376,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 
 		}
@@ -399,7 +401,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 		}
@@ -426,14 +428,188 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
-#endif //_DEBUG
 
+#endif //_DEBUG
+//
+//void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
+//{
+//	CAnimation* pAnim = m_pModelCom->Get_Animation();
+//	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
+//	{
+//		m_iEvent_Index = 0;
+//	}
+//
+//	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+//
+//	if (EventCallProcess())
+//	{
+//#pragma region Combo_Attack
+//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//			if (0 == m_iEvent_Index)
+//			{				
+//				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+//			}
+//
+//			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+//		}
+//		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//			if (0 == m_iEvent_Index)
+//			{
+//
+//				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+//			}
+//			else if (1 == m_iEvent_Index)
+//			{
+//
+//				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+//			}
+//
+//		}
+//		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//			if (0 == m_iEvent_Index)
+//			{
+//
+//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
+//					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+//			}
+//		}
+//		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//			if (0 == m_iEvent_Index)
+//			{
+//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
+//					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+//			}
+//		}
+//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//
+//		}
+//#pragma endregion
+//
+//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+//		{
+//			if (0 == m_iEvent_Index)
+//			{
+//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
+//					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+//
+//
+//			}
+//		}
+//
+//		m_iEvent_Index++;
+//	}
+//}
 void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 {
 	if (m_eCurAnimIndex != m_ePreAnimIndex)
 	{
 		m_ePreAnimIndex = m_eCurAnimIndex;
 	}
+}
+
+void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
+{
+	//_int m_eCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
+
+	//m_dCoolTime_Collider += dTimeDelta;
+
+	//if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() && m_dCoolTime_Collider > 0.2f)
+	//{
+	//	m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+
+	//	m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+	//	m_dCoolTime_Collider = 0.0;
+
+	//	if (m_StatusDesc.fHp <= 0.0f)
+	//	{
+	//		m_pModelCom->Set_Animation(17);
+	//		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	//	}
+	//	else
+	//	{
+	//		m_pModelCom->Set_Animation(ANIM_DMG_SMALL);
+	//		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	//	}
+	//}
+	//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 2.3f, 0.14f, m_Hit_AtkDir);
+
+
+	//if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big() && m_dCoolTime_Collider > 0.2f)
+	//{
+	//	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+
+	//	m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+	//	m_dCoolTime_Collider = 0.0;
+
+	//	if (m_StatusDesc.fHp <= 0.0f)
+	//	{
+	//		m_pModelCom->Set_Animation(17);
+	//		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	//	}
+	//	else
+	//	{
+	//		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+	//		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	//	}
+
+	//}
+	//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.10f, m_Hit_AtkDir);
+
+
+	//if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow() && m_dCoolTime_Collider > 0.2f)
+	//{
+	//	m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+
+	//	m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+	//	m_dCoolTime_Collider = 0.0;
+
+	//	m_pModelCom->Set_Animation(17);
+	//	m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+
+	//}
+	//if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin() && m_dCoolTime_Collider > 0.2f)
+	//{
+	//	m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+
+	//	m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+	//	m_dCoolTime_Collider = 0.0;
+
+
+	//	m_pModelCom->Set_Animation(17);
+	//	m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+
+	//}
+
+	//Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, m_Dir_To_Monster);
+	////m_pModelCom->Set_EarlyEnd(ANIM_BLOW, true);
+	//Go_Dir_Constant(dTimeDelta, 17, 1.5f, m_Dir_To_Monster);
+	//Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, m_Dir_To_Monster);
+
+
+	//if (m_eCurAnimIndex == ANIM_DOWN)
+	//{
+	//	m_eCurState = STATE_DOWN;
+	//}
+
+	//if (m_eCurAnimIndex == ANIM_IDLE)
+	//{
+	//	m_eCurState = STATE_IDLE;
+	//}
+
 }
 
 void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
@@ -1185,7 +1361,7 @@ void CBoss_Akaza::Trigger_JumpAirGun()
 	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN);
 	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN2);
 	m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN3);
-	m_pModelCom->Set_AnimisFinish(ANIM_JUMPROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_JUMPLOOP);
 	m_pModelCom->Set_AnimisFinish(ANIM_JUMPLAND);
 }
 
@@ -1236,7 +1412,7 @@ void CBoss_Akaza::Trigger_NextPhase3()
 
 	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
-	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 }
 
@@ -1285,7 +1461,7 @@ void CBoss_Akaza::Trigger_Nachim_ComboPunch()
 
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
-	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_ROOP);
+	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
 	m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
 
@@ -1665,7 +1841,7 @@ void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_JUMPAIRGUN3))
 	{
 		//수정 네비 나오면
-		m_eCurAnimIndex = ANIM_JUMPROOP;
+		m_eCurAnimIndex = ANIM_JUMPLOOP;
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		if (Pos.y <= 0.f)
@@ -1812,9 +1988,9 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 	//{
 
 	//	if (m_iPunchCount < 3)
-	//		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+	//		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
-	//	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.90, dTimeDelta))
+	//	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
 	//		m_iPunchCount++;
 
 	//	if (m_iPunchCount >= 3)
@@ -1891,9 +2067,9 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 	{
 
 		if (m_iPunchCount < 3)
-			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.90, dTimeDelta))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
 			m_iPunchCount++;
 
 		if (m_iPunchCount >= 3)
@@ -2036,9 +2212,9 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	{
 
 		if (m_iPunchCount < 3)
-			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.90, dTimeDelta))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
 			m_iPunchCount++;
 
 		if (m_iPunchCount >= 3)
@@ -2103,9 +2279,9 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 	{
 
 		if (m_iPunchCount < 3)
-			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_ROOP;
+			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_ROOP, 0.90, dTimeDelta))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
 			m_iPunchCount++;
 
 		if (m_iPunchCount >= 3)

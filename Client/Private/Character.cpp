@@ -15,6 +15,32 @@ CCharacter::CCharacter(const CCharacter& rhs)
 {
 }
 
+void CCharacter::Add_HitCollider(CGameObject* pAtkColl)
+{
+	if (nullptr == pAtkColl)
+		return;
+
+	if (1 > m_HitCollider.size())
+		m_HitCollider.emplace_back(dynamic_cast<CAtkCollider*>(pAtkColl));
+	else
+	{
+		_uint iCount = { 0 };
+
+		for (auto iter = m_HitCollider.begin(); iter != m_HitCollider.end(); iter++)
+		{
+			if (pAtkColl == (*iter))
+				break;
+
+			iCount++;
+		}
+
+		if (m_HitCollider.size() <= iCount)
+		{
+			m_HitCollider.emplace_back(dynamic_cast<CAtkCollider*>(pAtkColl));
+		}
+	}
+}
+
 HRESULT CCharacter::Initialize(void* pArg)
 {
 	if (nullptr != pArg)
@@ -31,7 +57,24 @@ HRESULT CCharacter::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	// Á¡±¤¿ø ´Þ±â
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+	LIGHTDESC tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof tLightInfo);
+
+	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
+
+	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	tLightInfo.fLightRange = 10.f;
+	tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	pGameInstance->Add_Light(m_pDevice, m_pContext,tLightInfo ,  m_pTransformCom);
+
+	Safe_Release(pGameInstance);
 
 	if (nullptr != pArg)
 	{
@@ -42,6 +85,7 @@ HRESULT CCharacter::Initialize(void* pArg)
 
 		m_fLand_Y = m_CharacterDesc.Land_Y;
 		m_eCurNavi = m_CharacterDesc.eCurNavi;
+		m_eNextNavi = m_eCurNavi;
 	}
 
 	return S_OK;
@@ -50,6 +94,20 @@ HRESULT CCharacter::Initialize(void* pArg)
 void CCharacter::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+	Check_HitCollDead();
+	Check_HitType();
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+	}
+	
+
+	Safe_Release(pGameInstance);
+
 
 	for (_uint i = 0; i < COLL_END; i++)
 		m_pColliderCom[i]->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
@@ -276,19 +334,25 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 	}
 }
 
-void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir)
+void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn)
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		if(!bIsJumpOn)
+			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
 	}
 }
 
-void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed)
+void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _bool bIsJumpOn)
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
+		if(!bIsJumpOn)
+			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed);
 	}
 }
 
@@ -399,6 +463,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 				m_isJumpOn = false;
 				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+
 			}
 		}
 	}
@@ -468,6 +533,48 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
+void CCharacter::Check_HitCollDead()
+{
+	for (auto iter = m_HitCollider.begin(); iter != m_HitCollider.end();)
+	{
+		if (true == (*iter)->Get_Dead())
+		{
+			iter = m_HitCollider.erase(iter);
+			continue;
+		}
+
+		++iter;
+	}
+}
+
+void CCharacter::Check_HitType()
+{
+	for (auto& pHitColl : m_HitCollider)
+	{
+		if (false == pHitColl->Get_IsAttack(this))
+		{
+			if (pHitColl->Get_Collider()->Get_Hit_Small())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Big())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Blow())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Spin())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(true);
+			}
+
+			pHitColl->Add_AtkObejct(this);
+		}
+	}
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
@@ -527,6 +634,8 @@ void CCharacter::Tick_Collider(_double dTimeDelta)
 void CCharacter::Free()
 {
 	__super::Free();
+
+	m_HitCollider.clear();
 
 	for (_uint i = 0; i < COLL_END; i++)
 		Safe_Release(m_pColliderCom[i]);

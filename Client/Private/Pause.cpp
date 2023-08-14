@@ -40,39 +40,37 @@ HRESULT CPause::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Frame
+	// Frame_1
 	if (m_UI_Desc.m_Type == 0) {
-
 		m_fX = 640;
-		m_fY = 660;
+		m_fY = 360;
 		m_Origin_PosX = 640;
-		m_Origin_PosY = 620;
+		m_Origin_PosY = 220;
 		m_Start_PosX = 640;
 		m_Start_PosY = 660;
 
-		m_Origin_X = 1308.f;
-		m_Origin_Y = 228.f;
-		m_Size_Param = 0.666678f;
-		m_UI_Layer = 1;
+		m_Origin_X = 240.f;
+		m_Origin_Y = 88.f;
+		m_Size_Param = 2.f;
+		m_UI_Layer = 11;
 	}
 
-	// Name_Frame
+	// Frame_2
 	if (m_UI_Desc.m_Type == 1) {
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 220;
+		m_Start_PosX = 640;
+		m_Start_PosY = 660;
 
-		m_fX = 398;
-		m_fY = 565;
-		m_Origin_PosX = 398;
-		m_Origin_PosY = 525;
-		m_Start_PosX = 398;
-		m_Start_PosY = 565;
-
-		m_Origin_X = 470;
-		m_Origin_Y = 69;
-		m_Size_Param = 0.666678f;
-		m_UI_Layer = 1;
+		m_Origin_X = 240.f;
+		m_Origin_Y = 88.f;
+		m_Size_Param = 1.8f;
+		m_UI_Layer = 12;
 	}
 
-	// Arrow
+	// Top
 	if (m_UI_Desc.m_Type == 2) {
 
 		m_fX = 640;
@@ -82,10 +80,70 @@ HRESULT CPause::Initialize(void * pArg)
 		m_Start_PosX = 640;
 		m_Start_PosY = 740;
 
-		m_Origin_X = 32;
-		m_Origin_Y = 32;
+		m_Origin_X = 460;
+		m_Origin_Y = 72;
 		m_Size_Param = 0.666678f;
 		m_UI_Layer = 2;
+	}
+
+	// Deco
+	if (m_UI_Desc.m_Type == 3) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 224;
+		m_Origin_Y = 224;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 로비로 돌아가기
+	if (m_UI_Desc.m_Type == 4) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 232;
+		m_Origin_Y = 84;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 옵션
+	if (m_UI_Desc.m_Type == 5) {
+
+		m_fX = 640;
+		m_fY = 740;
+		m_Origin_PosX = 640;
+		m_Origin_PosY = 700;
+		m_Start_PosX = 640;
+		m_Start_PosY = 740;
+
+		m_Origin_X = 232;
+		m_Origin_Y = 84;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// 백그라운드
+	if (m_UI_Desc.m_Type == 6) {
+
+		m_fX = 640;
+		m_fY = 360;
+		
+		m_Origin_X = 1280;
+		m_Origin_Y = 720;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 10;
 	}
 
 
@@ -95,20 +153,11 @@ HRESULT CPause::Initialize(void * pArg)
 	Set_UI();
 
 
-	m_szText_1.push_back(L"탄지로와 소녀");
-	m_szText_1.push_back(L"1");
-	m_szText_1.push_back(L"245");
-	m_szText_1.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-	m_szText_2.push_back(L"탄지로와 어머니");
-	m_szText_2.push_back(L"탄지로");
-	m_szText_2.push_back(L"245");
-	m_szText_2.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_2.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-
+	m_szText_1.push_back(L"로비로 돌아가기");
+	
+	m_szText_2.push_back(L"옵션");
+	
+	
 
 	return S_OK;
 }
@@ -136,46 +185,22 @@ void CPause::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
-	
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true) {
+	if (pGameInstance->Get_DIKeyDown(DIK_8)) {
 
-		m_Cur_Num++;
-		m_Name_Type *= -1;
-
-		if (m_Dialog_Type == 0) {
-			if (m_Cur_Num > m_szText_1.size() - 1) {
-				m_Cur_Num = 0;
-				m_Is_Out = true;
-				m_Is_Font_Render = false;
-				m_Name_Type = 1;
-			}
+		if (m_Alpha == 1.f) {
+			m_Is_Out = true;
+			m_Is_Font_Render = false;
+			
 		}
-		else if (m_Dialog_Type == 1) {
-			if (m_Cur_Num > m_szText_2.size() - 1) {
-				m_Cur_Num = 0;
-				m_Is_Out = true;
-				m_Is_Font_Render = false;
-				m_Name_Type = 1;
-			}
+		else if (m_Alpha == 0.f) {
+			m_Is_In = true;
+		
 		}
 
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false) {
-		m_Is_In = true;
-		m_Is_Font_Render = true;
-	}
-
-	if (m_Is_Font_Render == true)
-		CMissionManager::GetInstance()->Set_Is_Dialog_On(true);
-	else {
-		CMissionManager::GetInstance()->Set_Is_Dialog_On(false);
-	}
-
-
-
+	
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
@@ -210,29 +235,15 @@ HRESULT CPause::Render()
 		Safe_AddRef(pGameInstance);
 
 
-		if (m_UI_Desc.m_Type == 0) {
-			if (m_Dialog_Type == 0) {
+		if (m_UI_Desc.m_Type == 4) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
-					return E_FAIL;
-			}
-			else if (m_Dialog_Type == 1) {
-
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
-					return E_FAIL;
-			}
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				return E_FAIL;
 		}
-		else if (m_UI_Desc.m_Type == 1) {
-			if (m_Dialog_Type == 0) {
-				
-				
-				
-			}
-			else if (m_Dialog_Type == 1) {
+		else if (m_UI_Desc.m_Type == 5) {
 
-				
-
-			}
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				return E_FAIL;
 		}
 
 
@@ -261,12 +272,10 @@ HRESULT CPause::Add_Components()
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dialog"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Pause"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-
 
 
 	return S_OK;
@@ -334,18 +343,11 @@ void CPause::Fade_In(_double TimeDelta)
 		m_Alpha = 1.f;
 	}
 
-	m_fY -= TimeDelta * 120.0;
-
-	if (m_fY <= m_Origin_PosY)
-	{
-		m_fY = m_Origin_PosY;
-		
-	}
-
-	if (m_Alpha >= 1.f && m_fY <= m_Origin_PosY) {
+	
+	if (m_Alpha >= 1.f) {
 		m_Is_In = false;
+		m_Is_Font_Render = true;
 	}
-
 
 }
 
@@ -359,16 +361,10 @@ void CPause::Fade_Out(_double TimeDelta)
 		m_Alpha = 0.f;
 	}
 
-	m_fY += TimeDelta * 100.0;
 
-	if (m_fY >= m_Start_PosY)
-	{
-		m_fY = m_Start_PosY;
-		
-	}
-
-	if (m_Alpha <= 0.f && m_fY >= m_Start_PosY) {
+	if (m_Alpha <= 0.f) {
 		m_Is_Out = false;
+
 	}
 
 }

@@ -70,8 +70,14 @@ HRESULT CTerrainMapObject::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
-			return E_FAIL;
+
+		if (m_pModelCom->Get_IsNormalTexture(i))
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_NormalTexture", MESHMATERIALS::TextureType_NORMALS)))
+				return E_FAIL;
+		}
+
+		
 
 		m_pShaderCom->Begin(0);
 
@@ -163,6 +169,15 @@ HRESULT CTerrainMapObject::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pMaskTexture->Bind_ShaderResourceViews(m_pShaderCom, "g_MaskTexture")))
+		return E_FAIL;
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+	_float fUVRatio = 1.f;
+
+	if (LEVEL_TRAIN == iLevelIdx)
+		fUVRatio = 0.1f;
+
+	if(FAILED(m_pShaderCom->SetUp_RawValue("g_fUVRatio" , &fUVRatio, sizeof _float)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

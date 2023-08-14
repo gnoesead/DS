@@ -173,8 +173,8 @@ HRESULT CPlayer_Tanjiro::Render()
 #pragma endregion
 
 #ifdef _DEBUG
-	CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();
+	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+	pNavi->Render();*/
 #endif
 
 	return S_OK;
@@ -187,12 +187,13 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 
-
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	_vector   vLightAt = vPlayerPos;
+	//_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
 
 
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
@@ -206,7 +207,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
@@ -256,7 +257,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
 				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 
@@ -268,14 +269,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
 				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			
@@ -286,7 +287,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 			
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
 			}
 		}
@@ -294,9 +295,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1, 
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
 			}
 		}
@@ -542,7 +542,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
-
 
 
 	if (m_isCharging && m_Moveset.m_State_Battle_Charge == false)
@@ -901,10 +900,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//m_isBoxJumping = true;
 		//떨어지는
 		if (m_isPlayerStatus_OnRoof)
-			Jumping(1.0f, 0.07f);
+			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(2.0f, 0.08f);
+			Jumping(1.55f, 0.06f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -913,10 +912,19 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isLand_Roof = false;
 		}
 		m_vTanjrioToBoxDir = m_vPlayerToBoxDir;
-		if(m_isPlayerStatus_OnRoof == false)
+
+		if (m_isPlayerStatus_OnRoof == false)
+		{
 			m_pTransformCom->Set_Look(m_vPlayerToBoxDir);
+		}
 		else
+		{
+			// 지붕에 올라가있을때, dl
 			m_pTransformCom->Set_Look(m_ReverseDir);
+
+			m_eCurNavi = m_eNextNavi;
+
+		}
 	}
 
 	if (0.1f < m_fDistanceTo_Box)
@@ -924,10 +932,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//올라갈때
 		if (m_isPlayerStatus_OnRoof == false)
 		{
-			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f);
-			Go_Straight_Constant(dTimeDelta, 2, 0.6f);
+			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f , true);
+			Go_Straight_Constant(dTimeDelta, 2, 0.6f, true);
 		}
-		//내려갈때
+		//내려갈때 
 		else
 		{
 			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.4f);
@@ -937,8 +945,16 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 	if (m_isPlayerStatus_OnRoof == false)
 	{
-		Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
-		Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box);
+		if (NAVI_VILLAGE_WALL == m_eNextNavi)
+		{
+			Go_Dir_Constant(dTimeDelta, 3, 0.3f, m_Dir_ScondJump_Box);
+			Go_Dir_Constant(dTimeDelta, 85, 0.3f, m_Dir_ScondJump_Box);
+		}
+		else
+		{
+			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box , true);
+			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box, true);
+		}
 	}
 	else
 	{
@@ -956,7 +972,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->Set_Look(m_Dir_ScondJump_Box);
 			//떨어지는
 			if(m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.07f);
+				Jumping(1.1f, 0.07f);		// 두번째 올라갈때 점프(땅)
 			//올라가는
 			else
 				Jumping(2.15f, 0.08f);
@@ -966,9 +982,16 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		if (m_dDelay_BoxJump > 0.35f)
 		{
 			if (m_isCan_Jump_RoofOn)
+			{
 				m_isLand_Roof = true;
+			}
 			else
+			{
 				m_isLand_Roof = false;
+
+				//지붕 X  점프가 가장 고점일때임.
+				m_eCurNavi = m_eNextNavi;
+			}
 		}
 	}
 	else if (m_pModelCom->Get_iCurrentAnimIndex() == 3 && m_isPlayerStatus_OnRoof == true)
@@ -978,7 +1001,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isFirst_Jump2_To_Box = false;
 			//떨어지는
 			if (m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.08f);
+				Jumping(1.1f, 0.08f); // 지붕에서 내려갈때 두번째 점프
 			//올라가는
 			else
 				Jumping(2.45f, 0.08f);
