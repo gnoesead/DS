@@ -782,6 +782,7 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
 #pragma region Hit_Small
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
@@ -806,9 +807,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_iSmallHit_Index = 0;
 		}
 	}
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.0f, 0.04f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.0f, 0.04f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.0f, 0.04f, AtkDir);
 #pragma endregion
-
-
+	
 
 #pragma region Hit_Big
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
@@ -819,8 +822,41 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
 	}
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
 
+
+#pragma region Hit_Upper
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+
+		m_dDelay_ComboChain = 2.0;
+
+		m_pModelCom->Set_Animation(ANIM_FALL);
+		Jumping(1.0f, 0.015f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 111, 0.4f, 0.01f, AtkDir);
+	Ground_Animation_Play(111, 112);
+
+#pragma endregion
+
+
+#pragma region Hit_Blow
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+
+		m_dDelay_ComboChain = 2.5;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+		Jumping(1.2f, 0.05f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 3.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 92, 3.5f, AtkDir);
+	Ground_Animation_Play(92, 93);
+#pragma endregion
 
 
 	m_dDelay_ComboChain -= dTimeDelta;
@@ -830,6 +866,15 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_eCurState = STATE_IDLE;
 		m_isFirst_Move_0 = true;
 		m_isFirst_Move_1 = true;
+		m_isCoolTime_On = true;
+
+		_int i = rand() % 3;
+		if (i == 0)
+			m_iAttackIndex = 0;
+		else if (i == 1)
+			m_iAttackIndex = 2;
+		else if (i == 2)
+			m_iAttackIndex = 5;
 	}
 
 }

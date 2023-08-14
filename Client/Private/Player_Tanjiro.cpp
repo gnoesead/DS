@@ -250,13 +250,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				//CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				//CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
-				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 
 			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
@@ -265,17 +261,15 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			
 		}
@@ -283,27 +277,37 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 20.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
 			}
 		}
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+
+		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 50.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
 		}
+		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+			}
+		}
+
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			
 		}
 #pragma endregion
+
 
 		if (ANIM_ATK_SKILL_MOVE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
