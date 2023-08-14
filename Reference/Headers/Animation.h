@@ -91,7 +91,7 @@ public:
 
 	void	Set_ControlDesc(CONTROLDESC control) { m_ControlDesc = control; }
 	void	Set_EarlyEnd(_bool bEnd) { m_isEarlyEnd = bEnd; }
-
+	void	Set_Ratio_EarlyEnd(_float fEarly) { m_fEarlyEnd = fEarly; }
 
 
 private:
@@ -108,6 +108,7 @@ private:
 	_bool		m_isFirst_ComboDuration = { true };
 
 	_bool		m_isEarlyEnd = { false };
+	_float		m_fEarlyEnd = { 0.65f };
 
 public:
 	static CAnimation* Create(ANIMATIONDATA* pAnimationData, class CModel* pModel);
