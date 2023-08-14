@@ -121,13 +121,13 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 		{
 			if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSize", (void*)&m_eEffectDesc.vStartSizeMin, sizeof(_float3))))
 				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTextureOrder", (void*)&m_fTextureOrder, sizeof(float))))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
-				return E_FAIL;
 		}
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTextureOrder", (void*)&m_fTextureOrder, sizeof(float))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
+			return E_FAIL;
 	}
 
 	return S_OK;

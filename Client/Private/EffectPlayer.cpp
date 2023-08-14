@@ -151,14 +151,16 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 			pEffect->Add_AlphaOverLifeTime(LifetimeValue);
 		}
 
+		float fOrder = pEffect->Get_Order();
+		pEffect->Set_Order(fOrder);
+
 		if (CEffect::EFFECT_TEXTURE == iEnum)
 		{
-			CEffect_Texture* pEffectTexture = dynamic_cast<CEffect_Texture*>(pEffectOrigin);
+			CEffect_Texture* pEffectTextureOrigin = dynamic_cast<CEffect_Texture*>(pEffectOrigin);
 
-			float fOrder = pEffectTexture->Get_Order();
-			pEffectTexture->Set_Order(fOrder);
+			_float2 vCameraRightPos = pEffectTextureOrigin->Get_CameraRightLookPos();
 
-			_float2 vCameraRightPos = pEffectTexture->Get_CameraRightLookPos();
+			CEffect_Texture* pEffectTexture = dynamic_cast<CEffect_Texture*>(pEffect);
 			pEffectTexture->Set_CameraRightLookPos(vCameraRightPos);
 		}
 

@@ -3140,6 +3140,38 @@ HRESULT CLoader::LoadingForEffect()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_Slash001"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_Slash001.bin", PivotMatrix))))
 		return E_FAIL;
+
+
+	// Akaza
+	/* For.Prototype_Component_Model_SM_e_cmn_Board001 */
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_cmn_Board001"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_cmn_Board001.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_SM_e_Cmn_Ring001 */
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring001"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring001.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_SM_e_Cmn_Ring008 */
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring008"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring008.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_SM_e_Cmn_Ring016 */
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring016"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring016.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_SM_e_Cmn_Ring021 */
+	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring021"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring021.bin", PivotMatrix))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Texture
@@ -3307,6 +3339,34 @@ HRESULT CLoader::LoadingForEffect()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Wave001"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_Wave001.dds"), 1))))
 		return E_FAIL;
+
+	// Akaza
+	/* For.Prototype_Component_Texture_Ramp08 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp08"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Ramp08.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_T_e_cmn_Glow001 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Glow001"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Glow001.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_T_e_cmn_Grd_Radial001 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Grd_Radial001"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Grd_Radial001.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_T_e_cmn_Wave006 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Wave006"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Wave006.dds"), 1))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Texture_T_e_Useful_Wave006 */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Useful_Wave006"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Useful_Wave006.dds"), 1))))
+		return E_FAIL;
+	
+
 #pragma endregion
 
 #pragma region GAMEOBJECTS
