@@ -7,7 +7,7 @@ float4		g_vCamPosition;
 
 texture2D	g_DiffuseTexture;
 
-
+bool		g_bMotionBlur;
 
 
 float		g_fFar = 300.f;
@@ -199,10 +199,29 @@ PS_OUT  PS_Main(PS_IN _In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
 
+	if (true == g_bMotionBlur)
+	{
+		float2 Direction = _In.vTexUV - float2(0.5f, 0.5f);
+		float3 c = float3(0.0, 0.0, 0.0);
+		float f = 1.0 / 30;
+
+		for (int i = 0; i < 30; i++)
+		{
+			c += g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV - 0.01 * Direction * float(i)) * f;
+			Out.vDiffuse.rgb = c;
+		}
+		
+		Out.vDiffuse.a = vMtrlDiffuse.a;
+		/*if (Out.vColor.a == 0.f)
+			discard;*/
+	}
+	else
+		Out.vDiffuse = vMtrlDiffuse;
+
 	/*if (vMtrlDiffuse.a < 0.1f)
 		discard;*/
 
-	Out.vDiffuse = vMtrlDiffuse;
+	//Out.vDiffuse = vMtrlDiffuse;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);

@@ -146,7 +146,7 @@ protected:
 	_double	m_dTime_JumpStop_Duration = { 0.0 };
 
 	_bool	m_isFirst_JumpAtk = { true };
-
+	_bool	m_bMotionBlur = { false };
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
