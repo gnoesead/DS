@@ -25,6 +25,12 @@
 #include "Mini_Map.h"
 #include "CollisionBox.h"
 
+#include "Pause.h"
+#include "Fade.h"
+#include "Fade_Manager.h"
+
+
+
 
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -81,6 +87,10 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+
+    CFadeManager::GetInstance()->Set_Fade_In(true);
+
+
     return S_OK;
 }
 
@@ -95,24 +105,37 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
+
+   
+    
+    if (pGameInstance->Get_DIKeyDown(DIK_F9))
     {
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
+
+    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
         HRESULT hr = 0;
 
-        if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_HOUSE))
+        if (true == pGameInstance->Get_IsStage())
         {
-            pGameInstance->Clear_Light();
-            hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
-        }
-        else
-            hr = pGameInstance->Swap_Level(LEVEL_HOUSE);
 
-        if (FAILED(hr))
-        {
-            Safe_Release(pGameInstance);
-            return;
+            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+            }
+            else
+                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+
         }
     }
+
+
+
     Safe_Release(pGameInstance);
 
    
@@ -128,39 +151,7 @@ HRESULT CLevel_Village::Render()
 
 HRESULT CLevel_Village::Ready_Lights()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
-
-    LIGHTDESC LightDesc;
-    ZeroMemory(&LightDesc, sizeof LightDesc);
-
-    LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
-    LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(0.3f, 0.3f, 0.3f, 1.f);
-    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
-
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Direction_Light");
-        return E_FAIL;
-    }
-
-    ZeroMemory(&LightDesc, sizeof LightDesc);
-    LightDesc.eType = LIGHTDESC::TYPE_POINT;
-    LightDesc.vLightPos = _float4(575.f, 6.f, 268.f, 1.f);
-    LightDesc.fLightRange = 7.f;
-    LightDesc.vLightDiffuse = _float4(1.f, 1.0f, 1.0f, 1.f);
-    LightDesc.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightSpecular = _float4(1.f, 1.0f, 1.0f, 1.f);
-
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Point_Light");
-        return E_FAIL;
-    }
-
-    Safe_Release(pGameInstance);
+    Load_Lights_Info(TEXT("../../Data/Light/Village/Light_Village.dat"));
 
     return S_OK;
 }
@@ -195,7 +186,7 @@ HRESULT CLevel_Village::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(60.f);
+    CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
     CameraDesc.fFarZ = 300.f;
@@ -203,6 +194,7 @@ HRESULT CLevel_Village::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
+ 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -261,6 +253,28 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
+
+ // Fade
+    CFade::UIDESC UIDesc11;
+    ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+    UIDesc11.m_Is_Reverse = false;
+    UIDesc11.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc11))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+    UIDesc11.m_Is_Reverse = false;
+    UIDesc11.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc11))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
 // Dialog
     CDialog::UIDESC UIDesc10;
@@ -402,6 +416,46 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     }
 
 
+// Pause
+    CPause::UIDESC UIDesc3;
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    /*UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 0;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 1;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }*/
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 6;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+   
+
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -533,6 +587,57 @@ HRESULT CLevel_Village::Load_CollisionBox_Info(const _tchar* pPath, const _tchar
 
     return S_OK;
 }
+
+HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+    if (INVALID_HANDLE_VALUE == hFile)
+        return E_FAIL;
+
+    _ulong			dwByte = 0;
+    _uint			iSize = 0;
+
+    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+    for (_uint i = 0; i < iSize; ++i)
+    {
+        LIGHTDESC tLight;
+        ZeroMemory(&tLight, sizeof tLight); 
+
+       
+        ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+
+       
+
+        ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+        ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+
+        if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+        {
+            tLight.vLightDiffuse = _float4(0.4f, 0.4f, 0.4f, 1.f);
+        }
+           
+
+        if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+            return E_FAIL;
+    }
+
+    CloseHandle(hFile);
+
+    Safe_Release(pGameInstance);
+
+    return S_OK;
+}
+
+
 
 CLevel_Village* CLevel_Village::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

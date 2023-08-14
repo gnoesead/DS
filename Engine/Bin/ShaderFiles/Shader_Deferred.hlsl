@@ -27,6 +27,7 @@ texture2D      g_BlurTexture;
 texture2D      g_BlurXTexture;
 texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
+texture2D	   g_EmissiveTexture;
 
 texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
@@ -216,8 +217,8 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
 	
-	Out.vShade = saturate(Out.vShade);
-	Out.vShade = ceil(Out.vShade * 3) / 3.0f;
+	//Out.vShade = saturate(Out.vShade);
+	//Out.vShade = ceil(Out.vShade * 3) / 3.0f;
 
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
@@ -246,8 +247,6 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	/* 월드 스페이스상에 위치 .*/
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
-
-
 
 	vector      vLook = vWorldPos - g_vCamPosition;
 
@@ -317,6 +316,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 	/*if (vDiffuse.a == 0.f)
@@ -336,6 +336,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 			vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
 
 	Out.vColor = vDiffuse * vShade;
+	Out.vColor.rgb += vEmissive.rgb;
 	
 
 	if (true == g_bGrayScale)
@@ -476,7 +477,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.8f)
+	if (fBrightness >1.5f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 

@@ -197,6 +197,8 @@
     <ClInclude Include="..\Public\Effect_Mesh.h" />
     <ClInclude Include="..\Public\Effect_Particle.h" />
     <ClInclude Include="..\Public\Effect_Texture.h" />
+    <ClInclude Include="..\Public\Fade.h" />
+    <ClInclude Include="..\Public\Fade_Manager.h" />
     <ClInclude Include="..\Public\FIcon.h" />
     <ClInclude Include="..\Public\InstanceMapObject.h" />
     <ClInclude Include="..\Public\Interaction.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\MapObject.h" />
     <ClInclude Include="..\Public\Mini_Map.h" />
+    <ClInclude Include="..\Public\Mini_Map_Manager.h" />
     <ClInclude Include="..\Public\Mission.h" />
     <ClInclude Include="..\Public\MissionManager.h" />
     <ClInclude Include="..\Public\Monster.h" />
@@ -270,6 +273,8 @@
     <ClCompile Include="..\Private\Effect_Mesh.cpp" />
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
     <ClCompile Include="..\Private\Effect_Texture.cpp" />
+    <ClCompile Include="..\Private\Fade.cpp" />
+    <ClCompile Include="..\Private\Fade_Manager.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
     <ClCompile Include="..\Private\InstanceMapObject.cpp" />
     <ClCompile Include="..\Private\Interaction.cpp" />
@@ -286,6 +291,7 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\MapObject.cpp" />
     <ClCompile Include="..\Private\Mini_Map.cpp" />
+    <ClCompile Include="..\Private\Mini_Map_Manager.cpp" />
     <ClCompile Include="..\Private\Mission.cpp" />
     <ClCompile Include="..\Private\MissionManager.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />

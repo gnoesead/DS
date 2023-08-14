@@ -40,6 +40,22 @@ void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_ePlayerState = { PLAYER_ADVENTURE };
+	}
+	else {
+		m_ePlayerState = { PLAYER_BATTLE };
+	}
+
+		
+
+
+	Safe_Release(pGameInstance);
+
 
 	if (true == m_isDead)
 		return;
@@ -813,9 +829,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 
 			m_Moveset.m_Down_ADV_Jump_To_Object = true;
 
-			
 			m_eNextNavi = eNextNavi;
-
 		}
 	}
 	else

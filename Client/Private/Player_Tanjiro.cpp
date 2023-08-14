@@ -173,8 +173,8 @@ HRESULT CPlayer_Tanjiro::Render()
 #pragma endregion
 
 #ifdef _DEBUG
-	CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();
+	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+	pNavi->Render();*/
 #endif
 
 	return S_OK;
@@ -257,7 +257,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
 				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 
@@ -269,14 +269,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
 				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 			
@@ -287,7 +287,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 			
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
 			}
 		}
@@ -297,7 +297,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1, 
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
 			}
 		}
@@ -543,7 +543,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
-
 
 
 	if (m_isCharging && m_Moveset.m_State_Battle_Charge == false)
@@ -905,7 +904,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(1.55f, 0.08f);			
+			Jumping(1.55f, 0.06f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -934,10 +933,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//올라갈때
 		if (m_isPlayerStatus_OnRoof == false)
 		{
-			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f);
-			Go_Straight_Constant(dTimeDelta, 2, 0.6f);
+			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.6f , true);
+			Go_Straight_Constant(dTimeDelta, 2, 0.6f, true);
 		}
-		//내려갈때
+		//내려갈때 
 		else
 		{
 			Go_Straight_Constant(dTimeDelta, ANIM_ADV_JUMP, 0.4f);
@@ -954,8 +953,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		}
 		else
 		{
-			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box);
-			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box);
+			Go_Dir_Constant(dTimeDelta, 3, 0.65f, m_Dir_ScondJump_Box , true);
+			Go_Dir_Constant(dTimeDelta, 85, 0.65f, m_Dir_ScondJump_Box, true);
 		}
 	}
 	else

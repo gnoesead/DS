@@ -165,6 +165,11 @@ HRESULT CRenderer::Initialize_Prototype()
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectColor)))
 		return E_FAIL;
 
+	_float4 vColor_Emissive = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Emissive")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_Emissive)))
+		return E_FAIL;
+
 
 	/* For.MRT_GameObject */
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Diffuse"))))
@@ -172,6 +177,8 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Normal"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Depth"))))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Emissive"))))
 		return E_FAIL;
 
 
@@ -1531,6 +1538,9 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;*/
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_ShadowDepthTexture")))
+		return E_FAIL;
+
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Emissive"), m_pShader, "g_EmissiveTexture")))
 		return E_FAIL;
 
 

@@ -26,9 +26,11 @@ private:
 	HRESULT	Ready_Layer_Camera(const _tchar* pLayerTag);
 	HRESULT	Ready_Layer_Player(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_MapObject(const _tchar* pLayerTag);
+	HRESULT	Ready_Layer_Player_UI(const _tchar* pLayerTag);
 
 private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
+	HRESULT Load_Lights_Info(const _tchar* pPath);
 
 public:
 	static			CLevel_House* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

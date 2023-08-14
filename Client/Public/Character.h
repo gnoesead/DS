@@ -50,6 +50,9 @@ protected:
 	virtual ~CCharacter() = default;
 
 public:
+	void Add_HitCollider(CGameObject* pAtkColl);
+
+public:
 	//virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void	Tick(_double dTimeDelta) override;
@@ -58,6 +61,7 @@ public:
 
 public:
 	CTransform* Get_TransformCom();
+	_bool	Get_IsJumpOn() { return m_isJumpOn; }
 
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
@@ -71,15 +75,16 @@ protected:
 	void	Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
-	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir);
-	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
+	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn = false);
+	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed , _bool bIsJumpOn = false);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
 
-	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
+	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0 );
+
 
 	void	Navigation_To_Ground(_double dTimeDelta);
 	void	Gravity(_double dTimeDelta);
@@ -87,8 +92,10 @@ protected:
 	void	Jumping( _float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
-	//콜라이더 관련
+	//콜라이더 관련`
 	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg);
+	void	Check_HitCollDead();
+	void	Check_HitType();
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -101,6 +108,7 @@ protected: // 카메라 쉐이크
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;
+	list<class CAtkCollider*>	m_HitCollider; 
 
 protected:
 	CModel* m_pModelCom = { nullptr };		
