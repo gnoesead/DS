@@ -12,9 +12,9 @@
 #include "Fade_Manager.h"
 #include "Mini_Map_Manager.h"
 
-
-#include "SoundMgr.h"
 #include "EffectPlayer.h"
+#include "SoundMgr.h"
+
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())

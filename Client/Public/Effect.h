@@ -349,7 +349,7 @@ public:
 
 protected:
 	HRESULT Add_Components(void);
-	HRESULT SetUp_ShaderResources(void);
+	virtual HRESULT SetUp_ShaderResources(void);
 	virtual void Check_PassIndex(void) = 0;
 
 protected:

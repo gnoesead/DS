@@ -34,7 +34,7 @@ private:
 
 private:
 	HRESULT Add_Components(void);
-	HRESULT SetUp_ShaderResources(void);
+	virtual HRESULT SetUp_ShaderResources(void) override;
 	virtual void Check_PassIndex(void) override;
 
 public:

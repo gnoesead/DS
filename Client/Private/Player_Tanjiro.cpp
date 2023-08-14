@@ -266,7 +266,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
 
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
 			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -280,8 +280,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
 			}
 		}
 		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -304,8 +304,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
 			}
 		}
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())

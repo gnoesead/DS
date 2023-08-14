@@ -93,7 +93,7 @@ void GS_DEFAULT(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 	vLook.y = 0;
 	float3		vNormalizedLook = normalize(vLook);
 	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * g_vSize.x * 0.5f;
-	float3		vUp = float3(0.f, 1.f, 0.f) * g_vSize.y * 0.5f;
+	float3		vUp = normalize(cross(vLook, vRight)) * g_vSize.y * 0.5f;
 
 	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
