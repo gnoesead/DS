@@ -66,7 +66,6 @@ void CParticleSystem::Tick(_double dTimeDelta)
 		m_bStop = true;
 		m_bPlay = false;
 	}
-	
 
 	if (m_bPlay && m_pEffect)
 	{

@@ -448,25 +448,25 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
-	for (_int i = 0; i < 10; i++)
-	{
-		CPlayer::CHARACTERDESC CharacterDesc;
-		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+	//
+	//for (_int i = 0; i < 10; i++)
+	//{
+	//	CPlayer::CHARACTERDESC CharacterDesc;
+	//	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-		_float fX = (rand() % 20) + 130;
-		_float fZ = (rand() & 20) + 130;
+	//	_float fX = (rand() % 20) + 130;
+	//	_float fZ = (rand() & 20) + 130;
 
-		//140
-		CharacterDesc.WorldInfo.vPosition = _float4(fX, 0.f, fZ, 1.f);
+	//	//140
+	//	CharacterDesc.WorldInfo.vPosition = _float4(fX, 0.f, fZ, 1.f);
 
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
-			TEXT("Prototype_GameObject_Monster_Spider"), &CharacterDesc)))
-		{
-			MSG_BOX("Failed to Add_GameObject : Monster_Spider");
-			return E_FAIL;
-		}
-	}
+	//	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
+	//		TEXT("Prototype_GameObject_Monster_Spider"), &CharacterDesc)))
+	//	{
+	//		MSG_BOX("Failed to Add_GameObject : Monster_Spider");
+	//		return E_FAIL;
+	//	}
+	//}
 
 	Safe_Release(pGameInstance);
 
@@ -1558,8 +1558,8 @@ HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDissolveSpeed), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiffuseTilling), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vDiffuseOffset), sizeof(_float2));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientOffset), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientTilling), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientOffset), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingDelayStartEnd), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingSpeedStart), sizeof(_float2));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPaddingSpeedEnd), sizeof(_float2));

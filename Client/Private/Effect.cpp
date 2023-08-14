@@ -322,8 +322,8 @@ void CEffect::Tick(_double dTimeDelta)
 	}
 	else if ((m_ParentDesc.pParent->Get_isStopped()))
 	{
-		m_eEffectDesc.fTimeAcc = 0.f;
-		m_fDelayTimeAcc = 0.f;
+		//m_eEffectDesc.fTimeAcc = 0.f;
+		//m_fDelayTimeAcc = 0.f;
 	}
 }
 
@@ -335,12 +335,9 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	Check_PassIndex();
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT, this)))
-		return;
-}
-	if (m_fDelayTimeAcc > m_fStartDelay)
+	if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
 	{
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT, this)))
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
 			return;
 	}
 }

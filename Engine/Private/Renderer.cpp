@@ -1135,6 +1135,10 @@ HRESULT CRenderer::Render_NonBlend()
 
 HRESULT CRenderer::Render_NonLight()
 {
+	m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
+		});
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONLIGHT])
 	{
 		if (nullptr != pGameObject)
