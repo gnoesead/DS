@@ -358,15 +358,21 @@ void CPlayer_Battle_Hp::Tool_Funtion(_double TimeDelta)
 void CPlayer_Battle_Hp::Get_Player_Info(_double TimeDelta)
 {
 
-	if (GetKeyState('H') < 0) {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-		m_Player_Hp -= TimeDelta * 0.5;
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		if (m_Player_Hp < 0) {
-			m_Player_Hp = 0;
-		}
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		_float Hp = pPlayer->Get_Status().fHp;
+		_float Hp_Max = pPlayer->Get_Status().fHp_Max;
+
+		m_Player_Hp = (_double)(Hp / Hp_Max);
 
 	}
+
+	Safe_Release(pGameInstance);
 
 }
 

@@ -57,6 +57,18 @@ HRESULT CLevel_Train::Initialize()
         return E_FAIL;
     }
 
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Train");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Train");
+		return E_FAIL;
+	}
+
     if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
     {
         MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Train");
@@ -234,6 +246,16 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
     Safe_Release(pGameInstance);
 
     return S_OK;
+}
+
+HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
+{
+	return S_OK;
+}
+
+HRESULT CLevel_Train::Ready_Layer_Boss(const _tchar* pLayerTag)
+{
+	return S_OK;
 }
 
 HRESULT CLevel_Train::Ready_Layer_MapObject(const _tchar* pLayerTag)

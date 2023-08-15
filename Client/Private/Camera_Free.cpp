@@ -101,7 +101,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	// Monster
+	// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num) != nullptr) {
@@ -114,6 +114,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
+	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
+
+		CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
+
+		CTransform* m_pBattleTargetTransformCom = pBoss->Get_TransformCom();
+
+		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
 	else {
 		m_Is_Battle = false;
 	}
@@ -123,6 +131,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
+	XMVectorSetY(m_vBattleTargetPos, 0.f);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free

@@ -54,7 +54,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Akaza : CLevel_FinalBoss");
 		return E_FAIL;
@@ -219,27 +219,27 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
-	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
 	    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
 	{
 	    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 	    return E_FAIL;
-	}*/
+	}
 
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
-	}
+	}*/
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
 
-HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
+HRESULT CLevel_FinalBoss::Ready_Layer_Boss(const _tchar* pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -247,24 +247,16 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Monster(const _tchar* pLayerTag)
 	CBoss_Akaza::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    //CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
-    //CharacterDesc.WorldInfo.fDegree = 0.f;
+   
     CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
 
    
-   // CharacterDesc.
-   // .iCurrentIndex = 0;
-    //CharacterDesc.NaviDesc.vStartPosition = XMVectorSet(140.f, 0.f, 120.f, 1.f);
-
-
-
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
 	}
-
 
 
 	Safe_Release(pGameInstance);

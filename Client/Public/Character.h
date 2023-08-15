@@ -42,6 +42,7 @@ public:
 		_int	iSpecial_Cnt = { 0 };
 		_float  fSpecial = { 0.0f };
 		_float	fSpecial_Max = { 100.0f };
+		_int    iCombo = { 0 };
 	}CHAR_STATUS;
 
 protected:
@@ -62,6 +63,12 @@ public:
 public:
 	CTransform* Get_TransformCom();
 	_bool	Get_IsJumpOn() { return m_isJumpOn; }
+
+	// Get_Status
+	CHAR_STATUS Get_Status() {
+		return m_StatusDesc;
+	}
+
 
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
@@ -96,6 +103,9 @@ protected:
 	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg);
 	void	Check_HitCollDead();
 	void	Check_HitType();
+
+
+	
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }

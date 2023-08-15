@@ -57,7 +57,19 @@ HRESULT CLevel_Village::Initialize()
 
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
+        MSG_BOX("Failed to Ready_Layer_Player : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
         return E_FAIL;
     }
 
@@ -241,6 +253,16 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 
     Safe_Release(pGameInstance);
 
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
+{
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Boss(const _tchar* pLayerTag)
+{
     return S_OK;
 }
 

@@ -30,6 +30,18 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 		return E_FAIL;
 	}
 
+	if (FAILED(Check_PlayerToBoss(iLevelIndex, dTimeDelta)))
+	{
+		MSG_BOX("Failed to Check_PlayerToBoss");
+		return E_FAIL;
+	}
+
+	if (FAILED(Check_PlayerAtkToBoss(iLevelIndex, dTimeDelta)))
+	{
+		MSG_BOX("Failed to Check_PlayerAtkToBoss");
+		return E_FAIL;
+	}
+
 	if (FAILED(Check_MonsterToMonster(iLevelIndex, dTimeDelta)))
 	{
 		MSG_BOX("Failed to Check_MonsterToMonster");
@@ -39,6 +51,12 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 	if (FAILED(Check_MonsterAtkToPlayer(iLevelIndex, dTimeDelta)))
 	{
 		MSG_BOX("Failed to Check_MonsterAtkToPlayer");
+		return E_FAIL;
+	}
+
+	if (FAILED(Check_BossAtkToPlayer(iLevelIndex, dTimeDelta)))
+	{
+		MSG_BOX("Failed to Check_BossAtkToPlayer");
 		return E_FAIL;
 	}
 
@@ -129,6 +147,118 @@ HRESULT CColliderManager::Check_PlayerAtkToMonster(_uint iLevelIndex, _double dT
 	list<CGameObject*>* pPlayerAtkColls = pGameInstance->Get_GameObjects(LEVEL_STATIC, TEXT("Layer_PlayerAtk"));
 
 	list<CGameObject*>* pMonsters = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Monster"));
+
+	if (nullptr != pPlayerAtkColls && nullptr != pMonsters)
+	{
+		for (auto& pPlayerAtkColl : (*pPlayerAtkColls))
+		{
+			if (nullptr != pPlayerAtkColl)
+			{
+				for (auto& pMonster : (*pMonsters))
+				{
+					if (nullptr != pMonster)
+					{
+						CCollider* pAtkCollider = dynamic_cast<CCollider*>(pPlayerAtkColl->Find_Component(TEXT("Com_Sphere")));
+						CCollider* pMonsterCollider = dynamic_cast<CCollider*>(pMonster->Find_Component(TEXT("Com_Sphere")));
+
+						pAtkCollider->Intersect(pMonsterCollider);
+
+						if (true == pMonsterCollider->Get_Coll())
+						{
+							dynamic_cast<CCharacter*>(pMonster)->Add_HitCollider(pPlayerAtkColl);
+
+							pMonsterCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
+							pMonsterCollider->Set_fDamage(pAtkCollider->Get_fDamage());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CColliderManager::Check_PlayerToBoss(_uint iLevelIndex, _double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
+
+	list<CGameObject*>* pMonsters = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Boss"));
+
+	_int iCollCount = { 0 };
+
+	if (nullptr != pPlayerCollider && nullptr != pMonsters)
+	{
+		for (auto& pMonster : (*pMonsters))
+		{
+			if (nullptr != pMonster)
+			{
+				CCollider* pMonsterCollider = dynamic_cast<CCollider*>(pMonster->Find_Component(TEXT("Com_Sphere")));
+
+				if (pMonsterCollider->Get_Death() == false)
+					pPlayerCollider->Intersect(pMonsterCollider);
+
+
+
+				if (true == pPlayerCollider->Get_Coll())
+					iCollCount++;
+
+				if (true == pMonsterCollider->Get_Coll())
+				{
+					CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
+
+					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+
+					_float fRad = pPlayerCollider->Get_Collider() + pMonsterCollider->Get_Collider();
+
+					_vector vDir = pMonsterTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					_float fDis = Convert::GetLength(vDir);
+
+					if (fRad > fDis)
+					{
+						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+						//_float fMoveDistance = (fRad - fDis - 0.02f) / 2.0;
+						//_float fMoveDistance = fRad - fDis - 0.02f;
+						_float fMoveDistance = ((fRad - fDis) * 0.1f) / 2.0f;
+						_vector vMove = vMoveDir * fMoveDistance;
+
+						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+						vPlayerPos -= vMove;
+						pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+
+						_vector vMonPos = pMonsterTransform->Get_State(CTransform::STATE_POSITION);
+						vMonPos += vMove;
+						pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonPos);
+					}
+				}
+			}
+		}
+	}
+
+	if (0 < iCollCount)
+		pPlayerCollider->Set_Coll(true);
+	else
+		pPlayerCollider->Set_Coll(false);
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CColliderManager::Check_PlayerAtkToBoss(_uint iLevelIndex, _double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	list<CGameObject*>* pPlayerAtkColls = pGameInstance->Get_GameObjects(LEVEL_STATIC, TEXT("Layer_PlayerAtk"));
+
+	list<CGameObject*>* pMonsters = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Boss"));
 
 	if (nullptr != pPlayerAtkColls && nullptr != pMonsters)
 	{
@@ -363,6 +493,69 @@ HRESULT CColliderManager::Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dT
 							pPlayerCollider->Set_fDamage(pAtkCollider->Get_fDamage());
 
 							
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CColliderManager::Check_BossAtkToPlayer(_uint iLevelIndex, _double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	list<CGameObject*>* pMonsterAtkColls = pGameInstance->Get_GameObjects(LEVEL_STATIC, TEXT("Layer_MonsterAtk"));
+
+	list<CGameObject*>* pPlayers = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Player"));
+
+	if (nullptr != pMonsterAtkColls && nullptr != pPlayers)
+	{
+		for (auto& pMonsterAtkColls : (*pMonsterAtkColls))
+		{
+			if (nullptr != pMonsterAtkColls)
+			{
+				for (auto& pPlayers : (*pPlayers))
+				{
+					if (nullptr != pPlayers)
+					{
+						CCollider* pAtkCollider = dynamic_cast<CCollider*>(pMonsterAtkColls->Find_Component(TEXT("Com_Sphere")));
+						CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pPlayers->Find_Component(TEXT("Com_Sphere")));
+
+						pAtkCollider->Intersect(pPlayerCollider);
+
+						if (true == pPlayerCollider->Get_Coll())
+						{
+							if (pAtkCollider->Get_Hit_Small())
+							{
+								pPlayerCollider->Set_Hit_Small(true);
+							}
+							else if (pAtkCollider->Get_Hit_Big())
+							{
+								pPlayerCollider->Set_Hit_Big(true);
+							}
+							else if (pAtkCollider->Get_Hit_Blow())
+							{
+								pPlayerCollider->Set_Hit_Blow(true);
+							}
+							else if (pAtkCollider->Get_Hit_Spin())
+							{
+								pPlayerCollider->Set_Hit_Spin(true);
+							}
+							else if (pAtkCollider->Get_Hit_Upper())
+							{
+								pPlayerCollider->Set_Hit_Upper(true);
+							}
+
+							pPlayerCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
+							pPlayerCollider->Set_fDamage(pAtkCollider->Get_fDamage());
+
+
 						}
 					}
 				}
