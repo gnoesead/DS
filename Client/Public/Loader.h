@@ -45,7 +45,8 @@ private:    // ¸Ê ¿ÀºêÁ§Æ® ¸ðµ¨ (¿ø)
     HRESULT Load_MapObjectModel_Train();
     HRESULT Load_MapObjectModel_FinalBoss();     
 
-    HRESULT LoadingForEffect();
+    HRESULT LoadingForEffect(CGameInstance* pGameInstance);
+    
 
 private:
     ID3D11Device*           m_pDevice = { nullptr };
@@ -57,6 +58,7 @@ private:
     CRITICAL_SECTION    m_CS;
     _tchar              m_szLoadingText[MAX_PATH] = TEXT("");
     _bool               m_isFinished = { false };
+    _bool               m_isEffectFinished = { false };
     _bool               m_isLoaded = { false };
 
 public:
