@@ -228,6 +228,8 @@ _bool CCharacter::EventCallProcess()
 	{
 		m_pModelCom->Set_EventReset(m_iPreAnimIndex_ForEvent);
 		m_iPreAnimIndex_ForEvent = m_pModelCom->Get_iCurrentAnimIndex();
+
+		m_iEvent_Index = 0;
 	}
 
 	if (ControlDesc.m_isEventCall)
