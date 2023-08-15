@@ -70,9 +70,15 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 	Set_Height();
 
+	Check_Change_Position(dTimeDelta);
+
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 	
+#ifdef _DEBUG
+	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
+		return;
+#endif
 }
 
 HRESULT CPlayer::Render()
@@ -187,6 +193,17 @@ _float CPlayer::Get_Distance_To_LockOnPos()
 	_float fDistance = Convert::GetLength(vMonsterPos - vPlayerPos);
 
 	return fDistance;
+}
+
+_vector CPlayer::Get_Dir_To_LockOnPos()
+{
+	Get_LockOn_MonPos();
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = XMLoadFloat4(&m_LockOnPos);
+	_vector vDir = XMVector3Normalize(vMonsterPos - vPlayerPos);
+
+	return vDir;
 }
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
@@ -490,7 +507,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
+		if (m_dDelay_Charge_J < 0.011f && m_dDelay_Charge_W < 0.011f)
 		{
 			m_isCan_Charge = true;
 		}
@@ -644,6 +661,7 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 					m_isBack = false;
 					m_isLeft = false;
 					m_isRight = false;
+					
 				}
 				else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
 				{
@@ -924,6 +942,130 @@ void CPlayer::Add_BoxJump_Info()
 	m_vecBoxPos.emplace_back(BoxJump);
 }
 
+void CPlayer::Check_Change_Position(_double TimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector vInteractionPos;
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (LEVEL_HOUSE == iLevelIdx)
+	{
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A])
+		{
+			vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
+
+			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+		}
+
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B])
+		{
+			//vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
+
+			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+		}
+		
+
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A])
+		{
+			vInteractionPos = { 131.f , 3.f , 57.f , 1.f };
+
+			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+		}
+	}
+
+	
+	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1A])
+	{
+		m_dChangePositionAccTime += TimeDelta;
+
+		if (m_dChangePositionAccTime >= 1.0)
+		{
+			m_bChangePosition[CHANGE_POSITON_HOUSE_1A] = true;
+			m_dChangePositionAccTime = 0.0;
+		}
+	}
+
+	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1B])
+	{
+		m_dChangePositionAccTime += TimeDelta;
+
+		if (m_dChangePositionAccTime >= 1.0)
+		{
+			m_bChangePosition[CHANGE_POSITON_HOUSE_1B] = true;
+			m_dChangePositionAccTime = 0.0;
+		}
+	}
+
+	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_2A])
+	{
+		m_dChangePositionAccTime += TimeDelta;
+
+		if (m_dChangePositionAccTime >= 1.0)
+		{
+			m_bChangePosition[CHANGE_POSITON_HOUSE_2A] = true;
+			m_dChangePositionAccTime = 0.0;
+		}
+	}
+
+	_vector vNextPos = { 0.f, 0.f , 0.f , 1.f };
+
+	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
+	{
+		if (m_bChangePosition[i] && !m_bChangePositionFinish[i])
+		{
+			switch (i)
+			{
+			case CHANGE_POSITON_HOUSE_1A:
+				vNextPos = XMVectorSet(43.f, 0.f, 120.f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_HOUSE_2_0);
+				break;
+			case CHANGE_POSITON_HOUSE_1B:
+				vNextPos = XMVectorSet(67.f, 0.f, 19.9f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1);
+				break;
+			case CHANGE_POSITON_HOUSE_2A:
+				vNextPos = XMVectorSet(118.f, 0.f, 117.f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
+				break;
+			default:
+				break;
+			}
+
+			// 카메라와 플레이어 이동
+			_vector vDist = vNextPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); // 다음 이동지역과 플레이어 위치 차이
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNextPos);
+
+			CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+			CTransform* pCameraTransform = pCamera->Get_Transform();
+
+			_vector vCameraPos = pCameraTransform->Get_State(CTransform::STATE_POSITION);
+			pCameraTransform->Set_State(CTransform::STATE_POSITION, vCameraPos + vDist);
+
+			m_bChangePositionFinish[i] = true;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+}
+
 HRESULT CPlayer::Add_Components()
 {
 	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
@@ -997,6 +1139,14 @@ HRESULT CPlayer::Add_Components()
 		TEXT("Com_Navigation_House_1_1"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_1_1], &m_CharacterDesc.NaviDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Navigation_House_1_1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_House_2_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_2_0"),
+		TEXT("Com_Navigation_House_2_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_2_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_2_0: CPlayer");
 		return E_FAIL;
 	}
 

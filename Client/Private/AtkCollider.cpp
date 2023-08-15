@@ -175,22 +175,31 @@ void CAtkCollider::Setting_AtkCollDesc()
 {
 	//풀링메모리 재사용하는거라 초기화 필요
 	m_pColliderCom->Set_Hit_Small(false);
+	m_pColliderCom->Set_Hit_ConnectSmall(false);
 	m_pColliderCom->Set_Hit_Big(false);
 	m_pColliderCom->Set_Hit_Blow(false);
 	m_pColliderCom->Set_Hit_Spin(false);
 	m_pColliderCom->Set_Hit_Upper(false);
+	m_pColliderCom->Set_Hit_BigBlow(false);
+	m_pColliderCom->Set_Hit_Bound(false);
 
 	//값 넣어주기
 	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Small(true);
+	else if (TYPE_CONNECTSMALL == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_ConnectSmall(true);
 	else if (TYPE_BIG == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Big(true);
 	else if (TYPE_BLOW == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Blow(true);
+	else if (TYPE_BIGBLOW == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_BigBlow(true);
 	else if (TYPE_SPIN == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Spin(true);
 	else if (TYPE_UPPER == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Upper(true);
+	else if (TYPE_BOUND == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Bound(true);
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);

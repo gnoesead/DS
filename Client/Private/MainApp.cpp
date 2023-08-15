@@ -114,7 +114,7 @@ void CMainApp::Tick(_double dTimeDelta)
 	m_TimeAcc += dTimeDelta;
 #endif
 }
-
+ 
 HRESULT CMainApp::Render()
 {
 	if (nullptr == m_pGameInstance ||
@@ -253,8 +253,9 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
+	Load_Effect_Resources();
 
-
+#pragma region UI
 
 	/* Prototype_Component_Texture_UI */
 
@@ -359,7 +360,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Line"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Line_%d.png"),2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Line_%d.png"), 2))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Story_Mini_Title"),
@@ -370,7 +371,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Story_Board/Title_%d.png"), 5))))
 		return E_FAIL;
 
-	
+
 
 #pragma endregion
 
@@ -465,20 +466,20 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_World_Hp"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/M/Hp_%d.dds"),4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Bar/M/Hp_%d.dds"), 4))))
 		return E_FAIL;
 
 #pragma endregion
 
 #pragma region FIcon_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Main"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Main_%d.dds"),3))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Main_%d.dds"), 3))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Mini"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Mini_%d.dds"), 2))))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_FIcon_Talk"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/FIcon/FIcon_Talk_%d.dds"), 2))))
 		return E_FAIL;
@@ -491,7 +492,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma region Interaction_UI	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Interaction"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Interaction/Interaction_%d.dds"),2))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Interaction/Interaction_%d.dds"), 2))))
 		return E_FAIL;
 
 #pragma endregion
@@ -504,7 +505,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma endregion
 
 #pragma region Mission_UI	
-	
+
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Mission"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Mission/Mission_%d.dds"), 6))))
 		return E_FAIL;
@@ -518,6 +519,9 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 #pragma endregion	
+
+
+#pragma endregion
 
 
 #pragma region Navigation
@@ -596,6 +600,14 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
+	/* Prototype_Component_Navigation_House_2_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_2_0"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_2_0.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_House_2_0");
+		return E_FAIL;
+	}
+
 	/* Prototype_Component_Navigation_House_3_0 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_3_0"),
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Room/Navi_Room_3_0.dat")))))
@@ -658,6 +670,165 @@ HRESULT CMainApp::SetUp_StartLevel(LEVELID eLevelID)
 	return m_pGameInstance->Open_Level(LEVEL_LOADING, pLevel);
 }
 
+HRESULT CMainApp::Load_Effect_Resources()
+{
+	WIN32_FIND_DATAA fd;
+	HANDLE hFind = ::FindFirstFileA("../Bin/Resources/Textures/Effect/*.dds", &fd);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				char* filename = new char[MAX_PATH];
+				strcpy_s(filename, MAX_PATH, fd.cFileName);
+				//m_listFileName.push_back(filename);
+
+
+				char szFull[MAX_PATH] = "";
+
+				strcpy_s(szFull, "../Bin/Resources/Textures/Effect/");
+				strcat_s(szFull, filename);
+
+				_tchar FullFilePath[MAX_PATH] = TEXT("");
+
+				_int iLength = strlen(szFull) + 1;
+
+				MultiByteToWideChar(CP_ACP, 0, szFull, (_int)iLength, FullFilePath, MAX_PATH);
+
+				const _tchar* RealFilePath = FullFilePath;
+
+				_splitpath_s(filename, nullptr, 0, nullptr, 0, filename, MAX_PATH, nullptr, 0);
+
+				char szProtoTag[MAX_PATH] = "";
+
+				strcpy_s(szProtoTag, "Prototype_Component_Texture_");
+				strcat_s(szProtoTag, filename);
+
+				iLength = strlen(szProtoTag) + 1;
+
+				_tchar* RealProtoTag = new _tchar[iLength];
+
+				MultiByteToWideChar(CP_ACP, 0, szProtoTag, (_int)iLength, RealProtoTag, MAX_PATH);
+
+				_matrix		PivotMatrix = XMMatrixIdentity();
+
+				if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, RealProtoTag,
+					CTexture::Create(m_pDevice, m_pContext, RealFilePath))))
+					return E_FAIL;
+
+				m_ProtoTag.emplace_back(RealProtoTag);
+
+				delete[] filename;
+
+			}
+		} while (::FindNextFileA(hFind, &fd));
+		::FindClose(hFind);
+	}
+
+	WIN32_FIND_DATAA fd2;
+	HANDLE hFind2 = ::FindFirstFileA("../Bin/Resources/Textures/Effect/Ramp/*.dds", &fd2);
+	if (hFind2 != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			if (!(fd2.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				char* filename = new char[MAX_PATH];
+				strcpy_s(filename, MAX_PATH, fd2.cFileName);
+				//m_listFileName.push_back(filename);
+
+
+				char szFull[MAX_PATH] = "";
+
+				strcpy_s(szFull, "../Bin/Resources/Textures/Effect/Ramp/");
+				strcat_s(szFull, filename);
+
+				_tchar FullFilePath[MAX_PATH] = TEXT("");
+
+				_int iLength = strlen(szFull) + 1;
+
+				MultiByteToWideChar(CP_ACP, 0, szFull, (_int)iLength, FullFilePath, MAX_PATH);
+
+				const _tchar* RealFilePath = FullFilePath;
+
+				_splitpath_s(filename, nullptr, 0, nullptr, 0, filename, MAX_PATH, nullptr, 0);
+
+				char szProtoTag[MAX_PATH] = "";
+
+				strcpy_s(szProtoTag, "Prototype_Component_Texture_");
+				strcat_s(szProtoTag, filename);
+
+				iLength = strlen(szProtoTag) + 1;
+
+				_tchar* RealProtoTag = new _tchar[iLength];
+
+				MultiByteToWideChar(CP_ACP, 0, szProtoTag, (_int)iLength, RealProtoTag, MAX_PATH);
+
+				_matrix		PivotMatrix = XMMatrixIdentity();
+
+				if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, RealProtoTag,
+					/*pTexture = */CTexture::Create(m_pDevice, m_pContext, RealFilePath))))
+					return E_FAIL;
+
+				m_ProtoTag.emplace_back(RealProtoTag);
+
+				delete[] filename;
+
+			}
+		} while (::FindNextFileA(hFind2, &fd2));
+		::FindClose(hFind2);
+	}
+
+	WIN32_FIND_DATAA fd3;
+	HANDLE hFind3 = ::FindFirstFileA("../Bin/Resources/Models/Effect/*.bin", &fd3);
+	if (hFind3 != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			if (!(fd3.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				char* filename = new char[MAX_PATH];
+				strcpy_s(filename, MAX_PATH, fd3.cFileName);
+				//m_listFileName.push_back(filename);
+
+
+				char szFull[MAX_PATH] = "";
+
+				strcpy_s(szFull, "../Bin/Resources/Models/Effect/");
+				strcat_s(szFull, filename);
+
+				_splitpath_s(filename, nullptr, 0, nullptr, 0, filename, MAX_PATH, nullptr, 0);
+
+				char szProtoTag[MAX_PATH] = "";
+
+				strcpy_s(szProtoTag, "Prototype_Component_Model_");
+				strcat_s(szProtoTag, filename);
+
+				_int iLength = strlen(szProtoTag) + 1;
+
+				_tchar* RealProtoTag = new _tchar[iLength];
+
+				MultiByteToWideChar(CP_ACP, 0, szProtoTag, (_int)iLength, RealProtoTag, MAX_PATH);
+
+				_matrix		PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
+
+				if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, RealProtoTag,
+					/*pModel = */CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFull, PivotMatrix))))
+					return E_FAIL;
+
+				m_ProtoTag.emplace_back(RealProtoTag);
+
+				delete[] filename;
+
+			}
+		} while (::FindNextFileA(hFind3, &fd3));
+		::FindClose(hFind3);
+	}
+
+	return S_OK;
+}
+
 CMainApp* CMainApp::Create()
 {
 	CMainApp* pInstance = new CMainApp();
@@ -673,6 +844,9 @@ CMainApp* CMainApp::Create()
 
 void CMainApp::Free()
 {
+	for (auto ProtoTag : m_ProtoTag)
+		Safe_Delete_Array(ProtoTag);
+
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pDevice);

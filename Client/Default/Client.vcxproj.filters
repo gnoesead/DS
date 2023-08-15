@@ -214,9 +214,6 @@
     <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
       <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Bossr_Akaza">
-      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Player\Sword">
       <UniqueIdentifier>{8ff7c169-3b1c-4daa-bbcc-a593e0a1cbe4}</UniqueIdentifier>
     </Filter>
@@ -277,11 +274,17 @@
     <Filter Include="02. GameObjects\CollisionBox">
       <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Camera\Free\Camera_Manager">
-      <UniqueIdentifier>{1a58f1c8-9852-4c48-ab80-292340e28bd8}</UniqueIdentifier>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza">
+      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Kyogai">
+      <UniqueIdentifier>{b4b6df4d-bb33-4b31-9e81-fafbf4444f20}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Zako">
-      <UniqueIdentifier>{2f82684d-c2d3-42c4-bb1f-d62c045030f9}</UniqueIdentifier>
+      <UniqueIdentifier>{7821495e-d8d2-4ac7-b2e9-cdba5f4490ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Camera\Free\Manager">
+      <UniqueIdentifier>{aa966765-6075-47e8-b365-fc9113e28c10}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\UI\10.Skill_Name">
       <UniqueIdentifier>{ae9e1dde-8d52-45ca-bf9b-855475fe96fe}</UniqueIdentifier>
@@ -487,7 +490,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
-      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NPC.h">
       <Filter>02. GameObjects\Character\NPC</Filter>
@@ -513,11 +516,11 @@
     <ClInclude Include="..\Public\Mini_Map_Manager.h">
       <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Boss_Kyogai.h">
+      <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\CollisionBox.h">
       <Filter>02. GameObjects\CollisionBox</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Camera_Manager.h">
-      <Filter>02. GameObjects\Camera\Free\Camera_Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Zako.h">
       <Filter>02. GameObjects\Character\Monster\Zako</Filter>
@@ -527,6 +530,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Battle_UI_Manager.h">
       <Filter>02. GameObjects\UI\11.Battle_UI_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Camera_Manager.h">
+      <Filter>02. GameObjects\Camera\Free\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -717,7 +723,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
-      <Filter>02. GameObjects\Character\Monster\Bossr_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NPC.cpp">
       <Filter>02. GameObjects\Character\NPC</Filter>
@@ -743,14 +749,17 @@
     <ClCompile Include="..\Private\Mini_Map_Manager.cpp">
       <Filter>02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Boss_Kyogai.cpp">
+      <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\CollisionBox.cpp">
       <Filter>02. GameObjects\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Camera_Manager.cpp">
-      <Filter>02. GameObjects\Camera\Free\Camera_Manager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster_Zako.cpp">
       <Filter>02. GameObjects\Character\Monster\Zako</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Manager.cpp">
+      <Filter>02. GameObjects\Camera\Free\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Skill_Name.cpp">
       <Filter>02. GameObjects\UI\10.Skill_Name</Filter>

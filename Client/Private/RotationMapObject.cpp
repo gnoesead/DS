@@ -38,7 +38,7 @@ void CRotationMapObject::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_bTriggerTurnRoom || pGameInstance->Get_DIKeyDown(DIK_L) )
+	if (m_bTriggerTurnRoom || pGameInstance->Get_DIKeyDown(DIK_P) )
 	{
 		m_bTriggerTurnRoom = false;
 		m_bTurn = true;

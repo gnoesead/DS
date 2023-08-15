@@ -16,7 +16,8 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
-	enum ATK_TYPE { TYPE_SMALL, TYPE_BIG, TYPE_BLOW, TYPE_SPIN, TYPE_UPPER, TYPE_END };
+	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_END };
+	
 
 	typedef struct tagAtkCollDesc
 	{

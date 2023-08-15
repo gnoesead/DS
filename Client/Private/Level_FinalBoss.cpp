@@ -90,6 +90,12 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_Layer_Effect()))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		return E_FAIL;
+	}
+
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
@@ -106,7 +112,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F9))
+	if (pGameInstance->Get_DIKeyDown(DIK_F1))
 	{
 		CFadeManager::GetInstance()->Set_Fade_Out(true);
 	}
@@ -121,13 +127,12 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		{
 
 			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-			{
-				pGameInstance->Clear_Light();
+
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-			}
 			else
 				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 
+			pGameInstance->Clear_Light();
 
 		}
 	}
@@ -1145,6 +1150,35 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 	return S_OK;
 }
 
+
+HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
+{
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : ATK_Combo_Up");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
+		return E_FAIL;
+	}
+
+	return 	S_OK;
+}
 
 HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 {

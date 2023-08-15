@@ -138,7 +138,16 @@ protected:
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	//First
+	_bool	m_isFirst_Anim = { true };
+
+	//Eventcall관련 
+	_int m_iPreAnimIndex_ForEvent = { 0 };
 	
+
+	//Hit관련
+	_bool	m_isBounding = { false };
+	_bool	m_isConnectHitting = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };
@@ -158,7 +167,7 @@ protected:
 	_double	m_dTime_JumpStop_Duration = { 0.0 };
 
 	_bool	m_isFirst_JumpAtk = { true };
-
+	_bool	m_bMotionBlur = { false };
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
