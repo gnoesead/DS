@@ -40,8 +40,6 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 	Ready_CutInFinish();
 
 
-	
-
 
 
 	return S_OK;
@@ -89,6 +87,16 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	/*if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+
+		m_Village_Cam_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Village_Cam_TimeAcc < 4.f) {
+			CCameraManager::GetInstance()->Zoom_Fix(200.f);
+		}
+	}*/
+
+
 	// Camera_Shake
 	if (CCameraManager::GetInstance()->Get_Is_Shake_On()) {
 
@@ -125,6 +133,16 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	else {
 		m_Is_Battle = false;
 	}
+
+
+	// Zoom
+	if (m_Is_Battle == false) {
+		if (pGameInstance->Get_DIKeyState(DIK_S)) {
+			CCameraManager::GetInstance()->Zoom_Fix(2.f);
+		}
+	}
+
+	m_Zoom = CCameraManager::GetInstance()->Get_Zoom();
 
     // Focus
 	m_Is_Focus_On = CCameraManager::GetInstance()->Get_Is_Focus_On();
@@ -188,7 +206,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		}
 		else if (m_Is_Focus_On == true) {
 
-			m_fDistance = { 6.f };
+			m_fDistance = { 6.f + m_Zoom};
 			m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 			m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 			m_fLookDamping = { 7.f };
@@ -201,14 +219,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			if (m_Is_Battle != true) {
 
 				if (m_bIs_LockFree != true) {
-					m_fDistance = { 3.f };
+					m_fDistance = { 3.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.2f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.2f, 0.f, 0.f };
 					m_fLookDamping = { 6.f };
 					m_fDamping = { 7.f };
 				}
 				else {
-					m_fDistance = { 6.f };
+					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };
@@ -233,7 +251,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 					SideCamera(dTimeDelta);
 				}
 				else {
-					m_fDistance = { 6.f };
+					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };

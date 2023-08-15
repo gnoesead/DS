@@ -24,6 +24,7 @@
 #include "Mission.h"
 #include "Mini_Map.h"
 #include "CollisionBox.h"
+#include "Skill_Name.h"
 
 #include "Pause.h"
 #include "Fade.h"
@@ -1008,8 +1009,18 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+    // skill_name
+    CSkill_Name::UIDESC UIDesc8;
+    ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
+    UIDesc8.m_Is_Reverse = false;
+    UIDesc8.m_Type = 0;
 
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Skill_Name"), &UIDesc8))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
 
     Safe_Release(pGameInstance);

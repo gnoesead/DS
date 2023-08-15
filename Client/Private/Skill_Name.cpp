@@ -1,23 +1,25 @@
 #include "pch.h"
-#include "..\Public\Player_Battle_Mp.h"
+#include "..\Public\Skill_Name.h"
 
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "Battle_UI_Manager.h"
 
-CPlayer_Battle_Mp::CPlayer_Battle_Mp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+
+CSkill_Name::CSkill_Name(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
 {
 }
 
-CPlayer_Battle_Mp::CPlayer_Battle_Mp(const CPlayer_Battle_Mp & rhs)
+CSkill_Name::CSkill_Name(const CSkill_Name & rhs)
 	: CUI(rhs)
 {
 }
 
-HRESULT CPlayer_Battle_Mp::Initialize_Prototype()
+HRESULT CSkill_Name::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -25,7 +27,7 @@ HRESULT CPlayer_Battle_Mp::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CPlayer_Battle_Mp::Initialize(void * pArg)
+HRESULT CSkill_Name::Initialize(void * pArg)
 {
 	if (pArg != nullptr)
 		m_UI_Desc = *(UIDESC*)pArg;
@@ -38,60 +40,34 @@ HRESULT CPlayer_Battle_Mp::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Mp_Bar
+	// Player
 	if (m_UI_Desc.m_Type == 0) {
-		m_fX = 339.5;
-		m_fY = 76;
-		m_Origin_X = 612;
-		m_Origin_Y = 12;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 4;
+
+		m_fX = 230;
+		m_fY = 335;
+		m_Origin_X = 496;
+		m_Origin_Y = 16;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 1;
 	}
 
-	// Mp_Blue
+	// Boss
 	if (m_UI_Desc.m_Type == 1) {
-		m_fX = 340;
-		m_fY = 76;
-		m_Origin_X = 611;
-		m_Origin_Y = 11;
-		m_Size_Param = 0.602f;
-		m_UI_Layer = 5;
+
+		m_fX = 1140;
+		m_fY = 335;
+		m_Origin_X = 496;
+		m_Origin_Y = 16;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 1;
 	}
 
-	// Mp_Bar_BG
-	if (m_UI_Desc.m_Type == 2) {
-		m_fX = 339.5;
-		m_fY = 76;
-		m_Origin_X = 650;
-		m_Origin_Y = 48;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 3;
-	}
-
-	// Mp_Scale
-	if (m_UI_Desc.m_Type == 3) {
-		if (m_UI_Desc.m_Scale_Type == 0) {
-			m_fX = 155.9 + 74.45 * 1;
-			m_fY = 76;
-		}
-		else if (m_UI_Desc.m_Scale_Type == 1) {
-			m_fX = 155.9 + 74.45 * 2;
-			m_fY = 76;
-		}
-		else if (m_UI_Desc.m_Scale_Type == 2) {
-			m_fX = 155.9 + 74.45 * 3;
-			m_fY = 76;
-		}
-		else if (m_UI_Desc.m_Scale_Type == 3) {
-			m_fX = 155.9 + 74.45 * 4;
-			m_fY = 76;
-		}
 		
-		m_Origin_X = 9;
-		m_Origin_Y = 13;
-		m_Size_Param = 0.608333f;
-		m_UI_Layer = 6;
-	}
+	m_szTanjiro_Skill.push_back(L"제8형 용소");
+	m_szTanjiro_Skill.push_back(L"제2형 물방아");
+	m_szTanjiro_Skill.push_back(L"제6형 비틀린 소용돌이");
+
+	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬");
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -99,39 +75,53 @@ HRESULT CPlayer_Battle_Mp::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CPlayer_Battle_Mp::Tick(_double TimeDelta)
+void CSkill_Name::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+
+	if (CBattle_UI_Manager::GetInstance()->Get_Skill_On() == true) {
+
+		m_Is_Font_Render = true;
+
+		m_Alpha += (_float)TimeDelta * 6.f;
+
+		if (m_Alpha > 1.f) {
+			m_Alpha = 1.f;
+		}
+	}
+	else {
+
+		m_Is_Font_Render = false;
+
+		m_Alpha -= (_float)TimeDelta * 6.f;
+
+		if (m_Alpha < 0.f) {
+			m_Alpha = 0.f;
+		}
+	}
+
+
 
 	Set_UI();
 
 }
 
-void CPlayer_Battle_Mp::LateTick(_double TimeDelta)
+void CSkill_Name::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
+
+	m_Player_Index = CBattle_UI_Manager::GetInstance()->Get_Player_Type();
+	m_Player_Skill_Index = CBattle_UI_Manager::GetInstance()->Get_Player_Skill_Type();
 
 	m_Is_Render = CFadeManager::GetInstance()->Get_Is_Battle();
 
 	Get_Player_Info(TimeDelta);
 
-	if (m_UI_Desc.m_Type == 1) {
-		m_fX = 340 + 0.3021 * 611 * (m_Player_Max_Mp - m_Player_Mp);
-		m_Origin_X = (_int)(611 * m_Player_Mp);
-	}
-
-	Get_Mouse_Pos();
-
-	m_Pt_In = Pt_InUI();
-
-	Tool_Funtion(TimeDelta);
-	
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
 }
 
-HRESULT CPlayer_Battle_Mp::Render()
+HRESULT CSkill_Name::Render()
 {
 	if (m_Is_Render == true) {
 
@@ -153,23 +143,42 @@ HRESULT CPlayer_Battle_Mp::Render()
 			m_pVIBufferCom->Render();
 
 		}
+
+
+		if (m_Is_Font_Render == true) {
+
+
+			if (m_UI_Desc.m_Type == 0) {
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+
+				if (m_Player_Index == 0) {
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTanjiro_Skill[m_Player_Skill_Index].c_str(),
+						_float2((_float)m_fX - 151.f, (_float)m_fY - 22.f), _float2(0.45f, 0.45f), XMVectorSet(255.f / 255.f, 255.f / 255.f, 255.f / 255.f, 1.f))))
+						return E_FAIL;
+				}
+
+				Safe_Release(pGameInstance);
+			}
+
+		}
 	}
-	
 	
 	return S_OK;
 }
 
-HRESULT CPlayer_Battle_Mp::Add_Components()
+HRESULT CSkill_Name::Add_Components()
 {
 	/* For.Com_Renderer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"),
-		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))		
+		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
 	/* For.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxTex"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
-		return E_FAIL;	
+		return E_FAIL;
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -177,7 +186,7 @@ HRESULT CPlayer_Battle_Mp::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Player_Battle_Mp"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Name"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
@@ -185,7 +194,7 @@ HRESULT CPlayer_Battle_Mp::Add_Components()
 	return S_OK;
 }
 
-HRESULT CPlayer_Battle_Mp::SetUp_ShaderResources()
+HRESULT CSkill_Name::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;	
@@ -202,13 +211,18 @@ HRESULT CPlayer_Battle_Mp::SetUp_ShaderResources()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
-		return E_FAIL;
 
+
+	
+	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+	
+	
+	
 	return S_OK;
 }
 
-void CPlayer_Battle_Mp::Set_UI()
+void CSkill_Name::Set_UI()
 {
 	m_fSizeX = m_Origin_X * (_double)m_Size_Param;
 	m_fSizeY = m_Origin_Y * (_double)m_Size_Param;
@@ -229,7 +243,7 @@ void CPlayer_Battle_Mp::Set_UI()
 
 }
 
-void CPlayer_Battle_Mp::Get_Mouse_Pos()
+void CSkill_Name::Get_Mouse_Pos()
 {
 	CGameInstance*		pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -258,7 +272,7 @@ void CPlayer_Battle_Mp::Get_Mouse_Pos()
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer_Battle_Mp::Change_Info(_double TimeDelta)
+void CSkill_Name::Change_Info(_double TimeDelta)
 {
 
 	_long		MouseMove = 0;
@@ -299,7 +313,7 @@ void CPlayer_Battle_Mp::Change_Info(_double TimeDelta)
 	}
 }
 
-void CPlayer_Battle_Mp::Tool_Funtion(_double TimeDelta)
+void CSkill_Name::Tool_Funtion(_double TimeDelta)
 {
 	//// 툴 전용 
 	//if (CImGUI_Manager::Get_Instance()->Get_Mouse_Layer() == m_UI_Layer || CImGUI_Manager::Get_Instance()->Get_Mouse_Layer() == 99) {
@@ -339,51 +353,41 @@ void CPlayer_Battle_Mp::Tool_Funtion(_double TimeDelta)
 	//}
 }
 
-void CPlayer_Battle_Mp::Get_Player_Info(_double TimeDelta)
+void CSkill_Name::Get_Player_Info(_double TimeDelta)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+	
 
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
-
-		_float Mp = pPlayer->Get_Status().fMp;
-		_float Mp_Max = pPlayer->Get_Status().fMp_Max;
-
-		m_Player_Mp = (_double)(Mp / Mp_Max);
-
-	}
-
-	Safe_Release(pGameInstance);
 }
 
-CPlayer_Battle_Mp * CPlayer_Battle_Mp::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+
+
+CSkill_Name * CSkill_Name::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
-	CPlayer_Battle_Mp*		pInstance = new CPlayer_Battle_Mp(pDevice, pContext);
+	CSkill_Name*		pInstance = new CSkill_Name(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CPlayer_Battle_Mp");
+		MSG_BOX("Failed to Created : CSkill_Name");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
-CGameObject * CPlayer_Battle_Mp::Clone(void * pArg)
+CGameObject * CSkill_Name::Clone(void * pArg)
 {
-	CPlayer_Battle_Mp*		pInstance = new CPlayer_Battle_Mp(*this);
+	CSkill_Name*		pInstance = new CSkill_Name(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CPlayer_Battle_Mp");
+		MSG_BOX("Failed to Cloned : CSkill_Name");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CPlayer_Battle_Mp::Free()
+void CSkill_Name::Free()
 {
 	__super::Free();
 

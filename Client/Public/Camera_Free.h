@@ -77,7 +77,7 @@ private:
 	_float			m_fDistance = {};
 	_vector         m_vOffSet = {};
 	_vector         m_vLookOffSet = {};
-	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
+	_vector         m_vDist = { 0.f, 0.f, -1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
 	_vector         m_vFocusPos = {};
@@ -93,6 +93,12 @@ private:
 
 	_uint           m_Battle_Target_Num = { 0 };
 	_uint           m_Battle_Target_MaxNum = { 0 };
+
+	_float          m_Zoom = { 0.f };
+
+
+	_float          m_Village_Cam_TimeAcc = { 0.f };
+
 
 
 // Cut_In_Cam	

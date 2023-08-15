@@ -21,6 +21,8 @@
 #include "World_UI_Hp.h"
 #include "Interaction.h"
 #include "Dialog.h"
+#include "Skill_Name.h"
+
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -779,7 +781,17 @@ HRESULT CLevel_Train::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+	// Skill_Name
+	CSkill_Name::UIDESC UIDesc8;
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Skill_Name"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 

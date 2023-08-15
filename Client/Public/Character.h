@@ -42,7 +42,9 @@ public:
 		_int	iSpecial_Cnt = { 0 };
 		_float  fSpecial = { 0.0f };
 		_float	fSpecial_Max = { 100.0f };
-		_int    iCombo = { 0 };
+		_int    iAttackCombo = { 0 };
+		_int    iHitCombo = { 0 };
+
 	}CHAR_STATUS;
 
 protected:

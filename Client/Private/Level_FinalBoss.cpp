@@ -20,6 +20,8 @@
 #include "World_UI_Hp.h"
 #include "Interaction.h"
 #include "Dialog.h"
+#include "Skill_Name.h"
+
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -229,7 +231,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 	    return E_FAIL;
 	}
-
 
 	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
@@ -839,6 +840,17 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	// Skill_Name
+	CSkill_Name::UIDESC UIDesc12;
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Skill_Name"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 	Safe_Release(pGameInstance);

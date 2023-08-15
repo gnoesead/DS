@@ -134,6 +134,11 @@ public:
 	virtual HRESULT Render_ShadowDepth();
 
 
+public:
+	PLAYERMOVESET Get_Moveset() {
+		return m_Moveset;
+	}
+
 protected:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();

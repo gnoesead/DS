@@ -12,6 +12,7 @@
 #include "Fade_Manager.h"
 #include "Mini_Map_Manager.h"
 #include "Camera_Manager.h"
+#include "Battle_UI_Manager.h"
 #include "Title.h"
 #include "Loading.h"
 #include "Fade.h"
@@ -104,6 +105,8 @@ void CMainApp::Tick(_double dTimeDelta)
 	CTitleManager::GetInstance()->Tick();
 	
 	CCameraManager::GetInstance()->Tick(dTimeDelta);
+
+	CBattle_UI_Manager::GetInstance()->Tick(dTimeDelta);
 
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
@@ -274,6 +277,15 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CFade::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+#pragma region Skill_Name
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Name"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Skill_Name/Skill_Name.dds")))))
+		return E_FAIL;
+
+
+#pragma endregion
 
 #pragma region Title_UI
 
@@ -681,7 +693,7 @@ void CMainApp::Free()
 	CFadeManager::GetInstance()->DestroyInstance();
 	CMiniMapManager::GetInstance()->DestroyInstance();
 	CCameraManager::GetInstance()->DestroyInstance();
-
+	CBattle_UI_Manager::GetInstance()->DestroyInstance();
 
 	CGameInstance::Release_Engine();
 }
