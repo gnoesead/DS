@@ -224,6 +224,12 @@ _bool CCharacter::EventCallProcess()
 
 	CAnimation::CONTROLDESC ControlDesc = pAnim->Get_ControlDesc();
 
+	if (m_iPreAnimIndex_ForEvent != m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pModelCom->Set_EventReset(m_iPreAnimIndex_ForEvent);
+		m_iPreAnimIndex_ForEvent = m_pModelCom->Get_iCurrentAnimIndex();
+	}
+
 	if (ControlDesc.m_isEventCall)
 	{
 		ControlDesc.m_isEventCall = false;

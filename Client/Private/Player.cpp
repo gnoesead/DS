@@ -505,7 +505,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
+		if (m_dDelay_Charge_J < 0.011f && m_dDelay_Charge_W < 0.011f)
 		{
 			m_isCan_Charge = true;
 		}

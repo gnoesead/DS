@@ -889,7 +889,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(1.0f, 0.04f);
+			Jumping(2.0f, 0.05f);
 		}
 	}
 #pragma endregion

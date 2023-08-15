@@ -252,10 +252,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
-
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
 				else
@@ -263,15 +259,18 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
 			}
+			else if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
-
+				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
 				else
@@ -290,34 +289,40 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
-
+				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3", m_pTransformCom);
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3", m_pTransformCom);
 			}
+			else if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
 		}
 
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
+		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) 
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
-
+				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
 			}
+			else if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
+			}
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
-			if (0 == m_iEvent_Index)
+			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
@@ -356,38 +361,120 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
-
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
 			}
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (4 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (5 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (6 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (7 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
+			}
+
 		}
+
+
 
 		if (ANIM_ATK_SKILL_MOVE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
-
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
 			}
 		}
+		if (40 == m_pModelCom->Get_iCurrentAnimIndex()) // SKILL_MOVE µµÁß
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (4 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (5 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			if (6 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
+			}
+		
+		}
+
 
 		if (ANIM_ATK_SKILL_GUARD == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.4f, 3.4f, 3.4f), _float3(0.f, 0.0f, 0.0f), 1.1,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
+
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
 			}
+			
+			
 		}
 #pragma endregion
 
@@ -683,7 +770,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 		Jumping(3.0f * m_fScaleChange, 0.05f * m_fScaleChange);
 	}
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
+	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
 }
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
@@ -769,7 +856,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	if (m_isAirDashing)
 	{
 		Get_LockOn_MonPos();
-		if (Get_Distance_To_LockOnPos() > 0.1f)
+		if (Get_Distance_To_LockOnPos() > 0.5f)
 		{
 			m_pTransformCom->Go_Dir(dTimeDelta * 4.0f, Get_Dir_To_LockOnPos());
 		}
