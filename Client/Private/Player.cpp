@@ -644,6 +644,7 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 					m_isBack = false;
 					m_isLeft = false;
 					m_isRight = false;
+					
 				}
 				else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
 				{

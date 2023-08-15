@@ -339,7 +339,7 @@ PS_OUT PS_SSAO(PS_IN _In)
 	//float4 vNormal = g_NormalTexture.Sample(PointClampSampler, _In.vTexUV);
 
 	half4      vNormal = g_NormalTexture.Sample(NormalSampler, _In.vTexUV);
-	float4 vDepth = g_DepthTexture.Sample(DepthSampler, _In.vTexUV);
+	float4	   vDepth = g_DepthTexture.Sample(DepthSampler, _In.vTexUV);
 
 
 	//vNormal = float4(vNormal.xyz * 2.f - 1.f, 0.f);
@@ -382,13 +382,15 @@ PS_OUT PS_SSAO(PS_IN _In)
 	{
 
 		vRay = reflect(randomNormal(vNewUV), g_vRandom[i]);
+		//vRay = reflect(randomNormal(_In.vTexUV), g_vRandom[i]);
 		vReflect = normalize(reflect(vRay, vHNormal)) * (g_fRadius);
 		vReflect.x *= -1.f;
-		vRandomUV = _In.vTexUV + vReflect.xy;
+		//vRandomUV = _In.vTexUV + vReflect.xy;
+		vRandomUV = vNewUV + vReflect.xy;
 		vRandomDepth = g_DepthTexture.Sample(DepthSampler, vRandomUV);
 		fOccNorm = vRandomDepth.g * g_fFar * fViewZ;
 
-		if (fOccNorm <= fDepth + 1.f + g_fBias)
+		if (fOccNorm <= fDepth + g_fBias)
 			++iColor;
 	}
 

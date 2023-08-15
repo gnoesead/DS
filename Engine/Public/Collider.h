@@ -36,10 +36,13 @@ public:
 
 	_bool	Get_SphereOff() { return m_isSphereOff; }
 	_bool	Get_Hit_Small() { return m_isHit_Small; }
+	_bool	Get_Hit_ConnectSmall() { return m_isHit_ConnectSmall; }
 	_bool	Get_Hit_Big() { return m_isHit_Big; }
 	_bool	Get_Hit_Blow() { return m_isHit_Blow; }
+	_bool	Get_Hit_BigBlow() { return m_isHit_BigBlow; }
 	_bool	Get_Hit_Spin() { return m_isHit_Spin; }
 	_bool	Get_Hit_Upper() { return m_isHit_Upper; }
+	
 
 	_float4		Get_AtkDir() { return m_AtkDir; }
 	_float	Get_fDamage() { return m_fDamage; }
@@ -54,8 +57,10 @@ public:
 
 	void	Set_SphereOff(_bool SphereOff) { m_isSphereOff = SphereOff; }
 	void	Set_Hit_Small(_bool Hit) { m_isHit_Small = Hit; }
+	void	Set_Hit_ConnectSmall(_bool Hit) { m_isHit_ConnectSmall = Hit; }
 	void	Set_Hit_Big(_bool Hit) { m_isHit_Big = Hit; }
 	void	Set_Hit_Blow(_bool	Hit) { m_isHit_Blow = Hit; }
+	void	Set_Hit_BigBlow(_bool Hit) { m_isHit_BigBlow = Hit; }
 	void	Set_Hit_Spin(_bool Hit) { m_isHit_Spin = Hit; }
 	void	Set_Hit_Upper(_bool Hit) { m_isHit_Upper = Hit; }
 
@@ -98,11 +103,12 @@ private:
 	//For. Attack Collider
 	_bool		m_isSphereOff = { false };
 	_bool		m_isHit_Small = { false };
+	_bool		m_isHit_ConnectSmall = { false };
 	_bool		m_isHit_Big = { false };
 	_bool		m_isHit_Blow = { false };
 	_bool		m_isHit_Spin = { false };
 	_bool		m_isHit_Upper = { false };
-
+	_bool		m_isHit_BigBlow = { false };
 	_bool		m_isCanHit = { true };
 
 	_float4		m_AtkDir = { 0.f, 0.f, 0.f, 0.f };

@@ -210,12 +210,12 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-   // CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+     //CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
     CharacterDesc.Land_Y = 0.f;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
