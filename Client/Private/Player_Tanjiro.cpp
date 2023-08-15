@@ -693,6 +693,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 
 					m_isCan_AirDash = true;
 				}
+				
+				m_pModelCom->Set_AnimisFinish(25);
+				
 			}
 		}
 	}
@@ -716,7 +719,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 	{
 		if (m_pModelCom->Get_iCurrentAnimIndex() == 25)
 		{
+			//if (m_pModelCom->Get_AnimFinish())
+			//{
 
+			//}
 		}
 	}
 }
@@ -1054,12 +1060,35 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
+
+
 	if (m_Moveset.m_Down_Dmg_Small)
 	{
 		m_Moveset.m_Down_Dmg_Small = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_SMALL);
+		
 		m_pTransformCom->Set_Look(reverseAtkDir);
+
+		if (m_iSmallHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(139);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(140);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 2)
+		{
+			m_pModelCom->Set_Animation(141);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 3)
+		{
+			m_pModelCom->Set_Animation(142);
+			m_iSmallHit_Index = 0;
+		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 1.5f, 0.01f, AtkDir);
 
