@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Camera_Free.h"
 #include "Player.h"
+#include "Camera_Manager.h"
 
 CStaticMapObject::CStaticMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMapObject(pDevice, pContext)
@@ -241,16 +242,43 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 	_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	if (INTERACTION_ROOMCHANGE0 == m_MapObject_Info.iInteractionType)
+	{
+		if (Compute::DistCheck(vPlayerPos, vMyPos, 10.f))
+		{
+			static _bool b = false;
+
+			if (!b)
+			{
+				_vector vOffset = { 0.f , -1.f , 0.f , 0.f };
+
+				CCameraManager::GetInstance()->Focus_On(vMyPos + vOffset, 2.f);
+				b = true;
+			}
+		}
+	}
+
+
 	// 종이와의 거리
 	if (Compute::DistCheck(vPlayerPos, vMyPos, 6.f))
 		m_bChangeRoomTrigger = true;
 
 	if (m_bChangeRoomTrigger)
 	{
+		if (m_AccTime == 0.0)
+			CCameraManager::GetInstance()->Camera_Shake(1.2, 30);
+
 		m_AccTime += TimeDelta;
 
-		if (m_AccTime >= 1.5)
+		if (!m_bSetInvert && m_AccTime > 0.9)
 		{
+			m_bSetInvert = true;
+			m_pRendererCom->Set_Invert();
+		}
+
+		if (m_AccTime >= 1.0)
+		{
+			m_pRendererCom->Set_Invert();
 			m_bChageRoom = true;
 			m_bChangeRoomTrigger = false;
 		}
@@ -267,15 +295,17 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		switch (iInteractionType)
 		{
 		case INTERACTION_ROOMCHANGE0:
-			vNextPos = XMVectorSet(80.f, 0.f, 5.f, 1.f);
-			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
-			break;
+		{vNextPos = XMVectorSet(80.f, 0.f, 5.f, 1.f);
+		pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
+		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
+		break; }
 		case INTERACTION_ROOMCHANGE1:
-			vNextPos = XMVectorSet(77.f, 0.f, 62.f, 1.f);
+		vNextPos = XMVectorSet(77.f, 0.f, 62.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
+
 			break;
 		case INTERACTION_ROOMCHANGE2:
-			vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
+		vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
 			break;
 		}
