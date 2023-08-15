@@ -31,6 +31,8 @@ private:
 	CRenderer*				m_pRenderer = { nullptr };
 	_float4					m_vTestBG = { 0.5f, 0.8f, 0.5f, 1.0f };
 
+	list<_tchar*>			m_ProtoTag;
+
 #ifdef _DEBUG
 private:
 	void Key_Input(_double dTimeDelta);
@@ -48,6 +50,7 @@ private:
 private:
 	HRESULT	Ready_Prototype_Component_For_Static();
 	HRESULT SetUp_StartLevel(LEVELID eLevelID);
+	HRESULT Load_Effect_Resources();
 
 public:
 	static CMainApp*	Create();
