@@ -76,6 +76,10 @@ public://Set
 	void	Set_AnimisFinish(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_Finish(); }
 	void	Set_AnimResetTimeAcc(_uint iAnimationIdx) { m_Animations[iAnimationIdx]->Reset_TimeAcc(); }
 
+	void	Set_EventReset(_uint iAnimIdx) {
+		m_Animations[iAnimIdx]->Reset_Event();
+	}
+
 public:
 	HRESULT Initialize_Prototype(TYPE eModelType, const char* pModelFilePath, _fmatrix PivotMatrix);
 	HRESULT Initialize(void* pArg) override;

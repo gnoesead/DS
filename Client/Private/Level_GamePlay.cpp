@@ -112,18 +112,16 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
 		HRESULT hr = 0;
-
 		if (true == pGameInstance->Get_IsStage())
 		{
 
 			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-			{
-				pGameInstance->Clear_Light();
+
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-			}
 			else
 				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 
+			pGameInstance->Clear_Light();
 
 		}
 	}
@@ -441,6 +439,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 
 	CPlayer::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
 	
 	/*
 	for (_int i = 0; i < 3; i++)

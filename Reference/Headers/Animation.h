@@ -94,6 +94,9 @@ public:
 	void	Set_Ratio_EarlyEnd(_float fEarly) { m_fEarlyEnd = fEarly; }
 
 
+	void	Reset_Event();
+
+
 private:
 	ANIMATIONDESC	m_AnimationDesc;
 	CONTROLDESC		m_ControlDesc;

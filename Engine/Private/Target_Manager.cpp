@@ -186,7 +186,7 @@ HRESULT CTarget_Manager::Ready_DefaultRenderTarget()
 	D3D11_VIEWPORT	Viewport;
 	m_pContext->RSGetViewports(&iNumViewports, &Viewport);
 
-	m_vColor_Default = { 0.8f, 0.5f, 0.5f, 0.f };
+	m_vColor_Default = { 0.f, 0.f, 0.f, 0.f };
 	CRenderTarget* pRenderTarget = CRenderTarget::Create(m_pDevice, m_pContext
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, m_vColor_Default);
 

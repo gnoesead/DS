@@ -13,7 +13,7 @@ class CPlayer : public CCharacter
 {
 public:
 	enum PLAYERSTATE { PLAYER_ADVENTURE, PLAYER_BATTLE, PLAYER_END };
-	enum PLAYERTYPE { PLAYER_TANJIRO, PLAYER_ZENITSU, PLAYER_RENGOKU , PLAYERTYPE_END };
+	enum PLAYERTYPE { PLAYER_TANJIRO, PLAYER_ZENITSU, PLAYER_RENGOKU, PLAYERTYPE_END };
 
 	typedef struct tagPlayerMoveset
 	{
@@ -138,6 +138,7 @@ protected:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
+	_vector Get_Dir_To_LockOnPos();
 	
 
 protected: //애니메이션 제어용 함수들
@@ -160,6 +161,9 @@ protected: //애니메이션 제어용 함수들
 
 protected:
 	void	Add_BoxJump_Info();		// 상호작용(박스)(안원추가)
+	void	Check_Change_Position(_double TimeDelta);	// 캐릭터 이동 (안원추가)
+
+
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
@@ -183,6 +187,9 @@ protected: // 애니메이션 제어용 변수들
 
 	//콤보 도중
 	_bool	m_isComboing = { false };
+	_bool		m_isCan_AirDash = { false };
+	_bool		m_isAirDashing = { false };
+	_double		m_dDelay_Can_AirDash = { 0.0 };
 
 	// 잡기 용
 	_bool		m_isThrowing = { false };
@@ -244,7 +251,16 @@ protected:
 	// Outline Face
 	_float	m_fOutlineFaceThickness = 0.3f;
 
+protected:
+	// 맵 이동 변수(안원)
+	enum CHANGE_POSITONTYPE { CHANGE_POSITON_HOUSE_1A, CHANGE_POSITON_HOUSE_1B, CHANGE_POSITON_HOUSE_2A, CHANGE_POSITON_HOUSE_2B, CHANGE_POSITON_END };
 
+	_bool	m_bChangePositionTrigger[CHANGE_POSITON_END] = { false };
+	_bool	m_bChangePosition[CHANGE_POSITON_END] = { false };
+	_bool	m_bChangePositionFinish[CHANGE_POSITON_END] = { false };
+
+	_double	m_dChangePositionAccTime = { 0.0 };
+	
 
 protected:
 	HRESULT Add_Components();
