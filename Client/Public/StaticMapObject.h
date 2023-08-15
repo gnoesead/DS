@@ -43,7 +43,7 @@ private:
 	// πÊ ¿Ãµø
 	_bool	m_bChangeRoomTrigger = { false };
 	_bool	m_bChageRoom = { false };
-	
+	_bool	m_bSetInvert = { false };
 	// ≥øªı
 	_bool	m_bSmellOn = { false };
 };

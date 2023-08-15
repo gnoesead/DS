@@ -330,7 +330,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (true == g_bGrayScale)
 	{
-		//Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+		Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
 		/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);
 		float f = 1.0 / 6;
@@ -567,24 +567,24 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	if (vFinalColor.a == 0.f)
 		discard;
 
-	if (true == g_bGrayScale)
-	{
-		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
-		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 6;
+	//if (true == g_bGrayScale)
+	//{
+	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+	//	float3 c = float3(0.0, 0.0, 0.0);
+	//	float f = 1.0 / 6;
 
-		for (int i = 0; i < 6; i++)
-		{			
-			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
-			Out.vColor.rgb = c;
-		}
-		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
-			discard;
-		Out.vColor.a = vFinalColor.a;
-		/*if (Out.vColor.a == 0.f)
-			discard;*/
-	}
-	else
+	//	for (int i = 0; i < 6; i++)
+	//	{			
+	//		c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
+	//		Out.vColor.rgb = c;
+	//	}
+	//	if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
+	//		discard;
+	//	Out.vColor.a = vFinalColor.a;
+	//	/*if (Out.vColor.a == 0.f)
+	//		discard;*/
+	//}
+	//else
 		Out.vColor = vFinalColor;
 
 	/*if (Out.vColor.a == 0.f)

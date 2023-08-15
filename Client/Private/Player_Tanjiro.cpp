@@ -130,6 +130,11 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		m_pModelCom->Set_Animation(0);
 	}
+	
+#ifdef _DEBUG
+	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
+		return;
+#endif
 }
 
 HRESULT CPlayer_Tanjiro::Render()
