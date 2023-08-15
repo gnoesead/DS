@@ -97,7 +97,6 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Attack_Cross(_double dTimeDelta);
 	void	Animation_Control_Attack_SpinMove(_double dTimeDelta);
 
-
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
 

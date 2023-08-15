@@ -135,7 +135,7 @@ protected:
 
 	//Hit°ü·Ã
 	_bool	m_isBounding = { false };
-
+	_bool	m_isConnectHitting = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };
@@ -155,7 +155,7 @@ protected:
 	_double	m_dTime_JumpStop_Duration = { 0.0 };
 
 	_bool	m_isFirst_JumpAtk = { true };
-
+	_bool	m_bMotionBlur = { false };
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 

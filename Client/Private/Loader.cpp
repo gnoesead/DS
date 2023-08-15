@@ -74,8 +74,6 @@ unsigned int APIENTRY Loading_Main(void* pArg)
 
 	HRESULT	hr = 0;
 
-	hr = pLoader->LoadingForAllStage();
-
 	switch (pLoader->Get_LevelID())
 	{
 	case LEVEL_LOGO:
@@ -184,48 +182,6 @@ HRESULT CLoader::Initialize(LEVELID eLevelID)
 
 HRESULT CLoader::LoadingForAllStage()
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_matrix PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	if (false == pGameInstance->Get_IsLoadForAll())
-	{
-		/* Prototype_Component_Shader_VtxTerrainModel */
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxTerrainModel"),
-			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTerrainModel.hlsl"), VTXMODEL_DECL::Elements, VTXMODEL_DECL::iNumElements))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxTerrainModel");
-			return E_FAIL;
-		}
-		        
-		/* Prototype_Component_Shader_VtxModelInstance */
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModelInstance"),
-			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModelInstance.hlsl"), VTXMODELINSTANCE_DECL::Elements, VTXMODELINSTANCE_DECL::iNumElements))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxModelInstance");
-			return E_FAIL;
-		}
-
-		/*==========================================================================*/
-
-		/* For.Prototype_Component_Model_Sky_Train*/
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
-			return E_FAIL;
-
-		Load_MapObjectModel_AllStage(pGameInstance);
-		
-		LoadingForEffect();
-		
-	}
-	else
-	{
-
-	}
-
-	pGameInstance->Set_IsLoadForAll();
-
-	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -246,16 +202,39 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Model..."));
 #pragma region Model
+	_matrix PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	/* For.Prototype_Component_Model_Sky_Train*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
+		return E_FAIL;
+
+	Load_MapObjectModel_AllStage(pGameInstance);
 
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
+	/* Prototype_Component_Shader_VtxTerrainModel */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxTerrainModel"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTerrainModel.hlsl"), VTXMODEL_DECL::Elements, VTXMODEL_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxTerrainModel");
+		return E_FAIL;
+	}
 
+	/* Prototype_Component_Shader_VtxModelInstance */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModelInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModelInstance.hlsl"), VTXMODELINSTANCE_DECL::Elements, VTXMODELINSTANCE_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxModelInstance");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
 #pragma region Etc
+	LoadingForEffect(pGameInstance);
 
 #pragma endregion
 
@@ -289,7 +268,7 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
 	m_isFinished = true;
-	
+
 	return S_OK;
 }
 
@@ -3072,13 +3051,10 @@ HRESULT CLoader::Load_MapObjectModel_FinalBoss()
 	return S_OK;
 }
 
-HRESULT CLoader::LoadingForEffect()
+HRESULT CLoader::LoadingForEffect(CGameInstance* pGameInstance)
 {
 	SetWindowText(g_hWnd, TEXT("LoadingForEffect"));
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
+	
 #pragma region Buffer
 	/* Prototype_Component_VIBuffer_Point_Effect */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Point_Effect"),
@@ -3123,303 +3099,6 @@ HRESULT CLoader::LoadingForEffect()
 	}
 #pragma endregion
 
-#pragma region Model
-	_matrix		PivotMatrix = XMMatrixIdentity();
-
-	/* For.Prototype_Component_Model_Slash03 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Slash03"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Slash03.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_In_Slash003 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_In_Slash003"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_In_Slash003.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_6Nej_Vortex003 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_6Nej_Vortex003"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_6Nej_Vortex003.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_2Mig_WaveRing001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_2Mig_WaveRing001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_2Mig_WaveRing001.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_2Mig_WaveCrossRing001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_2Mig_WaveCrossRing001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_2Mig_WaveCrossRing001.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_8Tak_Thin002 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_8Tak_Thin002"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_8Tak_Thin002.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_Slash002 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_Slash002"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_Slash002.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_1Min_Slash_Cut000 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_1Min_Slash_Cut000"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_1Min_Slash_Cut000.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_SlashWave001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_SlashWave001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_SlashWave001.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_1Min_Slash007 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_1Min_Slash007"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_1Min_Slash007.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Skl_Wa_Slash001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Skl_Wa_Slash001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Skl_Wa_Slash001.bin", PivotMatrix))))
-		return E_FAIL;
-
-
-	// Akaza
-	/* For.Prototype_Component_Model_SM_e_cmn_Board001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_cmn_Board001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_cmn_Board001.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Cmn_Ring001 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring001"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring001.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Cmn_Ring008 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring008"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring008.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Cmn_Ring016 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring016"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring016.bin", PivotMatrix))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Model_SM_e_Cmn_Ring021 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring021"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_e_Cmn_Ring021.bin", PivotMatrix))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region Texture
-	/* For.Prototype_Component_Texture_Corvus_S_01 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Corvus_S_01"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Corvus_S_01.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Slash005 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Slash005"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Slash005.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Trail002 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Trail002"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_Trail002.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Line006 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Line006"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Line006.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_6Nej_Shadow002 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_6Nej_Shadow002"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_6Nej_Shadow002.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Slash007 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Slash007"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Slash007.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water011 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water011"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_8Tak_Water011.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_2Mig_Wave009 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_2Mig_Wave009"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_2Mig_Wave009.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_2Mig_Edge001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_2Mig_Edge001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_2Mig_Edge001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water007 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water007"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_8Tak_Water007.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_8Tak_Water001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_ChWave003 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_ChWave003"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_ChWave003.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_d_e_P0007_V00_C00_SplTtb_String_02_Vert */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_d_e_P0007_V00_C00_SplTtb_String_02_Vert"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_d_e_P0007_V00_C00_SplTtb_String_02_Vert.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_Line004 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Line004"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Cmn_Line004.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_Noise003 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Noise003"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Cmn_Noise003.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Plc_P0004_LineDraw000_Vert */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Plc_P0004_LineDraw000_Vert"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Plc_P0004_LineDraw000_Vert.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water003 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_8Tak_Water003"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Skl_Wa_8Tak_Water003.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Useful_Nioi001_Vert */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Useful_Nioi001_Vert"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Useful_Nioi001_Vert.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Plc_P1002_Line002 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Plc_P1002_Line002"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Plc_P1002_Line002.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_d_e_P0007_V00_C00_SplTtb_Mask_03 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_d_e_P0007_V00_C00_SplTtb_Mask_03"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_d_e_P0007_V00_C00_SplTtb_Mask_03.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_Water004 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Water004"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Cmn_Water004.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Slash001C */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Slash001C"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Skl_Wa_Slash001C.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_AuraSmoke001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_AuraSmoke001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Cmn_AuraSmoke001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_d_e_d050_c090_s030_cin_010_Cmn_Noise_01_A */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_d_e_d050_c090_s030_cin_010_Cmn_Noise_01_A"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_d_e_d050_c090_s030_cin_010_Cmn_Noise_01_A.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_Wave007 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Wave007"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_Cmn_Wave007.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_FireDist001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_FireDist001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../../Client/Bin/Resources/Textures/Effect/T_e_cmn_FireDist001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Scmn_ToonWave001C */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_ToonWave001C"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_ToonWave001C.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Plc_P0002_Noise02 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Plc_P0002_Noise02"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Plc_P0002_Noise02.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Water003 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Water003"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_Water003.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Water003C */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Water003C"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_Water003C.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Plc_P0001_Awake_Cut_Tile_00 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Plc_P0001_Awake_Cut_Tile_00"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Plc_P0001_Awake_Cut_Tile_00.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Cmn_AuraSmoke002 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_AuraSmoke002"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Cmn_AuraSmoke002.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Wave001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Wave001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Skl_Wa_Scmn_Wave001.dds"), 1))))
-		return E_FAIL;
-
-	// Akaza
-	/* For.Prototype_Component_Texture_Ramp08 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp08"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Ramp08.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Glow001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Glow001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Glow001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Grd_Radial001 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Grd_Radial001"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Grd_Radial001.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Wave006 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Wave006"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Wave006.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_Useful_Wave006 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Useful_Wave006"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_Useful_Wave006.dds"), 1))))
-		return E_FAIL;
-	
-
-#pragma endregion
-
 #pragma region GAMEOBJECTS
 	/* Prototype_GameObject_ParticleSystem */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ParticleSystem"),
@@ -3453,8 +3132,6 @@ HRESULT CLoader::LoadingForEffect()
 		return E_FAIL;
 	}
 #pragma endregion
-
-	Safe_Release(pGameInstance);
 
 	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
 	m_isFinished = true;

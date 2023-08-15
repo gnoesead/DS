@@ -80,6 +80,7 @@ private:
 	//eventcall
 	_int	m_iTest = { 0 };
 
+	_int	m_iSelectDeleteIndex = { 0 };
 
 	//Save
 	_bool	m_isSave = { false };

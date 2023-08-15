@@ -225,14 +225,15 @@ PS_OUT  PS_SMELL(PS_IN In)
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
 	Out.vDiffuse = vMtrlDiffuse;
-
+	
 	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
-
+	Out.vDiffuse.r *= 5.5f;
 	Out.vDiffuse.g = 0.f;
 	Out.vDiffuse.b = 0.f;
-
-
-	if (Out.vDiffuse.a < 0.1f)
+	
+	
+		
+	if (Out.vDiffuse.a < 0.3f)
 		discard;
 
 	return Out;
@@ -307,7 +308,7 @@ technique11 DefaultTechnique
 	pass JumpEffect // 5
 	{
 		SetRasterizerState(RS_CULL_NONE);
-		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_AlphaBlendingOne, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 		VertexShader = compile vs_5_0 VS_Main();
 		GeometryShader = NULL;

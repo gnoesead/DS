@@ -88,6 +88,12 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_Layer_Effect()))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		return E_FAIL;
+	}
+
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
@@ -1141,6 +1147,35 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 	return S_OK;
 }
 
+
+HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
+{
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : ATK_Combo_Up");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
+		return E_FAIL;
+	}
+
+	return 	S_OK;
+}
 
 HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 {

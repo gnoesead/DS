@@ -215,6 +215,7 @@ void CMonster_Zako::Trigger()
 {
 	//Hit_Trigger
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small()
+		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
 		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
@@ -786,9 +787,18 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
 
 #pragma region Hit_Small
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		if(m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+			m_isConnectHitting = false;
+		}
+		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+			m_isConnectHitting = true;
+		}
 
 		m_dDelay_ComboChain = 1.0;
 
@@ -817,9 +827,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			}
 		}
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.0f, 0.04f, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.0f, 0.04f, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.0f, 0.04f, AtkDir);
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.0f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.0f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.0f, 0.04f, AtkDir);
+	}
+	
 #pragma endregion
 	
 
