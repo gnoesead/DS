@@ -114,13 +114,12 @@ void CLevel_House::Tick(_double dTimeDelta)
         {
 
             if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-            {
-                pGameInstance->Clear_Light();
-                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-            }
+            
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);           
             else
                 hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 
+			pGameInstance->Clear_Light();
 
         }
     }
@@ -210,12 +209,12 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
     CPlayer::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-     //CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-    CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
     CharacterDesc.Land_Y = 0.f;
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
+   // CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))

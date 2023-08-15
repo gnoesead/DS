@@ -77,7 +77,7 @@ private:
 	_float			m_fDistance = {};
 	_vector         m_vOffSet = {};
 	_vector         m_vLookOffSet = {};
-	_vector         m_vDist = { 0.f, 0.f, 1.f, 0.f };
+	_vector         m_vDist = { 0.f, 0.f, -1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
 	_vector         m_vFocusPos = {};
