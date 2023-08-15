@@ -499,7 +499,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
 			}
-
 		}
 
 		if (ANIM_SUPERARMOR3 == m_pModelCom->Get_iCurrentAnimIndex())

@@ -439,6 +439,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 
 	CPlayer::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
 	
 	/*
 	for (_int i = 0; i < 3; i++)

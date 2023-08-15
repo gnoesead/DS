@@ -75,6 +75,10 @@ void CPlayer::LateTick(_double dTimeDelta)
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 	
+#ifdef _DEBUG
+	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
+		return;
+#endif
 }
 
 HRESULT CPlayer::Render()
@@ -189,6 +193,17 @@ _float CPlayer::Get_Distance_To_LockOnPos()
 	_float fDistance = Convert::GetLength(vMonsterPos - vPlayerPos);
 
 	return fDistance;
+}
+
+_vector CPlayer::Get_Dir_To_LockOnPos()
+{
+	Get_LockOn_MonPos();
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = XMLoadFloat4(&m_LockOnPos);
+	_vector vDir = XMVector3Normalize(vMonsterPos - vPlayerPos);
+
+	return vDir;
 }
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
@@ -492,7 +507,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
+		if (m_dDelay_Charge_J < 0.011f && m_dDelay_Charge_W < 0.011f)
 		{
 			m_isCan_Charge = true;
 		}

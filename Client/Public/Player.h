@@ -138,6 +138,7 @@ protected:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
+	_vector Get_Dir_To_LockOnPos();
 	
 
 protected: //애니메이션 제어용 함수들
@@ -186,6 +187,9 @@ protected: // 애니메이션 제어용 변수들
 
 	//콤보 도중
 	_bool	m_isComboing = { false };
+	_bool		m_isCan_AirDash = { false };
+	_bool		m_isAirDashing = { false };
+	_double		m_dDelay_Can_AirDash = { 0.0 };
 
 	// 잡기 용
 	_bool		m_isThrowing = { false };
