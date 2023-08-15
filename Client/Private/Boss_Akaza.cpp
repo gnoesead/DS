@@ -440,27 +440,24 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
 			}
 
-		}
+		}	
 		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 1.0f);
 			}
 			if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 1.0,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, 1.0f);
 			}
-			if (2 == m_iEvent_Index)
-			{
-				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
-
-			}
+		
 
 		}
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -469,7 +466,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider ::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
 		}
