@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 class CTransform;
@@ -11,7 +11,7 @@ END
 
 BEGIN(Client)
 
-class CEffect : public CGameObject
+class CEffect : public CMasterEffect
 {
 public:
 	enum EFFECTTYPE { EFFECT_TEXTURE, EFFECT_MESH, EFFECT_PARTICLE, EFFECT_TYPE_END };
@@ -155,6 +155,11 @@ public:
 		int				eRotOverLifetimeOption = { OP_CURVE };		//EFFECTOPTION
 		int				iNumRotations[3] = { 0, 0, 0 };
 
+		// Position over Lifetime
+		bool			isPositionOverLifetime = { false };
+		int				ePosOverLifetimeOption = { OP_CURVE };		//EFFECTOPTION
+		int				iNumPositions[3] = { 0, 0, 0 };
+
 		// Rotation by Speed
 		bool			isRotationBySpeed = { false };
 		bool			isSeparateAxesRotBySpeed = { false };
@@ -164,6 +169,7 @@ public:
 		// SubEmitters
 		// Texture Sheet Animation
 		// Trail
+		// 
 		// Renderer
 		bool			isRenderer = { true };
 		int				eRenderMode = { BILLBOARD };		//RENDERMODE
@@ -173,14 +179,23 @@ public:
 		float			fMinParticleSize = { 0.f };
 		float			fMaxParticleSize = { 0.5f };
 		_float3			vPivot = { 0.f, 3.f, 0.f };
+		float			fTextureOrder = { 0.f };
+
 		// Texture
 		_float2			vFlip = { 1.f, 1.f };
 		float			fCutOff = { 0.f };		// Dissolve 기능, DissolveAmount (0-1)
 		float			fCutOffSoftness = { 0.f };	// 카툰은 0, 실사는 1에 가깝게
 		_float4			vBurnColor = { 0.f, 0.f, 0.f, 0.f };		// 끝이 타들어가는 느낌
 		float			fBurnSize = { 0.f };
-		_float2			vGradientTilling = { 1.f, 1.f };
+		float			fDissolveDelay = { 0.f };
+		float			fDissolveSpeed = { 0.f };
+		_float2			vDiffuseTilling = { 1.f, 1.f };
+		_float2			vDiffuseOffset = { 0.f, 0.f };
 		_float2			vGradientOffset = { 0.f, 0.f };
+		_float2			vGradientTilling = { 1.f, 1.f };
+		_float2			vPaddingDelayStartEnd = { 0.f, 0.f };
+		_float2			vPaddingSpeedStart = { 0.f, 0.f };
+		_float2			vPaddingSpeedEnd = { 0.f, 0.f };
 		float			fDistortionStrength = { 0.f };
 		float			fDistortionSpeed = { 0.f };
 		//_float4		vBaseColor = { 0.f, 0.f, 0.f, 0.f };
@@ -197,6 +212,12 @@ public:
 		float			fRectangleMaskInnerRadius = { 0.f };
 		float			fRectangleMaskSmoothness = { 0.f };
 		int				eCullMode = { CULL_OFF };		//CULLMODE
+		_float2			vDiscardedPixelMin = { 0.f, 0.f };
+		_float2			vDiscardedPixelMax = { 1.f, 1.f };
+		_float2			vPixelDiscardSpeedMin = { 0.f, 0.f };
+		_float2			vPixelDiscardSpeedMax = { 0.f, 0.f };
+		float			fPixelDiscardDelay = { 0.f };
+		int				iNumAlpha = { 0 };
 
 		//Material
 		int				eMaterialRenderingMode = { ADDITIVE };	//MATERIALRENDERINGMODE
@@ -223,6 +244,9 @@ public:
 	virtual HRESULT Render(void) override;
 
 public:
+	EFFECTDESC* Get_EffectDesc(void) {
+		return &m_eEffectDesc;
+	}
 	int Get_StartLifeTimeOption(void) {
 		return m_eEffectDesc.eStartLifeTimeOption;
 	}
@@ -235,6 +259,34 @@ public:
 	float Get_StartLifeTimeMax(void) {
 		return m_eEffectDesc.fStartLifeTimeMax;
 	}
+	int Get_EffectType(void) {
+		return m_eEffectDesc.eEffectType;
+	}
+	BURSTDESC* Get_BurstDesc(int iIndex)
+	{
+		return &m_BurstList[iIndex];
+	}
+	LIFETIMEVALUE* Get_SizeOverLifeTime(int iAxis, int iIndex) {
+		return &m_SizeOverLifeTimes[iAxis][iIndex];
+	}
+	LIFETIMEVALUE* Get_RotationOverLifeTime(int iAxis, int iIndex) {
+		return &m_RotOverLifeTimes[iAxis][iIndex];
+	}
+	LIFETIMEVALUE* Get_PositionOverLifeTime(int iAxis, int iIndex) {
+		return &m_PosOverLifeTimes[iAxis][iIndex];
+	}
+	LIFETIMEVALUE* Get_AlphaOverLifeTime(int iIndex) {
+		return &m_AlphaOverLifetimes[iIndex];
+	}
+	const _tchar* Get_ModelKey(void) {
+		return m_szModelKey;
+	}
+	const _tchar* Get_TextureKey(int iIndex) {
+		return m_szTextureKeys[iIndex];
+	}
+	int Get_SimulationSpace(void) {
+		return m_eEffectDesc.eSimulationSpace;
+	}
 
 public:
 	void Set_Parent(class CTransform* pTransform, class CParticleSystem* pParent)
@@ -245,9 +297,33 @@ public:
 	{
 		m_eEffectDesc = *pDesc;
 	}
+	void Set_ModelKey(const _tchar* pKey) {
+		lstrcpy(m_szModelKey, pKey);
+	}
+	void Set_TextureKey(int iIndex, const _tchar* pKey) {
+		lstrcpy(m_szTextureKeys[iIndex], pKey);
+	}
+	void Set_EffectType(int eType) {
+		m_eEffectDesc.eEffectType = eType;
+	}
 
 public:
 	HRESULT Add_Component_Texture(_uint iLevelIndex, const _tchar* pComponentTag, int eType);
+	void Reserve_BurstList(int iNumBurst) {
+		m_BurstList.reserve(iNumBurst);
+	}
+	void Reserve_SizeOverLifeTime(int iIndex, int iNumSOL) {
+		m_SizeOverLifeTimes[iIndex].reserve(iNumSOL);
+	}
+	void Reserve_RotationOverLifeTime(int iIndex, int iNumROL) {
+		m_RotOverLifeTimes[iIndex].reserve(iNumROL);
+	}
+	void Reserve_PositionOverLifeTime(int iIndex, int iNumPOL) {
+		m_PosOverLifeTimes[iIndex].reserve(iNumPOL);
+	}
+	void Reserve_AlphaOverLifeTime(int iNumAOL) {
+		m_AlphaOverLifetimes.reserve(iNumAOL);
+	}
 	void Add_BurstDesc(BURSTDESC Desc) {
 		m_BurstList.push_back(Desc);
 	}
@@ -259,10 +335,21 @@ public:
 	{
 		m_RotOverLifeTimes[iIndex].push_back(value);
 	}
+	void Add_PositionOverLifeTime(int iIndex, LIFETIMEVALUE value)
+	{
+		m_PosOverLifeTimes[iIndex].push_back(value);
+	}
+	void Add_AlphaOverLifeTime(LIFETIMEVALUE value)
+	{
+		m_AlphaOverLifetimes.push_back(value);
+	}
+	virtual void Clear(void);
+	void Reset_Data(void);
+	void Set_Initial_Data(void);
 
 protected:
 	HRESULT Add_Components(void);
-	HRESULT SetUp_ShaderResources(void);
+	virtual HRESULT SetUp_ShaderResources(void);
 	virtual void Check_PassIndex(void) = 0;
 
 protected:
@@ -279,11 +366,36 @@ protected:
 	_uint					m_iPassIndex = { 0 };
 	_float					m_fLifeTime = { 0.f };
 	_uint					m_iCurSizeIndex = { 0 };
-	_bool					m_isRendering = { true };
+	_uint					m_iCurRotIndex[3] = { 0 };
+	_uint					m_iCurPosIndex[3] = { 0 };
+	_uint					m_iCurAlphaIndex = { 0 };
 
-	list<BURSTDESC>			m_BurstList;
+	_float					m_fAlpha = { 1.f };
+	_float					m_fDissolveAmount = { 0.f };
+
+	_float3					m_vCurPos = { 0.f, 0.f, 0.f };
+
+	vector<BURSTDESC>		m_BurstList;
 	vector<LIFETIMEVALUE>	m_SizeOverLifeTimes[3];	// x,y,z
 	vector<LIFETIMEVALUE>	m_RotOverLifeTimes[3];	// x,y,z
+	vector<LIFETIMEVALUE>	m_PosOverLifeTimes[3];	// x,y,z
+	vector<LIFETIMEVALUE>	m_AlphaOverLifetimes;
+
+	_tchar					m_szModelKey[MAX_PATH] = { TEXT("") };
+	_tchar					m_szTextureKeys[TEX_END][MAX_PATH] = { TEXT("") };
+
+	_bool					m_isRendering = { true };
+	_bool					m_bCollect = { false };
+
+	_float					m_fDelayTimeAcc = { 0.f };
+	_float					m_fStartDelay = { 0.f };
+	_float					m_fDiscardTimeAcc = { 0.f };
+	_float					m_fDissolveTimeAcc = { 0.f };
+	_float					m_fPaddingTimeStartAcc = { 0.f };
+	_float					m_fPaddingTimeEndAcc = { 0.f };
+
+	_float2					m_vPaddingStart = { 0.f, 0.f };
+	_float2					m_vPaddingEnd = { 0.f, 0.f };
 
 public:
 	//static CEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -12,7 +12,7 @@ vector         g_vLightDiffuse;
 vector         g_vLightAmbient;
 vector         g_vLightSpecular;
 
-vector         g_vMtrlAmbient = vector(0.6f, 0.6f, 0.6f, 1.f);
+vector         g_vMtrlAmbient = vector(0.9f, 0.9f, 0.9f, 1.f);
 vector         g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
 texture2D      g_NormalTexture;
@@ -27,6 +27,7 @@ texture2D      g_BlurTexture;
 texture2D      g_BlurXTexture;
 texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
+texture2D	   g_RadialBlurTexture;
 texture2D	   g_EmissiveTexture;
 
 texture2D      g_FinalTexture; // 디퍼드 텍스처
@@ -210,7 +211,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
-		
+
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
@@ -223,15 +224,14 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
 
-	////Out.vShade *= vSSAO;
-	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+////Out.vShade *= vSSAO;
+//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(g_vLightDir), vNormal);
 
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
 	float      fViewZ = vDepth.x * 300.f;
-
 
 	vector      vWorldPos;
 
@@ -283,11 +283,9 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	/* 월드 스페이스상에 위치 .*/
 	vWorldPos = mul(vWorldPos, g_ViewMatrixInv);
 
-
 	vector      vLightDir = vWorldPos - g_vLightPos;
 
 	float      fDistance = length(vLightDir);
-
 
 	/* 0 ~ 1 */
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
@@ -304,9 +302,6 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	return Out;
 }
 
-
-
-
 PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
@@ -319,15 +314,6 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
-	/*if (vDiffuse.a == 0.f)
-		discard;*/
-		//vector adjustedDiffuse = vDiffuse * vSSAO;
-		//vector adjustedShade = vShade * vSSAO;
-
-		//// 새로 계산된 결과를 적용하여 최종 결과를 만듦
-		//Out.vColor = adjustedDiffuse * adjustedShade;
-
-
 		/*if (vShade.r < 0.21f)
 			vShade.rgb = float3(0.2f, 0.2f, 0.2f);
 		else if (vShade.r >= 0.21f && vShade.r < 0.41f)
@@ -335,12 +321,40 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		else if (vShade.r >= 0.41f && vShade.r <= 1.f)
 			vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
 
+	if (vDiffuse.a == 0.f)
+		discard;
+
 	Out.vColor = vDiffuse * vShade;
 	Out.vColor.rgb += vEmissive.rgb;
 	
 
 	if (true == g_bGrayScale)
-		Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+	{
+		//Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+		/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
+		float3 c = float3(0.0, 0.0, 0.0);
+		float f = 1.0 / 6;
+
+		float2 minTexCoord = float2(0.01, 0.01);
+		float2 maxTexCoord = float2(0.99, 0.99);
+
+		if (vDiffuse.a == 0.f)
+			discard;
+
+		for (int i = 0; i < 12; i++)
+		{
+			float2 clampedTexCoord = clamp(In.vTexUV - 0.01 * Direction * float(i), minTexCoord, maxTexCoord);
+
+			c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
+			if (c.r == 1.f && c.b == 1.f)
+				discard;
+			
+			Out.vColor.rgb = c * vShade.rgb;
+			Out.vColor.a = vDiffuse.a * vShade.a;
+			
+			Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
+		}*/
+	}
 
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
@@ -356,15 +370,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		Out.vColor = vector(sepia.r, sepia.g, sepia.b, sepia.a);
 	}
 
-
-
-	if (Out.vColor.a == 0.f)
-		discard;
+	
 
 	//그림자 적용
 
 	vector      vDepthInfo = g_DepthTexture.Sample(DepthSampler, In.vTexUV);
-	float      fViewZ = vDepthInfo.x * 300.0f;
+	float      fViewZ = vDepthInfo.z * 300.0f;
 
 	vector      vPosition;
 
@@ -388,63 +399,64 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	vector      vShadowDepthInfo = g_ShadowDepthTexture.Sample(ShadowDepthSampler, vNewUV);
 
-	/*if (vPosition.z - 0.1f > vShadowDepthInfo.r * 300.0f)
+	/*if (vPosition.z  > vShadowDepthInfo.r * vDepthInfo.y * 300.0f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 1.f);
+		vector vColor = vector(0.5f, 0.5f, 0.5f, 1.f);
 		Out.vColor *= vColor;
 	}*/
 
 	if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.1f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 1.f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 1.f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.2f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.7f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.3f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.8f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.8f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.4f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.7f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.7f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.5f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.6f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.5f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.5f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.7f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.4f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.4f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.8f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.3f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.3f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.7f)
+	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.2f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.2f);
 		Out.vColor *= vColor;
 	}
 	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 1.f)
 	{
-		vector vColor = vector(0.7f, 0.7f, 0.7f, 0.1f);
+		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.1f);
 		Out.vColor *= vColor;
 	}
-
+	/*if (Out.vColor.a == 0.f) // 0814 지움
+		discard;*/
 
 	return Out;
 }
@@ -475,14 +487,18 @@ PS_OUT PS_Bloom(PS_IN In)
 	float fBrightColor = 0.f;
 	vector vFragColor = g_FinalTexture.Sample(LinearSampler, In.vTexUV);
 
+	//if (vFragColor.a == 0.f) // 0813 추가
+	//	discard;
+
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
 	if (fBrightness >1.5f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
-
-
 	Out.vColor = fBrightColor;
+
+	//if (Out.vColor.a == 0.f) // 0813 추가
+	//	discard;
 
 	return Out;
 }
@@ -495,27 +511,87 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 	vector vBloomOriTex = g_BloomTextrue.Sample(BloomOriSampler, In.vTexUV); // 블룸 추출한 텍스처
 	vector vBloomColor = g_HDRTexture.Sample(BloomSampler, In.vTexUV); // 블룸 + 블러먹인 텍스처
 
-	if (vHDRColor.a == 0.f)
+	/*if (vHDRColor.a == 0.f)
+		discard;*/
+	/*if (vBloomOriTex.a == 0.f)
 		discard;
+	if (vBloomColor.a == 0.f)
+		discard;*/
 
-	vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
+	//if (true == g_bGrayScale)
+	//{
+	//	//Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+	//	float3 c = float3(0.0, 0.0, 0.0);
+	//	float f = 1.0 / 6;
+	//	for (int i = 0; i < 6; i++)
+	//	{
+	//		c += g_FinalTexture.Sample(LinearSampler, In.vTexUV - 0.01 * Direction * float(i)).rgb * f;
+	//		Out.vColor.rgb = c;
+	//	}
+	//	/*if ( )
+	//		discard;*/
 
-	vector vOut = (vHDRColor);
+	//}
+	//else
+	{
+		if (vHDRColor.a == 0.f)
+			discard;
 
-	vOut = pow(abs(vOut), 2.2f);
-	vBloom = pow(abs(vBloom), 2.2f);
+		vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
 
-	vOut += vBloom;
-	Out.vColor = pow(abs(vOut), 1 / 2.2f);
+		vector vOut = (vHDRColor);
 
-	if (Out.vColor.a == 0.f)
-		discard;
+		vOut = pow(abs(vOut), 2.2f);
+		vBloom = pow(abs(vBloom), 2.2f);
 
+		vOut += vBloom;
+		Out.vColor = pow(abs(vOut), 1 / 2.2f);
+		if (Out.vColor.a == 0.f)
+			discard;
+		Out.vColor.a = 1.f;
+
+		
+	}
 
 
 	return Out;
 }
 
+PS_OUT PS_RadialBlur(PS_IN In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	vector vFinalColor = g_RadialBlurTexture.Sample(LinearSampler, In.vTexUV); // 원본 텍스처
+
+	if (vFinalColor.a == 0.f)
+		discard;
+
+	if (true == g_bGrayScale)
+	{
+		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+		float3 c = float3(0.0, 0.0, 0.0);
+		float f = 1.0 / 6;
+
+		for (int i = 0; i < 6; i++)
+		{			
+			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
+			Out.vColor.rgb = c;
+		}
+		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
+			discard;
+		Out.vColor.a = vFinalColor.a;
+		/*if (Out.vColor.a == 0.f)
+			discard;*/
+	}
+	else
+		Out.vColor = vFinalColor;
+
+	/*if (Out.vColor.a == 0.f)
+		discard;*/
+
+	return Out;
+}
 //==============================Blur======================================
 float m_TexW = 1280.f;
 float m_TexH = 720.f;
@@ -523,6 +599,7 @@ float m_TexH = 720.f;
 //float m_ShadowTexH = 720.f;
 float m_ShadowTexW = 12800.f;
 float m_ShadowTexH = 7200.f;
+
 
 static const float Weight[13] =
 {
@@ -652,6 +729,8 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	return Out;
 }
+
+
 PS_OUT PS_BlurX_3(PS_IN _In)
 {
 	PS_OUT         Out = (PS_OUT)0;
@@ -719,11 +798,11 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
+	//vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
 	if (vFinal.a == 0.f)
 		discard;
 
-	//vFinal *= vSSAO.r;
+
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
 	/*if (Out.vColor.a == 0.f)
@@ -806,15 +885,15 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-
-	if (vFinal.a == 0.f)
-		discard;
+	/*if (vFinal.a == 0.f) // 0812
+		discard;*/
 
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
-	if (Out.vColor.a == 0.f)
-		discard;
+	//if (Out.vColor.a == 0.f) // 0812
+	//	discard;
+
 	/*if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
@@ -824,7 +903,32 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 
 	return Out;
 }
+PS_OUT PS_Combine_ShadowBlur(PS_IN In)
+{
+	PS_OUT      Out = (PS_OUT)0;
 
+	vector      vFinal = g_Texture.Sample(LinearSampler, In.vTexUV);
+	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
+	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
+
+	/*if (vFinal.a == 0.f) // 0812
+		discard;*/
+
+
+	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
+
+	//if (Out.vColor.a == 0.f) // 0812
+	//	discard;
+
+	/*if (Out.vColor.a == 1.f)
+		discard;
+	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+		discard;
+	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+		discard;*/
+
+	return Out;
+}
 //==============================SSAO======================================
 
 float3 randomNormal(float2 tex)
@@ -1115,4 +1219,30 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_ShadowBlurY();
 	}
+	pass CombineShadowBlur
+	{//16
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Combine_ShadowBlur();
+	}
+	pass RadialBlur
+	{//17
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_RadialBlur();
+	}
+
+
 }

@@ -112,7 +112,7 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 	}
 
 
-	if(m_isAir_Hekireki == false)
+	if (m_isAir_Hekireki == false)
 		Gravity(dTimeDelta);
 
 	//임시 코드
@@ -125,14 +125,21 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		else
 			m_bGround_Enemy = true;
 	}
+	if (pGameInstance->Get_DIKeyDown(DIK_DELETE))
+	{
+		if (m_bMotionBlur == true)
+			m_bMotionBlur = false;
+		else if (m_bMotionBlur == false)
+			m_bMotionBlur = true;
+	}
 	Safe_Release(pGameInstance);
-	
+
 
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
 
-	
+
 #endif
 }
 
@@ -180,7 +187,7 @@ HRESULT CPlayer_Zenitsu::Render()
 		m_pModelCom->Render(i);
 	}
 #pragma endregion
-	
+
 #ifdef _DEBUG
 	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
 	pNavi->Render();*/
@@ -280,7 +287,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
 				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
 			}
-			
+
 		}
 		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -302,7 +309,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+
 		}
 #pragma endregion
 		m_iEvent_Index++;
@@ -410,7 +417,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_pModelCom->Set_EarlyEnd(58, true);
 	}
-	
+
 
 
 	//공중 공격 콤보
@@ -531,19 +538,19 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange, 0.12f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange, 0.10f * m_fScaleChange);
 	//분기
-	
+
 	Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange, 0.07f * m_fScaleChange); // Normal
 	Ground_Animation_Play(9, 10);
 
 	//Down
-	if (ANIM_ATK_COMBO_DOWN == iCurAnimIndex )
+	if (ANIM_ATK_COMBO_DOWN == iCurAnimIndex)
 	{
 		if (m_isFirst_Combo_Down)
 		{
 			m_isFirst_Combo_Down = false;
 			Jumping(5.5f, 0.18f);
 		}
-		
+
 		m_dTime_Comboing_Down += dTimeDelta;
 
 		if (0.70f < m_dTime_Comboing_Down)
@@ -554,7 +561,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			Go_Straight_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 12.0f * m_fScaleChange);
 		else if (0.1f < m_dTime_Comboing_Down && m_dTime_Comboing_Down < 1.05f)
 			Go_Backward_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 12.0f * m_fScaleChange);
-		else if ( 0.0f < m_dTime_Comboing_Down && m_dTime_Comboing_Down < 0.05f)
+		else if (0.0f < m_dTime_Comboing_Down && m_dTime_Comboing_Down < 0.05f)
 			Go_Straight_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 12.0f * m_fScaleChange);
 	}
 
@@ -568,16 +575,16 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			m_isFirst_Combo_Upper = false;
 			Jumping(4.0f * m_fScaleChange, 0.3f * m_fScaleChange);
 
-			if( 0.5f < m_dTime_Comboing_Upper && m_dTime_Comboing_Upper < 0.505f)
+			if (0.5f < m_dTime_Comboing_Upper && m_dTime_Comboing_Upper < 0.505f)
 				Go_Straight_Constant(dTimeDelta, ANIM_ATK_COMBO_UP, 15.0f * m_fScaleChange);
 		}
-		
+
 		if (0.77f < m_dTime_Comboing_Upper)
 		{
 			JumpStop(0.08f);
 		}
 	}
-	
+
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_IDLE)
 	{
 		m_isComboing = false;
@@ -617,7 +624,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_isHekireki_After = true;
 
 		//히트상태는 이 딜레이 시간동안 유지된다.
-		if (m_dDelay_Hekireki_Hit > 0.23f) 
+		if (m_dDelay_Hekireki_Hit > 0.23f)
 		{
 			m_dDelay_Hekireki_Hit = 0.0;
 			m_isHekireki_Hit = false;
@@ -656,7 +663,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_Moveset.m_Down_Skill_Move = false;
 	}
 
-	
+
 	if (m_isHekireki)
 	{
 		if (m_isHekireki_Hit == false)
@@ -664,7 +671,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		if (0.35f < m_dTime_Hekireki && m_dTime_Hekireki < 0.42f)
 		{
-			if(m_isHekireki_Hit)
+			if (m_isHekireki_Hit)
 				m_pTransformCom->Go_Straight(dTimeDelta * 0.6f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			else
 				m_pTransformCom->Go_Straight(dTimeDelta * 20.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
@@ -674,7 +681,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_dTime_Hekireki = 0.0f;
 	}
-	
+
 
 
 	//스킬_2 : 가드키 + I키
@@ -700,7 +707,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 	}
 
 	//가드 도중
-	
+
 
 	//가드 내리기
 	if (m_Moveset.m_Up_Battle_Guard)
@@ -724,7 +731,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 		m_isMaintain_Guard = true;
 	}
 
-	
+
 	//푸시 ( O키 가드키 + 이동키)
 	if (m_Moveset.m_Down_Battle_Push)
 	{
@@ -737,7 +744,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 	{
 		m_isMaintain_Guard = true;
 	}
-	
+
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
@@ -756,9 +763,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 		m_Moveset.m_Down_Battle_Step = false;
 
 		m_pTransformCom->Set_Look(m_vLook);
-		if(m_isForward)
+		if (m_isForward)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_F);
-		else if(m_isBack)
+		else if (m_isBack)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_B);
 		else
 		{
@@ -774,7 +781,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
-					
+
 				}
 			}
 			else if (m_isRight)
@@ -789,7 +796,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
-					
+
 				}
 			}
 		}
@@ -834,9 +841,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 		m_dTime_Special_Ready = 0.0;
 	}
 	m_dTime_Special_Ready += dTimeDelta;
-	if(m_dTime_Special_Ready >1.5f)
+	if (m_dTime_Special_Ready > 1.5f)
 		Go_Straight_Deceleration(dTimeDelta, 130, 4.0f * m_fScaleChange, 0.15f * m_fScaleChange);
-	
+
 	//Go_Straight_Constant(dTimeDelta, 108, 2.7f);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 130 || m_pModelCom->Get_iCurrentAnimIndex() == 131)
 	{
@@ -856,8 +863,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 		m_isFirst_Special_Jump = false;
 		Jumping(10.65f, 0.10f);
 	}
-	
-	
+
+
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 124)
 	{
@@ -866,14 +873,14 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 125)
 	{
-		Go_Straight_Deceleration(dTimeDelta, 125, 6.0f * m_fScaleChange,  0.10f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 125, 6.0f * m_fScaleChange, 0.10f * m_fScaleChange);
 	}
 
-	if (m_pModelCom->Get_iCurrentAnimIndex() == 126 )
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 126)
 	{
 		Go_Backward_Constant(dTimeDelta, 26, 5.3f * m_fScaleChange);
 	}
-	
+
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
@@ -891,7 +898,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	}
 
 
-	
+
 }
 
 void CPlayer_Zenitsu::Moving_Restrict()
@@ -899,10 +906,10 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
 	//콤보공격시 무빙제한
-	if (ANIM_ATK_COMBO == iCurAnimIndex || 4 == iCurAnimIndex || 5 == iCurAnimIndex 
-		|| ANIM_ATK_COMBO_DOWN == iCurAnimIndex 
-		|| 7 == iCurAnimIndex 
-		|| ANIM_ATK_COMBO_UP == iCurAnimIndex || 9 == iCurAnimIndex || 10 == iCurAnimIndex || 11 == iCurAnimIndex 
+	if (ANIM_ATK_COMBO == iCurAnimIndex || 4 == iCurAnimIndex || 5 == iCurAnimIndex
+		|| ANIM_ATK_COMBO_DOWN == iCurAnimIndex
+		|| 7 == iCurAnimIndex
+		|| ANIM_ATK_COMBO_UP == iCurAnimIndex || 9 == iCurAnimIndex || 10 == iCurAnimIndex || 11 == iCurAnimIndex
 		|| 12 == iCurAnimIndex || 13 == iCurAnimIndex || 14 == iCurAnimIndex || 15 == iCurAnimIndex || 16 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
@@ -924,7 +931,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		}
 	}
 	//점프 콤보공격시 제한
-	else if (ANIM_ATK_AIRCOMBO == iCurAnimIndex  || 18 == iCurAnimIndex)
+	else if (ANIM_ATK_AIRCOMBO == iCurAnimIndex || 18 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_Jump = true;
@@ -934,7 +941,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_pSwordHome->Set_SwordIn(false);
 	}
 	//차지공격 시 무빙제한
-	else if (ANIM_ATK_CHARGE == iCurAnimIndex  || 20 == iCurAnimIndex || 21 == iCurAnimIndex )
+	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 20 == iCurAnimIndex || 21 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_Charge = true;
@@ -946,7 +953,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		}
 	}
 	//스킬공격 시 무빙제한
-	else if (ANIM_ATK_SKILL_GUARD == iCurAnimIndex 
+	else if (ANIM_ATK_SKILL_GUARD == iCurAnimIndex
 		|| ANIM_ATK_SKILL_HEKIREKI == iCurAnimIndex || ANIM_ATK_SKILL_HEKIREKI_END == iCurAnimIndex
 		|| ANIM_ATK_SKILL_HEKIREKI_AIR == iCurAnimIndex || ANIM_ATK_SKILL_HEKIREKI_AIR_END == iCurAnimIndex)
 	{
@@ -958,7 +965,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 			m_pSword->Set_SwordIn(false);
 			m_pSwordHome->Set_SwordIn(false);
 		}
-		
+
 		if (ANIM_ATK_SKILL_HEKIREKI == iCurAnimIndex || ANIM_ATK_SKILL_HEKIREKI_END == iCurAnimIndex
 			|| ANIM_ATK_SKILL_HEKIREKI_AIR == iCurAnimIndex || ANIM_ATK_SKILL_HEKIREKI_AIR_END == iCurAnimIndex)
 		{
@@ -967,9 +974,9 @@ void CPlayer_Zenitsu::Moving_Restrict()
 
 			m_isHekireki = true;
 		}
-	} 
+	}
 	//잡기 공격 시 제한
-	else if (ANIM_ATK_THROW == iCurAnimIndex )
+	else if (ANIM_ATK_THROW == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
@@ -988,7 +995,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		}
 	}
 	//Awaken
-	else if (ANIM_BATTLE_AWAKEN == iCurAnimIndex || ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == iCurAnimIndex )
+	else if (ANIM_BATTLE_AWAKEN == iCurAnimIndex || ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
@@ -998,7 +1005,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Dash = true;
 	}
 	//Special
-	else if (ANIM_ATK_SPECIAL_CUTSCENE == iCurAnimIndex || 118 == iCurAnimIndex || 119 == iCurAnimIndex || 120 == iCurAnimIndex 
+	else if (ANIM_ATK_SPECIAL_CUTSCENE == iCurAnimIndex || 118 == iCurAnimIndex || 119 == iCurAnimIndex || 120 == iCurAnimIndex
 		|| 121 == iCurAnimIndex || 122 == iCurAnimIndex || 123 == iCurAnimIndex || 124 == iCurAnimIndex || 125 == iCurAnimIndex || 126 == iCurAnimIndex
 		|| ANIM_ATK_SPECIAL_READY == iCurAnimIndex || 128 == iCurAnimIndex || 129 == iCurAnimIndex || 130 == iCurAnimIndex || 131 == iCurAnimIndex)
 	{
@@ -1017,14 +1024,14 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 	}
 	//대시 시 제한
-	else if (ANIM_BATTLE_DASH == iCurAnimIndex ||  46 == iCurAnimIndex || 47 == iCurAnimIndex)
+	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 46 == iCurAnimIndex || 47 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 		m_Moveset.m_isRestrict_Dash = true;
 	}
 	//점프 시 무빙제한
-	else if (ANIM_BATTLE_JUMP == iCurAnimIndex || 57 == iCurAnimIndex || 58 == iCurAnimIndex )
+	else if (ANIM_BATTLE_JUMP == iCurAnimIndex || 57 == iCurAnimIndex || 58 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_Jump = true;
@@ -1043,11 +1050,11 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Step = true;
 	}
 	//더블스텝 시 제한
-	else if ( 71 == iCurAnimIndex || 73 == iCurAnimIndex)
+	else if (71 == iCurAnimIndex || 73 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
-		
+
 		m_Moveset.m_isRestrict_DoubleStep = true;
 	}
 	//제한 해제d
@@ -1069,7 +1076,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 
 		m_isHekireki = false;
 		m_isCan_Air_Hekireki = false;
-		
+
 		m_pSword->Set_SwordIn(true);
 		m_pSwordHome->Set_SwordIn(true);
 	}
@@ -1170,6 +1177,9 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bMotionBlur", &m_bMotionBlur, sizeof(_bool))))
 		return E_FAIL;
 
 	// 슈퍼아머 상태 넣어주셈

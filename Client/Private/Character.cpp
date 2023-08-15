@@ -557,6 +557,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_ConnectSmall())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(true);
+			}
 			else if (pHitColl->Get_Collider()->Get_Hit_Big())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(true);
@@ -565,9 +569,17 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Blow())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(true);
+			}
 			else if (pHitColl->Get_Collider()->Get_Hit_Spin())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Upper())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(true);
 			}
 
 			pHitColl->Add_AtkObejct(this);

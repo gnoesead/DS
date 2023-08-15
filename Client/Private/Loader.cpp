@@ -11,6 +11,7 @@
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
 #include "Monster_Spider.h"
+#include "Monster_Zako.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -72,8 +73,6 @@ unsigned int APIENTRY Loading_Main(void* pArg)
 	EnterCriticalSection(pLoader->Get_CS());
 
 	HRESULT	hr = 0;
-
-	hr = pLoader->LoadingForAllStage();
 
 	switch (pLoader->Get_LevelID())
 	{
@@ -183,48 +182,6 @@ HRESULT CLoader::Initialize(LEVELID eLevelID)
 
 HRESULT CLoader::LoadingForAllStage()
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_matrix PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	if (false == pGameInstance->Get_IsLoadForAll())
-	{
-		/* Prototype_Component_Shader_VtxTerrainModel */
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxTerrainModel"),
-			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTerrainModel.hlsl"), VTXMODEL_DECL::Elements, VTXMODEL_DECL::iNumElements))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxTerrainModel");
-			return E_FAIL;
-		}
-		        
-		/* Prototype_Component_Shader_VtxModelInstance */
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModelInstance"),
-			CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModelInstance.hlsl"), VTXMODELINSTANCE_DECL::Elements, VTXMODELINSTANCE_DECL::iNumElements))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxModelInstance");
-			return E_FAIL;
-		}
-
-		/*==========================================================================*/
-
-		/* For.Prototype_Component_Model_Sky_Train*/
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
-			return E_FAIL;
-
-		Load_MapObjectModel_AllStage(pGameInstance);
-		
-		LoadingForEffect();
-		
-	}
-	else
-	{
-
-	}
-
-	pGameInstance->Set_IsLoadForAll();
-
-	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -245,16 +202,39 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Model..."));
 #pragma region Model
+	_matrix PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+
+	/* For.Prototype_Component_Model_Sky_Train*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
+		return E_FAIL;
+
+	Load_MapObjectModel_AllStage(pGameInstance);
 
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
+	/* Prototype_Component_Shader_VtxTerrainModel */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxTerrainModel"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTerrainModel.hlsl"), VTXMODEL_DECL::Elements, VTXMODEL_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxTerrainModel");
+		return E_FAIL;
+	}
 
+	/* Prototype_Component_Shader_VtxModelInstance */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModelInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModelInstance.hlsl"), VTXMODELINSTANCE_DECL::Elements, VTXMODELINSTANCE_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxModelInstance");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
 #pragma region Etc
+	LoadingForEffect(pGameInstance);
 
 #pragma endregion
 
@@ -288,7 +268,7 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
 	m_isFinished = true;
-	
+
 	return S_OK;
 }
 
@@ -433,6 +413,15 @@ HRESULT CLoader::LoadingForLobby()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/NPC_Female/NPC_Female.bin", PivotMatrix))))
 	{
 		MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Model_Monster_Zako_0 */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Zako_0"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zako_0/Zako_0.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Monster_Zako_0");
 		return E_FAIL;
 	}
 	
@@ -595,6 +584,14 @@ HRESULT CLoader::LoadingForLobby()
 		CMonster_Spider::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Spider");
+		return E_FAIL;
+	}
+	
+	/* Prototype_GameObject_Monster_Zako_0 */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Zako_0"),
+		CMonster_Zako::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Zako_0");
 		return E_FAIL;
 	}
 
@@ -3096,13 +3093,10 @@ HRESULT CLoader::Load_MapObjectModel_FinalBoss()
 	return S_OK;
 }
 
-HRESULT CLoader::LoadingForEffect()
+HRESULT CLoader::LoadingForEffect(CGameInstance* pGameInstance)
 {
 	SetWindowText(g_hWnd, TEXT("LoadingForEffect"));
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
+	
 #pragma region Buffer
 	/* Prototype_Component_VIBuffer_Point_Effect */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Point_Effect"),
@@ -3147,28 +3141,6 @@ HRESULT CLoader::LoadingForEffect()
 	}
 #pragma endregion
 
-#pragma region Model
-	_matrix		PivotMatrix = XMMatrixIdentity();
-
-	/* For.Prototype_Component_Model_Slash03 */
-	PivotMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Slash03"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Slash03.bin", PivotMatrix))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region Texture
-	/* For.Prototype_Component_Texture_Corvus_S_01 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Corvus_S_01"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Corvus_S_01.dds"), 1))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Texture_T_e_cmn_Slash005 */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Slash005"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_e_cmn_Slash005.png"), 1))))
-		return E_FAIL;
-#pragma endregion
-
 #pragma region GAMEOBJECTS
 	/* Prototype_GameObject_ParticleSystem */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ParticleSystem"),
@@ -3202,8 +3174,6 @@ HRESULT CLoader::LoadingForEffect()
 		return E_FAIL;
 	}
 #pragma endregion
-
-	Safe_Release(pGameInstance);
 
 	SetWindowText(g_hWnd, TEXT("Loading Finished!!!"));
 	m_isFinished = true;

@@ -444,6 +444,7 @@ Client/Bin/*
 Client/Bin/Resources/Models/Character/Akaza/Akaza.bin
 Client/Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin
 Client/Bin/Resources/Models/Character/Tanjiro/Tanjiro.bin
+Client/Bin/Resources/Models/Character/Kyogai/Kyogai.bin
 !Engine/Bin
 Engine/Bin/*
 !Engine/Bin/ShaderFiles

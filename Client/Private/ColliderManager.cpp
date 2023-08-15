@@ -93,8 +93,9 @@ HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTime
 					if (fRad > fDis)
 					{
 						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
-						_float fMoveDistance = (fRad - fDis - 0.02f) / 2.f;
+						//_float fMoveDistance = (fRad - fDis - 0.02f) / 2.0;
 						//_float fMoveDistance = fRad - fDis - 0.02f;
+						_float fMoveDistance = ((fRad - fDis) * 0.1f) / 2.0f;
 						_vector vMove = vMoveDir * fMoveDistance;
 
 						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
@@ -283,8 +284,9 @@ HRESULT CColliderManager::Check_MonsterToMonster(_uint iLevelIndex, _double dTim
 							if (fRad > fDis)
 							{
 								_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
-								_float fMoveDistance = (fRad - fDis - 0.05f) / 2.0f;
+								//_float fMoveDistance = (fRad - fDis - 0.05f) / 2.0f;
 								//_float fMoveDistance = fRad - fDis - 0.1f;
+								_float fMoveDistance = ((fRad - fDis) * 0.95f) / 2.0f;
 								_vector vMove = vMoveDir * fMoveDistance;
 
 								_vector vPlayerPos = pSourTransform->Get_State(CTransform::STATE_POSITION);
@@ -336,22 +338,8 @@ HRESULT CColliderManager::Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dT
 
 						if (true == pPlayerCollider->Get_Coll())
 						{
-							if (pAtkCollider->Get_Hit_Small())
-							{
-								pPlayerCollider->Set_Hit_Small(true);
-							}
-							else if (pAtkCollider->Get_Hit_Big())
-							{
-								pPlayerCollider->Set_Hit_Big(true);
-							}
-							else if (pAtkCollider->Get_Hit_Blow())
-							{
-								pPlayerCollider->Set_Hit_Blow(true);
-							}
-							else if (pAtkCollider->Get_Hit_Spin())
-							{
-								pPlayerCollider->Set_Hit_Spin(true);
-							}
+							dynamic_cast<CCharacter*>(pPlayers)->Add_HitCollider(pMonsterAtkColls);
+
 
 							pPlayerCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
 							pPlayerCollider->Set_fDamage(pAtkCollider->Get_fDamage());

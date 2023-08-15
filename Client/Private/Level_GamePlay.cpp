@@ -19,9 +19,6 @@
 #include "Story_Board.h"
 
 #include "Monster_Spider.h"
-
-#include "EffectPlayer.h"
-#include "ParticleSystem.h"
 #include "Story_Manager.h"
 
 #include "MonsterManager.h"
@@ -86,12 +83,6 @@ HRESULT CLevel_GamePlay::Initialize()
 		MSG_BOX("Failed to Ready_Boss_UI : CLevel_GamePlay");
 		return E_FAIL;
 	}*/
-
-	if (FAILED(Ready_Layer_Effect()))
-	{
-		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_GamePlay");
-		return E_FAIL;
-	}
 
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
@@ -416,9 +407,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 
 
     CharacterDesc.WorldInfo.vPosition = _float4(130.f, 0.f, 140.f, 1.f);
+	
 	CharacterDesc.Land_Y = 0.f;
-
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
+
 
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
@@ -445,14 +437,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	CPlayer::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 	
-	for (_int i = 0; i < 10; i++)
+	/*
+	for (_int i = 0; i < 3; i++)
 	{
-		CPlayer::CHARACTERDESC CharacterDesc;
-		ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
-
-		_float fX = (_float)((rand() % 20) + 130);
-		_float fZ = (_float)((rand() & 20) + 130);
+		_float fX = (rand() % 20) + 130;
+		_float fZ = (rand() & 20) + 130;
 
 		//140
 		CharacterDesc.WorldInfo.vPosition = _float4(fX, 0.f, fZ, 1.f);
@@ -463,8 +455,17 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 			MSG_BOX("Failed to Add_GameObject : Monster_Spider");
 			return E_FAIL;
 		}
+	}*/
+	
+	
+	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 140.f, 1.f);
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
 	}
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1092,18 +1093,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Effect()
-{
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Test_Two.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : CLevel_GamePlay");
-		return E_FAIL;
-	}
-
-	return 	S_OK;
-}
-
 HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -1189,364 +1178,6 @@ HRESULT CLevel_GamePlay::Load_MapObject_Info(const _tchar* pPath, const _tchar* 
     return S_OK;
 }
 
-HRESULT CLevel_GamePlay::LoadEffects(const _tchar* pPath)
-{
-	char szFilePathChar[MAX_PATH] = "";
-	WideCharToMultiByte(CP_ACP, 0, pPath, MAX_PATH, szFilePathChar, MAX_PATH, nullptr, nullptr);
-
-	std::ifstream inputFile(szFilePathChar, std::ios::binary);
-
-	if (!inputFile)
-	{
-		MSG_BOX("파일을 열 수 없습니다.");
-		return E_FAIL;
-	}
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	_ulong dwStrLen;
-	int iEnum = 0;
-	_float3 vFloat3 = { 0.f, 0.f, 0.f };
-
-	_uint iNumParticleSystem = 0;
-
-	inputFile.read(reinterpret_cast<char*>(&iNumParticleSystem), sizeof(_uint));
-
-	CEffectPlayer::Get_Instance()->Set_NumParticleSystem(iNumParticleSystem);
-
-	for (_uint i = 0; i < iNumParticleSystem; ++i)
-	{
-		inputFile.read(reinterpret_cast<char*>(&dwStrLen), sizeof(unsigned long));
-
-		char* pTagName = new char[dwStrLen];
-
-		inputFile.read(pTagName, dwStrLen);
-
-		CEffectPlayer::Get_Instance()->Add_EffectTag(pTagName);
-
-		CParticleSystem* pParentParticleSystem = nullptr;
-
-		_uint iLevelIndex = LEVEL_STATIC;
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
-			MSG_BOX("Failed to Add ParticleSystem");
-		size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ParticleSystem"));
-		pParentParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ParticleSystem"), (_uint)iSize - 1));
-
-		CEffectPlayer::Get_Instance()->Add_Effect(pTagName, pParentParticleSystem);
-		Safe_AddRef(pParentParticleSystem);
-
-		int iNumEffects = 0;
-
-		inputFile.read(reinterpret_cast<char*>(&iNumEffects), sizeof(int));
-
-		pParentParticleSystem->Set_NumEffects(iNumEffects);
-
-		for (int j = 0; j < iNumEffects; ++j)
-		{
-			CParticleSystem* pParticleSystem = nullptr;
-			_uint iLevelIndex = LEVEL_STATIC;
-			if (FAILED(pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex)))
-				MSG_BOX("Failed to Add ParticleSystem");
-			size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("ChildParticleSystem"));
-			pParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("ChildParticleSystem"), (_uint)iSize - 1));
-
-			pParentParticleSystem->Add_Parts(pParticleSystem);
-			Safe_AddRef(pParticleSystem);
-
-			// ParticleSystem - Transform
-			inputFile.read(reinterpret_cast<char*>(&vFloat3), sizeof(_float3));
-			pParticleSystem->Set_Position(vFloat3);
-			inputFile.read(reinterpret_cast<char*>(&vFloat3), sizeof(_float3));
-			pParticleSystem->Set_Rotation(vFloat3);
-			inputFile.read(reinterpret_cast<char*>(&vFloat3), sizeof(_float3));
-			pParticleSystem->Set_Scale(vFloat3);
-
-			inputFile.read(reinterpret_cast<char*>(&iEnum), sizeof(int));
-			pParticleSystem->Create_Effect(iEnum);
-
-			//Effect
-			CEffect::EFFECTDESC EffectDesc;
-			ZeroMemory(&EffectDesc, sizeof EffectDesc);
-
-			// ParticleSystem
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartLifeTimeOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartLifeTimeMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartLifeTimeMax), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartSpeedOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartSpeedMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartSpeedMax), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartSizeOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.is3DStartSize), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartSizeMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartSizeMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartRotationOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.is3DStartRotation), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartRotationMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartRotationMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartColorOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vColor), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSimulationSpace), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSimulationSpeed), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eScalingMode), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iMaxParticles), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStopAction), sizeof(int));
-
-			// Emission
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isEmission), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverTimeOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMax), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverDistanceOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMax), sizeof(float));
-
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumBursts), sizeof(int));
-
-			for (int k = 0; k < EffectDesc.iNumBursts; ++k)
-			{
-				CEffect::BURSTDESC BurstDesc;
-				ZeroMemory(&BurstDesc, sizeof BurstDesc);
-
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.fTime), sizeof(float));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.eCountOption), sizeof(int));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.iCountMin), sizeof(int));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.iCountMax), sizeof(int));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.eCycle), sizeof(int));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.iNumCycles), sizeof(int));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.fInterval), sizeof(float));
-				inputFile.read(reinterpret_cast<char*>(&BurstDesc.fProbability), sizeof(float));
-
-				pParticleSystem->Get_Effect()->Add_BurstDesc(BurstDesc);
-			}
-
-			// Shape
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isShape), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eShapeType), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeAngle), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeRadius), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeRadiusTickness), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fArc), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eArcMode), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fArcSpread), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eEmitFromOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fArcLength), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vShapePosition), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vShapeRotation), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vShapeScale), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAlignToDirection), sizeof(bool));
-
-			// Velocity over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isVelocity), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocityLinearOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityLinearMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityLinearMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpace), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocityOrbitalOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityOrbitalMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityOrbitalMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocityOffsetOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityOffsetMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vVelocityOffsetMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocityRadialOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRadialMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRadialMax), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocitySpeedModifierOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMin), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMax), sizeof(float));
-
-			// Limit Velocity over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesLimitVelocity), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eLimitVelocitySpeedOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vLimitVelocitySpeedMin), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vLimitVelocitySpeedMax), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eLimitVelocitySpace), sizeof(int));
-
-			// Inherit Velocity
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isInheritVelocity), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
-
-			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
-
-			// Size over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSizeOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesSzOverLifeTime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSizeOverLifetimeOption), sizeof(int));
-
-			for (int k = 0; k < 3; ++k)
-			{
-				inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumSizes[k]), sizeof(int));
-
-				for (int l = 0; l < EffectDesc.iNumSizes[k]; ++l)
-				{
-					CEffect::LIFETIMEVALUE LifetimeValue;
-					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
-					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
-
-					pParticleSystem->Get_Effect()->Add_SizeOverLifeTime(k, LifetimeValue);
-				}
-			}
-
-			// Rotation over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRotationOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesRotOverLifeTime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRotOverLifetimeOption), sizeof(int));
-
-			for (_uint k = 0; k < 3; ++k)
-			{
-				inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumRotations[k]), sizeof(int));
-
-				for (int l = 0; l < EffectDesc.iNumRotations[k]; ++l)
-				{
-					CEffect::LIFETIMEVALUE LifetimeValue;
-					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
-					inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
-
-					pParticleSystem->Get_Effect()->Add_SizeOverLifeTime(l, LifetimeValue);
-				}
-			}
-
-			// Rotation by Speed
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRotationBySpeed), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesRotBySpeed), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eAngularVelocityOption), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vAngularVelocity), sizeof(_float3));
-
-			// Collision
-			// SubEmitters
-			// Texture Sheet Animation
-			// Trail
-			// Renderer
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRenderer), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRenderMode), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eMaterialType), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSortMode), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSortingFudge), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMinParticleSize), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
-
-			// Texture
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vFlip), sizeof(_float2));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCutOff), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCutOffSoftness), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vBurnColor), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fBurnSize), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientTilling), sizeof(_float2));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGradientOffset), sizeof(_float2));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDistortionStrength), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDistortionSpeed), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.hasSecondTexture), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vNoisePanningSpeed), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vSecondaryNoisePanningSpeed), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPanningSpeed), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vNormalPanningSpeed), sizeof(_float4));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPolarCoordinate), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCircleMaskOuterRadius), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCircleMaskInnerRadius), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fCircleMaskSmoothness), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRectangleMaskOuterRadius), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRectangleMaskInnerRadius), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRectangleMaskSmoothness), sizeof(float));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eCullMode), sizeof(int));
-
-			//Material
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eMaterialRenderingMode), sizeof(int));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotScale), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotRot), sizeof(_float3));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotPos), sizeof(_float3));
-
-			for (_uint k = 0; k < CEffect::TEX_END; ++k)
-			{
-				inputFile.read(reinterpret_cast<char*>(&EffectDesc.eTextureShaderOption[k]), sizeof(int));
-			}
-
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTimeAcc), sizeof(float));
-
-			pParticleSystem->Set_EffectDesc(&EffectDesc);
-
-			// Keys
-			inputFile.read(reinterpret_cast<char*>(&dwStrLen), sizeof(unsigned long));
-
-			char	szTag[MAX_PATH];
-			inputFile.read(szTag, dwStrLen);
-
-			if (strlen(szTag) > 1)
-			{
-				_tchar* pTagName = new _tchar[dwStrLen];
-				MultiByteToWideChar(CP_ACP, 0, szTag, (int)dwStrLen, pTagName, MAX_PATH);
-
-				pParticleSystem->Add_Component_Model(LEVEL_STATIC, pTagName);
-				CEffectPlayer::Get_Instance()->Add_ModelTag(pTagName);
-			}
-
-			for (_uint k = 0; k < CEffect::TEX_END; ++k)
-			{
-				inputFile.read(reinterpret_cast<char*>(&dwStrLen), sizeof(unsigned long));
-				inputFile.read(szTag, dwStrLen);
-
-				if (strlen(szTag) > 1)
-				{
-					if (dwStrLen <= 1)
-						continue;
-
-					_tchar* pTagName = new _tchar[dwStrLen];
-					MultiByteToWideChar(CP_ACP, 0, szTag, (int)dwStrLen, pTagName, MAX_PATH);
-
-					switch (k)
-					{
-					case 0:		// TEX_DIFFUSE
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_DIFFUSE);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_DIFFUSE, pTagName);
-						break;
-					case 1:		//TEX_MASK
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_MASK);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_MASK, pTagName);
-						break;
-					case 2:		//TEX_RAMP
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_RAMP);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_RAMP, pTagName);
-						break;
-					case 3:		//TEX_NOISE
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NOISE);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NOISE, pTagName);
-						break;
-					case 4:		//TEX_NOISE2
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NOISE2);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NOISE2, pTagName);
-						break;
-					case 5:		//TEX_DISTORTION
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_DISTORTION);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_DISTORTION, pTagName);
-						break;
-					case 6:		//TEX_NORMAL
-						pParticleSystem->Add_Component_Texture(LEVEL_STATIC, pTagName, CEffect::TEX_NORMAL);
-						CEffectPlayer::Get_Instance()->Add_TextureTag(CEffect::TEX_NORMAL, pTagName);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	Safe_Release(pGameInstance);
-
-	return S_OK;
-}
-
 CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CLevel_GamePlay* pInstance = new CLevel_GamePlay(pDevice, pContext);
@@ -1562,5 +1193,5 @@ CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 
 void CLevel_GamePlay::Free()
 {
-    __super::Free();
+	__super::Free();
 }
