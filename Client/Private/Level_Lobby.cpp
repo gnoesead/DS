@@ -77,13 +77,17 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 
 			HRESULT hr = 0;
 
+
 			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_GAMEPLAY))
 			{
 				pGameInstance->Clear_Light();
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY), false, false);
 			}
 			else
+			{
+				pGameInstance->Clear_Light();
 				hr = pGameInstance->Swap_Level(LEVEL_GAMEPLAY);
+			}
 
 			if (FAILED(hr))
 			{
@@ -109,7 +113,10 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_VILLAGE), false, false);
 			}
 			else
+			{
+				pGameInstance->Clear_Light();
 				hr = pGameInstance->Swap_Level(LEVEL_VILLAGE);
+			}
 
 			if (FAILED(hr)) {
 				Safe_Release(pGameInstance);
@@ -132,7 +139,10 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
 			}
 			else
+			{
+				pGameInstance->Clear_Light();
 				hr = pGameInstance->Swap_Level(LEVEL_HOUSE);
+			}
 
 			if (FAILED(hr)) {
 				Safe_Release(pGameInstance);
@@ -155,7 +165,10 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
 			}
 			else
+			{
+				pGameInstance->Clear_Light();
 				hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
+			}
 
 			if (FAILED(hr)) {
 				Safe_Release(pGameInstance);
@@ -180,7 +193,10 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
 			}
 			else
+			{
+				pGameInstance->Clear_Light();
 				hr = pGameInstance->Swap_Level(LEVEL_FINALBOSS);
+			}
 
 			if (FAILED(hr)) {
 				Safe_Release(pGameInstance);

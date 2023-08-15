@@ -2839,11 +2839,6 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		return E_FAIL;
 
 	// ===============RoomMap BossRoom======================
-	/* For.Prototype_Component_Model_BossRoomBase*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BossRoomBase"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BossRoomBase.bin", PivotMatrix))))
-		return E_FAIL;
-
 	/* For.Prototype_Component_Model_BossRoom*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BossRoom"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BossRoom.bin", PivotMatrix))))
@@ -2877,6 +2872,53 @@ HRESULT CLoader::Load_MapObjectModel_House()
 	/* For.Prototype_Component_Model_AllWoodWall*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_AllWoodWall"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/AllWoodWall.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BattleRoomBase*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomBase"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomBase.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Veranda_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Veranda_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Veranda_01a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Veranda_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Veranda_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Veranda_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_RoomLight_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_RoomLight_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/RoomLight_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BattleRoomCorridor_01*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_01.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BattleRoomCorridor_02*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_02.bin", PivotMatrix))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_BattleRoomCorridor_03*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_03"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_03.bin", PivotMatrix))))
+		return E_FAIL;
+
+
+	/* For.Prototype_Component_Model_BattleRoomCorridor_04*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_04"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_04.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BattleRoomCorridor_05*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_05"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_05.bin", PivotMatrix))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
