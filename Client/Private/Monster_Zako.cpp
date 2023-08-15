@@ -783,6 +783,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
+	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
+
 #pragma region Hit_Small
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
@@ -790,20 +792,29 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 1.0;
 
-		if (m_iSmallHit_Index == 0)
+		if (m_isJumpOn)
 		{
-			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
-			m_iSmallHit_Index++;
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			Jumping(0.2f, 0.030f);
+			m_dDelay_ComboChain = 6.0;
 		}
-		else if (m_iSmallHit_Index == 1)
+		else
 		{
-			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
-			m_iSmallHit_Index++;
-		}
-		else if (m_iSmallHit_Index == 2)
-		{
-			m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
-			m_iSmallHit_Index = 0;
+			if (m_iSmallHit_Index == 0)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 1)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 2)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
+				m_iSmallHit_Index = 0;
+			}
 		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.0f, 0.04f, AtkDir);
@@ -833,13 +844,56 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 6.0;
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.0f, 0.015f);
+		Jumping(2.0f, 0.03f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, 111, 0.4f, 0.01f, AtkDir);
-	Ground_Animation_Play(111, 112);
 
+		
+	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+	if (m_isBounding)
+	{
+		Ground_Animation_Play(111, ANIM_DMG_BOUND);
+		
+	}
+	else
+		Ground_Animation_Play(111, 112);
 #pragma endregion
+
+
+#pragma region Hit_Bound
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
+
+		m_dDelay_ComboChain = 15.0;
+		m_isBounding = true;
+
+		if (m_isJumpOn)
+		{
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			Set_FallingStatus(3.0f, 0.0f);
+		}
+		else
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
+		}
+	}
+	//Ground_Animation_Play(96, 97);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_BOUND && m_isBounding)
+	{
+		if (m_isFirst_Anim)
+		{
+			m_isFirst_Anim = false;
+			m_isBounding = false;
+
+			Jumping(1.0f, 0.04f);
+		}
+	}
+#pragma endregion
+
 
 
 #pragma region Hit_Blow
@@ -867,6 +921,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Move_1 = true;
 		m_isCoolTime_On = true;
 
+		m_isFirst_Anim = true;
+
 		m_eCurState = STATE_IDLE;
 		
 		_int i = rand() % 3;
@@ -885,6 +941,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Move_0 = true;
 		m_isFirst_Move_1 = true;
 		m_isCoolTime_On = true;
+
+		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_DOWN;
 
@@ -975,8 +1033,6 @@ HRESULT CMonster_Zako::Add_Components()
 		return E_FAIL;
 	}
 
-
-
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f , 1.0f , 1.0f );
 	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
@@ -988,6 +1044,15 @@ HRESULT CMonster_Zako::Add_Components()
 		return E_FAIL;
 	}
 
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+
+	/* for.Com_Navigation_Acaza*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
+		TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

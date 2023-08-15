@@ -325,7 +325,7 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir));
+		m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -572,6 +572,10 @@ void CCharacter::Check_HitType()
 			else if (pHitColl->Get_Collider()->Get_Hit_Upper())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Bound())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(true);
 			}
 
 			pHitColl->Add_AtkObejct(this);

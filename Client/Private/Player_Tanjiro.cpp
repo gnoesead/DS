@@ -112,18 +112,24 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
-	Gravity(dTimeDelta);
+	if(m_isAirDashing == false)
+		Gravity(dTimeDelta);
 
+
+	if (m_isCan_AirDash)
+	{
+		m_dDelay_Can_AirDash += dTimeDelta;
+		if (m_dDelay_Can_AirDash > 3.0f)
+		{
+			m_dDelay_Can_AirDash = 0.0;
+			m_isCan_AirDash = false;
+		}
+	}
 
 	if (GetAsyncKeyState('B'))
 	{
 		m_pModelCom->Set_Animation(0);
 	}
-	
-#ifdef _DEBUG
-	//if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
-		//return;
-#endif
 }
 
 HRESULT CPlayer_Tanjiro::Render()
@@ -170,11 +176,6 @@ HRESULT CPlayer_Tanjiro::Render()
 		m_pModelCom->Render(i);
 	}
 #pragma endregion
-
-#ifdef _DEBUG
-	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();*/
-#endif
 
 	return S_OK;
 }
@@ -306,6 +307,26 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			
+		}
+		
+
+		if (ANIM_ATK_AIRCOMBO == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_air
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+		}
+		if (30 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+			}
 		}
 #pragma endregion
 
@@ -525,11 +546,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 				else if (m_Moveset.m_Down_Battle_Combo_Up)
 				{
 					m_pModelCom->Set_Combo_Another(26);
+
+					m_isCan_AirDash = true;
 				}
 			}
 		}
-
-	
 	}
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.3f * m_fScaleChange);
@@ -680,10 +701,38 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 		if (Get_LockOn_MonPos())
 			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
-		m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+		
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (m_LockOnPos.y > PlayerPos.y + 0.1f && m_isCan_AirDash)
+		{
+			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash = 0.0;
+			m_isAirDashing = true;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP); // 공중콤보용 대시
+			Jumping(1.0f, 0.055f);
+		}
+		else
+			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
 	Go_Straight_Constant(dTimeDelta, 80, 3.0f * m_fScaleChange);
+
+	if (m_isAirDashing)
+	{
+		Get_LockOn_MonPos();
+		if (Get_Distance_To_LockOnPos() > 0.1f)
+		{
+			m_pTransformCom->Go_Dir(dTimeDelta * 4.0f, Get_Dir_To_LockOnPos());
+		}
+		else
+		{
+			m_isAirDashing = false;
+		}
+	}
+	Ground_Animation_Play(85, 86);
+
+
+	//공중콤보영 대시
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
 	{

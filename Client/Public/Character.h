@@ -126,7 +126,11 @@ protected:
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	
+	//First
+	_bool	m_isFirst_Anim = { true };
+
+	//Hit°ü·Ã
+	_bool	m_isBounding = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };

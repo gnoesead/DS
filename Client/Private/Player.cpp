@@ -73,6 +73,10 @@ void CPlayer::LateTick(_double dTimeDelta)
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 	
+#ifdef _DEBUG
+	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
+		return;
+#endif
 }
 
 HRESULT CPlayer::Render()
@@ -187,6 +191,17 @@ _float CPlayer::Get_Distance_To_LockOnPos()
 	_float fDistance = Convert::GetLength(vMonsterPos - vPlayerPos);
 
 	return fDistance;
+}
+
+_vector CPlayer::Get_Dir_To_LockOnPos()
+{
+	Get_LockOn_MonPos();
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = XMLoadFloat4(&m_LockOnPos);
+	_vector vDir = XMVector3Normalize(vMonsterPos - vPlayerPos);
+
+	return vDir;
 }
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)

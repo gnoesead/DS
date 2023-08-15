@@ -40,6 +40,7 @@ public:
 	_bool	Get_Hit_Blow() { return m_isHit_Blow; }
 	_bool	Get_Hit_Spin() { return m_isHit_Spin; }
 	_bool	Get_Hit_Upper() { return m_isHit_Upper; }
+	_bool	Get_Hit_Bound() { return m_isHit_Bound; }
 
 	_float4		Get_AtkDir() { return m_AtkDir; }
 	_float	Get_fDamage() { return m_fDamage; }
@@ -58,6 +59,7 @@ public:
 	void	Set_Hit_Blow(_bool	Hit) { m_isHit_Blow = Hit; }
 	void	Set_Hit_Spin(_bool Hit) { m_isHit_Spin = Hit; }
 	void	Set_Hit_Upper(_bool Hit) { m_isHit_Upper = Hit; }
+	void	Set_Hit_Bound(_bool Hit) { m_isHit_Bound = Hit; }
 
 	void	Set_AtkDir(_float4 Dir) { m_AtkDir = Dir; }
 	void	Set_fDamage(_float fDmg) { m_fDamage = fDmg; }
@@ -102,6 +104,7 @@ private:
 	_bool		m_isHit_Blow = { false };
 	_bool		m_isHit_Spin = { false };
 	_bool		m_isHit_Upper = { false };
+	_bool		m_isHit_Bound = { false };
 
 	_bool		m_isCanHit = { true };
 
