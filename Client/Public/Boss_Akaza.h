@@ -273,13 +273,15 @@ private: // _bool
 	_bool	m_bAwake = { false };
 	_bool	m_bFirstAwake = { false };
 	_bool	m_bSecondAwake = { false };
+	
+	
 	//_bool	m_bNextPhase = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dAwakeTime = { 0.0 };
-
 	_double m_dTriggerTime = { 0.0 };
+	
 
 private:
 	_uint	m_iRandomDirNum = { 0 };

@@ -23,9 +23,15 @@ public:
 	_bool	Get_Dead() const {	//삭제처리용
 		return m_isDead;
 	}
+	_bool	Get_Collect() const {	//오브젝트 풀용
+		return m_isCollect;
+	}
 
 	void Set_Dead(_bool isDead = true) {			//삭제처리용
 		m_isDead = isDead;
+	}
+	void Set_Collect(_bool isCollect = true) {			//오브젝트 풀용
+		m_isCollect = isCollect;
 	}
 
 public:
@@ -53,6 +59,7 @@ protected:
 protected:
 	WORLDINFO				m_WorldInfo;
 	_bool					m_isDead = { false };
+	_bool					m_isCollect = { false };
 
 protected:
 	unordered_map<const _tchar*, class CComponent*>		m_Components;

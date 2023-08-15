@@ -338,26 +338,8 @@ HRESULT CColliderManager::Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dT
 
 						if (true == pPlayerCollider->Get_Coll())
 						{
-							if (pAtkCollider->Get_Hit_Small())
-							{
-								pPlayerCollider->Set_Hit_Small(true);
-							}
-							else if (pAtkCollider->Get_Hit_Big())
-							{
-								pPlayerCollider->Set_Hit_Big(true);
-							}
-							else if (pAtkCollider->Get_Hit_Blow())
-							{
-								pPlayerCollider->Set_Hit_Blow(true);
-							}
-							else if (pAtkCollider->Get_Hit_Spin())
-							{
-								pPlayerCollider->Set_Hit_Spin(true);
-							}
-							else if (pAtkCollider->Get_Hit_Upper())
-							{
-								pPlayerCollider->Set_Hit_Upper(true);
-							}
+							dynamic_cast<CCharacter*>(pPlayers)->Add_HitCollider(pMonsterAtkColls);
+
 
 							pPlayerCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
 							pPlayerCollider->Set_fDamage(pAtkCollider->Get_fDamage());

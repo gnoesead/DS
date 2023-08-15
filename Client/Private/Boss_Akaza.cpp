@@ -65,9 +65,9 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	Update_TriggerTime(dTimeDelta);
+	/*Update_TriggerTime(dTimeDelta);
 	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);
+	Update_State(dTimeDelta);*/
 
 	//m_eCurAnimIndex = ANIM_IDEL;
 
@@ -76,6 +76,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);
 
+	EventCall_Control(dTimeDelta);
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -133,19 +134,7 @@ HRESULT CBoss_Akaza::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_tchar	m_szFPS[MAX_PATH] = TEXT("");
-	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	//wsprintf(m_szFPS, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-#endif // DEBUG
-
+ 
 	return S_OK;
 }
 
@@ -164,7 +153,6 @@ HRESULT CBoss_Akaza::Render_ShadowDepth()
 	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
 	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
 
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
@@ -295,7 +283,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_SKILL_DOWNEND);
 			m_bAnimFinish = false;
 			m_dJumpStompTime = 0.0;
-
+			
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_7))
 		{
@@ -439,75 +427,139 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
-	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
 	if (EventCallProcess())
 	{
-#pragma region Combo_Attack
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+#pragma region AWAKE_ComboPunch
+		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
-
-			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (4 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (5 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			
 		}
-		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, 1.0f);
 			}
-			else if (1 == m_iEvent_Index)
-			{
+			
 
+		}
+#pragma endregion // AWAKE_ComboPunch
+
+		if (ANIM_SUPERARMOR3 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
 			}
 
 		}
-		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 2.0f, 0.0f), 0.2,
+					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
 			}
+
 		}
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 0.2,
+					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 1.0f);
 			}
-		}
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
-		{
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 0.2,
+					CAtkCollider::TYPE_UPPER, vMonsterDir, 1.0f);
+			}
 
 		}
-#pragma endregion
-
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
-
-
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
+
+		}
+		if (ANIM_COMBO2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+
+		}
+		if (ANIM_COMBO3 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+
+		}
+		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
+			}
+
 		}
 
 		m_iEvent_Index++;
@@ -1740,9 +1792,16 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 			if (Pos.y <= 0.f)
 			{
+				
 				m_eCurAnimIndex = ANIM_SKILL_DOWNEND;
+				
+
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
+				{
 					Camera_Shake();
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 1.0,
+						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 1.0f);
+				}
 
 				Pos.y = 0.0f;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
@@ -1766,7 +1825,6 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == false)
 	{
 		m_eCurAnimIndex = ANIM_DASH;
-
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
@@ -1938,7 +1996,7 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 	}
 
 	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
-	Go_Straight_Deceleration(dTimeDelta, ANIM_COMBO_DOWN, 1.f, 0.2f);
+	
 
 }
 
