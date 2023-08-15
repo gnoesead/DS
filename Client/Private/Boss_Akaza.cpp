@@ -430,89 +430,89 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 }
 
 #endif //_DEBUG
-//
-//void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
-//{
-//	CAnimation* pAnim = m_pModelCom->Get_Animation();
-//	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
-//	{
-//		m_iEvent_Index = 0;
-//	}
-//
-//	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-//
-//	if (EventCallProcess())
-//	{
-//#pragma region Combo_Attack
-//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//			if (0 == m_iEvent_Index)
-//			{				
-//				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
-//			}
-//
-//			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
-//		}
-//		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//			if (0 == m_iEvent_Index)
-//			{
-//
-//				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
-//			}
-//			else if (1 == m_iEvent_Index)
-//			{
-//
-//				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-//					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
-//			}
-//
-//		}
-//		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//			if (0 == m_iEvent_Index)
-//			{
-//
-//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-//					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
-//			}
-//		}
-//		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//			if (0 == m_iEvent_Index)
-//			{
-//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-//					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
-//			}
-//		}
-//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//
-//		}
-//#pragma endregion
-//
-//		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
-//		{
-//			if (0 == m_iEvent_Index)
-//			{
-//				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-//				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
-//					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
-//
-//
-//			}
-//		}
-//
-//		m_iEvent_Index++;
-//	}
-//}
+
+void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
+{
+	CAnimation* pAnim = m_pModelCom->Get_Animation();
+	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
+	{
+		m_iEvent_Index = 0;
+	}
+
+	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	if (EventCallProcess())
+	{
+#pragma region Combo_Attack
+		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{				
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+			}
+
+			//CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
+		}
+		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+			}
+
+		}
+		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 20.0f);
+			}
+		}
+		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+			}
+		}
+		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+
+		}
+#pragma endregion
+
+		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.1,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 50.0f);
+
+
+			}
+		}
+
+		m_iEvent_Index++;
+	}
+}
 void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 {
 	if (m_eCurAnimIndex != m_ePreAnimIndex)
