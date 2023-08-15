@@ -8,6 +8,7 @@
 #include "PipeLine.h"
 #include "GameInstance.h"
 #include "UI.h"
+#include "MasterEffect.h"
 
 
 CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1134,6 +1135,10 @@ HRESULT CRenderer::Render_NonBlend()
 
 HRESULT CRenderer::Render_NonLight()
 {
+	m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
+		});
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONLIGHT])
 	{
 		if (nullptr != pGameObject)
@@ -1203,6 +1208,10 @@ HRESULT CRenderer::Render_Effect()
 
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
 		return E_FAIL;
+
+	m_RenderObjects[RENDER_EFFECT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
+		});
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_EFFECT])
 	{

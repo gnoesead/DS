@@ -138,8 +138,6 @@ _int CAnimation::Invalidate_TransformationMatrices(CModel* pModel, _double dTime
 	// 애니메이션이 끝날 때, 루프애님이 아니면,  다음 애니메이션 인덱스를 return
 	if (m_AnimationDesc.m_isFinish)
 	{
-
-
 		// EventCall 초기화
 		for (auto& event : m_ControlDesc.m_vecTime_Event)
 		{
