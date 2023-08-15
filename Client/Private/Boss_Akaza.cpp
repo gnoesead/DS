@@ -2,6 +2,7 @@
 #include "Boss_Akaza.h"
 #include "GameInstance.h"
 #include "SoundMgr.h"
+#include "EffectPlayer.h"
 
 #include "AtkCollManager.h"
 
@@ -65,9 +66,9 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/*Update_TriggerTime(dTimeDelta);
+	Update_TriggerTime(dTimeDelta);
 	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);*/
+	Update_State(dTimeDelta);
 
 	//m_eCurAnimIndex = ANIM_IDEL;
 
@@ -285,7 +286,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_dJumpStompTime = 0.0;
 			
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_7))
+		if (pGameInstance->Get_DIKeyDown(DIK_M))
 		{
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 			m_eCurstate = STATE_UPPERKICK;
@@ -484,6 +485,22 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma endregion // AWAKE_ComboPunch
+		if (ANIM_SUPERARMOR == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
+			}
+
+		}
+		if (ANIM_SUPERARMOR2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
+			}
+
+		}
 
 		if (ANIM_SUPERARMOR3 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -492,6 +509,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.2,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
 			}
 
 		}
@@ -509,6 +530,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 0.2,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 1.0f);
@@ -519,6 +541,11 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 0.2,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, 1.0f);
 			}
+			/*if (2 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+
+			}*/
 
 		}
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -1668,7 +1695,7 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
 
-		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 13.f, 0.0, 0.3);
+		//Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 13.f, 0.0, 0.3); // 이펙트수정
 
 	}
 
@@ -1995,7 +2022,7 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 		Trigger_Interact();
 	}
 
-	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
+	//Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f); // 이펙트수정
 	
 
 }
