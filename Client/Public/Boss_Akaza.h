@@ -262,6 +262,7 @@ private: // _bool
 	_bool	m_bStep_B = { false };
 	_bool	m_bRunPunch = { false };
 	_bool	m_bDashOn = { false };
+	_bool	m_bMove = { false };
 
 	_bool	m_bHeal = { false };
 
