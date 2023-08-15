@@ -109,7 +109,7 @@ HRESULT CPlayer_Tool::Render()
 HRESULT CPlayer_Tool::Add_Components()
 {
 	/* for.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Tanjiro"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CPlayer_Tool");

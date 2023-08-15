@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Effect_Mesh.h"
+#include "EffectPlayer.h"
 
 CParticleSystem::CParticleSystem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CGameObject(pDevice, pContext)
@@ -52,10 +53,18 @@ void CParticleSystem::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	if (m_pEffect)
+	if (m_bCollect)
 	{
-		if (m_pEffect->Get_Dead())
-			Safe_Release(m_pEffect);
+		if (m_pParent)
+			m_pParent->Set_isCollect(true);
+
+		m_bCollect = false;
+
+		CEffectPlayer::Get_Instance()->Collect_ParticleSystem(this);
+		m_isCollect = true;
+
+		m_bStop = true;
+		m_bPlay = false;
 	}
 
 	if (m_bPlay && m_pEffect)
@@ -99,8 +108,24 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	if(nullptr != m_pParentTransform)
-		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+	if (nullptr != m_pParentTransform)	
+	{
+		if (m_pEffect)     // ±øÅë X
+		{
+			if (m_pEffect->Get_SimulationSpace() == CEffect::SPACE_LOCAL)
+				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+			else
+			{
+				if (m_bInitialTransformSetting)
+				{
+					m_bInitialTransformSetting = false;
+					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+				}
+			}
+		}
+		else    // ±øÅë
+			XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+	}
 
 	for (auto Parts : m_PartEffects)
 		Parts->LateTick(dTimeDelta);
@@ -114,7 +139,7 @@ HRESULT CParticleSystem::Render(void)
 void CParticleSystem::Set_PartsParent(CTransform* pTransformCom)
 {
 	for (auto Part : m_PartEffects)
-		Part->Set_Parent(pTransformCom);
+		Part->Set_Parent(pTransformCom, this);
 }
 
 HRESULT CParticleSystem::Create_Effect(int eEffectType)
@@ -122,7 +147,7 @@ HRESULT CParticleSystem::Create_Effect(int eEffectType)
 	if (nullptr == m_pEffect)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
+		//Safe_AddRef(pGameInstance);
 
 		switch (eEffectType)
 		{
@@ -146,7 +171,7 @@ HRESULT CParticleSystem::Create_Effect(int eEffectType)
 			size_t iSize = pGameInstance->Get_GameObject_ListSize(m_iLevelIndex, TEXT("ParticleSystem_EffectParticle"));
 			m_pEffect = dynamic_cast<CEffect*>(pGameInstance->Get_GameObject(m_iLevelIndex, TEXT("ParticleSystem_EffectParticle"), (_uint)iSize - 1));
 		}
-			break;
+		break;
 		}
 
 		Safe_AddRef(m_pEffect);
@@ -155,7 +180,47 @@ HRESULT CParticleSystem::Create_Effect(int eEffectType)
 
 		m_pEffect->Set_Parent(m_pTransformCom, this);
 
-		Safe_Release(pGameInstance);
+		//Safe_Release(pGameInstance);
+	}
+	else
+		MSG_BOX("Effect already exists. \nDelete it first. Before you create it.");
+
+	return S_OK;
+}
+
+HRESULT CParticleSystem::Clone_Effect(int eEffectType)
+{
+	if (nullptr == m_pEffect)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		//Safe_AddRef(pGameInstance);
+
+		int iLevelIndex = LEVEL_STATIC;
+
+		switch (eEffectType)
+		{
+		case 0:		// EFFECT_TEXTURE
+		{
+			m_pEffect = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectTexture"), &iLevelIndex));
+		}
+		break;
+		case 1:		// EFFECT_MESH
+		{
+			m_pEffect = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectMesh"), &iLevelIndex));
+		}
+		break;
+		case 2:		// EFFECT_PARTICLE
+		{
+			m_pEffect = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectParticle"), &iLevelIndex));
+		}
+		break;
+		}
+
+		//Safe_AddRef(m_pEffect);
+
+		m_pEffect->Set_Parent(m_pTransformCom, this);
+
+		//Safe_Release(pGameInstance);
 	}
 	else
 		MSG_BOX("Effect already exists. \nDelete it first. Before you create it.");
@@ -192,6 +257,21 @@ void CParticleSystem::Stop_Parts()
 		Part->m_bStop = true;
 		Part->m_bPlay = false;
 	}
+}
+
+void CParticleSystem::Clear(void)
+{
+	m_pEffect = nullptr;
+
+	m_iNumEffects = 0;
+	m_PartEffects.clear();
+
+	m_dTimeAccTotal = 0.0;
+	m_dTimeAccCycle = 0.0;
+
+	m_bInitialTransformSetting = true;
+
+	m_pParent = nullptr;
 }
 
 HRESULT CParticleSystem::Add_Components(void)

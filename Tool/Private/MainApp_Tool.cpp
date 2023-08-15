@@ -83,6 +83,7 @@ void CMainApp_Tool::Tick(_double dTimeDelta)
 	m_pGameInstance->Tick_Engine(dTimeDelta);
 
 	m_pGUI->ImGui_Set();
+	m_pGUI->ImGui_Set2();
 
 	m_pGUI->ImGUI_ShowDemo();
 }
