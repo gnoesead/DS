@@ -459,6 +459,7 @@ void CPlayer::Key_Input_Battle_Attack(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	
 	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump && false == m_Moveset.m_isRestrict_Charge)
 	{
 		// 콤보공격
@@ -484,6 +485,15 @@ void CPlayer::Key_Input_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
+
+
+	if (m_isCan_Surge)
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_J))
+		{
+			m_Moveset.m_Down_Battle_Combo_Surge = true;
+		}
+	}
 	Safe_Release(pGameInstance);
 }
 
@@ -492,42 +502,29 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	m_dDelay_Charge_J += dTimeDelta;
-	m_dDelay_Charge_W += dTimeDelta;
+	//m_dDelay_Charge_J += dTimeDelta;
+	//m_dDelay_Charge_W += dTimeDelta;
 
 	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump)
 	{
 		// 차지공격
-		if (pGameInstance->Get_DIKeyDown(DIK_J))
+		if (pGameInstance->Get_DIKeyDown(DIK_H))
 		{
-			m_dDelay_Charge_J = 0.0;
-		}
-		if (pGameInstance->Get_DIKeyDown(DIK_W))
-		{
-			m_dDelay_Charge_W = 0.0;
-		}
-		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.011f && m_dDelay_Charge_W < 0.011f)
-		{
-			m_isCan_Charge = true;
-		}
-		//딜레이 확인 후, 둘이 동시에 눌린 상태인제 확인
-		if (m_isCan_Charge && pGameInstance->Get_DIKeyState(DIK_J) && pGameInstance->Get_DIKeyState(DIK_W))
-		{
-			m_isCan_Charge = false;
 			m_Moveset.m_Down_Battle_Charge = true;
-			m_isCharging = true;
+			//m_dDelay_Charge_J = 0.0;
 		}
-		//차지상태
-		if (m_isCharging && pGameInstance->Get_DIKeyState(DIK_J) && pGameInstance->Get_DIKeyState(DIK_W))
+
+
+		if ( pGameInstance->Get_DIKeyUp(DIK_H))
 		{
-			m_Moveset.m_State_Battle_Charge = true;
-		}
-		else
-		{
-			m_Moveset.m_State_Battle_Charge = false;
+			m_Moveset.m_Up_Battle_Charge = true;
 		}
 		
+
+		if (pGameInstance->Get_DIKeyState(DIK_H))
+		{
+			m_dDelay_Charge += dTimeDelta;
+		}
 		
 	}
 
@@ -724,7 +721,7 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 
 		if (m_Moveset.m_dTime_Awaken_Duration <= 0.0)
 		{
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
+			m_Moveset.m_dTime_Awaken_Duration = 15.0;
 			m_Moveset.m_iAwaken = 0;
 		}
 	}
@@ -736,12 +733,12 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		if (m_Moveset.m_iAwaken == 0)
 		{
 			m_Moveset.m_iAwaken = 1;
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
+			m_Moveset.m_dTime_Awaken_Duration = 15.0;
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
 			m_Moveset.m_iAwaken = 2;
-			m_Moveset.m_dTime_Awaken_Duration = 10.0;
+			m_Moveset.m_dTime_Awaken_Duration = 15.0;
 		}
 	}
 

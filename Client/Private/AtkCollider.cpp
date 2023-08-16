@@ -182,6 +182,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 	m_pColliderCom->Set_Hit_Upper(false);
 	m_pColliderCom->Set_Hit_BigBlow(false);
 	m_pColliderCom->Set_Hit_Bound(false);
+	m_pColliderCom->Set_Hit_CutScene(false);
 
 	//값 넣어주기
 	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
@@ -200,6 +201,8 @@ void CAtkCollider::Setting_AtkCollDesc()
 		m_pColliderCom->Set_Hit_Upper(true);
 	else if (TYPE_BOUND == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Bound(true);
+	else if (TYPE_CUTSCENE == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_CutScene(true);
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
