@@ -59,7 +59,9 @@ public:
 		ANIM_FALL = 110, //110,  111 fallingidle, 112
 		ANIM_DMG_GUARDBRK = 113,
 		ANIM_BACKDUMBLING = 114,
-		ANIM_DMG_SPIN = 116 //116~117idle 118
+		ANIM_DMG_SPIN = 116, //116~117idle 118
+		ANIM_DEATH_GETUP = 119,
+		ANIM_END = 120
 	};
 
 private:

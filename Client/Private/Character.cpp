@@ -269,8 +269,6 @@ void CCharacter::Reset_Decleration(_float fResetSpeed)
 	}
 }
 
-
-
 void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease)
 {
 	//서서히 느려지는 Transform 이동
@@ -601,6 +599,10 @@ void CCharacter::Check_HitType()
 			else if (pHitColl->Get_Collider()->Get_Hit_Bound())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_CutScene())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(true);
 			}
 
 			pHitColl->Add_AtkObejct(this);
