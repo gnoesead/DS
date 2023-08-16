@@ -39,6 +39,7 @@
 #include "Pause.h"
 #include "Fade.h"
 #include "Skill_Name.h"
+#include "Battle_Signal.h"
 
 
 #include "NPC_Female.h"
@@ -744,6 +745,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Skill_Name */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Skill_Name"),
 		CSkill_Name::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Battle_Signal */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Battle_Signal"),
+		CBattle_Signal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

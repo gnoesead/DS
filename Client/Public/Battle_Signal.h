@@ -20,6 +20,8 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
+		_uint    m_Rank = { 0 };
+
 	}UIDESC;
 
 
@@ -75,6 +77,8 @@ private:
 
 	_float m_Origin_X = {};
 	_float m_Origin_Y = {};
+
+	_float m_Size_Change = { -0.2f };
 
 
 private:
