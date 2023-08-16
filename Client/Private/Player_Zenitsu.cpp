@@ -511,22 +511,6 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 					}
 				}
 			}
-
-			//=======================AtkCollTest=======================
-
-			CAtkCollider::ATKCOLLDESC AtkCollDesc;
-			ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
-
-			AtkCollDesc.ColliderDesc.vSize = _float3(3.f, 1.f, 1.f);
-			AtkCollDesc.ColliderDesc.vPosition = _float3(0.f, 0.f, 0.f);
-
-			AtkCollDesc.dLifeTime = 1.0;
-
-			AtkCollDesc.pTransform = m_pTransformCom;
-
-			CAtkCollManager::GetInstance()->Reuse_Collider(TEXT("Layer_PlayerAtk"), &AtkCollDesc);
-
-			//=========================================================
 		}
 	}
 	//m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true);
