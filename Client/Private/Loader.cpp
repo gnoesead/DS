@@ -38,6 +38,7 @@
 #include "Story_Board.h"
 #include "Pause.h"
 #include "Fade.h"
+#include "Skill_Name.h"
 
 
 #include "NPC_Female.h"
@@ -740,7 +741,10 @@ HRESULT CLoader::LoadingForLobby()
 		CPause::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	
+	/* Prototype_GameObject_Skill_Name */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Skill_Name"),
+		CSkill_Name::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

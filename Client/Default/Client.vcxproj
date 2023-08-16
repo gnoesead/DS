@@ -180,6 +180,8 @@
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\Public\Battle_Signal.h" />
+    <ClInclude Include="..\Public\Battle_UI_Manager.h" />
     <ClInclude Include="..\Public\Boss_Akaza.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -241,6 +243,7 @@
     <ClInclude Include="..\Public\Player_Tanjiro.h" />
     <ClInclude Include="..\Public\Player_Zenitsu.h" />
     <ClInclude Include="..\Public\RotationMapObject.h" />
+    <ClInclude Include="..\Public\Skill_Name.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\SoundMgr.h" />
     <ClInclude Include="..\Public\StaticMapObject.h" />
@@ -262,6 +265,8 @@
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\Private\Battle_Signal.cpp" />
+    <ClCompile Include="..\Private\Battle_UI_Manager.cpp" />
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -322,6 +327,7 @@
     <ClCompile Include="..\Private\Player_Tanjiro.cpp" />
     <ClCompile Include="..\Private\Player_Zenitsu.cpp" />
     <ClCompile Include="..\Private\RotationMapObject.cpp" />
+    <ClCompile Include="..\Private\Skill_Name.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\StaticMapObject.cpp" />

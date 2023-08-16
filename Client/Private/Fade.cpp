@@ -75,7 +75,6 @@ HRESULT CFade::Initialize(void * pArg)
 void CFade::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	
 
 	// Fade_Out
 	if (m_UI_Desc.m_Type == 0) {
@@ -94,9 +93,7 @@ void CFade::Tick(_double TimeDelta)
 	}
 
 
-
 	Set_UI();
-
 }
 
 void CFade::LateTick(_double TimeDelta)
@@ -186,10 +183,15 @@ HRESULT CFade::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
-
+	if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
+			return E_FAIL;
+	}
+	else {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+	}
+	
 
 	return S_OK;
 }
@@ -285,6 +287,7 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_InOut_Speed = 1.f;
 		CFadeManager::GetInstance()->Set_Fade_OutIn(false);
 		CFadeManager::GetInstance()->Set_Fade_OutIn_Done(true);
+		CFadeManager::GetInstance()->Set_Fade_Color(false);
 	}
 
 

@@ -24,6 +24,7 @@
 #include "Mission.h"
 #include "Mini_Map.h"
 #include "CollisionBox.h"
+#include "Skill_Name.h"
 
 #include "Pause.h"
 #include "Fade.h"
@@ -57,7 +58,19 @@ HRESULT CLevel_Village::Initialize()
 
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
     {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
+        MSG_BOX("Failed to Ready_Layer_Player : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
         return E_FAIL;
     }
 
@@ -227,7 +240,8 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
  
-    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f);
 
     CharacterDesc.Land_Y = 0.0f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
@@ -241,6 +255,41 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
 
     Safe_Release(pGameInstance);
 
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
+{
+
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    CPlayer::CHARACTERDESC CharacterDesc;
+    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+    CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
+
+  
+    CharacterDesc.WorldInfo.vPosition = _float4(426.f, 0.f, 290.f, 1.f);
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+        return E_FAIL;
+    }
+
+
+
+
+
+    Safe_Release(pGameInstance);
+
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Boss(const _tchar* pLayerTag)
+{
     return S_OK;
 }
 
@@ -986,8 +1035,18 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 #pragma endregion
 
+    // skill_name
+    CSkill_Name::UIDESC UIDesc8;
+    ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
+    UIDesc8.m_Is_Reverse = false;
+    UIDesc8.m_Type = 0;
 
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Skill_Name"), &UIDesc8))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
 
     Safe_Release(pGameInstance);

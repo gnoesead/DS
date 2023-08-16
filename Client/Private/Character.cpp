@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "AtkCollManager.h"
+#include "Fade_Manager.h"
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject(pDevice, pContext)
@@ -102,7 +103,15 @@ void CCharacter::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
-		m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+
+		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+		if (Is_Battle == false)
+			m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+		else
+			m_pTransformCom->Scaling(_float3(0.8f, 0.8f, 0.8f));
+
+
 	}
 	
 

@@ -35,7 +35,6 @@ public:
 	void Set_Is_Shake_Done(_bool Is_Done);
 	_bool Get_Is_Shake_Done();
 
-
 // Focus
 public:
 	void Focus_On(_vector Pos , _float Time);
@@ -44,9 +43,12 @@ public:
 
 // Zoom_In/Out
 public:
+	void Zoom_In(_float Zoom, _float Time);
+	void Zoom_Out(_float Zoom, _float Time);
 
+	void Zoom_Fix(_float Zoom);
 
-
+	_float Get_Zoom();
 
 // Special_View
 public:
@@ -69,7 +71,13 @@ private: // Focus
 	_float m_Focus_TimeAcc = { 0.f };
 	_float m_Focus_Time = { 0.f };
 
+private: // Zoom_In/Out
+	_bool m_Is_Zoom_In = { false };
+	_bool m_Is_Zoom_Out = { false };
 
+	_float m_Zoom = { 0.f };
+	_float m_Zoom_Time = { 0.f };
+	_float m_Zoom_TimeAcc = { 0.f };
 
 
 public:

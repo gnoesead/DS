@@ -94,6 +94,12 @@ private:
 	_uint           m_Battle_Target_Num = { 0 };
 	_uint           m_Battle_Target_MaxNum = { 0 };
 
+	_float          m_Zoom = { 0.f };
+
+
+	_float          m_Village_Cam_TimeAcc = { 0.f };
+
+
 
 // Cut_In_Cam	
 private:
