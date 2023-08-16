@@ -8,6 +8,7 @@
 #include "AtkCollManager.h"
 #include "DialogManager.h"
 #include "MissionManager.h"
+#include "Battle_UI_Manager.h"
 
 
 
@@ -394,7 +395,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
+				
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
 			}
@@ -437,6 +442,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+				
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
@@ -485,6 +493,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 1.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
 

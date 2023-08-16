@@ -341,15 +341,21 @@ void CPlayer_Battle_Mp::Tool_Funtion(_double TimeDelta)
 
 void CPlayer_Battle_Mp::Get_Player_Info(_double TimeDelta)
 {
-	if (GetKeyState('M') < 0) {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-		m_Player_Mp -= TimeDelta * 0.5;
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		if (m_Player_Mp < 0) {
-			m_Player_Mp = 0;
-		}
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		_float Mp = pPlayer->Get_Status().fMp;
+		_float Mp_Max = pPlayer->Get_Status().fMp_Max;
+
+		m_Player_Mp = (_double)(Mp / Mp_Max);
 
 	}
+
+	Safe_Release(pGameInstance);
 }
 
 CPlayer_Battle_Mp * CPlayer_Battle_Mp::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

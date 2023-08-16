@@ -136,6 +136,11 @@ public:
 
 
 public:
+	PLAYERMOVESET Get_Moveset() {
+		return m_Moveset;
+	}
+
+public:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
