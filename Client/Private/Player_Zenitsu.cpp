@@ -581,15 +581,29 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Charge = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
 
 
-	if (m_isCharging && m_Moveset.m_State_Battle_Charge == false)
+	if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge > 1.0f)
 	{
-		m_isCharging = false;
+		m_Moveset.m_Up_Battle_Charge = false;
+		m_dDelay_Charge = 0.0;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		m_pModelCom->Set_Animation(21);
+	}
+	else if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge <= 1.0f)
+	{
+		m_Moveset.m_Up_Battle_Charge = false;
+		m_dDelay_Charge = 0.0;
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
 	}
 	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange, 0.15f * m_fScaleChange);
 }

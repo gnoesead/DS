@@ -9,6 +9,8 @@
 
 #include "MonsterManager.h"
 
+#include "Player.h"
+
 CMonster_Zako::CMonster_Zako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -214,14 +216,26 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 void CMonster_Zako::Trigger()
 {
 	//Hit_Trigger
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
-		|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+	if (m_eCurState != STATE_DOWN)
 	{
-		m_eCurState = STATE_HIT;
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+		{
+			m_eCurState = STATE_HIT;
+		}
+	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 	}
 }
 
@@ -909,7 +923,6 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 #pragma endregion
 
 
-
 #pragma region Hit_Blow
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 	{
@@ -924,6 +937,27 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	Go_Dir_Constant(dTimeDelta, 92, 3.5f, AtkDir);
 	Ground_Animation_Play(92, 93);
 #pragma endregion
+
+
+
+#pragma region Hit_CutScene
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(false);
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
+		pPlayer->Set_Hit_SurgeCutScene(true);
+		Safe_Release(pGameInstance);
+
+		m_dDelay_ComboChain = 5.5;
+
+		m_pModelCom->Set_Animation(ANIM_DEATH);
+	}
+#pragma endregion
+
+
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	m_dDelay_ComboChain -= dTimeDelta;
@@ -948,7 +982,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_iAttackIndex = 5;
 	}
 
-	if (iCurAnim == ANIM_DOWN_IDLE)
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim ==  112) //112는 fall마지막 모션
 	{
 		m_dDelay_ComboChain = 0.0;
 
@@ -974,14 +1008,17 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_DOWN_IDLE)
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH_IDLE)
 	{
 		m_dDelay_Down += dTimeDelta;
-		if (m_dDelay_Down > 3.0f)
+		if (m_dDelay_Down > 1.7f)
 		{
 			m_dDelay_Down = 0.0;
 
-			m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
+			if(iCurAnim == ANIM_DEATH_IDLE)
+				m_pModelCom->Set_Animation(ANIM_DEATH_GETUP);
+			else
+				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
 		}
 	}
 
