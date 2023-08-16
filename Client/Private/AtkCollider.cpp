@@ -119,12 +119,13 @@ void CAtkCollider::Tick(_double dTimeDelta)
 {
 	if (true == m_isDead)
 		return;
-
 	__super::Tick(dTimeDelta);
+
+	m_dTimeAcc += dTimeDelta;
+
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
-	m_dTimeAcc += dTimeDelta;
 
 	if (m_pColliderCom->Get_Coll())
 	{
