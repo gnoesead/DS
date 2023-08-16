@@ -76,6 +76,8 @@ private:
 	_float m_Origin_X = {};
 	_float m_Origin_Y = {};
 
+	_float m_Size_Change = { -0.2f };
+
 
 private:
 	HRESULT Add_Components();

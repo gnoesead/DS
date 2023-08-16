@@ -318,12 +318,32 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 
 		m_UV_Cull += (_float)TimeDelta * 0.5f;
 
+	}
+
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) != nullptr) {
+
+		CCharacter* pMonster = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index));
+
+		_float Hp = pMonster->Get_Status().fHp;
+		_float Hp_Max = pMonster->Get_Status().fHp_Max;
+
+		m_UV_Cull = 1.f - (_float)(Hp / Hp_Max);
+
 		if (m_UV_Cull > 1.f) {
 			m_UV_Cull = 1.f;
+			m_Is_Render = false;
 		}
-
-
 	}
+
+	Safe_Release(pGameInstance);
+
+
+
+
 }
 
 void CWorld_UI_Hp::Set_Personal_Pos()

@@ -286,12 +286,23 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 
+#pragma region Battle_Manager
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Battle_Signal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Manager/Signal_%d.png"),2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Battle_Rank"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Manager/Rank_%d.png"), 6))))
+		return E_FAIL;
+#pragma endregion
+
+
 #pragma region Skill_Name
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Name"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Skill_Name/Skill_Name.dds")))))
 		return E_FAIL;
-
 
 #pragma endregion
 

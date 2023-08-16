@@ -22,6 +22,7 @@ public:
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
 		_float   m_Up_Mount = { 0.f };
+		_uint    m_Monster_Index = { 0 };
 	}UIDESC;
 
 
@@ -87,6 +88,9 @@ private:
 
 	_float m_UV_Cull = { 0.0f };
 	_float m_D_UV_Cull = { 0.0f };
+
+
+	
 
 	
 private:

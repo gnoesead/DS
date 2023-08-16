@@ -34,8 +34,14 @@ public:
 	void Set_Battle_Start_On(_bool On);
 	_bool Get_Battle_Start_On();
 
+	void Set_Battle_Start_Off(_bool Off);
+	_bool Get_Battle_Start_Off();
+
 	void Set_Battle_Finish_On(_bool On);
 	_bool Get_Battle_Finish_On();
+
+	void Set_Battle_Finish_Off(_bool Off);
+	_bool Get_Battle_Finish_Off();
 
 private:
 	_uint m_Player_Index = { 0 };
@@ -47,9 +53,14 @@ private:
 
 private:
 	_bool m_Battle_Start_On = { false };
+	_bool m_Battle_Start_Off = { false };
+	_float m_Battle_Start_TimeAcc = { 0.f };
+	_bool m_Battle_Start_Time = { false };
+
 	_bool m_Battle_Finish_On = { false };
-
-
+	_bool m_Battle_Finish_Off = { false };
+	_float m_Battle_Finish_TimeAcc = { 0.f };
+	_bool m_Battle_Finish_Time = { false };
 
 public:
 	virtual void Free() override;

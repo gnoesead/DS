@@ -31,6 +31,30 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	}
 
 
+	if (m_Battle_Start_Time) {
+		m_Battle_Start_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Battle_Start_TimeAcc > 1.f) {
+
+			m_Battle_Start_TimeAcc = 0.f;
+			m_Battle_Start_Off = true;
+			m_Battle_Start_Time = false;
+		}
+
+	}
+
+	if (m_Battle_Finish_Time) {
+		m_Battle_Finish_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Battle_Finish_TimeAcc > 1.f) {
+
+			m_Battle_Finish_TimeAcc = 0.f;
+			m_Battle_Finish_Off = true;
+			m_Battle_Finish_Time = false;
+		}
+
+	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -68,6 +92,8 @@ _bool CBattle_UI_Manager::Get_Skill_On()
 
 void CBattle_UI_Manager::Set_Battle_Start_On(_bool On)
 {
+	m_Battle_Start_TimeAcc = 0.f;
+	m_Battle_Start_Time = true;
 	m_Battle_Start_On = On;
 }
 
@@ -76,14 +102,38 @@ _bool CBattle_UI_Manager::Get_Battle_Start_On()
 	return m_Battle_Start_On;
 }
 
+void CBattle_UI_Manager::Set_Battle_Start_Off(_bool Off)
+{
+
+	m_Battle_Start_Off = Off;
+
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Start_Off()
+{
+	return m_Battle_Start_Off;
+}
+
 void CBattle_UI_Manager::Set_Battle_Finish_On(_bool On)
 {
+	m_Battle_Finish_TimeAcc = 0.f;
+	m_Battle_Finish_Time = true;
 	m_Battle_Finish_On = On;
 }
 
 _bool CBattle_UI_Manager::Get_Battle_Finish_On()
 {
 	return m_Battle_Finish_On;
+}
+
+void CBattle_UI_Manager::Set_Battle_Finish_Off(_bool Off)
+{
+	m_Battle_Finish_Off = Off;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Finish_Off()
+{
+	return m_Battle_Finish_Off;
 }
 
 
