@@ -140,6 +140,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 	Get_Boss_Info(TimeDelta);
 
+
 	if (m_Delay_Down == true) {
 		m_D_UV_Cull += (_float)TimeDelta * 0.3f;
 		if (m_D_UV_Cull >= m_UV_Cull) {
@@ -327,7 +328,6 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 
 	}
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -347,8 +347,6 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
-
-
 
 
 }
