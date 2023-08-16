@@ -21,6 +21,7 @@ public:
 	HRESULT Inititalize();
 	void Tick(_double dTimeDelta);
 
+public:
 	void Set_Player_Type(_uint Type);
 	_uint Get_Player_Type();
 
@@ -28,13 +29,26 @@ public:
 	_uint Get_Player_Skill_Type();
 
 	_bool Get_Skill_On();
-	
+
+public:
+	void Set_Battle_Start_On(_bool On);
+	_bool Get_Battle_Start_On();
+
+	void Set_Battle_Finish_On(_bool On);
+	_bool Get_Battle_Finish_On();
+
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
 
 	_bool m_Skill_On = { false };
 	_float m_Skill_On_TimeAcc = { 0.f };
+
+
+private:
+	_bool m_Battle_Start_On = { false };
+	_bool m_Battle_Finish_On = { false };
+
 
 
 public:

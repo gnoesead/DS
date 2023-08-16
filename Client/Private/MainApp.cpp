@@ -108,6 +108,13 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	CBattle_UI_Manager::GetInstance()->Tick(dTimeDelta);
 
+
+	if (m_pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
+
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.f);
+	}
+
+
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
 
@@ -319,7 +326,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Black"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Fade/Black.png")))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Fade/Black_%d.png"),2))))
 		return E_FAIL;
 
 #pragma endregion

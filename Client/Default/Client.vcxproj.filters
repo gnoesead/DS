@@ -292,6 +292,9 @@
     <Filter Include="02. GameObjects\UI\11.Battle_UI_Manager">
       <UniqueIdentifier>{ded556a7-45ce-4462-852c-28c482291a30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\12.Battle_Signal">
+      <UniqueIdentifier>{0c5e686d-a9c2-4f43-9a8d-d31d2bd7b04f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -534,6 +537,9 @@
     <ClInclude Include="..\Public\Camera_Manager.h">
       <Filter>02. GameObjects\Camera\Free\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Battle_Signal.h">
+      <Filter>02. GameObjects\UI\12.Battle_Signal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -766,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Battle_UI_Manager.cpp">
       <Filter>02. GameObjects\UI\11.Battle_UI_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Battle_Signal.cpp">
+      <Filter>02. GameObjects\UI\12.Battle_Signal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

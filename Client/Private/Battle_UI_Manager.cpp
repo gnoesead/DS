@@ -30,8 +30,6 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 		}
 	}
 
-	
-	
 
 	Safe_Release(pGameInstance);
 }
@@ -67,5 +65,27 @@ _bool CBattle_UI_Manager::Get_Skill_On()
 {
 	return m_Skill_On;
 }
+
+void CBattle_UI_Manager::Set_Battle_Start_On(_bool On)
+{
+	m_Battle_Start_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Start_On()
+{
+	return m_Battle_Start_On;
+}
+
+void CBattle_UI_Manager::Set_Battle_Finish_On(_bool On)
+{
+	m_Battle_Finish_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Finish_On()
+{
+	return m_Battle_Finish_On;
+}
+
+
 
 
