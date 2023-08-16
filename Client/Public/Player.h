@@ -73,10 +73,11 @@ public:
 		_bool	m_Down_Battle_Combo_Up = { false };
 		_bool	m_Down_Battle_Combo_Down = { false };
 		_bool	m_isPressing_While_Restrict = { false };
+		_bool	m_Down_Battle_Combo_Surge = { false };
 
 		//차지 공격 키인풋
 		_bool	m_Down_Battle_Charge = { false };
-		_bool	m_State_Battle_Charge = { false };
+		_bool	m_Up_Battle_Charge = { false };
 
 		//스킬공격 키인풋
 		_bool	m_Down_Skill_Normal = { false };
@@ -139,12 +140,15 @@ public:
 		return m_Moveset;
 	}
 
-protected:
+public:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
 	_vector Get_Dir_To_LockOnPos();
-	
+
+	//히트 관련 시그널 트리거
+	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
+	void	Set_Hit_Success(_bool Hit) { m_isHit_Success = Hit; }
 
 protected: //애니메이션 제어용 함수들
 
@@ -180,6 +184,14 @@ protected: // 애니메이션 제어용 변수들
 
 	_bool	m_isSpecialHit = { false };
 
+	//각성모드 평타서지 가능
+	_bool	m_isCan_Surge = { false };
+	_double m_dDelay_Surge = { 0.0 };
+	_double m_dDelay_Surge_Attack = { 0.0 };
+
+	_bool	m_isHit_SurgeCutScene = { false };
+	_double m_dDelay_SurgeCutScene = { 0.0 };
+
 	//히트모션 인덱스 스몰
 	_int m_iSmallHit_Index = { 0 };
 
@@ -204,10 +216,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool		m_isMaintain_Guard = { false };
 
 	//charge 딜레이
-	_double		m_dDelay_Charge_J = { 0.0 };
-	_double		m_dDelay_Charge_W = { 0.0 };
-	_bool		m_isCan_Charge = { false };
-	_bool		m_isCharging = { false };
+	_double		m_dDelay_Charge = { 0.0 };
 
 	//Step 용
 	_float4		m_vLook = { 0.0f, 0.0f, 0.0f, 0.0f };

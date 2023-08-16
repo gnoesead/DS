@@ -46,14 +46,10 @@ _bool CAtkCollider::Get_IsAttack(CGameObject* pHitObj)
 
 void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 {
-	if (nullptr != m_pTransformCom)
-		Safe_Release(m_pTransformCom);
-
 	ZeroMemory(&m_AtkCollDesc, sizeof m_AtkCollDesc);
 
 	m_AtkCollDesc = *pAtkCollDesc;
-	m_pTransformCom = m_AtkCollDesc.pTransform;
-	Safe_AddRef(m_pTransformCom);
+	Safe_AddRef(m_AtkCollDesc.pParentTransform);
 
 	Setting_AtkCollDesc();
 
@@ -103,8 +99,7 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_AtkCollDesc, pArg, sizeof m_AtkCollDesc);
-	m_pTransformCom = m_AtkCollDesc.pTransform;
-	Safe_AddRef(m_pTransformCom);
+	Safe_AddRef(m_AtkCollDesc.pParentTransform);
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -122,7 +117,9 @@ void CAtkCollider::Tick(_double dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+	m_pTransformCom->Go_Dir(dTimeDelta, XMVector3Normalize(m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_LOOK)));
+
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
 
 	m_dTimeAcc += dTimeDelta;
 
@@ -138,7 +135,11 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
+		Safe_Release(m_AtkCollDesc.pParentTransform);
+		m_AtkCollDesc.pParentTransform = nullptr;
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
+		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
 
@@ -182,6 +183,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 	m_pColliderCom->Set_Hit_Upper(false);
 	m_pColliderCom->Set_Hit_BigBlow(false);
 	m_pColliderCom->Set_Hit_Bound(false);
+	m_pColliderCom->Set_Hit_CutScene(false);
 
 	//값 넣어주기
 	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
@@ -200,6 +202,8 @@ void CAtkCollider::Setting_AtkCollDesc()
 		m_pColliderCom->Set_Hit_Upper(true);
 	else if (TYPE_BOUND == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Bound(true);
+	else if (TYPE_CUTSCENE == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_CutScene(true);
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
@@ -216,6 +220,12 @@ HRESULT CAtkCollider::Add_Components()
 	}
 	Setting_AtkCollDesc();
 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_AtkCollDesc.TransformDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Transform : CAtkCollider");
+		return E_FAIL;
+	}
 
 #ifdef _DEBUG
 	/* for.Com_Renderer */
@@ -261,6 +271,9 @@ void CAtkCollider::Free()
 	__super::Free();
 
 	m_AtkObj.clear();
+	
+	if (nullptr != m_AtkCollDesc.pParentTransform)
+		Safe_Release(m_AtkCollDesc.pParentTransform);
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);

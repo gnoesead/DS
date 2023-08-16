@@ -16,12 +16,13 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
-	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_END };
+	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_END };
 	
 
 	typedef struct tagAtkCollDesc
 	{
-		CTransform* pTransform = { nullptr };
+		CTransform* pParentTransform = { nullptr };
+		CTransform::TRANSFORMDESC TransformDesc;
 		CCollider::COLLIDERDESC ColliderDesc;
 		_double		dLifeTime = { 0.0 };
 
