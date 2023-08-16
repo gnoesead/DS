@@ -46,14 +46,12 @@ _bool CAtkCollider::Get_IsAttack(CGameObject* pHitObj)
 
 void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 {
-	if (nullptr != m_pTransformCom)
-		Safe_Release(m_pTransformCom);
-
 	ZeroMemory(&m_AtkCollDesc, sizeof m_AtkCollDesc);
 
 	m_AtkCollDesc = *pAtkCollDesc;
-	m_pTransformCom = m_AtkCollDesc.pTransform;
-	Safe_AddRef(m_pTransformCom);
+	Safe_AddRef(m_AtkCollDesc.pParentTransform);
+
+	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 
 	Setting_AtkCollDesc();
 
@@ -103,14 +101,15 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_AtkCollDesc, pArg, sizeof m_AtkCollDesc);
-	m_pTransformCom = m_AtkCollDesc.pTransform;
-	Safe_AddRef(m_pTransformCom);
+	Safe_AddRef(m_AtkCollDesc.pParentTransform);
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
+
+	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 
 	return S_OK;
 }
@@ -121,6 +120,8 @@ void CAtkCollider::Tick(_double dTimeDelta)
 		return;
 
 	__super::Tick(dTimeDelta);
+
+	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
@@ -139,6 +140,10 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
+		Safe_Release(m_AtkCollDesc.pParentTransform);
+		m_AtkCollDesc.pParentTransform = nullptr;
+		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
 
@@ -216,6 +221,12 @@ HRESULT CAtkCollider::Add_Components()
 	}
 	Setting_AtkCollDesc();
 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
+		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_AtkCollDesc.TransformDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Transform : CAtkCollider");
+		return E_FAIL;
+	}
 
 #ifdef _DEBUG
 	/* for.Com_Renderer */

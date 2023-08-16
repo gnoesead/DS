@@ -21,7 +21,8 @@ public:
 
 	typedef struct tagAtkCollDesc
 	{
-		CTransform* pTransform = { nullptr };
+		CTransform* pParentTransform = { nullptr };
+		CTransform::TRANSFORMDESC TransformDesc;
 		CCollider::COLLIDERDESC ColliderDesc;
 		_double		dLifeTime = { 0.0 };
 

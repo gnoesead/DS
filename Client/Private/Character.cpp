@@ -539,7 +539,7 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 
 	AtkCollDesc.dLifeTime = DurationTime;
 
-	AtkCollDesc.pTransform = m_pTransformCom;
+	AtkCollDesc.pParentTransform = m_pTransformCom;
 
 	AtkCollDesc.eAtkType = AtkType;
 
