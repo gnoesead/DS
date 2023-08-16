@@ -227,10 +227,10 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
  
-    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f);
 
     CharacterDesc.Land_Y = 0.0f;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE;
  
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
