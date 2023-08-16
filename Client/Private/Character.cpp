@@ -126,6 +126,8 @@ void CCharacter::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	Status_Work(dTimeDelta);
+
 #ifdef _DEBUG
 	for (_uint i = 0; i < COLL_END; i++)
 	{
@@ -607,6 +609,94 @@ void CCharacter::Check_HitType()
 
 			pHitColl->Add_AtkObejct(this);
 		}
+	}
+}
+
+void CCharacter::Status_Work(_double dTimeDelta)
+{
+	//Mp
+	m_dDelay_Mp_Used += dTimeDelta;
+	if (m_dDelay_Mp_Used > 2.0)
+		m_StatusDesc.fMp += 0.06f;
+
+	if (100.0f <= m_StatusDesc.fMp)
+	{
+		m_StatusDesc.fMp = 100.0f;
+	}
+	if (m_StatusDesc.fMp <= 0.0f)
+	{
+		m_StatusDesc.fMp = 0.0f;
+	}
+
+	if (20.0f <= m_StatusDesc.fMp)
+		m_isCan_Mp_Skill = true;
+	else
+		m_isCan_Mp_Skill = false;
+
+
+	//적 히트시의 트리거
+	if (m_isHit_Success)
+	{
+		m_isHit_Success = false;
+
+		m_dDelay_ComboReset = 0.0;
+		m_StatusDesc.iAttackCombo++;
+
+		if(m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)
+			m_StatusDesc.fSpecial += 13.3f;
+	}
+	
+	//콤보
+	if (m_StatusDesc.iAttackCombo > 0)
+	{
+		m_dDelay_ComboReset += dTimeDelta;
+		if (m_dDelay_ComboReset > 5.0f)
+		{
+			m_dDelay_ComboReset = 0.0;
+			m_StatusDesc.iAttackCombo = 0;
+		}
+	}
+
+	//스페셜게이지
+	if (100.0f <= m_StatusDesc.fSpecial)
+	{
+		m_StatusDesc.fSpecial = 0.0f;
+		m_StatusDesc.iSpecial_Cnt++;
+	}
+
+	if (m_StatusDesc.iAwaken != 0)
+	{
+		if (m_StatusDesc.isAwaken_First)
+		{
+			m_StatusDesc.isAwaken_First = false;
+
+			m_StatusDesc.fSpecial_Save = m_StatusDesc.fSpecial;
+		}
+		m_StatusDesc.fSpecial = m_StatusDesc.dAwaken_TimeAcc;
+		m_StatusDesc.fSpecial_Max = m_StatusDesc.dAwaken_Duration;
+	}
+	else
+	{
+		if (m_StatusDesc.isNormal_First)
+		{
+			m_StatusDesc.isNormal_First = false;
+
+			m_StatusDesc.fSpecial = m_StatusDesc.fSpecial_Save;
+			m_StatusDesc.fSpecial_Max = 100.0f;
+		}
+	}
+
+
+	
+}
+
+void CCharacter::Use_Mp_Skill()
+{
+	if (m_isCan_Mp_Skill)
+	{
+		if(m_StatusDesc.iAwaken < 2)
+			m_StatusDesc.fMp -= 20.0f;
+		m_dDelay_Mp_Used = 0.0;
 	}
 }
 

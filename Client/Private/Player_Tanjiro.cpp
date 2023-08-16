@@ -127,6 +127,7 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 		}
 	}
 
+
 	if (GetAsyncKeyState('B'))
 	{
 		m_pModelCom->Set_Animation(0);
@@ -906,6 +907,16 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 {
+	if (m_Moveset.m_iAwaken < 2)
+	{
+		if (m_isCan_Mp_Skill == false)
+		{
+			m_Moveset.m_Down_Skill_Normal = false;
+			m_Moveset.m_Down_Skill_Move = false;
+			m_Moveset.m_Down_Skill_Guard = false;
+		}
+	}
+
 	//스킬_0
 	if (m_Moveset.m_Down_Skill_Normal)
 	{
@@ -916,6 +927,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
 		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
+
+		Use_Mp_Skill();
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 3.0f * m_fScaleChange, 0.07f * m_fScaleChange);
 	
@@ -932,10 +945,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Jumping(0.3f * m_fScaleChange, 0.07f * m_fScaleChange);
 
 		m_pModelCom->Get_Animation()->Set_EarlyEnd(true);
+
+		Use_Mp_Skill();
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 2.7f * m_fScaleChange);
-	Go_Straight_Constant(dTimeDelta, 40, 2.7f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 41, 2.7f * m_fScaleChange, 0.11f * m_fScaleChange);
+	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 1.5f * m_fScaleChange);
+	Go_Straight_Constant(dTimeDelta, 40, 1.5f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 41, 1.5f * m_fScaleChange, 0.07f * m_fScaleChange);
 
 
 	//스킬_2 : 가드키 + I키
@@ -948,6 +963,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 		Jumping(3.0f * m_fScaleChange, 0.05f * m_fScaleChange);
+
+		Use_Mp_Skill();
 	}
 	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
 }

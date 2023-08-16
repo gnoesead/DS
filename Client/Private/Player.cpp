@@ -74,6 +74,19 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
+
+
+#ifdef _DEBUG
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_tchar	m_szFPS[MAX_PATH] = TEXT("");
+	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("MP : %.2f"), m_StatusDesc.fMp);
+	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
+		return;
+	Safe_Release(pGameInstance);
+#endif // DEBUG
+
 	
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
@@ -717,28 +730,35 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 
 	if (m_Moveset.m_iAwaken != 0)
 	{
-		m_Moveset.m_dTime_Awaken_Duration -= dTimeDelta;
+		m_StatusDesc.dAwaken_TimeAcc -= dTimeDelta;
 
-		if (m_Moveset.m_dTime_Awaken_Duration <= 0.0)
+		if (m_StatusDesc.dAwaken_TimeAcc <= 0.0)
 		{
-			m_Moveset.m_dTime_Awaken_Duration = 15.0;
+			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
 			m_Moveset.m_iAwaken = 0;
+			m_StatusDesc.iAwaken = 0;
+			m_StatusDesc.isNormal_First = true;
 		}
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_Q))
+
+	if (pGameInstance->Get_DIKeyDown(DIK_Q) && m_StatusDesc.iSpecial_Cnt >= 1)
 	{
 		m_Moveset.m_Down_Battle_Awaken = true;
+		m_StatusDesc.iSpecial_Cnt--;
 
 		if (m_Moveset.m_iAwaken == 0)
 		{
 			m_Moveset.m_iAwaken = 1;
-			m_Moveset.m_dTime_Awaken_Duration = 15.0;
+			m_StatusDesc.iAwaken = 1;
+			m_StatusDesc.isAwaken_First = true;
+			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
 			m_Moveset.m_iAwaken = 2;
-			m_Moveset.m_dTime_Awaken_Duration = 15.0;
+			m_StatusDesc.iAwaken = 2;
+			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
 		}
 	}
 
