@@ -51,8 +51,6 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	m_AtkCollDesc = *pAtkCollDesc;
 	Safe_AddRef(m_AtkCollDesc.pParentTransform);
 
-	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
-
 	Setting_AtkCollDesc();
 
 
@@ -109,8 +107,6 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
-
 	return S_OK;
 }
 
@@ -121,9 +117,9 @@ void CAtkCollider::Tick(_double dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	m_pTransformCom->Set_WorldMatrix(m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+	m_pTransformCom->Go_Dir(dTimeDelta, XMVector3Normalize(m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_LOOK)));
 
-	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
 
 	m_dTimeAcc += dTimeDelta;
 
@@ -139,9 +135,9 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
-		CAtkCollManager::GetInstance()->Collect_Collider(this);
 		Safe_Release(m_AtkCollDesc.pParentTransform);
 		m_AtkCollDesc.pParentTransform = nullptr;
+		CAtkCollManager::GetInstance()->Collect_Collider(this);
 		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
 		m_AtkObj.clear();
@@ -275,6 +271,9 @@ void CAtkCollider::Free()
 	__super::Free();
 
 	m_AtkObj.clear();
+	
+	if (nullptr != m_AtkCollDesc.pParentTransform)
+		Safe_Release(m_AtkCollDesc.pParentTransform);
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pColliderCom);
