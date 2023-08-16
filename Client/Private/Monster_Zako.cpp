@@ -71,6 +71,8 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
 
+
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -243,11 +245,11 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		/*m_dDelay_Die += dTimeDelta;
+		m_dDelay_Die += dTimeDelta;
 		if (m_dDelay_Die > 10.0f)
 			m_isDead = true;
 
-		m_pColliderCom[COLL_SPHERE]->Set_Death(true);*/
+		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
 	}
 	else
 	{
@@ -796,6 +798,10 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 
 void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
+
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
 	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
@@ -815,6 +821,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		m_dDelay_ComboChain = 1.0;
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_isJumpOn)
 		{
@@ -847,6 +855,10 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.0f, 0.04f, AtkDir);
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.0f, 0.04f, AtkDir);
 	}
+	else
+	{
+
+	}
 	
 #pragma endregion
 	
@@ -857,6 +869,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 		m_dDelay_ComboChain = 1.7;
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
 	}
@@ -870,6 +884,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 		m_dDelay_ComboChain = 6.0;
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
 		Jumping(2.0f, 0.03f);
@@ -895,6 +911,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 15.0;
 		m_isBounding = true;
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_isJumpOn)
 		{
@@ -929,6 +947,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
 		m_dDelay_ComboChain = 2.5;
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		Jumping(1.2f, 0.05f);
@@ -945,14 +965,21 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(false);
 
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
 		pPlayer->Set_Hit_SurgeCutScene(true);
-		Safe_Release(pGameInstance);
+		pPlayer->Set_Hit_Success(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_dDelay_ComboChain = 5.5;
 
+		m_pModelCom->Set_Animation(ANIM_DEATH);
+	}
+#pragma endregion
+
+
+
+#pragma region Death_Motion
+	if (m_StatusDesc.fHp <= 0.0f)
+	{
 		m_pModelCom->Set_Animation(ANIM_DEATH);
 	}
 #pragma endregion
@@ -1002,11 +1029,20 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		else if (i == 2)
 			m_iAttackIndex = 5;
 	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+
+	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
+	{
+		m_isDeath_Motion = true;
+	}
+
 
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH_IDLE)
 	{
