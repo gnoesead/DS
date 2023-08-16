@@ -30,6 +30,9 @@ public: //Getter
 	_matrix		Get_WorldMatrix_Inverse();
 	_float4x4	Get_WorldFloat4x4_Inverse();
 
+	void	Set_WorldMatrix(_fmatrix TransformMatrix) {
+		m_WorldMatrix = Convert::ToFloat4x4(TransformMatrix);
+	}
 	void	Set_State(STATE eState, _fvector vState);
 	void	Set_Speed(_double dSpeed) { m_TransformDesc.dSpeedPerSec = dSpeed; }
 
