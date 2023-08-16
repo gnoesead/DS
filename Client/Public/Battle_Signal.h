@@ -20,6 +20,8 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
+		_uint    m_Rank = { 0 };
+
 	}UIDESC;
 
 

@@ -43,6 +43,13 @@ public:
 	void Set_Battle_Finish_Off(_bool Off);
 	_bool Get_Battle_Finish_Off();
 
+public:
+	void Set_Battle_Result_On(_bool On);
+	_bool Get_Battle_Result_On();
+
+	void Set_Battle_Result_Off(_bool Off);
+	_bool Get_Battle_Result_Off();
+
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
@@ -61,6 +68,12 @@ private:
 	_bool m_Battle_Finish_Off = { false };
 	_float m_Battle_Finish_TimeAcc = { 0.f };
 	_bool m_Battle_Finish_Time = { false };
+
+private:
+	_bool m_Battle_Result_On = { false };
+	_bool m_Battle_Result_Off = { false };
+	_float m_Battle_Result_TimeAcc = { 0.f };
+	_bool m_Battle_Result_Time = { false };
 
 public:
 	virtual void Free() override;

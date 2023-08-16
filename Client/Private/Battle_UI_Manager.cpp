@@ -55,6 +55,18 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 
 	}
 
+	if (m_Battle_Result_Time) {
+		m_Battle_Result_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Battle_Result_TimeAcc > 1.f) {
+
+			m_Battle_Result_TimeAcc = 0.f;
+			m_Battle_Result_Off = true;
+			m_Battle_Result_Time = false;
+		}
+
+	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -134,6 +146,28 @@ void CBattle_UI_Manager::Set_Battle_Finish_Off(_bool Off)
 _bool CBattle_UI_Manager::Get_Battle_Finish_Off()
 {
 	return m_Battle_Finish_Off;
+}
+
+void CBattle_UI_Manager::Set_Battle_Result_On(_bool On)
+{
+	m_Battle_Result_TimeAcc = 0.f;
+	m_Battle_Result_Time = true;
+	m_Battle_Result_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Result_On()
+{
+	return m_Battle_Result_On;
+}
+
+void CBattle_UI_Manager::Set_Battle_Result_Off(_bool Off)
+{
+	m_Battle_Result_Off = Off;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Result_Off()
+{
+	return m_Battle_Result_Off;
 }
 
 

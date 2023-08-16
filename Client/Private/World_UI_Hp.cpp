@@ -117,14 +117,21 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	m_pTransformCom->LookAt(m_vTargetPos);
 
 
-	// Monster (юс╫ц)
-	if (pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")) != nullptr) {
+	// Monster_Pos
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index) != nullptr) {
 
-		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
+		CGameObject* pGameObject = pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index);
+
+		CCharacter* pMon = dynamic_cast<CCharacter*>(pGameObject);
+
+		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
 
 		m_vBattle_Targt = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+	}
+	else {
+		m_Is_Render = false;
 	}
 
 

@@ -40,21 +40,22 @@ HRESULT CBattle_Signal::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 4) {
-		m_fX = 940;
-		m_fY = 560;
-		m_Origin_X = 512.f;
-		m_Origin_Y = 480.f;
-		m_Size_Param = 1.f;
+	if (m_UI_Desc.m_Type == 0) {
+		m_fX = 1100;
+		m_fY = 600;
+		m_Origin_X = 512.f * 0.7f;
+		m_Origin_Y = 480.f * 0.7f;
+		m_Size_Param = 0.6f;
 		m_UI_Layer = 101.f;
+		m_Size_Change = 0.2f;
 	}
 
-	if (m_UI_Desc.m_Type == 5) {
+	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 940;
 		m_fY = 560;
 		m_Origin_X = 502.f;
 		m_Origin_Y = 80.f;
-		m_Size_Param = 1.f;
+		m_Size_Param = 0.6f;
 		m_UI_Layer = 100.f;
 	}
 
@@ -104,6 +105,46 @@ void CBattle_Signal::Tick(_double TimeDelta)
 
 	Safe_Release(pGameInstance);
 	
+
+	if (m_UI_Desc.m_Type == 0) {
+
+		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On()) {
+			m_Size_Change -= (_float)TimeDelta * 1.f;
+
+			if (m_Size_Change < 0.f) {
+				m_Size_Change = 0.f;
+			}
+
+			m_Alpha += (_float)TimeDelta * 15.f;
+
+			if (m_Alpha > 1.f) {
+				m_Alpha = 1.f;
+			}
+
+			if (m_Size_Change == 0.f && m_Alpha == 1.f) {
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(false);
+			}
+
+		}
+
+		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Off()) {
+			
+			m_Alpha -= (_float)TimeDelta * 5.f;
+
+			if (m_Alpha < 0.f) {
+				m_Alpha = 0.f;
+			}
+
+			if (m_Alpha == 0.f) {
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Off(false);
+			}
+
+		}
+	}
+
+
+
+
 	if (m_UI_Desc.m_Type == 6) {
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Start_On()) {
@@ -186,6 +227,11 @@ void CBattle_Signal::Tick(_double TimeDelta)
 		}
 	}
 
+
+	if (m_UI_Desc.m_Type == 0) {
+		m_Size_Param = 0.6f + m_Size_Change;
+	}
+
 	if (m_UI_Desc.m_Type == 6) {
 		m_Size_Param = 0.6f + m_Size_Change;
 	}
@@ -261,7 +307,7 @@ HRESULT CBattle_Signal::Add_Components()
 		return E_FAIL;
 
 
-	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 5) {
+	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 1) {
 		/* For.Com_Texture */
 		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Battle_Rank"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
@@ -301,8 +347,12 @@ HRESULT CBattle_Signal::SetUp_ShaderResources()
 
 	
 
-	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 5) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
+	if (m_UI_Desc.m_Type == 0 ) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Rank)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 1) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 5)))
 			return E_FAIL;
 	}
 	else if (m_UI_Desc.m_Type >= 6 && m_UI_Desc.m_Type <= 7) {

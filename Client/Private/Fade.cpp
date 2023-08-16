@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "Battle_UI_Manager.h"
 
 
 CFade::CFade(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -280,6 +281,9 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_Delay_On = true;
 		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
+
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(true);
+
 	}
 
 
