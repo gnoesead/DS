@@ -567,7 +567,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	if (vFinalColor.a == 0.f)
 		discard;
 
-	//if (true == g_bGrayScale)
+	//if (true == g_bSepia)
 	//{
 	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 	//	float3 c = float3(0.0, 0.0, 0.0);
@@ -584,8 +584,38 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	//	/*if (Out.vColor.a == 0.f)
 	//		discard;*/
 	//}
-	//else
+	if (true == g_bSepia)
+	{
+		float2 arr[9] =
+		{
+			float2(-1, -1), float2(+0, +1), float2(+1, -1),
+			float2(-1, +0), float2(+0, +0), float2(+1, +0),
+			float2(-1, +1), float2(+0, +1), float2(+1, +1)
+		};
+
+		float3 color = 0;
+		for (uint blur = 0; blur < 8; blur++) // blur : ¹Ý°æ
+		{
+			for (int i = 0; i < 9; i++)
+			{
+				float x = arr[i].x * 1280.f * (float)blur;
+				float y = arr[i].y * 720.f * (float)blur;
+
+				float2 uv = In.vTexUV + float2(x, y);
+				Out.vColor.rgb += g_RadialBlurTexture.Sample(LinearSampler, uv).rgb;
+			}
+		}
+
+		Out.vColor.rgb /= 8 * 9;
+		Out.vColor.a = 1.f;
+	}
+	else
+	{
 		Out.vColor = vFinalColor;
+	}
+		
+
+
 
 	/*if (Out.vColor.a == 0.f)
 		discard;*/

@@ -444,8 +444,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
-				
+			{				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
