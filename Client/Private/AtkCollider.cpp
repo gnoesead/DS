@@ -117,16 +117,22 @@ void CAtkCollider::Tick(_double dTimeDelta)
 	__super::Tick(dTimeDelta);
 
 	m_dTimeAcc += dTimeDelta;
-	
-	//if(m_dTimeAcc < 0.10)
-	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
 
-	//if (0.10 <= m_dTimeAcc && m_dTimeAcc < 0.10 + dTimeDelta)
-		m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+	if (true == m_AtkCollDesc.bBullet)
+	{		
+		if (false == m_bSaveTransform)
+		{
+			m_bSaveTransform = true;
+			m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+		}
 
-	if(m_dTimeAcc > 0.12)
-	m_pTransformCom->Go_Dir(dTimeDelta * 20.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
-	
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
+	}
+	else
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
+
 
 	if (m_pColliderCom->Get_Coll())
 	{
@@ -147,8 +153,9 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
-
 		m_iCollCount = 0;
+		m_bSaveTransform = false;
+
 		Set_Dead();
 	}
 
@@ -279,7 +286,7 @@ void CAtkCollider::Free()
 	__super::Free();
 
 	m_AtkObj.clear();
-	
+
 	if (nullptr != m_AtkCollDesc.pParentTransform)
 		Safe_Release(m_AtkCollDesc.pParentTransform);
 

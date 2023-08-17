@@ -450,37 +450,37 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 			if (1 == m_iEvent_Index) // 0.25
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 			if (2 == m_iEvent_Index) // 0.48
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 			if (3 == m_iEvent_Index) // 0.55
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 			if (4 == m_iEvent_Index) // 0.82
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 			if (5 == m_iEvent_Index) // 0.88
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
 			}
 
 		}
