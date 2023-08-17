@@ -234,6 +234,8 @@ HRESULT CAtkCollider::Add_Components()
 	}
 	Setting_AtkCollDesc();
 
+	m_AtkCollDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_AtkCollDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_AtkCollDesc.TransformDesc)))
 	{
