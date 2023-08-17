@@ -116,6 +116,9 @@ private:
 
 	_float m_In_Out = { 1.f };
 
+	_float m_Map_Move = { 30.f };
+
+
 private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();

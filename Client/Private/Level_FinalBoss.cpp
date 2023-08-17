@@ -845,6 +845,16 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 	// Skill_Name
 	CSkill_Name::UIDESC UIDesc12;
 	ZeroMemory(&UIDesc12, sizeof UIDesc12);
@@ -882,8 +892,28 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc13, sizeof UIDesc13);
 
+	// ·©Å©
+	UIDesc13.m_Is_Reverse = false;
+	UIDesc13.m_Type = 0;
+	UIDesc13.m_Rank = 0;
 
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc13, sizeof UIDesc13);
+
+	// ÇÁ·¹ÀÓ
+	UIDesc13.m_Is_Reverse = false;
+	UIDesc13.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 
@@ -991,56 +1021,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 
 
 
-// Àâ¸÷ÀÌ ÆÄÃ÷·Î µé°íÀÖ°Ô
-
-#pragma region Monster_Hp
-	/*CWorld_UI_Hp::UIDESC UIDesc3;
-	ZeroMemory(&UIDesc, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 0;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
-		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 1;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
-		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 2;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
-		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 3;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Boss_UI"),
-		TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}*/
-
-#pragma endregion
 
 
 
