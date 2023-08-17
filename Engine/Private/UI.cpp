@@ -37,6 +37,7 @@ void CUI::Tick(_double dTimeDelta)
 void CUI::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
+
 }
 
 HRESULT CUI::Render()

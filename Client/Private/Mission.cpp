@@ -216,14 +216,9 @@ void CMission::LateTick(_double TimeDelta)
 		if (dist < 4.f && m_Is_Boss_Encounter == false) {
 			m_Is_Boss_Encounter = true;
 			CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
+			CFadeManager::GetInstance()->Set_Fade_Color(true);
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		}
-
-		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
-
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
-
 
 		// Monster
 		_vector Trigger_2 = { 67.f, 3.f, 19.9f };
@@ -233,7 +228,7 @@ void CMission::LateTick(_double TimeDelta)
 
 		if (dist_2 < 4.f && m_Is_Mon_Encounter == false) {
 			m_Is_Mon_Encounter = true;
-
+			CFadeManager::GetInstance()->Set_Fade_Color(true);
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		}
 
@@ -242,6 +237,7 @@ void CMission::LateTick(_double TimeDelta)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
+		// º¸½º
 		_vector Trigger = { 600.f, 4.5f, 317.f };
 		_vector vDist = Pos - Trigger;
 
@@ -249,13 +245,10 @@ void CMission::LateTick(_double TimeDelta)
 
 		if (dist < 4.f && m_Is_Boss_Encounter == false) {
 			m_Is_Boss_Encounter = true;
+			CFadeManager::GetInstance()->Set_Fade_Color(true);
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		}
 
-		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
-
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
 	}
 	
 	m_Main_Type = CMissionManager::GetInstance()->Get_Main_Mission_Type();

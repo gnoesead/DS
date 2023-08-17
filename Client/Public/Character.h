@@ -42,6 +42,20 @@ public:
 		_int	iSpecial_Cnt = { 0 };
 		_float  fSpecial = { 0.0f };
 		_float	fSpecial_Max = { 100.0f };
+		_float	fSpecial_Save = { 0.0f };
+
+		_int	iAwaken = { 0 };
+		_double	dAwaken_Duration = { 15.0 };
+		_double	dAwaken_TimeAcc = { 15.0 };
+		_bool	isAwaken_First = { true };
+		_bool	isNormal_First = { true };
+
+		_float	fSupport = { 100.0f };
+		_float	fSupport_Max = { 100.0f };
+
+		_int    iAttackCombo = { 0 };
+		_int    iHitCombo = { 0 };
+
 	}CHAR_STATUS;
 
 protected:
@@ -63,6 +77,12 @@ public:
 	CTransform* Get_TransformCom();
 	_bool	Get_IsJumpOn() { return m_isJumpOn; }
 
+	// Get_Status
+	CHAR_STATUS Get_Status() {
+		return m_StatusDesc;
+	}
+
+
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -75,6 +95,7 @@ protected:
 	void	Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
+
 	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn = false);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed , _bool bIsJumpOn = false);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
@@ -97,6 +118,12 @@ protected:
 	void	Check_HitCollDead();
 	void	Check_HitType();
 
+
+	//스테이터스 hp,mp등등 게이지 관련
+	void	Status_Work(_double dTimeDelta);
+	void	Use_Mp_Skill(); 
+	
+
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
 
@@ -118,10 +145,15 @@ protected:
 	CTransform* m_pTransformCom = { nullptr };
 
 
-protected:
+protected: //status 게이지 관련
 	CHAR_STATUS  m_StatusDesc;
 
+	_bool	m_isCan_Mp_Skill = { true };
+	_double m_dDelay_Mp_Used = { 0.0 };
 
+	_bool  m_isHit_Success = { false };
+
+	_double m_dDelay_ComboReset = { 0.0 };
 
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -132,6 +164,9 @@ protected:
 	//Eventcall관련 
 	_int m_iPreAnimIndex_ForEvent = { 0 };
 	
+
+	//Death
+	_double		m_dDelay_Die = { 0.0 };
 
 	//Hit관련
 	_bool	m_isBounding = { false };

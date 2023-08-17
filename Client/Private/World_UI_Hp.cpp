@@ -106,12 +106,10 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	// Camera
-	
 	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
@@ -119,14 +117,21 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	m_pTransformCom->LookAt(m_vTargetPos);
 
 
-	// Monster
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+	// Monster_Pos
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index) != nullptr) {
 
-		CTransform* m_pBattleTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), TEXT("Com_Transform")));
+		CGameObject* pGameObject = pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index);
+
+		CCharacter* pMon = dynamic_cast<CCharacter*>(pGameObject);
+
+		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
 
 		m_vBattle_Targt = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+	}
+	else {
+		m_Is_Render = false;
 	}
 
 
@@ -134,6 +139,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 
 
 	Get_Boss_Info(TimeDelta);
+
 
 	if (m_Delay_Down == true) {
 		m_D_UV_Cull += (_float)TimeDelta * 0.3f;
@@ -320,12 +326,29 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 
 		m_UV_Cull += (_float)TimeDelta * 0.5f;
 
+	}
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) != nullptr) {
+
+		CCharacter* pMonster = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index));
+
+		_float Hp = pMonster->Get_Status().fHp;
+		_float Hp_Max = pMonster->Get_Status().fHp_Max;
+
+		m_UV_Cull = 1.f - (_float)(Hp / Hp_Max);
+
 		if (m_UV_Cull > 1.f) {
 			m_UV_Cull = 1.f;
+			m_Is_Render = false;
 		}
-
-
 	}
+
+	Safe_Release(pGameInstance);
+
+
 }
 
 void CWorld_UI_Hp::Set_Personal_Pos()

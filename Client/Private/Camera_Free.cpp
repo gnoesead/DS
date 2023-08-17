@@ -40,8 +40,6 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 	Ready_CutInFinish();
 
 
-	
-
 
 
 	return S_OK;
@@ -89,6 +87,16 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	/*if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+
+		m_Village_Cam_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Village_Cam_TimeAcc < 4.f) {
+			CCameraManager::GetInstance()->Zoom_Fix(200.f);
+		}
+	}*/
+
+
 	// Camera_Shake
 	if (CCameraManager::GetInstance()->Get_Is_Shake_On()) {
 
@@ -101,7 +109,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	// Monster
+	// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num) != nullptr) {
@@ -114,15 +122,34 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
+	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
+
+		CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
+
+		CTransform* m_pBattleTargetTransformCom = pBoss->Get_TransformCom();
+
+		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
 	else {
 		m_Is_Battle = false;
 	}
+
+
+	// Zoom
+	if (m_Is_Battle == false) {
+		if (pGameInstance->Get_DIKeyState(DIK_S)) {
+			CCameraManager::GetInstance()->Zoom_Fix(2.f);
+		}
+	}
+
+	m_Zoom = CCameraManager::GetInstance()->Get_Zoom();
 
     // Focus
 	m_Is_Focus_On = CCameraManager::GetInstance()->Get_Is_Focus_On();
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
+	XMVectorSetY(m_vBattleTargetPos, 0.f);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
@@ -179,7 +206,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		}
 		else if (m_Is_Focus_On == true) {
 
-			m_fDistance = { 6.f };
+			m_fDistance = { 6.f + m_Zoom};
 			m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 			m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 			m_fLookDamping = { 7.f };
@@ -192,14 +219,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			if (m_Is_Battle != true) {
 
 				if (m_bIs_LockFree != true) {
-					m_fDistance = { 3.f };
+					m_fDistance = { 3.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.2f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.2f, 0.f, 0.f };
 					m_fLookDamping = { 6.f };
 					m_fDamping = { 7.f };
 				}
 				else {
-					m_fDistance = { 6.f };
+					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };
@@ -224,7 +251,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 					SideCamera(dTimeDelta);
 				}
 				else {
-					m_fDistance = { 6.f };
+					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };

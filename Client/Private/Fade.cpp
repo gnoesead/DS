@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "Battle_UI_Manager.h"
 
 
 CFade::CFade(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -75,7 +76,6 @@ HRESULT CFade::Initialize(void * pArg)
 void CFade::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-	
 
 	// Fade_Out
 	if (m_UI_Desc.m_Type == 0) {
@@ -94,9 +94,7 @@ void CFade::Tick(_double TimeDelta)
 	}
 
 
-
 	Set_UI();
-
 }
 
 void CFade::LateTick(_double TimeDelta)
@@ -118,26 +116,29 @@ void CFade::LateTick(_double TimeDelta)
 
 HRESULT CFade::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
 	}
-
-	
-	if (m_Is_CutScene == false && m_Is_Render == true) {
-
-		m_pVIBufferCom->Render();
-
-	}
-
-	
 
 	return S_OK;
 }
@@ -186,10 +187,15 @@ HRESULT CFade::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
-
-
+	if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
+			return E_FAIL;
+	}
+	else {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+	}
+	
 
 	return S_OK;
 }
@@ -275,6 +281,9 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_Delay_On = true;
 		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
+
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(true);
+
 	}
 
 
@@ -285,6 +294,7 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_InOut_Speed = 1.f;
 		CFadeManager::GetInstance()->Set_Fade_OutIn(false);
 		CFadeManager::GetInstance()->Set_Fade_OutIn_Done(true);
+		CFadeManager::GetInstance()->Set_Fade_Color(false);
 	}
 
 

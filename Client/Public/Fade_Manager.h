@@ -51,6 +51,11 @@ public:
 	_bool Get_Is_House_Boss_On();
 	void  Set_Is_House_Boss_On(_bool is);
 	
+public:
+	void Set_Fade_Color(_bool Type);
+	_bool Get_Fade_Color();
+
+
 private:
 	_bool m_Is_Fade_In = { false };
 	_bool m_Is_Fade_Out = { false };
@@ -67,6 +72,8 @@ private:
 	_uint m_Ink_Sprite = { 0 };
 
 	_float m_Delay_Time = { 0.f };
+
+	_bool m_Fade_Color = { false };
 
 public:
 	virtual void Free() override;
