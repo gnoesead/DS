@@ -293,7 +293,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		if (m_AccTime == 0.0)
 		{
 			CCameraManager::GetInstance()->Camera_Shake(1.2, 30);
-			m_pRendererCom->Set_Sepia();
+			m_pRendererCom->Set_RadialBlur();
 		}
 
 		m_AccTime += TimeDelta;
@@ -307,7 +307,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		if (m_AccTime >= 1.0)
 		{
 			m_pRendererCom->Set_Invert();
-			m_pRendererCom->Set_Sepia();
+			m_pRendererCom->Set_RadialBlur();
 			m_bChageRoom = true;
 			m_bChangeRoomTrigger = false;
 		}

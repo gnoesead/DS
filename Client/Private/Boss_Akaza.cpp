@@ -401,6 +401,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma endregion // AWAKE_ComboPunch
+
+#pragma region 대시펀치
 		if (ANIM_SUPERARMOR == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -431,6 +433,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+#pragma endregion 대시펀치 끝
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -440,35 +443,86 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
-		}	
-		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
+		}
+		if (ANIM_AIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)// 0.18
 			{
-				
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+			if (1 == m_iEvent_Index) // 0.25
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+			if (2 == m_iEvent_Index) // 0.48
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+			if (3 == m_iEvent_Index) // 0.55
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+			if (4 == m_iEvent_Index) // 0.82
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+			if (5 == m_iEvent_Index) // 0.88
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.0f), 1.5,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f, true);
+			}
+
+		}
+
+		if (ANIM_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0.75
+			{
+				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
-			if (1 == m_iEvent_Index)
+
+		}
+		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0.27
 			{
 				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (1 == m_iEvent_Index) // 0.65
+			{
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
-			if (2 == m_iEvent_Index)
-			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_Upper", m_pTransformCom);
-			}
+
+
 		}
+#pragma region 평타콤보
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
-					CAtkCollider ::TYPE_SMALL, vMonsterDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
 		}
@@ -490,9 +544,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
 
 		}
-		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
 			if (0 == m_iEvent_Index)
 			{
@@ -526,6 +586,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+#pragma endregion 평타콤보 끝
 
 		m_iEvent_Index++;
 	}

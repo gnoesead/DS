@@ -114,7 +114,7 @@ protected:
 	void	JumpStop(_double dDuration);
 
 	//콜라이더 관련`
-	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg);
+	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, _bool bBullet = false);
 	void	Check_HitCollDead();
 	void	Check_HitType();
 

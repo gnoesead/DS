@@ -298,7 +298,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
-		m_pRendererCom->Set_Sepia();
+		m_pRendererCom->Set_RadialBlur();
 	}
 
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
