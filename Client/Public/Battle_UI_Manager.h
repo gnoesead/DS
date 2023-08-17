@@ -50,6 +50,17 @@ public:
 	void Set_Battle_Result_Off(_bool Off);
 	_bool Get_Battle_Result_Off();
 
+	void Set_Battle_Result_Size_Reset(_bool Is);
+	_bool Get_Battle_Result_Size_Reset();
+
+public:
+	void Set_Battle_Result_On_2(_bool On);
+	_bool Get_Battle_Result_On_2();
+
+	void Set_Battle_Result_Off_2(_bool Off);
+	_bool Get_Battle_Result_Off_2();
+
+
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
@@ -74,6 +85,12 @@ private:
 	_bool m_Battle_Result_Off = { false };
 	_float m_Battle_Result_TimeAcc = { 0.f };
 	_bool m_Battle_Result_Time = { false };
+	_bool m_Battle_Result_Size_Reset = { false };
+
+	_bool m_Battle_Result_On_2 = { false };
+	_bool m_Battle_Result_Off_2 = { false };
+	_float m_Battle_Result_TimeAcc_2 = { 0.f };
+	_bool m_Battle_Result_Time_2 = { false };
 
 public:
 	virtual void Free() override;

@@ -54,6 +54,11 @@ void CPlayer::Tick(_double dTimeDelta)
 		m_ePlayerState = { PLAYER_BATTLE };
 	}
 
+	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE && pGameInstance->Get_CurLevelIdx() != LEVEL_HOUSE) {
+		m_ePlayerState = { PLAYER_BATTLE };
+		CFadeManager::GetInstance()->Set_Is_Battle(true);
+	}
+
 
 	Safe_Release(pGameInstance);
 
@@ -295,6 +300,11 @@ void CPlayer::Key_Input(_double dTimeDelta)
 			m_isCanNavi = true;
 	}
 
+	if (pGameInstance->Get_DIKeyState(DIK_B))
+	{
+		m_StatusDesc.fSpecial += 1.1f;
+	}
+
 	
 
 	if (pGameInstance->Get_DIKeyDown(DIK_Z))
@@ -307,7 +317,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
-		m_pRendererCom->Set_Sepia();
+		m_pRendererCom->Set_RadialBlur();
 	}
 
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
@@ -799,6 +809,13 @@ void CPlayer::Key_Input_Down(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	
+	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+		m_Moveset.m_isPressing_While_Restrict = true;
+	else
+		m_Moveset.m_isPressing_While_Restrict = false;
+
+
 	if (m_Moveset.m_isDownMotion)
 	{
 		m_dDelay_GetUp += dTimeDelta;
@@ -1015,38 +1032,42 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			}
 		}
 	}
-
-	
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1A])
+	else if (LEVEL_VILLAGE == iLevelIdx)
 	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A])
 		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_1A] = true;
-			m_dChangePositionAccTime = 0.0;
+			vInteractionPos = { 600.f, 4.5f, 317.f, 1.f };
+
+			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 		}
+
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B])
+		{
+			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+		}
+
 	}
 
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1B])
+
+	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
+		if (m_bChangePositionTrigger[i] && !m_bChangePosition[i])
 		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_1B] = true;
-			m_dChangePositionAccTime = 0.0;
-		}
-	}
+			m_dChangePositionAccTime += TimeDelta;
 
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_2A])
-	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
-		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_2A] = true;
-			m_dChangePositionAccTime = 0.0;
+			if (m_dChangePositionAccTime >= 1.0)
+			{
+				m_bChangePosition[i] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 		}
 	}
 
@@ -1069,6 +1090,14 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			case CHANGE_POSITON_HOUSE_2A:
 				vNextPos = XMVectorSet(118.f, 0.f, 117.f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
+				break;
+			case CHANGE_POSITON_VILLAGE_1A:
+				vNextPos = XMVectorSet(426.55f, 3.0f, 301.92f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_VILLAGE_BATTLE);
+				break;
+			case CHANGE_POSITON_VILLAGE_1B:
+				vNextPos = XMVectorSet(600.f, 4.5f, 317.f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_VILLAGE_MAINROAD1);
 				break;
 			default:
 				break;
@@ -1141,6 +1170,14 @@ HRESULT CPlayer::Add_Components()
 		TEXT("Com_Navigation_Village_Wall"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_WALL], &m_CharacterDesc.NaviDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Navigation_Village_Wall: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_Battle*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
+		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_Battle: CPlayer");
 		return E_FAIL;
 	}
 

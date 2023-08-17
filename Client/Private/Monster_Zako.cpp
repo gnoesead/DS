@@ -922,16 +922,13 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 
 	Go_Straight_Constant(dTimeDelta, 44, 1.8f);
 	Go_Straight_Deceleration(dTimeDelta, 45, 1.8f, 0.045f);
-
-	
-
 }
 
 void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player")));
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
 
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
@@ -1084,8 +1081,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		Jumping(1.2f, 0.05f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 3.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 92, 3.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
 	Ground_Animation_Play(92, 93);
 #pragma endregion
 
@@ -1269,6 +1266,14 @@ HRESULT CMonster_Zako::Add_Components()
 		TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_Battle*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
+		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_Battle: CPlayer");
 		return E_FAIL;
 	}
 

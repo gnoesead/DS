@@ -109,9 +109,10 @@ void CMainApp::Tick(_double dTimeDelta)
 	CBattle_UI_Manager::GetInstance()->Tick(dTimeDelta);
 
 
+	// 전투 종료
 	if (m_pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
 
-		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.f);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.4f);
 	}
 
 
@@ -590,6 +591,14 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_Wall.dat")))))
 	{
 		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_Wall");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Navigation_Village_Battle */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_Battle.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_Battle");
 		return E_FAIL;
 	}
 

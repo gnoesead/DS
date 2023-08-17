@@ -141,12 +141,14 @@ void CMini_Map::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+
 	if (m_Is_In == true)
 		Fade_In(TimeDelta);
 
 	if (m_Is_Out == true)
 		Fade_Out(TimeDelta);
 
+	
 	// Map
 	if (m_UI_Desc.m_Type == 3) {
 
@@ -273,6 +275,10 @@ void CMini_Map::Tick(_double TimeDelta)
 				m_UV_Cut_MaxY = 1.f;
 
 		}
+
+		m_fX += m_Map_Move;
+
+
 	}
 
 	// Player
@@ -301,7 +307,11 @@ void CMini_Map::Tick(_double TimeDelta)
 
 			m_fY = 170 + (0.136 - m_UV_Player_Y) * 340 * 0.8f - (120 - (0.5 - 0.3) * 268 - (_double)CMiniMapManager::GetInstance()->Get_MiniMap_Y());
 		}
+
+		m_fX += m_Map_Move;
 	}
+
+
 
 	Set_UI();
 
@@ -751,27 +761,41 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 void CMini_Map::Fade_In(_double TimeDelta)
 {
-	m_Alpha += (_float)TimeDelta * 2.f;
 
+	m_Alpha += (_float)TimeDelta * 2.f;
+	
 	if (m_Alpha >= 1.f)
 	{
 		m_Alpha = 1.f;
 	}
 
-	m_fX -= TimeDelta * 120.0;
-
-	if (m_fX <= m_Origin_PosX)
-	{
-		m_fX = m_Origin_PosX;
-	}
 
 	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
-		if (m_Alpha >= 1.f) {
+
+
+		m_Map_Move -= (_float)TimeDelta * 120.f;
+
+		if (m_Map_Move <= 0.f)
+		{
+			m_Map_Move = 0.f;
+		}
+
+		if (m_Alpha >= 1.f && m_Map_Move <= 0.f) {
 			m_Is_In = false;
 		
 		}
+
+
 	}
 	else {
+
+		m_fX -= TimeDelta * 120.0;
+
+		if (m_fX <= m_Origin_PosX)
+		{
+			m_fX = m_Origin_PosX;
+		}
+
 		if (m_Alpha >= 1.f && m_fX <= m_Origin_PosX) {
 			m_Is_In = false;
 		
@@ -783,28 +807,40 @@ void CMini_Map::Fade_Out(_double TimeDelta)
 {
 
 	m_Alpha -= (_float)TimeDelta * 3.f;
-
+	
 	if (m_Alpha <= 0.f)
 	{
 		m_Alpha = 0.f;
 	}
 
-	m_fX += TimeDelta * 120.0;
-
-	if (m_fX >= m_Start_PosX)
-	{
-		m_fX = m_Start_PosX;
-		
-	}
-
-
+	
 	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
-		if (m_Alpha <= 0.f) {
+
+		m_Map_Move += (_float)TimeDelta * 120.f;
+
+		if (m_Map_Move >= 30.f)
+		{
+			m_Map_Move = 30.f;
+		}
+
+
+		if (m_Alpha <= 0.f && m_Map_Move >= 30.f) {
 			m_Is_Out = false;
 		
 		}
+
+
 	}
 	else {
+
+		m_fX += TimeDelta * 120.0;
+
+		if (m_fX >= m_Start_PosX)
+		{
+			m_fX = m_Start_PosX;
+
+		}
+
 		if (m_Alpha <= 0.f && m_fX >= m_Start_PosX) {
 			m_Is_Out = false;
 		

@@ -1309,8 +1309,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		Jumping(1.2f, 0.05f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 3.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 120, 3.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 120, 2.5f, AtkDir);
 	Ground_Animation_Play(120, 121);
 	
 #pragma endregion
@@ -1537,6 +1537,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
+		
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
 		{
