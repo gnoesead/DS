@@ -582,31 +582,7 @@ void CPlayer_Battle_Ult_Frame::Tool_Funtion(_double TimeDelta)
 
 void CPlayer_Battle_Ult_Frame::Get_Player_Info(_double TimeDelta)
 {
-	if (GetKeyState('U') < 0) {
-
-		m_Player_Ult += TimeDelta * 0.5;
-
-		if (m_Player_Ult <= 0) {
-			m_Player_Ult = 0;
-		}
-
-		if (m_Player_Ult >= 1) {
-
-			m_Player_Ult = 0;
-
-			m_Ult_Stack++;
-			if (m_Ult_Stack > 3) {
-				m_Ult_Stack = 3;
-			}
-		}
-	}
-
-	if (GetKeyState('I') < 0) {
-		m_Player_Ult = 0;
-		m_Ult_Stack = 0;
-	}
-
-
+	
 	if (m_Ult_Stack == 0) {
 		m_Ult_Stack_Frame = 0;
 	}
@@ -615,22 +591,6 @@ void CPlayer_Battle_Ult_Frame::Get_Player_Info(_double TimeDelta)
 		m_Ult_Stack_Frame = 1;
 	}
 
-
-
-	if (GetKeyState('0') < 0) {
-		m_Ult_State = 0;
-	}
-	if (GetKeyState('1') < 0) {
-		m_Ult_State = 1;
-	}
-	if (GetKeyState('2') < 0) {
-		m_Ult_Stack = 0;
-		m_Ult_State = 2;
-	}
-	if (GetKeyState('3') < 0) {
-		m_Ult_Stack = 1;
-		m_Ult_State = 3;
-	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

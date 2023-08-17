@@ -435,7 +435,6 @@ void CPlayer_Battle_Combo::Tool_Funtion(_double TimeDelta)
 void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 {
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -502,14 +501,14 @@ void CPlayer_Battle_Combo::Check_Combo_Change(_double TimeDelta)
 {
 
 	if (m_Size_Up == true) {
-		m_Size_Param += (_float)TimeDelta * 2;
-		if (m_Size_Param >= 1.05) {
+		m_Size_Param += (_float)TimeDelta * 7;
+		if (m_Size_Param >= 1.3) {
 			m_Size_Up = false;
 		}
 	}
 	
 	if (m_Size_Up == false) {
-		m_Size_Param -= (_float)TimeDelta * 2;
+		m_Size_Param -= (_float)TimeDelta * 7;
 		if (m_Size_Param <= m_Origin_Size_Param) {
 			m_Size_Param = m_Origin_Size_Param;
 		}

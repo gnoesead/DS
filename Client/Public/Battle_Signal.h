@@ -78,8 +78,10 @@ private:
 	_float m_Origin_X = {};
 	_float m_Origin_Y = {};
 
-	_float m_Size_Change = { -0.2f };
+	_float m_Size_Change = { 0.25f };
+	_float m_Move_Change = { 0.f };
 
+	
 
 private:
 	HRESULT Add_Components();
