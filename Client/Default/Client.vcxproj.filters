@@ -181,9 +181,6 @@
     <Filter Include="02. GameObjects\UI\09.Main_UI\Option">
       <UniqueIdentifier>{53ad77b6-fc16-4e82-8d85-dd029aed7add}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Result">
-      <UniqueIdentifier>{842ea203-1e1b-49fa-97d3-e83de817bc64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\09.Main_UI\Pause">
       <UniqueIdentifier>{493ad216-5aa5-4c36-8e3f-c55767cdf314}</UniqueIdentifier>
     </Filter>

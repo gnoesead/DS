@@ -159,6 +159,19 @@ PS_OUT  PS_MAIN_ALPHA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_MAIN_ALPHA_PLUS(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	vColor.rgb *= 3.f;
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
 PS_OUT  PS_MAIN_ALPHA_CUT(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
@@ -215,6 +228,21 @@ PS_OUT  PS_MAIN_ALPHA_MASK(PS_IN In)
 	if (TexMaskUV.x >= 0.9f)
 		vColor.w = 0.f;
 
+
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
+PS_OUT  PS_MAIN_INK_MASK(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	
+	vColor.w *= 1.f - vColor.r;
 
 
 	Out.vColor = vColor;
@@ -478,5 +506,29 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_CUT();
+	}
+	// 14
+	pass Alpha_Ink_Mask
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_INK_MASK();
+	}
+	// 15
+	pass Alpha_Reverse_X_Plus
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN_REVERSE_X();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_PLUS();
 	}
 }

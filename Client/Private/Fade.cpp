@@ -59,7 +59,10 @@ HRESULT CFade::Initialize(void * pArg)
 	else if (m_UI_Desc.m_Type == 2) {
 		m_Alpha = 0.f;
 	}
-	
+	// Ink
+	else if (m_UI_Desc.m_Type == 3) {
+		m_Alpha = 1.f;
+	}
 
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -92,7 +95,20 @@ void CFade::Tick(_double TimeDelta)
 		if (m_Is_OutIn == true)
 			Fade_OutIn(TimeDelta);
 	}
+	// Ink
+	else if (m_UI_Desc.m_Type == 3) {
+	
+		if (m_Is_Ink_On == true) {
 
+			m_Ink_Sprite += TimeDelta * 35.f;
+
+			if (m_Ink_Sprite > 55.f) {
+				CFadeManager::GetInstance()->Set_Ink_In(false);
+				CFadeManager::GetInstance()->Set_Ink_In_Done(true);
+			}
+		}
+
+	}
 
 	Set_UI();
 }
@@ -125,8 +141,13 @@ HRESULT CFade::Render()
 		if (FAILED(SetUp_ShaderResources()))
 			return E_FAIL;
 
-		if (m_Is_Reverse == false)
-			m_pShaderCom->Begin(1);
+		if (m_Is_Reverse == false) {
+
+			if (m_UI_Desc.m_Type == 3)
+				m_pShaderCom->Begin(14);
+			else
+				m_pShaderCom->Begin(1);
+		}
 		else {
 			m_pShaderCom->Begin(2);
 		}
@@ -160,11 +181,21 @@ HRESULT CFade::Add_Components()
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Black"),
-		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 2) {
 
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Black"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 3){
+
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Ink"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
 
 	return S_OK;
 }
@@ -187,14 +218,32 @@ HRESULT CFade::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
-			return E_FAIL;
+	if (m_UI_Desc.m_Type >= 0 && m_UI_Desc.m_Type <= 2) {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
+				return E_FAIL;
+		}
+		else {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		}
 	}
-	else {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
-			return E_FAIL;
+	else if (m_UI_Desc.m_Type == 3) {
+
+		if (m_Ink_Sprite > 46.f) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 47)))
+				return E_FAIL;
+		}
+		else {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Ink_Sprite)))
+				return E_FAIL;
+		}
+		
+
 	}
+
+
 	
 
 	return S_OK;
@@ -238,7 +287,11 @@ void CFade::Get_Info(_double TimeDelta)
 		m_Is_OutIn = CFadeManager::GetInstance()->Get_Fade_OutIn();
 		m_Is_OutIn_Done = CFadeManager::GetInstance()->Get_Fade_OutIn_Done();
 	}
-	
+	// Ink
+	else if (m_UI_Desc.m_Type == 3) {
+		m_Is_Ink_On = CFadeManager::GetInstance()->Get_Ink_In();
+		m_Is_Ink_On_Done = CFadeManager::GetInstance()->Get_Ink_In_Done();
+	}
 }
 
 void CFade::Fade_In(_double TimeDelta)
