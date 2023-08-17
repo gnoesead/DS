@@ -75,6 +75,10 @@ void CPlayer::LateTick(_double dTimeDelta)
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 	
+#ifdef _DEBUG
+	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
+		return;
+#endif
 }
 
 HRESULT CPlayer::Render()
@@ -189,6 +193,17 @@ _float CPlayer::Get_Distance_To_LockOnPos()
 	_float fDistance = Convert::GetLength(vMonsterPos - vPlayerPos);
 
 	return fDistance;
+}
+
+_vector CPlayer::Get_Dir_To_LockOnPos()
+{
+	Get_LockOn_MonPos();
+
+	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = XMLoadFloat4(&m_LockOnPos);
+	_vector vDir = XMVector3Normalize(vMonsterPos - vPlayerPos);
+
+	return vDir;
 }
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
@@ -492,7 +507,7 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_dDelay_Charge_W = 0.0;
 		}
 		// 둘이 동시에 누른거 딜레이 확인
-		if (m_dDelay_Charge_J < 0.015f && m_dDelay_Charge_W < 0.015f)
+		if (m_dDelay_Charge_J < 0.011f && m_dDelay_Charge_W < 0.011f)
 		{
 			m_isCan_Charge = true;
 		}
@@ -974,38 +989,42 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			}
 		}
 	}
-
-	
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1A])
+	else if (LEVEL_VILLAGE == iLevelIdx)
 	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A])
 		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_1A] = true;
-			m_dChangePositionAccTime = 0.0;
+			vInteractionPos = { 600.f, 4.5f, 317.f, 1.f };
+
+			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 		}
+
+		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B])
+		{
+			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+		}
+
 	}
 
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] && !m_bChangePosition[CHANGE_POSITON_HOUSE_1B])
+
+	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
+		if (m_bChangePositionTrigger[i] && !m_bChangePosition[i])
 		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_1B] = true;
-			m_dChangePositionAccTime = 0.0;
-		}
-	}
+			m_dChangePositionAccTime += TimeDelta;
 
-	if (m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] && !m_bChangePosition[CHANGE_POSITON_HOUSE_2A])
-	{
-		m_dChangePositionAccTime += TimeDelta;
-
-		if (m_dChangePositionAccTime >= 1.0)
-		{
-			m_bChangePosition[CHANGE_POSITON_HOUSE_2A] = true;
-			m_dChangePositionAccTime = 0.0;
+			if (m_dChangePositionAccTime >= 1.0)
+			{
+				m_bChangePosition[i] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 		}
 	}
 
@@ -1028,6 +1047,14 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			case CHANGE_POSITON_HOUSE_2A:
 				vNextPos = XMVectorSet(118.f, 0.f, 117.f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
+				break;
+			case CHANGE_POSITON_VILLAGE_1A:
+				vNextPos = XMVectorSet(426.55f, 3.0f, 301.92f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_VILLAGE_BATTLE);
+				break;
+			case CHANGE_POSITON_VILLAGE_1B:
+				vNextPos = XMVectorSet(600.f, 4.5f, 317.f, 1.f);
+				Change_NaviMesh(CLandObject::NAVI_VILLAGE_MAINROAD1);
 				break;
 			default:
 				break;

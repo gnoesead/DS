@@ -46,7 +46,7 @@ public:
 		ANIM_DOWN = 136,
 		ANIM_DOWN_GETUP_MOVE = 137, // 137~138, 82
 		ANIM_DOWN_GETUP = 134, //134~135, 61, 82
-		ANIM_END = 116
+		
 	};
 
 private:

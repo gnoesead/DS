@@ -134,10 +134,16 @@ public:
 	virtual HRESULT Render_ShadowDepth();
 
 
+public:
+	PLAYERMOVESET Get_Moveset() {
+		return m_Moveset;
+	}
+
 protected:
 	void	Dir_Setting(_bool Reverse);
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
+	_vector Get_Dir_To_LockOnPos();
 	
 
 protected: //애니메이션 제어용 함수들
@@ -174,6 +180,9 @@ protected: // 애니메이션 제어용 변수들
 
 	_bool	m_isSpecialHit = { false };
 
+	//히트모션 인덱스 스몰
+	_int m_iSmallHit_Index = { 0 };
+
 	//쿨타임 적용
 	_bool		m_isCool_MoveKey = { false };
 	_double		m_dTime_MoveKey = { 0.0 };
@@ -186,6 +195,9 @@ protected: // 애니메이션 제어용 변수들
 
 	//콤보 도중
 	_bool	m_isComboing = { false };
+	_bool		m_isCan_AirDash = { false };
+	_bool		m_isAirDashing = { false };
+	_double		m_dDelay_Can_AirDash = { 0.0 };
 
 	// 잡기 용
 	_bool		m_isThrowing = { false };
@@ -249,7 +261,8 @@ protected:
 
 protected:
 	// 맵 이동 변수(안원)
-	enum CHANGE_POSITONTYPE { CHANGE_POSITON_HOUSE_1A, CHANGE_POSITON_HOUSE_1B, CHANGE_POSITON_HOUSE_2A, CHANGE_POSITON_HOUSE_2B, CHANGE_POSITON_END };
+	enum CHANGE_POSITONTYPE { CHANGE_POSITON_HOUSE_1A, CHANGE_POSITON_HOUSE_1B, CHANGE_POSITON_HOUSE_2A, CHANGE_POSITON_HOUSE_2B,
+							CHANGE_POSITON_VILLAGE_1A, CHANGE_POSITON_VILLAGE_1B, CHANGE_POSITON_END };
 
 	_bool	m_bChangePositionTrigger[CHANGE_POSITON_END] = { false };
 	_bool	m_bChangePosition[CHANGE_POSITON_END] = { false };

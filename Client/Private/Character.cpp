@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "AtkCollManager.h"
+#include "Fade_Manager.h"
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject(pDevice, pContext)
@@ -102,7 +103,15 @@ void CCharacter::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
-		m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+
+		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
+
+		if (Is_Battle == false)
+			m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
+		else
+			m_pTransformCom->Scaling(_float3(0.8f, 0.8f, 0.8f));
+
+
 	}
 	
 
@@ -224,6 +233,14 @@ _bool CCharacter::EventCallProcess()
 
 	CAnimation::CONTROLDESC ControlDesc = pAnim->Get_ControlDesc();
 
+	if (m_iPreAnimIndex_ForEvent != m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_pModelCom->Set_EventReset(m_iPreAnimIndex_ForEvent);
+		m_iPreAnimIndex_ForEvent = m_pModelCom->Get_iCurrentAnimIndex();
+
+		m_iEvent_Index = 0;
+	}
+
 	if (ControlDesc.m_isEventCall)
 	{
 		ControlDesc.m_isEventCall = false;
@@ -325,7 +342,7 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir));
+		m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -580,6 +597,10 @@ void CCharacter::Check_HitType()
 			else if (pHitColl->Get_Collider()->Get_Hit_Upper())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Bound())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(true);
 			}
 
 			pHitColl->Add_AtkObejct(this);

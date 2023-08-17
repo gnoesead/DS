@@ -38,6 +38,7 @@
 #include "Story_Board.h"
 #include "Pause.h"
 #include "Fade.h"
+#include "Skill_Name.h"
 
 
 #include "NPC_Female.h"
@@ -740,7 +741,10 @@ HRESULT CLoader::LoadingForLobby()
 		CPause::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	
+	/* Prototype_GameObject_Skill_Name */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Skill_Name"),
+		CSkill_Name::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -1756,6 +1760,11 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_01c.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_Wall_01d*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_01d"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_01d.bin", PivotMatrix))))
+		return E_FAIL;
+
 	/* For.Prototype_Component_Model_Wall_02a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_02a"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_02a.bin", PivotMatrix))))
@@ -1765,6 +1774,12 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_02b"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_02b.bin", PivotMatrix))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Wall_02c*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_02c"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_02c.bin", PivotMatrix))))
+		return E_FAIL;
+
 
 	/* For.Prototype_Component_Model_Wall_02d*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_02d"),
@@ -1784,6 +1799,16 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	/* For.Prototype_Component_Model_Wall_03c*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_03c"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_03c.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Wall_03d*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_03d"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_03d.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Wall_03e*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_03e"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_03e.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Wall_04a*/
@@ -1844,6 +1869,11 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	/* For.Prototype_Component_Model_Wall_08c*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_08c"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_08c.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Wall_08d*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Wall_08d"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Wall_08d.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_WallStone_01a*/

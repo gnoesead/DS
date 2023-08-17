@@ -632,6 +632,27 @@ void CPlayer_Battle_Ult_Frame::Get_Player_Info(_double TimeDelta)
 		m_Ult_State = 3;
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		_float Ult = pPlayer->Get_Status().fSpecial;
+		_float Ult_Max = pPlayer->Get_Status().fSpecial_Max;
+
+		m_Player_Ult = (_double)(Ult / Ult_Max);
+
+		m_Ult_Stack = pPlayer->Get_Status().iSpecial_Cnt;
+
+		m_Ult_State = dynamic_cast<CPlayer*>(pPlayer)->Get_Moveset().m_iAwaken + 1;
+	}
+
+	Safe_Release(pGameInstance);
+
+
+
 }
 
 void CPlayer_Battle_Ult_Frame::Size_Change(_double TimeDelta)

@@ -439,7 +439,6 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
-	//¡Ú
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{

@@ -204,7 +204,7 @@ void CFIcon::LateTick(_double TimeDelta)
 	// Monster (락온 UI만 이렇게)
 	if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
 
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
 			CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
 

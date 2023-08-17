@@ -17,6 +17,8 @@
 #include "Player_Battle_Ult_Effect.h"
 #include "ColliderManager.h"
 #include "Story_Board.h"
+#include "Skill_Name.h"
+
 
 #include "Monster_Spider.h"
 #include "Story_Manager.h"
@@ -102,7 +104,7 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F9))
+	if (pGameInstance->Get_DIKeyDown(DIK_F1))
 	{
 		CFadeManager::GetInstance()->Set_Fade_Out(true);
 	}
@@ -439,6 +441,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 
 	CCharacter::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
 	
 	/*
 	for (_int i = 0; i < 3; i++)
@@ -979,6 +983,19 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 1;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+	// Skill_Name
+	CSkill_Name::UIDESC UIDesc9;
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Skill_Name"), &UIDesc9))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

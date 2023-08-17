@@ -53,7 +53,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 void CBoss_Akaza::Tick(_double dTimeDelta)
 {
- 	__super::Tick(dTimeDelta);
+	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
 		return;
@@ -111,7 +111,7 @@ HRESULT CBoss_Akaza::Render()
 
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
-				
+
 
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
@@ -135,7 +135,7 @@ HRESULT CBoss_Akaza::Render()
 		m_pModelCom->Render(i);
 	}
 
- 
+
 	return S_OK;
 }
 
@@ -222,177 +222,93 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_DASHPUNCH;
-			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR);
-			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR2);
-			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR3);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
-			m_bRunPunch = false;
-			m_bStep_B = false;
-			m_bDashOn = false;
-			m_bCharge = false;
+			Trigger_DashPunch();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-			m_eCurstate = STATE_AIRGUN;
-			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
-			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
-			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN3);
-			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN);
-			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN2);
-			m_pModelCom->Set_AnimResetTimeAcc(ANIM_AIRGUN3);
+
+			Trigger_AirGun();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_DASHKICK;
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+
+			Trigger_DashKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_DASHKICK;
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+			Trigger_UpperKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_JUMPAIRGUN;
-			m_bJump = false;
-			m_bAnimFinish = false;
-			m_iRandomDirNum = Random::Generate_Int(1, 3);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN2);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPAIRGUN3);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPLOOP);
-			m_pModelCom->Set_AnimisFinish(ANIM_JUMPLAND);
+
+			Trigger_JumpAirGun();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			m_eCurstate = STATE_JUMPSTOMP;
-			m_pModelCom->Set_AnimResetTimeAcc(ANIM_SKILL_UP);
-			m_pModelCom->Set_AnimisFinish(ANIM_SKILL_UP);
-			m_pModelCom->Set_AnimisFinish(ANIM_SKILL_DOWN);
-			m_pModelCom->Set_AnimisFinish(ANIM_SKILL_DOWNEND);
-			m_bAnimFinish = false;
-			m_dJumpStompTime = 0.0;
-			
+
+			Trigger_JumpStomp();
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_M))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_UPPERKICK;
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_UP);
+
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_8))
 		{
-			m_eCurstate = STATE_AWAKE_COMBOPUNCH;
 
-			m_bDashOn = false;
-			m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+			Trigger_ComboPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_0))
 		{
-			m_eCurstate = STATE_NACHIM;
-			m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+
+			Trigger_Nachim();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_Q))
 		{
-			m_eCurstate = STATE_PUSHAWAY;
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
+
+			Trigger_PushAway();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_W))
 		{
-			m_eCurstate = STATE_HEAL;
-			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+
+			Trigger_Heal();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_E))
 		{
-			m_eCurstate = STATE_AWAKE;
-			m_bAnimFinish = false;
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_START);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_END);
+
+			Trigger_Awake();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_R))
 		{
-			m_eCurstate = STATE_ESCAPE;
-			m_bStep_B = false;
-			m_iRandomDirNum = Random::Generate_Int(1, 2);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_LEFT2);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_RIGHT2);
+
+			Trigger_Escape();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_T))
 		{
-			m_eCurstate = STATE_NEXTPHASE2;
 
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
-			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
+			Trigger_NextPhase2();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_Y))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_NEXTPHASE3;
-			m_bAnimFinish = false;
-			m_bStep_B = false;
-			m_bHeal = false;
 
-			m_iPunchCount = 0;
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
-			m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
-
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
-			m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+			Trigger_NextPhase3();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_U))
 		{
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_DASH_COMBO_PUNCH;
-			m_bAnimFinish = false;
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO1);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO2);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO3);
-			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
+			Trigger_Dash_ComboPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{
-			m_bTrigger = true;
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_eCurstate = STATE_NACHIM_COMBOPUNCH;
-			m_bAnimFinish = false;
-			m_bStep_B = false;
-			m_iPunchCount = 0;
-
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
-			m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
-			m_pModelCom->Set_AnimisFinish(ANIM_STEP_BEHIND);
+			Trigger_Nachim_ComboPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{
@@ -436,7 +352,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{				
+			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
@@ -471,17 +387,17 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
-			
+
 		}
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.2,
-					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f); // ºòºí·Î¿ì
 			}
-			
+
 
 		}
 #pragma endregion // AWAKE_ComboPunch
@@ -499,7 +415,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
 			}
-
 		}
 
 		if (ANIM_SUPERARMOR3 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -507,8 +422,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.2,
-					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -521,31 +436,28 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 2.0f, 0.0f), 0.2,
-					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 2.0f, 0.0f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
-		}
+		}	
 		if (ANIM_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 0.2,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 			if (1 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 0.2,
-					CAtkCollider::TYPE_UPPER, vMonsterDir, 1.0f);
-			}
-			/*if (2 == m_iEvent_Index)
-			{
 				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
-
-			}*/
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+		
 
 		}
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -553,8 +465,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider ::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
 		}
@@ -563,7 +475,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
@@ -573,7 +485,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
@@ -583,8 +495,32 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 0.2,
-					CAtkCollider::TYPE_BIG, vMonsterDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
+			}
+			if (4 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 2.0f, 1.5f), 1.0,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
 
 		}
@@ -909,13 +845,13 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	if (m_bAwake == true)
 	{
 		m_dAwakeTime += dTimeDelta;
-		if(24.0 < m_dAwakeTime && m_dAwakeTime <= 24.0 + dTimeDelta)
+		if (24.0 < m_dAwakeTime && m_dAwakeTime <= 24.0 + dTimeDelta)
 			m_pRendererCom->Set_Invert();
-		if (m_dAwakeTime > 25.0 )
+		if (m_dAwakeTime > 25.0)
 		{
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
-			
+
 		}
 	}
 
@@ -1159,7 +1095,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 
 			if (m_iIdleCnt == 1)
 			{
-				
+
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
@@ -1365,6 +1301,7 @@ void CBoss_Akaza::Trigger_DashPunch()
 	m_bStep_B = false;
 	m_bDashOn = false;
 	m_bCharge = false;
+	m_bMove = false;
 }
 
 void CBoss_Akaza::Trigger_Guard()
@@ -1463,6 +1400,7 @@ void CBoss_Akaza::Trigger_UpperKick()
 	m_eCurstate = STATE_UPPERKICK;
 	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 	m_pModelCom->Set_AnimisFinish(ANIM_COMBO_UP);
+	m_bMove = false;
 }
 
 void CBoss_Akaza::Trigger_NextPhase2()
@@ -1674,14 +1612,17 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 			if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR) == false)
 				m_eCurAnimIndex = ANIM_SUPERARMOR;
 		}
-		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR) == true && m_bCharge == false || m_bStep_B == true && m_bCharge == false)
+		if ((m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR) == true && m_bCharge == false) || (m_bStep_B == true && m_bCharge == false))
 		{
 			m_bCharge = true;
 			m_eCurAnimIndex = ANIM_SUPERARMOR2;
 		}
 
 		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR2) == true)
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_SUPERARMOR2);
 			m_eCurAnimIndex = ANIM_SUPERARMOR3;
+		}
 
 		if (m_pModelCom->Get_AnimFinish(ANIM_SUPERARMOR3) == true)
 		{
@@ -1695,7 +1636,11 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
 
-		//Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 13.f, 0.0, 0.3); // ÀÌÆåÆ®¼öÁ¤
+		if (Check_Distance(2.f) == true)
+			m_bMove = true;
+
+		if (Check_Distance(2.f) == false && m_bMove == false)
+			Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 10.f, 0.0, 0.4); // ÀÌÆåÆ®¼öÁ¤
 
 	}
 
@@ -1819,9 +1764,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 			if (Pos.y <= 0.f)
 			{
-				
+
 				m_eCurAnimIndex = ANIM_SKILL_DOWNEND;
-				
+
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
@@ -1857,7 +1802,7 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
 		m_eCurAnimIndex = ANIM_COMBO_DOWN;
 
-	if(m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_DOWN,0.80,dTimeDelta))
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_DOWN, 0.80, dTimeDelta))
 		Camera_Shake(0.5, 150);
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
@@ -1951,10 +1896,8 @@ void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 {
-
 	_vector vDir = Calculate_Dir_FixY();
 	_float fDistance = Calculate_Distance();
-
 
 	if (fDistance > 5.f && m_bAnimFinish == false)
 	{
@@ -2022,8 +1965,12 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 		Trigger_Interact();
 	}
 
-	//Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f); // ÀÌÆåÆ®¼öÁ¤
-	
+	if (Check_Distance(2.f) == true)
+		m_bMove = true;
+
+	if (Check_Distance(2.f) == false && m_bMove == false)
+		Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f); // ÀÌÆåÆ®¼öÁ¤
+
 
 }
 
@@ -2282,7 +2229,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_DASH);
-			
+
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
 
 	}

@@ -139,6 +139,11 @@ void CPlayer_Battle_Combo::LateTick(_double TimeDelta)
 		m_Size_Up = true;
 	}
 
+	if (m_Damage_Combo != m_Pre_Damage_Combo) {
+		m_Pre_Damage_Combo = m_Damage_Combo;
+		m_Size_Up = true;
+	}
+
 	if (m_Hit_Combo == 0) {
 		m_Is_Render = false;
 	}
@@ -154,6 +159,7 @@ void CPlayer_Battle_Combo::LateTick(_double TimeDelta)
 	}
 
 	if (m_UI_Desc.m_Type == 2) {
+
 		if (m_UI_Desc.m_Combo_Type == 0) {
 			if (m_Hit_Num_F == 0) {
 				m_Is_Render = false;
@@ -167,7 +173,6 @@ void CPlayer_Battle_Combo::LateTick(_double TimeDelta)
 	}
 
 	
-
 	Get_Mouse_Pos();
 
 	m_Pt_In = Pt_InUI();
@@ -433,19 +438,39 @@ void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 	if (GetKeyState('C') & 0x8000) {
 		m_Damage_Combo++;
 	}
-	
+
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		/*if (m_UI_Desc.m_Combo_Type == 0) {
+			m_Hit_Combo = pPlayer->Get_Status().iAttackCombo;
+		}
+		else if(m_UI_Desc.m_Combo_Type == 1){
+			m_Damage_Combo = pPlayer->Get_Status().iHitCombo;
+		}*/
+
+	}
+
+	Safe_Release(pGameInstance);
+
+
 	if (m_Hit_Combo >= 1 && m_Hit_Combo <= 9) {
-		
-		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0 ) {
+
+		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
 			m_Hit_Num_F = 0;
 			m_Hit_Num_B = m_Hit_Combo;
 		}
-			
+
 	}
 	else if (m_Hit_Combo >= 10 && m_Hit_Combo <= 99) {
 
 		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
-			
+
 			m_Hit_Num_F = m_Hit_Combo / 10;
 			m_Hit_Num_B = m_Hit_Combo % 10;
 

@@ -42,6 +42,9 @@ public:
 		_int	iSpecial_Cnt = { 0 };
 		_float  fSpecial = { 0.0f };
 		_float	fSpecial_Max = { 100.0f };
+		_int    iAttackCombo = { 0 };
+		_int    iHitCombo = { 0 };
+
 	}CHAR_STATUS;
 
 protected:
@@ -62,6 +65,12 @@ public:
 public:
 	CTransform* Get_TransformCom();
 	_bool	Get_IsJumpOn() { return m_isJumpOn; }
+
+	// Get_Status
+	CHAR_STATUS Get_Status() {
+		return m_StatusDesc;
+	}
+
 
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
@@ -97,6 +106,9 @@ protected:
 	void	Check_HitCollDead();
 	void	Check_HitType();
 
+
+	
+
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
 
@@ -126,7 +138,16 @@ protected:
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	//First
+	_bool	m_isFirst_Anim = { true };
+
+	//Eventcall관련 
+	_int m_iPreAnimIndex_ForEvent = { 0 };
 	
+
+	//Hit관련
+	_bool	m_isBounding = { false };
+	_bool	m_isConnectHitting = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };

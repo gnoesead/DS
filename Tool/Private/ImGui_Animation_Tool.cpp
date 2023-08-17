@@ -168,6 +168,8 @@ void CImGui_Animation_Tool::Animation_ImGui_Main()
         }
     }
 
+  
+    
 
 
     ImGui::Text("Event Test int : %d", m_iTest);
@@ -233,6 +235,27 @@ void CImGui_Animation_Tool::Animation_ImGui_Main()
         _float fEventTime = (_float)event.m_dTime;
         ImGui::SliderFloat("Event", &fEventTime, 0.0f, fEnd_Time, "%.3f", AnimSliderflags);
     }
+
+
+
+    ImGui::SeparatorText("DELETE Select");
+
+    ImGui::InputInt("Select Delete Number Idx", &m_iSelectDeleteIndex);
+
+    static int Button_Event_Delete_Select = 0;
+    if (ImGui::Button("Event_Select_Delete"))
+        Button_Event_Delete_Select++;
+    if (Button_Event_Delete_Select & 1)
+    {
+        Button_Event_Delete_Select--;
+
+        if (m_iSelectDeleteIndex >= 0 && m_iSelectDeleteIndex < ControlDesc.m_vecTime_Event.size())
+        {
+            ControlDesc.m_vecTime_Event.erase(ControlDesc.m_vecTime_Event.begin() + (size_t)m_iSelectDeleteIndex);
+        }
+        m_pAnimation->Set_ControlDesc(ControlDesc);
+    }
+
 
     ImGui::SeparatorText("WindowSet");
     ImGui::Checkbox("No Move", &m_isGUINoMove[1]);
