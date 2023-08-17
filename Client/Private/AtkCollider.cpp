@@ -122,7 +122,7 @@ void CAtkCollider::Tick(_double dTimeDelta)
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
 
 	//if (0.10 <= m_dTimeAcc && m_dTimeAcc < 0.10 + dTimeDelta)
-		m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+		//m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 
 	if(m_dTimeAcc > 0.12)
 	m_pTransformCom->Go_Dir(dTimeDelta * 20.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
