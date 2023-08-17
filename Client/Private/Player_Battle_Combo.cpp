@@ -134,29 +134,38 @@ void CPlayer_Battle_Combo::LateTick(_double TimeDelta)
 
 	Get_Player_Info(TimeDelta);
 
-	if (m_Hit_Combo != m_Pre_Hit_Combo) {
-		m_Pre_Hit_Combo = m_Hit_Combo;
-		m_Size_Up = true;
+	if (m_UI_Desc.m_Combo_Type == 0) {
+
+		if (m_Hit_Combo != m_Pre_Hit_Combo) {
+			m_Pre_Hit_Combo = m_Hit_Combo;
+			m_Size_Up = true;
+		}
+
+		if (m_Hit_Combo == 0) {
+			m_Is_Render = false;
+		}
+		else {
+			m_Is_Render = true;
+		}
 	}
 
-	if (m_Damage_Combo != m_Pre_Damage_Combo) {
-		m_Pre_Damage_Combo = m_Damage_Combo;
-		m_Size_Up = true;
+
+	if (m_UI_Desc.m_Combo_Type == 1) {
+
+		if (m_Damage_Combo != m_Pre_Damage_Combo) {
+			m_Pre_Damage_Combo = m_Damage_Combo;
+			m_Size_Up = true;
+		}
+
+		if (m_Damage_Combo == 0) {
+			m_Is_Render = false;
+		}
+		else {
+			m_Is_Render = true;
+		}
 	}
 
-	if (m_Hit_Combo == 0) {
-		m_Is_Render = false;
-	}
-	else {
-		m_Is_Render = true;
-	}
 
-	if (m_Damage_Combo == 0) {
-		m_Is_Render = false;
-	}
-	else {
-		m_Is_Render = true;
-	}
 
 	if (m_UI_Desc.m_Type == 2) {
 
@@ -172,13 +181,7 @@ void CPlayer_Battle_Combo::LateTick(_double TimeDelta)
 		}
 	}
 
-	
-	Get_Mouse_Pos();
 
-	m_Pt_In = Pt_InUI();
-
-	Tool_Funtion(TimeDelta);
-	
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -201,7 +204,7 @@ HRESULT CPlayer_Battle_Combo::Render()
 		}
 
 
-		if (m_Is_CutScene == false && m_Is_Render == true) {
+		if (m_Is_CutScene == false) {
 
 			m_pVIBufferCom->Render();
 
@@ -432,13 +435,6 @@ void CPlayer_Battle_Combo::Tool_Funtion(_double TimeDelta)
 void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 {
 
-	if (GetKeyState('C') & 0x8000) {
-		m_Hit_Combo++;
-	}
-	if (GetKeyState('C') & 0x8000) {
-		m_Damage_Combo++;
-	}
-
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -447,55 +443,59 @@ void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
 
-		/*if (m_UI_Desc.m_Combo_Type == 0) {
+		if (m_UI_Desc.m_Combo_Type == 0) {
 			m_Hit_Combo = pPlayer->Get_Status().iAttackCombo;
 		}
-		else if(m_UI_Desc.m_Combo_Type == 1){
+
+		if (m_UI_Desc.m_Combo_Type == 1){
 			m_Damage_Combo = pPlayer->Get_Status().iHitCombo;
-		}*/
+		}
 
 	}
 
 	Safe_Release(pGameInstance);
 
+	if (m_UI_Desc.m_Combo_Type == 0) {
 
-	if (m_Hit_Combo >= 1 && m_Hit_Combo <= 9) {
+		if (m_Hit_Combo >= 1 && m_Hit_Combo <= 9) {
 
-		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
-			m_Hit_Num_F = 0;
-			m_Hit_Num_B = m_Hit_Combo;
-		}
-
-	}
-	else if (m_Hit_Combo >= 10 && m_Hit_Combo <= 99) {
-
-		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
-
-			m_Hit_Num_F = m_Hit_Combo / 10;
-			m_Hit_Num_B = m_Hit_Combo % 10;
+			if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
+				m_Hit_Num_F = 0;
+				m_Hit_Num_B = m_Hit_Combo;
+			}
 
 		}
-	}
+		else if (m_Hit_Combo >= 10 && m_Hit_Combo <= 99) {
 
+			if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 0) {
 
-	if (m_Damage_Combo >= 1 && m_Damage_Combo <= 9) {
+				m_Hit_Num_F = m_Hit_Combo / 10;
+				m_Hit_Num_B = m_Hit_Combo % 10;
 
-		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 1) {
-			m_Damage_Num_F = 0;
-			m_Damage_Num_B = m_Damage_Combo;
-		}
-
-	}
-	else if (m_Damage_Combo >= 10 && m_Damage_Combo <= 99) {
-
-		if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 1) {
-
-			m_Damage_Num_F = m_Damage_Combo / 10;
-			m_Damage_Num_B = m_Damage_Combo % 10;
-
+			}
 		}
 	}
 
+	if (m_UI_Desc.m_Combo_Type == 1) {
+
+		if (m_Damage_Combo >= 1 && m_Damage_Combo <= 9) {
+
+			if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 1) {
+				m_Damage_Num_F = 0;
+				m_Damage_Num_B = m_Damage_Combo;
+			}
+
+		}
+		else if (m_Damage_Combo >= 10 && m_Damage_Combo <= 99) {
+
+			if ((m_UI_Desc.m_Type == 2 || m_UI_Desc.m_Type == 3) && m_UI_Desc.m_Combo_Type == 1) {
+
+				m_Damage_Num_F = m_Damage_Combo / 10;
+				m_Damage_Num_B = m_Damage_Combo % 10;
+
+			}
+		}
+	}
 }
 
 void CPlayer_Battle_Combo::Check_Combo_Change(_double TimeDelta)

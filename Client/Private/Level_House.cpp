@@ -24,6 +24,8 @@
 #include "Interaction.h"
 #include "Dialog.h"
 #include "Skill_Name.h"
+#include "Battle_Signal.h"
+
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -912,6 +914,31 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 0;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Skill_Name"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+	// Battle_Signal
+	CBattle_Signal::UIDESC UIDesc9;
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// 시작
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// 승부결정
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

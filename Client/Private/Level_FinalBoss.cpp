@@ -21,7 +21,7 @@
 #include "Interaction.h"
 #include "Dialog.h"
 #include "Skill_Name.h"
-
+#include "Battle_Signal.h"
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -856,6 +856,33 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+
+	// Battle_Signal
+	CBattle_Signal::UIDESC UIDesc13;
+	ZeroMemory(&UIDesc13, sizeof UIDesc13);
+
+	// 시작
+	UIDesc13.m_Is_Reverse = false;
+	UIDesc13.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc13, sizeof UIDesc13);
+
+	// 승부결정
+	UIDesc13.m_Is_Reverse = false;
+	UIDesc13.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
 
 
 	Safe_Release(pGameInstance);

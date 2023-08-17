@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "Battle_UI_Manager.h"
 
 
 CFade::CFade(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -115,26 +116,29 @@ void CFade::LateTick(_double TimeDelta)
 
 HRESULT CFade::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
 	}
-
-	
-	if (m_Is_CutScene == false && m_Is_Render == true) {
-
-		m_pVIBufferCom->Render();
-
-	}
-
-	
 
 	return S_OK;
 }
@@ -277,6 +281,9 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_Delay_On = true;
 		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
+
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(true);
+
 	}
 
 

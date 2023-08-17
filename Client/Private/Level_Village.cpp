@@ -25,6 +25,8 @@
 #include "Mini_Map.h"
 #include "CollisionBox.h"
 #include "Skill_Name.h"
+#include "Battle_Signal.h"
+
 
 #include "Pause.h"
 #include "Fade.h"
@@ -240,8 +242,8 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
  
-    //CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
-    CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f);
 
     CharacterDesc.Land_Y = 0.0f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
@@ -264,20 +266,20 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
-    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+    //CPlayer::CHARACTERDESC CharacterDesc;
+    //ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
+    //CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
 
   
-    CharacterDesc.WorldInfo.vPosition = _float4(426.f, 0.f, 290.f, 1.f);
+    //CharacterDesc.WorldInfo.vPosition = _float4(426.f, 0.f, 290.f, 1.f);
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
-        TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-        return E_FAIL;
-    }
+    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+    //    TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+    //{
+    //    MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+    //    return E_FAIL;
+    //}
 
 
 
@@ -545,6 +547,10 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+
+
+
 
    
 
@@ -1048,6 +1054,42 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+
+    // Battle_Signal
+    CBattle_Signal::UIDESC UIDesc9;
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ½ÃÀÛ
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 6;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ½ÂºÎ°áÁ¤
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 7;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ·©Å©
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 0;
+    UIDesc9.m_Rank = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 
