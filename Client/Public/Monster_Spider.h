@@ -91,8 +91,7 @@ private: //애니메이션 제어용 변수들
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
 
-	//Death
-	_double		m_dDelay_Die = { 0.0 };
+
 
 	
 private:

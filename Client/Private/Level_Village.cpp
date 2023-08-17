@@ -25,6 +25,8 @@
 #include "Mini_Map.h"
 #include "CollisionBox.h"
 #include "Skill_Name.h"
+#include "Battle_Signal.h"
+
 
 #include "Pause.h"
 #include "Fade.h"
@@ -236,7 +238,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
+    CCharacter::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
@@ -543,6 +545,10 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+
+
+
 
    
 
@@ -1046,6 +1052,42 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+
+    // Battle_Signal
+    CBattle_Signal::UIDESC UIDesc9;
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ½ÃÀÛ
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 6;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ½ÂºÎ°áÁ¤
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 7;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // ·©Å©
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 0;
+    UIDesc9.m_Rank = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 

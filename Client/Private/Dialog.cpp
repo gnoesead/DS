@@ -184,6 +184,10 @@ void CDialog::LateTick(_double TimeDelta)
 
 	Safe_Release(pGameInstance);
 
+	if (m_Alpha == 0.f)
+		m_Is_Render = false;
+
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
 }
