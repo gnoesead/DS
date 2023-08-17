@@ -109,9 +109,10 @@ void CMainApp::Tick(_double dTimeDelta)
 	CBattle_UI_Manager::GetInstance()->Tick(dTimeDelta);
 
 
+	// 전투 종료
 	if (m_pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
 
-		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.f);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.4f);
 	}
 
 

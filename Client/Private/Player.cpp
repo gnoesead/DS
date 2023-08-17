@@ -54,6 +54,11 @@ void CPlayer::Tick(_double dTimeDelta)
 		m_ePlayerState = { PLAYER_BATTLE };
 	}
 
+	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE && pGameInstance->Get_CurLevelIdx() != LEVEL_HOUSE) {
+		m_ePlayerState = { PLAYER_BATTLE };
+		CFadeManager::GetInstance()->Set_Is_Battle(true);
+	}
+
 
 	Safe_Release(pGameInstance);
 

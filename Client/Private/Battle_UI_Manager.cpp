@@ -58,11 +58,23 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	if (m_Battle_Result_Time) {
 		m_Battle_Result_TimeAcc += (_float)dTimeDelta;
 
-		if (m_Battle_Result_TimeAcc > 1.f) {
+		if (m_Battle_Result_TimeAcc > 1.8f) {
 
 			m_Battle_Result_TimeAcc = 0.f;
 			m_Battle_Result_Off = true;
 			m_Battle_Result_Time = false;
+		}
+
+	}
+
+	if (m_Battle_Result_Time_2) {
+		m_Battle_Result_TimeAcc_2 += (_float)dTimeDelta;
+
+		if (m_Battle_Result_TimeAcc_2 > 2.f) {
+
+			m_Battle_Result_TimeAcc_2 = 0.f;
+			m_Battle_Result_Off_2 = true;
+			m_Battle_Result_Time_2 = false;
 		}
 
 	}
@@ -170,6 +182,38 @@ _bool CBattle_UI_Manager::Get_Battle_Result_Off()
 	return m_Battle_Result_Off;
 }
 
+void CBattle_UI_Manager::Set_Battle_Result_Size_Reset(_bool Is)
+{
+	m_Battle_Result_Size_Reset = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Result_Size_Reset()
+{
+
+	return m_Battle_Result_Size_Reset;
+}
+
+void CBattle_UI_Manager::Set_Battle_Result_On_2(_bool On)
+{
+	m_Battle_Result_TimeAcc_2 = 0.f;
+	m_Battle_Result_Time_2 = true;
+	m_Battle_Result_On_2 = On;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Result_On_2()
+{
+	return m_Battle_Result_On_2;
+}
+
+void CBattle_UI_Manager::Set_Battle_Result_Off_2(_bool Off)
+{
+	m_Battle_Result_Off_2 = Off;
+}
+
+_bool CBattle_UI_Manager::Get_Battle_Result_Off_2()
+{
+	return m_Battle_Result_Off_2;
+}
 
 
 

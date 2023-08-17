@@ -36,26 +36,26 @@ HRESULT CBattle_Signal::Initialize(void * pArg)
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
+	 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
 	if (m_UI_Desc.m_Type == 0) {
-		m_fX = 1100;
-		m_fY = 600;
-		m_Origin_X = 512.f * 0.7f;
-		m_Origin_Y = 480.f * 0.7f;
+		m_fX = 1140;
+		m_fY = 605;
+		m_Origin_X = 512.f * 0.55f;
+		m_Origin_Y = 480.f * 0.55f;
 		m_Size_Param = 0.6f;
 		m_UI_Layer = 101.f;
-		m_Size_Change = 0.2f;
+		m_Size_Change = 0.25f;
 	}
 
 	if (m_UI_Desc.m_Type == 1) {
-		m_fX = 940;
-		m_fY = 560;
+		m_fX = 1250;
+		m_fY = 620;
 		m_Origin_X = 502.f;
 		m_Origin_Y = 80.f;
-		m_Size_Param = 0.6f;
+		m_Size_Param = 1.f;
 		m_UI_Layer = 100.f;
 	}
 
@@ -109,6 +109,12 @@ void CBattle_Signal::Tick(_double TimeDelta)
 	if (m_UI_Desc.m_Type == 0) {
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On()) {
+
+			if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Size_Reset() == true) {
+				m_Size_Change = 0.25f;
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Size_Reset(false);
+			}
+
 			m_Size_Change -= (_float)TimeDelta * 1.f;
 
 			if (m_Size_Change < 0.f) {
@@ -129,7 +135,7 @@ void CBattle_Signal::Tick(_double TimeDelta)
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Off()) {
 			
-			m_Alpha -= (_float)TimeDelta * 5.f;
+			m_Alpha -= (_float)TimeDelta * 25.f;
 
 			if (m_Alpha < 0.f) {
 				m_Alpha = 0.f;
@@ -142,7 +148,48 @@ void CBattle_Signal::Tick(_double TimeDelta)
 		}
 	}
 
+	if (m_UI_Desc.m_Type == 1) {
 
+		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On_2()) {
+
+			m_Move_Change -= (_float)TimeDelta * 2000.f;
+
+			if (m_Move_Change < -200.f) {
+				m_Move_Change = -200.f;
+			}
+
+			m_Alpha += (_float)TimeDelta * 15.f;
+
+			if (m_Alpha > 1.f) {
+				m_Alpha = 1.f;
+			}
+
+			if (m_Move_Change == -200.f && m_Alpha == 1.f) {
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On_2(false);
+			}
+
+		}
+
+		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Off_2()) {
+
+			m_Move_Change += (_float)TimeDelta * 100.f;
+
+			if (m_Move_Change > 0.f) {
+				m_Move_Change = 0.f;
+			}
+
+			m_Alpha -= (_float)TimeDelta * 20.f;
+
+			if (m_Alpha < 0.f) {
+				m_Alpha = 0.f;
+			}
+
+			if (m_Move_Change == 0.f && m_Alpha == 0.f) {
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Off_2(false);
+			}
+
+		}
+	}
 
 
 	if (m_UI_Desc.m_Type == 6) {
@@ -240,6 +287,9 @@ void CBattle_Signal::Tick(_double TimeDelta)
 		m_Size_Param = 0.6f + m_Size_Change;
 	}
 
+	if (m_UI_Desc.m_Type == 1) {
+		m_fX = 1250 + (_double)m_Move_Change;
+	}
 
 	Set_UI();
 }
@@ -387,7 +437,32 @@ void CBattle_Signal::Set_UI()
 
 void CBattle_Signal::Get_Info(_double TimeDelta)
 {
-	
+	if (m_UI_Desc.m_Type == 0) {
+
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+
+			CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+			if (pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.9f)
+				m_UI_Desc.m_Rank = 4;
+			else if(pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.8f)
+				m_UI_Desc.m_Rank = 0;
+			else if (pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.7f)
+				m_UI_Desc.m_Rank = 1;
+			else if (pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.6f)
+				m_UI_Desc.m_Rank = 2;
+			else if (pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.5f)
+				m_UI_Desc.m_Rank = 3;
+			
+		}
+
+		Safe_Release(pGameInstance);
+
+	}
 	
 }
 
