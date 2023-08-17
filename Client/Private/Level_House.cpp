@@ -943,6 +943,29 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// ·©Å©
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 0;
+	UIDesc9.m_Rank = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	// Frame
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 1;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
 	Safe_Release(pGameInstance);
 
