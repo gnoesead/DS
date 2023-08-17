@@ -315,7 +315,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -334,7 +333,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
 				else
@@ -349,6 +347,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
+			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
+				//else
+				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+			}
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
@@ -434,8 +439,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
-
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 			}
 		}
 
@@ -546,7 +549,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
