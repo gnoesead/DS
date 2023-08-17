@@ -65,12 +65,13 @@ private:
 
 	list<CGameObject*>	m_AtkObj;
 
+
 private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
-
 	_uint			m_iCollCount = { 0 };
 
+	//_float4x4		m_WorldMatrix;
 
 
 #ifdef _DEBUG

@@ -114,14 +114,19 @@ void CAtkCollider::Tick(_double dTimeDelta)
 {
 	if (true == m_isDead)
 		return;
-
 	__super::Tick(dTimeDelta);
 
-	m_pTransformCom->Go_Dir(dTimeDelta, XMVector3Normalize(m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_LOOK)));
-
+	m_dTimeAcc += dTimeDelta;
+	
+	//if(m_dTimeAcc < 0.10)
 	m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
 
-	m_dTimeAcc += dTimeDelta;
+	//if (0.10 <= m_dTimeAcc && m_dTimeAcc < 0.10 + dTimeDelta)
+		//m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	if(m_dTimeAcc > 0.12)
+	m_pTransformCom->Go_Dir(dTimeDelta * 20.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
+	
 
 	if (m_pColliderCom->Get_Coll())
 	{
@@ -220,6 +225,9 @@ HRESULT CAtkCollider::Add_Components()
 	}
 	Setting_AtkCollDesc();
 
+
+	m_AtkCollDesc.TransformDesc.dSpeedPerSec = 5.0;
+	m_AtkCollDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_AtkCollDesc.TransformDesc)))
 	{
