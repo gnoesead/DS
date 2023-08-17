@@ -40,22 +40,20 @@ HRESULT CPause::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	// Frame_1
+	// Frame
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 640;
 		m_fY = 360;
 		m_Origin_PosX = 640;
 		m_Origin_PosY = 220;
-		m_Start_PosX = 640;
-		m_Start_PosY = 660;
-
-		m_Origin_X = 240.f;
-		m_Origin_Y = 88.f;
+		
+		m_Origin_X = 280.f;
+		m_Origin_Y = 160.f;
 		m_Size_Param = 2.f;
 		m_UI_Layer = 11;
 	}
 
-	// Frame_2
+	// 재개하기
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 640;
 		m_fY = 360;
@@ -70,40 +68,8 @@ HRESULT CPause::Initialize(void * pArg)
 		m_UI_Layer = 12;
 	}
 
-	// Top
-	if (m_UI_Desc.m_Type == 2) {
-
-		m_fX = 640;
-		m_fY = 740;
-		m_Origin_PosX = 640;
-		m_Origin_PosY = 700;
-		m_Start_PosX = 640;
-		m_Start_PosY = 740;
-
-		m_Origin_X = 460;
-		m_Origin_Y = 72;
-		m_Size_Param = 0.666678f;
-		m_UI_Layer = 2;
-	}
-
-	// Deco
-	if (m_UI_Desc.m_Type == 3) {
-
-		m_fX = 640;
-		m_fY = 740;
-		m_Origin_PosX = 640;
-		m_Origin_PosY = 700;
-		m_Start_PosX = 640;
-		m_Start_PosY = 740;
-
-		m_Origin_X = 224;
-		m_Origin_Y = 224;
-		m_Size_Param = 0.666678f;
-		m_UI_Layer = 2;
-	}
-
 	// 로비로 돌아가기
-	if (m_UI_Desc.m_Type == 4) {
+	if (m_UI_Desc.m_Type == 2) {
 
 		m_fX = 640;
 		m_fY = 740;
@@ -119,7 +85,7 @@ HRESULT CPause::Initialize(void * pArg)
 	}
 
 	// 옵션
-	if (m_UI_Desc.m_Type == 5) {
+	if (m_UI_Desc.m_Type == 3) {
 
 		m_fX = 640;
 		m_fY = 740;
@@ -157,7 +123,8 @@ HRESULT CPause::Initialize(void * pArg)
 	
 	m_szText_2.push_back(L"옵션");
 	
-	
+	m_szText_3.push_back(L"재개하기");
+
 
 	return S_OK;
 }
