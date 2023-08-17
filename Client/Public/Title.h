@@ -73,6 +73,9 @@ private:
 	_float                  m_Time_Y = {};
 	_float                  m_UV_Speed_Y = {};
 
+	_float                  m_Eff_Sprite = { 16.f };
+
+
 private:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();

@@ -321,6 +321,13 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Title/Eff_%d.png"), 2))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Ink"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Background_Eff/Ink/tile0%d.png"), 48))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Yellow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Background_Eff/Start_Particle/Start_Particles_00%d.png"),101))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Loading_UI
