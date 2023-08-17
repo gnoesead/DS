@@ -593,6 +593,14 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 	}
 
+	/* Prototype_Component_Navigation_Village_Battle */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../../Data/NaviMesh/Village/Navi_Battle.dat")))))
+	{
+		MSG_BOX("Failed to Add Prototype_Component_Navigation_Village_Battle");
+		return E_FAIL;
+	}
+
 	// House Map
 	/* Prototype_Component_Navigation_House_0_0 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_0_0"),

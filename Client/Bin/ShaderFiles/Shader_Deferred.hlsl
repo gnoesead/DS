@@ -44,7 +44,7 @@ bool		   g_bSSAOSwitch;
 
 bool		   g_bInvert;
 bool		   g_bGrayScale;
-bool		   g_bSepia;
+bool		   g_bRadialBlur;
 
 //===================================================
 float g_fRadius;
@@ -567,55 +567,25 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	if (vFinalColor.a == 0.f)
 		discard;
 
-	//if (true == g_bSepia)
-	//{
-	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
-	//	float3 c = float3(0.0, 0.0, 0.0);
-	//	float f = 1.0 / 6;
-
-	//	for (int i = 0; i < 6; i++)
-	//	{			
-	//		c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
-	//		Out.vColor.rgb = c;
-	//	}
-	//	if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
-	//		discard;
-	//	Out.vColor.a = vFinalColor.a;
-	//	/*if (Out.vColor.a == 0.f)
-	//		discard;*/
-	//}
-	if (true == g_bSepia)
+	if (true == g_bRadialBlur)
 	{
-		float2 arr[9] =
-		{
-			float2(-1, -1), float2(+0, +1), float2(+1, -1),
-			float2(-1, +0), float2(+0, +0), float2(+1, +0),
-			float2(-1, +1), float2(+0, +1), float2(+1, +1)
-		};
+		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+		float3 c = float3(0.0, 0.0, 0.0);
+		float f = 1.0 / 6;
 
-		float3 color = 0;
-		for (uint blur = 0; blur < 8; blur++) // blur : ¹Ý°æ
-		{
-			for (int i = 0; i < 9; i++)
-			{
-				float x = arr[i].x * 1280.f * (float)blur;
-				float y = arr[i].y * 720.f * (float)blur;
-
-				float2 uv = In.vTexUV + float2(x, y);
-				Out.vColor.rgb += g_RadialBlurTexture.Sample(LinearSampler, uv).rgb;
-			}
+		for (int i = 0; i < 6; i++)
+		{			
+			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
+			Out.vColor.rgb = c;
 		}
-
-		Out.vColor.rgb /= 8 * 9;
-		Out.vColor.a = 1.f;
+		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
+			discard;
+		Out.vColor.a = vFinalColor.a;
+		/*if (Out.vColor.a == 0.f)
+			discard;*/
 	}
 	else
-	{
 		Out.vColor = vFinalColor;
-	}
-		
-
-
 
 	/*if (Out.vColor.a == 0.f)
 		discard;*/

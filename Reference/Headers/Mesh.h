@@ -19,6 +19,14 @@ public:
 
 	void	Get_BoneMatrices(_float4x4* pBoneMatrices, _fmatrix PivotMatrix, CModel* pModel);
 
+	VTXMODEL* Get_Vertices() {
+		return m_pVertices;
+	}
+
+	_ulong* Get_Indices() {
+		return m_pIndices;
+	}
+
 public:
 	const vector<_float4>&	Get_VertexPos() const { return m_VertexPos; }
 	const vector<_uint3>	Get_Faces()		const { return m_Faces; }
@@ -37,6 +45,10 @@ private:
 private:
 	vector<_float4>			m_VertexPos;
 	vector<_uint3>			m_Faces;
+
+private:
+	VTXMODEL*				 m_pVertices = { nullptr };
+	_ulong*					 m_pIndices = { nullptr };
 
 private:
 	HRESULT Ready_VertexBuffer_NonAnim(MESHDATA* pMeshData, _fmatrix PivotMatrix);

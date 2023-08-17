@@ -10,6 +10,9 @@ protected:
 	virtual ~CVIBuffer() = default;
 
 public:
+	const _uint	Get_NumIndices() {
+		return m_iNumIndices;
+	}
 	_uint	Get_NumVertices() { return m_iNumVertices; }
 
 public:

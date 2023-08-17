@@ -18,7 +18,6 @@ class CAtkCollider final : public CGameObject
 public:
 	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_END };
 	
-
 	typedef struct tagAtkCollDesc
 	{
 		CTransform* pParentTransform = { nullptr };
@@ -31,6 +30,8 @@ public:
 		ATK_TYPE	eAtkType = {TYPE_END};
 
 		_float4		AtkDir;
+		_bool		bBullet;
+
 	}ATKCOLLDESC;
 private:
 	CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -65,13 +66,13 @@ private:
 
 	list<CGameObject*>	m_AtkObj;
 
-
 private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
-	_uint			m_iCollCount = { 0 };
 
-	//_float4x4		m_WorldMatrix;
+	_uint			m_iCollCount = { 0 };
+	_bool			m_bSaveTransform = { false };
+
 
 
 #ifdef _DEBUG

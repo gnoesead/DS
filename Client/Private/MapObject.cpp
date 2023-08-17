@@ -84,6 +84,9 @@ HRESULT CMapObject::Render()
 			m_pShaderCom->Begin(5);
 		else if (7 == m_MapObject_Info.iRenderGroup)
 			m_pShaderCom->Begin(6);
+		else if (m_bBlocked)
+			m_pShaderCom->Begin(7);
+
 		else if (m_pModelCom->Get_IsNormalTexture(i))
 			m_pShaderCom->Begin(1);
 		else

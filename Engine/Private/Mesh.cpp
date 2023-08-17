@@ -85,8 +85,8 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHDATA* pMeshData
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = 0;
 
-	_ulong* pIndices = new _ulong[m_iNumIndices];
-	ZeroMemory(pIndices, sizeof(_ulong) * m_iNumIndices);
+	m_pIndices = new _ulong[m_iNumIndices];
+	ZeroMemory(m_pIndices, sizeof(_ulong) * m_iNumIndices);
 
 	_uint iNumIndices = { 0 };
 
@@ -94,22 +94,22 @@ HRESULT CMesh::Initialize_Prototype(CModel::TYPE eModelType, MESHDATA* pMeshData
 
 	for (_uint i = 0; i < iNumFaces; i++)
 	{
-		pIndices[iNumIndices]		= pMeshData->pMeshIdxData[i].iIndex0;
-		pIndices[iNumIndices + 1]	= pMeshData->pMeshIdxData[i].iIndex1;
-		pIndices[iNumIndices + 2]	= pMeshData->pMeshIdxData[i].iIndex2;
+		m_pIndices[iNumIndices]		= pMeshData->pMeshIdxData[i].iIndex0;
+		m_pIndices[iNumIndices + 1]	= pMeshData->pMeshIdxData[i].iIndex1;
+		m_pIndices[iNumIndices + 2]	= pMeshData->pMeshIdxData[i].iIndex2;
 
-		m_Faces.emplace_back(_uint3(pIndices[iNumIndices], pIndices[iNumIndices + 1], pIndices[iNumIndices + 2]));
+		m_Faces.emplace_back(_uint3(m_pIndices[iNumIndices], m_pIndices[iNumIndices + 1], m_pIndices[iNumIndices + 2]));
 
 		iNumIndices += 3;
 	}
 
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);
-	m_SubresourceData.pSysMem = pIndices;
+	m_SubresourceData.pSysMem = m_pIndices;
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pIB)))
 		return E_FAIL;
 
-	Safe_Delete_Array(pIndices);
+	
 #pragma endregion
 
 	return S_OK;
@@ -122,49 +122,47 @@ HRESULT CMesh::Initialize(void* pArg)
 
 HRESULT CMesh::Ready_VertexBuffer_NonAnim(MESHDATA* pMeshData, _fmatrix PivotMatrix)
 {
-	VTXMODEL* pVertices = new VTXMODEL[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXMODEL) * m_iNumVertices);
+	m_pVertices = new VTXMODEL[m_iNumVertices];
+	ZeroMemory(m_pVertices, sizeof(VTXMODEL) * m_iNumVertices);
 
 	for (_uint i = 0; i < m_iNumVertices; i++)
 	{
-		pVertices[i].vPosition = pMeshData->pMeshVtxData[i].vPosition;
-		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), PivotMatrix));
+		m_pVertices[i].vPosition = pMeshData->pMeshVtxData[i].vPosition;
+		XMStoreFloat3(&m_pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vPosition), PivotMatrix));
 		
-		m_VertexPos.emplace_back(_float4(pVertices[i].vPosition.x, pVertices[i].vPosition.y, pVertices[i].vPosition.z, 1.f));
+		m_VertexPos.emplace_back(_float4(m_pVertices[i].vPosition.x, m_pVertices[i].vPosition.y, m_pVertices[i].vPosition.z, 1.f));
 
-		pVertices[i].vNormal = pMeshData->pMeshVtxData[i].vNormal;
-		XMStoreFloat3(&pVertices[i].vNormal, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vNormal), PivotMatrix));
+		m_pVertices[i].vNormal = pMeshData->pMeshVtxData[i].vNormal;
+		XMStoreFloat3(&m_pVertices[i].vNormal, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vNormal), PivotMatrix));
 		
-		pVertices[i].vTexUV = pMeshData->pMeshVtxData[i].vTexUV;
-		pVertices[i].vTangent = pMeshData->pMeshVtxData[i].vTangent;
+		m_pVertices[i].vTexUV = pMeshData->pMeshVtxData[i].vTexUV;
+		m_pVertices[i].vTangent = pMeshData->pMeshVtxData[i].vTangent;
 	}
 
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);
-	m_SubresourceData.pSysMem = pVertices;
+	m_SubresourceData.pSysMem = m_pVertices;
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pVB)))
 		return E_FAIL;
-
-	Safe_Delete_Array(pVertices);
 	
 	return S_OK;
 }
 
 HRESULT CMesh::Ready_VertexBuffer_Anim(MESHDATA* pMeshData, CModel* pModel)
 {
-	VTXANIMMODEL* pVertices = new VTXANIMMODEL[m_iNumVertices];
-	ZeroMemory(pVertices, sizeof(VTXANIMMODEL) * m_iNumVertices);
+	VTXANIMMODEL* m_pVertices = new VTXANIMMODEL[m_iNumVertices];
+	ZeroMemory(m_pVertices, sizeof(VTXANIMMODEL) * m_iNumVertices);
 
 	for (_uint i = 0; i < m_iNumVertices; i++)
 	{
-		pVertices[i].vPosition = pMeshData->pMeshVtxData[i].vPosition;
+		m_pVertices[i].vPosition = pMeshData->pMeshVtxData[i].vPosition;
 
-		m_VertexPos.emplace_back(_float4(pVertices[i].vPosition.x, pVertices[i].vPosition.y, pVertices[i].vPosition.z, 1.f));
+		m_VertexPos.emplace_back(_float4(m_pVertices[i].vPosition.x, m_pVertices[i].vPosition.y, m_pVertices[i].vPosition.z, 1.f));
 
-		pVertices[i].vNormal = pMeshData->pMeshVtxData[i].vNormal;
+		m_pVertices[i].vNormal = pMeshData->pMeshVtxData[i].vNormal;
 
-		pVertices[i].vTexUV = pMeshData->pMeshVtxData[i].vTexUV;
-		pVertices[i].vTangent = pMeshData->pMeshVtxData[i].vTangent;
+		m_pVertices[i].vTexUV = pMeshData->pMeshVtxData[i].vTexUV;
+		m_pVertices[i].vTangent = pMeshData->pMeshVtxData[i].vTangent;
 	}
 
 
@@ -199,28 +197,28 @@ HRESULT CMesh::Ready_VertexBuffer_Anim(MESHDATA* pMeshData, CModel* pModel)
 			_float fWeights = pMeshData->pAnimMeshData[i].pWeightData[j].fWeights;
 
 			//pAIBone->mWeights[j].mVertexId = i번째 뼈가 영향을 주는 j정점의 인덱스"Idx"
-			if (0.f == pVertices[iVertexID].vBlendWeights.x)
+			if (0.f == m_pVertices[iVertexID].vBlendWeights.x)
 			{
 				//"Idx" 정점에 영향을 주는 뼈 x = i
-				pVertices[iVertexID].vBlendIndices.x = i;
+				m_pVertices[iVertexID].vBlendIndices.x = i;
 
 				//"Idx" 정점에 뼈 x가 몇 %의 영향을 주는가
-				pVertices[iVertexID].vBlendWeights.x = fWeights;
+				m_pVertices[iVertexID].vBlendWeights.x = fWeights;
 			}
-			else if (0.f == pVertices[iVertexID].vBlendWeights.y)
+			else if (0.f == m_pVertices[iVertexID].vBlendWeights.y)
 			{
-				pVertices[iVertexID].vBlendIndices.y = i;
-				pVertices[iVertexID].vBlendWeights.y = fWeights;
+				m_pVertices[iVertexID].vBlendIndices.y = i;
+				m_pVertices[iVertexID].vBlendWeights.y = fWeights;
 			}
-			else if (0.f == pVertices[iVertexID].vBlendWeights.z)
+			else if (0.f == m_pVertices[iVertexID].vBlendWeights.z)
 			{
-				pVertices[iVertexID].vBlendIndices.z = i;
-				pVertices[iVertexID].vBlendWeights.z = fWeights;
+				m_pVertices[iVertexID].vBlendIndices.z = i;
+				m_pVertices[iVertexID].vBlendWeights.z = fWeights;
 			}
 			else
 			{
-				pVertices[iVertexID].vBlendIndices.w = i;
-				pVertices[iVertexID].vBlendWeights.w = fWeights;
+				m_pVertices[iVertexID].vBlendIndices.w = i;
+				m_pVertices[iVertexID].vBlendWeights.w = fWeights;
 			}
 		}
 	}
@@ -235,12 +233,12 @@ HRESULT CMesh::Ready_VertexBuffer_Anim(MESHDATA* pMeshData, CModel* pModel)
 	}
 
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);
-	m_SubresourceData.pSysMem = pVertices;
+	m_SubresourceData.pSysMem = m_pVertices;
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_BufferDesc, &m_SubresourceData, &m_pVB)))
 		return E_FAIL;
 
-	Safe_Delete_Array(pVertices);
+	Safe_Delete_Array(m_pVertices);
 
 	return S_OK;
 }
@@ -276,4 +274,7 @@ void CMesh::Free()
 	__super::Free();
 
 	m_Bones.clear();
+
+	Safe_Delete_Array(m_pIndices);
+	Safe_Delete_Array(m_pVertices);
 }
