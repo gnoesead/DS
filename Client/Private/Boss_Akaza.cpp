@@ -1728,7 +1728,7 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 			m_bMove = true;
 
 		if (Check_Distance(2.f) == false && m_bMove == false)
-			Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 10.f, 0.0, 0.4); // 이펙트수정
+			Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_SUPERARMOR3, 10.f, 0.01, 0.4);
 
 	}
 
