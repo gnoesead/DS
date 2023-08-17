@@ -81,7 +81,8 @@ private:
 	_float m_Size_Change = { 0.25f };
 	_float m_Move_Change = { 0.f };
 
-	
+	vector<wstring>			m_szTex = {};
+	_bool m_Is_Font_Render = { false };
 
 private:
 	HRESULT Add_Components();

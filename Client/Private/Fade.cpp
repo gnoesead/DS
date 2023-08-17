@@ -283,10 +283,14 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
 
 		if (CFadeManager::GetInstance()->Get_Fade_Color() == false) {
-			CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(true);
-			CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Size_Reset(true);
 
-			CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On_2(true);
+			if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On() == false) {
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On(true);
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Size_Reset(true);
+			}
+				
+			if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On_2() == false)
+				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_On_2(true);
 		}
 	}
 
