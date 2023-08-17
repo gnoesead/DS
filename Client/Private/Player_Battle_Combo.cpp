@@ -502,14 +502,14 @@ void CPlayer_Battle_Combo::Check_Combo_Change(_double TimeDelta)
 {
 
 	if (m_Size_Up == true) {
-		m_Size_Param += (_float)TimeDelta * 2;
-		if (m_Size_Param >= 1.05) {
+		m_Size_Param += (_float)TimeDelta * 8;
+		if (m_Size_Param >= 1.4) {
 			m_Size_Up = false;
 		}
 	}
 	
 	if (m_Size_Up == false) {
-		m_Size_Param -= (_float)TimeDelta * 2;
+		m_Size_Param -= (_float)TimeDelta * 8;
 		if (m_Size_Param <= m_Origin_Size_Param) {
 			m_Size_Param = m_Origin_Size_Param;
 		}
