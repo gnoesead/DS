@@ -239,6 +239,19 @@ PS_OUT  PS_SMELL(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_ALPHA(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vDiffuse = vMtrlDiffuse;
+	Out.vDiffuse.rgb *= 0.4f;
+	Out.vDiffuse.a *= g_fAlpha;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	pass General
@@ -327,6 +340,18 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_SMELL();
+	}
+
+	pass Alpha // 7
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ALPHA();
 	}
 };
 

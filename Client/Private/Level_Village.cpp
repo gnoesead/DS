@@ -238,15 +238,14 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
+    CCharacter::CHARACTERDESC CharacterDesc;
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
- 
     CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
-    //CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f);
+   // CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f); // BattleMap
 
-    CharacterDesc.Land_Y = 0.0f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
+   // CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE;// BattleMap
  
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
@@ -266,20 +265,19 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    //CPlayer::CHARACTERDESC CharacterDesc;
-    //ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+    CPlayer::CHARACTERDESC CharacterDesc;
+    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    //CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE; //abcde
 
-  
-    //CharacterDesc.WorldInfo.vPosition = _float4(426.f, 0.f, 290.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(426.f, 3.f, 290.f, 1.f);
 
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
-    //    TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-    //    return E_FAIL;
-    //}
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+        return E_FAIL;
+    }
 
 
 

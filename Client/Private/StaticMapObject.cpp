@@ -42,6 +42,8 @@ void CStaticMapObject::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	m_bBlocked = false;
+
 	__super::Tick(TimeDelta);
 
 	switch (m_MapObject_Info.iInteractionType)
@@ -76,6 +78,24 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+	if ((m_MapObject_Info.iSceneType == SCENE_VILLAGE) && ((m_MapObject_Info.iRenderGroup == 1) || (m_MapObject_Info.iRenderGroup == 2)))
+	{
+		Check_Camera();
+
+		if (m_bBlocked)
+		{
+			m_fAlpha -= 4.f * (_float)TimeDelta;
+
+			if (m_fAlpha < 0.1f)
+				m_fAlpha = 0.1f;
+		}
+		else
+			m_fAlpha += 4.f * (_float)TimeDelta;
+
+		if (m_fAlpha > 1.f)
+			m_fAlpha = 1.f;
+	}
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -85,7 +105,12 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 
 		(true == pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 20.f)))
 	{
-		if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7)
+		if (m_bBlocked)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+				return;
+		}
+		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7)
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
 				return;
@@ -266,7 +291,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 	if (m_bChangeRoomTrigger)
 	{
 		if (m_AccTime == 0.0)
+		{
 			CCameraManager::GetInstance()->Camera_Shake(1.2, 30);
+			m_pRendererCom->Set_Sepia();
+		}
 
 		m_AccTime += TimeDelta;
 
@@ -279,6 +307,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		if (m_AccTime >= 1.0)
 		{
 			m_pRendererCom->Set_Invert();
+			m_pRendererCom->Set_Sepia();
 			m_bChageRoom = true;
 			m_bChangeRoomTrigger = false;
 		}
@@ -353,4 +382,135 @@ void CStaticMapObject::Control_RenderSmell(_double TimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+}
+
+void CStaticMapObject::Check_Camera()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (CLandObject::NAVI_VILLAGE_BATTLE != dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(iLevelIdx, TEXT("Layer_Player"), 0))->Get_CurNaviMesh())
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	_float4 vCameraPos = pGameInstance->Get_CameraPosition();
+
+	_vector vCamPos = XMLoadFloat4(&vCameraPos);
+	_vector vPlayerPos = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIdx, TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION)
+							+ XMVectorSet(0.f , 2.f , 0.f , 0.f);
+
+	if (m_MapObject_Info.iRenderGroup == 2 && XMVectorGetX(vCamPos) <= 433.f)
+	{
+		m_bBlocked = false;
+		Safe_Release(pGameInstance);
+		return;
+	}
+	else if (m_MapObject_Info.iRenderGroup == 1 && XMVectorGetX(vCamPos) > 416.f)
+	{
+		m_bBlocked = false;
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		CMesh* pMesh = m_pModelCom->Get_Mesh(i);
+		if (nullptr == pMesh)
+			return;
+			
+		if (((m_MapObject_Info.iRenderGroup == 1) && !m_bBlocked) || (((m_MapObject_Info.iRenderGroup == 2) && !m_bBlocked)))
+		{
+			if (Is_Blocked_Camera(g_hWnd, g_iWinSizeX, g_iWinSizeY, pMesh, vCamPos , vPlayerPos))
+			{
+				m_bBlocked = true;
+			}
+		}
+	}
+
+	
+
+	Safe_Release(pGameInstance);
+}
+
+_bool CStaticMapObject::Is_Blocked_Camera(HWND hWnd, const _uint& iWinSizeX, const _uint& iWinSizeY, CMesh* pMapObjectMesh, _fvector vCamPos , _fvector vPlayerPos)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vRayPos = vCamPos;
+
+	_vector vRayDir = vPlayerPos - vRayPos;
+
+
+	vRayDir = XMVector3Normalize(vRayDir);
+
+	// 월드 -> 로컬
+	_matrix WorldMatrix_Inverse = m_pTransformCom->Get_WorldMatrix_Inverse();
+
+	vRayPos = XMVector3TransformCoord(vRayPos, WorldMatrix_Inverse);
+	vRayDir = XMVector3TransformNormal(vRayDir, WorldMatrix_Inverse);
+
+	vRayDir = XMVector3Normalize(vRayDir);
+
+
+	_uint iIndexNum = pMapObjectMesh->Get_NumIndices();
+	_uint iVerticesNum = pMapObjectMesh->Get_NumVertices();
+
+	VTXMODEL* pVertices = { nullptr };
+	_ulong* pIndices = { nullptr };
+
+	pVertices = pMapObjectMesh->Get_Vertices();
+	pIndices = pMapObjectMesh->Get_Indices();
+
+	_float	fDist = 0.f;
+
+	for (_uint i = 0; i < iIndexNum / 3; ++i)
+	{
+		_vector v0 = XMLoadFloat3(&pVertices[pIndices[3 * i + 0]].vPosition);
+		_vector v1 = XMLoadFloat3(&pVertices[pIndices[3 * i + 1]].vPosition);
+		_vector v2 = XMLoadFloat3(&pVertices[pIndices[3 * i + 2]].vPosition);
+
+		if (TriangleTests::Intersects(vRayPos, vRayDir,
+			v0, v1, v2, fDist))
+		{
+			Safe_Release(pGameInstance);
+			return true;
+		}
+
+		/*if (TriangleTests::Intersects(vRayPos + XMVectorSet(0.f , 1.f , 0.f , 0.f), vRayDir,
+			v0, v1, v2, fDist))
+		{
+			return true;
+		}
+
+		if (TriangleTests::Intersects(vRayPos + XMVectorSet(0.f, -1.f, 0.f, 0.f), vRayDir,
+			v0, v1, v2, fDist))
+		{
+			return true;
+		}
+
+		if (TriangleTests::Intersects(vRayPos + XMVectorSet(0.f, 0.f, 1.f, 0.f), vRayDir,
+			v0, v1, v2, fDist))
+		{
+			return true;
+		}
+
+		if (TriangleTests::Intersects(vRayPos + XMVectorSet(0.f, 0.f, -1.f, 0.f), vRayDir,
+			v0, v1, v2, fDist))
+		{
+			return true;
+		}*/
+
+
+	}
+
+	Safe_Release(pGameInstance);
+
+	return false;
 }
