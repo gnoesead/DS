@@ -128,6 +128,15 @@ public:
 		ANIM_HIT_DOWNLOOP = 105, // 누워있음
 		ANIM_HIT_GETUP_SPIN = 106, // 107
 
+		ANIM_HIT_BACK = 121, // 누가 뒷통수 때림 ㅋ
+		ANIM_HIT_FRONT = 122,
+		ANIM_HIT_LEFT = 123,
+		ANIM_HIT_RIGHT = 124,
+		ANIM_HIT_SMALLUPPER = 125,
+		ANIM_HIT_GETUP = 126, // 처 누워있음
+		ANIM_HIT_GETUP2 = 127,
+
+
 		////////////////// 엔드모션 ///////////////////
 
 		////////////////// 컷신모션 ///////////////////
@@ -150,7 +159,7 @@ public:
 		ANIM_CINEMATIC8 = 118,
 		ANIM_CINEMATIC9 = 119,
 		ANIM_CINEMATIC10 = 120,
-		
+
 		ANIM_DEATH = 78, // 사망
 		ANIM_JUMP_PIST = 33, // 안쓸듯
 
@@ -180,7 +189,7 @@ public:
 	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
-	
+
 	//	void Update_Begin(_double dTimeDelta);
 	void Update_Phase_1(_double dTimeDelta);
 	void Update_Phase_2(_double dTimeDelta);
@@ -274,15 +283,15 @@ private: // _bool
 	_bool	m_bAwake = { false };
 	_bool	m_bFirstAwake = { false };
 	_bool	m_bSecondAwake = { false };
-	
-	
+
+
 	//_bool	m_bNextPhase = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
-	
+
 
 private:
 	_uint	m_iRandomDirNum = { 0 };

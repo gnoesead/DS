@@ -126,7 +126,6 @@ void CAtkCollider::Tick(_double dTimeDelta)
 			m_bSaveTransform = true;
 			m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 		}
-
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 		
 		m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
@@ -221,6 +220,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
+	
 }
 
 HRESULT CAtkCollider::Add_Components()
