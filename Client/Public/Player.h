@@ -26,6 +26,8 @@ public:
 
 		// 피격처리
 		_bool	m_Down_Dmg_Small = { false };
+		_bool	m_Down_Dmg_ConnectSmall = { false };
+		_bool	m_Down_Dmg_Big = { false };
 		_bool	m_Down_Dmg_Blow = { false };
 		_bool	m_Down_Dmg_Spin = { false };
 		_bool	m_Down_Dmg_Bound = { false };

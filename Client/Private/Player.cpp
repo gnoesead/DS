@@ -221,7 +221,7 @@ _vector CPlayer::Get_Dir_To_LockOnPos()
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
-	if (m_Moveset.m_isHitMotion == false)
+	if (m_Moveset.m_isDownMotion == false)
 	{
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
@@ -230,7 +230,21 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_Moveset.m_Down_Dmg_Small = true;
 		}
 
-	
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+
+			m_Moveset.m_Down_Dmg_ConnectSmall = true;
+		}
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+
+			m_Moveset.m_Down_Dmg_Big = true;
+		}
+
+
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
@@ -238,11 +252,6 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_Moveset.m_Down_Dmg_Blow = true;
 		}
 	}
-	else
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
-	}
-	
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)

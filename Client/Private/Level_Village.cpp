@@ -282,9 +282,6 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
     //}
 
 
-
-
-
     Safe_Release(pGameInstance);
 
     return S_OK;
