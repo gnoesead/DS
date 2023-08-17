@@ -27,7 +27,11 @@ public:
 		STATE_AWAKE, STATE_AWAKE_COMBOPUNCH,
 
 		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN,
-		STATE_CINEMATIC
+		STATE_CINEMATIC,
+
+		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW ,
+		STATE_HIT_BOUND, STATE_SPIN, STATE_CUTSCENE
+		
 
 	};
 
@@ -223,6 +227,15 @@ public:
 	void Trigger_Nachim_AirGun();
 	void Trigger_Awake_Cinematic();
 
+	void Trigger_Hit_Small();
+	void Trigger_Hit_ConnectSmall();
+	void Trigger_Hit_Big();
+	void Trigger_Hit_Blow();
+	void Trigger_Hit_BigBlow();
+	void Trigger_Hit_Bound();
+	void Trigger_Hit_Spin();
+	void Trigger_Hit_CutScene();
+
 #pragma endregion
 
 #pragma region Pattern
@@ -251,6 +264,15 @@ private: //패턴 함수들
 	void Update_Nachim_ComboPunch(_double dTimeDelta);
 	void Update_Nachim_AirGun(_double dTimeDelta);
 	void Update_Awake_Cinematic(_double dTimeDelta);
+
+	void Update_Hit_Small(_double dTimeDelta);
+	void Update_Hit_ConnectSmall(_double dTimeDelta);
+	void Update_Hit_Big(_double dTimeDelta);
+	void Update_Hit_Blow(_double dTimeDelta);
+	void Update_Hit_BigBlow(_double dTimeDelta);
+	void Update_Hit_Bound(_double dTimeDelta);
+	void Update_Hit_Spin(_double dTimeDelta);
+	void Update_Hit_CutScene(_double dTimeDelta);
 
 private: /* Calculate */
 	/*_float Calculate_Distance();
@@ -291,15 +313,15 @@ private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
-
+	_double m_dDelay_ComboChain = { 0.0 };
 
 private:
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iPunchCount = { 0 };
 	_uint	m_iIdleCnt = { 0 };
-
 	_uint	m_iTriggerCnt = { 0 };
+	_uint	m_iSmallHit_Index = { 0 };
 
 	_uint	m_iHp = { 100 }; // 임시
 
