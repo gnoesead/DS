@@ -141,4 +141,14 @@ _bool CFadeManager::Get_Is_House_Boss_On()
 void CFadeManager::Set_Is_House_Boss_On(_bool is)
 {
 	m_Is_House_Boss_On = is;
-} 
+}
+void CFadeManager::Set_Fade_Color(_bool Type)
+{
+	m_Fade_Color = Type;
+}
+
+_bool CFadeManager::Get_Fade_Color()
+{
+	return m_Fade_Color;
+}
+

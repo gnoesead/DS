@@ -359,7 +359,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
 
-	if (true == g_bSepia)
+	/*if (true == g_bSepia)
 	{
 		float4 sepia;
 		sepia.a = Out.vColor.a;
@@ -368,7 +368,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		sepia.b = dot(Out.vColor.rbb, float3(0.272f, 0.534f, 0.131f));
 
 		Out.vColor = vector(sepia.r, sepia.g, sepia.b, sepia.a);
-	}
+	}*/
 
 	
 

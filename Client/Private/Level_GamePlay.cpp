@@ -17,6 +17,10 @@
 #include "Player_Battle_Ult_Effect.h"
 #include "ColliderManager.h"
 #include "Story_Board.h"
+#include "Skill_Name.h"
+#include "Battle_Signal.h"
+#include "World_UI_Hp.h"
+
 
 #include "Monster_Spider.h"
 #include "Story_Manager.h"
@@ -984,6 +988,108 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+
+	// Skill_Name
+	CSkill_Name::UIDESC UIDesc9;
+	ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+	UIDesc9.m_Is_Reverse = false;
+	UIDesc9.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Skill_Name"), &UIDesc9))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Battle_Signal
+	CBattle_Signal::UIDESC UIDesc10;
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	// 시작
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// 승부결정
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 7;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// Rank
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 0;
+	UIDesc10.m_Rank = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+// Monster_Hp
+	CWorld_UI_Hp::UIDESC UIDesc11;
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 0;
+	UIDesc11.m_Monster_Index = 0;
+	UIDesc11.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 1;
+	UIDesc11.m_Monster_Index = 0;
+	UIDesc11.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 2;
+	UIDesc11.m_Monster_Index = 0;
+	UIDesc11.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Is_Reverse = false;
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Monster_Index = 0;
+	UIDesc11.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
 
 

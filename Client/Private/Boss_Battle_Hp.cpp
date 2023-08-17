@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "Character.h"
 
 CBoss_Battle_Hp::CBoss_Battle_Hp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -362,15 +363,24 @@ void CBoss_Battle_Hp::Tool_Funtion(_double TimeDelta)
 
 void CBoss_Battle_Hp::Get_Boss_Info(_double TimeDelta)
 {
-	if (GetKeyState('H') < 0) {
+	
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-		m_Boss_Hp -= TimeDelta * 0.5;
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
-		if (m_Boss_Hp < 0) {
-			m_Boss_Hp = 0;
-		}
+		CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss"), 0));
 
+		_float Hp = pBoss->Get_Status().fHp;
+		_float Hp_Max = pBoss->Get_Status().fHp_Max;
+
+		m_Boss_Hp = (_double)(Hp / Hp_Max);
+		
 	}
+
+
+	Safe_Release(pGameInstance);
+
 }
 
 CBoss_Battle_Hp * CBoss_Battle_Hp::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

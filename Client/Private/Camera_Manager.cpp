@@ -36,6 +36,34 @@ void CCameraManager::Tick(_double dTimeDelta)
 
 	}
 
+	if (m_Is_Zoom_In == true) {
+
+		m_Zoom_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Zoom_TimeAcc > m_Zoom_Time) {
+			m_Zoom_TimeAcc = 0.f;
+			m_Zoom = 0.f;
+			m_Is_Zoom_In = false;
+		}
+
+	}
+
+	if (m_Is_Zoom_Out == true) {
+
+		m_Zoom_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Zoom_TimeAcc > m_Zoom_Time) {
+			m_Zoom_TimeAcc = 0.f;
+			m_Zoom = 0.f;
+			m_Is_Zoom_Out = false;
+		}
+
+	}
+
+
+	if (m_Is_Zoom_In == false && m_Is_Zoom_Out == false) {
+		m_Zoom = 0.f;
+	}
 	
 	Safe_Release(pGameInstance);
 }
@@ -96,6 +124,39 @@ _bool CCameraManager::Get_Is_Focus_On()
 _vector CCameraManager::Get_Focus_Pos()
 {
 	return m_FocusPos;
+}
+
+void CCameraManager::Zoom_In(_float Zoom, _float Time)
+{
+	m_Is_Zoom_In = true;
+	m_Is_Zoom_Out = false;
+	m_Zoom_TimeAcc = 0.f;
+
+	m_Zoom -= Zoom;
+	m_Zoom_Time = Time;
+}
+
+void CCameraManager::Zoom_Out(_float Zoom, _float Time)
+{
+	m_Is_Zoom_In = false;
+	m_Is_Zoom_Out = true;
+	m_Zoom_TimeAcc = 0.f;
+
+	m_Zoom += Zoom;
+	m_Zoom_Time = Time;
+}
+
+void CCameraManager::Zoom_Fix(_float Zoom)
+{
+	
+	m_Zoom = Zoom;
+}
+
+
+
+_float CCameraManager::Get_Zoom()
+{
+	return m_Zoom;
 }
 
 void CCameraManager::Free()

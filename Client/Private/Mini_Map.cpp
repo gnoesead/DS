@@ -567,17 +567,13 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
-	
 	m_Is_Dialog_On = CMissionManager::GetInstance()->Get_Is_Dialog_On();
-
 
 	_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
-	
 	if (Is_Battle == true) {
 		m_Is_Dialog_On = true;
 	}
-
 
 	if (m_Is_Dialog_On == false && m_Is_In == false && m_Is_Out == false) {
 		m_Is_In = true;
@@ -608,14 +604,6 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 			m_Map_Type = 2;
 		}
 
-		if (dist < 4.f && m_Is_Boss_Encounter == false) {
-			m_Is_Boss_Encounter = true;
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
-
-		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
@@ -627,18 +615,8 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 		_float dist = XMVectorGetX(XMVector3Length(vDist));
 
-		if (dist < 4.f && m_Is_Boss_Encounter == false) {
-			m_Is_Boss_Encounter = true;
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
-
-		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
-
-			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
-		}
 	}
 
-	
 	if (m_Map_Type == 0) {
 
 		m_UV_Centor_X = XMVectorGetX(Pos);
