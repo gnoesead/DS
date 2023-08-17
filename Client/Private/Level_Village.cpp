@@ -280,9 +280,6 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
     }
 
 
-
-
-
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -1088,6 +1085,20 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+    ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+    // Frame
+    UIDesc9.m_Is_Reverse = false;
+    UIDesc9.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+
 
     Safe_Release(pGameInstance);
 

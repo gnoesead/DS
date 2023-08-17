@@ -173,12 +173,17 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// Combo_On
 	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
 
-	if (pGameInstance->Get_DIKeyDown(DIK_LSHIFT) && dist <= 7.f) {
-		if (m_bIs_Combo_On == true)
-			m_bIs_Combo_On = false;
-		else {
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 1) {
 			m_bIs_Combo_On = true;
 		}
+		else {
+			m_bIs_Combo_On = false;
+		}
+		
 	}
 
 	if (dist > 7.f) {

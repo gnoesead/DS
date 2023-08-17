@@ -54,6 +54,11 @@ void CPlayer::Tick(_double dTimeDelta)
 		m_ePlayerState = { PLAYER_BATTLE };
 	}
 
+	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE && pGameInstance->Get_CurLevelIdx() != LEVEL_HOUSE) {
+		m_ePlayerState = { PLAYER_BATTLE };
+		CFadeManager::GetInstance()->Set_Is_Battle(true);
+	}
+
 
 	Safe_Release(pGameInstance);
 
@@ -221,7 +226,7 @@ _vector CPlayer::Get_Dir_To_LockOnPos()
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
-	if (m_Moveset.m_isHitMotion == false)
+	if (m_Moveset.m_isDownMotion == false)
 	{
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
@@ -230,7 +235,21 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_Moveset.m_Down_Dmg_Small = true;
 		}
 
-	
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+
+			m_Moveset.m_Down_Dmg_ConnectSmall = true;
+		}
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+
+			m_Moveset.m_Down_Dmg_Big = true;
+		}
+
+
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
@@ -238,11 +257,6 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_Moveset.m_Down_Dmg_Blow = true;
 		}
 	}
-	else
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
-	}
-	
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -284,6 +298,11 @@ void CPlayer::Key_Input(_double dTimeDelta)
 			m_isCanNavi = false;
 		else
 			m_isCanNavi = true;
+	}
+
+	if (pGameInstance->Get_DIKeyState(DIK_B))
+	{
+		m_StatusDesc.fSpecial += 1.1f;
 	}
 
 	
@@ -789,6 +808,13 @@ void CPlayer::Key_Input_Down(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	
+	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+		m_Moveset.m_isPressing_While_Restrict = true;
+	else
+		m_Moveset.m_isPressing_While_Restrict = false;
+
 
 	if (m_Moveset.m_isDownMotion)
 	{

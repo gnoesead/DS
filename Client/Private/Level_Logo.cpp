@@ -34,15 +34,16 @@ void CLevel_Logo::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (GetKeyState(VK_RETURN) & 0x8000 && CTitleManager::GetInstance()->Get_Select_Type() == 0)
+    if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
-        CFadeManager::GetInstance()->Set_Fade_Out(true);
+        if (CTitleManager::GetInstance()->Get_Select_Type() == 0)
+            CFadeManager::GetInstance()->Set_Ink_In(true);
     }
 
-    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+    if (CFadeManager::GetInstance()->Get_Ink_In_Done() == true) {
 
 
-        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+        CFadeManager::GetInstance()->Set_Ink_In_Done(false);
 
         HRESULT hr = 0;
 
@@ -155,6 +156,18 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+    ZeroMemory(&UIDesc, sizeof UIDesc);
+
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 7;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Title"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+
+// Fade
     CFade::UIDESC UIDesc2;
     ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
@@ -166,7 +179,15 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+    ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
+    UIDesc2.m_Is_Reverse = false;
+    UIDesc2.m_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc2))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
    
 
     Safe_Release(pGameInstance);

@@ -118,6 +118,17 @@ HRESULT CTitle::Initialize(void* pArg)
 		m_UI_Layer = 0.5;
 		m_Alpha = 0.45f;
 	}
+	// Bg_Eff
+	if (m_UI_Desc.m_Type == 7) {
+
+		m_fX = 540;
+		m_fY = 260;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 6;
+		m_Alpha = 1.f;
+	}
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -150,6 +161,16 @@ void CTitle::Tick(_double dTimeDelta)
 
 	}
 
+	if (m_UI_Desc.m_Type == 7) {
+		m_Eff_Sprite += (_float)dTimeDelta * 25.f;
+
+		if (m_Eff_Sprite > 100.f) {
+			m_Eff_Sprite = 16.f;
+		}
+	}
+
+
+
 }
 
 void CTitle::LateTick(_double dTimeDelta)
@@ -177,6 +198,9 @@ HRESULT CTitle::Render()
 	}
 	else if (m_UI_Desc.m_Type == 5) {
 		m_pShaderCom->Begin(8);
+	}
+	else if (m_UI_Desc.m_Type == 7) {
+		m_pShaderCom->Begin(15);
 	}
 	else {
 		m_pShaderCom->Begin(1);
@@ -267,7 +291,11 @@ HRESULT CTitle::Add_Components()
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-	
+	else if (m_UI_Desc.m_Type == 7) {
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Title_Yellow"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -316,6 +344,10 @@ HRESULT CTitle::SetUp_ShaderResources()
 	}
 	else if (m_UI_Desc.m_Type >= 5 && m_UI_Desc.m_Type <= 6) {
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 5)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 7) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Eff_Sprite)))
 			return E_FAIL;
 	}
 	
