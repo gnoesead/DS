@@ -457,8 +457,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
 			}
-		
-
+			if (2 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_Upper", m_pTransformCom);
+			}
 		}
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{

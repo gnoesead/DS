@@ -219,7 +219,7 @@ void CLevel_Loading::Tick(_double dTimeDelta)
         m_pCloud_LD->Tick(dTimeDelta);
         m_pCloud_LD->LateTick(dTimeDelta);
 
-        m_pCloud_RD->Tick(dTimeDelta);
+        m_pCloud_RD->Tick(dTimeDelta); 
         m_pCloud_RD->LateTick(dTimeDelta);
 
         m_pDoor->Tick(dTimeDelta);
