@@ -50,7 +50,7 @@ void CMonster::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	
+	Set_Height();
 }
 
 HRESULT CMonster::Render()

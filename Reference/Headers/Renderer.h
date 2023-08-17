@@ -32,7 +32,7 @@ public:
 #ifdef _DEBUG
 public:
 	
-	void Set_Sepia() { m_bSepia = !m_bSepia; }
+	void Set_RadialBlur() { m_bRadialBlur = !m_bRadialBlur; }
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void OnOff_RenderDebug()	{ m_isRenderDebug = !m_isRenderDebug; }
@@ -108,7 +108,7 @@ private:
 	_bool					m_bSSAOBlur = { false };
 	_bool					m_bSSAOSwitch = { false };
 	_bool					m_bInvert = { false };
-	_bool					m_bSepia = { false };
+	_bool					m_bRadialBlur = { false };
 	_bool					m_bGrayScale = { false };
 private:
 	D3D11_VIEWPORT			m_VP; // Shadow

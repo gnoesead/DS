@@ -1121,7 +1121,8 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-
+	if (FAILED(m_pShader->SetUp_RawValue("g_bRadialBlur", &m_bRadialBlur, sizeof(_bool))))
+		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_HDR"), m_pShader, "g_HDRTexture"))) // ºí·ë + ºí·¯ 
 		return E_FAIL;
@@ -1627,8 +1628,7 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_RawValue("g_bSepia", &m_bSepia, sizeof(_bool))))
-		return E_FAIL;
+	
 	if (FAILED(m_pShader->SetUp_RawValue("g_bGrayScale", &m_bGrayScale, sizeof(_bool))))
 		return E_FAIL;
 

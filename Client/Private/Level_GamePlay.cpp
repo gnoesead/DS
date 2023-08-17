@@ -441,7 +441,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CPlayer::CHARACTERDESC CharacterDesc;
+	CCharacter::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde

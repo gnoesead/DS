@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "MapObject.h"
+#include "Mesh.h"
 
 BEGIN(Client)
 
@@ -31,6 +32,10 @@ private:
 	void	Room_Change(_double TimeDelta, _uint iInteractionType);
 	void	Control_RenderSmell(_double TimeDelta);
 
+	// 카메라 검사
+	void	Check_Camera();
+	_bool	Is_Blocked_Camera(HWND hWnd, const _uint& iWinSizeX, const _uint& iWinSizeY, class CMesh* pMapObjectMesh, _fvector vCamPos , _fvector vPlayerPos);
+
 private:
 	_bool m_bKeyInput = { false };
 
@@ -46,6 +51,8 @@ private:
 	_bool	m_bSetInvert = { false };
 	// 냄새
 	_bool	m_bSmellOn = { false };
+
+	
 };
 
 END

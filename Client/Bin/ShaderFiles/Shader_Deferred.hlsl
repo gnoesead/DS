@@ -44,7 +44,7 @@ bool		   g_bSSAOSwitch;
 
 bool		   g_bInvert;
 bool		   g_bGrayScale;
-bool		   g_bSepia;
+bool		   g_bRadialBlur;
 
 //===================================================
 float g_fRadius;
@@ -567,7 +567,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	if (vFinalColor.a == 0.f)
 		discard;
 
-	if (true == g_bSepia)
+	if (true == g_bRadialBlur)
 	{
 		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);

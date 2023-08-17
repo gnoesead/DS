@@ -97,6 +97,9 @@ protected:
 
 	_float					m_fAlpha = { 1.f };
 
+	// 카메라 검사
+	_bool					m_bBlocked = { false };
+
 public:
 	virtual void Free() override;
 };
