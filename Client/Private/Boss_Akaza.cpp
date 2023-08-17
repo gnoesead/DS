@@ -489,7 +489,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
@@ -507,7 +507,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index) // 0.65
 			{
-
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_Upper", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), 1.0,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, 1.0f);
