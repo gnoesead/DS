@@ -100,6 +100,9 @@ private:
 
 	_bool m_Is_Fix = { true };
 
+	_bool m_Is_Battle = { true };
+
+
 
 private:
 	HRESULT Add_Components();

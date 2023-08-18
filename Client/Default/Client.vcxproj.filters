@@ -244,9 +244,6 @@
     <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
       <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause\Pause_Manager">
-      <UniqueIdentifier>{a4d9dedf-5ff4-4ed4-9201-b1494b2a0ab8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\09.Main_UI\Option\Option_Manager">
       <UniqueIdentifier>{77e19af2-afba-4242-9190-38f5013fb4f2}</UniqueIdentifier>
     </Filter>

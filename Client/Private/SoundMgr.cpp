@@ -4,6 +4,7 @@
 #include "SoundMgr.h"
 
 CSoundMgr* CSoundMgr::m_pInstance = nullptr;
+
 CSoundMgr::CSoundMgr()
 {
 	m_pSystem = nullptr;

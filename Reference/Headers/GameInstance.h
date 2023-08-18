@@ -57,6 +57,9 @@ public: /*for Object_Manager*/
     HRESULT		                Add_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, class CGameObject* pGameObject, _bool isKeep = false);
     class CGameObject*          Clone_GameObject(const _tchar * pPrototypeTag, void* pArg);
     void                        Clear_Layer(_uint iLevelIndex, const _tchar * pLayerTag);
+    void                        Time_Stop();
+    void                        Time_Stop_Off();
+    void                        Time_Slow(_double Time, _double Slow);
 
 public: /*for Component_Manager*/
     HRESULT             Add_Prototype(_uint iLevelIndex, const _tchar * pPrototypeTag, class CComponent* pPrototype);

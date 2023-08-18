@@ -34,6 +34,10 @@ public:
 		m_isCollect = isCollect;
 	}
 
+	_bool Get_TimeFree() const {    // 시간제약용
+		return m_Is_TimeFree;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -60,6 +64,9 @@ protected:
 	WORLDINFO				m_WorldInfo;
 	_bool					m_isDead = { false };
 	_bool					m_isCollect = { false };
+
+	// 시간제약 체크용
+	_bool                   m_Is_TimeFree = { false };
 
 protected:
 	unordered_map<const _tchar*, class CComponent*>		m_Components;
