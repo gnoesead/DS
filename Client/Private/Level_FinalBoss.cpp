@@ -22,6 +22,8 @@
 #include "Dialog.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
+#include "Pause.h"
+
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -868,7 +870,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-	// Battle_Signal
+// Battle_Signal
 	CBattle_Signal::UIDESC UIDesc13;
 	ZeroMemory(&UIDesc13, sizeof UIDesc13);
 
@@ -911,6 +913,58 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc13.m_Type = 1;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+// Pause
+	CPause::UIDESC UIDesc14;
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -1160,9 +1214,24 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Projectile.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Projectile");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : ATK_Combo_Up");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_Upper.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_Upper");
 		return E_FAIL;
 	}
 
@@ -1171,13 +1240,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_0");
 		return E_FAIL;
 	}
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_1");
 		return E_FAIL;
 	}
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");

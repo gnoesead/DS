@@ -153,6 +153,40 @@ void CObject_Manager::Clear_Layer(_uint iLevelIndex, const _tchar* pLayerTag)
 		pLayer->Clear_Layer();
 }
 
+void CObject_Manager::Time_Stop()
+{
+	m_Is_Stop = true;
+}
+
+void CObject_Manager::Time_Stop_Off()
+{
+	m_Is_Stop = false;
+}
+
+void CObject_Manager::Time_Slow(_double Time ,_double Slow)
+{
+	if (m_Is_Stop == false) {
+		m_Is_Slow = true;
+		m_Slow_Time = Time;
+		m_Slow = Slow;
+	}
+}
+
+_bool CObject_Manager::Get_Is_Time_Stop()
+{
+	return m_Is_Stop;
+}
+
+_bool CObject_Manager::Get_Is_Time_Slow()
+{
+	return m_Is_Slow;
+}
+
+_double  CObject_Manager::Get_Time_Slow_Amount()
+{
+	return m_Slow;
+}
+
 void CObject_Manager::Tick(_double dTimeDelta)
 {
 	for (_uint i = 0; i < m_iNumLevels; i++)
@@ -163,6 +197,16 @@ void CObject_Manager::Tick(_double dTimeDelta)
 				Pair.second->Tick(dTimeDelta);
 		}
 	}
+
+	
+	if (m_Is_Slow) {
+		m_Slow_TimeAcc += dTimeDelta;
+		if (m_Slow_TimeAcc > m_Slow_Time) {
+			m_Slow_TimeAcc = 0;
+			m_Is_Slow = false;
+		}
+	}
+
 }
 
 void CObject_Manager::LateTick(_double dTimeDelta)

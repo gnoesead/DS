@@ -17,6 +17,11 @@ public:
 	HRESULT Initialize(void* pArg) override;
 
 public:
+	_bool	Get_GrayScale() {
+		return m_bGrayScale;
+	}
+
+public:
 	template<typename T>
 	HRESULT RegistCallBack(T* pClassType, HRESULT(T::*fp)());
 
