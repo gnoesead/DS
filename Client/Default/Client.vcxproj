@@ -231,6 +231,7 @@
     <ClInclude Include="..\Public\Monster_Zako.h" />
     <ClInclude Include="..\Public\NPC.h" />
     <ClInclude Include="..\Public\NPC_Female.h" />
+    <ClInclude Include="..\Public\Option.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Pause.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -315,6 +316,7 @@
     <ClCompile Include="..\Private\Monster_Zako.cpp" />
     <ClCompile Include="..\Private\NPC.cpp" />
     <ClCompile Include="..\Private\NPC_Female.cpp" />
+    <ClCompile Include="..\Private\Option.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Pause.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
