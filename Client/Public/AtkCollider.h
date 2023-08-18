@@ -31,7 +31,7 @@ public:
 
 		_float4		AtkDir;
 		_bool		bBullet;
-
+		char		pEffectTag[MAX_PATH] = { "" };
 	}ATKCOLLDESC;
 private:
 	CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
