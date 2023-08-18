@@ -949,7 +949,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		m_dDelay_ComboChain = 1.0;
-		pPlayer->Set_Hit_Success(true);
+		pPlayer->Set_Hit_Success(true); // 플레이어가 맞았따
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_isJumpOn)
