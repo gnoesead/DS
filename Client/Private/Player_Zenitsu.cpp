@@ -60,7 +60,7 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 
 	return S_OK;
 }
