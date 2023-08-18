@@ -193,6 +193,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -237,7 +238,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 		m_pModelCom->Render(i);
 	}
-
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
