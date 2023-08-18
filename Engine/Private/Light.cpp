@@ -47,7 +47,7 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer)
 
 	_uint iPassIndex = { 0 };
 
-	if (LIGHTDESC::TYPE_POINT == m_LightDesc.eType && !pGameInstance->isIn_WorldSpace(XMLoadFloat4(&m_LightDesc.vLightPos), 8.f) && m_LightDesc.fLightRange < 20.f)
+	if (nullptr == m_pOwnerTranform && LIGHTDESC::TYPE_POINT == m_LightDesc.eType && !pGameInstance->isIn_WorldSpace(XMLoadFloat4(&m_LightDesc.vLightPos), 8.f) && m_LightDesc.fLightRange < 20.f)
 	{
 		Safe_Release(pGameInstance);
 		return S_OK;
