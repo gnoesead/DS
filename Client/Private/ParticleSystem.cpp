@@ -94,8 +94,6 @@ void CParticleSystem::Tick(_double dTimeDelta)
 		m_dTimeAccCycle = 0.0;
 	}
 
-	__super::Tick(dTimeDelta);
-
 	m_pTransformCom->Scaling(m_vScale);
 	m_pTransformCom->Rotation(m_vRotation);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(m_vPosition.x, m_vPosition.y, m_vPosition.z, 1.f));

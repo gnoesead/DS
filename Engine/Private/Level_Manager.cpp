@@ -101,9 +101,11 @@ void CLevel_Manager::Free()
 {
 	for (auto& pLevel : m_pLoadedLevels)
 	{
-		Safe_Release(pLevel);
+		if (nullptr != pLevel)
+			Safe_Release(pLevel);
 	}
 	m_pLoadedLevels.clear();
 
-	Safe_Release(m_pCurrentLevel);
+	/*if (nullptr != m_pCurrentLevel)
+		Safe_Release(m_pCurrentLevel);*/
 }
