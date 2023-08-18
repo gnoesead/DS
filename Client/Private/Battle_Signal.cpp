@@ -77,7 +77,8 @@ HRESULT CBattle_Signal::Initialize(void * pArg)
 		m_UI_Layer = 100.f;
 	}
 
-	
+	m_szTex.push_back(L"배틀 결과");
+
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
 
@@ -152,6 +153,8 @@ void CBattle_Signal::Tick(_double TimeDelta)
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On_2()) {
 
+			m_Is_Font_Render = true;
+
 			m_Move_Change -= (_float)TimeDelta * 2000.f;
 
 			if (m_Move_Change < -200.f) {
@@ -171,6 +174,8 @@ void CBattle_Signal::Tick(_double TimeDelta)
 		}
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Off_2()) {
+
+			m_Is_Font_Render = false;
 
 			m_Move_Change += (_float)TimeDelta * 100.f;
 
@@ -335,6 +340,23 @@ HRESULT CBattle_Signal::Render()
 		}
 
 	}
+
+
+	// 폰트 랜더
+	if (m_Is_Font_Render && m_UI_Desc.m_Type == 1) {
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+
+		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTex[0].c_str(), _float2((_float)m_fX - 70.f + 4.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f))))
+			return E_FAIL;
+
+		Safe_Release(pGameInstance);
+
+	}
+
+
 
 	return S_OK;
 }

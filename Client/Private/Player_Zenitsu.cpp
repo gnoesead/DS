@@ -83,15 +83,20 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 	//}
 #endif // _DEBUG
-	Animation_Control(dTimeDelta);
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
+	//playerswap
+	if (m_ePlayerType == PLAYER_ZENITSU)
+	{
 
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+		Animation_Control(dTimeDelta);
 
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
+
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
+	}
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -105,15 +110,20 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
-	if (m_isAir_Hekireki && m_pModelCom->Get_iCurrentAnimIndex() == ANIM_JUMP_IDLE)
+	//playerswap
+	if (m_ePlayerType == PLAYER_ZENITSU)
 	{
-		m_isAir_Hekireki = false;
-		m_isJumpOn = true;
+		if (m_isAir_Hekireki && m_pModelCom->Get_iCurrentAnimIndex() == ANIM_JUMP_IDLE)
+		{
+			m_isAir_Hekireki = false;
+			m_isJumpOn = true;
+		}
+
+
+		if (m_isAir_Hekireki == false)
+			Gravity(dTimeDelta);
 	}
 
-
-	if (m_isAir_Hekireki == false)
-		Gravity(dTimeDelta);
 
 	//임시 코드
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

@@ -43,6 +43,8 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 	iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
 	pParentParticleSystem->Set_NumEffects(iNumEffects);
 
+	pParentParticleSystem->Set_ParentMatrix(pTransformCom->Get_WorldFloat4x4());
+
 	for (int i = 0; i < iNumEffects; ++i)
 	{
 		CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);

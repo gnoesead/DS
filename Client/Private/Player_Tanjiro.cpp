@@ -91,14 +91,18 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Animation_Control(dTimeDelta);
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
+	{
+		Animation_Control(dTimeDelta);
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
 
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
+	}
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -113,24 +117,23 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
-	if(m_isAirDashing == false)
-		Gravity(dTimeDelta);
-
-
-	if (m_isCan_AirDash)
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
 	{
-		m_dDelay_Can_AirDash += dTimeDelta;
-		if (m_dDelay_Can_AirDash > 3.0f)
+
+		if (m_isAirDashing == false)
+			Gravity(dTimeDelta);
+
+
+		if (m_isCan_AirDash)
 		{
-			m_dDelay_Can_AirDash = 0.0;
-			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash += dTimeDelta;
+			if (m_dDelay_Can_AirDash > 3.0f)
+			{
+				m_dDelay_Can_AirDash = 0.0;
+				m_isCan_AirDash = false;
+			}
 		}
-	}
-
-
-	if (GetAsyncKeyState('B'))
-	{
-		m_pModelCom->Set_Animation(0);
 	}
 	
 #ifdef _DEBUG
@@ -314,7 +317,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -333,7 +335,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
 				else
@@ -348,6 +349,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
+			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
+				//else
+				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+			}
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
@@ -433,8 +441,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
-
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 			}
 		}
 
@@ -545,7 +551,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{

@@ -226,37 +226,40 @@ _vector CPlayer::Get_Dir_To_LockOnPos()
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
-	if (m_Moveset.m_isDownMotion == false)
+	
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
-		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
+		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_Small = true;
-		}
-
-		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
-
-			m_Moveset.m_Down_Dmg_ConnectSmall = true;
-		}
-
-		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
-
-			m_Moveset.m_Down_Dmg_Big = true;
-		}
-
-
-		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
-
-			m_Moveset.m_Down_Dmg_Blow = true;
-		}
 	}
+
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+
+		if (m_Moveset.m_isDownMotion == false)
+			m_Moveset.m_Down_Dmg_ConnectSmall = true;
+	}
+
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+
+		if (m_Moveset.m_isDownMotion == false)
+			m_Moveset.m_Down_Dmg_Big = true;
+	}
+
+
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+
+		if (m_Moveset.m_isDownMotion == false)
+			m_Moveset.m_Down_Dmg_Blow = true;
+	}
+	
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -323,7 +326,14 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
-
+	//서포트 키
+	if (pGameInstance->Get_DIKeyDown(DIK_U))
+	{
+		if (m_ePlayerType == PLAYER_TANJIRO)
+			m_ePlayerType = PLAYER_ZENITSU;
+		else if (m_ePlayerType == PLAYER_ZENITSU)
+			m_ePlayerType = PLAYER_TANJIRO;
+	}
 	
 		Trigger_Hit(dTimeDelta);
 
@@ -605,7 +615,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	CameraLook.w = 0.0f;
 	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
 
-	if (m_Moveset.m_isRestrict_Throw == false && m_isComboing == false)
+	if (m_Moveset.m_isRestrict_Throw == false && m_isComboing == false && m_Moveset.m_isRestrict_KeyInput == false)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{

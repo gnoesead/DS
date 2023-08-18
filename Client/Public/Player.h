@@ -180,6 +180,8 @@ protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 	PLAYERTYPE		m_ePlayerType = { PLAYER_TANJIRO };
 
+	
+
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
