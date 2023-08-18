@@ -101,6 +101,7 @@ HRESULT CPause::Initialize(void * pArg)
 		m_UI_Layer = 10;
 	}
 
+	m_Is_TimeFree = true;
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -145,7 +146,7 @@ void CPause::LateTick(_double TimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_8)) {
 
-		// 시간 정지
+		pGameInstance->Time_Stop();
 
 		if (m_Alpha == 0.f) {
 			m_Is_In = true;
@@ -181,7 +182,7 @@ void CPause::LateTick(_double TimeDelta)
 			if (m_Alpha == 1.f) {
 				m_Is_Out = true;
 				m_Is_Font_Render = false;
-
+				pGameInstance->Time_Stop_Off();
 			}
 
 		}
@@ -230,6 +231,7 @@ void CPause::LateTick(_double TimeDelta)
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 			{
 				CFadeManager::GetInstance()->Set_Fade_Out(true);
+				pGameInstance->Time_Stop_Off();
 			}
 
 		}

@@ -24,6 +24,18 @@ public:
 	class CGameObject* Clone_GameObject(const _tchar* pPrototypeTag, void* pArg);
 	void		Clear_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
 
+public:
+	void        Time_Stop();
+	void        Time_Stop_Off();
+
+	void        Time_Slow(_double Time , _double Slow);
+
+	_bool       Get_Is_Time_Stop();
+	_bool       Get_Is_Time_Slow();
+	_double     Get_Time_Slow_Amount();
+
+
+public:
 	void		Tick(_double dTimeDelta);
 	void		LateTick(_double dTimeDelta);
 	void		Clear(_uint iLevelIndex);
@@ -36,6 +48,21 @@ private: /*사본 객체*/
 
 	unordered_map<const _tchar*, class CLayer*>*		m_pLayers = { nullptr };
 	typedef unordered_map<const _tchar*, class CLayer*>	LAYERS;
+
+
+private: /*시간 조작*/
+	_double m_Slow = { 1 };
+	_bool   m_Is_Slow = { false };
+	_double m_Slow_TimeAcc = { 0 };
+	_double m_Slow_Time = { 0 };
+
+
+	_bool   m_Is_Stop = { false };
+	
+
+
+
+
 
 private:
 	class CGameObject*	Find_Prototype(const _tchar* pPrototypeTag);
