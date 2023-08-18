@@ -55,6 +55,8 @@ float g_fStrength = 0.0007f;
 float g_fTotStrength = 1.38f;
 float g_fInvSamples = 1.f / 16.f;
 
+float g_fGrayRatio;
+
 float3 g_vRandom[16] =
 {
 	float3(0.2024537f, 0.841204f, -0.9060141f),
@@ -325,36 +327,37 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		discard;
 
 	Out.vColor = vDiffuse * vShade;
+
 	Out.vColor.rgb += vEmissive.rgb;
 	
+	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+	float3 grayColor = { grayValue , grayValue ,grayValue };
 
-	if (true == g_bGrayScale)
+	Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
+	/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
+	float3 c = float3(0.0, 0.0, 0.0);
+	float f = 1.0 / 6;
+
+	float2 minTexCoord = float2(0.01, 0.01);
+	float2 maxTexCoord = float2(0.99, 0.99);
+
+	if (vDiffuse.a == 0.f)
+		discard;
+
+	for (int i = 0; i < 12; i++)
 	{
-		Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
-		/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
-		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 6;
+		float2 clampedTexCoord = clamp(In.vTexUV - 0.01 * Direction * float(i), minTexCoord, maxTexCoord);
 
-		float2 minTexCoord = float2(0.01, 0.01);
-		float2 maxTexCoord = float2(0.99, 0.99);
-
-		if (vDiffuse.a == 0.f)
+		c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
+		if (c.r == 1.f && c.b == 1.f)
 			discard;
-
-		for (int i = 0; i < 12; i++)
-		{
-			float2 clampedTexCoord = clamp(In.vTexUV - 0.01 * Direction * float(i), minTexCoord, maxTexCoord);
-
-			c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
-			if (c.r == 1.f && c.b == 1.f)
-				discard;
-			
-			Out.vColor.rgb = c * vShade.rgb;
-			Out.vColor.a = vDiffuse.a * vShade.a;
-			
-			Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
-		}*/
-	}
+		
+		Out.vColor.rgb = c * vShade.rgb;
+		Out.vColor.a = vDiffuse.a * vShade.a;
+		
+		Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
+	}*/
+	
 
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
@@ -571,9 +574,9 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	{
 		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 6;
+		float f = 1.0 / 12;
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 12; i++)
 		{			
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;

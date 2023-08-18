@@ -334,6 +334,30 @@ void CGameInstance::Clear_Layer(_uint iLevelIndex, const _tchar* pLayerTag)
 	m_pObject_Manager->Clear_Layer(iLevelIndex, pLayerTag);
 }
 
+void CGameInstance::Time_Stop()
+{
+	if (nullptr == m_pObject_Manager)
+		return;
+
+	m_pObject_Manager->Time_Stop();
+}
+
+void CGameInstance::Time_Stop_Off()
+{
+	if (nullptr == m_pObject_Manager)
+		return;
+
+	m_pObject_Manager->Time_Stop_Off();
+}
+
+void CGameInstance::Time_Slow(_double Time, _double Slow)
+{
+	if (nullptr == m_pObject_Manager)
+		return;
+
+	m_pObject_Manager->Time_Slow(Time,Slow);
+}
+
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _tchar* pPrototypeTag, CComponent* pPrototype)
 {
 	if (nullptr == m_pComponenet_Manager)

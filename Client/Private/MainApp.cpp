@@ -353,7 +353,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma region Pause_UI
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Pause"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Pause/Pause_%d.png"), 7))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Pause/Pause_%d.png"), 4))))
 		return E_FAIL;
 
 

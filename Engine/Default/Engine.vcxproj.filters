@@ -172,6 +172,9 @@
     <Filter Include="01. Utility\02. GameObjects\MasterEffect">
       <UniqueIdentifier>{47879f4c-4be5-4acb-bbfe-29c5169d6563}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01. Utility\02. GameObjects\Manager\TimeDelta_Manager">
+      <UniqueIdentifier>{5a55de7b-2fbf-4d42-b478-e3bf533e0599}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Engine_Defines.h">
