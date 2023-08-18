@@ -2,7 +2,7 @@
 #include "..\Public\AtkCollider.h"
 
 #include "GameInstance.h"
-
+#include "Camera_Manager.h"
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
 
@@ -107,6 +107,7 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
@@ -152,6 +153,9 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
 		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
+		if(true == m_AtkCollDesc.bBullet)
+		CCameraManager::GetInstance()->Camera_Shake(0.30,100);
+		
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
 		m_iCollCount = 0;

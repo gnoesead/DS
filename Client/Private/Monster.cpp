@@ -70,6 +70,11 @@ void CMonster::Get_PlayerComponent()
 	Safe_AddRef(pGameInstance);
 
 	m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	if (m_pPlayerTransformCom == nullptr)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
 	
 	Safe_Release(pGameInstance);
 }

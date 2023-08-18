@@ -352,6 +352,25 @@ void CTransform::Chase_Target(_fvector vTargetPos, _double dTimeDelta, _double C
 	Set_State(CTransform::STATE_POSITION, vPosition);
 }
 
+void CTransform::Chase_Target_FixY(_fvector vTargetPos, _double dTimeDelta, _double ChaseSpeed)
+{
+	_vector vTargetPosition = XMVectorSetY(vTargetPos, XMVectorGetY(Get_State(STATE_POSITION)));
+
+	_vector		vPosition = Get_State(CTransform::STATE_POSITION);
+	_vector		vDir = vTargetPosition - vPosition;
+	_double		Speed = m_TransformDesc.dSpeedPerSec * ChaseSpeed * dTimeDelta;
+
+
+	if (XMVectorGetX(XMVector3Length(vDir)) <= (_float)Speed)
+	{
+		vPosition += vDir;
+	}
+	else
+		vPosition += XMVector3Normalize(vDir) * (_float)Speed;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
 
 
 void CTransform::LerpVector(_fvector vTargetLook, _float weight)
