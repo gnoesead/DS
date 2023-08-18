@@ -1628,10 +1628,24 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
-	
-	if (FAILED(m_pShader->SetUp_RawValue("g_bGrayScale", &m_bGrayScale, sizeof(_bool))))
+
+	static _float fGrayRatio = 1.f;
+
+	if (FAILED(m_pShader->SetUp_RawValue("g_fGrayRatio", &fGrayRatio, sizeof(_float))))
 		return E_FAIL;
 
+	if (m_bGrayScale)
+	{
+		fGrayRatio += 0.03f;
+		if (fGrayRatio > 1.f)
+			fGrayRatio = 1.f;
+	}
+	else
+	{
+		fGrayRatio -= 0.03f;
+		if (fGrayRatio < 0.f)
+			fGrayRatio = 0.f;
+	}
 
 	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_DepthTexture")))
 		return E_FAIL;*/

@@ -361,19 +361,22 @@ void CStaticMapObject::Control_RenderSmell(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	if (m_pRendererCom->Get_GrayScale())
 	{
-		m_bSmellOn = !m_bSmellOn;
+		if (true == pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
+		{
+			CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+			_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+			if(Compute::DistCheck(vPlayerPos , m_pTransformCom->Get_State(CTransform::STATE_POSITION) , 25.f))
+				m_bSmellOn = true;
+			
+		}
 	}
 
-	if (!m_bSmellOn)
-	{
-		m_fAlpha -= 1.f * (_float)TimeDelta;
 
-		if (m_fAlpha < 0.f)
-			m_fAlpha = 0.f;
-	}
-	else
+	if(m_bSmellOn)
 	{
 		m_fAlpha += 1.f * (_float)TimeDelta;
 
