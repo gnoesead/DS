@@ -518,7 +518,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
-   /* ZeroMemory(&UIDesc3, sizeof UIDesc3);
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
     UIDesc3.m_Is_Reverse = false;
     UIDesc3.m_Type = 1;
@@ -528,7 +528,31 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
         Safe_Release(pGameInstance);
         return E_FAIL;
-    }*/
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 2;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Is_Reverse = false;
+    UIDesc3.m_Type = 3;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Pause"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
     ZeroMemory(&UIDesc3, sizeof UIDesc3);
 

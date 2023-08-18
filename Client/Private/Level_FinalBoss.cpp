@@ -22,6 +22,8 @@
 #include "Dialog.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
+#include "Pause.h"
+
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -868,7 +870,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-	// Battle_Signal
+// Battle_Signal
 	CBattle_Signal::UIDESC UIDesc13;
 	ZeroMemory(&UIDesc13, sizeof UIDesc13);
 
@@ -911,6 +913,58 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc13.m_Type = 1;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+// Pause
+	CPause::UIDESC UIDesc14;
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc14))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

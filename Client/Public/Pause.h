@@ -49,19 +49,17 @@ public:
 
 
 private:
-	
+	vector<wstring>			m_szText_0 = {};
+
 	vector<wstring>			m_szText_1 = {};
 
 	vector<wstring>			m_szText_2 = {};
 
 	vector<wstring>			m_szText_3 = {};
 
+	_int                   m_Cur_Num = { 0 };
 
-	_uint                   m_Dialog_Type = { 0 };
-
-	_uint                   m_Cur_Num = { 0 };
-
-	_int                    m_Name_Type = { 1 };
+	_bool                   m_Is_Selected = { false };
 
 private:
 	_bool m_Is_In = { false };
