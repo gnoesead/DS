@@ -1160,6 +1160,11 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Projectile.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Projectile");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");

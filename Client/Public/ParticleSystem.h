@@ -93,6 +93,9 @@ public:
 	void Set_Effect(CEffect* pEffect) {
 		m_pEffect = pEffect;
 	}
+	void Set_ParentMatrix(_float4x4 WorldMatrix) {
+		m_ParentWorldMatrix = WorldMatrix;
+	}
 
 
 public:
@@ -113,6 +116,7 @@ private:
 	class CTransform*	m_pTransformCom = { nullptr };
 	class CTransform*	m_pParentTransform = { nullptr };
 	_float4x4			m_WorldMatrix;
+	_float4x4			m_ParentWorldMatrix;
 	CParticleSystem*	m_pParent = { nullptr };
 
 private:

@@ -314,7 +314,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-			
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -333,7 +332,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
 				else
@@ -348,6 +346,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
 		{
+			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
+				//else
+				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+			}
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
@@ -433,8 +438,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
-
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 			}
 		}
 
@@ -545,7 +548,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -1233,13 +1239,22 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 
-
-	if (m_Moveset.m_Down_Dmg_Small)
+#pragma region Dmg_Small
+	if (m_Moveset.m_Down_Dmg_Small || m_Moveset.m_Down_Dmg_ConnectSmall)
 	{
-		m_Moveset.m_Down_Dmg_Small = false;
+		if (m_Moveset.m_Down_Dmg_Small)
+		{
+			m_Moveset.m_Down_Dmg_Small = false;
+			m_isConnectHitting = false;
+		}
+		else if (m_Moveset.m_Down_Dmg_ConnectSmall)
+		{
+			m_Moveset.m_Down_Dmg_ConnectSmall = false;
+			m_isConnectHitting = true;
+		}
 
-		
 		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_iSmallHit_Index == 0)
 		{
@@ -1262,21 +1277,50 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iSmallHit_Index = 0;
 		}
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 1.5f, 0.01f, AtkDir);
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 1.5f, 0.01f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 142, 1.0f, 0.015f, AtkDir);
+	}
+#pragma endregion
 
+
+
+#pragma region Dmg_Big
+	if (m_Moveset.m_Down_Dmg_Big)
+	{
+		m_Moveset.m_Down_Dmg_Big = false;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+	}
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f,  AtkDir);
+	
+#pragma endregion
+
+
+#pragma region Dmg_Blow
 	if (m_Moveset.m_Down_Dmg_Blow)
 	{
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 3.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 120, 3.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 120, 2.5f, AtkDir);
 	Ground_Animation_Play(120, 121);
 	
+#pragma endregion
+
 
 
 	if (m_Moveset.m_Down_GetUp)
@@ -1303,8 +1347,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	//Go_Straight_Deceleration(dTimeDelta, 138, 1.0f, 0.01f);
 	
-	
-
 }
 
 void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
@@ -1497,9 +1539,11 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| ANIM_DMG_SPIN == iCurAnimIndex || 132 == iCurAnimIndex || 133 == iCurAnimIndex
 		|| ANIM_DMG_SMALL == iCurAnimIndex || ANIM_DMG_SMALL_RETURN == iCurAnimIndex || ANIM_DMG_BIG_RETURN == iCurAnimIndex || ANIM_DMG_BIG == iCurAnimIndex
 		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 138 == iCurAnimIndex
-		|| ANIM_DOWN_GETUP == iCurAnimIndex || 135 == iCurAnimIndex)
+		|| ANIM_DOWN_GETUP == iCurAnimIndex || 135 == iCurAnimIndex
+		|| 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
+		
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
 		{

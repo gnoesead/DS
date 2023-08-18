@@ -52,6 +52,7 @@ void CFadeManager::Fade_OutIn()
 
 void CFadeManager::Fall_Ink()
 {
+
 }
 
 void CFadeManager::Set_Fade_In(_bool Fade)
@@ -72,6 +73,12 @@ void CFadeManager::Set_Fade_OutIn(_bool Fade, _float Time)
 		m_Delay_Time = Time;
 }
 
+void CFadeManager::Set_Ink_In(_bool Fade)
+{
+	m_Is_Ink_In = Fade;
+
+}
+
 _bool CFadeManager::Get_Fade_In()
 {
 	return m_Is_Fade_In;
@@ -85,6 +92,11 @@ _bool CFadeManager::Get_Fade_Out()
 _bool CFadeManager::Get_Fade_OutIn()
 {
 	return m_Is_Fade_OutIn;
+}
+
+_bool CFadeManager::Get_Ink_In()
+{
+	return m_Is_Ink_In;
 }
 
 void CFadeManager::Set_Fade_In_Done(_bool Fade)
@@ -103,6 +115,11 @@ void CFadeManager::Set_Fade_OutIn_Done(_bool Fade)
 	
 }
 
+void CFadeManager::Set_Ink_In_Done(_bool Fade)
+{
+	m_Is_Ink_In_Done = Fade;
+}
+
 _bool CFadeManager::Get_Fade_In_Done()
 {
 	return m_Is_Fade_In_Done;
@@ -116,6 +133,11 @@ _bool CFadeManager::Get_Fade_Out_Done()
 _bool CFadeManager::Get_Fade_OutIn_Done()
 {
 	return m_Is_Fade_OutIn_Done;
+}
+
+_bool CFadeManager::Get_Ink_In_Done()
+{
+	return m_Is_Ink_In_Done;
 }
 
 _bool CFadeManager::Get_Is_Battle()

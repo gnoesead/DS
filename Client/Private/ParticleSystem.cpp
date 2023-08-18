@@ -100,8 +100,8 @@ void CParticleSystem::Tick(_double dTimeDelta)
 	m_pTransformCom->Rotation(m_vRotation);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(m_vPosition.x, m_vPosition.y, m_vPosition.z, 1.f));
 
-	for (auto Parts : m_PartEffects)
-		Parts->Tick(dTimeDelta);
+	//for (auto Parts : m_PartEffects)
+	//	Parts->Tick(dTimeDelta);
 }
 
 void CParticleSystem::LateTick(_double dTimeDelta)
@@ -116,19 +116,21 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
 			else
 			{
-				if (m_bInitialTransformSetting)
-				{
-					m_bInitialTransformSetting = false;
-					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
-				}
+				//if (m_bInitialTransformSetting)
+				//{
+				//	m_bInitialTransformSetting = false;
+				//	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
+				//}
+
+				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_ParentWorldMatrix));
 			}
 		}
 		else    // ±øÅë
 			XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
 	}
 
-	for (auto Parts : m_PartEffects)
-		Parts->LateTick(dTimeDelta);
+	//for (auto Parts : m_PartEffects)
+	//	Parts->LateTick(dTimeDelta);
 }
 
 HRESULT CParticleSystem::Render(void)
