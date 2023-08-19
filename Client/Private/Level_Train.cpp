@@ -144,27 +144,9 @@ HRESULT CLevel_Train::Render()
 
 HRESULT CLevel_Train::Ready_Lights()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	Load_Lights_Info(TEXT("../../Data/Light/Train/Light_Train.dat"));
 
-    LIGHTDESC LightDesc;
-    ZeroMemory(&LightDesc, sizeof LightDesc);
-
-    LightDesc.eType = LIGHTDESC::TYPE_DIRECTION;
-    LightDesc.vLightDir         = _float4(1.f, -1.f, 1.f, 0.f);
-    LightDesc.vLightDiffuse     = _float4(0.2f, 0.2f, 0.2f, 1.f);
-    LightDesc.vLightAmbient     = _float4(1.f, 1.f, 1.f, 1.f);
-    LightDesc.vLightSpecular    = _float4(1.f, 1.f, 1.f, 1.f);
-
-    if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, LightDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Direction_Light");
-        return E_FAIL;
-    }
-
-    Safe_Release(pGameInstance);
-
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_Train::Ready_Layer_BackGround(const _tchar* pLayerTag)
@@ -943,6 +925,55 @@ HRESULT CLevel_Train::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLa
     Safe_Release(pGameInstance);
 
     return S_OK;
+}
+
+HRESULT CLevel_Train::Load_Lights_Info(const _tchar* pPath)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
+
+	_ulong			dwByte = 0;
+	_uint			iSize = 0;
+
+	ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		LIGHTDESC tLight;
+		ZeroMemory(&tLight, sizeof tLight);
+
+
+		ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+
+
+
+		ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+
+		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+		{
+			tLight.vLightDiffuse = _float4(0.2f, 0.2f, 0.2f, 1.f);
+		}
+
+
+		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+			return E_FAIL;
+	}
+
+	CloseHandle(hFile);
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 CLevel_Train* CLevel_Train::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

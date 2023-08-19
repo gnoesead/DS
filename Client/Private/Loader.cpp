@@ -2413,6 +2413,20 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Lamp_02a.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_far_hill_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_far_hill_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Acaza_vs/far_hill_01a.bin", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_far_hill_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_far_hill_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Acaza_vs/far_hill_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BigMountain*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_BigMountain"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/BigMountain.bin", PivotMatrix))))
+		return E_FAIL;
+
 	// Instance
 	/* For.Prototype_Component_ModelInstance_WoodFence_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_ModelInstance_WoodFence_01a"),
@@ -3001,6 +3015,11 @@ HRESULT CLoader::Load_MapObjectModel_House()
 	/* For.Prototype_Component_Model_BattleRoomCorridor_05*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_BattleRoomCorridor_05"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_05.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_107_OuterWall_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_107_OuterWall_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/107_OuterWall_01a.bin", PivotMatrix))))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
