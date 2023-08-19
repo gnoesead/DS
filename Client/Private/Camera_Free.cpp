@@ -183,12 +183,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		else {
 			m_bIs_Combo_On = false;
 		}
+
+		if (dist > 7.f) {
+			m_bIs_Combo_On = false;
+		}
 		
 	}
 
-	if (dist > 7.f) {
-		m_bIs_Combo_On = false;
-	}
+	
 
 	// ÇÃ·¹ÀÌ¾î¿Í ¸ó½ºÅÍ¿¡°Ô ÄÆ¾À »óÅÂÀÎÁö , ¾î¶² ÄÆ¾ÀÀÎÁö ¹Þ¾Æ¿È
 	if (pGameInstance->Get_DIKeyDown(DIK_7)) {

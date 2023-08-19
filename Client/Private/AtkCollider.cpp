@@ -2,7 +2,7 @@
 #include "..\Public\AtkCollider.h"
 
 #include "GameInstance.h"
-
+#include "Camera_Manager.h"
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
 #include "EffectPlayer.h"
@@ -60,6 +60,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 
 	if (true == m_AtkCollDesc.bBullet)
 	{
+		if(nullptr != m_AtkCollDesc.pEffectTag)
 		CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom);
 	}
 }
@@ -136,7 +137,6 @@ void CAtkCollider::Tick(_double dTimeDelta)
 			m_bSaveTransform = true;
 			m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 		}
-
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 		
 		m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
@@ -163,6 +163,9 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 		CAtkCollManager::GetInstance()->Collect_Collider(this);
 		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
+		if(true == m_AtkCollDesc.bBullet)
+		CCameraManager::GetInstance()->Camera_Shake(0.30,100);
+		
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
 		m_iCollCount = 0;
@@ -231,6 +234,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
+	
 }
 
 HRESULT CAtkCollider::Add_Components()

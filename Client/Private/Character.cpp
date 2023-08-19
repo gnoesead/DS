@@ -694,8 +694,17 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		}
 	}
 
+	//서포트 게이지
+	m_StatusDesc.fSupport += 0.05f;
+	if (m_StatusDesc.fSupport >= m_StatusDesc.fSupport_Max)
+	{
+		m_StatusDesc.fSupport = m_StatusDesc.fSupport_Max;
+	}
+	if (m_StatusDesc.fSupport <= 0.0f)
+	{
+		m_StatusDesc.fSupport = 0.0f;
+	}
 
-	
 }
 
 void CCharacter::Use_Mp_Skill()
