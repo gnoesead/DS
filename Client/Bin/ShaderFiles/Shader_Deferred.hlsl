@@ -327,6 +327,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		discard;
 
 	Out.vColor = vDiffuse * vShade;
+
 	Out.vColor.rgb += vEmissive.rgb;
 	
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
@@ -573,9 +574,9 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	{
 		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 6;
+		float f = 1.0 / 12;
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 12; i++)
 		{			
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;

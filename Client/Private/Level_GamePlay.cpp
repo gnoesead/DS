@@ -20,6 +20,7 @@
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
 #include "World_UI_Hp.h"
+#include "Pause.h"
 
 
 #include "Monster_Spider.h"
@@ -1110,7 +1111,57 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
+// Pause
+	CPause::UIDESC UIDesc12;
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
 
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 

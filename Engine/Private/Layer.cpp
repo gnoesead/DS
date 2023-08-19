@@ -1,5 +1,7 @@
 #include "..\Public\Layer.h"
 #include "GameObject.h"
+#include "Object_Manager.h"
+
 CLayer::CLayer()
 {
 }
@@ -52,8 +54,22 @@ void CLayer::Tick(_double dTimeDelta)
 	{
 		if (nullptr != (*iter))
 		{
-			(*iter)->Tick(dTimeDelta);
+			if ((*iter)->Get_TimeFree()) {
+				(*iter)->Tick(dTimeDelta);
+			}
+			else {
 
+				if (CObject_Manager::GetInstance()->Get_Is_Time_Stop() == true) {
+					(*iter)->Tick(0);
+				}
+				else if (CObject_Manager::GetInstance()->Get_Is_Time_Slow() == true) {
+					(*iter)->Tick(dTimeDelta * CObject_Manager::GetInstance()->Get_Time_Slow_Amount());
+				}
+				else {
+					(*iter)->Tick(dTimeDelta);
+				}
+			}
+			
 			if (true == (*iter)->Get_Dead())
 			{
 				if (false == m_isKeep)
@@ -76,8 +92,19 @@ void CLayer::LateTick(_double dTimeDelta)
 {
 	for (auto& pGameObject : m_GameObjects)
 	{
-		if (nullptr != pGameObject)
-			pGameObject->LateTick(dTimeDelta);
+		if (nullptr != pGameObject) {
+
+			if (CObject_Manager::GetInstance()->Get_Is_Time_Stop() == true) {
+				pGameObject->LateTick(0);
+			}
+			else if (CObject_Manager::GetInstance()->Get_Is_Time_Slow() == true) {
+				pGameObject->LateTick(dTimeDelta * CObject_Manager::GetInstance()->Get_Time_Slow_Amount());
+			}
+			else {
+				pGameObject->LateTick(dTimeDelta);
+			}
+		}
+		
 	}
 }
 

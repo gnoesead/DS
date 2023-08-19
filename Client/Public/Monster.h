@@ -12,7 +12,7 @@ BEGIN(Client)
 class CMonster : public CCharacter
 {
 public:
-	
+
 
 protected:
 	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -27,10 +27,10 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_ShadowDepth();
 
-public:
+protected:
 	void Get_PlayerComponent();
-		
-public: // Calculate
+
+protected: // Calculate
 	void  Calculate_To_Player();
 
 	_bool Check_Distance(_float fDistance);
@@ -41,12 +41,21 @@ public: // Calculate
 
 protected:
 	//플레이어 정보 calculate
-	_float			m_fDistance_To_Player;
+
 	_float4		m_PlayerPos;
 	_float4		m_Dir_To_Monster;
 	_float4		m_Dir_To_Player;
 	_float4		m_Dir_To_Player_FixY;
-	
+protected:
+	_float		m_fDistance_To_Player = { 0.0f };
+	_float		m_fSmallDmg = { 1.f };
+	_float		m_fBigDmg = { 5.f };
+	_float		m_fBlowDmg = { 3.f };
+	_float		m_fBigBlowDmg = { 5.f };
+	_float		m_fSpinDmg = { 5.f };
+	_float		m_fUpperDmg = { 1.f };
+	_float		m_fBoundDmg = { 1.f };
+
 
 
 protected: //애니메이션 제어용 함수들
@@ -55,7 +64,8 @@ protected: //애니메이션 제어용 함수들
 
 protected: // 애니메이션 제어용 변수들
 	_bool m_isDeath_Motion = { false };
-	
+	_bool m_bAir_Motion = { false };
+
 
 protected:
 	/* 임시 코드 */
@@ -63,7 +73,7 @@ protected:
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
 
-	
+
 protected:
 	// Outline Default
 	_float	m_fOutlineThickness = 0.9f;
@@ -71,7 +81,7 @@ protected:
 	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-	
+
 protected:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();

@@ -66,8 +66,12 @@ void CCollisionBox::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+#ifdef DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pColliderCom)))
 		return;
+#endif // DEBUG
+
+	
 }
 
 HRESULT CCollisionBox::Render()
