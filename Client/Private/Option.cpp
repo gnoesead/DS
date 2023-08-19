@@ -93,27 +93,27 @@ HRESULT COption::Initialize(void* pArg)
 	// Cloud_LT
 	if (m_UI_Desc.m_Type == 9) {
 		m_fX = 90;
-		m_fY = 2;
+		m_fY = 55;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 31;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RT
 	if (m_UI_Desc.m_Type == 10) {
 
-		m_fX = 1210;
-		m_fY = 35;
+		m_fX = 1120;
+		m_fY = 20;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 848.f;
 		m_Origin_Y = 308.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 31;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
@@ -127,12 +127,69 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
+		m_UI_Layer = 31;
+		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
+	}
+	// Cloud_RD
+	if (m_UI_Desc.m_Type == 12) {
+
+		m_fX = 1120;
+		m_fY = 710;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 31;
+		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
+
+	}
+
+	// Cloud_LT_D
+	if (m_UI_Desc.m_Type == 13) {
+		m_fX = 90;
+		m_fY = 2;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_R = true;
 	}
-	// Cloud_RD
-	if (m_UI_Desc.m_Type == 12) {
+	// Cloud_RT_D
+	if (m_UI_Desc.m_Type == 14) {
+
+		m_fX = 1210;
+		m_fY = 35;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 848.f;
+		m_Origin_Y = 308.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+		m_Is_Side_Cut_L = true;
+	}
+	// Cloud_LD_D
+	if (m_UI_Desc.m_Type == 15) {
+
+		m_fX = 290;
+		m_fY = 715;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 1080.f;
+		m_Origin_Y = 328.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 1;
+		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
+	}
+	// Cloud_RD_D
+	if (m_UI_Desc.m_Type == 16) {
 
 		m_fX = 1150;
 		m_fY = 625;
@@ -148,6 +205,9 @@ HRESULT COption::Initialize(void* pArg)
 	}
 	
 	m_szCameraMenu.push_back(L"카메라 설정");
+	m_szGraphicMenu.push_back(L"그래픽 설정");
+	m_szSoundMenu.push_back(L"사운드 설정");
+
 	
 
 
@@ -263,7 +323,7 @@ HRESULT COption::Render()
 		m_pShaderCom->Begin(9);
 	}
 	else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
-		m_pShaderCom->Begin(5);
+		m_pShaderCom->Begin(16);
 	}
 	else {
 		m_pShaderCom->Begin(1);
@@ -277,8 +337,40 @@ HRESULT COption::Render()
 
 	if (m_UI_Desc.m_Type == 7) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
-			return E_FAIL;
+		if (m_UI_Desc.m_Menu_Type == 0) {
+			if (m_Is_Select == true) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+					return E_FAIL;
+			}
+			else {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+		}
+
+		if (m_UI_Desc.m_Menu_Type == 1) {
+			if (m_Is_Select == true) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+					return E_FAIL;
+			}
+			else {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+		}
+
+		if (m_UI_Desc.m_Menu_Type == 2) {
+			if (m_Is_Select == true) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+					return E_FAIL;
+			}
+			else {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+		}
+
+	
 	}
 
 	
@@ -328,22 +420,6 @@ void COption::Cloud_Control(_double dTimeDelta)
 	// Cloud_RT
 	if (m_UI_Desc.m_Type == 10) {
 
-		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
-
-		if (m_Origin_PosX - m_fX >= 20.f) {
-
-			m_PosX_Dir *= -1.f;
-		}
-
-		if (m_fX >= m_Origin_PosX) {
-			m_PosX_Dir *= -1.f;
-		}
-
-
-	}
-	// Cloud_LD
-	if (m_UI_Desc.m_Type == 11) {
-
 		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
 
 		if (m_fX - m_Origin_PosX >= 20.f) {
@@ -352,6 +428,22 @@ void COption::Cloud_Control(_double dTimeDelta)
 		}
 
 		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_LD
+	if (m_UI_Desc.m_Type == 11) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
 			m_PosX_Dir *= -1.f;
 		}
 
@@ -402,8 +494,14 @@ HRESULT COption::Add_Components()
 			return E_FAIL;
 
 	}
-	
-	
+	else if (m_UI_Desc.m_Type >= 9 || m_UI_Desc.m_Type <= 16) {
+
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option_Cloud"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
+
 
 	return S_OK;
 }
@@ -449,10 +547,13 @@ HRESULT COption::SetUp_ShaderResources()
 			return E_FAIL;
 
 	}
-	
+	else if (m_UI_Desc.m_Type >= 9 || m_UI_Desc.m_Type <= 16) {
 
-	
-	
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Cloud_Type)))
+			return E_FAIL;
+
+	}
+
 	
 	return S_OK;
 }

@@ -22,6 +22,8 @@ public:
 
 		_uint    m_Type = { 0 };
 		_uint    m_Menu_Type = { 0 };
+		_uint    m_Cloud_Type = { 0 };
+
 
 	}UIDESC;
 
