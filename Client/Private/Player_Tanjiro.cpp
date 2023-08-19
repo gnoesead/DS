@@ -95,14 +95,19 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (m_ePlayerType == PLAYER_TANJIRO)
 	{
 		Animation_Control(dTimeDelta);
-
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
-
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
 	}
+	else
+	{
+		Player_Change(dTimeDelta);
+	}
+
+	//애니메이션 처리
+	m_pModelCom->Play_Animation(dTimeDelta);
+	RootAnimation(dTimeDelta);
+
+	//이벤트 콜
+	EventCall_Control(dTimeDelta);
+
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -1530,6 +1535,24 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		
 	}
 	
+}
+
+void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
+{
+	if (m_isFirst_Player_Change)
+	{
+		m_isFirst_Player_Change = false;
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+	}
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
+	{
+		m_pTransformCom->Go_Up(dTimeDelta);
+	}
+
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()

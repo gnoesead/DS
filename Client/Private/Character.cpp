@@ -529,7 +529,9 @@ void CCharacter::JumpStop(_double dDuration)
 	m_dTime_JumpStop = 0.0;
 }
 
-void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, _bool bBullet)
+void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, 
+								CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, 
+								_bool bBullet, const char* pEffectTag)
 {
 	CAtkCollider::ATKCOLLDESC AtkCollDesc;
 	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
@@ -546,6 +548,10 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	AtkCollDesc.fDamage = fDmg;
 
 	AtkCollDesc.bBullet = bBullet;
+	if (true == bBullet)
+	{
+		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
+	}
 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
 

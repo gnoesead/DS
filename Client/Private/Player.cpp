@@ -333,9 +333,12 @@ void CPlayer::Key_Input(_double dTimeDelta)
 			m_ePlayerType = PLAYER_ZENITSU;
 		else if (m_ePlayerType == PLAYER_ZENITSU)
 			m_ePlayerType = PLAYER_TANJIRO;
+
+		m_isPlayerType_Change = true;
+		m_isFirst_Player_Change = true;
 	}
 	
-		Trigger_Hit(dTimeDelta);
+	Trigger_Hit(dTimeDelta);
 
 	if (m_Moveset.m_isHitMotion == false)
 	{
