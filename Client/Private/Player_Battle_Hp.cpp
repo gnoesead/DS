@@ -370,6 +370,10 @@ void CPlayer_Battle_Hp::Get_Player_Info(_double TimeDelta)
 
 		m_Player_Hp = (_double)(Hp / Hp_Max);
 
+		if (m_Player_Hp < 0) {
+			m_Player_Hp = 0;
+		}
+
 	}
 
 	Safe_Release(pGameInstance);

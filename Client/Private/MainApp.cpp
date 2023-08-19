@@ -286,6 +286,10 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CFade::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma region Option
+
+
+#pragma endregion
 
 #pragma region Battle_Manager
 

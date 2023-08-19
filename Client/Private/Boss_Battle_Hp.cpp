@@ -375,6 +375,10 @@ void CBoss_Battle_Hp::Get_Boss_Info(_double TimeDelta)
 		_float Hp_Max = pBoss->Get_Status().fHp_Max;
 
 		m_Boss_Hp = (_double)(Hp / Hp_Max);
+
+		if (m_Boss_Hp < 0) {
+			m_Boss_Hp = 0;
+		}
 		
 	}
 

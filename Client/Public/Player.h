@@ -179,6 +179,10 @@ protected:
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 	PLAYERTYPE		m_ePlayerType = { PLAYER_TANJIRO };
+	
+	_bool	m_isPlayerType_Change = { false };
+	_bool	m_isFirst_Player_Change = { true };
+	
 
 
 protected: // 애니메이션 제어용 변수들

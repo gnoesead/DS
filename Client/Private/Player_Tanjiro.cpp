@@ -91,7 +91,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Animation_Control(dTimeDelta);
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
+	{
+		Animation_Control(dTimeDelta);
+	}
+	else
+	{
+		Player_Change(dTimeDelta);
+	}
 
 	//애니메이션 처리
 	m_pModelCom->Play_Animation(dTimeDelta);
@@ -99,6 +107,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
+
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -113,24 +122,23 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
-	if(m_isAirDashing == false)
-		Gravity(dTimeDelta);
-
-
-	if (m_isCan_AirDash)
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
 	{
-		m_dDelay_Can_AirDash += dTimeDelta;
-		if (m_dDelay_Can_AirDash > 3.0f)
+
+		if (m_isAirDashing == false)
+			Gravity(dTimeDelta);
+
+
+		if (m_isCan_AirDash)
 		{
-			m_dDelay_Can_AirDash = 0.0;
-			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash += dTimeDelta;
+			if (m_dDelay_Can_AirDash > 3.0f)
+			{
+				m_dDelay_Can_AirDash = 0.0;
+				m_isCan_AirDash = false;
+			}
 		}
-	}
-
-
-	if (GetAsyncKeyState('B'))
-	{
-		m_pModelCom->Set_Animation(0);
 	}
 	
 #ifdef _DEBUG
@@ -297,7 +305,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3", m_pTransformCom);
 				else
@@ -315,6 +322,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -329,7 +338,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
 			}
 		}
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) // Combo_Up
+		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) // Combo_Normal
 		{
 			if (0 == m_iEvent_Index)
 			{
@@ -345,14 +354,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
 		}
-		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Normal
+		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Up
 		{
 			if (0 == m_iEvent_Index)
 			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -381,6 +388,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air1", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
@@ -389,6 +403,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (30 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_
 		{
 			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air2", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
@@ -407,8 +428,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
-
-				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_0", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -451,8 +470,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 				
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
-
-				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_1", m_pTransformCom);
 			}
 		}
 		if (40 == m_pModelCom->Get_iCurrentAnimIndex()) // SKILL_MOVE 도중
@@ -504,8 +521,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
-
-				//CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
 			}
 			
 			
@@ -1528,6 +1543,24 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		
 	}
 	
+}
+
+void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
+{
+	if (m_isFirst_Player_Change)
+	{
+		m_isFirst_Player_Change = false;
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+	}
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
+	{
+		m_pTransformCom->Go_Up(dTimeDelta);
+	}
+
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()
