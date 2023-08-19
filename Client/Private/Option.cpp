@@ -56,7 +56,7 @@ HRESULT COption::Initialize(void* pArg)
 	// Title
 	if (m_UI_Desc.m_Type == 1) {
 
-		m_fX = 80;
+		m_fX = 100;
 		m_fY = 80;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
@@ -124,8 +124,8 @@ HRESULT COption::Initialize(void* pArg)
 		m_fY = 715;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 1080.f;
-		m_Origin_Y = 328.f;
+		m_Origin_X = 848.f;
+		m_Origin_Y = 308.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 31;
 		m_Alpha = 1.f;
@@ -149,28 +149,28 @@ HRESULT COption::Initialize(void* pArg)
 
 	// Cloud_LT_D
 	if (m_UI_Desc.m_Type == 13) {
-		m_fX = 90;
-		m_fY = 2;
+		m_fX = 200;
+		m_fY = 120;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 1080.f;
-		m_Origin_Y = 328.f;
+		m_Origin_X = 1032.f;
+		m_Origin_Y = 560.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 30.5;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RT_D
 	if (m_UI_Desc.m_Type == 14) {
 
-		m_fX = 1210;
-		m_fY = 35;
+		m_fX = 1000;
+		m_fY = 80;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 848.f;
-		m_Origin_Y = 308.f;
+		m_Origin_X = 1000.f;
+		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 30.5;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
@@ -178,27 +178,27 @@ HRESULT COption::Initialize(void* pArg)
 	if (m_UI_Desc.m_Type == 15) {
 
 		m_fX = 290;
-		m_fY = 715;
+		m_fY = 685;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 30.5;
 		m_Alpha = 1.f;
-		m_Is_Side_Cut_R = true;
+		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_RD_D
 	if (m_UI_Desc.m_Type == 16) {
 
 		m_fX = 1150;
-		m_fY = 625;
+		m_fY = 640;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
 		m_Origin_X = 1080.f;
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
-		m_UI_Layer = 1;
+		m_UI_Layer = 30.5;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 
@@ -209,8 +209,6 @@ HRESULT COption::Initialize(void* pArg)
 	m_szSoundMenu.push_back(L"사운드 설정");
 
 	
-
-
 	m_Is_TimeFree = true;
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -460,6 +458,72 @@ void COption::Cloud_Control(_double dTimeDelta)
 		}
 
 		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+
+
+	// Cloud_LT_D
+	if (m_UI_Desc.m_Type == 13) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_RT_D
+	if (m_UI_Desc.m_Type == 14) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_LD_D
+	if (m_UI_Desc.m_Type == 15) {
+
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_fX - m_Origin_PosX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_RD_D
+	if (m_UI_Desc.m_Type == 16) {
+
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_fX - m_Origin_PosX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX <= m_Origin_PosX) {
 			m_PosX_Dir *= -1.f;
 		}
 

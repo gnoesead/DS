@@ -293,6 +293,48 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 13;
+    UIDesc3.m_Cloud_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 14;
+    UIDesc3.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 15;
+    UIDesc3.m_Is_X_Reverse = true;
+    UIDesc3.m_Is_Y_Reverse = true;
+    UIDesc3.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 16;
+    UIDesc3.m_Is_Y_Reverse = true;
+    UIDesc3.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 
