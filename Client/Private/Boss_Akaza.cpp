@@ -483,7 +483,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
 
 			}
@@ -491,7 +491,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
 
 			}
@@ -2297,6 +2297,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 		{
 			m_pModelCom->Set_AnimResetTimeAcc(ANIM_COMBO_PIST);
 			m_iRandomPatternNum = Random::Generate_Int(1, 12);
+
 			if (m_eCurPhase == PHASE_1)
 			{
 				if (m_iRandomPatternNum > 8)
@@ -2324,6 +2325,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 	}
 	if (m_eCurAnimIndex == ANIM_RUN)
 		m_pTransformCom->LerpVector(vDir, 0.3f);
+
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO1, 2.f, 0.0, 0.3);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO2, 1.5f, 0.0, 0.5);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO3, 1.5f, 0.0, 0.5);
