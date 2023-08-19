@@ -91,7 +91,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Animation_Control(dTimeDelta);
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
+	{
+		Animation_Control(dTimeDelta);
+	}
+	else
+	{
+		Player_Change(dTimeDelta);
+	}
 
 	//애니메이션 처리
 	m_pModelCom->Play_Animation(dTimeDelta);
@@ -99,6 +107,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
+
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -113,24 +122,23 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
-	if(m_isAirDashing == false)
-		Gravity(dTimeDelta);
-
-
-	if (m_isCan_AirDash)
+	//playerswap
+	if (m_ePlayerType == PLAYER_TANJIRO)
 	{
-		m_dDelay_Can_AirDash += dTimeDelta;
-		if (m_dDelay_Can_AirDash > 3.0f)
+
+		if (m_isAirDashing == false)
+			Gravity(dTimeDelta);
+
+
+		if (m_isCan_AirDash)
 		{
-			m_dDelay_Can_AirDash = 0.0;
-			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash += dTimeDelta;
+			if (m_dDelay_Can_AirDash > 3.0f)
+			{
+				m_dDelay_Can_AirDash = 0.0;
+				m_isCan_AirDash = false;
+			}
 		}
-	}
-
-
-	if (GetAsyncKeyState('B'))
-	{
-		m_pModelCom->Set_Animation(0);
 	}
 	
 #ifdef _DEBUG
@@ -1528,6 +1536,24 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		
 	}
 	
+}
+
+void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
+{
+	if (m_isFirst_Player_Change)
+	{
+		m_isFirst_Player_Change = false;
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+	}
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
+	{
+		m_pTransformCom->Go_Up(dTimeDelta);
+	}
+
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()
