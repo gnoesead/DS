@@ -75,8 +75,12 @@ private:
 	_int                   m_Select_Num = { 0 };
 
 
-	vector<wstring>         m_szTitle = { };
-	vector<wstring>         m_szContent = { };
+	vector<wstring>         m_szCameraMenu = { };
+	vector<wstring>         m_szGraphicMenu = { };
+	vector<wstring>         m_szSoundMenu = { };
+
+	
+
 
 	_uint                   m_Loading_Index = { 0 };
 

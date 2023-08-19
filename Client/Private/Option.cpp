@@ -144,14 +144,14 @@ HRESULT COption::Initialize(void* pArg)
 		m_UI_Layer = 1;
 		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
-	}
 
-	m_szTitle.push_back(L"카메라 설정");
-	m_szContent.push_back(L"음향 설정");
+	}
+	
+	m_szCameraMenu.push_back(L"카메라 설정");
+	
 
 
 	m_Is_TimeFree = true;
-
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -275,17 +275,13 @@ HRESULT COption::Render()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_UI_Desc.m_Type == 8) {
+	if (m_UI_Desc.m_Type == 7) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Loading_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
+		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
 			return E_FAIL;
 	}
 
-	if (m_UI_Desc.m_Type == 2) {
-
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent[m_Loading_Index].c_str(), _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
-			return E_FAIL;
-	}
+	
 
 	Safe_Release(pGameInstance);
 
