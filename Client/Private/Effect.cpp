@@ -41,7 +41,10 @@ void CEffect::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	m_pTransformCom->Scaling(m_eEffectDesc.vShapeScale);
+	if(!m_eEffectDesc.is3DStartSize)
+		m_pTransformCom->Scaling(m_eEffectDesc.vShapeScale);
+	else
+		m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMin.y, m_eEffectDesc.vStartSizeMin.z));
 	m_pTransformCom->Rotation(m_eEffectDesc.vShapeRotation);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(m_eEffectDesc.vPivot.x, m_eEffectDesc.vPivot.y, m_eEffectDesc.vPivot.z, 1.f));
 
@@ -128,7 +131,10 @@ void CEffect::Tick(_double dTimeDelta)
 
 							_float	fCurSize = fWeight * y + m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue;
 
-							m_pTransformCom->Scaling(fCurSize);
+							if(!m_eEffectDesc.is3DStartSize)
+								m_pTransformCom->Scaling(fCurSize);
+							else
+								m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize));
 						}
 					}
 				}
