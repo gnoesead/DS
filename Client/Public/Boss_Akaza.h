@@ -117,7 +117,7 @@ public:
 		ANIM_HIT_DMGFALL_BOUND = 88, //? 바운드가 왜 또 있지 
 		ANIM_HIT_FALL = 89, // 모르겟음 HIT가 맞나? 공중에서 웅크리며 있음 IDLE상태
 
-		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크
+		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크 -> 빅공격히트모션 -> 리턴스몰
 		ANIM_HIT_SPIN = 91, // 92, 93
 		ANIM_HIT_POWER_GUARDBREAK = 94, // 뒷걸음질 함
 		ANIM_HIT_RETURN_BIG = 95, // 반쯤 고개 숙인 상태에서 돌아옴

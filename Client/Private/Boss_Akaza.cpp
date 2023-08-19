@@ -558,7 +558,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 
 		}
@@ -757,8 +757,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			if (true == m_isJumpOn)
 				Jumping(0.2f, 0.030f);
-
-			m_dDelay_ComboChain = 1.0;
+						
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -777,9 +776,26 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_Big();
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		}
 
 		Safe_Release(pGameInstance);
 	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+	}
+
 }
 
 void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
@@ -1465,8 +1481,9 @@ void CBoss_Akaza::Trigger_Interact_Phase_3(_double dTimeDelta)
 void CBoss_Akaza::Trigger_Interact()
 {
 	m_bTrigger = true;
+	m_bAir_Motion = false;
 	m_eCurstate = STATE_IDLE;
-	//m_pModelCom->Set_AnimResetTimeAcc(STATE_IDLE);
+	
 }
 
 void CBoss_Akaza::Trigger_Begin()
@@ -1634,6 +1651,9 @@ void CBoss_Akaza::Trigger_NextPhase3()
 	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+
+	Pos_FixY();
+
 }
 
 void CBoss_Akaza::Trigger_Heal()
@@ -1654,7 +1674,7 @@ void CBoss_Akaza::Trigger_Awake()
 	m_pModelCom->Set_AnimisFinish((ANIM_AWAKE_END));
 	m_bAnimFinish = false;
 	m_bAwake = true;
-
+	Pos_FixY();
 }
 
 void CBoss_Akaza::Trigger_Awake_ComboPunch()
@@ -1759,11 +1779,17 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(2.0f, 0.03f);
+	Jumping(1.5f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_POWER_GUARDBREAK);
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_SMALL);
+	m_eCurstate = STATE_HIT_BIG;
 }
 
 void CBoss_Akaza::Trigger_Hit_Blow()
@@ -2103,9 +2129,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
-					Camera_Shake();
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 1.0,
-						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 1.0f);
+					Camera_Shake();					
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
 				}
 
 				Pos.y = m_fLand_Y;
@@ -2547,7 +2573,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.0f, 0.3, 1.00);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.0f, 0.1, 1.00);
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.2, 0.70);
 
@@ -2685,7 +2711,6 @@ void CBoss_Akaza::Update_Awake_Cinematic(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 {
-	//m_dDelay_ComboChain -= dTimeDelta;
 	
 	if (m_isJumpOn)
 	{
@@ -2771,9 +2796,6 @@ void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 		Trigger_Hit_GetUp();
 	}
 
-
-
-
 }
 
 void CBoss_Akaza::Update_Hit_Upper(_double dTimeDelta)
@@ -2805,6 +2827,24 @@ void CBoss_Akaza::Update_Hit_Upper(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_Big(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_HIT_POWER_GUARDBREAK;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_POWER_GUARDBREAK))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_POWER_GUARDBREAK);
+		m_eCurAnimIndex = ANIM_HIT_RETURN_SMALL;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_SMALL))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_SMALL);
+		m_eCurAnimIndex = ANIM_IDEL;
+		Trigger_Interact();
+	}
+	//Go_Backward_Constant(dTimeDelta, ANIM_HIT_POWER_GUARDBREAK, 1.2f);
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_POWER_GUARDBREAK, 1.2f, 0.01, 0.85);
 }
 
 void CBoss_Akaza::Update_Hit_Blow(_double dTimeDelta)
@@ -2823,6 +2863,7 @@ void CBoss_Akaza::Update_Hit_Blow(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_BLOW_END))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
+		m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
 		Trigger_Hit_GetUp();
 		//Trigger_Hit_RollGetUp();
 	}
@@ -2869,24 +2910,7 @@ void CBoss_Akaza::Update_Hit_GetUp(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
 		Trigger_PushAway();
 	}
-	// 테스트용
-	/*if (m_bAnimFinish == false)
-	{
-		m_bAnimFinish = true;
-		m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
-	}
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_HIT_GETUP_DIZZY, 0.55, dTimeDelta))
-	{
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT_GETUP_DIZZY);
-		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
-		Trigger_PushAway();
-	}*/
-	/*if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_BIG))
-	{
-		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_BIG);
-		Trigger_PushAway();
-	}*/
-
+	
 }
 
 void CBoss_Akaza::Update_Hit_RollGetUp(_double dTimeDelta)
