@@ -1235,6 +1235,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Normal.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Normal");
@@ -1244,6 +1250,24 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt");
 		return E_FAIL;
 	}
 
@@ -1289,9 +1313,15 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air1.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt");
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air2");
 		return E_FAIL;
 	}
 
