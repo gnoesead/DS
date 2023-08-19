@@ -13,11 +13,6 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	void Set_RadialBlur() { m_bRadialBlur = !m_bRadialBlur; }
-	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
-	void Set_Invert() { m_bInvert = !m_bInvert; }
-
-public:
 	HRESULT Initialize_Prototype() override;
 	HRESULT Initialize(void* pArg) override;
 

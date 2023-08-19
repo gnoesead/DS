@@ -481,7 +481,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.2
 			{
-
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
@@ -489,7 +489,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index) // 0.3
 			{
-
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
@@ -511,6 +511,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index) // 0.75
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Ground", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Back", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
