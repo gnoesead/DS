@@ -185,7 +185,12 @@ void CDialog::LateTick(_double TimeDelta)
 	Safe_Release(pGameInstance);
 
 	
-
+	if (m_Alpha == 0.f) {
+		m_Is_Render = false;
+	}
+	else {
+		m_Is_Render = true;
+	}
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -193,23 +198,26 @@ void CDialog::LateTick(_double TimeDelta)
 
 HRESULT CDialog::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (m_Is_Reverse == false)
-		m_pShaderCom->Begin(1);
-	else {
-		m_pShaderCom->Begin(2);
-	}
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
-	
-	if (m_Is_CutScene == false && m_Is_Render == true) {
+		if (m_Is_Reverse == false)
+			m_pShaderCom->Begin(1);
+		else {
+			m_pShaderCom->Begin(2);
+		}
 
-		m_pVIBufferCom->Render();
 
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
 	}
 
 	// 폰트 랜더
