@@ -534,6 +534,9 @@
     <ClInclude Include="..\Public\Battle_Signal.h">
       <Filter>02. GameObjects\UI\12.Battle_Signal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Option.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -769,6 +772,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Battle_Signal.cpp">
       <Filter>02. GameObjects\UI\12.Battle_Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Option.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
