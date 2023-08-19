@@ -39,17 +39,16 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
-
+	
 	Get_PlayerComponent();
 
+	m_StatusDesc.fHp = 150.f;
+	m_StatusDesc.fHp_Max = 150.f;
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 	m_eCurNavi = NAVI_ACAZA;
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 	return S_OK;
 
 }
@@ -3116,7 +3115,7 @@ HRESULT CBoss_Akaza::Add_Components()
 	}
 
 
-	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0 * 0.8;
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 	// for.Com_Transform 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
@@ -3127,7 +3126,7 @@ HRESULT CBoss_Akaza::Add_Components()
 	}
 
 
-	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(0.8f, 0.8f, 0.8f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
 	//for.Com_AABB 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
