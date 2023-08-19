@@ -50,7 +50,10 @@ void CCamera_Free::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
+	if (m_bIs_Pos_Set == false) {
+		m_bIs_Pos_Set = true;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+	}
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_0))
 	{
