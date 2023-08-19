@@ -60,6 +60,7 @@ protected:
 
 protected: //애니메이션 제어용 함수들
 	void	Dir_Setting(_bool Reverse);
+	void	Pos_FixY();
 
 
 protected: // 애니메이션 제어용 변수들
