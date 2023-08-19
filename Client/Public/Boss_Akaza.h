@@ -27,7 +27,12 @@ public:
 		STATE_AWAKE, STATE_AWAKE_COMBOPUNCH,
 
 		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN,
-		STATE_CINEMATIC
+		STATE_CINEMATIC,
+
+		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW ,
+		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
+		
 
 	};
 
@@ -102,6 +107,7 @@ public:
 		ANIM_HIT_BLOW = 79, // 80 뒤로 날아감 
 		ANIM_HIT_BLOW_LOOP = 80,
 		ANIM_HIT_BLOW_END = 81, // 뒤로 날아감 끝
+
 		ANIM_HIT_POWER_BLOW = 82, // 105 종잇장 마냥 날라감
 		ANIM_HIT_MIDDLE_BLOW = 83, // 105 날라감
 		ANIM_HIT_BOUND = 84, // 85 105 바운드
@@ -111,7 +117,7 @@ public:
 		ANIM_HIT_DMGFALL_BOUND = 88, //? 바운드가 왜 또 있지 
 		ANIM_HIT_FALL = 89, // 모르겟음 HIT가 맞나? 공중에서 웅크리며 있음 IDLE상태
 
-		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크
+		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크 -> 빅공격히트모션 -> 리턴스몰
 		ANIM_HIT_SPIN = 91, // 92, 93
 		ANIM_HIT_POWER_GUARDBREAK = 94, // 뒷걸음질 함
 		ANIM_HIT_RETURN_BIG = 95, // 반쯤 고개 숙인 상태에서 돌아옴
@@ -119,14 +125,26 @@ public:
 
 		ANIM_HIT_SMALL_AIR = 97, // 79,80 C자고역ㄱ 들어오고 날아감
 		ANIM_HIT_AIR_UPPER = 98, // 어퍼 맞고 떨어짐
+
 		ANIM_HIT_SMALL = 99, // 스몰공격 -> 96이랑 이어짐
 		ANIM_HIT_UPPER = 100, // 어퍼 -> 돌아오는건 96
 
 		ANIM_HIT_STUN = 101, // 102 스턴
 		ANIM_HIT_STUN2 = 102, // 스턴
-		ANIM_HIT_GETUP_DIZZY = 103, // 104랑 연결 돼있음 근데 95랑 연결이 맞는듯
+		ANIM_HIT_GETUP_DIZZY = 103, // 104랑 연결 돼있음 근데 95랑 연결이 맞는듯 -> 회천이랑 이어서 쓰셈
+
 		ANIM_HIT_DOWNLOOP = 105, // 누워있음
 		ANIM_HIT_GETUP_SPIN = 106, // 107
+		ANIM_HIT_GETUP_SPIN2 = 107, // 리턴스몰이랑 이어짐
+
+		ANIM_HIT_BACK = 121, // 누가 뒷통수 때림 ㅋ
+		ANIM_HIT_FRONT = 122,
+		ANIM_HIT_LEFT = 123,
+		ANIM_HIT_RIGHT = 124,
+		ANIM_HIT_SMALLUPPER = 125,
+		ANIM_HIT_GETUP = 126, // 처 누워있음
+		ANIM_HIT_GETUP2 = 127,
+
 
 		////////////////// 엔드모션 ///////////////////
 
@@ -150,7 +168,7 @@ public:
 		ANIM_CINEMATIC8 = 118,
 		ANIM_CINEMATIC9 = 119,
 		ANIM_CINEMATIC10 = 120,
-		
+
 		ANIM_DEATH = 78, // 사망
 		ANIM_JUMP_PIST = 33, // 안쓸듯
 
@@ -180,7 +198,7 @@ public:
 	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
 	void Update_TriggerTime(_double dTimeDelta);
-	
+
 	//	void Update_Begin(_double dTimeDelta);
 	void Update_Phase_1(_double dTimeDelta);
 	void Update_Phase_2(_double dTimeDelta);
@@ -214,6 +232,19 @@ public:
 	void Trigger_Nachim_AirGun();
 	void Trigger_Awake_Cinematic();
 
+	void Trigger_Hit_Small();
+	void Trigger_Hit_ConnectSmall();
+	void Trigger_Hit_Upper();
+	void Trigger_Hit_Big();
+	void Trigger_Hit_Blow();
+	void Trigger_Hit_BigBlow();
+	void Trigger_Hit_Bound();
+	void Trigger_Hit_Spin();
+	void Trigger_Hit_CutScene();
+	void Trigger_Hit_GetUp();
+	void Trigger_Hit_RollGetUp();
+	void Trigger_Hit_BigGetUp();
+	
 #pragma endregion
 
 #pragma region Pattern
@@ -243,10 +274,20 @@ private: //패턴 함수들
 	void Update_Nachim_AirGun(_double dTimeDelta);
 	void Update_Awake_Cinematic(_double dTimeDelta);
 
+	void Update_Hit_Small(_double dTimeDelta);
+	void Update_Hit_Upper(_double dTimeDelta);
+	void Update_Hit_Big(_double dTimeDelta);
+	void Update_Hit_Blow(_double dTimeDelta);
+	void Update_Hit_BigBlow(_double dTimeDelta);
+	void Update_Hit_Bound(_double dTimeDelta);
+	void Update_Hit_Spin(_double dTimeDelta);
+	void Update_Hit_CutScene(_double dTimeDelta);
+	void Update_Hit_GetUp(_double dTimeDelta);
+	void Update_Hit_RollGetUp(_double dTimeDelta);
+	void Update_Hit_BigGetUp(_double dTimeDelta);
+
 private: /* Calculate */
-	/*_float Calculate_Distance();
-	_vector Calculate_Dir();
-	_vector Calculate_Dir_FixY();*/
+	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
 
 
 #pragma endregion
@@ -274,25 +315,24 @@ private: // _bool
 	_bool	m_bAwake = { false };
 	_bool	m_bFirstAwake = { false };
 	_bool	m_bSecondAwake = { false };
-	
-	
+
+	_bool	m_bNoDmg = { false };
+
 	//_bool	m_bNextPhase = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
-	
+	_double m_dDelay_ComboChain = { 0.0 };
 
 private:
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iPunchCount = { 0 };
 	_uint	m_iIdleCnt = { 0 };
-
 	_uint	m_iTriggerCnt = { 0 };
-
-	_uint	m_iHp = { 100 }; // 임시
+	_uint	m_iSmallHit_Index = { 0 };
 
 private:
 	PHASE   m_eCurPhase = PHASE_1;

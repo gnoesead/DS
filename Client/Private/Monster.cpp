@@ -70,6 +70,11 @@ void CMonster::Get_PlayerComponent()
 	Safe_AddRef(pGameInstance);
 
 	m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	if (m_pPlayerTransformCom == nullptr)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
 	
 	Safe_Release(pGameInstance);
 }
@@ -192,6 +197,19 @@ void CMonster::Dir_Setting(_bool Reverse)
 	}
 
 	Safe_Release(pGameInstance);
+}
+
+void CMonster::Pos_FixY()
+{
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (Pos.y >= m_fLand_Y)
+	{
+		m_bAir_Motion = false;
+		Pos.y = m_fLand_Y;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+	}
 }
 
 HRESULT CMonster::Add_Components()

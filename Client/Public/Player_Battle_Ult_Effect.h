@@ -83,7 +83,7 @@ private:
 	_bool m_Is_Stack_Down = { false };
 	_bool m_Is_Stack_Down_Change = { false };
 
-
+	_bool m_Is_Battle = { true };
 
 private:
 	_double m_Player_Max_Ult = { 1.000 };

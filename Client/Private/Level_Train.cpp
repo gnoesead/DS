@@ -23,6 +23,7 @@
 #include "Dialog.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
+#include "Pause.h"
 
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -836,6 +837,58 @@ HRESULT CLevel_Train::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	}
 
 
+// Pause
+
+	CPause::UIDESC UIDesc10;
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 

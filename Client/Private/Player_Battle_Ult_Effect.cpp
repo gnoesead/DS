@@ -164,7 +164,6 @@ void CPlayer_Battle_Ult_Effect::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-	m_Is_Render = CFadeManager::GetInstance()->Get_Is_Battle();
 
 	Get_Player_Info(TimeDelta);
 
@@ -247,21 +246,16 @@ void CPlayer_Battle_Ult_Effect::LateTick(_double TimeDelta)
 		}
 	}
 
-	Get_Mouse_Pos();
+	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
-	m_Pt_In = Pt_InUI();
-
-	if (m_UI_Desc.m_Type == 3) {
-		Tool_Funtion(TimeDelta);
-	}
-
+	
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
 }
 
 HRESULT CPlayer_Battle_Ult_Effect::Render()
 {
-	if (m_Is_Render == true) {
+	if (m_Is_Render == true && m_Is_Battle == true) {
 
 		if (FAILED(__super::Render()))
 			return E_FAIL;

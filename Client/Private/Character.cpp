@@ -120,6 +120,7 @@ void CCharacter::Tick(_double dTimeDelta)
 
 	for (_uint i = 0; i < COLL_END; i++)
 		m_pColliderCom[i]->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
 }
 
 void CCharacter::LateTick(_double dTimeDelta)
@@ -127,7 +128,6 @@ void CCharacter::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 
 	Status_Work(dTimeDelta);
-
 #ifdef _DEBUG
 	for (_uint i = 0; i < COLL_END; i++)
 	{
@@ -135,6 +135,7 @@ void CCharacter::LateTick(_double dTimeDelta)
 			return;
 	}
 #endif // _DEBUG
+
 }
 
 HRESULT CCharacter::Render()
@@ -694,8 +695,17 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		}
 	}
 
+	//서포트 게이지
+	m_StatusDesc.fSupport += 0.05f;
+	if (m_StatusDesc.fSupport >= m_StatusDesc.fSupport_Max)
+	{
+		m_StatusDesc.fSupport = m_StatusDesc.fSupport_Max;
+	}
+	if (m_StatusDesc.fSupport <= 0.0f)
+	{
+		m_StatusDesc.fSupport = 0.0f;
+	}
 
-	
 }
 
 void CCharacter::Use_Mp_Skill()

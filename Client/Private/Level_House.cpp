@@ -25,6 +25,7 @@
 #include "Dialog.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
+#include "Pause.h"
 
 
 
@@ -245,6 +246,23 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	//CCharacter::CHARACTERDESC CharacterDesc;
+	//ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	//CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
+
+	//CharacterDesc.WorldInfo.vPosition = _float4(43.f, 0.f, 120.f, 1.f);
+	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	return E_FAIL;
+	//}
+
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
@@ -919,7 +937,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	}
 
 
-	// Battle_Signal
+// Battle_Signal
 	CBattle_Signal::UIDESC UIDesc9;
 	ZeroMemory(&UIDesc9, sizeof UIDesc9);
 
@@ -966,6 +984,59 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+
+// Pause
+	CPause::UIDESC UIDesc10;
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+	UIDesc10.m_Is_Reverse = false;
+	UIDesc10.m_Type = 6;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 
