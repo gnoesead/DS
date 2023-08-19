@@ -21,6 +21,8 @@ public:
 		_bool    m_Is_Y_Reverse = { false };
 
 		_uint    m_Type = { 0 };
+		_uint    m_Menu_Type = { 0 };
+
 	}UIDESC;
 
 
@@ -40,7 +42,7 @@ public:
 
 public:
 	void Set_UI();
-
+	void Cloud_Control(_double dTimeDelta);
 
 private:
 	CShader*			m_pShaderCom = { nullptr };
@@ -69,7 +71,9 @@ private:
 
 
 private:
-	_bool                   m_Select = { 0 };
+	_bool                   m_Is_Select = { 0 };
+	_int                   m_Select_Num = { 0 };
+
 
 	vector<wstring>         m_szTitle = { };
 	vector<wstring>         m_szContent = { };
@@ -81,7 +85,6 @@ private:
 	_float                  m_UV_Speed_X = {};
 	_float                  m_Time_Y = {};
 	_float                  m_UV_Speed_Y = {};
-
 
 
 

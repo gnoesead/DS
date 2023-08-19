@@ -16,6 +16,8 @@
 #include "Title.h"
 #include "Loading.h"
 #include "Fade.h"
+#include "Option.h"
+
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
@@ -286,7 +288,20 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CFade::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_Option */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Option"),
+		COption::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region Option
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Option/Option_%d.png"), 7))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option_Cursor"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Option/Cursor_%d.png"), 2))))
+		return E_FAIL;
 
 
 #pragma endregion

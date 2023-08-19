@@ -6,6 +6,7 @@
 #include "Title_Manager.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
+#include "Option.h"
 
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -189,6 +190,64 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
    
+// Option
+    COption::UIDESC UIDesc3;
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 7;
+    UIDesc3.m_Menu_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 7;
+    UIDesc3.m_Menu_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 7;
+    UIDesc3.m_Menu_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 

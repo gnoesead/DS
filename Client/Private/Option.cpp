@@ -19,7 +19,7 @@ HRESULT COption::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Initialize_Prototype : BackGround");
+		MSG_BOX("Failed to Initialize_Prototype : Option");
 		return E_FAIL;
 	}
 
@@ -50,37 +50,45 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_X = 1280.f;
 		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
-		m_UI_Layer = 0;
+		m_UI_Layer = 30;
 	}
 
-	// Rect(Content)
+	// Title
+	if (m_UI_Desc.m_Type == 1) {
+
+		m_fX = 80;
+		m_fY = 80;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 160.f;
+		m_Origin_Y = 96.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 32;
+		m_Alpha = 1.f;
+	}
+
+	// Rect
 	if (m_UI_Desc.m_Type == 2) {
 
-		m_fX = 640;
+		m_fX = 850;
 		m_fY = 365;
 		m_Origin_PosX = (_float)m_fX;
 		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 860.f;
-		m_Origin_Y = 592.f;
-		m_Size_Param = 0.69f;
-		m_UI_Layer = 3;
-		m_Alpha = 0.2f;
-	}
-
-
-	// Title
-	if (m_UI_Desc.m_Type == 8) {
-
-		m_fX = 640;
-		m_fY = 146;
-		m_Origin_PosX = (_float)m_fX;
-		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 520.f;
-		m_Origin_Y = 68.f;
-		m_Size_Param = 0.69f;
-		m_UI_Layer = 4;
+		m_Origin_X = 620.f;
+		m_Origin_Y = 360.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 32;
 		m_Alpha = 1.f;
 	}
+
+
+	// Cursor
+	if (m_UI_Desc.m_Type == 7) {
+
+		m_UI_Layer = 32;
+		m_Alpha = 1.f;
+	}
+
 
 	// Cloud_LT
 	if (m_UI_Desc.m_Type == 9) {
@@ -155,69 +163,73 @@ void COption::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	
-	// Cloud_LT
-	if (m_UI_Desc.m_Type == 9) {
-		
-		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+	if (m_UI_Desc.m_Type == 7) {
 
-		if (m_fX - m_Origin_PosX >=  20.f) {
-			
-			m_PosX_Dir *= -1.f;
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
+			m_Select_Num--;
+
+			if (m_Select_Num < 0) {
+				m_Select_Num = 0;
+			}
 		}
-		
-		if (m_fX <= m_Origin_PosX) {
-			m_PosX_Dir *= -1.f;
+		if (pGameInstance->Get_DIKeyDown(DIK_DOWN)) {
+			m_Select_Num++;
+
+			if (m_Select_Num > 2) {
+				m_Select_Num = 2;
+			}
 		}
+
+		if (m_Select_Num == m_UI_Desc.m_Menu_Type) {
+			m_Is_Select = true;
+		}
+		else {
+			m_Is_Select = false;
+		}
+
+
+		Safe_Release(pGameInstance);
+
+		if (m_UI_Desc.m_Menu_Type == 0) {
+			m_fX = 210;
+			m_fY = 170;
+			m_Origin_PosX = (_float)m_fX;
+			m_Origin_PosY = (_float)m_fY;
+		}
+		else if (m_UI_Desc.m_Menu_Type == 1) {
+			m_fX = 210;
+			m_fY = 245;
+			m_Origin_PosX = (_float)m_fX;
+			m_Origin_PosY = (_float)m_fY;
+		}
+		else if (m_UI_Desc.m_Menu_Type == 2) {
+			m_fX = 210;
+			m_fY = 320;
+			m_Origin_PosX = (_float)m_fX;
+			m_Origin_PosY = (_float)m_fY;
+		}
+
+		if (m_Is_Select == true) {
+			m_fX -= 20;
+			m_Origin_X = 700.f;
+			m_Origin_Y = 140.f;
+			m_Size_Param = 0.65f;
+		}
+		else {
+			m_fX -= 10;
+			m_Origin_X = 600.f;
+			m_Origin_Y = 120.f;
+			m_Size_Param = 0.69f;
+		}
+
 	}
-	// Cloud_RT
-	if (m_UI_Desc.m_Type == 10) {
-
-		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
-
-		if (m_Origin_PosX - m_fX >= 20.f) {
-
-			m_PosX_Dir *= -1.f;
-		}
-
-		if (m_fX >= m_Origin_PosX) {
-			m_PosX_Dir *= -1.f;
-		}
 
 
-	}
-	// Cloud_LD
-	if (m_UI_Desc.m_Type == 11) {
 
-		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
-
-		if (m_fX - m_Origin_PosX >= 20.f) {
-
-			m_PosX_Dir *= -1.f;
-		}
-
-		if (m_fX <= m_Origin_PosX) {
-			m_PosX_Dir *= -1.f;
-		}
-
-	
-	}
-	// Cloud_RD
-	if (m_UI_Desc.m_Type == 12) {
-
-		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
-
-		if (m_Origin_PosX - m_fX >= 20.f) {
-
-			m_PosX_Dir *= -1.f;
-		}
-
-		if (m_fX >= m_Origin_PosX) {
-			m_PosX_Dir *= -1.f;
-		}
-
-
-	}
+	Cloud_Control(dTimeDelta);
 
 
 	Set_UI();
@@ -256,10 +268,6 @@ HRESULT COption::Render()
 	else {
 		m_pShaderCom->Begin(1);
 	}
-
-
-
-
 
 
 	m_pVIBufferCom->Render();
@@ -305,41 +313,99 @@ void COption::Set_UI()
 	XMStoreFloat4x4(&m_WorldMatrix, TransformMatrix);
 }
 
+void COption::Cloud_Control(_double dTimeDelta)
+{
+	// Cloud_LT
+	if (m_UI_Desc.m_Type == 9) {
+
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_fX - m_Origin_PosX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+	}
+	// Cloud_RT
+	if (m_UI_Desc.m_Type == 10) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_LD
+	if (m_UI_Desc.m_Type == 11) {
+
+		m_fX += dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_fX - m_Origin_PosX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX <= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+	// Cloud_RD
+	if (m_UI_Desc.m_Type == 12) {
+
+		m_fX -= dTimeDelta * 5.f * m_PosX_Dir;
+
+		if (m_Origin_PosX - m_fX >= 20.f) {
+
+			m_PosX_Dir *= -1.f;
+		}
+
+		if (m_fX >= m_Origin_PosX) {
+			m_PosX_Dir *= -1.f;
+		}
+
+
+	}
+}
+
 HRESULT COption::Add_Components()
 {
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"),
 		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 	
-
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxTex"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 	
-
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 	
-	
-	if (m_UI_Desc.m_Type == 13) {
+	if (m_UI_Desc.m_Type <= 6) {
 
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Door"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 	}
-	else if (m_UI_Desc.m_Type == 14) {
+	else if (m_UI_Desc.m_Type == 7) {
 
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Walk"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option_Cursor"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
+
 	}
-	else {
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-	}
-	
 	
 	
 
@@ -376,19 +442,18 @@ HRESULT COption::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	
-	if (m_UI_Desc.m_Type == 9 || m_UI_Desc.m_Type == 11 || m_UI_Desc.m_Type == 12) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 9)))
-			return E_FAIL;
-	}
-	else if (m_UI_Desc.m_Type == 10) {
-		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 10)))
-			return E_FAIL;
-	}
-	else {
+	if (m_UI_Desc.m_Type <= 6) {
+
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type)))
 			return E_FAIL;
 	}
+	else if (m_UI_Desc.m_Type == 7) {
+
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Is_Select)))
+			return E_FAIL;
+
+	}
+	
 
 	
 	

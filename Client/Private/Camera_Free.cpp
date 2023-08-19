@@ -90,16 +90,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/*if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
-
-		m_Village_Cam_TimeAcc += (_float)dTimeDelta;
-
-		if (m_Village_Cam_TimeAcc < 4.f) {
-			CCameraManager::GetInstance()->Zoom_Fix(200.f);
-		}
-	}*/
-
-
 	// Camera_Shake
 	if (CCameraManager::GetInstance()->Get_Is_Shake_On()) {
 
@@ -109,8 +99,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 	// Player
-	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-	m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
+
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
+
+		m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
 
 	// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
@@ -180,7 +176,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
 
-		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 1) {
+		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 3) {
 			m_bIs_Combo_On = true;
 		}
 		else {
