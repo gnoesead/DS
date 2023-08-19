@@ -30,8 +30,8 @@ public:
 		STATE_CINEMATIC,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW ,
-		STATE_HIT_BOUND, STATE_SPIN, STATE_CUTSCENE, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER
+		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
 		
 
 	};
@@ -117,7 +117,7 @@ public:
 		ANIM_HIT_DMGFALL_BOUND = 88, //? 바운드가 왜 또 있지 
 		ANIM_HIT_FALL = 89, // 모르겟음 HIT가 맞나? 공중에서 웅크리며 있음 IDLE상태
 
-		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크
+		ANIM_HIT_GUARDBREAK = 90, // 가드브레이크 -> 빅공격히트모션 -> 리턴스몰
 		ANIM_HIT_SPIN = 91, // 92, 93
 		ANIM_HIT_POWER_GUARDBREAK = 94, // 뒷걸음질 함
 		ANIM_HIT_RETURN_BIG = 95, // 반쯤 고개 숙인 상태에서 돌아옴
@@ -244,7 +244,7 @@ public:
 	void Trigger_Hit_GetUp();
 	void Trigger_Hit_RollGetUp();
 	void Trigger_Hit_BigGetUp();
-
+	
 #pragma endregion
 
 #pragma region Pattern
