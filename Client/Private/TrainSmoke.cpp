@@ -76,6 +76,8 @@ void CTrainSmoke::LateTick(_double TimeDelta)
 		return;
 
 	Compute_ViewZ(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CTrainSmoke::Render()
