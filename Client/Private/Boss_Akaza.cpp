@@ -510,9 +510,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Ground", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Back", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);				
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
@@ -2193,6 +2192,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
+					CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
 					Camera_Shake();
 					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);

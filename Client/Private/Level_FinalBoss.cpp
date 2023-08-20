@@ -1225,19 +1225,34 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Big.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Big");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Medium.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Medium");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Ground.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Big.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Ground");
+		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Medium");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Back.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Medium.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Back");
+		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Medium");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_XYZ_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Small");
 		return E_FAIL;
 	}
 
