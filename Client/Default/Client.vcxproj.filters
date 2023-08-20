@@ -537,6 +537,9 @@
     <ClInclude Include="..\Public\Option.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\OptionManager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -775,6 +778,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Option.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\OptionManager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

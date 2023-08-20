@@ -17,6 +17,7 @@
 #include "Loading.h"
 #include "Fade.h"
 #include "Option.h"
+#include "OptionManager.h"
 
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
@@ -110,6 +111,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	CBattle_UI_Manager::GetInstance()->Tick(dTimeDelta);
 
+	COptionManager::GetInstance()->Tick(dTimeDelta);
 
 	// 전투 종료
 	if (m_pGameInstance->Get_DIKeyDown(DIK_NUMPAD0)) {
@@ -296,7 +298,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 #pragma region Option
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Option/Option_%d.png"), 7))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Option/Option_%d.png"), 10))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option_Cursor"),
@@ -925,6 +927,7 @@ void CMainApp::Free()
 	CMiniMapManager::GetInstance()->DestroyInstance();
 	CCameraManager::GetInstance()->DestroyInstance();
 	CBattle_UI_Manager::GetInstance()->DestroyInstance();
+	COptionManager::GetInstance()->DestroyInstance();
 
 	CGameInstance::Release_Engine();
 }

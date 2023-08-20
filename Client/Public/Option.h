@@ -58,7 +58,7 @@ private:
 	_float4x4				m_ProjMatrix = {};
 	
 	UIDESC                  m_UI_Desc = {};
-	_float                  m_Alpha = { 1.f };
+	_float                  m_Alpha = { 0.f };
 	_float                  m_Alpha_Dir = { 1.f };
 	_bool                   m_Is_Reverse = { false };
 	_bool                   m_Is_CutScene = false;
@@ -81,17 +81,19 @@ private:
 	vector<wstring>         m_szGraphicMenu = { };
 	vector<wstring>         m_szSoundMenu = { };
 
+	vector<wstring>         m_szButtonMenu = { };
+
+
 	
-
-
-	_uint                   m_Loading_Index = { 0 };
-
 private:
 	_float                  m_Time_X = {};
 	_float                  m_UV_Speed_X = {};
 	_float                  m_Time_Y = {};
 	_float                  m_UV_Speed_Y = {};
 
+
+	_bool                   m_Is_Font_Render = { false };
+	_bool                   m_Is_Reset = { false };
 
 
 private:

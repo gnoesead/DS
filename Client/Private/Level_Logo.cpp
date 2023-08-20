@@ -7,6 +7,7 @@
 #include "Fade.h"
 #include "Fade_Manager.h"
 #include "Option.h"
+#include "OptionManager.h"
 
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -37,8 +38,18 @@ void CLevel_Logo::Tick(_double dTimeDelta)
 
     if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
-        if (CTitleManager::GetInstance()->Get_Select_Type() == 0)
-            CFadeManager::GetInstance()->Set_Ink_In(true);
+        if (CTitleManager::GetInstance()->Get_Select_Type() == 0) {
+
+            if (COptionManager::GetInstance()->Get_Is_Option_On() == false)
+                CFadeManager::GetInstance()->Set_Ink_In(true);
+        }
+        else {
+            if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
+                COptionManager::GetInstance()->Set_Is_Option_On(true);
+                COptionManager::GetInstance()->Set_Is_Reset(false);
+            }
+        }
+       
     }
 
     if (CFadeManager::GetInstance()->Get_Ink_In_Done() == true) {
@@ -330,6 +341,33 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
     UIDesc3.m_Type = 16;
     UIDesc3.m_Is_Y_Reverse = true;
     UIDesc3.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 17;
+   
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 18;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+    UIDesc3.m_Type = 19;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
         Safe_Release(pGameInstance);

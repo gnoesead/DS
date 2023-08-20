@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Title_Manager.h"
+#include "OptionManager.h"
 
 
 COption::COption(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -64,7 +65,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 96.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 32;
-		m_Alpha = 1.f;
 	}
 
 	// Rect
@@ -78,7 +78,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 360.f;
 		m_Size_Param = 1.3f;
 		m_UI_Layer = 32;
-		m_Alpha = 1.f;
 	}
 
 
@@ -86,7 +85,7 @@ HRESULT COption::Initialize(void* pArg)
 	if (m_UI_Desc.m_Type == 7) {
 
 		m_UI_Layer = 32;
-		m_Alpha = 1.f;
+		m_Is_Side_Cut_R = true;
 	}
 
 
@@ -100,7 +99,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 31;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RT
@@ -114,7 +112,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 308.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 31;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_LD
@@ -128,7 +125,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 308.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 31;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_RD
@@ -142,7 +138,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 31;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 
 	}
@@ -157,7 +152,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 560.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 30.5;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_R = true;
 	}
 	// Cloud_RT_D
@@ -171,7 +165,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 30.5;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_LD_D
@@ -185,7 +178,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 30.5;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 	}
 	// Cloud_RD_D
@@ -199,14 +191,55 @@ HRESULT COption::Initialize(void* pArg)
 		m_Origin_Y = 328.f;
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 30.5;
-		m_Alpha = 1.f;
 		m_Is_Side_Cut_L = true;
 
+	}
+	// Anounce_Back
+	if (m_UI_Desc.m_Type == 17) {
+
+		m_fX = 950;
+		m_fY = 670;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 128.f * 8.f;
+		m_Origin_Y = 52.f;
+		m_Size_Param = 0.69f;
+		m_UI_Layer = 32;
+		m_Is_Side_Cut_L = true;
+		m_Alpha = 0.6f;
+
+	}
+	// Button_Y
+	if (m_UI_Desc.m_Type == 18) {
+
+		m_fX = 1000;
+		m_fY = 670;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 92.f;
+		m_Origin_Y = 92.f;
+		m_Size_Param = 0.35f;
+		m_UI_Layer = 33;
+	}
+	// Button_B
+	if (m_UI_Desc.m_Type == 19) {
+
+		m_fX = 1120;
+		m_fY = 670;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 92.f;
+		m_Origin_Y = 92.f;
+		m_Size_Param = 0.35f;
+		m_UI_Layer = 33;
 	}
 	
 	m_szCameraMenu.push_back(L"카메라 설정");
 	m_szGraphicMenu.push_back(L"그래픽 설정");
 	m_szSoundMenu.push_back(L"사운드 설정");
+
+	m_szButtonMenu.push_back(L"결정");
+	m_szButtonMenu.push_back(L"돌아가기");
 
 	
 	m_Is_TimeFree = true;
@@ -221,10 +254,43 @@ void COption::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	if (m_UI_Desc.m_Type == 7) {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
+	// 옵션 나가기
+	if (pGameInstance->Get_DIKeyDown(DIK_B)) {
+
+		COptionManager::GetInstance()->Set_Is_Option_On(false);
+		m_Is_Font_Render = false;
+		COptionManager::GetInstance()->Set_Is_Reset(false);
+	}
+
+	if (COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+
+		m_Alpha += (_float)dTimeDelta * 2.f;
+
+		if (m_Alpha >= 0.5f) {
+			m_Is_Font_Render = true;
+		}
+
+		if (m_Alpha >= 1.f)
+		{
+			m_Alpha = 1.f;
+		}
+	}
+	else {
+
+		m_Alpha -= (_float)dTimeDelta * 2.f;
+
+		if (m_Alpha <= 0.f)
+		{
+			m_Alpha = 0.f;
+		}
+
+	}
+
+
+	if (m_UI_Desc.m_Type == 7) {
 
 		if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
 			m_Select_Num--;
@@ -248,8 +314,6 @@ void COption::Tick(_double dTimeDelta)
 			m_Is_Select = false;
 		}
 
-
-		Safe_Release(pGameInstance);
 
 		if (m_UI_Desc.m_Menu_Type == 0) {
 			m_fX = 210;
@@ -286,18 +350,68 @@ void COption::Tick(_double dTimeDelta)
 	}
 
 
+	if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 17 || m_UI_Desc.m_Type == 18 || m_UI_Desc.m_Type == 19) {
 
-	Cloud_Control(dTimeDelta);
+		if (m_UI_Desc.m_Type != 7)
+			m_fX = m_Origin_PosX;
+
+		m_fX -= COptionManager::GetInstance()->Get_Option_Move();
+	}
+
+
+	if (COptionManager::GetInstance()->Get_Is_Move_Done() == false) {
+
+		if (m_UI_Desc.m_Type == 9 || m_UI_Desc.m_Type == 11 || m_UI_Desc.m_Type == 13 || m_UI_Desc.m_Type == 15) {
+
+			m_fX = (_double)m_Origin_PosX - (_double)COptionManager::GetInstance()->Get_Option_Move();
+		}
+
+		if (m_UI_Desc.m_Type == 10 || m_UI_Desc.m_Type == 12 || m_UI_Desc.m_Type == 14 || m_UI_Desc.m_Type == 16 
+			|| m_UI_Desc.m_Type == 17 || m_UI_Desc.m_Type == 18 || m_UI_Desc.m_Type == 19) {
+
+			m_fX = (_double)m_Origin_PosX + (_double)COptionManager::GetInstance()->Get_Option_Move();
+		}
+	}
+
+	if (m_UI_Desc.m_Type != 1 && m_UI_Desc.m_Type != 7) {
+
+		if (COptionManager::GetInstance()->Get_Is_Move_Done() == true) {
+
+			if (m_Is_Reset == false) {
+				COptionManager::GetInstance()->Set_Is_Reset(true);
+				m_fX = (_double)m_Origin_PosX;
+			}
+
+
+			Cloud_Control(dTimeDelta);
+		}
+	}
 
 
 	Set_UI();
 
+
+
+	Safe_Release(pGameInstance);
 
 }
 
 void COption::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
+
+
+	m_Is_Reset = COptionManager::GetInstance()->Get_Is_Reset();
+
+
+	if (m_Alpha == 0.f) {
+		m_Is_Render = false;
+	}
+	else {
+		m_Is_Render = true;
+	}
+
+
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -306,74 +420,91 @@ void COption::LateTick(_double dTimeDelta)
 
 HRESULT COption::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
 
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
-		m_pShaderCom->Begin(6);
-	}
-	else if (m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
-		m_pShaderCom->Begin(9);
-	}
-	else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
-		m_pShaderCom->Begin(16);
-	}
-	else {
-		m_pShaderCom->Begin(1);
-	}
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
 
-	m_pVIBufferCom->Render();
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_UI_Desc.m_Type == 7) {
-
-		if (m_UI_Desc.m_Menu_Type == 0) {
-			if (m_Is_Select == true) {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
-					return E_FAIL;
-			}
-			else {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
-					return E_FAIL;
-			}
+		if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse != true) {
+			m_pShaderCom->Begin(6);
+		}
+		else if (m_UI_Desc.m_Is_X_Reverse != true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(9);
+		}
+		else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
+			m_pShaderCom->Begin(16);
+		}
+		else {
+			m_pShaderCom->Begin(1);
 		}
 
-		if (m_UI_Desc.m_Menu_Type == 1) {
-			if (m_Is_Select == true) {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
-					return E_FAIL;
-			}
-			else {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
-					return E_FAIL;
-			}
-		}
 
-		if (m_UI_Desc.m_Menu_Type == 2) {
-			if (m_Is_Select == true) {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
-					return E_FAIL;
-			}
-			else {
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
-					return E_FAIL;
-			}
-		}
-
-	
+		m_pVIBufferCom->Render();
 	}
 
-	
+	if (m_Is_Font_Render) {
 
-	Safe_Release(pGameInstance);
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (m_UI_Desc.m_Type == 7) {
+
+			if (m_UI_Desc.m_Menu_Type == 0) {
+				if (m_Is_Select == true) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+						return E_FAIL;
+				}
+			}
+
+			if (m_UI_Desc.m_Menu_Type == 1) {
+				if (m_Is_Select == true) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+						return E_FAIL;
+				}
+			}
+
+			if (m_UI_Desc.m_Menu_Type == 2) {
+				if (m_Is_Select == true) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 120.f, (_float)m_fY - 17.f), _float2(0.55f, 0.55f), XMVectorSet(0.f, 0.f, 0.f, 1.f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSoundMenu[0].c_str(), _float2((_float)m_fX - 130.f, (_float)m_fY - 17.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+						return E_FAIL;
+				}
+			}
+
+
+		}
+
+		if (m_UI_Desc.m_Type == 17) {
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szButtonMenu[0].c_str(), _float2((_float)m_fX + 70.f, (_float)m_fY - 13.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+				return E_FAIL;
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szButtonMenu[1].c_str(), _float2((_float)m_fX + 190.f, (_float)m_fY - 13.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+				return E_FAIL;
+
+
+		}
+
+		Safe_Release(pGameInstance);
+
+	}
+
 
 
 	return S_OK;
@@ -558,14 +689,20 @@ HRESULT COption::Add_Components()
 			return E_FAIL;
 
 	}
-	else if (m_UI_Desc.m_Type >= 9 || m_UI_Desc.m_Type <= 16) {
+	else if (m_UI_Desc.m_Type >= 9 && m_UI_Desc.m_Type <= 16) {
 
 		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option_Cloud"),
 			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 			return E_FAIL;
 
 	}
+	else if (m_UI_Desc.m_Type >= 17 && m_UI_Desc.m_Type <= 19) {
 
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Option"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
 
 	return S_OK;
 }
@@ -611,11 +748,16 @@ HRESULT COption::SetUp_ShaderResources()
 			return E_FAIL;
 
 	}
-	else if (m_UI_Desc.m_Type >= 9 || m_UI_Desc.m_Type <= 16) {
+	else if (m_UI_Desc.m_Type >= 9 && m_UI_Desc.m_Type <= 16) {
 
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Cloud_Type)))
 			return E_FAIL;
 
+	}
+	else if (m_UI_Desc.m_Type >= 17 && m_UI_Desc.m_Type <= 19) {
+
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_UI_Desc.m_Type - 10)))
+			return E_FAIL;
 	}
 
 	
