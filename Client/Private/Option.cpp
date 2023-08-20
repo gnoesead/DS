@@ -206,7 +206,6 @@ HRESULT COption::Initialize(void* pArg)
 		m_Size_Param = 0.69f;
 		m_UI_Layer = 32;
 		m_Is_Side_Cut_L = true;
-		m_Alpha = 0.6f;
 
 	}
 	// Button_Y
@@ -273,10 +272,20 @@ void COption::Tick(_double dTimeDelta)
 			m_Is_Font_Render = true;
 		}
 
-		if (m_Alpha >= 1.f)
-		{
-			m_Alpha = 1.f;
+
+		if (m_UI_Desc.m_Type == 17) {
+			if (m_Alpha >= 0.9f)
+			{
+				m_Alpha = 0.9f;
+			}
 		}
+		else {
+			if (m_Alpha >= 1.f)
+			{
+				m_Alpha = 1.f;
+			}
+		}
+	
 	}
 	else {
 
@@ -290,7 +299,7 @@ void COption::Tick(_double dTimeDelta)
 	}
 
 
-	if (m_UI_Desc.m_Type == 7) {
+	if (m_UI_Desc.m_Type == 7 && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
 
 		if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
 			m_Select_Num--;
