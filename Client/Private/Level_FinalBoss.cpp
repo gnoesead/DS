@@ -23,7 +23,7 @@
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
 #include "Pause.h"
-
+#include "Option.h"
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -967,6 +967,198 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+
+// Option
+	COption::UIDESC UIDesc15;
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 7;
+	UIDesc15.m_Menu_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 7;
+	UIDesc15.m_Menu_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 7;
+	UIDesc15.m_Menu_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 9;
+	UIDesc15.m_Cloud_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 10;
+	UIDesc15.m_Cloud_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 11;
+	UIDesc15.m_Is_X_Reverse = true;
+	UIDesc15.m_Is_Y_Reverse = true;
+	UIDesc15.m_Cloud_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 12;
+	UIDesc15.m_Is_X_Reverse = true;
+	UIDesc15.m_Is_Y_Reverse = true;
+	UIDesc15.m_Cloud_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 13;
+	UIDesc15.m_Cloud_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 14;
+	UIDesc15.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 15;
+	UIDesc15.m_Is_X_Reverse = true;
+	UIDesc15.m_Is_Y_Reverse = true;
+	UIDesc15.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 16;
+	UIDesc15.m_Is_Y_Reverse = true;
+	UIDesc15.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 17;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 18;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 19;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	Safe_Release(pGameInstance);
 
