@@ -38,6 +38,10 @@ public:
 		return m_Is_TimeFree;
 	}
 
+	_float					Get_ViewZ(void) {
+		return m_fViewZ;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -57,6 +61,9 @@ public:
 	class CComponent*	Find_Component(const _tchar* pComponentTag);
 
 protected:
+	void					Compute_ViewZ(const _fvector vPos);
+
+protected:
 	ID3D11Device*			m_pDevice = { nullptr };
 	ID3D11DeviceContext*	m_pContext = { nullptr };
 
@@ -67,6 +74,9 @@ protected:
 
 	// 시간제약 체크용
 	_bool                   m_Is_TimeFree = { false };
+
+	// Sorting용
+	_float					m_fViewZ = 0.f;
 
 protected:
 	unordered_map<const _tchar*, class CComponent*>		m_Components;

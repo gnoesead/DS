@@ -99,6 +99,22 @@ CComponent* CGameObject::Find_Component(const _tchar* pComponentTag)
 	return iter->second;
 }
 
+void CGameObject::Compute_ViewZ(const _fvector vPos)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_float4 CamPosFloat4 = pGameInstance->Get_CameraPosition();
+
+	_vector		vCamPos = XMLoadFloat4(&CamPosFloat4);
+
+	vCamPos = XMVectorSetX(vCamPos, XMVectorGetX(vPos));
+
+	m_fViewZ = XMVectorGetX(XMVector3Length(vCamPos - vPos));
+
+	Safe_Release(pGameInstance);
+}
+
 void CGameObject::Free()
 {
 	for (auto& Pair : m_Components)
