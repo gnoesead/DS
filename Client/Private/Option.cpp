@@ -80,6 +80,57 @@ HRESULT COption::Initialize(void* pArg)
 		m_UI_Layer = 32;
 	}
 
+	// Line
+	if (m_UI_Desc.m_Type == 3) {
+
+		m_fX = 850;
+		m_fY = 365;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 620.f;
+		m_Origin_Y = 360.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 32;
+	}
+
+	// Arrow
+	if (m_UI_Desc.m_Type == 4) {
+
+		m_fX = 850;
+		m_fY = 365;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 620.f;
+		m_Origin_Y = 360.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 32;
+	}
+
+	// Bar_Back
+	if (m_UI_Desc.m_Type == 5) {
+
+		m_fX = 850;
+		m_fY = 365;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 620.f;
+		m_Origin_Y = 360.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 32;
+	}
+
+	// Bar
+	if (m_UI_Desc.m_Type == 6) {
+
+		m_fX = 850;
+		m_fY = 365;
+		m_Origin_PosX = (_float)m_fX;
+		m_Origin_PosY = (_float)m_fY;
+		m_Origin_X = 620.f;
+		m_Origin_Y = 360.f;
+		m_Size_Param = 1.3f;
+		m_UI_Layer = 32;
+	}
 
 	// Cursor
 	if (m_UI_Desc.m_Type == 7) {
