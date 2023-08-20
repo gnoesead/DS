@@ -2192,6 +2192,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
 					CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
 					CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
 					Camera_Shake();
