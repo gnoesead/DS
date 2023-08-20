@@ -343,7 +343,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
-
 	if (EventCallProcess())
 	{
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);

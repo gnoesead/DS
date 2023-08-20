@@ -53,7 +53,7 @@ public:
 
 		//페이즈 2 배꼽 북 연속치기
 		ANIM_ATKCMB_01READY = 4, // 연속 배꼽치기 준비자세
-		ANIM_ATKCMB_02LOOP = 5, // 배꼽 연속으로 치기
+		ANIM_ATKCMB_02LOOP = 5, // 배꼽 연속으로 치기 // 8번치네 2번씩 4번
 		ANIM_ATKCMB_03END = 6, // 배꼽 연속치기 마무리 오른손 아이들자세로 돌아옴
 
 		ANIM_ATKSKCMB = 8, // 으으 기모으고 배꼽치기 와다다다닥

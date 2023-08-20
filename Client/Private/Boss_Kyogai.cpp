@@ -63,6 +63,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
+
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
 
@@ -241,12 +242,11 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-
+			Trigger_Awake();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
-
+			Trigger_AtkPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_7))
 		{
@@ -884,7 +884,8 @@ void CBoss_Kyogai::Trigger_Heal()
 void CBoss_Kyogai::Trigger_Awake()
 {
 	m_bTrigger = true;
-	m_eCurstate = STATE_INTERACT;
+	m_bAnimFinish = false;
+	m_eCurstate = STATE_AWAKE;
 }
 
 void CBoss_Kyogai::Trigger_JumpStep()
@@ -925,6 +926,9 @@ void CBoss_Kyogai::Trigger_StompKick()
 
 void CBoss_Kyogai::Trigger_AtkPunch()
 {
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKPUNCH;
+	m_bAnimFinish = false;
 }
 
 void CBoss_Kyogai::Trigger_Awake_RoomChange(_double dTimeDelta)
@@ -990,7 +994,17 @@ void CBoss_Kyogai::Update_Heal(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 {
-
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_AWAKE;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
 }
 
 void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
@@ -1128,6 +1142,7 @@ void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
 	}
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
 }
 
 void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
@@ -1208,15 +1223,6 @@ HRESULT CBoss_Kyogai::Add_Components()
 		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
 	{
 		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CBoss_Kyogai");
-		return E_FAIL;
-	}
-
-	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
-	/* for.Com_Navigation_House_4_0*/
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
-		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
-	{
-		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
 		return E_FAIL;
 	}
 
