@@ -110,7 +110,7 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
 				return;
 		}
-		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7)
+		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7 || m_MapObject_Info.iRenderGroup == 8 || m_MapObject_Info.iRenderGroup == 9)
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
 				return;

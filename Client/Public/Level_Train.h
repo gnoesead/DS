@@ -34,6 +34,8 @@ private:
 private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
 
+	HRESULT Load_Lights_Info(const _tchar* pPath);
+
 public:
 	static			CLevel_Train* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void	Free() override;

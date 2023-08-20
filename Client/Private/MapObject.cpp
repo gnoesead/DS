@@ -39,6 +39,17 @@ HRESULT CMapObject::Initialize(void* pArg)
 
 	m_vPanningSpeed = { 0.2f , 0.2f };
 
+	if (m_MapObject_Info.iRenderGroup == 8)
+	{
+		m_dSpeed = (_double)Random::Generate_Int(350, 450);
+	}
+
+	if (m_MapObject_Info.iRenderGroup == 9)
+	{
+		m_vPanningSpeed = { Random::Generate_Float(0.010f , 0.018f) ,  Random::Generate_Float(0.004f , 0.008f) };
+		m_fUVRatio = Random::Generate_Float(3.f, 6.f);
+	}
+
 	return S_OK;
 }
 
@@ -86,7 +97,10 @@ HRESULT CMapObject::Render()
 			m_pShaderCom->Begin(6);
 		else if (m_bBlocked)
 			m_pShaderCom->Begin(7);
-
+		else if (8 == m_MapObject_Info.iRenderGroup)
+			m_pShaderCom->Begin(8);
+		else if (9 == m_MapObject_Info.iRenderGroup)		// ¾È°³
+			m_pShaderCom->Begin(9);
 		else if (m_pModelCom->Get_IsNormalTexture(i))
 			m_pShaderCom->Begin(1);
 		else
@@ -177,6 +191,9 @@ HRESULT CMapObject::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vPanningSpeed", &m_vPanningSpeed, sizeof _float2)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fUVRatio", &m_fUVRatio, sizeof _float)))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
 	
@@ -186,7 +203,10 @@ HRESULT CMapObject::SetUp_ShaderResources()
 
 void CMapObject::Scroll(_double TimeDelta)
 {
-	m_pTransformCom->Set_Speed(200.0);
+	if (m_MapObject_Info.iRenderGroup == 8)
+		m_pTransformCom->Set_Speed(m_dSpeed);
+	else
+		m_pTransformCom->Set_Speed(200.0);
 
 	m_pTransformCom->Go_Dir(TimeDelta, XMVectorSet(0.f, 0.f, -1.f, 0.f));
 
