@@ -289,6 +289,9 @@
     <Filter Include="02. GameObjects\UI\12.Battle_Signal">
       <UniqueIdentifier>{0c5e686d-a9c2-4f43-9a8d-d31d2bd7b04f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\TrainSmoke">
+      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -537,6 +540,9 @@
     <ClInclude Include="..\Public\Option.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TrainSmoke.h">
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -775,6 +781,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Option.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TrainSmoke.cpp">
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

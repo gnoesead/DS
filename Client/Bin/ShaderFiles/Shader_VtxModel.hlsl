@@ -16,6 +16,7 @@ float		g_fFar = 300.f;
 float			g_fTimeAcc;
 float2			g_vPanningSpeed;
 float			g_fAlpha;
+float			g_fUVRatio;
 
 struct VS_IN
 {
@@ -239,6 +240,8 @@ PS_OUT  PS_SMELL(PS_IN In)
 	return Out;
 }
 
+
+
 PS_OUT  PS_ALPHA(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
@@ -252,9 +255,44 @@ PS_OUT  PS_ALPHA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_WIND(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (vMtrlDiffuse.a < 0.1f)
+		discard;
+
+	if (vMtrlDiffuse.r < 0.3f)
+		discard;
+
+	Out.vDiffuse = vMtrlDiffuse;
+	Out.vDiffuse.a = vMtrlDiffuse.r * 0.07f;
+
+
+	return Out;
+}
+
+PS_OUT  PS_FOG(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV * g_fUVRatio);
+	vDiffuse.a = vDiffuse.r * 0.025f;
+	vDiffuse.b *= 3.f;
+
+	Out.vDiffuse = vDiffuse;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
-	pass General
+	pass General // 0
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -267,7 +305,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_Main();
 	}
 
-	pass General2
+	pass General2 // 1
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -280,7 +318,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_Main_NormalTexture();
 	}
 
-	pass Blend
+	pass Blend // 2
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -293,7 +331,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_Blend();
 	}
 
-	pass Ramp
+	pass Ramp // 3
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -352,6 +390,30 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_ALPHA();
+	}
+
+	pass Wind // 8
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_WIND();
+	}
+
+	pass Fog // 9
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_FOG();
 	}
 };
 
