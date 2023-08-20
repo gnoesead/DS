@@ -400,6 +400,9 @@ void CEffectPlayer::Play(const char* pEffectTag, class CTransform* pTransformCom
 {
 	CParticleSystem* pParticleSystem = Find_ParticleSystem(pEffectTag);
 
+	if (nullptr == pParticleSystem)
+		return;
+
 	pParticleSystem->Set_PartsParent(pTransformCom);
 	pParticleSystem->Set_isPlaying(true);
 	pParticleSystem->Set_isStopped(false);
@@ -411,6 +414,10 @@ void CEffectPlayer::Play(const char* pEffectTag, class CTransform* pTransformCom
 void CEffectPlayer::Stop(const char* pEffectTag)
 {
 	CParticleSystem* pParticleSystem = Find_ParticleSystem(pEffectTag);
+
+	if (nullptr == pParticleSystem)
+		return;
+
 	pParticleSystem->Set_isStopped(true);
 	pParticleSystem->Set_isPlaying(false);
 	pParticleSystem->Stop_Parts();
