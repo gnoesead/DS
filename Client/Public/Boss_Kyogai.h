@@ -22,7 +22,7 @@ public:
 		STATE_INTERACT, STATE_BEGIN, STATE_NEXTPHASE, STATE_HEAL, STATE_AWAKE,
 		STATE_GUARD,
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
-		STATE_STOMPKICK,
+		STATE_STOMPKICK, STATE_ATKPUNCH,
 
 	};
 
@@ -146,6 +146,7 @@ public:
 	void Trigger_AtkCmb2();
 	void Trigger_AtkStep(); 
 	void Trigger_StompKick();
+	void Trigger_AtkPunch();
 
 	void Trigger_Awake_RoomChange(_double dTimeDelta); 
 
@@ -165,6 +166,7 @@ private: //패턴 함수들
 	void Update_AtkCmb2(_double dTimeDelta);
 	void Update_AtkStep(_double dTimeDelta); 
 	void Update_StompKick(_double dTimeDelta);
+	void Update_AtkPunch(_double dTimeDelta);
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
 

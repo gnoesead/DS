@@ -376,6 +376,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_STOMPKICK:
 		Update_StompKick(dTimeDelta);
 		break;
+	case CBoss_Kyogai::STATE_ATKPUNCH:
+		Update_AtkPunch(dTimeDelta);
+		break;
 
 
 	}
@@ -920,6 +923,10 @@ void CBoss_Kyogai::Trigger_StompKick()
 	m_bAnimFinish = false;
 }
 
+void CBoss_Kyogai::Trigger_AtkPunch()
+{
+}
+
 void CBoss_Kyogai::Trigger_Awake_RoomChange(_double dTimeDelta)
 {
 }
@@ -1108,6 +1115,21 @@ void CBoss_Kyogai::Update_StompKick(_double dTimeDelta)
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STOMPKICK, 1.f, 0.38, 0.56);
 }
 
+void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKPUNCH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+}
+
 void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
 {
 }
@@ -1189,14 +1211,14 @@ HRESULT CBoss_Kyogai::Add_Components()
 		return E_FAIL;
 	}
 
-	//m_CharacterDesc.NaviDesc.iCurrentIndex = 1;
-	///* for.Com_Navigation_Acaza*/
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
-	//	TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
-	//{
-	//	MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
-	//	return E_FAIL;
-	//}
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+	/* for.Com_Navigation_House_4_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
+		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
+		return E_FAIL;
+	}
 
 
 

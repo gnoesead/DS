@@ -169,6 +169,14 @@ HRESULT CLevel_Train::Ready_Layer_BackGround(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+	/* For.TrainSmoke*/
+	for (_uint i = 0; i < 40; ++i)
+	{
+		pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
+			TEXT("Prototype_GameObject_TrainSmoke"));
+	}
+
+
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -1014,8 +1022,9 @@ HRESULT CLevel_Train::Load_Lights_Info(const _tchar* pPath)
 
 		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
 		{
-			tLight.vLightDiffuse = _float4(0.2f, 0.2f, 0.2f, 1.f);
+			tLight.vLightDiffuse = _float4(0.1f, 0.1f, 0.1f, 1.f);
 		}
+
 
 
 		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
