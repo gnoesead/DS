@@ -71,6 +71,8 @@ private: //애니메이션 제어용 함수들
 
 	void	Animation_Control_Battle_Dmg(_double dTimeDelta);
 
+	void	Player_Change(_double dTimeDelta);
+
 	void	Moving_Restrict();
 
 

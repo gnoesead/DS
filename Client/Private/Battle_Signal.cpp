@@ -8,6 +8,7 @@
 #include "Fade_Manager.h"
 #include "Battle_UI_Manager.h"
 
+#include "PlayerManager.h"
 
 CBattle_Signal::CBattle_Signal(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -467,7 +468,7 @@ void CBattle_Signal::Get_Info(_double TimeDelta)
 
 		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-			CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+			CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
 			if (pPlayer->Get_Status().fHp / pPlayer->Get_Status().fHp_Max > 0.9f)
 				m_UI_Desc.m_Rank = 4;

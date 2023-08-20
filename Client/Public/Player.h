@@ -147,6 +147,7 @@ public:
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
 	_vector Get_Dir_To_LockOnPos();
+	
 
 	//히트 관련 시그널 트리거
 	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
@@ -170,19 +171,21 @@ protected: //애니메이션 제어용 함수들
 
 	void	Key_Input_Adventure(_double dTimeDelta);
 
+	void	Key_Input_PlayerChange(_double dTimeDelta);
 protected:
 	void	Add_BoxJump_Info();		// 상호작용(박스)(안원추가)
 	void	Check_Change_Position(_double TimeDelta);	// 캐릭터 이동 (안원추가)
 
+	//캐릭 변경
+	void	Player_Change_Setting_Status();
 
+public:
+	
+	_double m_dDelay_Player_Change = { 0.0 };
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
-	PLAYERTYPE		m_ePlayerType = { PLAYER_TANJIRO };
-	
-	_bool	m_isPlayerType_Change = { false };
-	_bool	m_isFirst_Player_Change = { true };
-	
+
 
 
 protected: // 애니메이션 제어용 변수들

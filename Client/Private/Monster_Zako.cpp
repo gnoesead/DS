@@ -996,11 +996,20 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	{
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
-		m_dDelay_ComboChain = 1.7;
 		pPlayer->Set_Hit_Success(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
+
+		if (m_isJumpOn)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			m_dDelay_ComboChain = 4.0;
+		}
+		else
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
+			m_dDelay_ComboChain = 1.7;
+		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion

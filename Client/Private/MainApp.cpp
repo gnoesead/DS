@@ -9,6 +9,7 @@
 #include "Title_Manager.h"
 #include "Story_Manager.h"
 #include "MonsterManager.h"
+#include "PlayerManager.h"
 #include "Fade_Manager.h"
 #include "Mini_Map_Manager.h"
 #include "Camera_Manager.h"
@@ -894,6 +895,7 @@ void CMainApp::Free()
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
 	CMonsterManager::GetInstance()->DestroyInstance();
+	CPlayerManager::GetInstance()->DestroyInstance();
 
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();

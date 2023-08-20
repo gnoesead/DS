@@ -6,6 +6,7 @@
 #include "EffectPlayer.h"
 
 #include "AtkCollManager.h"
+#include "PlayerManager.h"
 
 CPlayer_Zenitsu::CPlayer_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -84,19 +85,26 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	//}
 #endif // _DEBUG
 
+	
+
 	//playerswap
-	if (m_ePlayerType == PLAYER_ZENITSU)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
-
+		Player_Change_Setting_Status();
 		Animation_Control(dTimeDelta);
-
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
-
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
 	}
+	else
+	{
+		Player_Change(dTimeDelta);
+	}
+
+	//애니메이션 처리
+	m_pModelCom->Play_Animation(dTimeDelta);
+	RootAnimation(dTimeDelta);
+
+	//이벤트 콜
+	EventCall_Control(dTimeDelta);
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -111,7 +119,7 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 	m_pSwordHome->LateTick(dTimeDelta);
 
 	//playerswap
-	if (m_ePlayerType == PLAYER_ZENITSU)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
 		if (m_isAir_Hekireki && m_pModelCom->Get_iCurrentAnimIndex() == ANIM_JUMP_IDLE)
 		{
@@ -120,8 +128,19 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		}
 
 
-		if (m_isAir_Hekireki == false)
+		if (m_isAir_Hekireki == false && m_isAirDashing == false)
 			Gravity(dTimeDelta);
+
+		//추가
+		if (m_isCan_AirDash)
+		{
+			m_dDelay_Can_AirDash += dTimeDelta;
+			if (m_dDelay_Can_AirDash > 3.0f)
+			{
+				m_dDelay_Can_AirDash = 0.0;
+				m_isCan_AirDash = false;
+			}
+		}
 	}
 
 
@@ -383,7 +402,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 	{
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_fMove_Speed = 2.0f;
-		m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+
+		if (m_isCanNavi)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -433,10 +456,14 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 	//공중 공격 콤보
 	if (m_Moveset.m_Down_Battle_Jump_Attack)
 	{
+		//추가
 		if (m_isComboing_Down == false)
 		{
 			m_Moveset.m_Down_Battle_Jump_Attack = false;
 			m_isJump_Move = false;
+
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 			//콤보 첫 애니메이션 설정
 			if (m_pModelCom->Get_Combo_Doing() == false)
@@ -468,6 +495,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		{
 			m_isFirst_JumpAtk = false;
 
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 			JumpStop(0.9);
 			Set_FallingStatus(3.0f, 0.0f);
@@ -489,6 +519,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 		{
 			m_Moveset.m_Down_Battle_Combo = false;
 			m_isComboing = true;
+
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 			//첫 애니메이션 설정
 			if (m_pModelCom->Get_Combo_Doing() == false)
@@ -523,9 +556,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
-	//m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true);
-	//m_pModelCom->Set_EarlyEnd(4, true);
-	//m_pModelCom->Set_EarlyEnd(5, true);
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.6f);
+	m_pModelCom->Set_EarlyEnd(4, true, 0.6f);
+	m_pModelCom->Set_EarlyEnd(5, true, 0.6f);
 
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.15f * m_fScaleChange);
@@ -620,6 +653,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 {
+	if (m_Moveset.m_iAwaken < 2)
+	{
+		if (m_isCan_Mp_Skill == false)
+		{
+			m_Moveset.m_Down_Skill_Normal = false;
+			m_Moveset.m_Down_Skill_Move = false;
+			m_Moveset.m_Down_Skill_Guard = false;
+		}
+	}
+
+
 	if (m_isTestHit)
 	{
 		m_isTestHit = false;
@@ -661,8 +705,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			else
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
 
-			m_pTransformCom->LookAt(m_vBattleTargetPos);
+			//m_pTransformCom->LookAt(m_vBattleTargetPos);
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
+			Use_Mp_Skill();
 		}
 	}
 	else
@@ -697,7 +744,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
+
+		Use_Mp_Skill();
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
 }
@@ -709,6 +762,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 	if (m_Moveset.m_Down_Battle_Guard)
 	{
 		m_Moveset.m_Down_Battle_Guard = false;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
@@ -761,9 +817,56 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Dash = false;
 
-		m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+		m_dDelay_Dash = 0.0;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (m_LockOnPos.y > PlayerPos.y + 0.1f && m_isCan_AirDash)
+		{
+			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash = 0.0;
+			m_isAirDashing = true;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP); // 공중콤보용 대시
+			Jumping(1.0f, 0.055f);
+		}
+		else
+			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
 	Go_Straight_Constant(dTimeDelta, 46, 3.0f * m_fScaleChange);
+
+
+	if (m_isAirDashing)
+	{
+		Get_LockOn_MonPos();
+		if (Get_Distance_To_LockOnPos() > 0.5f)
+		{
+			m_pTransformCom->Go_Dir(dTimeDelta * 4.0f, Get_Dir_To_LockOnPos());
+		}
+		else
+		{
+			m_isAirDashing = false;
+		}
+	}
+	Ground_Animation_Play(58, 59);
+
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 46)
+	{
+		if (Get_Distance_To_LockOnPos() < 1.0f)
+		{
+			m_pModelCom->Set_Animation(47);
+		}
+
+		m_dDelay_Dash += dTimeDelta;
+		if (m_dDelay_Dash > 2.0f)
+		{
+			m_pModelCom->Set_Animation(47);
+		}
+	}
+	Go_Straight_Deceleration(dTimeDelta, 47, 3.0f * m_fScaleChange, 0.03f);
 
 
 	if (m_Moveset.m_Down_Battle_Step)
@@ -845,6 +948,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Special = false;
 
+		m_isFirst_SpecialReady = true;
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SPECIAL_READY);
 		m_dTime_Special_Ready = 0.0;
 	}
@@ -855,6 +960,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 	//Go_Straight_Constant(dTimeDelta, 108, 2.7f);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 130 || m_pModelCom->Get_iCurrentAnimIndex() == 131)
 	{
+		if (m_isFirst_SpecialReady)
+		{
+			m_isFirst_SpecialReady = false;
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
+
 		if (m_isSpecialHit)
 		{
 			m_isSpecialHit = false;
@@ -906,6 +1018,38 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	}
 
 
+
+}
+
+void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
+{
+	if (CPlayerManager::GetInstance()->Get_First_Player_Change())
+	{
+		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_dDelay_Player_Change = 0.0;
+		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
+
+		CPlayerManager::GetInstance()->Set_Hp(m_StatusDesc.fHp);
+		CPlayerManager::GetInstance()->Set_Mp(m_StatusDesc.fMp);
+		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
+		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
+		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
+	}
+
+	m_dDelay_Player_Change += dTimeDelta;
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
+	{
+		if (m_dDelay_Player_Change < 10.0)
+			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+
+		m_isJumpOn = true;
+
+	}
 
 }
 

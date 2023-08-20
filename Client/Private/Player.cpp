@@ -6,6 +6,9 @@
 #include "Camera_Free.h"
 #include "Fade_Manager.h"
 
+#include "PlayerManager.h"
+
+
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
@@ -33,6 +36,8 @@ HRESULT CPlayer::Initialize(void* pArg)
 		return E_FAIL;
 
 	Add_BoxJump_Info();		// 박스 정보 입력 (안원)
+
+	
 
 	return S_OK;
 }
@@ -326,17 +331,6 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
-	//서포트 키
-	if (pGameInstance->Get_DIKeyDown(DIK_U))
-	{
-		if (m_ePlayerType == PLAYER_TANJIRO)
-			m_ePlayerType = PLAYER_ZENITSU;
-		else if (m_ePlayerType == PLAYER_ZENITSU)
-			m_ePlayerType = PLAYER_TANJIRO;
-
-		m_isPlayerType_Change = true;
-		m_isFirst_Player_Change = true;
-	}
 	
 	Trigger_Hit(dTimeDelta);
 
@@ -950,6 +944,25 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
+void CPlayer::Key_Input_PlayerChange(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	//서포트 키
+	if (pGameInstance->Get_DIKeyDown(DIK_U))
+	{
+		if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+			CPlayerManager::GetInstance()->Set_PlayerIndex(1);
+		else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
+			CPlayerManager::GetInstance()->Set_PlayerIndex(0);
+
+		CPlayerManager::GetInstance()->Set_First_Player_Change(true);
+	}
+
+	Safe_Release(pGameInstance);
+}
+
 void CPlayer::Add_BoxJump_Info()
 {
 	BOXJUMP BoxJump;
@@ -1132,6 +1145,20 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 	}
 
 	Safe_Release(pGameInstance);
+}
+
+void CPlayer::Player_Change_Setting_Status()
+{
+	if (CPlayerManager::GetInstance()->Get_First_Setting_Status())
+	{
+		CPlayerManager::GetInstance()->Set_First_Setting_Status(false);
+
+		m_StatusDesc.fHp = CPlayerManager::GetInstance()->Get_Hp();
+		m_StatusDesc.fMp = CPlayerManager::GetInstance()->Get_Mp();
+		m_StatusDesc.iSpecial_Cnt = CPlayerManager::GetInstance()->Get_Special_Cnt();
+		m_StatusDesc.fSpecial = CPlayerManager::GetInstance()->Get_Special();
+		m_StatusDesc.fSupport = CPlayerManager::GetInstance()->Get_Support();
+	}
 }
 
 HRESULT CPlayer::Add_Components()

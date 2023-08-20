@@ -10,6 +10,7 @@
 #include "MissionManager.h"
 #include "Battle_UI_Manager.h"
 
+#include "PlayerManager.h"
 
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -91,9 +92,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
+	Key_Input_PlayerChange(dTimeDelta);
 	//playerswap
-	if (m_ePlayerType == PLAYER_TANJIRO)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //ÅºÁö·Î
 	{
+		Player_Change_Setting_Status();
 		Animation_Control(dTimeDelta);
 	}
 	else
@@ -123,7 +126,7 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	m_pSwordHome->LateTick(dTimeDelta);
 
 	//playerswap
-	if (m_ePlayerType == PLAYER_TANJIRO)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) // ÅºÁö·Î
 	{
 
 		if (m_isAirDashing == false)
@@ -200,8 +203,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -246,7 +248,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 		m_pModelCom->Render(i);
 	}
-	Safe_Release(pGameInstance);
+	
 	return S_OK;
 }
 
@@ -496,7 +498,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
 			}
 			
 		}
@@ -1540,18 +1542,32 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 {
-	if (m_isFirst_Player_Change)
+	if (CPlayerManager::GetInstance()->Get_First_Player_Change())
 	{
-		m_isFirst_Player_Change = false;
+		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_dDelay_Player_Change = 0.0;
+		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
+
+		CPlayerManager::GetInstance()->Set_Hp(m_StatusDesc.fHp);
+		CPlayerManager::GetInstance()->Set_Mp(m_StatusDesc.fMp);
+		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
+		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
+		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
 	}
+
+	m_dDelay_Player_Change += dTimeDelta;
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		m_pTransformCom->Go_Up(dTimeDelta);
+		if(m_dDelay_Player_Change < 10.0)
+			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+
+		m_isJumpOn = true;
+
 	}
 
 }

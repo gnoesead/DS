@@ -236,6 +236,7 @@
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Pause.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\Public\PlayerManager.h" />
     <ClInclude Include="..\Public\Player_Battle_Combo.h" />
     <ClInclude Include="..\Public\Player_Battle_Frame.h" />
     <ClInclude Include="..\Public\Player_Battle_Hp.h" />
@@ -322,6 +323,7 @@
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Pause.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\Private\PlayerManager.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Combo.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Frame.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Hp.cpp" />
