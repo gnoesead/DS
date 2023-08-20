@@ -220,8 +220,8 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
 	
-	//Out.vShade = saturate(Out.vShade);
-	//Out.vShade = ceil(Out.vShade * 3) / 3.0f;
+	/*Out.vShade = saturate(Out.vShade);
+	Out.vShade = ceil(Out.vShade * 3) / 3.0f;*/
 
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));

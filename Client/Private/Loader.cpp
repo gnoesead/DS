@@ -10,6 +10,7 @@
 
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
+#include "Boss_Kyogai.h"
 #include "Monster_Spider.h"
 #include "Monster_Zako.h"
 
@@ -396,7 +397,15 @@ HRESULT CLoader::LoadingForLobby()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Akaza"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Akaza/Akaza.bin", PivotMatrix))))
 	{
-		MSG_BOX("Failed to Add_Prototype_Model_Spider");
+		MSG_BOX("Failed to Add_Prototype_Model_Akaza");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_Akaza
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Kyogai"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Kyogai/Kyogai.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Kyogai");
 		return E_FAIL;
 	}
 
@@ -578,6 +587,14 @@ HRESULT CLoader::LoadingForLobby()
 		CBoss_Akaza::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Akaza");
+		return E_FAIL;
+	}
+
+	/* Prototype_GameObject_Boss_Kyogai */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Kyogai"),
+		CBoss_Kyogai::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Kyogai");
 		return E_FAIL;
 	}
 
