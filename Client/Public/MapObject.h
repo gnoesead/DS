@@ -94,11 +94,14 @@ protected:
 protected:
 	_float					m_fTimeAcc = { 0.0f };
 	_float2					m_vPanningSpeed = { 0.f , 0.f };
+	_float					m_fUVRatio = { 0.f };
 
 	_float					m_fAlpha = { 1.f };
 
 	// 카메라 검사
 	_bool					m_bBlocked = { false };
+
+	_double					m_dSpeed = { 0.0 };
 
 public:
 	virtual void Free() override;

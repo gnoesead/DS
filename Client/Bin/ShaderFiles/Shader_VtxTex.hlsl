@@ -18,6 +18,7 @@ float           g_UV_Cut_MaxX;
 float           g_UV_Cut_MinY;
 float           g_UV_Cut_MaxY;
 
+float			g_fUVRatioX, g_fUVRatioY;
 
 
 struct VS_IN
@@ -358,6 +359,26 @@ PS_OUT  PS_MAIN_ALPHA_UV_SIDE_CUT_L(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_SMOKE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float spriteWidth = 1.0 / 4.0; // 4개의 열
+	float spriteHeight = 1.0 / 4.0; // 4개의 행
+
+	float2 spriteUV = float2(g_fUVRatioX + In.vTexUV.x * spriteWidth,
+		g_fUVRatioY + In.vTexUV.y * spriteHeight);
+
+	vector vDiffuse = g_Texture.Sample(LinearSampler, spriteUV);
+	vDiffuse.a = vDiffuse.r * g_Alpha;
+
+	vDiffuse.rgb = (0.2f, 0.2f, 0.2f);
+
+	Out.vColor = vDiffuse;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	// 0
@@ -549,7 +570,21 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_PLUS();
 	}
+
 	// 16
+	pass Train_Smoke  // (안원)
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Not_ZWrite, 0);
+		/* 버텍스 쉐이더는 5.0버젼으로 번역하고 VS_MAIN이라는 이름을 가진 함수를 호출해라. */
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_SMOKE();
+	}
+	// 17
 	pass Cloud_LD
 	{
 		SetRasterizerState(RS_None);

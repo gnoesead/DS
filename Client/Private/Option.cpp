@@ -422,7 +422,6 @@ HRESULT COption::Render()
 {
 	if (m_Is_Render == true) {
 
-
 		if (FAILED(__super::Render()))
 			return E_FAIL;
 
@@ -437,7 +436,7 @@ HRESULT COption::Render()
 			m_pShaderCom->Begin(9);
 		}
 		else if (m_UI_Desc.m_Is_X_Reverse == true && m_UI_Desc.m_Is_Y_Reverse == true) {
-			m_pShaderCom->Begin(16);
+			m_pShaderCom->Begin(17);
 		}
 		else {
 			m_pShaderCom->Begin(1);
