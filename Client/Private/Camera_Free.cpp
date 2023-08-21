@@ -129,6 +129,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
@@ -137,6 +138,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CTransform* m_pBattleTargetTransformCom = pBoss->Get_TransformCom();
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	else {
 		m_Is_Battle = false;
@@ -157,8 +159,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
-	_vector Temp = XMVectorSetY(m_vBattleTargetPos, 0.f);
-	m_vBattleCenter = (m_vTargetPos + Temp) * 0.5f;
+	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
