@@ -3,6 +3,8 @@
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "RotationMapObject.h"
+#include "EffectPlayer.h"
+#include "Player.h"
 #include "AtkCollManager.h"
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -39,12 +41,16 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 	}
 
 	Get_PlayerComponent();
-	
-	m_eCurAnimIndex = ANIM_IDEL;
-	m_eCurstate = STATE_IDLE;
+
+	m_eCurAnimIndex = ANIM_IDLE;
+	m_eCurstate = STATE_INTERACT;
 	m_eCurPhase = PHASE_1;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
 	m_eCurNavi = NAVI_HOUSE_4_0;
+
+	//m_eCurNavi = NAVI_ACAZA;
+	m_StatusDesc.fHp = 100.f;
+	m_StatusDesc.fHp_Max = 100.f;
 
 	return S_OK;
 
@@ -52,27 +58,24 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 
 void CBoss_Kyogai::Tick(_double dTimeDelta)
 {
- 	__super::Tick(dTimeDelta);
+	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
 		return;
+
 
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
 
 #endif // _DEBUG
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	Update_TriggerTime(dTimeDelta);
+	Update_Hit_Messenger(dTimeDelta);
 	Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
-	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -107,7 +110,7 @@ HRESULT CBoss_Kyogai::Render()
 
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
-				
+
 
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
@@ -201,18 +204,14 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F1))
+	if (pGameInstance->Get_DIKeyDown(DIK_F2))
 	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
 		m_iTriggerCnt = 0;
 		m_iIdleCnt = 0;
-		m_eCurstate = STATE_IDLE;
+		m_eCurstate = STATE_INTERACT;
 	}
-	if (pGameInstance->Get_DIKeyState(DIK_F2))
-	{
-		Camera_Shake();
 
-	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_DELETE))
@@ -226,83 +225,80 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
-		
+			Trigger_AtkCmb();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-			
-
+			Trigger_AtkCmb2();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-			
+			Trigger_StompKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
-			
+			Trigger_AtkStep();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-			
-
+			Trigger_Awake();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			
-
+			Trigger_AtkPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_7))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_8))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_0))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_Q))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_W))
 		{
-			
+
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_E))
 		{
-			
+
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_R))
 		{
-			
+
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_T))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_Y))
 		{
-			
+
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_U))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{
-			
+
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{
-			
+
 
 		}
 
@@ -310,7 +306,14 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
+void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
+{
+}
 #endif //_DEBUG
+
+void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
+{
+}
 
 void CBoss_Kyogai::Update_AnimIndex(_uint iAnimIndex)
 {
@@ -323,11 +326,6 @@ void CBoss_Kyogai::Update_AnimIndex(_uint iAnimIndex)
 void CBoss_Kyogai::Update_Trigger(_double dTimeDelta)
 {
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	Safe_Release(pGameInstance);
-
 	switch (m_eCurPhase)
 	{
 	case CBoss_Kyogai::BEGIN:
@@ -339,13 +337,8 @@ void CBoss_Kyogai::Update_Trigger(_double dTimeDelta)
 	case CBoss_Kyogai::PHASE_2:
 		Update_Phase_2(dTimeDelta);
 		break;
-	
 	}
 
-}
-
-void CBoss_Kyogai::Update_TriggerTime(_double dTimeDelta)
-{
 }
 
 void CBoss_Kyogai::Update_State(_double dTimeDelta)
@@ -353,27 +346,40 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 
 	switch (m_eCurstate)
 	{
-	case CBoss_Kyogai::STATE_IDLE:
+	case CBoss_Kyogai::STATE_INTERACT:
 		Update_Interact(dTimeDelta);
 		break;
 	case CBoss_Kyogai::STATE_BEGIN:
 		Update_Begin(dTimeDelta);
 		break;
-	case CBoss_Kyogai::STATE_GUARD:
-		Update_Guard(dTimeDelta);
+	case CBoss_Kyogai::STATE_NEXTPHASE:
+		Update_NextPhase(dTimeDelta);
 		break;
-	
-	case CBoss_Kyogai::STATE_NEXTPHASE2:
-		Update_NextPhase2(dTimeDelta);
-		break;
-	
 	case CBoss_Kyogai::STATE_HEAL:
 		Update_Heal(dTimeDelta);
 		break;
 	case CBoss_Kyogai::STATE_AWAKE:
 		Update_Awake(dTimeDelta);
 		break;
-	
+	case CBoss_Kyogai::STATE_GUARD:
+		Update_Guard(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_ATKCMB:
+		Update_AtkCmb(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_ATKCMB2:
+		Update_AtkCmb2(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_ATKSTEP:
+		Update_AtkStep(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_STOMPKICK:
+		Update_StompKick(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_ATKPUNCH:
+		Update_AtkPunch(dTimeDelta);
+		break;
+
 
 	}
 
@@ -400,6 +406,15 @@ void CBoss_Kyogai::Update_Begin(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 {
+	if (m_StatusDesc.fHp <= 0.f)
+	{
+		m_bTrigger = false;
+		m_bPatternStart = false;
+		m_iTriggerCnt = 5;
+		m_dTriggerTime = 0.0;
+		m_iIdleCnt = 0;
+	}
+
 	if (m_bTrigger == false)
 	{
 		if (m_StatusDesc.fHp > 50.f)
@@ -408,20 +423,13 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 			switch (m_iTriggerCnt)
 			{
 			case 1:
+				Trigger_Begin();
+				break;
+
+			case 2:
 				Trigger_Interact();
 				break;
-			case 2:
-				Trigger_DashPunch();
-				break;
-			case 3:
-				Trigger_AirGun();
-				break;
-			case 4:
-				Trigger_Dash_ComboPunch();
-				break;
-			case 5:
-				Trigger_Escape();
-				break;
+
 			}
 
 
@@ -430,23 +438,12 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 		{
 			switch (m_iTriggerCnt)
 			{
-			case 0:
-				Trigger_Nachim();
-				break;
 			case 1:
-				Trigger_DashPunch();
+				Trigger_Begin();
 				break;
-			case 2:
-				Trigger_AirGun();
-				break;
-			case 3:
-				Trigger_Dash_ComboPunch();
-				break;
-			case 4:
-				Trigger_Escape();
-				break;
+
 			case 5:
-				Trigger_NextPhase3();
+				Trigger_NextPhase();
 				break;
 			}
 		}
@@ -458,7 +455,7 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 {
 	// 개방하고 25초 유지 m_bAwake가 활성되면 25초 후에 다시 false
-	if (m_StatusDesc.fHp < 70.f && m_bFirstAwake == false)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.7f && m_bFirstAwake == false)
 	{
 		m_bFirstAwake = true;
 		m_bAwake = true;
@@ -470,7 +467,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
 	}
-	if (m_StatusDesc.fHp < 30.f && m_bSecondAwake == false)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.7f && m_bSecondAwake == false)
 	{
 		m_bSecondAwake = true;
 		m_bAwake = true;
@@ -486,13 +483,13 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 	if (m_bAwake == true)
 	{
 		m_dAwakeTime += dTimeDelta;
-		if(24.0 < m_dAwakeTime && m_dAwakeTime <= 24.0 + dTimeDelta)
+		if (24.5 < m_dAwakeTime && m_dAwakeTime <= 24.5 + dTimeDelta)
 			m_pRendererCom->Set_Invert();
-		if (m_dAwakeTime > 25.0 )
+		if (m_dAwakeTime > 25.0)
 		{
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
-			
+
 		}
 	}
 
@@ -503,29 +500,9 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			switch (m_iTriggerCnt)
 			{
 			case 1:
-				Trigger_JumpAirGun();
+				Trigger_Begin();
 				break;
-			case 2:
-				Trigger_AirGun();
-				break;
-			case 3:
-				Trigger_DashKick();
-				break;
-			case 4:
-				Trigger_JumpStomp();
-				break;
-			case 5:
-				Trigger_Dash_ComboPunch();
-				break;
-			case 6:
-				Trigger_UpperKick();
-				break;
-			case 7:
-				Trigger_Awake_ComboPunch();
-				break;
-			case 8:
-				Trigger_Escape();
-				break;
+
 
 			}
 		}
@@ -534,27 +511,10 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 
 			switch (m_iTriggerCnt)
 			{
-			case 0:
+			case 1:
 				Trigger_Awake();
 				break;
-			case 1:
-				Trigger_Nachim();
-				break;
-			case 2:
-				Trigger_Awake_ComboPunch();
-				break;
-			case 3:
-				Trigger_AirGun();
-				break;
-			case 4:
-				Trigger_JumpStomp();
-				break;
-			case 5:
-				Trigger_JumpAirGun();
-				break;
-			case 6:
-				Trigger_NextPhase3();
-				break;
+
 
 			}
 		}
@@ -562,19 +522,16 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 	}
 }
 
-void CBoss_Kyogai::Update_Phase_3(_double dTimeDelta)
-{
-}
-
 void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 {
-	m_eCurAnimIndex = ANIM_IDEL;
+	m_eCurAnimIndex = ANIM_IDLE;
 
-	if (m_StatusDesc.fHp > 50.f)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) > 0.5f)
 	{
 		if (m_bPatternStart == false)
 		{
-			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+			m_dTriggerTime += dTimeDelta;
+			if (0.6 < m_dTriggerTime && m_dTriggerTime <= 0.6 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -582,9 +539,10 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
 				m_iTriggerCnt++;
+
 				if (m_iTriggerCnt >= 6)
 				{
-					m_iTriggerCnt = 0;
+					m_iTriggerCnt = 1;
 					m_bPatternStart = true;
 				}
 			}
@@ -593,17 +551,18 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
 			{
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
+
 				m_iRandomPatternNum = Random::Generate_Int(1, 10);
 
 
-				if (fDistance <= 5.f)
+				if (fDistance <= 5.f) //가까울 때
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
 					{
@@ -616,7 +575,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 						m_bTrigger = false;
 					}
 				}
-				if (fDistance > 5.f)
+				if (fDistance > 5.f) // 멀 때
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 5)
 					{
@@ -637,11 +596,11 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 			}
 		}
 	}
-	if (m_StatusDesc.fHp <= 50.f && m_StatusDesc.fHp > 0.f)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max) > 0.f)
 	{
 		if (m_bPatternStart == true)
 		{
-			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDEL, 0.30, dTimeDelta))
+			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -649,7 +608,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
-				m_iTriggerCnt = 0;
+				m_iTriggerCnt = 1;
 				m_bPatternStart = false;
 
 			}
@@ -658,7 +617,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -668,7 +627,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 				m_iRandomPatternNum = Random::Generate_Int(1, 12);
 
 
-				if (fDistance <= 5.f)
+				if (fDistance <= 5.f) // 거리가 가까울 때 
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
 					{
@@ -686,7 +645,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 						m_bTrigger = false;
 					}
 				}
-				if (fDistance > 5.f)
+				if (fDistance > 5.f) // 거리가 멀 때
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
 					{
@@ -712,31 +671,24 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 			}
 		}
 	}
-	if (m_StatusDesc.fHp <= 0.f)
-	{
-		m_bTrigger = false;
-		m_bPatternStart = false;
-		m_iTriggerCnt = 5;
-		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
-	}
+
 }
 
 void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 {
-	m_eCurAnimIndex = ANIM_IDEL;
+	m_eCurAnimIndex = ANIM_IDLE;
 
 	if (m_bAwake == false)
 	{
 		if (m_bPatternStart == false)
 		{
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
 			{
-				
+
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
@@ -754,7 +706,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -889,27 +841,18 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 			}
 		}
 	}
-	if (m_StatusDesc.fHp <= 0.f)
-	{
-		m_bTrigger = false;
-		m_bPatternStart = false;
-		m_iTriggerCnt = 5;
-		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
-	}
+
 }
 
 
 void CBoss_Kyogai::Trigger_Interact()
 {
 	m_bTrigger = true;
-	m_eCurstate = STATE_IDLE;
-	//m_pModelCom->Set_AnimResetTimeAcc(STATE_IDLE);
+	m_eCurstate = STATE_INTERACT;
 }
 
 void CBoss_Kyogai::Trigger_Begin()
 {
-
 	m_eCurstate = STATE_BEGIN;
 }
 
@@ -917,6 +860,79 @@ void CBoss_Kyogai::Trigger_Begin()
 void CBoss_Kyogai::Trigger_Guard()
 {
 	m_bTrigger = true;
+	m_eCurstate = STATE_INTERACT;
+}
+
+void CBoss_Kyogai::Trigger_PushAway()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_INTERACT;
+}
+
+void CBoss_Kyogai::Trigger_NextPhase()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_INTERACT;
+}
+
+void CBoss_Kyogai::Trigger_Heal()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_INTERACT;
+}
+
+void CBoss_Kyogai::Trigger_Awake()
+{
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_eCurstate = STATE_AWAKE;
+}
+
+void CBoss_Kyogai::Trigger_JumpStep()
+{
+}
+
+void CBoss_Kyogai::Trigger_AtkCmb()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKCMB;
+	m_bAnimFinish = false;
+}
+
+void CBoss_Kyogai::Trigger_AtkCmb2()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKCMB2;
+	m_bAnimFinish = false;
+}
+
+void CBoss_Kyogai::Trigger_AtkStep()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKSTEP;
+	m_bAnimFinish = false;
+	if (Check_Distance(2.f) == true)
+		m_iRandomDirNum = 0;
+	else
+		m_iRandomDirNum = 1;
+}
+
+void CBoss_Kyogai::Trigger_StompKick()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_STOMPKICK;
+	m_bAnimFinish = false;
+}
+
+void CBoss_Kyogai::Trigger_AtkPunch()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKPUNCH;
+	m_bAnimFinish = false;
+}
+
+void CBoss_Kyogai::Trigger_Awake_RoomChange(_double dTimeDelta)
+{
 }
 
 void CBoss_Kyogai::Update_Guard(_double dTimeDelta)
@@ -927,12 +943,12 @@ void CBoss_Kyogai::Update_Guard(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_PushAway(_double dTimeDelta)
 {
-	
+
 }
 
 void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 {
-	
+
 }
 
 
@@ -970,7 +986,7 @@ void CBoss_Kyogai::Update_Heal(_double dTimeDelta)
 		/*else if (m_eCurPhase == PHASE_2)
 			m_eCurPhase = PHASE_3;*/
 
-		m_eCurAnimIndex = ANIM_IDEL;
+		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
 
 	}
@@ -981,24 +997,156 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 	if (m_bAnimFinish == false)
 	{
 		m_bAnimFinish = true;
-		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+		m_eCurAnimIndex = ANIM_AWAKE;
 	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
 	{
-		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
-		m_eCurAnimIndex = ANIM_AWAKE_START;
-	}
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
-	{
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
-		m_eCurAnimIndex = ANIM_AWAKE_END;
-	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
-	{
-		m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END);
-		m_eCurAnimIndex = ANIM_IDEL;
+		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
+		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
 	}
+}
+
+void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKCMB1;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB1);
+		m_eCurAnimIndex = ANIM_ATKCMB2;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB2))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB2);
+		m_eCurAnimIndex = ANIM_ATKCMB3;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB3);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+}
+
+void CBoss_Kyogai::Update_AtkCmb2(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKCMB_01READY;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_01READY))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_01READY);
+		m_eCurAnimIndex = ANIM_ATKCMB_02LOOP;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_02LOOP))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_02LOOP);
+		m_eCurAnimIndex = ANIM_ATKCMB_03END;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_03END))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_03END);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+}
+
+void CBoss_Kyogai::Update_AtkStep(_double dTimeDelta)
+{
+	if (m_iRandomDirNum == 1)
+	{
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_ATKSTEP_BACK;
+			Jumping(1.f, 0.03f);
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSTEP_BACK))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSTEP_BACK);
+			m_eCurAnimIndex = ANIM_IDLE;
+			Trigger_Interact();
+		}
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKSTEP_BACK, 0.32, dTimeDelta))
+		{
+			_vector vDir = Calculate_Dir_FixY();
+			m_pTransformCom->LerpVector(vDir, 0.9f);
+			JumpStop(0.4);
+		}
+	}
+	else
+	{
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_ATKSTEP_FRONT;
+			Jumping(1.f, 0.03f);
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSTEP_FRONT))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSTEP_FRONT);
+			m_eCurAnimIndex = ANIM_IDLE;
+			Trigger_Interact();
+		}
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKSTEP_FRONT, 0.32, dTimeDelta))
+		{
+			_vector vDir = Calculate_Dir_FixY();
+			m_pTransformCom->LerpVector(vDir, 0.9f);
+			JumpStop(0.4);
+		}
+	}
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_ATKSTEP_BACK, 3.f, 0.01, 0.16);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKSTEP_FRONT, 3.f, 0.01, 0.16);
+}
+
+void CBoss_Kyogai::Update_StompKick(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_STOMPKICK;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_STOMPKICK))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_STOMPKICK);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_STOMPKICK, 0.380, dTimeDelta))
+	{
+		Jumping(1.f, 0.06f);
+	}
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STOMPKICK, 1.f, 0.38, 0.56);
+}
+
+void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKPUNCH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
+}
+
+void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
+{
 }
 
 
@@ -1006,10 +1154,10 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 HRESULT CBoss_Kyogai::Add_Components()
 {
 	/* for.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Akaza"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Kyogai"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
-		MSG_BOX("Failed to Add_Com_Model : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_Model : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
@@ -1017,18 +1165,18 @@ HRESULT CBoss_Kyogai::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 	{
-		MSG_BOX("Failed to Add_Com_Shader : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_Shader : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
 
-	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0 * 0.8;
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 	// for.Com_Transform 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
 	{
-		MSG_BOX("Failed to Add_Com_Transform : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_Transform : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
@@ -1039,7 +1187,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
 	{
-		MSG_BOX("Failed to Add_Com_AABB : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_AABB : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
@@ -1052,7 +1200,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
 	{
-		MSG_BOX("Failed to Add_Com_OBB : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_OBB : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
@@ -1065,7 +1213,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
 	{
-		MSG_BOX("Failed to Add_Com_Sphere : CBoss_Kyogai_Akaza");
+		MSG_BOX("Failed to Add_Com_Sphere : CBoss_Kyogai");
 		return E_FAIL;
 	}
 
@@ -1074,7 +1222,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
 		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
 	{
-		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
+		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CBoss_Kyogai");
 		return E_FAIL;
 	}
 
