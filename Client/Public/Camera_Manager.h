@@ -54,7 +54,10 @@ public:
 public:
 
 
-
+// Battle
+public:
+	void Set_Is_Battle_LockFree(_bool Is);
+	_bool Get_Is_Battle_LockFree();
 
 private: // Shake
 	_bool m_Is_Shake_On = { false };
@@ -78,6 +81,11 @@ private: // Zoom_In/Out
 	_float m_Zoom = { 0.f };
 	_float m_Zoom_Time = { 0.f };
 	_float m_Zoom_TimeAcc = { 0.f };
+
+	
+private: // Battle
+	_bool m_Is_Battle_LockFree = { false };
+
 
 
 public:

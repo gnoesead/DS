@@ -9,6 +9,7 @@
 #include "MissionManager.h"
 #include "Fade_Manager.h"
 #include "Level_Loading.h"
+#include "OptionManager.h"
 
 CPause::CPause(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -157,34 +158,41 @@ void CPause::LateTick(_double TimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_DOWN)) {
 
-		m_Cur_Num++;
+		if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 
-		if (m_Cur_Num > 2) {
-			m_Cur_Num = 2;
+			m_Cur_Num++;
+
+			if (m_Cur_Num > 2) {
+				m_Cur_Num = 2;
+			}
 		}
-
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
 
-		m_Cur_Num -= 1;
+		if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 
-		if (m_Cur_Num <= 0) {
-			m_Cur_Num = 0;
+			m_Cur_Num -= 1;
+
+			if (m_Cur_Num <= 0) {
+				m_Cur_Num = 0;
+			}
 		}
-
 	}
 
 
 	if (m_Cur_Num == 0) {
 		if (pGameInstance->Get_DIKeyDown(DIK_RETURN)) {
 
-			if (m_Alpha == 1.f) {
-				m_Is_Out = true;
-				m_Is_Font_Render = false;
-				pGameInstance->Time_Stop_Off();
-			}
+			if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 
+				if (m_Alpha == 1.f) {
+					m_Is_Out = true;
+					m_Is_Font_Render = false;
+					pGameInstance->Time_Stop_Off();
+				}
+
+			}
 		}
 	}
 
@@ -211,7 +219,10 @@ void CPause::LateTick(_double TimeDelta)
 		if (m_Is_Selected) {
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN)) {
 
-			   // 옵션 창 열기
+				if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
+					COptionManager::GetInstance()->Set_Is_Option_On(true);
+					COptionManager::GetInstance()->Set_Is_Reset(false);
+				}
 
 			}
 		}
@@ -230,8 +241,10 @@ void CPause::LateTick(_double TimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 			{
-				CFadeManager::GetInstance()->Set_Fade_Out(true);
-				pGameInstance->Time_Stop_Off();
+				if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
+					CFadeManager::GetInstance()->Set_Fade_Out(true);
+					pGameInstance->Time_Stop_Off();
+				}
 			}
 
 		}

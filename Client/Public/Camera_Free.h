@@ -70,7 +70,10 @@ private:
 	_bool           m_Is_Focus_On = { false };
 	_bool           m_bIs_Combo_On = { false };
 	_bool           m_bIs_LockFree = { false };
+	_bool           m_bIs_Battle_LockFree = { false };
 
+
+	_bool           m_bIs_Pos_Set= { false };
 
 private:
 	_float4			m_fCameraLook = {};

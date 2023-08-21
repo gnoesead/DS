@@ -21,7 +21,7 @@
 #include "Battle_Signal.h"
 #include "World_UI_Hp.h"
 #include "Pause.h"
-
+#include "Option.h"
 
 #include "Monster_Spider.h"
 #include "Story_Manager.h"
@@ -1162,6 +1162,237 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+
+// Option
+	COption::UIDESC UIDec13;
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 3;
+	UIDec13.m_Line_Num = 0;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 3;
+	UIDec13.m_Line_Num = 1;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 3;
+	UIDec13.m_Line_Num = 2;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 3;
+	UIDec13.m_Line_Num = 3;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 3;
+	UIDec13.m_Line_Num = 4;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 7;
+	UIDec13.m_Menu_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 7;
+	UIDec13.m_Menu_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 7;
+	UIDec13.m_Menu_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 9;
+	UIDec13.m_Cloud_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 10;
+	UIDec13.m_Cloud_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 11;
+	UIDec13.m_Is_X_Reverse = true;
+	UIDec13.m_Is_Y_Reverse = true;
+	UIDec13.m_Cloud_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 12;
+	UIDec13.m_Is_X_Reverse = true;
+	UIDec13.m_Is_Y_Reverse = true;
+	UIDec13.m_Cloud_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 13;
+	UIDec13.m_Cloud_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 14;
+	UIDec13.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 15;
+	UIDec13.m_Is_X_Reverse = true;
+	UIDec13.m_Is_Y_Reverse = true;
+	UIDec13.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 16;
+	UIDec13.m_Is_Y_Reverse = true;
+	UIDec13.m_Cloud_Type = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 17;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 18;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDec13, sizeof UIDec13);
+
+	UIDec13.m_Type = 19;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
 
 	Safe_Release(pGameInstance);
 

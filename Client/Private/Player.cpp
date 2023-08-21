@@ -1027,7 +1027,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			//vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
 
 			
-			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] = true;
 				m_dChangePositionAccTime = 0.0;
@@ -1065,7 +1065,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B])
 		{
-			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B] = true;
 				m_dChangePositionAccTime = 0.0;
