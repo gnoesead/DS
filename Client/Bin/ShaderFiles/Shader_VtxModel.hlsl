@@ -282,7 +282,7 @@ PS_OUT  PS_FOG(PS_IN In)
 	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
 
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV * g_fUVRatio);
-	vDiffuse.a = vDiffuse.r * 0.025f;
+	vDiffuse.a = vDiffuse.r * 0.04f;
 	vDiffuse.b *= 3.f;
 
 	Out.vDiffuse = vDiffuse;
