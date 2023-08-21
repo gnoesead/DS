@@ -24,6 +24,10 @@ public:
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
 		STATE_STOMPKICK, STATE_ATKPUNCH,
 
+		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
+		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
+
 	};
 
 #pragma region AnimIndex
@@ -58,6 +62,7 @@ public:
 
 		ANIM_ATKSKCMB = 8, // 으으 기모으고 배꼽치기 와다다다닥
 		ANIM_ATKPUNCH = 9, // 강펀치~
+		ANIM_ATKPUNCH2 = 10,
 
 		ANIM_KICKDOWN = 11, // 왼발 내려찍기
 		ANIM_STOMPKICK = 13, // 내려찍기 준비자세하고 함 이거쓰자
@@ -87,11 +92,13 @@ public:
 		ANIM_BASETURN_L = 52, // 왼쪽 어깨 살짝 히트모션 아닌데 쓸만할듯?
 		ANIM_BASETURN_R = 53, // 오른쪽 어깨 살짝
 
+		ANIM_HIT = 67, // 히트다 히트~
+
 		////////////////// 엔드모션 ///////////////////
 		ANIM_HEAL,
 		ANIM_DEATH = 66, // 데스
 		ANIM_DEATH_GETUP = 69, // 죽음에서 살아나기
-		ANIM_HIT = 67,
+		
 		ANIM_GETUP = 68, // 일어나기
 		ANIM_HITDOWN = 70, // 무릎꿇으면서 앉음
 		ANIM_HITDOWN_LOOP = 71, // 무릎꿇는 자세 루프
@@ -148,6 +155,19 @@ public:
 	void Trigger_StompKick();
 	void Trigger_AtkPunch();
 
+	void Trigger_Hit_Small();
+	void Trigger_Hit_ConnectSmall();
+	void Trigger_Hit_Upper();
+	void Trigger_Hit_Big();
+	void Trigger_Hit_Blow();
+	void Trigger_Hit_BigBlow();
+	void Trigger_Hit_Bound();
+	void Trigger_Hit_Spin();
+	void Trigger_Hit_CutScene();
+	void Trigger_Hit_GetUp();
+	void Trigger_Hit_RollGetUp();
+	void Trigger_Hit_BigGetUp();
+
 	void Trigger_Awake_RoomChange(_double dTimeDelta); 
 
 #pragma endregion
@@ -167,6 +187,18 @@ private: //패턴 함수들
 	void Update_AtkStep(_double dTimeDelta); 
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
+
+	void Update_Hit_Small(_double dTimeDelta);
+	void Update_Hit_Upper(_double dTimeDelta);
+	void Update_Hit_Big(_double dTimeDelta);
+	void Update_Hit_Blow(_double dTimeDelta);
+	void Update_Hit_BigBlow(_double dTimeDelta);
+	void Update_Hit_Bound(_double dTimeDelta);
+	void Update_Hit_Spin(_double dTimeDelta);
+	void Update_Hit_CutScene(_double dTimeDelta);
+	void Update_Hit_GetUp(_double dTimeDelta);
+	void Update_Hit_RollGetUp(_double dTimeDelta);
+	void Update_Hit_BigGetUp(_double dTimeDelta);
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
 

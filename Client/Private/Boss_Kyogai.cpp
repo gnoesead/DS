@@ -76,7 +76,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
-
+	EventCall_Control(dTimeDelta);
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -309,11 +309,146 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 }
 void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 {
+	CAnimation* pAnim = m_pModelCom->Get_Animation();
+	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
+	{
+		m_iEvent_Index = 0;
+	}
+
+	if (EventCallProcess())
+	{
+		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		_vector vDir = Calculate_Dir();
+
+		_float RandomAngle = Random::Generate_Float(0.f, 15.f);
+		_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
+		_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
+
+		RandomAngle = Random::Generate_Float(-20.f, 20.f);
+		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 1.f), XMConvertToRadians(RandomAngle));
+		vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
+
+		_double dLifeTime = 0.20;
+		_double dLongLifeTime = 1.0;
+#pragma region AWAKE_ComboPunch
+		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+			}
+
+
+		}
+		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			}
+
+		}
+		if (ANIM_ATKPUNCH2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+			}
+
+		}
+		m_iEvent_Index++;
+	}
 }
 #endif //_DEBUG
 
 void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 {
+	if (m_bNoDmg == false /*&& m_bStart == true*/)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+
+		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				Trigger_Hit_Small();
+			}
+			if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				Trigger_Hit_ConnectSmall();
+			}
+
+			if (true == m_isJumpOn)
+				Jumping(0.2f, 0.030f);
+
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		}
+		/*if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_Blow();
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_Upper();
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+
+			Trigger_Hit_Big();
+
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_Bound();
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+			Set_FallingStatus(3.0f, 0.0f);
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_CutScene();
+			pPlayer->Set_Hit_SurgeCutScene(true);
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		}*/
+
+		Safe_Release(pGameInstance);
+	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+	}
 }
 
 void CBoss_Kyogai::Update_AnimIndex(_uint iAnimIndex)
@@ -379,6 +514,12 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Kyogai::STATE_ATKPUNCH:
 		Update_AtkPunch(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_HIT_SMALL:
+		Update_Hit_Small(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_HIT_BIG:
+		Update_Hit_Big(dTimeDelta);
 		break;
 
 
@@ -920,6 +1061,7 @@ void CBoss_Kyogai::Trigger_AtkStep()
 
 void CBoss_Kyogai::Trigger_StompKick()
 {
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_bTrigger = true;
 	m_eCurstate = STATE_STOMPKICK;
 	m_bAnimFinish = false;
@@ -930,6 +1072,65 @@ void CBoss_Kyogai::Trigger_AtkPunch()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKPUNCH;
 	m_bAnimFinish = false;
+}
+
+void CBoss_Kyogai::Trigger_Hit_Small()
+{
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+	m_isConnectHitting = false;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_iSmallHit_Index++;
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_L);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_R);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R);
+		
+	m_eCurstate = STATE_HIT_SMALL;
+}
+
+void CBoss_Kyogai::Trigger_Hit_ConnectSmall()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_Upper()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_Big()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_Blow()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_BigBlow()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_Bound()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_Spin()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_CutScene()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_GetUp()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_RollGetUp()
+{
+}
+
+void CBoss_Kyogai::Trigger_Hit_BigGetUp()
+{
 }
 
 void CBoss_Kyogai::Trigger_Awake_RoomChange(_double dTimeDelta)
@@ -1125,6 +1326,7 @@ void CBoss_Kyogai::Update_StompKick(_double dTimeDelta)
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_STOMPKICK, 0.380, dTimeDelta))
 	{
+		m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		Jumping(1.f, 0.06f);
 	}
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STOMPKICK, 1.f, 0.38, 0.56);
@@ -1137,13 +1339,111 @@ void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_ATKPUNCH;
 	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH))
+	//if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH))
+	if(m_pModelCom->Check_PickAnimRatio(ANIM_ATKPUNCH,0.75,dTimeDelta))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH);
+		m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKPUNCH);
+		m_eCurAnimIndex = ANIM_ATKPUNCH2;
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH2))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH2);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
 	}
+	_vector vDir = Calculate_Dir_FixY();
+	m_pTransformCom->LerpVector(vDir, 0.7f);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
+	
+}
+
+void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
+{
+	if (m_isJumpOn == false && m_bAir_Motion == false)
+	{
+		if (false == m_bAnimFinish)
+		{
+			if (m_iSmallHit_Index == 1)
+			{
+				m_eCurAnimIndex = ANIM_BASETURN_L;
+			}
+			if (m_iSmallHit_Index == 2)
+				m_eCurAnimIndex = ANIM_BASETURN_R;
+
+			if (m_iSmallHit_Index >= 3)
+			{
+				m_iSmallHit_Index = 1;
+
+			}
+			
+			
+		}
+		if ((m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L) || m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R)))
+		{
+			m_bAnimFinish = true;
+			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_L);
+			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_R);
+			m_eCurAnimIndex = ANIM_IDLE;
+			Trigger_Interact();
+			//m_eCurAnimIndex = ANIM_BASETURN_L;
+		}		
+	}
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_L, 0.3f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_R, 0.3f, 0.0, 0.7);
+		
+	}
+		
+
+	/*if (m_pModelCom->Get_AnimFinish(ANIM_HIT_BLOW_END))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
+		m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
+		Trigger_Hit_GetUp();
+	}*/
+}
+
+void CBoss_Kyogai::Update_Hit_Upper(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_Big(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_Blow(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_BigBlow(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_Bound(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_Spin(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_CutScene(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_GetUp(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_RollGetUp(_double dTimeDelta)
+{
+}
+
+void CBoss_Kyogai::Update_Hit_BigGetUp(_double dTimeDelta)
+{
 }
 
 void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)

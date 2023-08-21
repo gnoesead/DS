@@ -41,6 +41,7 @@
 #include "Fade.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
+#include "Option.h"
 
 
 #include "NPC_Female.h"
@@ -770,6 +771,8 @@ HRESULT CLoader::LoadingForLobby()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Battle_Signal"),
 		CBattle_Signal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	
 
 #pragma endregion
 

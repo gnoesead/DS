@@ -160,6 +160,24 @@ PS_OUT  PS_MAIN_ALPHA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_MAIN_ALPHA_2(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	if (g_Is_Side_Cut_R == true && In.vTexUV.x >= 0.989)
+		vColor.w *= 0.f;
+	if (g_Is_Side_Cut_L == true && In.vTexUV.x <= 0.01)
+		vColor.w *= 0.f;
+
+	vColor.w *= g_Alpha;
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
 PS_OUT  PS_MAIN_ALPHA_PLUS(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
@@ -565,5 +583,17 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_SMOKE();
+	}
+	// 17
+	pass Cloud_LD
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN_REVERSE();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_2();
 	}
 }
