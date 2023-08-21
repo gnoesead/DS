@@ -69,12 +69,12 @@ _bool COptionManager::Get_Is_Reset()
 	return m_Is_Reset;
 }
 
-void COptionManager::Set_Select_Num(_bool num)
+void COptionManager::Set_Select_Num(_int num)
 {
 	m_Select_Num = num;
 }
 
-_bool COptionManager::Get_Select_Num()
+_int COptionManager::Get_Select_Num()
 {
 	return m_Select_Num;
 }

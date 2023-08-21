@@ -1002,6 +1002,57 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	ZeroMemory(&UIDesc15, sizeof UIDesc15);
 
+	UIDesc15.m_Type = 3;
+	UIDesc15.m_Line_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 3;
+	UIDesc15.m_Line_Num = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 3;
+	UIDesc15.m_Line_Num = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 3;
+	UIDesc15.m_Line_Num = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 3;
+	UIDesc15.m_Line_Num = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
 	UIDesc15.m_Type = 7;
 	UIDesc15.m_Menu_Type = 0;
 

@@ -90,6 +90,15 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	// Test
+	if (m_Is_Battle == true) {
+		if (pGameInstance->Get_DIKeyDown(DIK_R)) {
+			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(!m_bIs_Battle_LockFree);
+		}
+
+		m_bIs_Battle_LockFree = CCameraManager::GetInstance()->Get_Is_Battle_LockFree();
+	}
+
 	// Camera_Shake
 	if (CCameraManager::GetInstance()->Get_Is_Shake_On()) {
 
@@ -148,7 +157,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
-	XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
@@ -189,7 +198,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		
 	}
 
-	
 
 	// ÇÃ·¹ÀÌ¾î¿Í ¸ó½ºÅÍ¿¡°Ô ÄÆ¾À »óÅÂÀÎÁö , ¾î¶² ÄÆ¾ÀÀÎÁö ¹Þ¾Æ¿È
 	if (pGameInstance->Get_DIKeyDown(DIK_7)) {
@@ -371,16 +379,30 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 
 	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	m_vDist = m_vTargetPos - m_vBattleTargetPos;
+	if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false) {
+		m_fDistance = 6.f + m_Zoom;
 
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(-m_vCameraAngle));
+		m_vDist = m_vTargetPos - m_vBattleTargetPos;
 
-	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+		_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(-m_vCameraAngle));
 
-	m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
+		m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
-	m_vDist = XMVector3Normalize(m_vDist);
+		m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
 
+		m_vDist = XMVector3Normalize(m_vDist);
+	}
+	else {
+		m_fDistance = 8.f + m_Zoom;
+
+		Turn_Camera(dTimeDelta);
+		
+		m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
+
+		m_vDist = XMVector3Normalize(m_vDist);
+
+	}
+		
 	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
 
 	_float t = (_float)dTimeDelta * m_fDamping;
@@ -389,7 +411,12 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
 
-	_vector NewLook = m_vBattleCenter + m_vLookOffSet - CamPos;
+	_vector NewLook = {};
+
+	if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		NewLook = m_vBattleCenter + m_vLookOffSet - CamPos;
+	else
+		NewLook = m_vTargetPos + m_vLookOffSet - CamPos;
 
 	NewLook = { XMVectorGetX(NewLook), XMVectorGetY(NewLook) * 0.f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 	NewLook = XMVector3Normalize(NewLook);
@@ -450,9 +477,10 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector vRight = m_vTargetPos - m_vBattleTargetPos;
+	_vector vRight = {};
 
-
+	vRight = m_vTargetPos - m_vBattleTargetPos;
+	
 	m_vDist = XMVector3Cross(vRight, vUp);
 
 	m_vDist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
@@ -463,17 +491,20 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
-	_vector vDest = m_vBattleCenter + m_vOffSet + (m_vDist * m_fDistance);
+	_vector vDest = {};
 
+	vDest = m_vBattleCenter + m_vOffSet + (m_vDist * m_fDistance);
+	
 	_float t = (_float)dTimeDelta * m_fDamping;
 
 	_vector CamPos = XMVectorLerp(vCamPosition, vDest, t);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
 
+	_vector NewLook = {};
 
-	_vector NewLook = m_vBattleCenter + m_vLookOffSet - CamPos;
-
+	NewLook = m_vBattleCenter + m_vLookOffSet - CamPos;
+	
 	NewLook = { XMVectorGetX(NewLook), 0.5f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 	NewLook = XMVector3Normalize(NewLook);
 

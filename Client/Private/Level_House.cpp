@@ -1097,6 +1097,56 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Line_Num = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Line_Num = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Line_Num = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Line_Num = 3;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+	UIDesc11.m_Type = 3;
+	UIDesc11.m_Line_Num = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
 	UIDesc11.m_Type = 7;
 	UIDesc11.m_Menu_Type = 0;
 

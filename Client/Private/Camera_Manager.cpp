@@ -159,6 +159,16 @@ _float CCameraManager::Get_Zoom()
 	return m_Zoom;
 }
 
+void CCameraManager::Set_Is_Battle_LockFree(_bool Is)
+{
+	m_Is_Battle_LockFree = Is;
+}
+
+_bool CCameraManager::Get_Is_Battle_LockFree()
+{
+	return m_Is_Battle_LockFree;
+}
+
 void CCameraManager::Free()
 {
 	
