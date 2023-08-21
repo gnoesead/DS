@@ -39,17 +39,16 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
-
+	
 	Get_PlayerComponent();
 
+	m_StatusDesc.fHp = 150.f;
+	m_StatusDesc.fHp_Max = 150.f;
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 	m_eCurNavi = NAVI_ACAZA;
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 	return S_OK;
 
 }
@@ -233,8 +232,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
-		{
-
+		{			
 			Trigger_DashKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
@@ -344,7 +342,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 	{
 		m_iEvent_Index = 0;
 	}
-
 
 	if (EventCallProcess())
 	{
@@ -994,7 +991,7 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 			m_eCurPhase = PHASE_1;
 			m_eCurAnimIndex = ANIM_IDEL;
 			m_bStart = true;
-			//m_iTriggerCnt = 1;
+			m_iTriggerCnt = 1;
 			Trigger_Interact();
 			
 		}
@@ -2974,9 +2971,11 @@ void CBoss_Akaza::Update_Hit_Bound(_double dTimeDelta)
 	else
 	{
 		Land_Anim_Play(ANIM_HIT_DMGFALL_LOOP, ANIM_HIT_DMGFALL_BOUND);
+		Land_Anim_Play(ANIM_HIT_BOUND, ANIM_HIT_DMGFALL_BOUND);
 		if (m_pModelCom->Get_AnimFinish(ANIM_HIT_DMGFALL_BOUND))
 		{
 			m_pModelCom->Set_AnimisFinish(ANIM_HIT_DMGFALL_BOUND);
+			m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
 			Trigger_Hit_GetUp();
 		}
 	}
@@ -3014,9 +3013,9 @@ void CBoss_Akaza::Update_Hit_CutScene(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_BIG))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_BIG);
-		m_eCurAnimIndex = ANIM_IDEL;
 		m_bNoDmg = false;
-		Trigger_Interact();
+		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+		Trigger_PushAway();
 	}
 }
 
@@ -3029,7 +3028,7 @@ void CBoss_Akaza::Update_Hit_GetUp(_double dTimeDelta)
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_HIT_GETUP_DIZZY, 0.55, dTimeDelta))
 	{
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT_GETUP_DIZZY);
+		//m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT_GETUP_DIZZY);
 		m_eCurAnimIndex = ANIM_HIT_RETURN_BIG;
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_BIG))
@@ -3121,7 +3120,7 @@ HRESULT CBoss_Akaza::Add_Components()
 	}
 
 
-	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0 * 0.8;
+	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
 	// for.Com_Transform 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
@@ -3132,7 +3131,7 @@ HRESULT CBoss_Akaza::Add_Components()
 	}
 
 
-	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(0.8f, 0.8f, 0.8f);
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize = _float3(1.f, 1.f, 1.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_AABB].vSize.y * 0.5f, 0.f);
 	//for.Com_AABB 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
