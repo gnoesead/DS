@@ -48,7 +48,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
 	m_eCurNavi = NAVI_ACAZA;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
 	return S_OK;
 
 }
