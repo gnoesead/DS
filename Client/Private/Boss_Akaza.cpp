@@ -554,6 +554,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
