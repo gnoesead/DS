@@ -23,7 +23,7 @@ public:
 		_uint    m_Type = { 0 };
 		_uint    m_Menu_Type = { 0 };
 		_uint    m_Cloud_Type = { 0 };
-
+		_uint    m_Line_Num = { 0 };
 
 	}UIDESC;
 
@@ -74,7 +74,7 @@ private:
 
 private:
 	_bool                   m_Is_Select = { 0 };
-	_int                   m_Select_Num = { 0 };
+	_int                    m_Select_Num = { 0 };
 
 
 	vector<wstring>         m_szCameraMenu = { };

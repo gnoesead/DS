@@ -31,6 +31,10 @@ public:
 	void Set_Is_Reset(_bool Is);
 	_bool Get_Is_Reset();
 
+	void Set_Select_Num(_bool num);
+	_bool Get_Select_Num();
+
+
 private:
 	_bool m_Is_Option_On = { false };
 	_bool m_Is_Move_Done = { false };
@@ -38,6 +42,8 @@ private:
 
 	_float m_Option_Move = { 40.f };
 	_bool  m_Is_Reset = { false };
+
+	_int   m_Select_Num = { 0 };
 
 public:
 	virtual void Free() override;

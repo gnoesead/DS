@@ -84,13 +84,11 @@ HRESULT COption::Initialize(void* pArg)
 	if (m_UI_Desc.m_Type == 3) {
 
 		m_fX = 850;
-		m_fY = 365;
-		m_Origin_PosX = (_float)m_fX;
-		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 620.f;
-		m_Origin_Y = 360.f;
-		m_Size_Param = 1.3f;
-		m_UI_Layer = 32;
+		m_fY = 165;
+		m_Origin_X = 820.f;
+		m_Origin_Y = 18.f;
+		m_Size_Param = 0.83f;
+		m_UI_Layer = 33;
 	}
 
 	// Arrow
@@ -349,8 +347,60 @@ void COption::Tick(_double dTimeDelta)
 
 	}
 
+	if (m_UI_Desc.m_Type == 3) {
 
-	if (m_UI_Desc.m_Type == 7 && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+		if (m_UI_Desc.m_Line_Num == 0) {
+			m_fX = 850;
+			m_fY = 230;
+		}
+		else if (m_UI_Desc.m_Line_Num == 1) {
+			m_fX = 850;
+			m_fY = 305;
+		}
+		else if (m_UI_Desc.m_Line_Num == 2) {
+			m_fX = 850;
+			m_fY = 380;
+		}
+		else if (m_UI_Desc.m_Line_Num == 3) {
+			m_fX = 850;
+			m_fY = 455;
+		}
+		else if (m_UI_Desc.m_Line_Num == 4) {
+			m_fX = 850;
+			m_fY = 530;
+		}
+
+
+		if (m_Select_Num == 0) {
+			if (m_UI_Desc.m_Line_Num == 3) {
+				m_Is_Render = false;
+				m_Is_Font_Render = false;
+			}
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Is_Render = false;
+				m_Is_Font_Render = false;
+			}
+		}
+		if (m_Select_Num == 1) {
+
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Is_Render = false;
+				m_Is_Font_Render = false;
+			}
+		}
+		if (m_Select_Num == 2) {
+	
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Is_Render = false;
+				m_Is_Font_Render = false;
+			}
+		}
+
+
+
+	}
+
+	if ((m_UI_Desc.m_Type == 7) && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
 
 		if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
 			m_Select_Num--;
@@ -433,7 +483,7 @@ void COption::Tick(_double dTimeDelta)
 		}
 	}
 
-	if (m_UI_Desc.m_Type != 1 && m_UI_Desc.m_Type != 7) {
+	if (m_UI_Desc.m_Type != 1 && m_UI_Desc.m_Type != 3 && m_UI_Desc.m_Type != 7) {
 
 		if (COptionManager::GetInstance()->Get_Is_Move_Done() == true) {
 
