@@ -189,7 +189,7 @@
     <ClInclude Include="..\Public\Boss_Battle_Hp.h" />
     <ClInclude Include="..\Public\Boss_Kyogai.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
@@ -233,6 +233,7 @@
     <ClInclude Include="..\Public\NPC.h" />
     <ClInclude Include="..\Public\NPC_Female.h" />
     <ClInclude Include="..\Public\Option.h" />
+    <ClInclude Include="..\Public\OptionManager.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Pause.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -278,7 +279,7 @@
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp" />
     <ClCompile Include="..\Private\Boss_Kyogai.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
@@ -321,6 +322,7 @@
     <ClCompile Include="..\Private\NPC.cpp" />
     <ClCompile Include="..\Private\NPC_Female.cpp" />
     <ClCompile Include="..\Private\Option.cpp" />
+    <ClCompile Include="..\Private\OptionManager.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Pause.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />

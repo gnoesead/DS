@@ -69,7 +69,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_isDeath_Motion = { false };
 	_bool	m_bAir_Motion = { false };
 
-	
+	_bool	m_bStart = { false };
 	_bool	m_bHeal = { false };
 	_bool	m_bTrigger = { false };
 	_bool	m_bPatternStart = { false };
@@ -84,7 +84,8 @@ protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
 
-
+protected:
+	_uint	m_iSmallHit_Index = { 0 };
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };

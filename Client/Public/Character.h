@@ -21,6 +21,9 @@ class CCharacter abstract : public CLandObject
 public:
 	enum DIR { DIR_UP, DIR_DOWN, DIR_RIGHT, DIR_LEFT };
 	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
+
+	//NPC
+	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK, NPC_END };
 public:
 	typedef struct tagCharacterDesc
 	{
@@ -30,6 +33,9 @@ public:
 		CNavigation::NAVIDESC		NaviDesc;
 		_float						Land_Y;
 		NAVI_TYPE					eCurNavi;
+
+		//NPC
+		NPC_TYPE		eNPC = NPC_END;
 	}CHARACTERDESC;
 
 	typedef struct tagCharacterStatusDesc

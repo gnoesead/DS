@@ -142,7 +142,10 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 				m_isCan_AirDash = false;
 			}
 		}
+
+		CPlayerManager::GetInstance()->Set_PlayerPos_Change(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
+	
 	
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
@@ -326,6 +329,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Down", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -362,6 +367,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Up", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -1614,9 +1621,13 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
 
 		m_isJumpOn = true;
-
 	}
 
+	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+	_float4 CurPos;
+	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	AnotherPos.y = CurPos.y;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()

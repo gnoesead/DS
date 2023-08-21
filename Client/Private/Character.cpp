@@ -114,8 +114,6 @@ void CCharacter::Tick(_double dTimeDelta)
 			m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
 		else
 			m_pTransformCom->Scaling(_float3(0.8f, 0.8f, 0.8f));
-
-
 	}
 	
 

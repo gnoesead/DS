@@ -85,9 +85,7 @@ void CPlayer::LateTick(_double dTimeDelta)
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 
-
 #ifdef _DEBUG
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	_tchar	m_szFPS[MAX_PATH] = TEXT("");
@@ -97,7 +95,10 @@ void CPlayer::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 #endif // DEBUG
 
-	
+	_float4 TestPos;
+	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_int ak = 47;
+
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
 		return;
@@ -1052,7 +1053,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			//vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
 
 			
-			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] = true;
 				m_dChangePositionAccTime = 0.0;
@@ -1090,7 +1091,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B])
 		{
-			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_NUMPAD0))
+			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B] = true;
 				m_dChangePositionAccTime = 0.0;

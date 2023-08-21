@@ -51,6 +51,10 @@ private: //애니메이션 제어용 함수
 	void	EventCall_Control(_double dTimeDelta);
 
 	void	Animation_Control(_double dTimeDelta);
+	void	Animation_Control_Quest(_double dTimeDelta);
+	void	Animation_Control_Stand(_double dTimeDelta);
+	void	Animation_Control_Walk(_double dTimeDelta);
+	
 
 private:
 	

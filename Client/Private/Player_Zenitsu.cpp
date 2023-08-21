@@ -142,7 +142,10 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 				m_isCan_AirDash = false;
 			}
 		}
+
+		CPlayerManager::GetInstance()->Set_PlayerPos_Change(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
+	
 
 
 	//임시 코드
@@ -838,8 +841,6 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	//}
 
 	
-
-	
 	if (m_isHit_Hekireki)
 	{
 		m_isHit_Hekireki = false;
@@ -1409,9 +1410,13 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
 
 		m_isJumpOn = true;
-
 	}
 
+	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+	_float4 CurPos;
+	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	AnotherPos.y = CurPos.y;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 }
 
 void CPlayer_Zenitsu::Moving_Restrict()

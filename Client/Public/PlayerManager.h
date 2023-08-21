@@ -45,15 +45,24 @@ private: //캐릭터 스왑 체인지 관련 변수
 
 	_bool	isFirst_Setting_Status = { true };
 
+	_float4		PlayerPos_Change = { 0.0f, 0.0f, 0.0f,  1.0f };
+
 public:
 	_int	Get_PlayerIndex() { return iPlayerIndex; }
 	_bool	Get_First_Player_Change() { return isFirst_Player_Change; }
 	_bool	Get_First_Setting_Status() { return isFirst_Setting_Status; }
 
+	_float4 Get_PlayerPos_Change() { return PlayerPos_Change; }
+
+
 	void	Set_PlayerIndex(_int index) { iPlayerIndex = index; }
 	void	Set_First_Player_Change(_bool first) { isFirst_Player_Change = first; }
 	void	Set_First_Setting_Status(_bool first) { isFirst_Setting_Status = first; }
 
+	void	Set_PlayerPos_Change(_float4 Pos) { PlayerPos_Change = Pos; }
+	void	Set_PlayerPos_Change(_vector vPos) {
+		XMStoreFloat4(&PlayerPos_Change, vPos);
+	}
 public:
 	virtual void Free() override;
 };

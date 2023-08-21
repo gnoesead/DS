@@ -546,6 +546,9 @@
     <ClInclude Include="..\Public\TrainSmoke.h">
       <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\OptionManager.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\PlayerManager.h">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
     </ClInclude>
@@ -790,6 +793,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TrainSmoke.cpp">
       <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\OptionManager.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerManager.cpp">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>

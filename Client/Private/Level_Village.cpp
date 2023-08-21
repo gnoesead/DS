@@ -31,6 +31,7 @@
 #include "Pause.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
+#include "Option.h"
 
 
 
@@ -71,6 +72,12 @@ HRESULT CLevel_Village::Initialize()
     }
 
     if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
     {
         MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
         return E_FAIL;
@@ -287,6 +294,30 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 HRESULT CLevel_Village::Ready_Layer_Boss(const _tchar* pLayerTag)
 {
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    CPlayer::CHARACTERDESC CharacterDesc;
+    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE; //abcde
+
+    CharacterDesc.WorldInfo.vPosition = _float4(426.f, 3.f, 290.f, 1.f);
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : NPC_Female");
+        return E_FAIL;
+    }
+
+    Safe_Release(pGameInstance);
+
     return S_OK;
 }
 
@@ -566,7 +597,228 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+ // Option
+    COption::UIDESC UIDesc4;
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
 
+    UIDesc4.m_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 3;
+    UIDesc4.m_Line_Num = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 3;
+    UIDesc4.m_Line_Num = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 3;
+    UIDesc4.m_Line_Num = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 3;
+    UIDesc4.m_Line_Num = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 3;
+    UIDesc4.m_Line_Num = 4;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 7;
+    UIDesc4.m_Menu_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 7;
+    UIDesc4.m_Menu_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 7;
+    UIDesc4.m_Menu_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 9;
+    UIDesc4.m_Cloud_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 10;
+    UIDesc4.m_Cloud_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 11;
+    UIDesc4.m_Is_X_Reverse = true;
+    UIDesc4.m_Is_Y_Reverse = true;
+    UIDesc4.m_Cloud_Type = 1;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 12;
+    UIDesc4.m_Is_X_Reverse = true;
+    UIDesc4.m_Is_Y_Reverse = true;
+    UIDesc4.m_Cloud_Type = 0;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 13;
+    UIDesc4.m_Cloud_Type = 2;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 14;
+    UIDesc4.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 15;
+    UIDesc4.m_Is_X_Reverse = true;
+    UIDesc4.m_Is_Y_Reverse = true;
+    UIDesc4.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 16;
+    UIDesc4.m_Is_Y_Reverse = true;
+    UIDesc4.m_Cloud_Type = 3;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 17;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 18;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+    UIDesc4.m_Type = 19;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
 
 

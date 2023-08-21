@@ -213,10 +213,24 @@ void CNPC_Female::EventCall_Control(_double dTimeDelta)
 
 void CNPC_Female::Animation_Control(_double dTimeDelta)
 {
-	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), dTimeDelta);
+	if (NPC_QUEST == m_CharacterDesc.eNPC)
+	{
+		Animation_Control_Quest(dTimeDelta);
+	}
+	else if (NPC_STAND == m_CharacterDesc.eNPC || NPC_TALK == m_CharacterDesc.eNPC 
+		|| NPC_SIT == m_CharacterDesc.eNPC || NPC_SITTALK == m_CharacterDesc.eNPC
+		|| NPC_DOWN == m_CharacterDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.eNPC)
+	{
+		Animation_Control_Stand(dTimeDelta);
+	}
+	else if (NPC_WALK == m_CharacterDesc.eNPC || NPC_WALKTALK == m_CharacterDesc.eNPC)
+	{
+		Animation_Control_Walk(dTimeDelta);
+	}
+}
 
-	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
-
+void CNPC_Female::Animation_Control_Quest(_double dTimeDelta)
+{
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -229,38 +243,41 @@ void CNPC_Female::Animation_Control(_double dTimeDelta)
 	{
 		m_pModelCom->Set_Animation(ANIM_SPEAK_SHY_END);
 	}
-
-	if (!pGameInstance->Get_DIKeyState(DIK_H))
-	{
-		//°È±â µµÁß
-		if (iCurAnim == 36)
-		{
-			m_dTime_Walking += dTimeDelta;
-			if (m_dTime_Walking > 3.8f)
-			{
-				m_dTime_Walking = 0.0f;
-				m_pModelCom->Set_Animation(ANIM_WALK_GONGSON_END);
-			}
-		}
-		else
-		{
-			//°È±â ½ÃÀÛ
-			m_dCoolTime_Walk += dTimeDelta;
-			if (m_dCoolTime_Walk > 3.0f)
-			{
-				m_dCoolTime_Walk = 0.0f;
-
-				m_pModelCom->Set_Animation(ANIM_WALK_GONGSON);
-			}
-		}
-
-		Go_Straight_Constant(dTimeDelta, ANIM_WALK_GONGSON, 0.3f);
-		Go_Straight_Constant(dTimeDelta, 36, 0.3f);
-		Go_Straight_Deceleration(dTimeDelta, ANIM_WALK_GONGSON_END, 0.3f, 0.01f);
-
-	}
 	Safe_Release(pGameInstance);
-	
+}
+
+void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
+{
+}
+
+void CNPC_Female::Animation_Control_Walk(_double dTimeDelta)
+{
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	//°È±â µµÁß
+	if (iCurAnim == 36)
+	{
+		m_dTime_Walking += dTimeDelta;
+		if (m_dTime_Walking > 3.8f)
+		{
+			m_dTime_Walking = 0.0f;
+			m_pModelCom->Set_Animation(ANIM_WALK_GONGSON_END);
+		}
+	}
+	else
+	{
+		//°È±â ½ÃÀÛ
+		m_dCoolTime_Walk += dTimeDelta;
+		if (m_dCoolTime_Walk > 3.0f)
+		{
+			m_dCoolTime_Walk = 0.0f;
+
+			m_pModelCom->Set_Animation(ANIM_WALK_GONGSON);
+		}
+	}
+	Go_Straight_Constant(dTimeDelta, ANIM_WALK_GONGSON, 0.3f);
+	Go_Straight_Constant(dTimeDelta, 36, 0.3f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_WALK_GONGSON_END, 0.3f, 0.01f);
 }
 
 HRESULT CNPC_Female::Add_Components()

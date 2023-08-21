@@ -21,6 +21,10 @@ public:
 		_bool    m_Is_Y_Reverse = { false };
 
 		_uint    m_Type = { 0 };
+		_uint    m_Menu_Type = { 0 };
+		_uint    m_Cloud_Type = { 0 };
+		_uint    m_Line_Num = { 0 };
+
 	}UIDESC;
 
 
@@ -40,7 +44,7 @@ public:
 
 public:
 	void Set_UI();
-
+	void Cloud_Control(_double dTimeDelta);
 
 private:
 	CShader*			m_pShaderCom = { nullptr };
@@ -54,7 +58,7 @@ private:
 	_float4x4				m_ProjMatrix = {};
 	
 	UIDESC                  m_UI_Desc = {};
-	_float                  m_Alpha = { 1.f };
+	_float                  m_Alpha = { 0.f };
 	_float                  m_Alpha_Dir = { 1.f };
 	_bool                   m_Is_Reverse = { false };
 	_bool                   m_Is_CutScene = false;
@@ -69,13 +73,18 @@ private:
 
 
 private:
-	_bool                   m_Select = { 0 };
+	_bool                   m_Is_Select = { 0 };
+	_int                    m_Select_Num = { 0 };
 
-	vector<wstring>         m_szTitle = { };
-	vector<wstring>         m_szContent = { };
 
-	_uint                   m_Loading_Index = { 0 };
+	vector<wstring>         m_szCameraMenu = { };
+	vector<wstring>         m_szGraphicMenu = { };
+	vector<wstring>         m_szSoundMenu = { };
 
+	vector<wstring>         m_szButtonMenu = { };
+
+
+	
 private:
 	_float                  m_Time_X = {};
 	_float                  m_UV_Speed_X = {};
@@ -83,6 +92,8 @@ private:
 	_float                  m_UV_Speed_Y = {};
 
 
+	_bool                   m_Is_Font_Render = { false };
+	_bool                   m_Is_Reset = { false };
 
 
 private:
