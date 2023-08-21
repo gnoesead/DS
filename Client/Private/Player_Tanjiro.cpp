@@ -324,6 +324,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Down", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -360,6 +362,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Up", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
