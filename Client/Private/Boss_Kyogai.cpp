@@ -246,6 +246,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
+			CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom);
 			Trigger_AtkPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_7))
