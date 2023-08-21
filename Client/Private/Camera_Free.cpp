@@ -157,8 +157,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
-	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
-	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
+	_vector Temp = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vBattleCenter = (m_vTargetPos + Temp) * 0.5f;
 
 	// Lock_Free
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
