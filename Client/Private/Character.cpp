@@ -513,6 +513,7 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
+			m_isStrictUpper = false;
 		}
 	}
 
@@ -599,7 +600,7 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(true);
 			}
-			else if (pHitColl->Get_Collider()->Get_Hit_Blow())
+			else if (pHitColl->Get_Collider()->Get_Hit_BigBlow())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(true);
 			}
@@ -618,6 +619,10 @@ void CCharacter::Check_HitType()
 			else if (pHitColl->Get_Collider()->Get_Hit_CutScene())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(true);
+			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Hekireki())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(true);
 			}
 
 			pHitColl->Add_AtkObejct(this);

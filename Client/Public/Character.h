@@ -172,6 +172,8 @@ protected:
 	_bool	m_isBounding = { false };
 	_bool	m_isConnectHitting = { false };
 
+	_bool	m_isStrictUpper = { false };
+
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };
 	_bool	m_isReset_Atk_MoveControl = { false };

@@ -265,6 +265,22 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_Moveset.m_Down_Dmg_Blow = true;
 	}
 	
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+
+		if (m_Moveset.m_isDownMotion == false)
+			m_Moveset.m_Down_Dmg_BigBlow = true;
+	}
+
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+
+		if (m_Moveset.m_isDownMotion == false)
+			m_Moveset.m_Down_Dmg_Upper = true;
+	}
+
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -295,10 +311,6 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		m_isSpecialHit = true;
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_V))
-	{
-		m_isTestHit = true;
-	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_V))
 	{
@@ -1051,7 +1063,11 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A])
 		{
 			vInteractionPos = { 131.f , 3.f , 57.f , 1.f };
-
+			if (NAVI_HOUSE_0_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F3))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;

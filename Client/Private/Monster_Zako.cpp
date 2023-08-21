@@ -356,7 +356,8 @@ void CMonster_Zako::Trigger()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Big()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Spin()
-			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper()
+			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
 			m_eCurState = STATE_HIT;
 		}
@@ -369,6 +370,7 @@ void CMonster_Zako::Trigger()
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 	}
 }
 
@@ -931,6 +933,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
 
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	
+	AtkDir.y = 0.0f;
+	XMStoreFloat4(&AtkDir, XMVector4Normalize( XMLoadFloat4(&AtkDir)));
 
 	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
 
@@ -955,7 +960,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (m_isJumpOn)
 		{
 			m_pModelCom->Set_Animation(ANIM_FALL);
-			Jumping(0.2f, 0.030f);
+			Jumping(0.3f, 0.030f);
 			m_dDelay_ComboChain = 6.0;
 		}
 		else
@@ -979,14 +984,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	}
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.0f, 0.04f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.0f, 0.04f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.0f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.1f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.1f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.1f, 0.04f, AtkDir);
 	}
-	else
-	{
-
-	}
+	
 	
 #pragma endregion
 	
@@ -1025,16 +1027,19 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(2.0f, 0.03f);
+		Jumping(1.85f, 0.03f);
 	}
 
-		
-	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+	//어퍼시 수직상승 여부
+	if (m_isStrictUpper == false)
+	{
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+	}
+
 	if (m_isBounding)
 	{
 		Ground_Animation_Play(111, ANIM_DMG_BOUND);
-		
 	}
 	else
 		Ground_Animation_Play(111, 112);
@@ -1109,6 +1114,31 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 5.5;
 
 		m_pModelCom->Set_Animation(ANIM_DEATH);
+	}
+#pragma endregion
+
+
+#pragma region Hit_HEKIREKI
+	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+
+		m_dDelay_ComboChain = 5.5;
+		pPlayer->Set_Hit_Success(true);
+		pPlayer->Set_Hit_Success_Hekireki(true);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		m_pModelCom->Set_Animation(ANIM_FALL);
+		m_isStrictUpper = true;
+
+		if (m_isJumpOn == false)
+		{
+			Jumping(1.85f, 0.03f);
+		}
+		else
+		{
+			Jumping(0.85f, 0.030f);
+		}
 	}
 #pragma endregion
 

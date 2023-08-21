@@ -33,7 +33,14 @@ public:
 		ANIM_BATTLE_RUN = 62, ANIM_BATTLE_RUN_END = 63,
 		ANIM_BATTLE_STEP_AB = 64, ANIM_BATTLE_STEP_AF = 65, ANIM_BATTLE_STEP_AL = 66, ANIM_BATTLE_STEP_AR = 67,
 		ANIM_BATTLE_STEP_B = 68, ANIM_BATTLE_STEP_F = 69, ANIM_BATTLE_STEP_L = 70, ANIM_BATTLE_STEP_R = 72,
+		ANIM_DOWN = 98,
+		ANIM_FALL = 99, //99, 100 idle, 101 착지
 		ANIM_DMG_SMALL = 107,
+		ANIM_DMG_BIG = 82,
+		ANIM_DMG_SPIN = 109, //109~111
+		ANIM_DMG_BLOW = 84, // 84~86
+		ANIM_GETUP = 115, 
+		ANIM_DOWN_GETUP_MOVE = 116,
 		ANIM_ATK_SPECIAL_CUTSCENE = 117, ANIM_ATK_SPECIAL_READY = 127,
 		ANIM_BATTLE_START = 137,
 		ANIM_DMG_S_B = 138, ANIM_DMG_S_F = 139, //140,141,142 LRU
@@ -86,8 +93,7 @@ private:
 	
 	//벽력일섬용 임시좌표
 	_vector m_vBattleTargetPos = { 140.f, 2.f,120.f,1.f }; 
-	_bool	m_bGround_Enemy = { true };
-
+	
 
 private: //애니메이션 제어용 변수들
 	//Move
@@ -108,13 +114,17 @@ private: //애니메이션 제어용 변수들
 	//스킬용 벽력일섬
 	_bool		m_isHekireki = { false };
 	_double		m_dTime_Hekireki = { 0.0 };
-	_bool		m_isHekireki_Hit = { false };
+	_bool		m_isHekireki_Hitting = { false };
 	_double		m_dDelay_Hekireki_Hit = { 0.0 };
 
 	_bool		m_isHekireki_After = { false };
 	_double		m_dTime_Hekireki_After = { 0.0 };
 
 	_bool		m_isAir_Hekireki = { false };
+
+	_double		m_dDelay_Hekireki_AnotherCan = { 0.0 };
+
+	_bool	m_isFirst_Hekireki_AirEnd = { false };
 
 	//오의 용
 	_double		m_dTime_Special_Ready = { 0.0 };

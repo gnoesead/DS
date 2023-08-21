@@ -29,6 +29,8 @@ public:
 		_bool	m_Down_Dmg_ConnectSmall = { false };
 		_bool	m_Down_Dmg_Big = { false };
 		_bool	m_Down_Dmg_Blow = { false };
+		_bool	m_Down_Dmg_BigBlow = { false };
+		_bool	m_Down_Dmg_Upper = { false };
 		_bool	m_Down_Dmg_Spin = { false };
 		_bool	m_Down_Dmg_Bound = { false };
 		_bool	m_Down_Dmg_Great_Blow = { false };
@@ -152,6 +154,7 @@ public:
 	//히트 관련 시그널 트리거
 	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
 	void	Set_Hit_Success(_bool Hit) { m_isHit_Success = Hit; }
+	void	Set_Hit_Success_Hekireki(_bool Hit) { m_isHit_Hekireki; }
 
 protected: //애니메이션 제어용 함수들
 
@@ -236,6 +239,7 @@ protected: // 애니메이션 제어용 변수들
 
 	//젠이츠 벽력용
 	_bool	m_isCan_Air_Hekireki = { false };
+	_bool	m_isHit_Hekireki = { false };
 
 	//Dash
 	_double		m_dDelay_Dash = { 0.0 };
@@ -247,7 +251,7 @@ protected:
 	_uint	m_iMeshNum = { 0 };
 
 	//히트용
-	_bool	m_isTestHit = { false };
+	//_bool	m_isTestHit = { false };
 
 	_bool	m_isCanNavi = { true };
 
