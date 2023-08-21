@@ -58,6 +58,8 @@
 
 #include "CollisionBox.h"
 
+#include "TrainSmoke.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{pContext}
@@ -1059,6 +1061,11 @@ HRESULT CLoader::LoadingForTrain()
 
 #pragma region EffectTexture
 
+	/* For.Prototype_Component_Texture_Train_Smoke*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Texture_Train_Smoke"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Environments/Map/Effect/T_e_cmn_Smoke008.dds")))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region UITexture
@@ -1109,6 +1116,11 @@ HRESULT CLoader::LoadingForTrain()
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
 #pragma region Object
 	
+	/* For.Prototype_GameObject_TrainSmoke*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TrainSmoke"),
+		CTrainSmoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Environment
@@ -1585,6 +1597,33 @@ HRESULT CLoader::Load_MapObjectModel_AllStage(CGameInstance* pGameInstance)
 	/* For.Prototype_Component_Model_Wind1*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Wind1"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Wind1.bin", PivotMatrix))))
+		return E_FAIL;
+
+	PivotMatrix = XMMatrixIdentity();
+
+	/* For.Prototype_Component_Model_Fog*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fog2*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog2.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fog3*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog3.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fog4*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog4"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog4.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Fog5*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog5"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog5.bin", PivotMatrix))))
 		return E_FAIL;
 
 	return S_OK;
@@ -2413,6 +2452,20 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Lamp_02a.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_far_hill_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_far_hill_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Acaza_vs/far_hill_01a.bin", PivotMatrix))))
+		return E_FAIL;
+	/* For.Prototype_Component_Model_far_hill_02a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_far_hill_02a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Acaza_vs/far_hill_02a.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_BigMountain*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_BigMountain"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/BigMountain.bin", PivotMatrix))))
+		return E_FAIL;
+
 	// Instance
 	/* For.Prototype_Component_ModelInstance_WoodFence_01a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_ModelInstance_WoodFence_01a"),
@@ -3003,6 +3056,11 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/BattleRoomCorridor_05.bin", PivotMatrix))))
 		return E_FAIL;
 
+	/* For.Prototype_Component_Model_107_OuterWall_01a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_107_OuterWall_01a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/107_OuterWall_01a.bin", PivotMatrix))))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -3058,6 +3116,14 @@ HRESULT CLoader::Load_MapObjectModel_Train()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_FarHouse_03d"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/FarHouse_03d.bin", PivotMatrix))))
 		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Train_Wind*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Model_Train_Wind"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Train_Wind.bin", PivotMatrix))))
+		return E_FAIL;
+
+
+
 	 
 	Safe_Release(pGameInstance);
 	return S_OK;

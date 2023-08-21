@@ -209,6 +209,19 @@ void CMonster::Dir_Setting(_bool Reverse)
 	Safe_Release(pGameInstance);
 }
 
+void CMonster::Pos_FixY()
+{
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (Pos.y >= m_fLand_Y)
+	{
+		m_bAir_Motion = false;
+		Pos.y = m_fLand_Y;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+	}
+}
+
 HRESULT CMonster::Add_Components()
 {
 

@@ -43,8 +43,8 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_IDLE;
 	m_eCurPhase = PHASE_1;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
-	//m_eCurNavi = NAVI_ACAZA;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
+	m_eCurNavi = NAVI_HOUSE_4_0;
 
 	return S_OK;
 
@@ -1069,14 +1069,14 @@ HRESULT CBoss_Kyogai::Add_Components()
 		return E_FAIL;
 	}
 
-	//m_CharacterDesc.NaviDesc.iCurrentIndex = 1;
-	///* for.Com_Navigation_Acaza*/
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
-	//	TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
-	//{
-	//	MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
-	//	return E_FAIL;
-	//}
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+	/* for.Com_Navigation_House_4_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_4_0"),
+		TEXT("Com_Navigation_House_4_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_4_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_4_0: CPlayer");
+		return E_FAIL;
+	}
 
 
 

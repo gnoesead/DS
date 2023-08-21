@@ -150,4 +150,11 @@ DepthStencilState DS_None_Test
 	DepthFunc = LESS_EQUAL;
 };
 
+DepthStencilState DS_Not_ZWrite
+{
+	DepthEnable = true;
+	DepthWriteMask = zero;
+};
+
+
 

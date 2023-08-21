@@ -39,14 +39,14 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-	m_StatusDesc.fHp = 100.f;
-	m_StatusDesc.fHp_Max = 100.f;
+	m_StatusDesc.fHp = 150.f;
+	m_StatusDesc.fHp_Max = 150.f;
 
 	Get_PlayerComponent();
 
 	m_eCurAnimIndex = ANIM_IDEL;
-	m_eCurstate = STATE_IDLE;
-	m_eCurPhase = PHASE_1;
+	m_eCurstate = STATE_BEGIN;
+	m_eCurPhase = BEGIN;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 	m_eCurNavi = NAVI_ACAZA;
 
@@ -64,11 +64,11 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
 
-#endif // _DEBUG
-
+#endif // _DEBUG	
+	
 	Update_Hit_Messenger(dTimeDelta);
 	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);
+	Update_State(dTimeDelta);		
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
@@ -255,7 +255,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_M))
 		{
-
+			Trigger_Hit_CutScene();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_8))
@@ -481,17 +481,17 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.2
 			{
-
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
 
 			}
 			if (1 == m_iEvent_Index) // 0.3
 			{
-
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
 
 			}
@@ -510,7 +510,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);				
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
@@ -558,7 +559,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 
 		}
@@ -568,7 +569,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -734,7 +735,7 @@ void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 
 void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 {
-	if (m_bNoDmg == false)
+	if (m_bNoDmg == false && m_bStart == true)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
@@ -758,7 +759,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			if (true == m_isJumpOn)
 				Jumping(0.2f, 0.030f);
 
-			m_dDelay_ComboChain = 1.0;
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -777,9 +777,45 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+
+			Trigger_Hit_Big();
+
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_Bound();
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+			Set_FallingStatus(3.0f, 0.0f);
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
+		{
+			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+			Trigger_Hit_CutScene();
+			pPlayer->Set_Hit_SurgeCutScene(true);
+			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+			
+		}
 
 		Safe_Release(pGameInstance);
 	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+	}
+
 }
 
 void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
@@ -899,7 +935,7 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_SPIN:
 		Update_Hit_Spin(dTimeDelta);
 		break;
-	case CBoss_Akaza::STATE_CUTSCENE:
+	case CBoss_Akaza::STATE_HIT_CUTSCENE:
 		Update_Hit_CutScene(dTimeDelta);
 		break;
 	case CBoss_Akaza::STATE_GETUP:
@@ -932,15 +968,37 @@ void CBoss_Akaza::Update_Interact(_double dTimeDelta)
 	{
 		Trigger_Interact_Phase_2(dTimeDelta);
 	}
-	/*if (m_eCurPhase == PHASE_3)
+	if (m_eCurPhase == PHASE_3)
 	{
 		Trigger_Interact_Phase_3(dTimeDelta);
-	}*/
+	}
 
 }
 
 void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 {
+	// 조건 주면 시작
+	m_dTriggerTime += dTimeDelta;
+
+	if (m_dTriggerTime > 15.0)
+	{
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_BATTLE_START;
+		}
+
+		if (m_pModelCom->Get_AnimFinish(ANIM_BATTLE_START))
+		{
+			m_dTriggerTime = 0.0;
+			m_eCurPhase = PHASE_1;
+			m_eCurAnimIndex = ANIM_IDEL;
+			m_bStart = true;
+			//m_iTriggerCnt = 1;
+			Trigger_Interact();
+			
+		}
+	}
 
 }
 
@@ -1046,6 +1104,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	{
 		m_bNoDmg = true;
 		m_StatusDesc.fHp = 0.f;
+		m_eCurPhase = PHASE_3;
 
 	}
 	if (m_bAwake == true)
@@ -1460,18 +1519,21 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 
 void CBoss_Akaza::Trigger_Interact_Phase_3(_double dTimeDelta)
 {
+	m_eCurAnimIndex = ANIM_IDEL;
 }
 
 void CBoss_Akaza::Trigger_Interact()
 {
 	m_bTrigger = true;
+	m_bAir_Motion = false;
 	m_eCurstate = STATE_IDLE;
-	//m_pModelCom->Set_AnimResetTimeAcc(STATE_IDLE);
+
 }
 
 void CBoss_Akaza::Trigger_Begin()
 {
 	m_eCurstate = STATE_BEGIN;
+	m_bAnimFinish = false;
 }
 
 void CBoss_Akaza::Trigger_Escape()
@@ -1634,6 +1696,9 @@ void CBoss_Akaza::Trigger_NextPhase3()
 	m_pModelCom->Set_AnimisFinish(ANIM_HEAL);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_LOOP);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_END);
+
+	Pos_FixY();
+
 }
 
 void CBoss_Akaza::Trigger_Heal()
@@ -1654,7 +1719,7 @@ void CBoss_Akaza::Trigger_Awake()
 	m_pModelCom->Set_AnimisFinish((ANIM_AWAKE_END));
 	m_bAnimFinish = false;
 	m_bAwake = true;
-
+	Pos_FixY();
 }
 
 void CBoss_Akaza::Trigger_Awake_ComboPunch()
@@ -1759,11 +1824,17 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(2.0f, 0.03f);
+	Jumping(1.5f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_POWER_GUARDBREAK);
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_SMALL);
+	m_eCurstate = STATE_HIT_BIG;
 }
 
 void CBoss_Akaza::Trigger_Hit_Blow()
@@ -1779,10 +1850,19 @@ void CBoss_Akaza::Trigger_Hit_Blow()
 
 void CBoss_Akaza::Trigger_Hit_BigBlow()
 {
+
 }
 
 void CBoss_Akaza::Trigger_Hit_Bound()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_isBounding = true;
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_LOOP);
+	m_pModelCom->Set_AnimisFinish((ANIM_HIT_BLOW_END));
+	m_eCurstate = STATE_HIT_BOUND;
 }
 
 void CBoss_Akaza::Trigger_Hit_Spin()
@@ -1791,6 +1871,15 @@ void CBoss_Akaza::Trigger_Hit_Spin()
 
 void CBoss_Akaza::Trigger_Hit_CutScene()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bNoDmg = true;
+
+	/*m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
+	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_LOOP);
+	m_pModelCom->Set_AnimisFinish((ANIM_HIT_BLOW_END));*/
+	m_eCurstate = STATE_HIT_CUTSCENE;
 }
 
 void CBoss_Akaza::Trigger_Hit_GetUp()
@@ -2103,9 +2192,13 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
 					Camera_Shake();
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 1.0,
-						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 1.0f);
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+						CAtkCollider::TYPE_SMALL, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
 				}
 
 				Pos.y = m_fLand_Y;
@@ -2271,15 +2364,15 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 		{
 			m_pModelCom->Set_AnimResetTimeAcc(ANIM_COMBO_PIST);
 			m_iRandomPatternNum = Random::Generate_Int(1, 12);
+
 			if (m_eCurPhase == PHASE_1)
 			{
 				if (m_iRandomPatternNum > 8)
 					Trigger_UpperKick();
+
 				if (m_iRandomPatternNum < 5)
-				{
-					m_eCurAnimIndex = ANIM_SUPERARMOR;
 					Trigger_DashPunch();
-				}
+
 				if (5 <= m_iRandomPatternNum && m_iRandomPatternNum <= 8)
 					Trigger_AirGun();
 			}
@@ -2287,10 +2380,13 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 			{
 				if (m_iRandomPatternNum > 9)
 					Trigger_UpperKick();
+
 				if (7 <= m_iRandomPatternNum <= 9)
 					Trigger_DashKick();
+
 				if (4 <= m_iRandomPatternNum <= 6)
 					Trigger_JumpStomp();
+
 				if (m_iRandomPatternNum < 4)
 					Trigger_JumpAirGun();
 			}
@@ -2298,6 +2394,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 	}
 	if (m_eCurAnimIndex == ANIM_RUN)
 		m_pTransformCom->LerpVector(vDir, 0.3f);
+
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO1, 2.f, 0.0, 0.3);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO2, 1.5f, 0.0, 0.5);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO3, 1.5f, 0.0, 0.5);
@@ -2547,7 +2644,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.0f, 0.3, 1.00);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.0f, 0.1, 1.00);
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.2, 0.70);
 
@@ -2685,8 +2782,7 @@ void CBoss_Akaza::Update_Awake_Cinematic(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 {
-	//m_dDelay_ComboChain -= dTimeDelta;
-	
+
 	if (m_isJumpOn)
 	{
 		m_bAir_Motion = true;
@@ -2710,8 +2806,8 @@ void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 			m_eCurAnimIndex = ANIM_HIT_BLOW_LOOP;
 		}
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_SMALL_AIR, 1.5f, 0.0, 0.7);
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_AIR_UPPER, 1.5f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_SMALL_AIR, 1.f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_AIR_UPPER, 1.f, 0.0, 0.7);
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_BLOW, 1.5f);
 
 	}
@@ -2771,9 +2867,6 @@ void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 		Trigger_Hit_GetUp();
 	}
 
-
-
-
 }
 
 void CBoss_Akaza::Update_Hit_Upper(_double dTimeDelta)
@@ -2805,6 +2898,24 @@ void CBoss_Akaza::Update_Hit_Upper(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_Big(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_HIT_POWER_GUARDBREAK;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_POWER_GUARDBREAK))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_POWER_GUARDBREAK);
+		m_eCurAnimIndex = ANIM_HIT_RETURN_SMALL;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_SMALL))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_SMALL);
+		m_eCurAnimIndex = ANIM_IDEL;
+		Trigger_Interact();
+	}
+	//Go_Backward_Constant(dTimeDelta, ANIM_HIT_POWER_GUARDBREAK, 1.2f);
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_POWER_GUARDBREAK, 1.2f, 0.01, 0.85);
 }
 
 void CBoss_Akaza::Update_Hit_Blow(_double dTimeDelta)
@@ -2823,6 +2934,7 @@ void CBoss_Akaza::Update_Hit_Blow(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_BLOW_END))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
+		m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
 		Trigger_Hit_GetUp();
 		//Trigger_Hit_RollGetUp();
 	}
@@ -2841,6 +2953,36 @@ void CBoss_Akaza::Update_Hit_BigBlow(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_Bound(_double dTimeDelta)
 {
+	if (m_isJumpOn == true)
+	{
+		m_eCurAnimIndex = ANIM_HIT_DMGFALL_LOOP;
+	}
+	else
+	{
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_HIT_BOUND;
+		}
+	}
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_HIT_BOUND && m_isBounding == true)
+	{
+		m_isBounding = false;
+		Jumping(2.0f, 0.05f);
+	}
+	else
+	{
+		Land_Anim_Play(ANIM_HIT_DMGFALL_LOOP, ANIM_HIT_DMGFALL_BOUND);
+		if (m_pModelCom->Get_AnimFinish(ANIM_HIT_DMGFALL_BOUND))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT_DMGFALL_BOUND);
+			Trigger_Hit_GetUp();
+		}
+	}
+
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_BOUND, 0.5f);
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_DMGFALL_LOOP, 0.5f);
 }
 
 void CBoss_Akaza::Update_Hit_Spin(_double dTimeDelta)
@@ -2849,6 +2991,33 @@ void CBoss_Akaza::Update_Hit_Spin(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_CutScene(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_DEATH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_DEATH);
+		m_eCurAnimIndex = ANIM_HIT_GETUP;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_GETUP))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_GETUP);
+		m_eCurAnimIndex = ANIM_HIT_GETUP2;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_GETUP2))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_GETUP2);
+		m_eCurAnimIndex = ANIM_HIT_RETURN_BIG;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_BIG))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_BIG);
+		m_eCurAnimIndex = ANIM_IDEL;
+		m_bNoDmg = false;
+		Trigger_Interact();
+	}
 }
 
 void CBoss_Akaza::Update_Hit_GetUp(_double dTimeDelta)
@@ -2869,23 +3038,6 @@ void CBoss_Akaza::Update_Hit_GetUp(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
 		Trigger_PushAway();
 	}
-	// 테스트용
-	/*if (m_bAnimFinish == false)
-	{
-		m_bAnimFinish = true;
-		m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
-	}
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_HIT_GETUP_DIZZY, 0.55, dTimeDelta))
-	{
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT_GETUP_DIZZY);
-		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
-		Trigger_PushAway();
-	}*/
-	/*if (m_pModelCom->Get_AnimFinish(ANIM_HIT_RETURN_BIG))
-	{
-		m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_BIG);
-		Trigger_PushAway();
-	}*/
 
 }
 

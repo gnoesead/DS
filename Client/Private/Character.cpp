@@ -69,8 +69,11 @@ HRESULT CCharacter::Initialize(void* pArg)
 	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
 
 	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	tLightInfo.fLightRange = 10.f;
-	tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	tLightInfo.fLightRange = 15.f;
+	if(pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+		tLightInfo.vLightDiffuse = _float4(0.15f, 0.15f, 0.3f, 1.f);
+	else
+		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
 	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
@@ -121,6 +124,7 @@ void CCharacter::Tick(_double dTimeDelta)
 
 	for (_uint i = 0; i < COLL_END; i++)
 		m_pColliderCom[i]->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
 }
 
 void CCharacter::LateTick(_double dTimeDelta)
@@ -128,7 +132,6 @@ void CCharacter::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 
 	Status_Work(dTimeDelta);
-
 #ifdef _DEBUG
 	for (_uint i = 0; i < COLL_END; i++)
 	{
@@ -136,6 +139,7 @@ void CCharacter::LateTick(_double dTimeDelta)
 			return;
 	}
 #endif // _DEBUG
+
 }
 
 HRESULT CCharacter::Render()
