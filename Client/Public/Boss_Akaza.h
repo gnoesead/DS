@@ -292,40 +292,19 @@ private: /* Calculate */
 
 #pragma endregion
 private: // _bool
-	_bool	m_bStart = { false };
-
-	_bool	m_bAnimFinish = { false };
-
-	_bool	m_bHit = { false };
-
+	_bool	m_bStart = { false };		
 	_bool	m_bDashPunch = { false };
 	_bool	m_bCharge = { false };
 	_bool	m_bStep_B = { false };
 	_bool	m_bRunPunch = { false };
 	_bool	m_bDashOn = { false };
 	_bool	m_bMove = { false };
-
-	_bool	m_bHeal = { false };
-
 	_bool	m_bJump = { false };
-
-	_bool	m_bTrigger = { false };
-	_bool	m_bPatternStart = { false };
-
-	_bool	m_bAwake = { false };
-	_bool	m_bFirstAwake = { false };
-	_bool	m_bSecondAwake = { false };
-
-	_bool	m_bNoDmg = { false };
-
-	//_bool	m_bNextPhase = { false };
+			
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
-	_double m_dAwakeTime = { 0.0 };
-	_double m_dTriggerTime = { 0.0 };
-	_double m_dDelay_ComboChain = { 0.0 };
-
+	
 private:
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
@@ -339,20 +318,6 @@ private:
 	STATE	m_eCurstate = STATE_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDEL;
 	ANIM	m_ePreAnimIndex = ANIM_IDEL;
-
-#pragma region Render
-private: // ·»´õ ¾Æ¿ô¶óÀÎ
-	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
-	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
-	/* ÀÓ½Ã ÄÚµå */
-	_uint	m_iNumAnim = { 0 };
-	// ·»´õ È®ÀÎ¿ë
-	_uint	m_iMeshNum = { 0 };
-#pragma endregion
-private:
-	//CTransform* m_pPlayerTransformCom = { nullptr };
 
 private:
 	HRESULT Add_Components();

@@ -64,8 +64,23 @@ protected: //애니메이션 제어용 함수들
 
 
 protected: // 애니메이션 제어용 변수들
-	_bool m_isDeath_Motion = { false };
-	_bool m_bAir_Motion = { false };
+	_bool	m_isDeath_Motion = { false };
+	_bool	m_bAir_Motion = { false };
+
+	
+	_bool	m_bHeal = { false };
+	_bool	m_bTrigger = { false };
+	_bool	m_bPatternStart = { false };
+	_bool	m_bAnimFinish = { false };
+	_bool	m_bAwake = { false };
+	_bool	m_bFirstAwake = { false };
+	_bool	m_bSecondAwake = { false };
+	_bool	m_bNoDmg = { false };
+	_bool	m_bSuperArmor = { false };
+
+protected:
+	_double m_dAwakeTime = { 0.0 };
+	_double m_dTriggerTime = { 0.0 };
 
 
 protected:
@@ -77,9 +92,11 @@ protected:
 
 protected:
 	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
+	//_float	m_fOutlineThickness = 0.9f;
+	_float	m_fOutlineThickness = 2.0f;
 	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
+	//_float	m_fOutlineFaceThickness = 0.3f;
+	_float	m_fOutlineFaceThickness = 0.6f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 

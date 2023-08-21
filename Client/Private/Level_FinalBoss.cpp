@@ -270,6 +270,8 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	
+
 
 	Safe_Release(pGameInstance);
 

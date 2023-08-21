@@ -188,7 +188,7 @@
     <ClInclude Include="..\Public\Boss_Battle_Frame.h" />
     <ClInclude Include="..\Public\Boss_Battle_Hp.h" />
     <ClInclude Include="..\Public\Boss_Kyogai.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Free.h" />
@@ -277,7 +277,7 @@
     <ClCompile Include="..\Private\Boss_Battle_Frame.cpp" />
     <ClCompile Include="..\Private\Boss_Battle_Hp.cpp" />
     <ClCompile Include="..\Private\Boss_Kyogai.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Free.cpp" />

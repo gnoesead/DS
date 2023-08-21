@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+#include "Boss_Kyogai.h"
 #include "MapObject.h"
 #include "Fade.h"
 #include "Fade_Manager.h"
@@ -27,6 +28,8 @@
 #include "Battle_Signal.h"
 #include "Pause.h"
 #include "Option.h"
+
+#include "ColliderManager.h"
 
 
 
@@ -112,6 +115,8 @@ void CLevel_House::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("House"));
+
+	CColliderManager::GetInstance()->Check_Collider(LEVEL_HOUSE, dTimeDelta);
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -247,29 +252,49 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 {
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//Safe_AddRef(pGameInstance);
 
-	//CCharacter::CHARACTERDESC CharacterDesc;
+	//CBoss_Kyogai::CHARACTERDESC CharacterDesc;
 	//ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-	//CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
-	//CharacterDesc.WorldInfo.vPosition = _float4(43.f, 0.f, 120.f, 1.f);
+	////CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
+
+
 	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//	TEXT("Prototype_GameObject_Monster_Kyogai"), &CharacterDesc)))
 	//{
-	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	MSG_BOX("Failed to Add_GameObject : CLevel_House");
 	//	return E_FAIL;
 	//}
 
-	Safe_Release(pGameInstance);
+
+	//Safe_Release(pGameInstance);
 	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Boss(const _tchar* pLayerTag)
 {
-	return S_OK;
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CBoss_Kyogai::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+
+	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
+
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Kyogai"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_House");
+		return E_FAIL;
+	}
+
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
