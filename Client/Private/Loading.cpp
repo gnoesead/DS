@@ -182,6 +182,7 @@ HRESULT CLoading::Initialize(void* pArg)
 	m_szTitle.push_back(L"시련돌파");
 	m_szContent.push_back(L"로딩중");
 
+	m_Is_TimeFree = true;
 
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -342,10 +343,6 @@ HRESULT CLoading::Render()
 	else {
 		m_pShaderCom->Begin(1);
 	}
-
-
-
-
 
 
 	m_pVIBufferCom->Render();
