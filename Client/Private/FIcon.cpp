@@ -228,8 +228,9 @@ void CFIcon::LateTick(_double TimeDelta)
 		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 	}
-	// 기타 등등
+	// 월드 트리거
 	else {
+		m_pTransformCom->Scaling({ m_Origin_X * 1.5f, m_Origin_Y * 1.5f , 1.f });
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
 	}
 	

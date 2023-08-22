@@ -36,6 +36,7 @@
 #include "EffectPlayer.h"
 
 #include "PlayerManager.h"
+#include "FIcon.h"
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -476,6 +477,22 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Dialog"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Icon
+
+	CFIcon::UIDESC UIDesc5;
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Type = 0;
+	UIDesc5.Pos = { 67.f, 0.f, 19.9f , 1.f };
+	UIDesc5.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
