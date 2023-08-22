@@ -53,7 +53,8 @@ void CMonster::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	Set_Height();
+	if(m_isNavi_Y_Off == false)
+		Set_Height();
 }
 
 HRESULT CMonster::Render()
@@ -125,6 +126,14 @@ _bool CMonster::Check_Distance(_float fDistance)
 	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
 	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+}
+
+_vector CMonster::Calculate_PlayerPos()
+{
+	Get_PlayerComponent();
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return vPlayerPos;
 }
 
 _float CMonster::Calculate_Distance()

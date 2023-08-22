@@ -52,6 +52,7 @@ private: //애니메이션 제어용 함수
 	void	Trigger();
 
 	void	Animation_Control(_double dTimeDelta);
+	void	Animation_Control_Crawling(_double dTimeDelta);
 	void	Animation_Control_Idle(_double dTimeDelta);
 	void	Animation_Control_Attack(_double dTimeDelta);
 	void	Animation_Control_Hit(_double dTimeDelta);
@@ -66,6 +67,18 @@ private:
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 
+	//기차 기어오르기
+	_bool	m_isSpider_Start = { false };
+
+	_float	m_fCrawlingSpeed = { 1.0f };
+	_bool	m_isCrawlingOn = { true };
+	_float	m_fCrawling_Y = { 0.0f };
+	_double m_dDelay_Crawling = { 0.0 };
+	_bool	m_isLeft = { false };
+
+	//Hit
+	_bool	m_isUpperHit = { false };
+
 
 	//Move
 	_double		m_dDelay_Spider = { 0.0 };
@@ -75,8 +88,8 @@ private: //애니메이션 제어용 변수들
 	_vector m_vPos = { 140.f, 0.f,120.f,1.f };
 
 	//Attack
-	_double		m_dCoolTime_Collider = { 0.0 };
-
+	_double m_dDelay_ComboChain = { 0.0 };
+	
 	_double		m_dCoolTime_Attack = { 0.0 };
 	_bool	m_isFirst_Attack = { true };
 	_double		m_dDelay_Attack = { 0.0 };

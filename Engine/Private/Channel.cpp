@@ -103,11 +103,14 @@ void CChannel::Invalidate(CModel* pModel, _uint& pCurrentKeyFrame, _double Track
 				--pCurrentKeyFrame;
 		}
 
+
 		_double dRatio = (TrackPosition - m_KeyFrames[pCurrentKeyFrame].dTime)
 			/ (m_KeyFrames[pCurrentKeyFrame + 1].dTime - m_KeyFrames[pCurrentKeyFrame].dTime);
 		/*한 키 프레임 구간에서 현재 얼마나 재생됐는지 0 ~ 1
 		* 1보다 커지면 다음 키프레임으로 넘어간다 - 위의 if문을 들어간다
 		*/
+		m_iCurKey = pCurrentKeyFrame;
+		m_dCurRatio = dRatio;
 
 		_float3		vSourScale, vDestScale;
 		_float4		vSourRotation, vDestRotation;
@@ -155,7 +158,7 @@ void CChannel::Invalidate(CModel* pModel, _uint& pCurrentKeyFrame, _double Track
 	m_dSave_TrackPosition = TrackPosition;
 }
 
-void CChannel::Invalidate_Linear(CModel* pModel, KEYFRAME LastKeyFrame_Prev, _double TrackPosition )
+void CChannel::Invalidate_Linear(CModel* pModel, KEYFRAME LastKeyFrame_Prev, _double TrackPosition, _double LinearDuration)
 {
 	// LastKeyFrame_Prev : 이전 키프레임의 마지막이 처음이 된다.
 
@@ -171,7 +174,7 @@ void CChannel::Invalidate_Linear(CModel* pModel, KEYFRAME LastKeyFrame_Prev, _do
 	//이 애니메이션의 마지막 키 프레임
 
 	// 보간duration
-	if (TrackPosition >= 0.09f)
+	if (TrackPosition >= LinearDuration)
 	{
 		/*간혹 전체 재생시간 이전에 키 프레임이 끝났을 경우 남은 재생시간 동안
 		* 마지막 상태를 유지시켜주기 위한 예외처리
@@ -183,7 +186,7 @@ void CChannel::Invalidate_Linear(CModel* pModel, KEYFRAME LastKeyFrame_Prev, _do
 	else
 	{
 		// 보간duration
-		_double dRatio = TrackPosition / 0.09f;
+		_double dRatio = TrackPosition / LinearDuration;
 		/*한 키 프레임 구간에서 현재 얼마나 재생됐는지 0 ~ 1
 		* 1보다 커지면 다음 키프레임으로 넘어간다 - 위의 if문을 들어간다
 		*/
@@ -241,7 +244,28 @@ void CChannel::Invalidate_Linear(CModel* pModel, KEYFRAME LastKeyFrame_Prev, _do
 
 KEYFRAME CChannel::Get_LastKeyFrame()
 {
-	KEYFRAME	LastKeyFrame = m_KeyFrames.back();
+	//KEYFRAME	LastKeyFrame = m_KeyFrames.back();
+	//KEYFRAME	LastKeyFrame = m_KeyFrames[m_iCurKey];
+
+	KEYFRAME	LastKeyFrame;
+
+	_float3		vSourScale, vDestScale;
+	_float4		vSourRotation, vDestRotation;
+	_float3		vSourPosition, vDestPosition;
+
+	vSourScale = m_KeyFrames[m_iCurKey].vScale;
+	vDestScale = m_KeyFrames[m_iCurKey + 1].vScale;
+
+	vSourRotation = m_KeyFrames[m_iCurKey].vRotation;
+	vDestRotation = m_KeyFrames[m_iCurKey + 1].vRotation;
+
+	vSourPosition = m_KeyFrames[m_iCurKey].vPosition;
+	vDestPosition = m_KeyFrames[m_iCurKey + 1].vPosition;
+
+	XMStoreFloat3(&LastKeyFrame.vScale, XMVectorLerp(XMLoadFloat3(&vSourScale), XMLoadFloat3(&vDestScale), (_float)m_dCurRatio));
+	XMStoreFloat4(&LastKeyFrame.vRotation, XMQuaternionSlerp(XMLoadFloat4(&vSourRotation), XMLoadFloat4(&vDestRotation), (_float)m_dCurRatio));
+	XMStoreFloat3(&LastKeyFrame.vPosition, XMVectorLerp(XMLoadFloat3(&vSourPosition), XMLoadFloat3(&vDestPosition), (_float)m_dCurRatio));
+
 
 	return LastKeyFrame;
 }

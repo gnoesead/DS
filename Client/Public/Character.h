@@ -174,6 +174,9 @@ protected: //status 게이지 관련
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	//navi
+	_bool	m_isNavi_Y_Off = { false };
+
 	//First
 	_bool	m_isFirst_Anim = { true };
 

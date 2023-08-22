@@ -12,7 +12,7 @@ private:
 public:
 	HRESULT Initialize(CHANNELDATA* pChannelData, const char* pName, _uint iBoneIndex);
 	void	Invalidate(class CModel* pModel, _uint& pCurrentKeyFrame, _double TrackPosition);
-	void	Invalidate_Linear(class CModel* pModel, KEYFRAME LastKeyFrame_Prev, _double TrackPosition  );
+	void	Invalidate_Linear(class CModel* pModel, KEYFRAME LastKeyFrame_Prev, _double TrackPosition ,_double LinearDuration );
 	
 
 public:
@@ -46,6 +46,11 @@ private:
 	//재생과 역재생 구별
 	_double  m_dSave_TrackPosition = { 0.0 };
 	_bool	 m_isReverse = { false };
+
+
+	//보간용
+	_int	m_iCurKey = { 0 };
+	_double m_dCurRatio = { 0.0 };
 
 public:
 	static CChannel* Create(CHANNELDATA* pChannelData, const char* pName, _uint iBoneIndex);

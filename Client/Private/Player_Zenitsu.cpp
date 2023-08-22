@@ -8,6 +8,8 @@
 #include "AtkCollManager.h"
 #include "PlayerManager.h"
 
+#include "Camera_Manager.h"
+
 CPlayer_Zenitsu::CPlayer_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -619,9 +621,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		m_Moveset.m_Down_Battle_Jump_Attack = false;
 		m_isJump_Move = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		//콤보 첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
@@ -651,9 +655,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		{
 			m_isFirst_JumpAtk = false;
 
-			if (Get_LockOn_MonPos())
-				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			{
+				if (Get_LockOn_MonPos())
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 			JumpStop(0.9);
 			Set_FallingStatus(3.0f, 0.0f);
@@ -679,9 +685,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			m_Moveset.m_Down_Battle_Combo = false;
 			m_isComboing = true;
 
-			if (Get_LockOn_MonPos())
-				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			{
+				if (Get_LockOn_MonPos())
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
 			//첫 애니메이션 설정
 			if (m_pModelCom->Get_Combo_Doing() == false)
 			{
@@ -691,6 +699,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			//아닐경우, 다음 콤보로 진행
 			else
 			{
+				if(3 == iCurAnimIndex)
+					m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.4f);
+				else if( 4 == iCurAnimIndex)
+					m_pModelCom->Set_EarlyEnd(4, true, 0.4f);
+				else if(5 == iCurAnimIndex)
+					m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
+
 				m_pModelCom->Set_Combo_Trigger(true);
 				//콤보 분기 설정
 				if (5 == iCurAnimIndex)
@@ -717,9 +732,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
-	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.4f);
-	m_pModelCom->Set_EarlyEnd(4, true, 0.4f);
-	m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.4f);
+	m_pModelCom->Set_EarlyEnd(4, false, 0.4f);
+	m_pModelCom->Set_EarlyEnd(5, false, 0.4f);
 
 	if (fDistance > 0.7f)
 	{
@@ -788,9 +803,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Charge = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
 
@@ -800,9 +817,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 		m_Moveset.m_Up_Battle_Charge = false;
 		m_dDelay_Charge = 0.0;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(21);
 	}
 	else if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge <= 1.0f)
@@ -918,18 +937,26 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI_AIR);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
-				if (Get_LockOn_MonPos())
+
+				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 				{
-					m_LockOnPos.y -= 0.5f;
-					m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
+					if (Get_LockOn_MonPos())
+					{
+						m_LockOnPos.y -= 0.5f;
+						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
+					}
 				}
 			}
 			else
 			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
-				if (Get_LockOn_MonPos())
-					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				{
+					if (Get_LockOn_MonPos())
+						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+				}
 			}
 			
 			Use_Mp_Skill();
@@ -973,9 +1000,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 
@@ -992,9 +1021,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Guard = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
@@ -1048,9 +1079,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 		m_dDelay_Dash = 0.0;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		if (m_LockOnPos.y > PlayerPos.y + 0.1f && m_isCan_AirDash)
@@ -1192,8 +1225,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 		if (m_isFirst_SpecialReady)
 		{
 			m_isFirst_SpecialReady = false;
-			if (Get_LockOn_MonPos())
-				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			{
+				if (Get_LockOn_MonPos())
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
 		}
 
 		if (m_isSpecialHit)

@@ -80,6 +80,10 @@ public://Set
 		m_Animations[iAnimIdx]->Reset_Event();
 	}
 
+	void	Set_LinearDuration(_int iAnimIdx, _double Duration) {
+		m_Animations[iAnimIdx]->Set_LinearDuration(Duration);
+	}
+
 public:
 	HRESULT Initialize_Prototype(TYPE eModelType, const char* pModelFilePath, _fmatrix PivotMatrix);
 	HRESULT Initialize(void* pArg) override;
@@ -146,6 +150,7 @@ private:
 
 	_uint						m_iNumAnimations = { 0 };
 	vector<class CAnimation*>	m_Animations;
+
 
 private:
 	_bool						m_isNormalTexture[50] = { false };
