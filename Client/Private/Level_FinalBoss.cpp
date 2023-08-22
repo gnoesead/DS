@@ -1458,6 +1458,11 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_0");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2");

@@ -543,6 +543,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
@@ -2388,10 +2389,10 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 				if (m_iRandomPatternNum > 9)
 					Trigger_UpperKick();
 
-				if (7 <= m_iRandomPatternNum <= 9)
+				if (7 <= m_iRandomPatternNum && 9 <= m_iRandomPatternNum)
 					Trigger_DashKick();
 
-				if (4 <= m_iRandomPatternNum <= 6)
+				if (4 <= m_iRandomPatternNum && 6 <= m_iRandomPatternNum)
 					Trigger_JumpStomp();
 
 				if (m_iRandomPatternNum < 4)
