@@ -1176,6 +1176,8 @@ void CPlayer::Player_Change_Setting_Status()
 		m_StatusDesc.iSpecial_Cnt = CPlayerManager::GetInstance()->Get_Special_Cnt();
 		m_StatusDesc.fSpecial = CPlayerManager::GetInstance()->Get_Special();
 		m_StatusDesc.fSupport = CPlayerManager::GetInstance()->Get_Support();
+
+		m_isSwap_OnSky = false;
 	}
 }
 
