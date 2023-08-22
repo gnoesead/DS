@@ -26,7 +26,7 @@
 #include "CollisionBox.h"
 #include "Skill_Name.h"
 #include "Battle_Signal.h"
-
+#include "Character.h"
 
 #include "Pause.h"
 #include "Fade.h"
@@ -72,6 +72,12 @@ HRESULT CLevel_Village::Initialize()
     }
 
     if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
+        return E_FAIL;
+    }
+
+    if (FAILED(Ready_Layer_NPC(TEXT("Layer_NPC"))))
     {
         MSG_BOX("Failed to Ready_Layer_Boss : CLevel_Village");
         return E_FAIL;
@@ -254,6 +260,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
     }
+  
 
     Safe_Release(pGameInstance);
 
@@ -288,6 +295,32 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 HRESULT CLevel_Village::Ready_Layer_Boss(const _tchar* pLayerTag)
 {
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+    
+    CPlayer::CHARACTERDESC CharacterDesc;
+    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+    CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1; //abcde
+
+
+    CharacterDesc.WorldInfo.vPosition = _float4(574.5f, 4.55f, 264.4f, 1.f);
+    CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_STAND;
+    XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, -1.0f, 0.0f }));
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : NPC_Female");
+        return E_FAIL;
+    }
+    
+    Safe_Release(pGameInstance);
+
     return S_OK;
 }
 

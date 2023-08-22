@@ -317,25 +317,33 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 	if (m_bChageRoom)
 	{
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+		CPlayer* pPlayer_2 = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
+
 		if (nullptr == pPlayer)
 			return;
-
+		if (nullptr == pPlayer_2)
+			return;
 		switch (iInteractionType)
 		{
 		case INTERACTION_ROOMCHANGE0:
 		{vNextPos = XMVectorSet(80.f, 0.f, 5.f, 1.f);
 		pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
+		pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
+
 		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
 		break; }
 		case INTERACTION_ROOMCHANGE1:
 		vNextPos = XMVectorSet(77.f, 0.f, 62.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
+			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
 
 			break;
 		case INTERACTION_ROOMCHANGE2:
 		vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
+			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
+
 			break;
 		}
 

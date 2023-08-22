@@ -6,6 +6,7 @@
 #include "EffectPlayer.h"
 
 #include "AtkCollManager.h"
+#include "PlayerManager.h"
 
 CPlayer_Zenitsu::CPlayer_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -84,19 +85,26 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	//}
 #endif // _DEBUG
 
+	
+
 	//playerswap
-	if (m_ePlayerType == PLAYER_ZENITSU)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
-
+		Player_Change_Setting_Status();
 		Animation_Control(dTimeDelta);
-
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
-
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
 	}
+	else
+	{
+		Player_Change(dTimeDelta);
+	}
+
+	//애니메이션 처리
+	m_pModelCom->Play_Animation(dTimeDelta);
+	RootAnimation(dTimeDelta);
+
+	//이벤트 콜
+	EventCall_Control(dTimeDelta);
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -105,14 +113,16 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 {
-	__super::LateTick(dTimeDelta);
 
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
 	//playerswap
-	if (m_ePlayerType == PLAYER_ZENITSU)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
+		__super::LateTick(dTimeDelta);
+
+
 		if (m_isAir_Hekireki && m_pModelCom->Get_iCurrentAnimIndex() == ANIM_JUMP_IDLE)
 		{
 			m_isAir_Hekireki = false;
@@ -120,21 +130,29 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		}
 
 
-		if (m_isAir_Hekireki == false)
+		if (m_isAir_Hekireki == false && m_isAirDashing == false)
 			Gravity(dTimeDelta);
+
+		//추가
+		if (m_isCan_AirDash)
+		{
+			m_dDelay_Can_AirDash += dTimeDelta;
+			if (m_dDelay_Can_AirDash > 3.0f)
+			{
+				m_dDelay_Can_AirDash = 0.0;
+				m_isCan_AirDash = false;
+			}
+		}
+
+		CPlayerManager::GetInstance()->Set_PlayerPos_Change(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
+	
 
 
 	//임시 코드
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyDown(DIK_H))
-	{
-		if (m_bGround_Enemy)
-			m_bGround_Enemy = false;
-		else
-			m_bGround_Enemy = true;
-	}
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_DELETE))
 	{
 		if (m_bMotionBlur == true)
@@ -155,55 +173,57 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Zenitsu::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_isSwap_OnSky == false)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
-	m_pSword->Render();
-	m_pSwordHome->Render();
+		m_pSword->Render();
+		m_pSwordHome->Render();
 
 #pragma region Player
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
-			m_pShaderCom->Begin(1);
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
+			else
+				m_pShaderCom->Begin(1);
 
-		m_pModelCom->Render(m_iMeshNum);
-	}
-	// Default Render
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+			m_pModelCom->Render(m_iMeshNum);
+		}
+		// Default Render
+		for (_uint i = 0; i < iNumMeshes; i++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+			m_pShaderCom->Begin(0);
 
-		m_pModelCom->Render(i);
-	}
+			m_pModelCom->Render(i);
+		}
 #pragma endregion
 
 #ifdef _DEBUG
-	/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
-	pNavi->Render();*/
+		/*CNavigation* pNavi = m_pNavigationCom[m_eCurNavi];
+		pNavi->Render();*/
 #endif
 
-
+	}
 	return S_OK;
 }
 
@@ -269,6 +289,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
+	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
@@ -276,52 +298,209 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
-
-			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
 		}
-		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (4 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+		}
+		if (5 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
+			else if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+		}
+		if (7 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f);
+			}
+		}
 
-		}
-		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_ATK_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), 0.5,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 4.0f);
 			}
 		}
-		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+
+		if (ANIM_ATK_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
-				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
-				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f);
 			}
 		}
+
+		
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
 		}
 #pragma endregion
+
+
+#pragma region Air_Attack, charge_attack
+		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			
+		}
+		if (2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+		}
+
+
+		if (ANIM_ATK_AIRCOMBO == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f);
+			}
+		}
+		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.0f);
+			}
+		}
+
+
+		if (ANIM_ATK_CHARGE == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			
+		}
+		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
+			}
+		}
+#pragma endregion
+
+
+#pragma region Dash_Tackle
+		if (ANIM_BATTLE_DASH == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+		}
+
+#pragma endregion
+
+
+
+
+#pragma region SuperSkill
+		if (ANIM_ATK_SKILL_HEKIREKI == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+			}
+		}
+		if (ANIM_ATK_SKILL_HEKIREKI_END == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			
+		}
+
+
+		if (ANIM_ATK_SKILL_HEKIREKI_AIR == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+			}
+		}
+		if (ANIM_ATK_SKILL_HEKIREKI_AIR_END == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+
+		}
+
+
+		if (ANIM_ATK_SKILL_GUARD == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f);
+			}
+		}
+#pragma endregion
+
+
 		m_iEvent_Index++;
 	}
 }
@@ -383,7 +562,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 	{
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_fMove_Speed = 2.0f;
-		m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+
+		if (m_isCanNavi)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -433,28 +616,28 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 	//공중 공격 콤보
 	if (m_Moveset.m_Down_Battle_Jump_Attack)
 	{
-		if (m_isComboing_Down == false)
+		m_Moveset.m_Down_Battle_Jump_Attack = false;
+		m_isJump_Move = false;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+		//콤보 첫 애니메이션 설정
+		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
-			m_Moveset.m_Down_Battle_Jump_Attack = false;
-			m_isJump_Move = false;
+			m_pModelCom->Set_Combo_Doing(true);
+			m_pModelCom->Set_Animation(ANIM_ATK_AIRCOMBO);
 
-			//콤보 첫 애니메이션 설정
-			if (m_pModelCom->Get_Combo_Doing() == false)
-			{
-				m_pModelCom->Set_Combo_Doing(true);
-				m_pModelCom->Set_Animation(ANIM_ATK_AIRCOMBO);
+			JumpStop(0.40);
+		}
+		//아닐경우, 다음 콤보로 진행
+		else
+		{
+			m_pModelCom->Set_Combo_Trigger(true);
 
-				JumpStop(0.40);
-			}
-			//아닐경우, 다음 콤보로 진행
-			else
-			{
-				m_pModelCom->Set_Combo_Trigger(true);
-
-				m_pModelCom->Set_EarlyEnd(18, true);
-				JumpStop(0.85);
-				m_isFirst_JumpAtk = false;
-			}
+			m_pModelCom->Set_EarlyEnd(18, true);
+			JumpStop(0.85);
+			m_isFirst_JumpAtk = false;
 		}
 	}
 
@@ -468,11 +651,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		{
 			m_isFirst_JumpAtk = false;
 
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 			JumpStop(0.9);
 			Set_FallingStatus(3.0f, 0.0f);
 		}
 	}
+	m_pModelCom->Set_EarlyEnd(2, true, 0.55f);
 	Ground_Animation_Play(1, 2);
 	Go_Straight_Constant(dTimeDelta, 1, 3.f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 2, 3.f * m_fScaleChange, 0.2f * m_fScaleChange); // Down
@@ -482,6 +669,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 {
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
+	_float fDistance = Get_Distance_To_LockOnPos();
+
 	if (m_isComboing_Upper == false)
 	{
 		// 콤보공격
@@ -489,6 +678,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 		{
 			m_Moveset.m_Down_Battle_Combo = false;
 			m_isComboing = true;
+
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 			//첫 애니메이션 설정
 			if (m_pModelCom->Get_Combo_Doing() == false)
@@ -518,22 +710,27 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 					else if (m_Moveset.m_Down_Battle_Combo_Up)
 					{
 						m_pModelCom->Set_Combo_Another(8);
+
+						m_isCan_AirDash = true;
 					}
 				}
 			}
 		}
 	}
-	//m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true);
-	//m_pModelCom->Set_EarlyEnd(4, true);
-	//m_pModelCom->Set_EarlyEnd(5, true);
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.4f);
+	m_pModelCom->Set_EarlyEnd(4, true, 0.4f);
+	m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
 
-	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.15f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange, 0.12f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange, 0.10f * m_fScaleChange);
-	//분기
+	if (fDistance > 0.7f)
+	{
+		// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
+		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.15f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange, 0.12f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange, 0.10f * m_fScaleChange);
 
-	Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange, 0.07f * m_fScaleChange); // Normal
+		//분기
+		Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange, 0.07f * m_fScaleChange); // Normal
+	}
 	Ground_Animation_Play(9, 10);
 
 	//Down
@@ -620,13 +817,41 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 {
-	if (m_isTestHit)
+	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	//벽력일섬 콤보용
+	m_dDelay_Hekireki_AnotherCan += dTimeDelta;
+	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_END || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
 	{
-		m_isTestHit = false;
-		m_isHekireki_Hit = true;
+		if (0.8 < m_dDelay_Hekireki_AnotherCan )
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			if (pGameInstance->Get_DIKeyDown(DIK_I))
+				m_Moveset.m_Down_Skill_Normal = true;
+			Safe_Release(pGameInstance);
+		}
 	}
+	//마나제한
+	//if (m_Moveset.m_iAwaken < 2)
+	//{
+	//	if (m_isCan_Mp_Skill == false)
+	//	{
+	//		m_Moveset.m_Down_Skill_Normal = false;
+	//		m_Moveset.m_Down_Skill_Move = false;
+	//		m_Moveset.m_Down_Skill_Guard = false;
+	//	}
+	//}
+
+	
+	if (m_isHit_Hekireki)
+	{
+		m_isHit_Hekireki = false;
+		m_isHekireki_Hitting = true;
+	}
+	
 	//벽력일섬 히트시 살짝 느려지는거 구현 위한것. 이게 켜질시 히트상태임.
-	if (m_isHekireki_Hit)
+	if (m_isHekireki_Hitting)
 	{
 		m_dDelay_Hekireki_Hit += dTimeDelta;
 		m_isHekireki_After = true;
@@ -635,13 +860,38 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		if (m_dDelay_Hekireki_Hit > 0.23f)
 		{
 			m_dDelay_Hekireki_Hit = 0.0;
-			m_isHekireki_Hit = false;
+			m_isHekireki_Hitting = false;
 		}
 	}
 
-	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (CurAnim != ANIM_ATK_SKILL_HEKIREKI && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR && CurAnim != ANIM_ATK_SKILL_HEKIREKI_END && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR_END)
+	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
+	{
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		if (PlayerPos.y > m_fLand_Y + 0.1f)
+		{
+			m_isJumpOn = true;
+		}
+
+		JumpStop(0.1f);
+		Set_FallingStatus(0.0f, 0.0f);
+		m_isFirst_Hekireki_AirEnd = true;
+	}
+	else
+	{
+		if (m_isFirst_Hekireki_AirEnd)
+		{
+			m_isFirst_Hekireki_AirEnd = false;
+			Set_FallingStatus(0.0f, 0.03f);
+		}
+	}
+
+	
+	
+
+	if (CurAnim != ANIM_ATK_SKILL_HEKIREKI && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR /* && CurAnim != ANIM_ATK_SKILL_HEKIREKI_END && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR_END*/)
 	{
 		//스킬_0
 		if (m_Moveset.m_Down_Skill_Normal || m_Moveset.m_Down_Skill_Move)
@@ -649,20 +899,40 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			m_Moveset.m_Down_Skill_Normal = false;
 			m_Moveset.m_Down_Skill_Move = false;
 
+			m_dDelay_Hekireki_AnotherCan = 0.0;
+
 			m_dTime_Hekireki = 0.0f;
 
-			if (m_bGround_Enemy)
+
+			_float4 PlayerPos;
+			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			Get_LockOn_MonPos();
+			if (m_LockOnPos.y <= PlayerPos.y + 0.01f)
 				m_isAir_Hekireki = false;
 			else
 				m_isAir_Hekireki = true;
 
+
 			if (m_isAir_Hekireki)
+			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI_AIR);
+				//m_pTransformCom->LookAt(m_vBattleTargetPos);
+				if (Get_LockOn_MonPos())
+				{
+					m_LockOnPos.y -= 0.5f;
+					m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
+				}
+			}
 			else
+			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
-
-			m_pTransformCom->LookAt(m_vBattleTargetPos);
-
+				//m_pTransformCom->LookAt(m_vBattleTargetPos);
+				if (Get_LockOn_MonPos())
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
+			
+			Use_Mp_Skill();
 		}
 	}
 	else
@@ -672,17 +942,23 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	}
 
 
+
 	if (m_isHekireki)
 	{
-		if (m_isHekireki_Hit == false)
+		if (m_isHekireki_Hitting == false)
 			m_dTime_Hekireki += dTimeDelta;
 
 		if (0.35f < m_dTime_Hekireki && m_dTime_Hekireki < 0.42f)
 		{
-			if (m_isHekireki_Hit)
+			if (m_isHekireki_Hitting)
 				m_pTransformCom->Go_Straight(dTimeDelta * 0.6f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			else
-				m_pTransformCom->Go_Straight(dTimeDelta * 20.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			{
+				if(m_isAir_Hekireki)
+					m_pTransformCom->Go_Straight(dTimeDelta * 28.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * 20.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			}
 		}
 	}
 	else
@@ -697,7 +973,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
+
+		Use_Mp_Skill();
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
 }
@@ -709,6 +991,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 	if (m_Moveset.m_Down_Battle_Guard)
 	{
 		m_Moveset.m_Down_Battle_Guard = false;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
@@ -761,9 +1046,56 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Dash = false;
 
-		m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+		m_dDelay_Dash = 0.0;
+
+		if (Get_LockOn_MonPos())
+			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (m_LockOnPos.y > PlayerPos.y + 0.1f && m_isCan_AirDash)
+		{
+			m_isCan_AirDash = false;
+			m_dDelay_Can_AirDash = 0.0;
+			m_isAirDashing = true;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP); // 공중콤보용 대시
+			Jumping(1.0f, 0.055f);
+		}
+		else
+			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
 	Go_Straight_Constant(dTimeDelta, 46, 3.0f * m_fScaleChange);
+
+
+	if (m_isAirDashing)
+	{
+		Get_LockOn_MonPos();
+		if (Get_Distance_To_LockOnPos() > 0.5f)
+		{
+			m_pTransformCom->Go_Dir(dTimeDelta * 4.0f, Get_Dir_To_LockOnPos());
+		}
+		else
+		{
+			m_isAirDashing = false;
+		}
+	}
+	Ground_Animation_Play(58, 59);
+
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 46)
+	{
+		if (Get_Distance_To_LockOnPos() < 1.0f)
+		{
+			m_pModelCom->Set_Animation(47);
+		}
+
+		m_dDelay_Dash += dTimeDelta;
+		if (m_dDelay_Dash > 2.0f)
+		{
+			m_pModelCom->Set_Animation(47);
+		}
+	}
+	Go_Straight_Deceleration(dTimeDelta, 47, 3.0f * m_fScaleChange, 0.03f);
 
 
 	if (m_Moveset.m_Down_Battle_Step)
@@ -845,6 +1177,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Special = false;
 
+		m_isFirst_SpecialReady = true;
+
 		m_pModelCom->Set_Animation(ANIM_ATK_SPECIAL_READY);
 		m_dTime_Special_Ready = 0.0;
 	}
@@ -855,6 +1189,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 	//Go_Straight_Constant(dTimeDelta, 108, 2.7f);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 130 || m_pModelCom->Get_iCurrentAnimIndex() == 131)
 	{
+		if (m_isFirst_SpecialReady)
+		{
+			m_isFirst_SpecialReady = false;
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
+
 		if (m_isSpecialHit)
 		{
 			m_isSpecialHit = false;
@@ -893,28 +1234,228 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 {
-	if (m_Moveset.m_Down_Dmg_Small)
+	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+	_vector vAtkDir = XMLoadFloat4(&AtkDir);
+	_float4 reverseAtkDir;
+	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
+
+
+#pragma region Dmg_Small
+	if (m_Moveset.m_Down_Dmg_Small || m_Moveset.m_Down_Dmg_ConnectSmall)
 	{
-		m_Moveset.m_Down_Dmg_Small = false;
+		if (m_Moveset.m_Down_Dmg_Small)
+		{
+			m_Moveset.m_Down_Dmg_Small = false;
+			m_isConnectHitting = false;
+		}
+		else if (m_Moveset.m_Down_Dmg_ConnectSmall)
+		{
+			m_Moveset.m_Down_Dmg_ConnectSmall = false;
+			m_isConnectHitting = true;
+		}
 
-		m_pModelCom->Set_Animation(ANIM_DMG_SMALL);
-		m_Moveset.m_isHitMotion = true;
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_iSmallHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(138);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(139);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 2)
+		{
+			m_pModelCom->Set_Animation(140);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 3)
+		{
+			m_pModelCom->Set_Animation(141);
+			m_iSmallHit_Index = 0;
+		}
 	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_DMG_SMALL))
+	if (m_isConnectHitting == false)
 	{
-		m_Moveset.m_isHitMotion = false;
+		Go_Dir_Deceleration(dTimeDelta, 138, 1.5f, 0.01f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f, 0.015f, AtkDir);
+	}
+#pragma endregion
+
+
+
+#pragma region Dmg_Big
+	if (m_Moveset.m_Down_Dmg_Big)
+	{
+		m_Moveset.m_Down_Dmg_Big = false;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+	}
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
+
+#pragma endregion
+
+
+
+#pragma region Dmg_Blow
+	if (m_Moveset.m_Down_Dmg_Blow)
+	{
+		m_Moveset.m_Down_Dmg_Blow = false;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		Jumping(1.2f, 0.05f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 85, 2.5f, AtkDir);
+	Ground_Animation_Play(85, 86);
+
+#pragma endregion
+
+
+
+#pragma region Dmg_BigBlow
+	if (m_Moveset.m_Down_Dmg_BigBlow)
+	{
+		m_Moveset.m_Down_Dmg_BigBlow = false;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		Jumping(1.2f, 0.05f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 110, 3.0f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 111, 3.0f, 0.1f, AtkDir);
+	Ground_Animation_Play(110, 111);
+
+#pragma endregion
+
+
+#pragma region Dmg_Upper
+	if (m_Moveset.m_Down_Dmg_Upper)
+	{
+		m_Moveset.m_Down_Dmg_Upper = false;
+
+		m_pModelCom->Set_Animation(ANIM_FALL);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		Jumping(1.7f, 0.03f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 100, 0.5f, AtkDir);
+	Ground_Animation_Play(100, 101);
+#pragma endregion
+
+
+
+	if (m_Moveset.m_Down_GetUp)
+	{
+		m_Moveset.m_Down_GetUp = false;
+		m_Moveset.m_Down_Dmg_Blow = false;
+
+		m_pModelCom->Set_Animation(ANIM_GETUP);
 	}
 
 
+	if (m_Moveset.m_Down_GetUp_Move)
+	{
+		m_Moveset.m_Down_GetUp_Move = false;
+		m_Moveset.m_Down_Dmg_Blow = false;
 
+		m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+	}
+	//Go_Straight_Constant(dTimeDelta, 138, 2.0f);
+	Go_Straight_Deceleration(dTimeDelta, 138, 3.0f, 0.03f);
+	m_pModelCom->Set_EarlyEnd(ANIM_DOWN_GETUP_MOVE, true);
+
+
+
+}
+
+void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
+{
+	if (CPlayerManager::GetInstance()->Get_First_Player_Change())
+	{
+		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
+
+		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_dDelay_Player_Change = 0.0;
+		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
+
+		CPlayerManager::GetInstance()->Set_Hp(m_StatusDesc.fHp);
+		CPlayerManager::GetInstance()->Set_Mp(m_StatusDesc.fMp);
+		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
+		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
+		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
+	}
+
+	m_dDelay_Player_Change += dTimeDelta;
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
+	{
+		if (m_dDelay_Player_Change < 1.5)
+			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+		else
+			m_isSwap_OnSky = true;
+
+		m_isJumpOn = true;
+	}
+
+	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+	_float4 CurPos;
+	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	AnotherPos.y = CurPos.y;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 }
 
 void CPlayer_Zenitsu::Moving_Restrict()
 {
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
+
+	//히트시 제한 + 기상, 다운
+	if (ANIM_DMG_BLOW == iCurAnimIndex || 85 == iCurAnimIndex || 86 == iCurAnimIndex
+		|| ANIM_DMG_SPIN == iCurAnimIndex || 110 == iCurAnimIndex || 111 == iCurAnimIndex
+		|| ANIM_FALL == iCurAnimIndex || 100 == iCurAnimIndex || 101 == iCurAnimIndex
+		|| ANIM_DMG_SMALL == iCurAnimIndex || ANIM_DMG_BIG == iCurAnimIndex
+		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 103 == iCurAnimIndex || 104 == iCurAnimIndex
+		|| ANIM_GETUP == iCurAnimIndex || 96 == iCurAnimIndex 
+		|| 138 == iCurAnimIndex || 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex)
+	{
+		m_Moveset.m_isHitMotion = true;
+
+		//다운상태
+		if (ANIM_DOWN == iCurAnimIndex)
+		{
+			m_Moveset.m_isDownMotion = true;
+			m_Moveset.m_Down_Dmg_Blow = false;
+		}
+
+		//겟업 상태
+		if (ANIM_GETUP == iCurAnimIndex || 96 == iCurAnimIndex 
+			|| ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 103 == iCurAnimIndex || 104 == iCurAnimIndex)
+		{
+			m_Moveset.m_isGetUpMotion = true;
+		}
+	}
 	//콤보공격시 무빙제한
-	if (ANIM_ATK_COMBO == iCurAnimIndex || 4 == iCurAnimIndex || 5 == iCurAnimIndex
+	else if (ANIM_ATK_COMBO == iCurAnimIndex || 4 == iCurAnimIndex || 5 == iCurAnimIndex
 		|| ANIM_ATK_COMBO_DOWN == iCurAnimIndex
 		|| 7 == iCurAnimIndex
 		|| ANIM_ATK_COMBO_UP == iCurAnimIndex || 9 == iCurAnimIndex || 10 == iCurAnimIndex || 11 == iCurAnimIndex
@@ -1032,7 +1573,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 	}
 	//대시 시 제한
-	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 46 == iCurAnimIndex || 47 == iCurAnimIndex)
+	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 46 == iCurAnimIndex /* || 47 == iCurAnimIndex*/)
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
@@ -1068,6 +1609,10 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	//제한 해제d
 	else
 	{
+		m_Moveset.m_isHitMotion = false;
+		m_Moveset.m_isDownMotion = false;
+		m_Moveset.m_isGetUpMotion = false;
+
 		m_Moveset.m_isRestrict_Move = false;
 		m_Moveset.m_isRestrict_KeyInput = false;
 		m_Moveset.m_isRestrict_Jump = false;

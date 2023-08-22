@@ -31,9 +31,16 @@ public:
 protected: //애니메이션 제어용 함수들
 	void	Dir_Setting(_bool Reverse);
 
+	void Get_PlayerComponent();
+	_bool Check_Distance(_float fDistance);
+	_float Calculate_Distance();
+	_vector Calculate_Dir();
+	_vector Calculate_Dir_FixY();
+	_vector Calculate_Dir_Cross();
+
 
 protected: // 애니메이션 제어용 변수들
-	
+	CTransform* m_pPlayerTransformCom = { nullptr };
 
 protected:
 	/* 임시 코드 */

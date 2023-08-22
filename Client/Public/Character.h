@@ -8,6 +8,7 @@
 
 #include "AtkCollider.h"
 
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -21,7 +22,19 @@ class CCharacter abstract : public CLandObject
 public:
 	enum DIR { DIR_UP, DIR_DOWN, DIR_RIGHT, DIR_LEFT };
 	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
+
+	//NPC
+	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK, NPC_END };
 public:
+	typedef struct tagNPC
+	{
+		NPC_TYPE		eNPC = { NPC_END };
+		_bool			isNPC_NaviOff = { false };
+		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
+		
+		_float4			WalkSpot[3];
+	}NPCDESC;
+
 	typedef struct tagCharacterDesc
 	{
 		CGameObject::WORLDINFO		WorldInfo;
@@ -30,6 +43,9 @@ public:
 		CNavigation::NAVIDESC		NaviDesc;
 		_float						Land_Y;
 		NAVI_TYPE					eCurNavi;
+
+		NPCDESC				NPCDesc;
+
 	}CHARACTERDESC;
 
 	typedef struct tagCharacterStatusDesc
@@ -171,6 +187,8 @@ protected:
 	//Hit°ü·Ã
 	_bool	m_isBounding = { false };
 	_bool	m_isConnectHitting = { false };
+
+	_bool	m_isStrictUpper = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };
