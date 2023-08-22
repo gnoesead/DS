@@ -154,6 +154,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	}
 	else {
 		m_Is_Battle = false;
