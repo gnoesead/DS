@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Fade_Manager.h"
 
+#include "PlayerManager.h"
+
 CPlayer_Battle_Mp::CPlayer_Battle_Mp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
 {
@@ -346,7 +348,7 @@ void CPlayer_Battle_Mp::Get_Player_Info(_double TimeDelta)
 
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
 		_float Mp = pPlayer->Get_Status().fMp;
 		_float Mp_Max = pPlayer->Get_Status().fMp_Max;
