@@ -53,7 +53,6 @@ void CNPC::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	Set_Height();
 }
 
 HRESULT CNPC::Render()
@@ -178,6 +177,47 @@ _vector CNPC::Calculate_Dir_Cross()
 
 
 	return vCross;
+}
+
+_float CNPC::Calculate_To_Spot()
+{
+	_vector vNPCPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vSpotPos = XMLoadFloat4(&m_CharacterDesc.NPCDesc.WalkSpot[(m_iSpot_Index)]);
+	_vector vDir = XMVector3Normalize(vSpotPos - vNPCPos);
+	_float fDistance = Convert::GetLength(vSpotPos - vNPCPos);
+
+	m_pTransformCom->LerpVector(vDir, 0.05f);
+
+	if (fDistance < 0.15f)
+	{
+		if (m_isSpot_Reverse == false)
+		{
+			if (m_iSpot_Index == 2)
+			{
+				m_iSpot_Index = 1;
+				m_isSpot_Reverse = true;
+			}
+			else
+			{
+				m_iSpot_Index++;
+			}
+		}
+		else
+		{
+			if (m_iSpot_Index == 0)
+			{
+				m_iSpot_Index = 1;
+				m_isSpot_Reverse = false;
+			}
+			else
+			{
+				m_iSpot_Index--;
+			}
+		}
+		
+	}
+
+	return fDistance;
 }
 
 HRESULT CNPC::Add_Components()
