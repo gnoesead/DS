@@ -211,10 +211,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 3) {
-			m_bIs_Combo_On = true;
+			//m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 		else {
-			m_bIs_Combo_On = false;
+			//m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 
 		if (dist > 7.f) {
@@ -222,6 +222,15 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		}
 
 	}
+
+	
+	//=============================================
+	// 사이드캠 이펙트 작업 시 주석 해제
+	// Side_Cam_Key
+	if (pGameInstance->Get_DIKeyDown(DIK_GRAVE)) {
+		m_bIs_Combo_On = !m_bIs_Combo_On;
+	}
+	//=============================================
 
 	// 플레이어와 몬스터에게 컷씬 상태인지 , 어떤 컷씬인지 받아옴
 	/*if (pGameInstance->Get_DIKeyDown(DIK_7)) {
