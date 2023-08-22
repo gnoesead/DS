@@ -162,6 +162,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Center
 	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vTargetPos = XMVectorSetY(m_vTargetPos, 0.f);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
