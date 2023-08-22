@@ -47,6 +47,7 @@ public:
 	void Set_RadialBlur() { m_bRadialBlur = !m_bRadialBlur; }
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
+	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
 
 private:
 	list<class CGameObject*>	m_RenderObjects[RENDER_END];
@@ -111,7 +112,7 @@ private:
 		
 private:
 	_bool					m_bSSAOBlur = { false };
-	_bool					m_bSSAOSwitch = { false };
+	_bool					m_bSSAOSwitch = { true };
 	_bool					m_bInvert = { false };
 	_bool					m_bRadialBlur = { false };
 	_bool					m_bGrayScale = { false };
