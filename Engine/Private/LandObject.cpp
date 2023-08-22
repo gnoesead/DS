@@ -13,6 +13,17 @@ CLandObject::CLandObject(const CLandObject& rhs)
 {
 }
 
+void CLandObject::Change_NaviMesh(NAVI_TYPE eNaviType)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	dynamic_cast<CLandObject*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0))->Set_CurNaviMesh(eNaviType);
+	dynamic_cast<CLandObject*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1))->Set_CurNaviMesh(eNaviType);
+
+	Safe_Release(pGameInstance);
+}
+
 //HRESULT CLandObject::Initialize_Prototype()
 //{
 //	if (FAILED(__super::Initialize_Prototype()))
