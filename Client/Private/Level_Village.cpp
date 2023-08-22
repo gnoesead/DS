@@ -33,7 +33,7 @@
 #include "Fade_Manager.h"
 #include "Option.h"
 
-
+#include "PlayerManager.h"
 
 
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -46,6 +46,8 @@ HRESULT CLevel_Village::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+    CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {
@@ -260,6 +262,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
     }
+  
 
     Safe_Release(pGameInstance);
 

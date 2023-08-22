@@ -436,13 +436,13 @@ void CPlayer_Battle_Combo::Tool_Funtion(_double TimeDelta)
 
 void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 {
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), m_Player_Index));
 
 		if (m_UI_Desc.m_Combo_Type == 0) {
 			m_Hit_Combo = pPlayer->Get_Status().iAttackCombo;
@@ -453,6 +453,15 @@ void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 		}
 
 	}
+
+	m_Player_Index = CPlayerManager::GetInstance()->Get_PlayerIndex();
+
+	if (m_Player_Index != m_Pre_Player_Index) {
+		m_Pre_Player_Index = m_Player_Index;
+		m_Hit_Combo = 0;
+		m_Damage_Combo = 0;
+	}
+
 
 	Safe_Release(pGameInstance);
 

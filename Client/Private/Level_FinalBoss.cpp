@@ -33,6 +33,8 @@
 #include "Effect_Texture.h"
 #include "EffectPlayer.h"
 
+#include "PlayerManager.h"
+
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
 {
@@ -43,6 +45,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
 	if (FAILED(Ready_Lights()))
 	{
@@ -238,13 +242,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 	    return E_FAIL;
 	}
-
-	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
-	}*/
+	}
 
 	Safe_Release(pGameInstance);
 

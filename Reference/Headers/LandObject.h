@@ -18,10 +18,10 @@ protected:
 
 public:
 	NAVI_TYPE Get_CurNaviMesh() { return m_eCurNavi; }
+	void Set_CurNaviMesh(NAVI_TYPE eNaviType) {  m_eCurNavi = eNaviType; }
 
 public:
-	void		Change_NaviMesh(NAVI_TYPE eNaviType) { m_eCurNavi = eNaviType; }
-
+	void		Change_NaviMesh(NAVI_TYPE eNaviType);
 protected:
 	CNavigation* m_pNavigationCom[NAVI_END] = {nullptr};
 

@@ -26,6 +26,7 @@
 #include "Pause.h"
 #include "Option.h"
 
+#include "PlayerManager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -37,6 +38,8 @@ HRESULT CLevel_Train::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {
@@ -237,7 +240,7 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_Train");
         return E_FAIL;
     }
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");

@@ -6,6 +6,7 @@
 #include "Layer.h"
 #include "Player.h"
 #include "Fade_Manager.h"
+#include "PlayerManager.h"
 
 CPlayer_Battle_Frame::CPlayer_Battle_Frame(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -81,46 +82,36 @@ void CPlayer_Battle_Frame::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
+		m_UI_Desc.m_C_Num = 0;
+	}
+	else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
+		m_UI_Desc.m_C_Num = 2;
+	}
+	else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 2) {
+		m_UI_Desc.m_C_Num = 4;
+	}
+
+
 	if (m_UI_Desc.m_C_Num == 0) {
 		if (m_UI_Desc.m_Type == 1) {
-
+			
 		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 1) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
+		else if(m_UI_Desc.m_Type == 2){
+			m_Size_Param = 0.249946f;
+			m_fX = 210;
 		}
 	}
 	if (m_UI_Desc.m_C_Num == 2) {
 		if (m_UI_Desc.m_Type == 1) {
 
 		}
-		else {
-
+		else if (m_UI_Desc.m_Type == 2) {
+			m_Size_Param = 0.28f;
+			m_fX = 217;
 		}
 	}
-	if (m_UI_Desc.m_C_Num == 3) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
-	if (m_UI_Desc.m_C_Num == 4) {
-		if (m_UI_Desc.m_Type == 1) {
-
-		}
-		else {
-
-		}
-	}
+	
 
 	Set_UI();
 

@@ -85,6 +85,10 @@ private:
 
 	_uint m_Level_Index = { 0 };
 
+	_uint m_Player_Index = { 0 };
+	_uint m_Pre_Player_Index = { 0 };
+
+
 	_bool m_Is_CutScene = false;
 
 	_bool m_Pt_In = { false };
