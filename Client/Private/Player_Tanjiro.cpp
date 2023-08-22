@@ -129,10 +129,8 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		__super::LateTick(dTimeDelta);
 
-
 		if (m_isAirDashing == false)
 			Gravity(dTimeDelta);
-
 
 		if (m_isCan_AirDash)
 		{

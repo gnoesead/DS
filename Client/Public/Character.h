@@ -31,6 +31,7 @@ public:
 		NPC_TYPE		eNPC = { NPC_END };
 		_bool			isNPC_NaviOff = { false };
 		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
+		_uint           Icon_Type = { 99 };
 		
 		_float4			WalkSpot[3];
 	}NPCDESC;

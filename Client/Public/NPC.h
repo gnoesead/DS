@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Character.h"
+#include "FIcon.h"
 
 BEGIN(Engine)
 
@@ -60,7 +61,8 @@ protected:
 	_int	m_iSpot_Index = { 0 };
 	_bool	m_isSpot_Reverse = { false };
 	
-
+private:
+	CFIcon* m_pIcon = { nullptr };
 
 protected:
 	HRESULT Add_Components();

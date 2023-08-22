@@ -132,19 +132,23 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 
-	// Battle_Target
+// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num) != nullptr) {
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), 0) != nullptr) {
 
-		CCharacter* pMon = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num));
+		m_Battle_Target_MaxNum = (_int)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
 
-		m_Battle_Target_MaxNum = (_uint)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
+		if (m_Battle_Target_Num < m_Battle_Target_MaxNum) {
 
-		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
+			CCharacter* pMon = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num));
 
-		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+			CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
+
+			m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		}
+
 	}
 	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
@@ -164,7 +168,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// Zoom
 	if (m_Is_Battle == false) {
 		if (pGameInstance->Get_DIKeyState(DIK_S)) {
-			CCameraManager::GetInstance()->Zoom_Fix(2.f);
+			//CCameraManager::GetInstance()->Zoom_Fix(2.f);
 		}
 	}
 
@@ -188,17 +192,17 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_bIs_LockFree = true;
 	}
 
+
 	// Lock_On_Change
 	if (pGameInstance->Get_DIKeyDown(DIK_RSHIFT)) {
-		
 		m_Battle_Target_Num++;
 
 		if (m_Battle_Target_Num > m_Battle_Target_MaxNum) {
 			m_Battle_Target_Num = 0;
 		}
 	}
-
 	
+
 	// Combo_On
 	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
 
