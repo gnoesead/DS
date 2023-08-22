@@ -25,6 +25,7 @@
 #include "Battle_Signal.h"
 #include "Pause.h"
 #include "Option.h"
+#include "ColliderManager.h"
 
 #include "PlayerManager.h"
 
@@ -105,6 +106,8 @@ void CLevel_Train::Tick(_double dTimeDelta)
 {
     __super::Tick(dTimeDelta);
     SetWindowText(g_hWnd, TEXT("Train"));
+
+	CColliderManager::GetInstance()->Check_Collider(LEVEL_TRAIN, dTimeDelta);
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
@@ -229,7 +232,7 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
    
-    CharacterDesc.WorldInfo.vPosition = _float4(206.75f, 7.3f, 300.63f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(205.57f, 7.38f, 224.0f, 1.f);
     CharacterDesc.Land_Y = 6.6f;
     CharacterDesc.eCurNavi = CLandObject::NAVI_TRAIN;
 
@@ -254,6 +257,47 @@ HRESULT CLevel_Train::Ready_Layer_Player(const _tchar* pLayerTag)
 
 HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCharacter::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_TRAIN; //abcde
+
+	//Left
+	for (_int i = 0; i < 20; i++)
+	{
+		_float fZ = i + 221;
+
+		CharacterDesc.WorldInfo.vPosition = _float4(201.3f, 6.9f, fZ, 1.f);
+		
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
+			TEXT("Prototype_GameObject_Monster_Spider"), &CharacterDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : Monster_Spider");
+			return E_FAIL;
+		}
+	}
+
+	//Right
+	for (_int i = 0; i < 20; i++)
+	{
+		_float fZ = i + 221;
+
+		CharacterDesc.WorldInfo.vPosition = _float4(209.2f, 6.9f, fZ, 1.f);
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag,
+			TEXT("Prototype_GameObject_Monster_Spider"), &CharacterDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : Monster_Spider");
+			return E_FAIL;
+		}
+	}
+	
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 

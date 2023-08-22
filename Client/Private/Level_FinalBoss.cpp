@@ -230,7 +230,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     
-    CharacterDesc.WorldInfo.vPosition = _float4(136.f, 0.f, 136.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(120.6f, 0.f, 139.2f, 1.f);
 
    
 	CharacterDesc.Land_Y = 0.f;

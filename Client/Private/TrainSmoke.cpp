@@ -35,7 +35,7 @@ HRESULT CTrainSmoke::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(205.5f, 8.2f, 415.0f + m_fPlusZ, 1.f));
 
-	m_dFrameSpeed = (_double)Random::Generate_Float(0.06f, 0.09f);
+	m_dFrameSpeed = (_double)Random::Generate_Float(0.05f, 0.08f);
 
 	m_dSpeedX = (_double)Random::Generate_Float(-2.f, 2.f);
 
@@ -43,7 +43,7 @@ HRESULT CTrainSmoke::Initialize(void* pArg)
 
 	m_iFrame = Random::Generate_Int(0, 15);
 
-	m_fSizeSpeed = Random::Generate_Float(4.f, 25.f);
+	m_fSizeSpeed = Random::Generate_Float(4.f, 35.f);
 
 	m_fSize = Random::Generate_Float(2.f, 4.f);
 
