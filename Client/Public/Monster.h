@@ -46,6 +46,8 @@ protected:
 	_float4		m_Dir_To_Monster;
 	_float4		m_Dir_To_Player;
 	_float4		m_Dir_To_Player_FixY;
+
+
 protected:
 	_float		m_fDistance_To_Player = { 0.0f };
 	_float		m_fSmallDmg = { 1.f };

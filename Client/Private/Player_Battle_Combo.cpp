@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Fade_Manager.h"
 
+#include "PlayerManager.h"
+
 CPlayer_Battle_Combo::CPlayer_Battle_Combo(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
 {
@@ -440,7 +442,7 @@ void CPlayer_Battle_Combo::Get_Player_Info(_double TimeDelta)
 
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
 		if (m_UI_Desc.m_Combo_Type == 0) {
 			m_Hit_Combo = pPlayer->Get_Status().iAttackCombo;

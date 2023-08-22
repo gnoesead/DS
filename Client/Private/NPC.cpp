@@ -5,6 +5,9 @@
 #include "SoundMgr.h"
 #include "Camera_Free.h"
 
+#include "PlayerManager.h"
+#include "Player.h"
+
 CNPC::CNPC(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
@@ -50,7 +53,7 @@ void CNPC::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	
+	Set_Height();
 }
 
 HRESULT CNPC::Render()
@@ -97,8 +100,121 @@ void CNPC::Dir_Setting(_bool Reverse)
 	Safe_Release(pGameInstance);
 }
 
+void CNPC::Get_PlayerComponent()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+
+	//m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	m_pPlayerTransformCom = pPlayer->Get_TransformCom();
+
+	if (m_pPlayerTransformCom == nullptr)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+_bool CNPC::Check_Distance(_float fDistance)
+{
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+}
+
+_float CNPC::Calculate_Distance()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+
+	return fDistance;
+}
+
+_vector CNPC::Calculate_Dir()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+
+	return vDir;
+}
+
+_vector CNPC::Calculate_Dir_FixY()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
+}
+
+_vector CNPC::Calculate_Dir_Cross()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+
+	_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+	_vector vCross = XMVector3Normalize(XMVector3Cross(vDir, vUp));
+
+
+	return vCross;
+}
+
 HRESULT CNPC::Add_Components()
 {
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
+
+	/* for.Com_Navigation_Village_MainRoad1 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad1"),
+		TEXT("Com_Navigation_Village_MainRoad1"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_MAINROAD1], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_MainRoad1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_MainRoad2 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_MainRoad2"),
+		TEXT("Com_Navigation_Village_MainRoad2"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_MAINROAD2], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_MainRoad2 : CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_InsideWall1*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall1"),
+		TEXT("Com_Navigation_Village_InsideWall1"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_INSIDEWALL1], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_InsideWall1: CPlayer");
+		return E_FAIL;
+	}
+
+	/* for.Com_Navigation_Village_InsideWall2*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_InsideWall2"),
+		TEXT("Com_Navigation_Village_InsideWall2"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_INSIDEWALL2], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Village_InsideWall2: CPlayer");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }

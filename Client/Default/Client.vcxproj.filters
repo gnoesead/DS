@@ -292,6 +292,9 @@
     <Filter Include="02. GameObjects\Environment\TrainSmoke">
       <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\PlayerManager">
+      <UniqueIdentifier>{b8c29c98-f2c8-4acc-a6d5-e826cfb59d61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -546,6 +549,9 @@
     <ClInclude Include="..\Public\OptionManager.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\PlayerManager.h">
+      <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -790,6 +796,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\OptionManager.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerManager.cpp">
+      <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
