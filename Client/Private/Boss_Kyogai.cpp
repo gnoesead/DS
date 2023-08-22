@@ -332,7 +332,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 #pragma region AWAKE_ComboPunch
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 1.65
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
@@ -342,8 +342,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		}
 		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
-		{
-			if (0 == m_iEvent_Index)
+		{				
+			if (0 == m_iEvent_Index) // 1.50
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
@@ -353,7 +353,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATKPUNCH2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.50
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
