@@ -103,7 +103,7 @@ protected:
 	_float	m_fOutlineThickness = 2.0f;
 	// Outline Face
 	//_float	m_fOutlineFaceThickness = 0.3f;
-	_float	m_fOutlineFaceThickness = 0.6f;
+	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 
