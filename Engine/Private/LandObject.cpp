@@ -19,7 +19,9 @@ void CLandObject::Change_NaviMesh(NAVI_TYPE eNaviType)
 	Safe_AddRef(pGameInstance);
 
 	dynamic_cast<CLandObject*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0))->Set_CurNaviMesh(eNaviType);
-	dynamic_cast<CLandObject*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1))->Set_CurNaviMesh(eNaviType);
+
+	if(pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx() , TEXT("Layer_Player")) > 1)
+		dynamic_cast<CLandObject*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1))->Set_CurNaviMesh(eNaviType);
 
 	Safe_Release(pGameInstance);
 }
