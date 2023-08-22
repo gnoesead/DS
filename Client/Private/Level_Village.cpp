@@ -320,7 +320,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.WalkSpot[0] = { 572.8f, 4.55f, 258.05f, 1.f };
     CharacterDesc.NPCDesc.WalkSpot[1] = { 573.95f, 4.55f, 276.12f, 1.f };
     CharacterDesc.NPCDesc.WalkSpot[2] = { 583.37f, 4.55f, 276.15f, 1.f };
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 1;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -334,7 +334,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 #pragma region First Street
     CharacterDesc.WorldInfo.vPosition = _float4(565.6f, 4.55f, 254.97f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SIT;
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 5;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -354,7 +354,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(575.7f, 4.55f, 267.25f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_STAND;
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 5;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -364,7 +364,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(565.7f, 4.55f, 270.24f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK;
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 3;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 1.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -374,7 +374,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(567.1f, 4.55f, 271.42f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN;
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 5;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, -1.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -384,7 +384,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(575.76f, 4.55f, 260.34f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
-    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Icon_Type = 4;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -408,6 +408,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(605.30f, 4.55f, 270.00f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SITTALK;
+    CharacterDesc.NPCDesc.Icon_Type = 4;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {

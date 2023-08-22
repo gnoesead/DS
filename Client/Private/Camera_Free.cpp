@@ -139,7 +139,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		m_Battle_Target_MaxNum = (_int)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
 
-		if (m_Battle_Target_Num < m_Battle_Target_MaxNum) {
+		if (m_Battle_Target_Num <= m_Battle_Target_MaxNum) {
 
 			CCharacter* pMon = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num));
 
@@ -222,7 +222,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		}
 
 	}
-
 
 	// ÇÃ·¹ÀÌ¾î¿Í ¸ó½ºÅÍ¿¡°Ô ÄÆ¾À »óÅÂÀÎÁö , ¾î¶² ÄÆ¾ÀÀÎÁö ¹Þ¾Æ¿È
 	/*if (pGameInstance->Get_DIKeyDown(DIK_7)) {

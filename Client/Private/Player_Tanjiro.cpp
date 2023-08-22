@@ -77,14 +77,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	// Npc 에서 해야함
-	CDialogManager::GetInstance()->Set_Dialog_Type(1);
-
-	// Npc or 트리거로 처리
-	CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
-	CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
-
-
+	
 	m_pSword->Tick(dTimeDelta);
 	m_pSwordHome->Tick(dTimeDelta);
 
