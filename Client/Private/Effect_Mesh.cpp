@@ -176,6 +176,9 @@ void CEffect_Mesh::Check_PassIndex(void)
 
 		if (nullptr != m_pTextures[TEX_NOISE])
 			m_iPassIndex = 7;
+
+		if (nullptr != m_pTextures[TEX_DISTORTION])
+			m_iPassIndex = 5;
 	}
 	else
 		m_iPassIndex = 0;
