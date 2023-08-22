@@ -120,6 +120,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		if (m_Swap_TimeAcc >= 1.5f)
 			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		m_fLandY = pPlayer->Get_LandY();
 	}
 
 	m_Player_Index = CPlayerManager::GetInstance()->Get_PlayerIndex();
@@ -172,9 +174,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
-	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, m_fLandY);
 	if (m_Swap_TimeAcc < 1.5f)
-		m_vTargetPos = XMVectorSetY(m_vTargetPos, 0.f);
+		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free

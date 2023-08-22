@@ -431,7 +431,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 	}
 
 
-
     Safe_Release(pGameInstance);
 
     return S_OK;

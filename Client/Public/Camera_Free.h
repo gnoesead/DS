@@ -107,6 +107,8 @@ private:
 	_uint           m_Player_Index = { 0 };
 	_uint           m_Pre_Player_Index = { 0 };
 
+	_float          m_fLandY = { 0.f };
+
 // Cut_In_Cam	
 private:
 	vector<CutInCamDesc> m_Cut_In_Finish[END_FINISH];

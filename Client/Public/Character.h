@@ -146,6 +146,11 @@ protected:
 protected:	 
 	// 네비매쉬 높이설정(안원추가)
 	void	Set_Height();
+
+public:
+	_float  Get_LandY() {
+		return m_fLand_Y;
+	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
 	
