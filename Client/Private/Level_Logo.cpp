@@ -307,6 +307,28 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         }
     }
 
+    for (int i = 0; i < 5; i++) {
+
+        ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+        UIDesc3.m_Type = 5;
+        UIDesc3.m_Line_Num = i;
+
+        if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+            Safe_Release(pGameInstance);
+            return E_FAIL;
+        }
+
+        ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+        UIDesc3.m_Type = 6;
+        UIDesc3.m_Line_Num = i;
+     
+        if (FAILED(pGameInstance->Add_GameObject(LEVEL_LOGO, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc3))) {
+            Safe_Release(pGameInstance);
+            return E_FAIL;
+        }
+    }
    
     ZeroMemory(&UIDesc3, sizeof UIDesc3);
 

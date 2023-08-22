@@ -69,7 +69,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_isCombo), sizeof(_bool));
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_iConnect_ComboAnim), sizeof(_int));
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_isRootAnimation), sizeof(_bool));
-			
+
 			_int isizeEvent;
 			fin.read(reinterpret_cast<char*>(&isizeEvent), sizeof(_int));
 

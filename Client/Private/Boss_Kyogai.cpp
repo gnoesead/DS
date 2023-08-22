@@ -307,6 +307,8 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
+#endif //_DEBUG
+
 void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
@@ -331,6 +333,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
 #pragma region AWAKE_ComboPunch
+		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom);
+			}
+		}
+
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -386,7 +396,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index++;
 	}
 }
-#endif //_DEBUG
+
 
 void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 {

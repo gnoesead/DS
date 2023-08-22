@@ -430,6 +430,57 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+		UIDesc2.m_Type = 4;
+		UIDesc2.m_Line_Num = i;
+		UIDesc2.m_Arrow_Type = 0;
+		UIDesc2.m_Is_X_Reverse = true;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc2))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+		UIDesc2.m_Type = 4;
+		UIDesc2.m_Line_Num = i;
+		UIDesc2.m_Arrow_Type = 1;
+		UIDesc2.m_Is_X_Reverse = false;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc2))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+		UIDesc2.m_Type = 5;
+		UIDesc2.m_Line_Num = i;
+		
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc2))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc2, sizeof UIDesc2);
+
+		UIDesc2.m_Type = 6;
+		UIDesc2.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc2))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
 	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
 	UIDesc2.m_Type = 7;

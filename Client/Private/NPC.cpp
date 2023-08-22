@@ -7,6 +7,11 @@
 
 #include "PlayerManager.h"
 #include "Player.h"
+#include "DialogManager.h"
+#include "MissionManager.h"
+
+
+
 
 CNPC::CNPC(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -34,6 +39,76 @@ HRESULT CNPC::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CFIcon::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+	
+
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 0) {
+		UIDesc.m_Is_Reverse = false;
+		UIDesc.m_Type = 0;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 1) {
+		UIDesc.m_Type = 1;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 2) {
+		UIDesc.m_Type = 2;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 3) {
+		UIDesc.m_Type = 3;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 4) {
+		UIDesc.m_Type = 4;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 5) {
+		UIDesc.m_Type = 5;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+	if (m_CharacterDesc.NPCDesc.Icon_Type == 6) {
+		UIDesc.m_Type = 6;
+		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.pParentTransform = m_pTransformCom;
+
+		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
+	}
+
+	
+	Safe_Release(pGameInstance);
+
+
+
+
+
+
+
+
+
 	return S_OK;
 }
 
@@ -41,7 +116,17 @@ void CNPC::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	// Npc 에서 해야함
+	CDialogManager::GetInstance()->Set_Dialog_Type(1);
 
+	// Npc or 트리거로 처리
+	CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
+	CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
+
+
+
+	if (m_pIcon != nullptr)
+		m_pIcon->Tick(dTimeDelta);
 
 	if (true == m_isDead)
 		return;
@@ -53,10 +138,14 @@ void CNPC::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	if (m_pIcon != nullptr)
+		m_pIcon->LateTick(dTimeDelta);
+
 }
 
 HRESULT CNPC::Render()
 {
+	
 
 	return S_OK;
 }
@@ -293,5 +382,8 @@ CGameObject* CNPC::Clone(void* pArg)
 
 void CNPC::Free()
 {
+	Safe_Release(m_pIcon);
+
+
 	__super::Free();
 }
