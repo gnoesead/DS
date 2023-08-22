@@ -94,13 +94,9 @@ HRESULT COption::Initialize(void* pArg)
 	// Arrow
 	if (m_UI_Desc.m_Type == 4) {
 
-		m_fX = 850;
-		m_fY = 365;
-		m_Origin_PosX = (_float)m_fX;
-		m_Origin_PosY = (_float)m_fY;
-		m_Origin_X = 620.f;
-		m_Origin_Y = 360.f;
-		m_Size_Param = 1.3f;
+		m_Origin_X = 40.f;
+		m_Origin_Y = 40.f;
+		m_Size_Param = 0.6f;
 		m_UI_Layer = 32;
 	}
 
@@ -286,18 +282,29 @@ HRESULT COption::Initialize(void* pArg)
 	m_szCameraMenu.push_back(L"카메라 감도");
 	m_szCameraMenu.push_back(L"카메라 흔들림");
 
+	m_szCameraMenu_2.push_back(L"낮음");
+	m_szCameraMenu_2.push_back(L"보통");
+	m_szCameraMenu_2.push_back(L"높음");
+	
 
 	m_szGraphicMenu.push_back(L"그래픽 설정");
 	m_szGraphicMenu.push_back(L"밝기");
 	m_szGraphicMenu.push_back(L"SSAO");
 	m_szGraphicMenu.push_back(L"모션블러");
 
+	m_szGraphicMenu_2.push_back(L"ON");
+	m_szGraphicMenu_2.push_back(L"OFF");
+
+	m_szGraphicMenu_3.push_back(L"낮음");
+	m_szGraphicMenu_3.push_back(L"보통");
+	m_szGraphicMenu_3.push_back(L"높음");
 
 	m_szSoundMenu.push_back(L"사운드 설정");
 	m_szSoundMenu.push_back(L"마스터 볼륨");
 	m_szSoundMenu.push_back(L"BGM 음량");
 	m_szSoundMenu.push_back(L"SE 음량");
 	m_szSoundMenu.push_back(L"음성 음량");
+
 
 
 	m_szButtonMenu.push_back(L"결정");
@@ -366,6 +373,66 @@ void COption::Tick(_double dTimeDelta)
 		}
 
 	}
+
+	if (m_UI_Desc.m_Type == 4) {
+
+		if (m_UI_Desc.m_Arrow_Type == 0)
+			m_fX = 800;
+		else
+			m_fX = 1174;
+
+		if (m_UI_Desc.m_Line_Num == 0) {
+			m_fY = 230;
+		}
+		else if (m_UI_Desc.m_Line_Num == 1) {
+			m_fY = 305;
+		}
+		else if (m_UI_Desc.m_Line_Num == 2) {
+			m_fY = 380;
+		}
+		else if (m_UI_Desc.m_Line_Num == 3) {
+			m_fY = 455;
+		}
+		else if (m_UI_Desc.m_Line_Num == 4) {
+			m_fY = 530;
+		}
+
+		m_fY -= 36;
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 0) {
+			if (m_UI_Desc.m_Line_Num == 2) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+			if (m_UI_Desc.m_Line_Num == 3) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+		}
+		if (COptionManager::GetInstance()->Get_Select_Num() == 1) {
+
+			if (m_UI_Desc.m_Line_Num == 3) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+		}
+		if (COptionManager::GetInstance()->Get_Select_Num() == 2) {
+
+			if (m_UI_Desc.m_Line_Num == 4) {
+				m_Alpha = 0.f;
+				m_Is_Font_Render = false;
+			}
+		}
+	}
+
 
 	if (m_UI_Desc.m_Type == 3) {
 
@@ -511,7 +578,7 @@ void COption::Tick(_double dTimeDelta)
 		}
 	}
 
-	if (m_UI_Desc.m_Type != 1 && m_UI_Desc.m_Type != 3 && m_UI_Desc.m_Type != 7) {
+	if (m_UI_Desc.m_Type != 1 && m_UI_Desc.m_Type != 3 && m_UI_Desc.m_Type != 4 && m_UI_Desc.m_Type != 7) {
 
 		if (COptionManager::GetInstance()->Get_Is_Move_Done() == true) {
 
@@ -644,10 +711,26 @@ HRESULT COption::Render()
 				if (m_UI_Desc.m_Line_Num == 0) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[1].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
+
+					wsprintf(m_szCameraMenu_1, TEXT("%d"), m_szCameraMenu_1_Int);
+					
+					if (m_szCameraMenu_1_Int < 10) {
+						if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu_1, _float2(984.f, (_float)m_fY - 35.f), _float2(0.45f, 0.45f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+							return E_FAIL;
+					}
+					else {
+						if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu_1, _float2(977.f, (_float)m_fY - 35.f), _float2(0.45f, 0.45f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+							return E_FAIL;
+					}
+
 				}
 				else if (m_UI_Desc.m_Line_Num == 1) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[2].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu_2[m_szCameraMenu_2_Num].c_str(), _float2(969.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+						return E_FAIL;
+
 				}
 			}
 			else if (COptionManager::GetInstance()->Get_Select_Num() == 1) {
@@ -658,9 +741,15 @@ HRESULT COption::Render()
 				else if (m_UI_Desc.m_Line_Num == 1) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[2].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu_2[m_szGraphicMenu_2_Num].c_str(), _float2(969.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+						return E_FAIL;
 				}
 				else if (m_UI_Desc.m_Line_Num == 2) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[3].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+						return E_FAIL;
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu_3[m_szGraphicMenu_3_Num].c_str(), _float2(967.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
 				}
 			}

@@ -10,6 +10,7 @@
 #include "MonsterManager.h"
 
 #include "Player.h"
+#include "PlayerManager.h"
 
 CMonster_Zako::CMonster_Zako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -930,7 +931,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+	_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 	

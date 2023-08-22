@@ -257,6 +257,30 @@ void CNPC_Female::Animation_Control_Quest(_double dTimeDelta)
 
 void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 {
+	if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC)
+	{
+		
+	}
+	else if ( NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
+	{
+
+	}
+	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
+	{
+
+	}
+	else if (NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC)
+	{
+
+	}
+	else if (NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC )
+	{
+
+	}
+	else if (NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
+	{
+
+	}
 }
 
 void CNPC_Female::Animation_Control_Walk(_double dTimeDelta)
