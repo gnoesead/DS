@@ -1569,6 +1569,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_1_2");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_9.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_9");
@@ -1590,6 +1596,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_10_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_10_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkStepB.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkStepB");
 		return E_FAIL;
 	}
 
