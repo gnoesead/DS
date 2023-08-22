@@ -103,7 +103,9 @@ private:
 
 	_float          m_Village_Cam_TimeAcc = { 0.f };
 
-
+	_float          m_Swap_TimeAcc = { 2.f };
+	_uint           m_Player_Index = { 0 };
+	_uint           m_Pre_Player_Index = { 0 };
 
 // Cut_In_Cam	
 private:

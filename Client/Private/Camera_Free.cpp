@@ -77,6 +77,8 @@ void CCamera_Free::Tick(_double dTimeDelta)
 		LockMouse();
 
 	
+	m_Swap_TimeAcc += (_float)dTimeDelta;
+
 
 	Safe_Release(pGameInstance);
 
@@ -112,12 +114,21 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// Player
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), m_Player_Index));
 
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (m_Swap_TimeAcc >= 1.5f)
+			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
+
+	m_Player_Index = CPlayerManager::GetInstance()->Get_PlayerIndex();
+
+	if (m_Player_Index != m_Pre_Player_Index) {
+		m_Pre_Player_Index = m_Player_Index;
+		m_Swap_TimeAcc = 0.f;
+	}
+
 
 	// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
@@ -162,6 +173,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Center
 	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	if (m_Swap_TimeAcc < 1.5f)
+		m_vTargetPos = XMVectorSetY(m_vTargetPos, 0.f);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
@@ -200,16 +213,16 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		if (dist > 7.f) {
 			m_bIs_Combo_On = false;
 		}
-		
+
 	}
 
 
 	// 플레이어와 몬스터에게 컷씬 상태인지 , 어떤 컷씬인지 받아옴
-	if (pGameInstance->Get_DIKeyDown(DIK_7)) {
+	/*if (pGameInstance->Get_DIKeyDown(DIK_7)) {
 		m_Is_Cut_In = true;
 		m_Cut_In_IsDone = false;
 		m_Cut_In_Finish_Type = 0;
-	}
+	}*/
 
 
 	// 카메라 함수
