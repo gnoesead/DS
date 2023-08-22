@@ -88,7 +88,10 @@ private:
 	_tchar                  m_szGraphicMenu_1[MAX_PATH] = { };
 	_int                    m_szGraphicMenu_1_Int = { 10 }; // 밝기 0 ~ 20
 	vector<wstring>         m_szGraphicMenu_2 = { }; // SSAO On/Off
+	_int                    m_szGraphicMenu_2_Num = { 0 };
+
 	vector<wstring>         m_szGraphicMenu_3 = { }; // 블러 정도
+	_int                    m_szGraphicMenu_3_Num = { 0 }; // 블러 정도
 
 	vector<wstring>         m_szSoundMenu = { };
 	_tchar                  m_szSoundMenu_1[MAX_PATH] = { }; // 소리 0 ~ 20

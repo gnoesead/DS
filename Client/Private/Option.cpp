@@ -728,7 +728,7 @@ HRESULT COption::Render()
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu[2].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
 
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu_2[m_szCameraMenu_2_Num].c_str(), _float2(970.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szCameraMenu_2[m_szCameraMenu_2_Num].c_str(), _float2(969.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
 
 				}
@@ -741,9 +741,15 @@ HRESULT COption::Render()
 				else if (m_UI_Desc.m_Line_Num == 1) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[2].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu_2[m_szGraphicMenu_2_Num].c_str(), _float2(969.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+						return E_FAIL;
 				}
 				else if (m_UI_Desc.m_Line_Num == 2) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu[3].c_str(), _float2((_float)m_fX - 338.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
+						return E_FAIL;
+
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szGraphicMenu_3[m_szGraphicMenu_3_Num].c_str(), _float2(967.f, (_float)m_fY - 51.f), _float2(0.5f, 0.5f), XMVectorSet(46.f / 255.f, 28.f / 255.f, 3.f / 255.f, 1.f))))
 						return E_FAIL;
 				}
 			}
