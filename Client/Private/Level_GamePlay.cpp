@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+#include "PlayerManager.h"
 #include "MapObject.h"
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
@@ -40,6 +41,8 @@ HRESULT CLevel_GamePlay::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {

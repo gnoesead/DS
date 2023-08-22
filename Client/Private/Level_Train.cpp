@@ -26,6 +26,7 @@
 #include "Pause.h"
 #include "Option.h"
 
+#include "PlayerManager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -37,6 +38,8 @@ HRESULT CLevel_Train::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {

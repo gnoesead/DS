@@ -42,8 +42,33 @@ HRESULT CNPC_Female::Initialize(void* pArg)
 		return E_FAIL;
 	}
 	
-
 	m_pTransformCom->Set_Look(m_CharacterDesc.NPCDesc.DirNPC);
+
+
+	if (NPC_QUEST == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_STAND_IDLE);
+	else if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_STAND_IDLE);
+	else if (NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_SPEAK_STAND);
+	else if (NPC_LISTEN == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_LISTEN_NORMAL);
+	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_SIT_IDLE);
+	else if (NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_SIT_LISTEN);
+	else if (NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_FLOOR_SIT_IDLE);
+	else if (NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_FLOOR_SIT_LISTEN);
+	else if (NPC_WALK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_WALK_STANDARD);
+	else if (NPC_WALKTALK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_WALK_GONGSON);
+	else if (NPC_WORK == m_CharacterDesc.NPCDesc.eNPC)
+		m_pModelCom->Set_Animation(ANIM_WORK);
+
+
 
 	return S_OK;
 }
@@ -216,15 +241,17 @@ void CNPC_Female::EventCall_Control(_double dTimeDelta)
 
 void CNPC_Female::Animation_Control(_double dTimeDelta)
 {
-
+	Set_Height();
 	if (NPC_QUEST == m_CharacterDesc.NPCDesc.eNPC)
 	{
 		Animation_Control_Quest(dTimeDelta);
 	}
 	else
 	{
-		Sway(dTimeDelta);
-	
+		if(NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
+			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC)
+			Sway(dTimeDelta);
+
 		if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC || NPC_TALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_SIT == m_CharacterDesc.NPCDesc.eNPC || NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
@@ -263,23 +290,23 @@ void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 	}
 	else if ( NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-
+		
 	}
 	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
 	{
-
+		
 	}
 	else if (NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-
+		
 	}
 	else if (NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC )
 	{
-
+		m_fLand_Y = 4.85f;
 	}
 	else if (NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-
+		m_fLand_Y = 4.85f;
 	}
 }
 
@@ -287,30 +314,15 @@ void CNPC_Female::Animation_Control_Walk(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	//°È±â µµÁß
-	if (iCurAnim == 36)
-	{
-		m_dTime_Walking += dTimeDelta;
-		if (m_dTime_Walking > 3.8f)
-		{
-			m_dTime_Walking = 0.0f;
-			m_pModelCom->Set_Animation(ANIM_WALK_GONGSON_END);
-		}
-	}
-	else
-	{
-		//°È±â ½ÃÀÛ
-		m_dCoolTime_Walk += dTimeDelta;
-		if (m_dCoolTime_Walk > 3.0f)
-		{
-			m_dCoolTime_Walk = 0.0f;
+	Sway(dTimeDelta);
 
-			m_pModelCom->Set_Animation(ANIM_WALK_GONGSON);
-		}
+	//°È±â µµÁß
+	if (iCurAnim == 33 || iCurAnim == 36)
+	{
+		Calculate_To_Spot();
+	
+		m_pTransformCom->Go_Straight(dTimeDelta * 0.2f);
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_WALK_GONGSON, 0.3f);
-	Go_Straight_Constant(dTimeDelta, 36, 0.3f);
-	Go_Straight_Deceleration(dTimeDelta, ANIM_WALK_GONGSON_END, 0.3f, 0.01f);
 }
 
 void CNPC_Female::Sway(_double dTimeDelta)
@@ -333,18 +345,34 @@ void CNPC_Female::Sway(_double dTimeDelta)
 			_float4 Dir;
 			XMStoreFloat4(&Dir, -Calculate_Dir_FixY());
 			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
-			Go_Dir_Constant(dTimeDelta, ANIM_STAGGER, 0.1f, Dir);
+			Go_Dir_Constant(dTimeDelta, ANIM_STAGGER, 0.15f, Dir);
 		}
 	}
 
 	if (m_isFirst_Sway == false)
 	{
 		m_dCoolTime_Walk += dTimeDelta;
-		if (m_dCoolTime_Walk > 1.85f)
+
+		if (m_CharacterDesc.NPCDesc.eNPC == NPC_WALK || m_CharacterDesc.NPCDesc.eNPC == NPC_WALKTALK)
 		{
-			m_dCoolTime_Walk = 0.0;
-			m_isFirst_Sway = true;
-			m_pModelCom->Set_Animation(ANIM_STAND_IDLE);
+			if (m_dCoolTime_Walk > 5.0f)
+			{
+				m_dCoolTime_Walk = 0.0;
+				m_isFirst_Sway = true;
+
+				m_pModelCom->Set_Animation(36);
+				
+			}
+		}
+		else
+		{
+			if (m_dCoolTime_Walk > 1.85f)
+			{
+				m_dCoolTime_Walk = 0.0;
+				m_isFirst_Sway = true;
+
+				m_pModelCom->Set_Animation(ANIM_STAND_IDLE);
+			}
 		}
 	}
 }
