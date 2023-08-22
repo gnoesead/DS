@@ -223,13 +223,10 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
 			Trigger_DashPunch();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_AirGun();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{			
@@ -241,75 +238,65 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-
 			Trigger_JumpAirGun();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
 			Trigger_JumpStomp();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_M))
+	}
+
+	if (pGameInstance->Get_DIKeyState(DIK_LSHIFT))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
 			Trigger_Hit_CutScene();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_8))
+		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_0))
+		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
 			Trigger_Nachim();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_Q))
+		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
-
 			Trigger_PushAway();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_W))
+		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-
 			Trigger_Heal();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_E))
+		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
 			Trigger_Awake();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_R))
-		{
+	}
 
+	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
+		{
 			Trigger_Escape();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_T))
+		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_NextPhase2();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_Y))
+		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
 			Trigger_NextPhase3();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_U))
+		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
 			Trigger_Dash_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_I))
+		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
 			Trigger_Nachim_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_O))
+		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
 			m_bTrigger = true;
 			m_eCurstate = STATE_CINEMATIC;
@@ -327,9 +314,8 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
 
 		}
-
-
 	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -540,10 +526,13 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 #pragma region ÆòÅ¸ÄÞº¸
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			//dLifeTime = 0.20;
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
+			}
+			//dLifeTime = 0.20;
+			if (1 == m_iEvent_Index) // 0.20
+			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
@@ -555,7 +544,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
@@ -566,6 +554,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);

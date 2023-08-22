@@ -293,8 +293,9 @@ HRESULT CLevel_House::Ready_Layer_Boss(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-
 	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)

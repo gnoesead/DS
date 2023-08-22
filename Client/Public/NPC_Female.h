@@ -51,12 +51,22 @@ private: //애니메이션 제어용 함수
 	void	EventCall_Control(_double dTimeDelta);
 
 	void	Animation_Control(_double dTimeDelta);
+	void	Animation_Control_Quest(_double dTimeDelta);
+	void	Animation_Control_Stand(_double dTimeDelta);
+	void	Animation_Control_Walk(_double dTimeDelta);
+	
 
 private:
-	
+	void	Sway(_double dTimeDelta);
 
 
 private: //애니메이션 제어용 변수들
+	//뒷걸음
+	_bool		m_isFirst_Sway = { true };
+	_double		m_isCoolTime_Sway = { 0.0 };
+	
+
+
 	//Move
 	_float	m_fMove_Speed = { 2.f };
 

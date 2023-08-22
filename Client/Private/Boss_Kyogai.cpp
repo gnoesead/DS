@@ -306,6 +306,8 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
+#endif //_DEBUG
+
 void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
@@ -364,7 +366,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index++;
 	}
 }
-#endif //_DEBUG
+
 
 void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 {

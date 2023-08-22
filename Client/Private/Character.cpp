@@ -6,6 +6,7 @@
 #include "AtkCollManager.h"
 #include "Fade_Manager.h"
 
+
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLandObject(pDevice, pContext)
 {
@@ -113,8 +114,6 @@ void CCharacter::Tick(_double dTimeDelta)
 			m_pTransformCom->Scaling(_float3(0.67f, 0.67f, 0.67f));
 		else
 			m_pTransformCom->Scaling(_float3(0.8f, 0.8f, 0.8f));
-
-
 	}
 	
 
@@ -512,6 +511,7 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
+			m_isStrictUpper = false;
 		}
 	}
 
@@ -598,7 +598,7 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(true);
 			}
-			else if (pHitColl->Get_Collider()->Get_Hit_Blow())
+			else if (pHitColl->Get_Collider()->Get_Hit_BigBlow())
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(true);
 			}
@@ -618,6 +618,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Hekireki())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(true);
+			}
 
 			pHitColl->Add_AtkObejct(this);
 		}
@@ -626,6 +630,7 @@ void CCharacter::Check_HitType()
 
 void CCharacter::Status_Work(_double dTimeDelta)
 {
+	
 	//Mp
 	m_dDelay_Mp_Used += dTimeDelta;
 	if (m_dDelay_Mp_Used > 2.0)
@@ -709,6 +714,7 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		m_StatusDesc.fSupport = 0.0f;
 	}
 
+	//CPlayerManager::GetInstance()->Set_Status(m_StatusDesc);
 }
 
 void CCharacter::Use_Mp_Skill()
@@ -790,5 +796,6 @@ void CCharacter::Free()
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+
 
 }

@@ -43,7 +43,7 @@ public:
 public:
 	_float4		Get_CameraLook() { return m_fCameraLook; }
 	
-	_vector		Get_Battle_Target_Pos() { return m_vBattleTargetPos; }
+	_vector		Get_Battle_Target_Pos() { return m_vBattleTargetPos_Offer; }
 
 	_bool       Get_Is_Battle() { return m_Is_Battle; }
 	_bool       Get_Is_Cut_In() { return m_Is_Cut_In; }
@@ -86,6 +86,7 @@ private:
 	_vector         m_vFocusPos = {};
 	_vector			m_vMonsterPos = {};
 	_vector         m_vBattleTargetPos = {};
+	_vector         m_vBattleTargetPos_Offer = {};
 	_vector         m_vBattleCenter = {};
 
 	_float          m_vCameraAngle = { 10.f };
