@@ -66,6 +66,13 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 		return E_FAIL;
 	}
 
+	if (FAILED(Check_PlayerToNPC(iLevelIndex, dTimeDelta)))
+	{
+		MSG_BOX("Failed to Check_PlayerToNPC");
+		return E_FAIL;
+	}
+
+
 	return S_OK;
 }
 
@@ -526,6 +533,72 @@ HRESULT CColliderManager::Check_BossAtkToPlayer(_uint iLevelIndex, _double dTime
 			}
 		}
 	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CColliderManager::Check_PlayerToNPC(_uint iLevelIndex, _double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
+
+	list<CGameObject*>* pNPCs = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_NPC"));
+
+	_int iCollCount = { 0 };
+
+	if (nullptr != pPlayerCollider && nullptr != pNPCs)
+	{
+		for (auto& pNPC : (*pNPCs))
+		{
+			if (nullptr != pNPC)
+			{
+				CCollider* pNPCColl = dynamic_cast<CCollider*>(pNPC->Find_Component(TEXT("Com_Sphere")));
+
+				if (pNPCColl->Get_Death() == false)
+					pPlayerCollider->Intersect(pNPCColl);
+
+
+
+				if (true == pPlayerCollider->Get_Coll())
+					iCollCount++;
+
+				if (true == pNPCColl->Get_Coll())
+				{
+					CTransform* pNPCTransform = dynamic_cast<CTransform*>(pNPC->Find_Component(TEXT("Com_Transform")));
+
+					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+
+					_float fRad = pPlayerCollider->Get_Collider() + pNPCColl->Get_Collider();
+
+					_vector vDir = pNPCTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					_float fDis = Convert::GetLength(vDir);
+
+					if (fRad > fDis)
+					{
+						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+						//_float fMoveDistance = (fRad - fDis - 0.02f) / 2.0;
+						//_float fMoveDistance = fRad - fDis - 0.02f;
+						_float fMoveDistance = ((fRad - fDis) * 0.1f) / 2.0f;
+						_vector vMove = vMoveDir * fMoveDistance;
+
+						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+						vPlayerPos -= vMove;
+						pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+					}
+				}
+			}
+		}
+	}
+
+	if (0 < iCollCount)
+		pPlayerCollider->Set_Coll(true);
+	else
+		pPlayerCollider->Set_Coll(false);
 
 	Safe_Release(pGameInstance);
 
