@@ -120,6 +120,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		if (m_Swap_TimeAcc >= 1.5f)
 			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		m_fLandY = pPlayer->Get_LandY();
 	}
 
 	m_Player_Index = CPlayerManager::GetInstance()->Get_PlayerIndex();
@@ -130,19 +132,23 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 
-	// Battle_Target
+// Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num) != nullptr) {
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), 0) != nullptr) {
 
-		CCharacter* pMon = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num));
+		m_Battle_Target_MaxNum = (_int)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
 
-		m_Battle_Target_MaxNum = (_uint)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
+		if (m_Battle_Target_Num <= m_Battle_Target_MaxNum) {
 
-		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
+			CCharacter* pMon = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_Battle_Target_Num));
 
-		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+			CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
+
+			m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		}
+
 	}
 	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
@@ -152,6 +158,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	}
 	else {
 		m_Is_Battle = false;
@@ -161,7 +168,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// Zoom
 	if (m_Is_Battle == false) {
 		if (pGameInstance->Get_DIKeyState(DIK_S)) {
-			CCameraManager::GetInstance()->Zoom_Fix(2.f);
+			//CCameraManager::GetInstance()->Zoom_Fix(2.f);
 		}
 	}
 
@@ -172,9 +179,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vFocusPos = CCameraManager::GetInstance()->Get_Focus_Pos();
 
 	// Center
-	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, 0.f);
+	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, m_fLandY);
 	if (m_Swap_TimeAcc < 1.5f)
-		m_vTargetPos = XMVectorSetY(m_vTargetPos, 0.f);
+		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
@@ -185,17 +192,17 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_bIs_LockFree = true;
 	}
 
+
 	// Lock_On_Change
 	if (pGameInstance->Get_DIKeyDown(DIK_RSHIFT)) {
-		
 		m_Battle_Target_Num++;
 
 		if (m_Battle_Target_Num > m_Battle_Target_MaxNum) {
 			m_Battle_Target_Num = 0;
 		}
 	}
-
 	
+
 	// Combo_On
 	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
 
@@ -204,10 +211,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 3) {
-			//m_bIs_Combo_On = true;
+			//m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 		else {
-			//m_bIs_Combo_On = false;
+			//m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 
 		if (dist > 7.f) {
@@ -216,11 +223,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	}
 
+	
+	//=============================================
+	// 사이드캠 이펙트 작업 시 주석 해제
 	// Side_Cam_Key
 	if (pGameInstance->Get_DIKeyDown(DIK_GRAVE)) {
 		m_bIs_Combo_On = !m_bIs_Combo_On;
 	}
-
+	//=============================================
 
 	// 플레이어와 몬스터에게 컷씬 상태인지 , 어떤 컷씬인지 받아옴
 	/*if (pGameInstance->Get_DIKeyDown(DIK_7)) {

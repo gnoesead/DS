@@ -963,7 +963,7 @@ void CPlayer::Key_Input_PlayerChange(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	//서포트 키
-	if (pGameInstance->Get_DIKeyDown(DIK_U))
+	if (pGameInstance->Get_DIKeyDown(DIK_U) && pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
 	{
 		if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
 			CPlayerManager::GetInstance()->Set_PlayerIndex(1);

@@ -333,6 +333,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
 #pragma region AWAKE_ComboPunch
+		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom);
+			}
+		}
+
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -346,8 +354,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 1.30
 			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom);
+				
+			}
+
+			if (1 == m_iEvent_Index) // 1.50
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
@@ -356,7 +371,21 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATKPUNCH2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10_2", m_pTransformCom);
+			}
+
+			if (1 == m_iEvent_Index) // 0.4
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10", m_pTransformCom);
+
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+			}
+
+			if (2 == m_iEvent_Index) // 0.5
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,

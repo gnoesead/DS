@@ -493,24 +493,17 @@ PS_OUT  PS_NORMALDISTORTION(PS_IN In)
 			UVY += g_vDiscardedPixelMin.y;
 		}
 	}
-	
-	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+
+	vector vMask = g_MaskTexture.Sample(LinearSampler, float2(UVX, UVY));
+
 	vector vDistortion = g_DistortionTexture.Sample(LinearSampler, In.vTexUV);
+	float2 fWeight;
+	fWeight.x = cos(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * vMask.r * g_fDistortionStrength;
+	fWeight.y = sin(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * vMask.r * g_fDistortionStrength;
 
-	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeedNormal.x;
-	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeedNormal.y;
+	Out.vDiffuse = g_MaskTexture.Sample(LinearSampler, In.vTexUV + fWeight);
+	Out.vDiffuse = Out.vDiffuse.r * 1.4f;
 
-	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexUV);
-	float3	vNormal = vNormalDesc.xyz * 2.f - 1.f;
-	float3x3	WorldMatrix = float3x3(In.vTangent.xyz, In.vBinormal.xyz, In.vNormal.xyz);
-	vNormal = mul(vNormal, WorldMatrix);
-
-	Out.vDiffuse = vMtrlDiffuse;
-	//Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vNormal = vector(vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, 0.f, 1.f);
-	Out.vAdditional = vector(1.f, 0.f, 0.f, 0.f);
-	
 	Out.vDiffuse.a *= g_fAlpha;
 
 	if (Out.vDiffuse.a < 0.01f)

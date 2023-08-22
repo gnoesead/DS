@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Player.h"
+#include "PlayerManager.h"
 #include "MapObject.h"
 #include "Player_Battle_Frame.h"
 #include "Player_Battle_Hp.h"
@@ -40,6 +41,8 @@ HRESULT CLevel_GamePlay::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {
@@ -429,7 +432,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
 		return E_FAIL;
 	}
-
 
 
     Safe_Release(pGameInstance);
@@ -1246,6 +1248,57 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
+	}
+
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDec13, sizeof UIDec13);
+
+		UIDec13.m_Type = 4;
+		UIDec13.m_Line_Num = i;
+		UIDec13.m_Arrow_Type = 0;
+		UIDec13.m_Is_X_Reverse = true;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDec13, sizeof UIDec13);
+
+		UIDec13.m_Type = 4;
+		UIDec13.m_Line_Num = i;
+		UIDec13.m_Arrow_Type = 1;
+		UIDec13.m_Is_X_Reverse = false;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDec13, sizeof UIDec13);
+
+		UIDec13.m_Type = 5;
+		UIDec13.m_Line_Num = i;
+		
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDec13, sizeof UIDec13);
+
+		UIDec13.m_Type = 6;
+		UIDec13.m_Line_Num = i;
+		
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDec13))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
 	}
 
 	ZeroMemory(&UIDec13, sizeof UIDec13);
