@@ -10,6 +10,7 @@
 #include "MissionManager.h"
 #include "Battle_UI_Manager.h"
 
+#include "PlayerManager.h"
 
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -91,9 +92,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
+	Key_Input_PlayerChange(dTimeDelta);
 	//playerswap
-	if (m_ePlayerType == PLAYER_TANJIRO)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //탄지로
 	{
+		Player_Change_Setting_Status();
 		Animation_Control(dTimeDelta);
 	}
 	else
@@ -117,14 +120,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 {
-	__super::LateTick(dTimeDelta);
 
 	m_pSword->LateTick(dTimeDelta);
 	m_pSwordHome->LateTick(dTimeDelta);
 
 	//playerswap
-	if (m_ePlayerType == PLAYER_TANJIRO)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) // 탄지로
 	{
+		__super::LateTick(dTimeDelta);
+
 
 		if (m_isAirDashing == false)
 			Gravity(dTimeDelta);
@@ -139,7 +143,10 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 				m_isCan_AirDash = false;
 			}
 		}
+
+		CPlayerManager::GetInstance()->Set_PlayerPos_Change(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
+	
 	
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
@@ -149,49 +156,51 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Tanjiro::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_isSwap_OnSky == false)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
-	m_pSword->Render();
-	m_pSwordHome->Render();
+		m_pSword->Render();
+		m_pSwordHome->Render();
 
 #pragma region Player
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
-			m_pShaderCom->Begin(1);
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
+			else
+				m_pShaderCom->Begin(1);
 
-		m_pModelCom->Render(m_iMeshNum);
-	}
-	// Default Render
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+			m_pModelCom->Render(m_iMeshNum);
+		}
+		// Default Render
+		for (_uint i = 0; i < iNumMeshes; i++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+			m_pShaderCom->Begin(0);
 
-		m_pModelCom->Render(i);
-	}
+			m_pModelCom->Render(i);
+		}
 #pragma endregion
-
+	}
 	return S_OK;
 }
 
@@ -200,8 +209,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -246,7 +254,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 
 		m_pModelCom->Render(i);
 	}
-	Safe_Release(pGameInstance);
+	
 	return S_OK;
 }
 
@@ -278,7 +286,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -296,7 +304,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 
@@ -313,7 +321,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -330,13 +338,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
 			}
 		}
@@ -352,7 +360,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
 		}
@@ -368,7 +376,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
 			}
 		}
@@ -377,7 +385,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.5,
 					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 9.0f);
 			}
 		}
@@ -400,7 +408,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
@@ -416,7 +424,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
 			}
 		}
@@ -436,31 +444,31 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (4 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (5 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 1.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
 			}
 		}
@@ -480,27 +488,27 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (1 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (2 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (3 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			if (4 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -508,8 +516,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 1.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
 			}
 			
 		}
@@ -521,7 +529,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
@@ -541,7 +549,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 1.5,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
@@ -575,17 +583,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 5.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 5.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 5.0,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}
 
@@ -808,6 +816,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
+	m_pModelCom->Set_EarlyEnd(21, true, 0.5f);
+	m_pModelCom->Set_EarlyEnd(22, true, 0.5f);
+	m_pModelCom->Set_EarlyEnd(23, true, 0.5f);
+
 	m_pModelCom->Set_EarlyEnd(25, true, 0.99f);
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.3f * m_fScaleChange);
@@ -1338,7 +1350,43 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 120, 2.5f, AtkDir);
 	Ground_Animation_Play(120, 121);
-	
+
+#pragma endregion
+
+
+#pragma region Dmg_BigBlow
+	if (m_Moveset.m_Down_Dmg_BigBlow)
+	{
+		m_Moveset.m_Down_Dmg_BigBlow = false;
+
+		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		Jumping(1.2f, 0.05f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 132, 3.0f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 133, 3.0f, 0.1f, AtkDir);
+	Ground_Animation_Play(132, 133);
+
+#pragma endregion
+
+
+#pragma region Dmg_Upper
+	if (m_Moveset.m_Down_Dmg_Upper)
+	{
+		m_Moveset.m_Down_Dmg_Upper = false;
+
+		m_pModelCom->Set_Animation(ANIM_FALL);
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		Jumping(1.7f, 0.03f);
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 125, 0.5f, AtkDir);
+	Ground_Animation_Play(125, 126);
 #pragma endregion
 
 
@@ -1551,20 +1599,40 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 {
-	if (m_isFirst_Player_Change)
+	if (CPlayerManager::GetInstance()->Get_First_Player_Change())
 	{
-		m_isFirst_Player_Change = false;
+		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_dDelay_Player_Change = 0.0;
+		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
+
+		CPlayerManager::GetInstance()->Set_Hp(m_StatusDesc.fHp);
+		CPlayerManager::GetInstance()->Set_Mp(m_StatusDesc.fMp);
+		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
+		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
+		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
 	}
+
+	m_dDelay_Player_Change += dTimeDelta;
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		m_pTransformCom->Go_Up(dTimeDelta);
+		if(m_dDelay_Player_Change < 1.5)
+			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+		else
+			m_isSwap_OnSky = true;
+
+		m_isJumpOn = true;
 	}
 
+	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+	_float4 CurPos;
+	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	AnotherPos.y = CurPos.y;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()
@@ -1575,6 +1643,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	//히트시 제한 + 기상, 다운
 	if (ANIM_DMG_BLOW == iCurAnimIndex || 120 == iCurAnimIndex || 121 == iCurAnimIndex
 		|| ANIM_DMG_SPIN == iCurAnimIndex || 132 == iCurAnimIndex || 133 == iCurAnimIndex
+		|| ANIM_FALL == iCurAnimIndex || 125 == iCurAnimIndex || 126 == iCurAnimIndex
 		|| ANIM_DMG_SMALL == iCurAnimIndex || ANIM_DMG_SMALL_RETURN == iCurAnimIndex || ANIM_DMG_BIG_RETURN == iCurAnimIndex || ANIM_DMG_BIG == iCurAnimIndex
 		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 138 == iCurAnimIndex
 		|| ANIM_DOWN_GETUP == iCurAnimIndex || 135 == iCurAnimIndex
@@ -1720,6 +1789,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	//어드벤처 모드 행동
 	else if (ANIM_ADV_JUMP == iCurAnimIndex || 2 == iCurAnimIndex || 3 == iCurAnimIndex || 4 == iCurAnimIndex)
 	{
+		m_pSword->Set_SwordIn(true);
+		m_pSword->Set_SwordIn(true);
+
 		m_Moveset.m_isRestrict_Adventure = true;
 	}
 	//제한 해제d
@@ -1741,6 +1813,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Special = false;
 
 		m_Moveset.m_isRestrict_Adventure = false;
+
+		m_pSword->Set_SwordIn(false);
+		m_pSword->Set_SwordIn(false);
 	}
 }
 
