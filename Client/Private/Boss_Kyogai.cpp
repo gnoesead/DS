@@ -341,6 +341,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (ANIM_ATKCMB3 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom);
+			}
+		}
+
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index) // 1.65
@@ -387,6 +395,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 
 		}
+
+		if (ANIM_ATKSTEP_BACK == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);
+			}
+		}
+
 		m_iEvent_Index++;
 	}
 }
