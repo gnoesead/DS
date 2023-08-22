@@ -4,6 +4,7 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 #include "Player.h"
+#include "PlayerManager.h"
 
 #include "AtkCollManager.h"
 
@@ -737,7 +738,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 

@@ -129,6 +129,7 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		__super::LateTick(dTimeDelta);
 
+
 		if (m_isAirDashing == false)
 			Gravity(dTimeDelta);
 
@@ -155,49 +156,51 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Tanjiro::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	if (m_isSwap_OnSky == false)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
 
-	m_pSword->Render();
-	m_pSwordHome->Render();
+		m_pSword->Render();
+		m_pSwordHome->Render();
 
 #pragma region Player
 
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
-			m_pShaderCom->Begin(1);
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
+			else
+				m_pShaderCom->Begin(1);
 
-		m_pModelCom->Render(m_iMeshNum);
-	}
-	// Default Render
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+			m_pModelCom->Render(m_iMeshNum);
+		}
+		// Default Render
+		for (_uint i = 0; i < iNumMeshes; i++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+			m_pShaderCom->Begin(0);
 
-		m_pModelCom->Render(i);
-	}
+			m_pModelCom->Render(i);
+		}
 #pragma endregion
-
+	}
 	return S_OK;
 }
 
@@ -1617,8 +1620,10 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		if(m_dDelay_Player_Change < 10.0)
+		if(m_dDelay_Player_Change < 1.5)
 			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+		else
+			m_isSwap_OnSky = true;
 
 		m_isJumpOn = true;
 	}
@@ -1784,6 +1789,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	//어드벤처 모드 행동
 	else if (ANIM_ADV_JUMP == iCurAnimIndex || 2 == iCurAnimIndex || 3 == iCurAnimIndex || 4 == iCurAnimIndex)
 	{
+		m_pSword->Set_SwordIn(true);
+		m_pSword->Set_SwordIn(true);
+
 		m_Moveset.m_isRestrict_Adventure = true;
 	}
 	//제한 해제d
@@ -1805,6 +1813,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Special = false;
 
 		m_Moveset.m_isRestrict_Adventure = false;
+
+		m_pSword->Set_SwordIn(false);
+		m_pSword->Set_SwordIn(false);
 	}
 }
 
