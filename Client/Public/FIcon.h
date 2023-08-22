@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "UI.h"
 
+
 BEGIN(Engine)
 class CShader;
 class CTexture;
@@ -22,6 +23,8 @@ public:
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
 		_float   m_Up_Mount = { 0.f };
+		CTransform* pParentTransform = { nullptr };
+		_vector Pos = {};
 	}UIDESC;
 
 

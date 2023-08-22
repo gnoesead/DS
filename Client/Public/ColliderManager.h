@@ -46,6 +46,7 @@ private:
 	HRESULT Check_MonsterToMonster(_uint iLevelIndex, _double dTimeDelta);
 	HRESULT Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dTimeDelta);
 	HRESULT Check_BossAtkToPlayer(_uint iLevelIndex, _double dTimeDelta);
+	HRESULT Check_PlayerToNPC(_uint iLevelIndex, _double dTimeDelta);
 
 public:
 	virtual void Free() override;

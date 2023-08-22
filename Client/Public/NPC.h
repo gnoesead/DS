@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Character.h"
+#include "FIcon.h"
 
 BEGIN(Engine)
 
@@ -38,6 +39,7 @@ protected: //애니메이션 제어용 함수들
 	_vector Calculate_Dir_FixY();
 	_vector Calculate_Dir_Cross();
 
+	_float	Calculate_To_Spot();
 
 protected: // 애니메이션 제어용 변수들
 	CTransform* m_pPlayerTransformCom = { nullptr };
@@ -55,6 +57,12 @@ protected:
 	// Outline Face
 	_float	m_fOutlineFaceThickness = 0.3f;
 
+	//워크스팟
+	_int	m_iSpot_Index = { 0 };
+	_bool	m_isSpot_Reverse = { false };
+	
+private:
+	CFIcon* m_pIcon = { nullptr };
 
 protected:
 	HRESULT Add_Components();

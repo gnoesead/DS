@@ -35,6 +35,7 @@
 #include "Effect_Texture.h"
 #include "EffectPlayer.h"
 
+#include "PlayerManager.h"
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -47,6 +48,8 @@ HRESULT CLevel_House::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {
@@ -307,7 +310,6 @@ HRESULT CLevel_House::Ready_Layer_Boss(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : CLevel_House");
 		return E_FAIL;
 	}
-
 
 	Safe_Release(pGameInstance);
 
@@ -1162,6 +1164,57 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+		UIDesc11.m_Type = 4;
+		UIDesc11.m_Line_Num = i;
+		UIDesc11.m_Arrow_Type = 0;
+		UIDesc11.m_Is_X_Reverse = true;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+		UIDesc11.m_Type = 4;
+		UIDesc11.m_Line_Num = i;
+		UIDesc11.m_Arrow_Type = 1;
+		UIDesc11.m_Is_X_Reverse = false;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+		UIDesc11.m_Type = 5;
+		UIDesc11.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+		UIDesc11.m_Type = 6;
+		UIDesc11.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
 	UIDesc11.m_Type = 7;
@@ -1560,6 +1613,12 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_House::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_1_1");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_9.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_9");

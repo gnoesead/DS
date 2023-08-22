@@ -12,6 +12,8 @@
 
 #include "PlayerManager.h"
 
+#include "Camera_Manager.h"
+
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -69,6 +71,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
+	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, -1.0f, 0.0f});
 
 	return S_OK;
 }
@@ -77,14 +80,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	// Npc 에서 해야함
-	CDialogManager::GetInstance()->Set_Dialog_Type(1);
-
-	// Npc or 트리거로 처리
-	CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
-	CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
-
-
+	
 	m_pSword->Tick(dTimeDelta);
 	m_pSwordHome->Tick(dTimeDelta);
 
@@ -116,6 +112,10 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 		return;
+
+	_float4 TestPos;
+	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_int ak = 47;
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -129,10 +129,8 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		__super::LateTick(dTimeDelta);
 
-
 		if (m_isAirDashing == false)
 			Gravity(dTimeDelta);
-
 
 		if (m_isCan_AirDash)
 		{
@@ -307,6 +305,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
+			else if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
 
 		}
 		if (23 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -341,7 +345,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
 			}
-			if (2 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			else if (3 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
@@ -609,6 +619,24 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 {
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), dTimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+		m_isBattleStart = true;
+	Safe_Release(pGameInstance);
+
+	if (m_isBattleStart)
+	{
+		m_dDelay_BattleStart += dTimeDelta;
+		if (m_dDelay_BattleStart > 1.5f)
+		{
+			m_pModelCom->Set_Animation(ANIM_BATTLESTART);
+			m_isBattleStart = false;
+			m_dDelay_BattleStart = 0.0;
+		}
+	}
+
+
 	Moving_Restrict();
 
 	if (m_ePlayerState == PLAYER_BATTLE)
@@ -758,8 +786,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_isFirst_JumpAtk = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 		JumpStop(0.3);
@@ -776,15 +807,21 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 {
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
+	//m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.1f);
+	
 	// 콤보공격
 	if (m_Moveset.m_Down_Battle_Combo)
 	{
 		m_Moveset.m_Down_Battle_Combo = false;
 		m_isComboing = true;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		//m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.5f);
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
+		
 		//첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
@@ -795,6 +832,16 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 		else
 		{
 			m_pModelCom->Set_Combo_Trigger(true);
+
+			if(21 == iCurAnimIndex)
+				m_pModelCom->Set_EarlyEnd(21, true, 0.5f);
+			if (22 == iCurAnimIndex)
+				m_pModelCom->Set_EarlyEnd(22, true, 0.5f);
+			if (23 == iCurAnimIndex)
+				m_pModelCom->Set_EarlyEnd(23, true, 0.5f);
+			if (25 == iCurAnimIndex)
+				m_pModelCom->Set_EarlyEnd(25, true, 0.99f);
+
 			//콤보 분기 설정
 			if (23 == iCurAnimIndex)
 			{
@@ -816,11 +863,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
-	m_pModelCom->Set_EarlyEnd(21, true, 0.5f);
-	m_pModelCom->Set_EarlyEnd(22, true, 0.5f);
-	m_pModelCom->Set_EarlyEnd(23, true, 0.5f);
+	m_pModelCom->Set_EarlyEnd(21, false, 0.5f);
+	m_pModelCom->Set_EarlyEnd(22, false, 0.5f);
+	m_pModelCom->Set_EarlyEnd(23, false, 0.5f);
 
-	m_pModelCom->Set_EarlyEnd(25, true, 0.99f);
+	m_pModelCom->Set_EarlyEnd(25, false, 0.99f);
+
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.3f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 22, 3.0f * m_fScaleChange, 0.16f * m_fScaleChange);
@@ -916,9 +964,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Charge = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
 
@@ -928,9 +978,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 		m_Moveset.m_Up_Battle_Charge = false;
 		m_dDelay_Charge = 0.0;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(33);
 	}
 	else if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge <= 1.0f)
@@ -960,15 +1012,20 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Normal = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
 		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 		Use_Mp_Skill();
+		
 	}
+	
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 3.0f * m_fScaleChange, 0.07f * m_fScaleChange);
+		
 	
 
 	//스킬_1 : 이동키 + I키
@@ -976,9 +1033,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Move = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_MOVE);
 		Jumping(0.3f * m_fScaleChange, 0.07f * m_fScaleChange);
 
@@ -996,8 +1055,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 		Jumping(3.0f * m_fScaleChange, 0.05f * m_fScaleChange);
@@ -1014,9 +1076,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Guard = false;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
@@ -1069,9 +1133,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 		m_dDelay_Dash = 0.0;
 
-		if (Get_LockOn_MonPos())
-			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-		
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		if (m_LockOnPos.y > PlayerPos.y + 0.1f && m_isCan_AirDash)
@@ -1219,8 +1285,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Special(_double dTimeDelta)
 		if (m_isFirst_SpecialReady)
 		{
 			m_isFirst_SpecialReady = false;
-			if (Get_LockOn_MonPos())
-				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			{
+				if (Get_LockOn_MonPos())
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
 		}
 
 

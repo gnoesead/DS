@@ -166,14 +166,14 @@ _bool CAnimation::Invalidate_Linear_TransformationMatrices(CModel* pModel, _doub
 	for (auto& pChannel : m_AnimationDesc.m_Channels)
 	{
 		//이 애니메이션에서 움직이는 뼈들의 상태를 시간에 맞게 갱신한다.
-		pChannel->Invalidate_Linear(pModel, vecLastKey[iIndex++], m_AnimationDesc.m_dTimeAcc);
+		pChannel->Invalidate_Linear(pModel, vecLastKey[iIndex++], m_AnimationDesc.m_dTimeAcc, m_dLinear_Duration);
 	}
 
 	m_RootPosition = pRoot->Get_RootPosition();
 
 
 	// 보간duration
-	if (0.09f <= m_AnimationDesc.m_dTimeAcc)
+	if (m_dLinear_Duration <= m_AnimationDesc.m_dTimeAcc)
 	{
 		// 전체 재생시간보다 누적시간이 커졌다 == 애니메이션이 끝났다
 		m_AnimationDesc.m_isFinish = true;

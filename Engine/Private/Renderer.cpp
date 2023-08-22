@@ -1602,7 +1602,7 @@ HRESULT CRenderer::Render_World_UI()
 	m_RenderObjects[RENDER_WORLD_UI].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
 		return dynamic_cast<CUI*>(pDest)->Get_UI_Layer() < dynamic_cast<CUI*>(pSrc)->Get_UI_Layer();
 
-		});
+	});
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_WORLD_UI])
 	{
