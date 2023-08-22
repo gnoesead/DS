@@ -96,16 +96,17 @@ private:
 	_float          m_fLookDamping = { 7.f };
 
 	_uint           m_Battle_Target_Num = { 0 };
-	_uint           m_Battle_Target_MaxNum = { 0 };
+	_int            m_Battle_Target_MaxNum = { 0 };
 
 	_float          m_Zoom = { 0.f };
-
 
 	_float          m_Village_Cam_TimeAcc = { 0.f };
 
 	_float          m_Swap_TimeAcc = { 2.f };
 	_uint           m_Player_Index = { 0 };
 	_uint           m_Pre_Player_Index = { 0 };
+
+	_float          m_fLandY = { 0.f };
 
 // Cut_In_Cam	
 private:

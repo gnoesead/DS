@@ -27,8 +27,11 @@ HRESULT CFIcon::Initialize_Prototype()
 
 HRESULT CFIcon::Initialize(void * pArg)
 {
-	if (pArg != nullptr)
+	if (pArg != nullptr) {
 		m_UI_Desc = *(UIDESC*)pArg;
+		Safe_AddRef(m_UI_Desc.pParentTransform);
+	}
+		
 
 	m_Is_Reverse = m_UI_Desc.m_Is_Reverse;
 
@@ -42,9 +45,9 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
-		m_Size_Param = 1.f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
+		m_Size_Param = 0.608333f;
 		m_UI_Layer = 5;
 		m_fZ = 0.12f;
 
@@ -55,8 +58,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 4;
 		m_fZ = 0.11f;
@@ -68,8 +71,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 2) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 3;
 		m_fZ = 0.1f;
@@ -81,8 +84,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 3) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -94,8 +97,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 4) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -107,8 +110,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 5) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -120,8 +123,8 @@ HRESULT CFIcon::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 6) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.5f;
+		m_Origin_X = 0.4f;
+		m_Origin_Y = 0.4f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 2;
 		m_fZ = 0.09f;
@@ -201,33 +204,38 @@ void CFIcon::LateTick(_double TimeDelta)
 	m_pTransformCom->LookAt(m_vTargetPos);
 
 
-	// Monster (락온 UI만 이렇게)
+	// (락온 UI)
 	if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
 
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
-			CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+		CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
 
-			m_vBattle_Targt = pCamera->Get_Battle_Target_Pos();
+		m_vBattle_Targt = pCamera->Get_Battle_Target_Pos();
 
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
 
 
-			if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
-				m_Is_Render = pCamera->Get_Is_Battle();
-			}
-
+		if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
+			m_Is_Render = pCamera->Get_Is_Battle();
 		}
+
+
 	}
+	// Npc
+	else if(m_UI_Desc.pParentTransform != nullptr) {
 
-	// 나머지는 Npc가 파츠로 소유함 또는 그냥 특정 위치에 띄움
+		_vector Pos = m_UI_Desc.pParentTransform->Get_State(CTransform::STATE_POSITION);
+		
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
+	}
+	// 기타 등등
+	else {
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
+	}
 	
-
-
+	
 	Safe_Release(pGameInstance);
 
-
-	Get_Boss_Info(TimeDelta);
 
 	
 	Set_Personal_Pos();
@@ -428,5 +436,7 @@ void CFIcon::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
+
+	Safe_Release(m_UI_Desc.pParentTransform);
 
 }
