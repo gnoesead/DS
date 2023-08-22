@@ -43,8 +43,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	Get_PlayerComponent();
 
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
+	m_StatusDesc.fHp = 100.f;
+	m_StatusDesc.fHp_Max = 100.f;
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
@@ -1087,6 +1087,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		m_fOutlineThickness = 4.0f;
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
 	{
@@ -1101,6 +1102,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		m_fOutlineThickness = 4.0f;
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1118,6 +1120,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		{
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
+			m_fOutlineThickness = 2.0f;
 
 		}
 	}
@@ -2527,7 +2530,7 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.70);
-
+	Pos_FixY();
 
 }
 
@@ -2594,6 +2597,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDEL;
 		Trigger_Interact();
 	}
+	Pos_FixY();
 }
 
 void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)

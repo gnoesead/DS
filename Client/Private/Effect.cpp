@@ -572,8 +572,7 @@ HRESULT CEffect::SetUp_ShaderResources(void)
 	{
 		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vColor", (void*)&m_eEffectDesc.vColor, sizeof(_float4))))
 			return E_FAIL;
-	}
-
+	}	
 	if (nullptr != m_pTextures[TEX_MASK])
 	{
 		/* For.Com_Texture */

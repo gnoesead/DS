@@ -29,6 +29,7 @@ texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
 texture2D	   g_RadialBlurTexture;
 texture2D	   g_EmissiveTexture;
+texture2D	   g_EffectTexture;
 
 texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
@@ -314,6 +315,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vEffectDiffuse = g_EffectTexture.Sample(LinearSampler, In.vTexUV);
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 		/*if (vShade.r < 0.21f)
@@ -325,6 +327,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (vDiffuse.a == 0.f)
 		discard;
+	
 
 	Out.vColor = vDiffuse * vShade;
 
