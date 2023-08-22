@@ -80,7 +80,7 @@ private:
 
 	vector<wstring>         m_szCameraMenu = { };
 	_tchar                  m_szCameraMenu_1[MAX_PATH] = { };
-	_int                    m_szCameraMenu_1_Int = { 10 };  // 카메라 감도 0 ~ 20
+	_int                    m_szCameraMenu_1_Int = { 20 };  // 카메라 감도 0 ~ 20
 	vector<wstring>         m_szCameraMenu_2 = { };
 	_int                    m_szCameraMenu_2_Num = { 0 };
 	
