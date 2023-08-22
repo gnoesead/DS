@@ -42,9 +42,8 @@ HRESULT CNPC_Female::Initialize(void* pArg)
 		return E_FAIL;
 	}
 	
-	
-	
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
+
+	m_pTransformCom->Set_Look(m_CharacterDesc.NPCDesc.DirNPC);
 
 	return S_OK;
 }
@@ -69,6 +68,10 @@ void CNPC_Female::Tick(_double dTimeDelta)
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 		return;
+
+	_float4 TestPos;
+	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_int ak = 47;
 }
 
 void CNPC_Female::LateTick(_double dTimeDelta)
@@ -213,19 +216,25 @@ void CNPC_Female::EventCall_Control(_double dTimeDelta)
 
 void CNPC_Female::Animation_Control(_double dTimeDelta)
 {
-	if (NPC_QUEST == m_CharacterDesc.eNPC)
+
+	if (NPC_QUEST == m_CharacterDesc.NPCDesc.eNPC)
 	{
 		Animation_Control_Quest(dTimeDelta);
 	}
-	else if (NPC_STAND == m_CharacterDesc.eNPC || NPC_TALK == m_CharacterDesc.eNPC 
-		|| NPC_SIT == m_CharacterDesc.eNPC || NPC_SITTALK == m_CharacterDesc.eNPC
-		|| NPC_DOWN == m_CharacterDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.eNPC)
+	else
 	{
-		Animation_Control_Stand(dTimeDelta);
-	}
-	else if (NPC_WALK == m_CharacterDesc.eNPC || NPC_WALKTALK == m_CharacterDesc.eNPC)
-	{
-		Animation_Control_Walk(dTimeDelta);
+		Sway(dTimeDelta);
+	
+		if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC || NPC_TALK == m_CharacterDesc.NPCDesc.eNPC
+			|| NPC_SIT == m_CharacterDesc.NPCDesc.eNPC || NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC
+			|| NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
+		{
+			Animation_Control_Stand(dTimeDelta);
+		}
+		else if (NPC_WALK == m_CharacterDesc.NPCDesc.eNPC || NPC_WALKTALK == m_CharacterDesc.NPCDesc.eNPC)
+		{
+			Animation_Control_Walk(dTimeDelta);
+		}
 	}
 }
 
@@ -278,6 +287,42 @@ void CNPC_Female::Animation_Control_Walk(_double dTimeDelta)
 	Go_Straight_Constant(dTimeDelta, ANIM_WALK_GONGSON, 0.3f);
 	Go_Straight_Constant(dTimeDelta, 36, 0.3f);
 	Go_Straight_Deceleration(dTimeDelta, ANIM_WALK_GONGSON_END, 0.3f, 0.01f);
+}
+
+void CNPC_Female::Sway(_double dTimeDelta)
+{
+	if (Calculate_Distance() < 0.8f)
+	{
+		if (m_isFirst_Sway)
+		{
+			m_isFirst_Sway = false;
+
+			m_pModelCom->Set_Animation(ANIM_STAGGER);
+			m_dCoolTime_Walk = 0.0;
+		}
+	}
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_STAGGER)
+	{
+
+		if (0.0f < m_dCoolTime_Walk && m_dCoolTime_Walk < 1.0f)
+		{
+			_float4 Dir;
+			XMStoreFloat4(&Dir, -Calculate_Dir_FixY());
+			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+			Go_Dir_Constant(dTimeDelta, ANIM_STAGGER, 0.1f, Dir);
+		}
+	}
+
+	if (m_isFirst_Sway == false)
+	{
+		m_dCoolTime_Walk += dTimeDelta;
+		if (m_dCoolTime_Walk > 1.85f)
+		{
+			m_dCoolTime_Walk = 0.0;
+			m_isFirst_Sway = true;
+			m_pModelCom->Set_Animation(ANIM_STAND_IDLE);
+		}
+	}
 }
 
 HRESULT CNPC_Female::Add_Components()

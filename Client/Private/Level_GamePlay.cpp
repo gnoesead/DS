@@ -432,13 +432,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 
 
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
-		TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-		return E_FAIL;
-	}
-
     Safe_Release(pGameInstance);
 
     return S_OK;

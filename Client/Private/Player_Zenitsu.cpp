@@ -830,15 +830,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 	}
 	//마나제한
-	//if (m_Moveset.m_iAwaken < 2)
-	//{
-	//	if (m_isCan_Mp_Skill == false)
-	//	{
-	//		m_Moveset.m_Down_Skill_Normal = false;
-	//		m_Moveset.m_Down_Skill_Move = false;
-	//		m_Moveset.m_Down_Skill_Guard = false;
-	//	}
-	//}
+	if (m_Moveset.m_iAwaken < 2)
+	{
+		if (m_isCan_Mp_Skill == false)
+		{
+			m_Moveset.m_Down_Skill_Normal = false;
+			m_Moveset.m_Down_Skill_Move = false;
+			m_Moveset.m_Down_Skill_Guard = false;
+		}
+	}
 
 	
 	if (m_isHit_Hekireki)

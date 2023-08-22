@@ -131,6 +131,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CTransform* m_pBattleTargetTransformCom = pMon->Get_TransformCom();
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
@@ -139,6 +140,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CTransform* m_pBattleTargetTransformCom = pBoss->Get_TransformCom();
 
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	else {
 		m_Is_Battle = false;

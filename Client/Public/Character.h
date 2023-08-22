@@ -8,6 +8,7 @@
 
 #include "AtkCollider.h"
 
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -25,6 +26,15 @@ public:
 	//NPC
 	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK, NPC_END };
 public:
+	typedef struct tagNPC
+	{
+		NPC_TYPE		eNPC = { NPC_END };
+		_bool			isNPC_NaviOff = { false };
+		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
+		
+		_float4			WalkSpot[3];
+	}NPCDESC;
+
 	typedef struct tagCharacterDesc
 	{
 		CGameObject::WORLDINFO		WorldInfo;
@@ -34,8 +44,8 @@ public:
 		_float						Land_Y;
 		NAVI_TYPE					eCurNavi;
 
-		//NPC
-		NPC_TYPE		eNPC = NPC_END;
+		NPCDESC				NPCDesc;
+
 	}CHARACTERDESC;
 
 	typedef struct tagCharacterStatusDesc

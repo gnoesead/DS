@@ -1307,7 +1307,7 @@ HRESULT CMonster_Zako::Add_Components()
 		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
 		return E_FAIL;
 	}
-
+	
 	/* for.Com_Navigation_Village_Battle*/
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
 		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
