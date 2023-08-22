@@ -621,7 +621,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 		m_isBattleStart = true;
 	Safe_Release(pGameInstance);
 
