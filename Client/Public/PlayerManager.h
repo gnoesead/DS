@@ -63,6 +63,13 @@ public:
 	void	Set_PlayerPos_Change(_vector vPos) {
 		XMStoreFloat4(&PlayerPos_Change, vPos);
 	}
+
+	void Reset_PlayerManager() {
+		iPlayerIndex =  0 ; 
+		isFirst_Player_Change = true ;
+		isFirst_Setting_Status =  true ;
+		PlayerPos_Change = { 0.0f, 0.0f, 0.0f,  1.0f };
+	}
 public:
 	virtual void Free() override;
 };

@@ -35,6 +35,7 @@
 #include "Effect_Texture.h"
 #include "EffectPlayer.h"
 
+#include "PlayerManager.h"
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -47,6 +48,8 @@ HRESULT CLevel_House::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
     if (FAILED(Ready_Lights()))
     {

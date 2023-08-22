@@ -595,7 +595,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_JUMP, m_fMove_Speed * 1.2f * m_fScaleChange);
 		Go_Straight_Constant(dTimeDelta, 57, m_fMove_Speed * 1.2f * m_fScaleChange);
 		Go_Straight_Constant(dTimeDelta, 58, m_fMove_Speed * 1.2f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 59, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
+		//Go_Straight_Deceleration(dTimeDelta, 59, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
 	}
 	Ground_Animation_Play(58, 59);
 
@@ -1421,6 +1421,8 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 	_float4 CurPos;
 	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	AnotherPos.y = CurPos.y;
+	if (m_isSwap_OnSky)
+		AnotherPos.y = 10.0f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 }
 
