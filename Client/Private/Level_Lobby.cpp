@@ -1343,6 +1343,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Small");
+		return E_FAIL;
+	}
+
 	return 	S_OK;
 }
 

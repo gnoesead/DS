@@ -63,6 +63,7 @@ protected:
 	
 private:
 	CFIcon* m_pIcon = { nullptr };
+	_vector m_Player_Pos = {};
 
 protected:
 	HRESULT Add_Components();

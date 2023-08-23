@@ -1316,6 +1316,14 @@ HRESULT CMonster_Zako::Add_Components()
 		return E_FAIL;
 	}
 
+	/* for.Com_Navigation_House_2_0*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_2_0"),
+		TEXT("Com_Navigation_House_2_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_2_0], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_House_2_0: CPlayer");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
