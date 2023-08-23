@@ -99,7 +99,7 @@ private: //애니메이션 제어용 변수들
 	//Move
 	_float	m_fMove_Speed = { 2.f };
 
-	_bool	m_isJump_Move = { false };
+	
 
 	//평타 용
 	_bool	m_isFirst_Combo_Down = { true };

@@ -92,7 +92,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //ÅºÁö·Î
 	{
-		Player_Change_Setting_Status();
+		Player_Change_Setting_Status(dTimeDelta);
 		Animation_Control(dTimeDelta);
 	}
 	else
@@ -154,8 +154,8 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Tanjiro::Render()
 {
-	if (m_isSwap_OnSky == false)
-	{
+	//if (m_isSwap_OnSky == false)
+	//{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
 
@@ -198,7 +198,7 @@ HRESULT CPlayer_Tanjiro::Render()
 			m_pModelCom->Render(i);
 		}
 #pragma endregion
-	}
+	//}
 	return S_OK;
 }
 
@@ -732,7 +732,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_JUMP, m_fMove_Speed * 1.2f * m_fScaleChange);
 		Go_Straight_Constant(dTimeDelta, 84, m_fMove_Speed * 1.2f * m_fScaleChange);
 		Go_Straight_Constant(dTimeDelta, 85, m_fMove_Speed * 1.2f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
+		//Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
 	}
 	Ground_Animation_Play(85, 86);
 
@@ -1673,6 +1673,7 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_isJump_Move = false;
 		m_dDelay_Player_Change = 0.0;
 		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
 
@@ -1681,6 +1682,8 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
 		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
+
+		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -1690,18 +1693,24 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
 		if(m_dDelay_Player_Change < 1.5)
-			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
 		else
 			m_isSwap_OnSky = true;
 
 		m_isJumpOn = true;
 	}
 
-	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
-	_float4 CurPos;
-	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	AnotherPos.y = CurPos.y;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	if (m_isSwap_OnSky)
+	{
+		_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+		_float4 CurPos;
+		XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		AnotherPos.y = CurPos.y;
+
+		AnotherPos.y = 13.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	}
+	
 }
 
 void CPlayer_Tanjiro::Moving_Restrict()
