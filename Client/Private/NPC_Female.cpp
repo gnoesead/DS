@@ -94,9 +94,6 @@ void CNPC_Female::Tick(_double dTimeDelta)
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 		return;
 
-	_float4 TestPos;
-	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	_int ak = 47;
 }
 
 void CNPC_Female::LateTick(_double dTimeDelta)

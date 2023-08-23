@@ -106,9 +106,9 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 	PS_OUT         Out = (PS_OUT)0;
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
-	if (0.f == vDiffuse.a)
-		discard;
+	
 	Out.vColor = vDiffuse;
+	
 
 	if (0.f == Out.vColor.a)
 		discard;
@@ -123,24 +123,21 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightColor = 0.f;
 	vector vDiffuseColor = g_FinalTexture.Sample(LinearSampler, In.vTexUV);
-	if (vDiffuseColor.a == 0.f)
-		discard;
+	
 	vector vFragColor = vDiffuseColor;
 	if (vFragColor.a == 0.f)
 		discard;
-	if (vFragColor.r == float(0.f) && vFragColor.g == float(0.f) && vFragColor.b == float(0.f))
-		discard;
+	
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	
-	if (fBrightness > 0.7f)
+	if (fBrightness > 0.99f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	
 
 	return Out;
 }
@@ -153,14 +150,9 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 	vector vBloomOriTex = g_BloomTextrue.Sample(BloomOriSampler, In.vTexUV); // 블룸 추출한 텍스처
 	vector vBloomColor = g_HDRTexture.Sample(BloomSampler, In.vTexUV); // 블룸 + 블러먹인 텍스처
 
-	/*if (vHDRColor.a == 0.f)
-		discard;*/
-	/*if (vBloomOriTex.a == 0.f)
-		discard;*/
-	/*if (vBloomColor.r == float(0.f) && vBloomColor.g == float(0.f) && vBloomColor.b == float(0.f))
-		discard;*/
-
-
+	if (vHDRColor.a == 0.f)
+		discard;
+	
 	vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
 
 	vector vOut = (vHDRColor);
@@ -245,13 +237,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
-
+	
 	return Out;
 }
 
@@ -276,12 +262,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	
 
 	return Out;
 }
@@ -303,14 +284,7 @@ PS_OUT PS_BlurX_3(PS_IN _In)
 
 
 	Out.vColor /= FinalTotal;
-
 	/*if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
 		discard;*/
 
 	return Out;
@@ -334,12 +308,6 @@ PS_OUT PS_BlurY_3(PS_IN _In)
 	Out.vColor /= FinalTotal;
 
 	/*if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
 		discard;*/
 
 	return Out;
@@ -352,20 +320,15 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	if (vFinal.a < 0.2f)
-		discard;
+	/*if (vFinal.a < 0.2f)
+		discard;*/
 
-		//vFinal *= vSSAO.r;
+		
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
-	if (Out.vColor.a < 0.2f)
+	if (Out.vColor.a == 0.0f)
 		discard;
-		/*if (Out.vColor.a == 1.f)
-			discard;
-		if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-			discard;
-		if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-			discard;*/
+		
 
 	return Out;
 }
@@ -389,7 +352,7 @@ technique11 DefaultTechnique
 	pass Deferred_Test
 	{//1
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -403,7 +366,7 @@ technique11 DefaultTechnique
 	pass BlurX
 	{//2
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -416,7 +379,7 @@ technique11 DefaultTechnique
 	pass BlurY
 	{//3
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -429,7 +392,7 @@ technique11 DefaultTechnique
 	pass CombineBlur
 	{//4
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -442,7 +405,7 @@ technique11 DefaultTechnique
 	pass BlurX_3
 	{//5
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -454,7 +417,7 @@ technique11 DefaultTechnique
 	pass BlurY_3
 	{//6
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -466,7 +429,7 @@ technique11 DefaultTechnique
 	pass ExportBloom
 	{//7
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -478,8 +441,8 @@ technique11 DefaultTechnique
 	pass Bloom
 	{//8
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-		SetDepthStencilState(DS_Default, 0);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;

@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/NPC_Female.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Kyogai.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -69,7 +69,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_isCombo), sizeof(_bool));
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_iConnect_ComboAnim), sizeof(_int));
 			fin.read(reinterpret_cast<char*>(&ControlDesc.m_isRootAnimation), sizeof(_bool));
-			
+
 			_int isizeEvent;
 			fin.read(reinterpret_cast<char*>(&isizeEvent), sizeof(_int));
 
@@ -263,7 +263,7 @@ void CAnimCharacter_Tool::Save_Animations()
 	char FindFile[MAX_PATH] = { "" };
 	WIN32_FIND_DATAA fdFind;
 	//★
-	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/NPC_Female/*.bin", &fdFind);
+	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Kyogai/*.bin", &fdFind);
 	if (hFindOut != INVALID_HANDLE_VALUE)
 	{
 		do
@@ -439,7 +439,7 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_Female"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Kyogai"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CAnimCharacter_Tool");

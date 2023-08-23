@@ -230,7 +230,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     
-    CharacterDesc.WorldInfo.vPosition = _float4(136.f, 0.f, 136.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(120.6f, 0.f, 139.2f, 1.f);
 
    
 	CharacterDesc.Land_Y = 0.f;
@@ -1510,9 +1510,24 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_1");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2_1");
 		return E_FAIL;
 	}
 
