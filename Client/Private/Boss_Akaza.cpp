@@ -67,7 +67,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #endif // _DEBUG	
 
 	Update_Hit_Messenger(dTimeDelta);
-	Update_Trigger(dTimeDelta);
+	//Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -340,7 +340,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 		RandomAngle = Random::Generate_Float(-20.f, 20.f);
-		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 1.f), XMConvertToRadians(RandomAngle));
+		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
 		vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
 
 		_double dLifeTime = 0.20;

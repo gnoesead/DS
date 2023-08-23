@@ -295,8 +295,11 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	if (g_bSSAOSwitch == false)
 	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-	else
+	else if(g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
+
+	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(vLightDir), vNormal);
