@@ -34,6 +34,7 @@
 #include "EffectPlayer.h"
 
 #include "PlayerManager.h"
+#include "SoundMgr.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -104,6 +105,10 @@ HRESULT CLevel_FinalBoss::Initialize()
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
+
+
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 	return S_OK;
 }

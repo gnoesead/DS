@@ -254,25 +254,29 @@ void CLevel_Loading::Tick(_double dTimeDelta)
 
         if (g_iLoadingTextureIndex == 0 && m_eNextLevelID == LEVEL_LOGO) {
 
-            CLevel* pLevel = { nullptr };
+            if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
+            {
 
-            pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
-            
-            if (nullptr == pLevel)
-                return;
+                CLevel* pLevel = { nullptr };
 
-            g_iLoadingTextureIndex += 1;
+                pLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 
-            HRESULT hr = 0;
+                if (nullptr == pLevel)
+                    return;
 
-            CGameInstance* pGameInstance = CGameInstance::GetInstance();
-            Safe_AddRef(pGameInstance);
+                g_iLoadingTextureIndex += 1;
 
-            hr = pGameInstance->Open_Level(m_eNextLevelID, pLevel, true);
-            Safe_Release(pGameInstance);
+                HRESULT hr = 0;
 
-            if (FAILED(hr))
-                return;
+                CGameInstance* pGameInstance = CGameInstance::GetInstance();
+                Safe_AddRef(pGameInstance);
+
+                hr = pGameInstance->Open_Level(m_eNextLevelID, pLevel, true);
+                Safe_Release(pGameInstance);
+
+                if (FAILED(hr))
+                    return;
+            }
         }
         else if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true && m_eNextLevelID != LEVEL_LOGO) {
 

@@ -66,10 +66,10 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 
 #ifdef _DEBUG
-	Debug_State(dTimeDelta);
+	
 
 #endif // _DEBUG
-
+	Debug_State(dTimeDelta);
 	Update_Hit_Messenger(dTimeDelta);
 	Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
@@ -199,7 +199,7 @@ HRESULT CBoss_Kyogai::Render_ShadowDepth()
 	}
 	return S_OK;
 }
-#ifdef _DEBUG
+//#ifdef _DEBUG
 void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -307,7 +307,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
-#endif //_DEBUG
+//#endif //_DEBUG
 
 void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 {

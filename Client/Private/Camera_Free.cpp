@@ -221,6 +221,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Combo_On = false;
 		}
 
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			m_bIs_Combo_On = false;
+		}
+
 	}
 
 	

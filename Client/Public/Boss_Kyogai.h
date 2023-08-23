@@ -126,8 +126,9 @@ public:
 #pragma endregion
 #pragma region Trigger
 #ifdef _DEBUG
-	void Debug_State(_double dTimeDelta);
 #endif //_DEBUG
+	void Debug_State(_double dTimeDelta);
+
 	void EventCall_Control(_double dTimeDelta);
 
 	void Update_Hit_Messenger(_double dTimeDelta);
