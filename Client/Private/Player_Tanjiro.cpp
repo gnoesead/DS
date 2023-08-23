@@ -154,8 +154,8 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Tanjiro::Render()
 {
-	//if (m_isSwap_OnSky == false)
-	//{
+	if (m_isSwap_OnSky == false)
+	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
 
@@ -198,7 +198,7 @@ HRESULT CPlayer_Tanjiro::Render()
 			m_pModelCom->Render(i);
 		}
 #pragma endregion
-	//}
+	}
 	return S_OK;
 }
 
@@ -479,7 +479,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 		}
 
@@ -621,7 +621,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 		m_isBattleStart = true;
 	Safe_Release(pGameInstance);
 
@@ -1692,8 +1692,18 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		if(m_dDelay_Player_Change < 1.5)
+		if (m_dDelay_Player_Change < 1.5)
+		{
 			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+
+			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			SwappingPos.y = MyPos.y;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
+		}
 		else
 			m_isSwap_OnSky = true;
 

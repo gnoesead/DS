@@ -175,8 +175,8 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer_Zenitsu::Render()
 {
-	//if (m_isSwap_OnSky == false)
-	//{
+	if (m_isSwap_OnSky == false)
+	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
 
@@ -225,7 +225,7 @@ HRESULT CPlayer_Zenitsu::Render()
 		pNavi->Render();*/
 #endif
 
-	//}
+	}
 	return S_OK;
 }
 
@@ -1450,7 +1450,17 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
 	{
 		if (m_dDelay_Player_Change < 1.5)
+		{
 			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+
+			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			SwappingPos.y = MyPos.y;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
+		}
 		else
 			m_isSwap_OnSky = true;
 
