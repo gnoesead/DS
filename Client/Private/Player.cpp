@@ -37,7 +37,27 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	Add_BoxJump_Info();		// 박스 정보 입력 (안원)
 
-	
+	// 점광원 달기
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	LIGHTDESC tLightInfo;
+	ZeroMemory(&tLightInfo, sizeof tLightInfo);
+
+	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
+
+	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	tLightInfo.fLightRange = 15.f;
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+		tLightInfo.vLightDiffuse = _float4(0.15f, 0.15f, 0.3f, 1.f);
+	else
+		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
+	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+
+	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -1162,7 +1182,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer::Player_Change_Setting_Status()
+void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 {
 	if (CPlayerManager::GetInstance()->Get_First_Setting_Status())
 	{
@@ -1176,6 +1196,49 @@ void CPlayer::Player_Change_Setting_Status()
 
 		m_isSwap_OnSky = false;
 		m_Moveset.m_isHitMotion = false;
+
+		
+		m_Moveset.m_isDownMotion = false;
+		m_Moveset.m_isGetUpMotion = false;
+
+		m_Moveset.m_isRestrict_Move = false;
+		m_Moveset.m_isRestrict_KeyInput = false;
+		m_Moveset.m_isRestrict_Jump = false;
+		m_Moveset.m_isRestrict_JumpCombo = false;
+		m_Moveset.m_isRestrict_Throw = false;
+		m_Moveset.m_isRestrict_Charge = false;
+		m_Moveset.m_isRestrict_Dash = false;
+		m_Moveset.m_isRestrict_Step = false;
+		m_Moveset.m_isRestrict_DoubleStep = false;
+		m_Moveset.m_isRestrict_Special = false;
+
+		m_Moveset.m_isRestrict_Adventure = false;
+
+		Set_FallingStatus(3.0f, 0.09f);
+
+		m_isJump_Move = false;
+		if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+		{
+			m_pModelCom->Set_Animation(84);
+		}
+		else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
+		{
+			m_pModelCom->Set_Animation(57);
+		}
+
+		m_dDelay_Swapping_Pos = 0.0;
+	}
+
+	m_dDelay_Swapping_Pos += dTimeDelta;
+	if (m_dDelay_Swapping_Pos < 0.85f)
+	{
+		_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+		_float4 MyPos;
+		XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		SwappingPos.y = MyPos.y;
+		
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
 	}
 }
 

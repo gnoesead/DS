@@ -58,6 +58,8 @@ public:
 		_bool	m_Down_GetUp_Move = { false };
 		_bool	m_Down_GetUp = { false };
 
+		//체인지 키인풋
+		_bool	m_Down_PlayerChange = { false };
 
 		//달리기 키인풋
 		_bool	m_State_Battle_Run = { false };
@@ -180,11 +182,13 @@ protected:
 	void	Check_Change_Position(_double TimeDelta);	// 캐릭터 이동 (안원추가)
 
 	//캐릭 변경
-	void	Player_Change_Setting_Status();
+	void	Player_Change_Setting_Status(_double dTimeDelta);
 
-public:
+protected:
 	
 	_double m_dDelay_Player_Change = { 0.0 };
+
+	_double		m_dDelay_Swapping_Pos = { 0.0 };
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
@@ -197,6 +201,7 @@ protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
 
 	_bool	m_isSpecialHit = { false };
+	_bool	m_isJump_Move = { false };
 
 	//각성모드 평타서지 가능
 	_bool	m_isCan_Surge = { false };
