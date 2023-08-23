@@ -75,7 +75,10 @@ HRESULT CMonster_Spider::Initialize(void* pArg)
 		m_isLeft = false;
 	}
 
-	m_fCrawlingSpeed = ((rand() % 100) + 50 ) * 0.01f ;
+	m_fCrawlingSpeed = ((rand() % 100) + 50 ) * 0.01f;
+
+	m_StatusDesc.fHp = 50.0f;
+	m_StatusDesc.fHp_Max = 50.0f;
 
 	return S_OK;
 }

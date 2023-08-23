@@ -47,12 +47,15 @@ private: //캐릭터 스왑 체인지 관련 변수
 
 	_float4		PlayerPos_Change = { 0.0f, 0.0f, 0.0f,  1.0f };
 
+	_float4		Swaping_Pos = { 0.0f, 0.0f, 0.0f, 1.0f };
+
 public:
 	_int	Get_PlayerIndex() { return iPlayerIndex; }
 	_bool	Get_First_Player_Change() { return isFirst_Player_Change; }
 	_bool	Get_First_Setting_Status() { return isFirst_Setting_Status; }
 
 	_float4 Get_PlayerPos_Change() { return PlayerPos_Change; }
+	_float4 Get_Swaping_Pos() { return Swaping_Pos; }
 
 
 	void	Set_PlayerIndex(_int index) { iPlayerIndex = index; }
@@ -63,6 +66,9 @@ public:
 	void	Set_PlayerPos_Change(_vector vPos) {
 		XMStoreFloat4(&PlayerPos_Change, vPos);
 	}
+
+	void	Set_Swaping_Pos(_float4 Pos) { Swaping_Pos = Pos; }
+	void	Set_Swaping_Pos(_vector vPos) { XMStoreFloat4(&Swaping_Pos, vPos); }
 
 	void Reset_PlayerManager() {
 		iPlayerIndex =  0 ; 
