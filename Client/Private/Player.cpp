@@ -8,6 +8,7 @@
 
 #include "PlayerManager.h"
 
+#include "EffectPlayer.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -235,6 +236,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 	
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
+
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
 		if (m_Moveset.m_isDownMotion == false)
