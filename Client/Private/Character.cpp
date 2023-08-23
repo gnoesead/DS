@@ -66,7 +66,7 @@ HRESULT CCharacter::Initialize(void* pArg)
 	LIGHTDESC tLightInfo;
 	ZeroMemory(&tLightInfo, sizeof tLightInfo);
 
-	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
+	tLightInfo.eType = LIGHTDESC::TYPE_POINT;	
 
 	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	tLightInfo.fLightRange = 15.f;
