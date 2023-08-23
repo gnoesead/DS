@@ -24,7 +24,8 @@ public:
 
 	
 private:
-	_uint    m_Dialog_Type = { 0 };
+	_uint    m_Dialog_Type = { 99 };
+	
 
 
 

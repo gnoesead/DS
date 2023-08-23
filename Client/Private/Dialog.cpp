@@ -94,24 +94,21 @@ HRESULT CDialog::Initialize(void * pArg)
 
 	Set_UI();
 
-
-	m_szText_1.push_back(L"탄지로와 소녀");
-	m_szText_1.push_back(L"1");
-	m_szText_1.push_back(L"245");
-	m_szText_1.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G");
-	m_szText_1.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-	m_szText_2.push_back(L"탄지로와 어머니");
-	m_szText_2.push_back(L"탄지로");
-	m_szText_2.push_back(L"245");
-	m_szText_2.push_back(L"이게 맞아?  이게 맞냐고");
-	m_szText_2.push_back(L"대화창 생성 : F , 대화창 소멸 : G 대화창 생성 : F , 대화창 소멸 : G");
-
-
+	// 0
+	m_szText_1.push_back(L"방해되니까 비켜");
+	m_szText_1.push_back(L"말씀이 심하시네요");
+	m_szText_1.push_back(L"좀 비켜주실래요?");
+	m_szText_1.push_back(L"이게 맞아? 이게 맞냐고");
+	
+	// 1
+	m_szText_2.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szText_2.push_back(L"어멋 탄지로상 아리가또네");
+	
+	
 	m_szName[TANJIRO] = L"카마도 탄지로";
-	m_szName[MOTHER] = L"어머니";
 	m_szName[GIRL] = L"소녀";
+	m_szName[MOTHER] = L"여자";
+	
 
 
 
@@ -145,7 +142,7 @@ void CDialog::LateTick(_double TimeDelta)
 	
 	m_Dialog_Type = CDialogManager::GetInstance()->Get_Dialog_Type();
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true) {
+	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true && m_Dialog_Type != 99) {
 
 		m_Cur_Num++;
 		m_Name_Type *= -1;
@@ -169,7 +166,7 @@ void CDialog::LateTick(_double TimeDelta)
 
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false) {
+	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false && m_Dialog_Type != 99) {
 		m_Is_In = true;
 		m_Is_Font_Render = true;
 	}

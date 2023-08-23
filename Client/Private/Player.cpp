@@ -344,20 +344,22 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	}
 
 	
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_pRendererCom->Set_Invert();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
-	{
-		m_pRendererCom->Set_GrayScale();
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		m_pRendererCom->Set_RadialBlur();
-	}
+		if (pGameInstance->Get_DIKeyDown(DIK_Z))
+		{
+			m_pRendererCom->Set_Invert();
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_X))
+		{
+			m_pRendererCom->Set_GrayScale();
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_C))
+		{
+			m_pRendererCom->Set_RadialBlur();
+		}
 
+	}
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 

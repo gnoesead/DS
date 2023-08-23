@@ -57,7 +57,7 @@ private:
 
 	vector<wstring>			m_szText_2 = {};
 
-	_uint                   m_Dialog_Type = { 0 };
+	_uint                   m_Dialog_Type = { 99 };
 
 	_uint                   m_Cur_Num = { 0 };
 
