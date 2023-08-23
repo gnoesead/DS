@@ -479,7 +479,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
 			}
 		}
 

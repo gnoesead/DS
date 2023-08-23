@@ -1079,7 +1079,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
-		m_fOutlineThickness = 4.0f;
+		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
 	{
@@ -1094,7 +1094,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
-		m_fOutlineThickness = 4.0f;
+		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1110,8 +1110,9 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 			m_pRendererCom->Set_Invert();
 		if (m_dAwakeTime > 25.0)
 		{
-			m_pRendererCom->Set_Invert();
+			m_dAwakeTime = 0.0;
 			m_bAwake = false;
+			m_pRendererCom->Set_Invert();			
 			m_fOutlineThickness = 2.0f;
 
 		}
@@ -1821,7 +1822,7 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(1.5f, 0.03f);
+	Jumping(1.8f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
@@ -2194,15 +2195,15 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					{
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
+						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 					}
 					else
 					{
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
+						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
 					Camera_Shake();
 

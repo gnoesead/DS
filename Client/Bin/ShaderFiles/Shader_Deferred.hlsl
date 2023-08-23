@@ -12,7 +12,7 @@ vector         g_vLightDiffuse;
 vector         g_vLightAmbient;
 vector         g_vLightSpecular;
 
-vector         g_vMtrlAmbient = vector(0.9f, 0.9f, 0.9f, 1.f);
+vector         g_vMtrlAmbient = vector(1.2f, 1.2f, 1.2f, 1.f);
 vector         g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
 texture2D      g_NormalTexture;
@@ -292,8 +292,11 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 
 	/* 0 ~ 1 */
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
-
+	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+	if (g_bSSAOSwitch == false)
 	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	else
+		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(vLightDir), vNormal);
