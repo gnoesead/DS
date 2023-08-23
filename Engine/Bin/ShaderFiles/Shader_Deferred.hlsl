@@ -292,8 +292,14 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 
 	/* 0 ~ 1 */
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
-
+	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+	if (g_bSSAOSwitch == false)
 	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	else if(g_bSSAOSwitch == true)
+		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
+
+	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(vLightDir), vNormal);
