@@ -849,11 +849,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 				if (m_Moveset.m_Down_Battle_Combo_Down)
 				{
 					m_pModelCom->Set_Combo_Another(24);
+					m_pModelCom->Set_EarlyEnd(24, true, 0.99f);
 				}
 				// À§ÄŞº¸ wÄŞº¸
 				else if (m_Moveset.m_Down_Battle_Combo_Up)
 				{
 					m_pModelCom->Set_Combo_Another(26);
+					m_pModelCom->Set_EarlyEnd(26, true, 0.99f);
 
 					m_isCan_AirDash = true;
 				}
