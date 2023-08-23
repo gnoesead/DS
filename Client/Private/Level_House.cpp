@@ -37,6 +37,7 @@
 
 #include "PlayerManager.h"
 #include "FIcon.h"
+#include "DialogManager.h"
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -120,6 +121,8 @@ HRESULT CLevel_House::Initialize()
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(false);
+
+	CDialogManager::GetInstance()->Set_Dialog_Type(99);
 
     return S_OK;
 }

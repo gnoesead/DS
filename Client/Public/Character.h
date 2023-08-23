@@ -32,7 +32,8 @@ public:
 		_bool			isNPC_NaviOff = { false };
 		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
 		_uint           Icon_Type = { 99 };
-		
+		_uint           Dialog_Type = { 99 };
+
 		_float4			WalkSpot[3];
 	}NPCDESC;
 
@@ -221,6 +222,7 @@ protected:
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
+	
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();
