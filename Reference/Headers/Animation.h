@@ -93,6 +93,7 @@ public:
 	void	Set_EarlyEnd(_bool bEnd) { m_isEarlyEnd = bEnd; }
 	void	Set_Ratio_EarlyEnd(_float fEarly) { m_fEarlyEnd = fEarly; }
 
+	void	Set_LinearDuration(_float dDuration) { m_dLinear_Duration = (_double)dDuration; }
 
 	void	Reset_Event();
 
@@ -112,6 +113,9 @@ private:
 
 	_bool		m_isEarlyEnd = { false };
 	_float		m_fEarlyEnd = { 0.65f };
+
+	//º¸°£duration
+	_double		m_dLinear_Duration = { 0.09 };
 
 public:
 	static CAnimation* Create(ANIMATIONDATA* pAnimationData, class CModel* pModel);

@@ -86,8 +86,20 @@ BlendState	 BS_Default
 {
 	/* [0] : 0¹øÂ° ·»´õÅ¸°Ù¿¡ ±×¸±¶§ ºí·»µùÀ» ÇÒ²¨´Ù ¸»²¨´Ù.*/
 	BlendEnable[0] = false;
-};
 
+
+};
+BlendState	 BS_Default_Engine
+{
+	/* [0] : 0¹øÂ° ·»´õÅ¸°Ù¿¡ ±×¸±¶§ ºí·»µùÀ» ÇÒ²¨´Ù ¸»²¨´Ù.*/
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+	BlendEnable[2] = true;
+	/*BlendEnable[0] = false;
+	BlendEnable[1] = false;
+	BlendEnable[2] = false;*/
+
+};
 BlendState	 BS_AlphaBlending
 {
 	BlendEnable[0] = true;
@@ -105,6 +117,24 @@ BlendState	 BS_AlphaBlendingOne
 	DestBlend = ONE;
 	BlendOp = Add;
 };
+BlendState	 BS_AlphaBlending_Engine
+{
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+	BlendEnable[2] = true;
+	SrcBlend = SRC_ALPHA;
+	DestBlend = INV_SRC_ALPHA;
+	BlendOp = Add;
+};
+BlendState	 BS_AlphaBlendingOne_Engine
+{
+	BlendEnable[0] = true;
+	BlendEnable[1] = true;
+	BlendEnable[2] = true;
+	SrcBlend = SRC_ALPHA;
+	DestBlend = ONE;
+	BlendOp = Add;
+};
 BlendState	 BS_OneByOne
 {
 	BlendEnable[0] = true;
@@ -118,6 +148,7 @@ BlendState    BS_OneByOne_Engine
 {
 	BlendEnable[0] = true;
 	BlendEnable[1] = true;
+	BlendEnable[2] = true;
 	SrcBlend = ONE;
 	DestBlend = ONE;
 	BlendOp = Add;

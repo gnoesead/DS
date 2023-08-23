@@ -230,7 +230,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     
-    CharacterDesc.WorldInfo.vPosition = _float4(136.f, 0.f, 136.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(120.6f, 0.f, 139.2f, 1.f);
 
    
 	CharacterDesc.Land_Y = 0.f;
@@ -772,32 +772,32 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 
 // FIcon (임시) 실제로는 객체가 파츠로 소유할거임
-	//CFIcon::UIDESC UIDesc8;
-	//// 락온 아이콘
-	//ZeroMemory(&UIDesc8, sizeof UIDesc8);
+	CFIcon::UIDESC UIDesc8;
+	// 락온 아이콘
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
-	//UIDesc8.m_Is_Reverse = false;
-	//UIDesc8.m_Type = 7;
-	//UIDesc8.m_Up_Mount = 1.95f;
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 7;
+	UIDesc8.m_Up_Mount = 1.95f;
 
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-	//// 락온 글로우
-	//ZeroMemory(&UIDesc8, sizeof UIDesc8);
+	// 락온 글로우
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
-	//UIDesc8.m_Is_Reverse = false;
-	//UIDesc8.m_Type = 8;
-	//UIDesc8.m_Up_Mount = 1.95f;
+	UIDesc8.m_Is_Reverse = false;
+	UIDesc8.m_Type = 8;
+	UIDesc8.m_Up_Mount = 1.95f;
 
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 // Interaction UI
@@ -1053,6 +1053,55 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+		UIDesc15.m_Type = 4;
+		UIDesc15.m_Line_Num = i;
+		UIDesc15.m_Arrow_Type = 0;
+		UIDesc15.m_Is_X_Reverse = true;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+		UIDesc15.m_Type = 4;
+		UIDesc15.m_Line_Num = i;
+		UIDesc15.m_Arrow_Type = 1;
+		UIDesc15.m_Is_X_Reverse = false;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+		UIDesc15.m_Type = 5;
+		UIDesc15.m_Line_Num = i;
+		
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+		UIDesc15.m_Type = 6;
+		UIDesc15.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
 
 	ZeroMemory(&UIDesc15, sizeof UIDesc15);
 
@@ -1461,9 +1510,24 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_1");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2_1");
 		return E_FAIL;
 	}
 

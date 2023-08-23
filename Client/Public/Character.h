@@ -31,6 +31,7 @@ public:
 		NPC_TYPE		eNPC = { NPC_END };
 		_bool			isNPC_NaviOff = { false };
 		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
+		_uint           Icon_Type = { 99 };
 		
 		_float4			WalkSpot[3];
 	}NPCDESC;
@@ -146,6 +147,11 @@ protected:
 protected:	 
 	// 네비매쉬 높이설정(안원추가)
 	void	Set_Height();
+
+public:
+	_float  Get_LandY() {
+		return m_fLand_Y;
+	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
 	
@@ -173,6 +179,9 @@ protected: //status 게이지 관련
 
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	//navi
+	_bool	m_isNavi_Y_Off = { false };
 
 	//First
 	_bool	m_isFirst_Anim = { true };

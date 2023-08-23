@@ -311,7 +311,6 @@ HRESULT CLevel_House::Ready_Layer_Boss(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -1165,6 +1164,57 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+		UIDesc11.m_Type = 4;
+		UIDesc11.m_Line_Num = i;
+		UIDesc11.m_Arrow_Type = 0;
+		UIDesc11.m_Is_X_Reverse = true;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+		UIDesc11.m_Type = 4;
+		UIDesc11.m_Line_Num = i;
+		UIDesc11.m_Arrow_Type = 1;
+		UIDesc11.m_Is_X_Reverse = false;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+	for (int i = 0; i < 5; i++) {
+
+		ZeroMemory(&UIDesc11, sizeof UIDesc11);
+
+		UIDesc11.m_Type = 5;
+		UIDesc11.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+		UIDesc11.m_Type = 6;
+		UIDesc11.m_Line_Num = i;
+	
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
 	UIDesc11.m_Type = 7;
@@ -1569,6 +1619,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_1_2");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_9.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_9");
@@ -1590,6 +1646,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_10_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_10_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkStepB.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkStepB");
 		return E_FAIL;
 	}
 

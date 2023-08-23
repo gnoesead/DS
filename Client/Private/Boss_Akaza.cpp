@@ -40,11 +40,11 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-	
+
 	Get_PlayerComponent();
 
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
+	m_StatusDesc.fHp = 100.f;
+	m_StatusDesc.fHp_Max = 100.f;
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
@@ -65,10 +65,10 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	Debug_State(dTimeDelta);
 
 #endif // _DEBUG	
-	
+
 	Update_Hit_Messenger(dTimeDelta);
 	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);		
+	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
@@ -224,16 +224,13 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
 			Trigger_DashPunch();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_AirGun();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
-		{			
+		{
 			Trigger_DashKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
@@ -242,75 +239,65 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-
 			Trigger_JumpAirGun();
-
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
 			Trigger_JumpStomp();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_M))
+	}
+
+	if (pGameInstance->Get_DIKeyState(DIK_LSHIFT))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
 			Trigger_Hit_CutScene();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_8))
+		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_0))
+		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
 			Trigger_Nachim();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_Q))
+		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
-
 			Trigger_PushAway();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_W))
+		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
-
 			Trigger_Heal();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_E))
+		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
 			Trigger_Awake();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_R))
-		{
+	}
 
+	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
+		{
 			Trigger_Escape();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_T))
+		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
 			Trigger_NextPhase2();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_Y))
+		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
 			Trigger_NextPhase3();
-
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_U))
+		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
 			Trigger_Dash_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_I))
+		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
 			Trigger_Nachim_ComboPunch();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_O))
+		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
 			m_bTrigger = true;
 			m_eCurstate = STATE_CINEMATIC;
@@ -328,9 +315,8 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
 
 		}
-
-
 	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -508,7 +494,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);				
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
@@ -544,6 +530,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
@@ -555,7 +542,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_1", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
@@ -566,12 +553,17 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 			if (1 == m_iEvent_Index)
-			{
+			{//0.75
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2_1", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
+			{//0.8
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
@@ -780,8 +772,10 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
 			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-
-			Trigger_Hit_Big();
+			if (m_isJumpOn == false)
+				Trigger_Hit_Big();
+			else
+				Trigger_Hit_Blow();
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -801,7 +795,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_SurgeCutScene(true);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-			
+
 		}
 
 		Safe_Release(pGameInstance);
@@ -996,7 +990,7 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 			m_bStart = true;
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
-			
+
 		}
 	}
 
@@ -1085,6 +1079,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		m_fOutlineThickness = 4.0f;
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
 	{
@@ -1099,6 +1094,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		m_fOutlineThickness = 4.0f;
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1116,6 +1112,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		{
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
+			m_fOutlineThickness = 2.0f;
 
 		}
 	}
@@ -1840,6 +1837,7 @@ void CBoss_Akaza::Trigger_Hit_Big()
 void CBoss_Akaza::Trigger_Hit_Blow()
 {
 	m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
@@ -2207,7 +2205,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
 					}
 					Camera_Shake();
-					
+
 				}
 
 				Pos.y = m_fLand_Y;
@@ -2390,10 +2388,10 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 				if (m_iRandomPatternNum > 9)
 					Trigger_UpperKick();
 
-				if (7 <= m_iRandomPatternNum <= 9)
+				if (7 <= m_iRandomPatternNum && 9 <= m_iRandomPatternNum)
 					Trigger_DashKick();
 
-				if (4 <= m_iRandomPatternNum <= 6)
+				if (4 <= m_iRandomPatternNum && 6 <= m_iRandomPatternNum)
 					Trigger_JumpStomp();
 
 				if (m_iRandomPatternNum < 4)
@@ -2524,7 +2522,7 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.70);
-
+	Pos_FixY();
 
 }
 
@@ -2591,6 +2589,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDEL;
 		Trigger_Interact();
 	}
+	Pos_FixY();
 }
 
 void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
