@@ -668,8 +668,8 @@ void CCharacter::Status_Work(_double dTimeDelta)
 
 			m_StatusDesc.fSpecial_Save = m_StatusDesc.fSpecial;
 		}
-		m_StatusDesc.fSpecial = m_StatusDesc.dAwaken_TimeAcc;
-		m_StatusDesc.fSpecial_Max = m_StatusDesc.dAwaken_Duration;
+		m_StatusDesc.fSpecial = (_float)m_StatusDesc.dAwaken_TimeAcc;
+		m_StatusDesc.fSpecial_Max = (_float)m_StatusDesc.dAwaken_Duration;
 	}
 	else
 	{

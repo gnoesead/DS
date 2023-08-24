@@ -271,7 +271,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 	//Left
 	for (_int i = 0; i < 20; i++)
 	{
-		_float fZ = i + 221;
+		_float fZ = (_float)(i + 221);
 
 		CharacterDesc.WorldInfo.vPosition = _float4(201.3f, 6.9f, fZ, 1.f);
 		
@@ -286,7 +286,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 	//Right
 	for (_int i = 0; i < 20; i++)
 	{
-		_float fZ = i + 221;
+		_float fZ = (_float)(i + 221);
 
 		CharacterDesc.WorldInfo.vPosition = _float4(209.2f, 6.9f, fZ, 1.f);
 

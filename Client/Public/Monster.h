@@ -40,7 +40,6 @@ protected: // Calculate
 	_vector Calculate_Dir_FixY();
 	_vector Calculate_Dir_Cross();
 
-	
 
 protected:
 	//플레이어 정보 calculate
