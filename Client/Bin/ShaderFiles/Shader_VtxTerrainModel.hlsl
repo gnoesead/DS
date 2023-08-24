@@ -114,7 +114,7 @@ PS_OUT  PS_Main(PS_IN _In)
 		discard;
 
 	//Out.vDiffuse = (vMtrlDiffuse * (vMask.r) + vSplatingDiffuse * (1.f - vMask.r)) * 0.7f;
-	Out.vDiffuse = (vMtrlDiffuse * (1.f - vMask.r)+ vSplatingDiffuse * (vMask.r)) * 0.6f;
+	Out.vDiffuse = (vMtrlDiffuse * (1.f - vMask.r)+ vSplatingDiffuse * (vMask.r)) * 0.35f;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 300.f, 0.f);

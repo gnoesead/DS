@@ -8,6 +8,7 @@
 
 #include "PlayerManager.h"
 
+#include "EffectPlayer.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -251,6 +252,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 	
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
+
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
 		if (m_Moveset.m_isDownMotion == false)
@@ -344,6 +347,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	}
 
 	
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 
 	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 	{
@@ -357,6 +361,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		m_pRendererCom->Set_RadialBlur();
 	}
 
+	}
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
@@ -1228,6 +1233,8 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		m_dDelay_Swapping_Pos = 0.0;
 		
 	}
+	
+	/*
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
@@ -1242,12 +1249,9 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 			SwappingPos.y = MyPos.y;
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
-
-
-		}
-		
+		}	
 	}
-	Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);*/
 }
 
 HRESULT CPlayer::Add_Components()

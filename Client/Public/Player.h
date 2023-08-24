@@ -285,6 +285,9 @@ protected:
 	_bool	m_isBattleStart = { false };
 	_double m_dDelay_BattleStart = { 0.0 };
 
+	//Npc
+	_bool m_Is_Npc_Near = { false };
+
 protected:
 	// Outline Default
 	_float	m_fOutlineThickness = 0.9f;
