@@ -181,7 +181,7 @@ void CEffect_Mesh::Check_PassIndex(void)
 		{
 			if (nullptr != m_pTextures[TEX_RAMP])
 			{
-				if (nullptr != m_pTextures[TEX_DISTORTION])
+				if (nullptr != m_pTextures[TEX_NOISE])
 					m_iPassIndex = 9;
 				else
 					m_iPassIndex = 8;

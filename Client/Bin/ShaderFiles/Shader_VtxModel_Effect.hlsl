@@ -858,10 +858,10 @@ PS_OUT  PS_MASKRAMPDISTORTIONDISSOLVE(PS_IN In)
 	float fDissolveFactor = vNoise.r;
 	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
 
-	//if (fDissolveAmount > 0 && fDissolveAmount <= 0.1)
-	//	Out.vDiffuse = vector(1.f, 0.f, 0.f, 0.f);
-	//else if (fDissolveAmount <= 0)
-	//	discard;
+	if (fDissolveAmount > 0 && fDissolveAmount <= 0.4)
+		Out.vDiffuse = vector(1.f, 0.f, 0.f, 0.f);
+	else if (fDissolveAmount <= 0)
+		discard;
 
 	return Out;
 }
