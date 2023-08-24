@@ -44,7 +44,7 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	if (FAILED(Add_Components_Model()))
 		return E_FAIL;
 
-	m_pModelCom->Set_Animation(ANIM_IDLE);
+	m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE);
 	
 	if (FAILED(Read_Animation_Control_File("SwampHorn3.bin")))
 	{
@@ -275,8 +275,21 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
-	_float fDistance = Calculate_Distance();
 
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_isNavi_Y_Off = true;
+		m_fLand_Y = -2.0f;
+	}
+	else if (iCurAnim == ANIM_SWAMP_IDLE)
+	{
+		m_isNavi_Y_Off = true;
+		m_fLand_Y = -1.0f;
+	}
+	else
+	{
+		m_isNavi_Y_Off = false;
+	}
 	
 
 }

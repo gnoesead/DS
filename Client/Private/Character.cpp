@@ -514,7 +514,7 @@ void CCharacter::JumpStop(_double dDuration)
 
 void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, 
 								CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, 
-								_bool bBullet, const char* pEffectTag)
+								 CAtkCollider::BULLET_TYPE eBulletType)
 {
 	CAtkCollider::ATKCOLLDESC AtkCollDesc;
 	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
@@ -527,17 +527,46 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	AtkCollDesc.pParentTransform = m_pTransformCom;
 
 	AtkCollDesc.eAtkType = AtkType;
+	AtkCollDesc.eBulletType = eBulletType;
 
 	AtkCollDesc.fDamage = fDmg;
 
-	AtkCollDesc.bBullet = bBullet;
-	if (true == bBullet)
+	AtkCollDesc.bBullet = false;
+	
+
+	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
+
+	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
+}
+
+void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime,
+	CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform,
+	_double Speed, CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag)
+{
+	CAtkCollider::ATKCOLLDESC AtkCollDesc;
+	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
+
+	AtkCollDesc.ColliderDesc.vSize = Size;
+	AtkCollDesc.ColliderDesc.vPosition = Pos;
+
+	AtkCollDesc.dLifeTime = DurationTime;
+
+	AtkCollDesc.pParentTransform = pTransform;
+
+	AtkCollDesc.eAtkType = AtkType;
+	AtkCollDesc.eBulletType = eBulletType;
+
+	AtkCollDesc.fDamage = fDmg;
+	AtkCollDesc.Speed = Speed;
+
+	AtkCollDesc.bBullet = true;
+	if (true == AtkCollDesc.bBullet)
 	{
 		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
 	}
 
-	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
-
+	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector3Normalize(vAtkDir));
+	
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
@@ -646,11 +675,30 @@ void CCharacter::Status_Work(_double dTimeDelta)
 	if (m_StatusDesc.iAttackCombo > 0)
 	{
 		m_dDelay_ComboReset += dTimeDelta;
-		if (m_dDelay_ComboReset > 5.0f)
+		if (m_dDelay_ComboReset > 3.5f)
 		{
 			m_dDelay_ComboReset = 0.0;
 			m_StatusDesc.iAttackCombo = 0;
 		}
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")) != nullptr) {
+
+			CCamera_Free* pCam = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")));
+
+			_float dist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pCam->Get_Battle_Target_Pos()));
+
+			if (dist > 7.5f) {
+				m_dDelay_ComboReset = 0.0;
+				m_StatusDesc.iAttackCombo = 0;
+			}
+
+		}
+
+		Safe_Release(pGameInstance);
+
 	}
 
 	//스페셜게이지

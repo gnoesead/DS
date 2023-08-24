@@ -59,6 +59,9 @@ public:
 	void Set_Is_Battle_LockFree(_bool Is);
 	_bool Get_Is_Battle_LockFree();
 
+	void Set_Is_Dist_Update(_bool Is , _float Time);
+	_bool Get_Is_Dist_Update();
+
 private: // Shake
 	_bool m_Is_Shake_On = { false };
 	_bool m_Is_Shake_Done = { false };
@@ -86,7 +89,9 @@ private: // Zoom_In/Out
 private: // Battle
 	_bool m_Is_Battle_LockFree = { false };
 
-
+	_bool m_bIs_Dist_Update = { true };
+	_float m_Dist_Update_TimeAcc = { 0.f };
+	_float m_Dist_Update_Time = { 0.f };
 
 public:
 	virtual void Free() override;

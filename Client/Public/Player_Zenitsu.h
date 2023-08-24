@@ -93,6 +93,9 @@ private:
 	
 	//벽력일섬용 임시좌표
 	_vector m_vBattleTargetPos = { 140.f, 2.f,120.f,1.f }; 
+
+	//벽력일섬 카메라용
+	_bool m_isHekireki_Camera_On = { false };
 	
 
 private: //애니메이션 제어용 변수들
