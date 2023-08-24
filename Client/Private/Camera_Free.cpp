@@ -54,7 +54,17 @@ void CCamera_Free::Tick(_double dTimeDelta)
 
 	if (m_bIs_Pos_Set == false) {
 		m_bIs_Pos_Set = true;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 130.f, 0.f, 140.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 573.f, 4.5f, 242.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 8.f, 0.f, 10.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 205.57f, 7.38f, 224.0f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 	}
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_0))
@@ -221,6 +231,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Combo_On = false;
 		}
 
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			m_bIs_Combo_On = false;
+		}
+
 	}
 
 	
@@ -280,7 +294,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 					m_fDamping = { 5.f };
 				}
 
-				AdventureCamera(dTimeDelta);
+				NewAdventureCamera(dTimeDelta);
 
 			}
 			// Battle
@@ -370,10 +384,6 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 
 	Turn_Camera(dTimeDelta);
 
-	_vector vDist = vCamPosition - m_vTargetPos;
-
-	_float dist = XMVectorGetX(XMVector3Length(vDist));
-
 	m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
 	m_vDist = XMVector3Normalize(m_vDist);
 
@@ -400,6 +410,34 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 	m_pTransformCom->LerpVector(NewLook, New_t);
 
 	
+	Safe_Release(pGameInstance);
+}
+
+void CCamera_Free::NewAdventureCamera(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vUp = XMVector3Normalize({ 0.f,1.f,0.f });
+
+	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	New_Turn_Camera(dTimeDelta);
+
+	//m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
+	m_vDist = XMVector3Normalize(m_vDist);
+
+	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
+
+	//m_pTransformCom->Chase_Target(vDest, dTimeDelta, 0.7f);
+
+	_vector NewLook = m_vTargetPos + m_vLookOffSet;
+
+	m_pTransformCom->LookAt(NewLook);
+
+
 	Safe_Release(pGameInstance);
 }
 
@@ -673,6 +711,57 @@ void CCamera_Free::Turn_Camera(_double TimeDelta)
 
 	Safe_Release(pGameInstance);
 
+}
+
+void CCamera_Free::New_Turn_Camera(_double TimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+
+
+	// 마우스로 회전
+	_long		MouseMove = 0;
+
+	if (fabs(MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X)))
+	{
+
+		_matrix		RotationMatrix = XMMatrixRotationAxis({ 0.f,1.f,0.f }, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+		m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+	}
+
+	_vector vUp = XMVector3Normalize({ 0.f,1.f,0.f });
+	m_vDist = XMVector3Normalize(m_vDist);
+
+	_float angle = acos(XMVectorGetX(XMVector3Dot(vUp, m_vDist)));
+
+	if (fabs(MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y)))
+	{
+
+		if (MouseMove > 0) {
+			if (angle > XMConvertToRadians(20.f)) {
+				_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+				m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+			}
+
+		}
+		else {
+			if (angle < XMConvertToRadians(100.f)) {
+				_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+				m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+			}
+		}
+
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CCamera_Free::LockMouse()

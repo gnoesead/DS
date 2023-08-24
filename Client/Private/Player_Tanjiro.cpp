@@ -84,11 +84,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	m_pSword->Tick(dTimeDelta);
 	m_pSwordHome->Tick(dTimeDelta);
 
-
-	if (true == m_isDead)
-		return;
-
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
@@ -96,6 +91,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		m_pRendererCom->Set_GrayScale();
 	}
 	Safe_Release(pGameInstance);
+
+	if (true == m_isDead)
+		return;
 
 	Key_Input_PlayerChange(dTimeDelta);
 	//playerswap
@@ -1534,7 +1532,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_State_Battle_Run)
 		{
 			//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.35f);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.45f);
 			m_fMove_Speed = 2.0f;
 
 			if (m_isCanNavi)

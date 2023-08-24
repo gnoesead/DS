@@ -292,6 +292,9 @@
     <Filter Include="02. GameObjects\Character\Player\PlayerManager">
       <UniqueIdentifier>{b8c29c98-f2c8-4acc-a6d5-e826cfb59d61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\AlertCircle">
+      <UniqueIdentifier>{1fcc66ec-5608-4569-b4b0-91886eb7715f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
       <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
     </Filter>
@@ -552,6 +555,9 @@
     <ClInclude Include="..\Public\PlayerManager.h">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AlertCircle.h">
+      <Filter>02. GameObjects\Environment\AlertCircle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -799,6 +805,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\PlayerManager.cpp">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AlertCircle.cpp">
+      <Filter>02. GameObjects\Environment\AlertCircle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

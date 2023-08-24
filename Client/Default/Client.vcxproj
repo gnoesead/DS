@@ -177,6 +177,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AlertCircle.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -267,6 +268,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AlertCircle.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />

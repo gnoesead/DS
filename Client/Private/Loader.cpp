@@ -302,6 +302,8 @@ HRESULT CLoader::LoadingForLobby()
 
 #pragma region EffectTexture
 
+
+
 #pragma endregion
 
 #pragma region UITexture

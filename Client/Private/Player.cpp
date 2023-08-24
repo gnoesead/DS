@@ -50,9 +50,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	tLightInfo.fLightRange = 15.f;
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-		tLightInfo.vLightDiffuse = _float4(0.15f, 0.15f, 0.3f, 1.f);
+		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.6f, 1.f);
 	else
-		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+		tLightInfo.vLightDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
@@ -349,17 +349,15 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 
-	if (pGameInstance->Get_DIKeyDown(DIK_Z))
-	{
-		m_pRendererCom->Set_Invert();
-	}
-
-
-	
-	if (pGameInstance->Get_DIKeyDown(DIK_C))
-	{
-		m_pRendererCom->Set_RadialBlur();
-	}
+		if (pGameInstance->Get_DIKeyDown(DIK_Z))
+		{
+			m_pRendererCom->Set_Invert();
+		}
+		
+		if (pGameInstance->Get_DIKeyDown(DIK_C))
+		{
+			m_pRendererCom->Set_RadialBlur();
+		}
 
 	}
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);

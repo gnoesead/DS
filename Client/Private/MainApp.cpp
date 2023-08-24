@@ -93,8 +93,7 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
-	/*_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.3f);*/
+	
 
 	return S_OK;
 }

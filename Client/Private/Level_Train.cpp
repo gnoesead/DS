@@ -28,6 +28,7 @@
 #include "ColliderManager.h"
 
 #include "PlayerManager.h"
+#include "Camera_Manager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -98,6 +99,8 @@ HRESULT CLevel_Train::Initialize()
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(true);
+
+	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
     return S_OK;
 }
