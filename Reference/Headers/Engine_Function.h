@@ -261,7 +261,6 @@ namespace Engine
 			XMVECTOR vDir = XMVector3Normalize(vTargetPosition - vOwnerPos);
 			return vDir;
 		}
-		
 	};
 
 }
