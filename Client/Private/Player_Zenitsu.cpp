@@ -885,7 +885,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_isHekireki_After = true;
 
 		//히트상태는 이 딜레이 시간동안 유지된다.
-		if (m_dDelay_Hekireki_Hit > 0.23f)
+		if (m_dDelay_Hekireki_Hit > 0.15f)
 		{
 			m_dDelay_Hekireki_Hit = 0.0;
 			m_isHekireki_Hitting = false;
@@ -951,7 +951,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				{
 					if (Get_LockOn_MonPos())
 					{
-						m_LockOnPos.y -= 0.6f;
+						m_LockOnPos.y -= 0.7f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
 					}
 				}
@@ -985,17 +985,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		if (m_isHekireki_Hitting == false)
 			m_dTime_Hekireki += dTimeDelta;
-
-		if (0.35f < m_dTime_Hekireki && m_dTime_Hekireki < 0.42f)
+		// 35 42
+		if (0.35f < m_dTime_Hekireki && m_dTime_Hekireki < 0.45f)
 		{
 			if (m_isHekireki_Hitting)
-				m_pTransformCom->Go_Straight(dTimeDelta * 0.6f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				m_pTransformCom->Go_Straight(dTimeDelta * 0.3f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			else
 			{
 				if(m_isAir_Hekireki)
-					m_pTransformCom->Go_Straight(dTimeDelta * 28.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 19.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * 20.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 15.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			}
 		}
 	}

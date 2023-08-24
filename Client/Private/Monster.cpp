@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
@@ -169,6 +170,15 @@ _vector CMonster::Calculate_Dir_FixY()
 
 	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
 }
+_vector CMonster::Calculate_Dir_ZeroY()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return Compute::Dir_ZeroY(vPlayerPos, vMonsterPos);
+}
 
 _vector CMonster::Calculate_Dir_Cross()
 {
@@ -184,6 +194,17 @@ _vector CMonster::Calculate_Dir_Cross()
 
 
 	return vCross;
+}
+
+_vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
+{
+	_float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
+	_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
+	_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
+
+	RandomAngle = Random::Generate_Float(fMinX, fMaxX);
+	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
+	return vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
 }
 
 void CMonster::Dir_Setting(_bool Reverse)
