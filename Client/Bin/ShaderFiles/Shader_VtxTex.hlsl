@@ -379,6 +379,17 @@ PS_OUT  PS_SMOKE(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_ALERTCIRCLE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	// 0
@@ -595,5 +606,17 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_ALPHA_2();
+	}
+	// 18
+	pass AlertCircle // ¾È¿ø
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ALERTCIRCLE();
 	}
 }
