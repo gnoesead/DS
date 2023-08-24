@@ -38,7 +38,9 @@ protected: // Calculate
 	_float Calculate_Distance();
 	_vector Calculate_Dir();
 	_vector Calculate_Dir_FixY();
+	_vector Calculate_Dir_ZeroY();
 	_vector Calculate_Dir_Cross();
+	_vector Random_Dir(_fvector vDir, _float fMinY = -30.f, _float fMaxY = 30.f, _float fMinX = -20.f, _float fMaxX = 20.f);
 
 
 protected:
@@ -59,6 +61,7 @@ protected:
 	_float		m_fSpinDmg = { 5.f };
 	_float		m_fUpperDmg = { 1.f };
 	_float		m_fBoundDmg = { 1.f };
+	_float		m_fSpeed = { 5.f };
 
 
 
