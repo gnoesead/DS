@@ -88,6 +88,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	{
+		m_pRendererCom->Set_GrayScale();
+	}
+	Safe_Release(pGameInstance);
+
 	Key_Input_PlayerChange(dTimeDelta);
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //ÅºÁö·Î
