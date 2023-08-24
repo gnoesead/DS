@@ -950,7 +950,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 	//박스에 점프하기
 	if (m_Moveset.m_isRestrict_Adventure == false )
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_K) && m_isCan_Jump_To_Box)
+		if (pGameInstance->Get_DIKeyDown(DIK_SPACE) && m_isCan_Jump_To_Box)
 		{
 			m_isCan_Jump_To_Box = false;
 

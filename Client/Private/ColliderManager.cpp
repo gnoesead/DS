@@ -60,11 +60,11 @@ HRESULT CColliderManager::Check_Collider(_uint iLevelIndex, _double dTimeDelta)
 		return E_FAIL;
 	}
 
-	if (FAILED(Check_PlayerToCollisionBox(iLevelIndex, dTimeDelta)))
+	/*if (FAILED(Check_PlayerToCollisionBox(iLevelIndex, dTimeDelta)))
 	{
 		MSG_BOX("Failed to Check_PlayerToCollisionBoxr");
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Check_PlayerToNPC(iLevelIndex, dTimeDelta)))
 	{
@@ -350,15 +350,42 @@ HRESULT CColliderManager::Check_PlayerToCollisionBox(_uint iLevelIndex, _double 
 					if (fRad > fDis)
 					{
 						_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
-						_float fMoveDistance = (fRad - fDis) / 6.0f;
+						_float fMoveDistance = ((fRad - fDis) * 0.15f) / 2.0f;
 						//_float fMoveDistance = fRad - fDis - 0.02f;
 						_vector vMove = vMoveDir * fMoveDistance;
-						
+
 						_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
 						vPlayerPos -= vMove;
 						pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 
 					}
+
+					//CTransform* pNPCTransform = dynamic_cast<CTransform*>(pNPC->Find_Component(TEXT("Com_Transform")));
+
+					//CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+
+					//_float fRad = pPlayerCollider->Get_Collider() + pNPCColl->Get_Collider();
+
+					//_vector vDir = pNPCTransform->Get_State(CTransform::STATE_POSITION) - pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+
+					//_float fDis = Convert::GetLength(vDir);
+
+					//if (fRad > fDis)
+					//{
+					//	_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
+					//	//_float fMoveDistance = (fRad - fDis - 0.02f) / 2.0;
+					//	//_float fMoveDistance = fRad - fDis - 0.02f;
+					//	_float fMoveDistance = ((fRad - fDis) * 0.1f) / 2.0f;
+					//	_vector vMove = vMoveDir * fMoveDistance;
+
+					//	_vector vPlayerPos = pPlayerTransform->Get_State(CTransform::STATE_POSITION);
+					//	vPlayerPos -= vMove;
+					//	pPlayerTransform->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+					//}
+
+
+
+					
 				}
 			}
 		}

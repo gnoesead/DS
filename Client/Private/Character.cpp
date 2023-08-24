@@ -648,11 +648,30 @@ void CCharacter::Status_Work(_double dTimeDelta)
 	if (m_StatusDesc.iAttackCombo > 0)
 	{
 		m_dDelay_ComboReset += dTimeDelta;
-		if (m_dDelay_ComboReset > 5.0f)
+		if (m_dDelay_ComboReset > 3.5f)
 		{
 			m_dDelay_ComboReset = 0.0;
 			m_StatusDesc.iAttackCombo = 0;
 		}
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")) != nullptr) {
+
+			CCamera_Free* pCam = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")));
+
+			_float dist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pCam->Get_Battle_Target_Pos()));
+
+			if (dist > 7.5f) {
+				m_dDelay_ComboReset = 0.0;
+				m_StatusDesc.iAttackCombo = 0;
+			}
+
+		}
+
+		Safe_Release(pGameInstance);
+
 	}
 
 	//스페셜게이지
