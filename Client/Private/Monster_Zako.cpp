@@ -72,8 +72,6 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
 
-
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -85,7 +83,6 @@ void CMonster_Zako::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 
 	Gravity(dTimeDelta);
-
 
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -432,6 +429,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 		//옆 이동
 		m_dCoolTime_SideMove += dTimeDelta;
 		if (3.7f < m_dCoolTime_SideMove)
+		
 		{
 			m_dCoolTime_SideMove = 0.0;
 

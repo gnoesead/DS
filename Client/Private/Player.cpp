@@ -96,10 +96,6 @@ void CPlayer::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 #endif // DEBUG
 
-	_float4 TestPos;
-	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	_int ak = 47;
-
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom[m_eCurNavi])))
 		return;
@@ -327,6 +323,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyState(DIK_B))
 	{
 		m_StatusDesc.fSpecial += 1.1f;
+		m_StatusDesc.fMp += 1.1f;
 	}
 
 	

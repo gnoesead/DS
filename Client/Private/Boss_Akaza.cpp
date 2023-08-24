@@ -40,11 +40,11 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-	
+
 	Get_PlayerComponent();
 
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
+	m_StatusDesc.fHp = 100.f;
+	m_StatusDesc.fHp_Max = 100.f;
 	m_eCurAnimIndex = ANIM_IDEL;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
@@ -65,10 +65,10 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	Debug_State(dTimeDelta);
 
 #endif // _DEBUG	
-	
+
 	Update_Hit_Messenger(dTimeDelta);
-	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);		
+	//Update_Trigger(dTimeDelta);
+	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
@@ -230,7 +230,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 			Trigger_AirGun();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
-		{			
+		{
 			Trigger_DashKick();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
@@ -340,7 +340,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 		RandomAngle = Random::Generate_Float(-20.f, 20.f);
-		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 1.f), XMConvertToRadians(RandomAngle));
+		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
 		vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
 
 		_double dLifeTime = 0.20;
@@ -494,7 +494,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);				
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
@@ -772,8 +772,10 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
 			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-
-			Trigger_Hit_Big();
+			if (m_isJumpOn == false)
+				Trigger_Hit_Big();
+			else
+				Trigger_Hit_Blow();
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -793,7 +795,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_SurgeCutScene(true);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-			
+
 		}
 
 		Safe_Release(pGameInstance);
@@ -988,7 +990,7 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 			m_bStart = true;
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
-			
+
 		}
 	}
 
@@ -1077,6 +1079,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
 	{
@@ -1091,6 +1094,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1106,8 +1110,10 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 			m_pRendererCom->Set_Invert();
 		if (m_dAwakeTime > 25.0)
 		{
-			m_pRendererCom->Set_Invert();
+			m_dAwakeTime = 0.0;
 			m_bAwake = false;
+			m_pRendererCom->Set_Invert();			
+			m_fOutlineThickness = 2.0f;
 
 		}
 	}
@@ -1816,7 +1822,7 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(1.5f, 0.03f);
+	Jumping(1.8f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
@@ -1832,6 +1838,7 @@ void CBoss_Akaza::Trigger_Hit_Big()
 void CBoss_Akaza::Trigger_Hit_Blow()
 {
 	m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
@@ -2188,18 +2195,18 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					{
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
+						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 					}
 					else
 					{
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fBigDmg);
+						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
 					Camera_Shake();
-					
+
 				}
 
 				Pos.y = m_fLand_Y;
@@ -2516,7 +2523,7 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.0, 0.70);
-
+	Pos_FixY();
 
 }
 
@@ -2583,6 +2590,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDEL;
 		Trigger_Interact();
 	}
+	Pos_FixY();
 }
 
 void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)

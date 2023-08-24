@@ -29,6 +29,7 @@ texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
 texture2D	   g_RadialBlurTexture;
 texture2D	   g_EmissiveTexture;
+texture2D	   g_EffectTexture;
 
 texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
@@ -291,8 +292,14 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 
 	/* 0 ~ 1 */
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
-
+	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
+	if (g_bSSAOSwitch == false)
 	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	else if(g_bSSAOSwitch == true)
+		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
+
+	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(vLightDir), vNormal);
@@ -314,6 +321,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vEffectDiffuse = g_EffectTexture.Sample(LinearSampler, In.vTexUV);
 	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
 
 		/*if (vShade.r < 0.21f)
@@ -325,6 +333,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (vDiffuse.a == 0.f)
 		discard;
+	
 
 	Out.vColor = vDiffuse * vShade;
 
@@ -495,7 +504,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness >1.5f)
+	if (fBrightness >0.99f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;

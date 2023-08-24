@@ -34,10 +34,13 @@ protected: // Calculate
 	void  Calculate_To_Player();
 
 	_bool Check_Distance(_float fDistance);
+	_vector Calculate_PlayerPos();
 	_float Calculate_Distance();
 	_vector Calculate_Dir();
 	_vector Calculate_Dir_FixY();
 	_vector Calculate_Dir_Cross();
+
+	
 
 protected:
 	//플레이어 정보 calculate
@@ -84,6 +87,7 @@ protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
 
+
 protected:
 	_uint	m_iSmallHit_Index = { 0 };
 protected:
@@ -99,7 +103,7 @@ protected:
 	_float	m_fOutlineThickness = 2.0f;
 	// Outline Face
 	//_float	m_fOutlineFaceThickness = 0.3f;
-	_float	m_fOutlineFaceThickness = 0.6f;
+	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
 
