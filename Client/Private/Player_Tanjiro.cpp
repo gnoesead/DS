@@ -1532,7 +1532,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_State_Battle_Run)
 		{
 			//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.45f);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f);
 			m_fMove_Speed = 2.0f;
 
 			if (m_isCanNavi)
