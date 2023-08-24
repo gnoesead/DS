@@ -254,10 +254,11 @@ namespace Engine
 			XMVECTOR vTargetPosition = XMVectorSetY(vTargetPos, XMVectorGetY(vOwnerPos));
 			XMVECTOR vDir = XMVector3Normalize(vTargetPosition - vOwnerPos);
 			return vDir;
+
 		}
 		static XMVECTOR Dir_ZeroY(FXMVECTOR vTargetPos, FXMVECTOR vOwnerPos)
 		{// vSour -> Target포지션 vDest -> 본인 포지션 
-			XMVECTOR vTargetPosition = XMVectorSetY(vTargetPos, 0.f);
+			XMVECTOR vTargetPosition = XMVectorSetY(vTargetPos,0.f);
 			XMVECTOR vDir = XMVector3Normalize(vTargetPosition - vOwnerPos);
 			return vDir;
 		}
