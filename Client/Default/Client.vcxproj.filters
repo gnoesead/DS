@@ -298,6 +298,12 @@
     <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
       <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\RoomSmoke">
+      <UniqueIdentifier>{3ede2645-e084-4d91-b1df-068b00737579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\AlertRect">
+      <UniqueIdentifier>{b14fd503-70cd-41dc-9a37-4cda1a419f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -558,6 +564,12 @@
     <ClInclude Include="..\Public\AlertCircle.h">
       <Filter>02. GameObjects\Environment\AlertCircle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RoomSmoke.h">
+      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AlertRect.h">
+      <Filter>02. GameObjects\Environment\AlertRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -808,6 +820,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AlertCircle.cpp">
       <Filter>02. GameObjects\Environment\AlertCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RoomSmoke.cpp">
+      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AlertRect.cpp">
+      <Filter>02. GameObjects\Environment\AlertRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
