@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+#include "SwampManager.h"
+
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -39,9 +41,11 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	if (FAILED(Add_Components_Model()))
+		return E_FAIL;
 
 	m_pModelCom->Set_Animation(ANIM_IDLE);
-
+	
 	if (FAILED(Read_Animation_Control_File("SwampHorn3.bin")))
 	{
 		MSG_BOX("Failed to AnimData Read : SwampHorn3");
@@ -599,16 +603,6 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 
 HRESULT CMonster_Swamp::Add_Components()
 {
-	/* for.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn1"),
-		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
-	{
-		MSG_BOX("Failed to Add_Com_Model : CMonster_Swamp_0");
-		return E_FAIL;
-	}
-
-	
-
 	/* for.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
@@ -689,6 +683,39 @@ HRESULT CMonster_Swamp::Add_Components()
 		return E_FAIL;
 	}
 
+	return S_OK;
+}
+
+HRESULT CMonster_Swamp::Add_Components_Model()
+{
+	/* for.Com_Model */
+	if (m_CharacterDesc.SwampHorn == 1)
+	{
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn1"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		{
+			MSG_BOX("Failed to Add_Com_Model : CMonster_Swamp_0");
+			return E_FAIL;
+		}
+	}
+	else if (m_CharacterDesc.SwampHorn == 2)
+	{
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn2"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		{
+			MSG_BOX("Failed to Add_Com_Model : CMonster_Swamp_0");
+			return E_FAIL;
+		}
+	}
+	else if (m_CharacterDesc.SwampHorn == 3)
+	{
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn3"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+		{
+			MSG_BOX("Failed to Add_Com_Model : CMonster_Swamp_0");
+			return E_FAIL;
+		}
+	}
 	return S_OK;
 }
 

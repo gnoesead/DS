@@ -156,7 +156,7 @@ public:
 	//히트 관련 시그널 트리거
 	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
 	void	Set_Hit_Success(_bool Hit) { m_isHit_Success = Hit; }
-	void	Set_Hit_Success_Hekireki(_bool Hit) { m_isHit_Hekireki; }
+	void	Set_Hit_Success_Hekireki(_bool Hit) { m_isHit_Hekireki = Hit; }
 
 protected: //애니메이션 제어용 함수들
 

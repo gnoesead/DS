@@ -13,6 +13,7 @@
 #include "Boss_Kyogai.h"
 #include "Monster_Spider.h"
 #include "Monster_Zako.h"
+#include "Monster_Swamp.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -642,6 +643,14 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+	/* Prototype_GameObject_Monster_Swamp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Swamp"),
+		CMonster_Swamp::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Swamp");
+		return E_FAIL;
+	}
+
 	/* Prototype_GameObject_Monster_Test */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Test"),
 		CMonster_Test::Create(m_pDevice, m_pContext))))
@@ -649,6 +658,8 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Test");
 		return E_FAIL;
 	}
+
+	
 
 
 

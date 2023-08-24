@@ -340,7 +340,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 			m_isCanNavi = true;
 	}
 
-	if (pGameInstance->Get_DIKeyState(DIK_NUMPAD8))
+	if (pGameInstance->Get_DIKeyState(DIK_B))
 	{
 		m_StatusDesc.fSpecial += 1.1f;
 		m_StatusDesc.fMp += 1.1f;
