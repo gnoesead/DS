@@ -16,7 +16,8 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
-	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_END };
+	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_EFFECT, TYPE_END };
+	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAIBULLET, TYPE_KYOGAIDELAYBULLET,TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
 	{
@@ -26,10 +27,12 @@ public:
 		_double		dLifeTime = { 0.0 };
 
 		_float		fDamage = { 0.0 };
-
+		_double 	Speed = { 5.0 };
 		ATK_TYPE	eAtkType = {TYPE_END};
+		BULLET_TYPE eBulletType = { TYPE_BULLET_END };
 
-		_float4		AtkDir;
+		_float4		AtkDir = { 0.f, 0.f, 0.f, 0.f };
+		
 		_bool		bBullet;
 		char		pEffectTag[MAX_PATH] = { "" };
 	}ATKCOLLDESC;
@@ -61,6 +64,16 @@ public:
 	void	Setting_AtkCollDesc();
 
 private:
+	void	Tick_Default(_double dTimeDelta);
+	void	Tick_BaseBullet(_double dTimeDelta);
+	void	Tick_KyogaiBullet(_double dTimeDelta);
+	void	Tick_KyogaiDelayBullet(_double dTimeDelta);
+
+	void	Setting_BaseBullet();
+	void	Setting_KyogaiBullet();
+	void	Setting_KyogaiDelayBullet();
+
+private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 
@@ -72,6 +85,8 @@ private:
 
 	_uint			m_iCollCount = { 0 };
 	_bool			m_bSaveTransform = { false };
+
+	_vector			m_vDir = { 0.f,0.f,0.f,0.f };
 
 
 

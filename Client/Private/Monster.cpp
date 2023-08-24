@@ -169,6 +169,15 @@ _vector CMonster::Calculate_Dir_FixY()
 
 	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
 }
+_vector CMonster::Calculate_Dir_ZeroY()
+{
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return Compute::Dir_ZeroY(vPlayerPos, vMonsterPos);
+}
 
 _vector CMonster::Calculate_Dir_Cross()
 {
