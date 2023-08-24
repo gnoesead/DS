@@ -50,9 +50,9 @@ HRESULT CPlayer::Initialize(void* pArg)
 	XMStoreFloat4(&tLightInfo.vLightPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	tLightInfo.fLightRange = 15.f;
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-		tLightInfo.vLightDiffuse = _float4(0.15f, 0.15f, 0.3f, 1.f);
+		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.6f, 1.f);
 	else
-		tLightInfo.vLightDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
+		tLightInfo.vLightDiffuse = _float4(0.5f, 0.5f, 0.5f, 1.f);
 	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
@@ -353,10 +353,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		{
 			m_pRendererCom->Set_Invert();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_X))
-		{
-			m_pRendererCom->Set_GrayScale();
-		}
+		
 		if (pGameInstance->Get_DIKeyDown(DIK_C))
 		{
 			m_pRendererCom->Set_RadialBlur();
@@ -1233,7 +1230,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 
 		m_dDelay_Swapping_Pos = 0.0;
 	}
-
+	/*
 	m_dDelay_Swapping_Pos += dTimeDelta;
 	if (m_dDelay_Swapping_Pos < 0.85f)
 	{
@@ -1244,7 +1241,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		SwappingPos.y = MyPos.y;
 		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
-	}
+	}*/
 }
 
 HRESULT CPlayer::Add_Components()

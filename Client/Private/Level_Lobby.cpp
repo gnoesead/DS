@@ -25,6 +25,8 @@
 #include "ParticleSystem.h"
 #include "Effect_Texture.h"
 #include "EffectPlayer.h"
+#include "SoundMgr.h"
+
 
 CLevel_Lobby::CLevel_Lobby(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -52,6 +54,9 @@ HRESULT CLevel_Lobby::Initialize()
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	
+	CSoundMgr::Get_Instance()->StopAll();
+
+
     return S_OK;
 }
 
@@ -59,7 +64,7 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
