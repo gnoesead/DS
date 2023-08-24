@@ -116,14 +116,25 @@ void CNPC::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	// Npc 에서 해야함
-	CDialogManager::GetInstance()->Set_Dialog_Type(1);
 
-	// Npc or 트리거로 처리
-	CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
-	CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
+	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
 
+	CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
+
+	m_Player_Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (Distance < 2.f) {
+		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
+	}
+
+	
+
+	Safe_Release(pGameInstance);
 
 	if (m_pIcon != nullptr)
 		m_pIcon->Tick(dTimeDelta);

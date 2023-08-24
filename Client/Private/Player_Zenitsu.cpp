@@ -92,7 +92,7 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃ÷
 	{
-		Player_Change_Setting_Status();
+		Player_Change_Setting_Status(dTimeDelta);
 		Animation_Control(dTimeDelta);
 	}
 	else
@@ -469,7 +469,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_END == m_pModelCom->Get_iCurrentAnimIndex())
@@ -483,7 +483,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_AIR_END == m_pModelCom->Get_iCurrentAnimIndex())
@@ -938,25 +938,25 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI_AIR);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
-				{
+				//if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				//{
 					if (Get_LockOn_MonPos())
 					{
-						m_LockOnPos.y -= 0.5f;
+						m_LockOnPos.y -= 0.6f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
 					}
-				}
+				//}
 			}
 			else
 			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
-				{
+				//if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				//{
 					if (Get_LockOn_MonPos())
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-				}
+				//}
 			}
 			
 			Use_Mp_Skill();
@@ -1416,7 +1416,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 	}
 	//Go_Straight_Constant(dTimeDelta, 138, 2.0f);
-	Go_Straight_Deceleration(dTimeDelta, 138, 3.0f, 0.03f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_DOWN_GETUP_MOVE, 3.0f, 0.03f);
 	m_pModelCom->Set_EarlyEnd(ANIM_DOWN_GETUP_MOVE, true);
 
 
@@ -1430,6 +1430,7 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_isJump_Move = false;
 		m_dDelay_Player_Change = 0.0;
 		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
 
@@ -1438,6 +1439,8 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
 		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
+
+		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -1447,20 +1450,34 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
 	{
 		if (m_dDelay_Player_Change < 1.5)
-			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+		{
+			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+
+			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			SwappingPos.y = MyPos.y;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
+		}
 		else
 			m_isSwap_OnSky = true;
 
 		m_isJumpOn = true;
 	}
 
-	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
-	_float4 CurPos;
-	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	AnotherPos.y = CurPos.y;
 	if (m_isSwap_OnSky)
-		AnotherPos.y = 10.0f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	{
+		_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+		_float4 CurPos;
+		XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		AnotherPos.y = CurPos.y;
+
+		AnotherPos.y = 13.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	}
+	
 }
 
 void CPlayer_Zenitsu::Moving_Restrict()

@@ -692,6 +692,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			m_pRendererCom->Set_Invert();
 		if (m_dAwakeTime > 25.0)
 		{
+			m_dAwakeTime = 0.0;
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
 
