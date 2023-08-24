@@ -5,6 +5,7 @@
 #include "Camera_Free.h"
 #include "Layer.h"
 #include "Player.h"
+#include "PlayerManager.h"
 
 
 CInteraction::CInteraction(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -27,9 +28,11 @@ HRESULT CInteraction::Initialize_Prototype()
 
 HRESULT CInteraction::Initialize(void * pArg)
 {
-	if (pArg != nullptr)
+	if (pArg != nullptr) {
 		m_UI_Desc = *(UIDESC*)pArg;
-
+		Safe_AddRef(m_UI_Desc.pParentTransform);
+	}
+		
 	m_Is_Reverse = m_UI_Desc.m_Is_Reverse;
 
 	if (FAILED(__super::Initialize(pArg)))
@@ -38,12 +41,11 @@ HRESULT CInteraction::Initialize(void * pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-
 	// 배경
 	if (m_UI_Desc.m_Type == 0) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.224f * 4.f;
+		m_Origin_X = 0.220f * 4.f;
 		m_Origin_Y = 0.052f * 4.f;
 		m_Size_Param = 0.608333f;
 		m_UI_Layer = 6;
@@ -74,9 +76,9 @@ void CInteraction::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_float dist = Convert::GetLength(m_vPlayerPos - m_vBattle_Targt);
+	_float dist = Convert::GetLength(m_vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (dist < 3.f) {
+	if (dist < 2.f) {
 
 		m_Alpha += (_float)TimeDelta * 1.5f;
 
@@ -84,6 +86,7 @@ void CInteraction::Tick(_double TimeDelta)
 			m_Alpha = 1.f;
 	}
 	else {
+
 		m_Alpha -= (_float)TimeDelta * 1.5f;
 
 		if (m_Alpha < 0.f)
@@ -98,28 +101,40 @@ void CInteraction::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	// Camera
 	m_vTargetPos = Convert::ToVector(pGameInstance->Get_CameraPosition());
-	
+
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
 
-	m_pTransformCom->LookAt(m_vTargetPos);
+	m_pTransformCom->LookAt_FixY(m_vTargetPos);
 
+	// Player
+	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 
-	// Trigger
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
-		CTransform* m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		m_vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vPlayerPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		m_vBattle_Targt = { 130.f, 0.f, 140.f, 1.f };
+	}
+	
+	// Npc
+	if (m_UI_Desc.pParentTransform != nullptr) {
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+		_vector Pos = m_UI_Desc.pParentTransform->Get_State(CTransform::STATE_POSITION);
+
+		Pos += m_UI_Desc.pParentTransform->Get_State(CTransform::STATE_LOOK) * 0.8f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
+	}
+	// 월드 트리거
+	else {
+		m_pTransformCom->Scaling({ m_Origin_X , m_Origin_Y , 1.f });
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
 	}
 
 
@@ -288,4 +303,5 @@ void CInteraction::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
 
+	Safe_Release(m_UI_Desc.pParentTransform);
 }
