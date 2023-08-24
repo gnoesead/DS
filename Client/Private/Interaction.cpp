@@ -76,25 +76,39 @@ void CInteraction::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	_float dist = Convert::GetLength(m_vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (dist < 2.f) {
+	if (dist < 2.f && m_Trigger_On == false) {
 
-		m_Alpha += (_float)TimeDelta * 1.5f;
+		m_Alpha += (_float)TimeDelta * 2.f;
 
 		if (m_Alpha > 1.f)
 			m_Alpha = 1.f;
 	}
 	else {
 
-		m_Alpha -= (_float)TimeDelta * 1.5f;
+		m_Alpha -= (_float)TimeDelta * 2.f;
 
 		if (m_Alpha < 0.f)
 			m_Alpha = 0.f;
 	}
+
+
+	if (dist < 2.f) {
+
+		if (pGameInstance->Get_DIKeyDown(DIK_F)) {
+			m_Trigger_On = true;
+		}
+	}
+	else {
+		m_Trigger_On = false;
+	}
+
 	
-
-
+	Safe_Release(pGameInstance);
 }
 
 void CInteraction::LateTick(_double TimeDelta)
@@ -119,7 +133,6 @@ void CInteraction::LateTick(_double TimeDelta)
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
 		m_vPlayerPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
-
 	}
 	
 	// Npc
@@ -133,6 +146,7 @@ void CInteraction::LateTick(_double TimeDelta)
 	}
 	// 월드 트리거
 	else {
+
 		m_pTransformCom->Scaling({ m_Origin_X , m_Origin_Y , 1.f });
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
 	}

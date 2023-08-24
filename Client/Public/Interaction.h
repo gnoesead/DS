@@ -82,6 +82,7 @@ private:
 
 	_vector m_vBattle_Targt = {};
 
+	_bool m_Trigger_On = { false };
 
 private:
 	HRESULT Add_Components();

@@ -500,7 +500,19 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+// Interaction
+	CInteraction::UIDESC UIDesc6;
+	ZeroMemory(&UIDesc6, sizeof UIDesc6);
 
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 78.f, 0.f, 26.f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 
