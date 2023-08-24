@@ -39,6 +39,7 @@ protected: // Calculate
 	_vector Calculate_Dir();
 	_vector Calculate_Dir_FixY();
 	_vector Calculate_Dir_Cross();
+	_vector Random_Dir(_fvector vDir, _float fMinY = -30.f, _float fMaxY = 30.f, _float fMinX = -20.f, _float fMaxX = 20.f);
 
 	
 

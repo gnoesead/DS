@@ -116,6 +116,7 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	if (true == m_AtkCollDesc.bBullet)
 	{
 		CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom);
+		
 	}
 
 	return S_OK;
@@ -136,13 +137,35 @@ void CAtkCollider::Tick(_double dTimeDelta)
 		{
 			m_bSaveTransform = true;
 			m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			vPos += XMLoadFloat4(&m_AtkCollDesc.AtkDir) * 2.f;
+			m_pTransformCom->LookAt(vPos);
 		}
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 		
-		m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
+		//m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
+		m_pTransformCom->Go_Straight(dTimeDelta * 5.0);
 	}
 	else
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);
+
+	/*if (true == m_AtkCollDesc.bBullet)
+	{
+		if (false == m_bSaveTransform)
+		{
+			m_bSaveTransform = true;
+			m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			vPos -= XMLoadFloat4(&m_AtkCollDesc.AtkDir) * 10.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		}
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		m_pTransformCom->Go_Dir(dTimeDelta * 5.0, XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)));
+	}
+	else
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix(), dTimeDelta);*/
 
 
 

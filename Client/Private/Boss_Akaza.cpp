@@ -335,13 +335,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		_vector vDir = Calculate_Dir();
 
-		_float RandomAngle = Random::Generate_Float(0.f, 15.f);
-		_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
-		_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
-
-		RandomAngle = Random::Generate_Float(-20.f, 20.f);
-		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
-		vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
+		_vector vRandomDir = Random_Dir(vDir);
 
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
@@ -353,6 +347,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -384,6 +379,151 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 			}
+			//if (0 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg,true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+
+			//}
+			//if (1 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//}
+			//if (2 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//}
+			//if (3 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//}
+			//if (4 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//}
+			//if (5 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//	vRandomDir = Random_Dir(vDir);
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
+			//}
 
 		}
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())

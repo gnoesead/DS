@@ -543,6 +543,33 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
+void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, CTransform* pTransform, _bool bBullet, const char* pEffectTag)
+{
+	CAtkCollider::ATKCOLLDESC AtkCollDesc;
+	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
+
+	AtkCollDesc.ColliderDesc.vSize = Size;
+	AtkCollDesc.ColliderDesc.vPosition = Pos;
+
+	AtkCollDesc.dLifeTime = DurationTime;
+
+	AtkCollDesc.pParentTransform = pTransform;
+
+	AtkCollDesc.eAtkType = AtkType;
+
+	AtkCollDesc.fDamage = fDmg;
+
+	AtkCollDesc.bBullet = bBullet;
+	if (true == bBullet)
+	{
+		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
+	}
+
+	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
+
+	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
+}
+
 void CCharacter::Check_HitCollDead()
 {
 	for (auto iter = m_HitCollider.begin(); iter != m_HitCollider.end();)
