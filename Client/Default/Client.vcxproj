@@ -177,6 +177,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AlertCircle.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterManager.h" />
     <ClInclude Include="..\Public\Monster_Spider.h" />
+    <ClInclude Include="..\Public\Monster_Swamp.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\Monster_Zako.h" />
     <ClInclude Include="..\Public\NPC.h" />
@@ -267,6 +269,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AlertCircle.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
@@ -317,6 +320,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterManager.cpp" />
     <ClCompile Include="..\Private\Monster_Spider.cpp" />
+    <ClCompile Include="..\Private\Monster_Swamp.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\Monster_Zako.cpp" />
     <ClCompile Include="..\Private\NPC.cpp" />

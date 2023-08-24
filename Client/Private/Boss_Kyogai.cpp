@@ -333,7 +333,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
 #pragma region AWAKE_ComboPunch
-		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
+ 		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
@@ -349,9 +349,28 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (ANIM_ATKCMB_02LOOP == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.19
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom);
+			}
+
+			if (1 == m_iEvent_Index)	// 0.62
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom);
+			}
+
+		}
+
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index) // 1.65
+			if (0 == m_iEvent_Index)	// 1.1
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+			}
+
+			if (1 == m_iEvent_Index) // 1.65
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
@@ -360,6 +379,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 
 		}
+
 		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index) // 1.30

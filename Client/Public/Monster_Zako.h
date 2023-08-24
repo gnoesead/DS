@@ -110,7 +110,7 @@ private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };
 	
-	_vector m_vPos = { 140.f, 0.f,120.f,1.f };
+
 
 	//Moving
 	_bool	m_isFirst_Move_0 = { true };
