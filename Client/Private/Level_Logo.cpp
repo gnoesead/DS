@@ -8,7 +8,7 @@
 #include "Fade_Manager.h"
 #include "Option.h"
 #include "OptionManager.h"
-
+#include "SoundMgr.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -23,6 +23,11 @@ HRESULT CLevel_Logo::Initialize()
 
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
         return E_FAIL;
+
+
+    _tchar szBgm[MAX_PATH] = TEXT("Intro.mp3");
+    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
 
     return S_OK;
 }

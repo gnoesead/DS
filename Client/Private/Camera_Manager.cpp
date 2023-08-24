@@ -31,6 +31,7 @@ void CCameraManager::Tick(_double dTimeDelta)
 		if (m_Focus_TimeAcc > m_Focus_Time) {
 			m_Focus_TimeAcc = 0.f;
 
+			// 바로 해제 X 원래 위치로 보간해서 이동 후 false로 바꿈
 			m_Is_Focus_On = false;
 		}
 

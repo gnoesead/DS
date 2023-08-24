@@ -84,6 +84,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	m_pSword->Tick(dTimeDelta);
 	m_pSwordHome->Tick(dTimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	{
+		m_pRendererCom->Set_GrayScale();
+	}
+
+	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
 		return;

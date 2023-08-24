@@ -33,7 +33,8 @@ public://Get
 	class CAnimation* Get_Animation(_int index) { return m_Animations[index]; }
 	vector<class CAnimation*> Get_vecAnimation() { return m_Animations; }
 
-	_uint Get_iCurrentAnimIndex() { return m_iCurrentAnimIndex; }
+	_uint Get_iCurrentAnimIndex() { 
+		return m_iCurrentAnimIndex; }
 
 
 	_bool	Get_AnimFinish(_int AnimIndex) {
