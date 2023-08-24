@@ -340,7 +340,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 			m_isCanNavi = true;
 	}
 
-	if (pGameInstance->Get_DIKeyState(DIK_B))
+	if (pGameInstance->Get_DIKeyState(DIK_NUMPAD8))
 	{
 		m_StatusDesc.fSpecial += 1.1f;
 		m_StatusDesc.fMp += 1.1f;
@@ -1234,7 +1234,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		
 	}
 	
-	/*
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
@@ -1251,7 +1251,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
 		}	
 	}
-	Safe_Release(pGameInstance);*/
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer::Add_Components()

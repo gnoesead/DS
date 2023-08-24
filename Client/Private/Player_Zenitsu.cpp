@@ -602,6 +602,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		//Go_Straight_Deceleration(dTimeDelta, 59, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
 	}
 	Ground_Animation_Play(58, 59);
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_JUMP, 0.001f);
+	m_pModelCom->Set_LinearDuration(57, 0.001f);
+	m_pModelCom->Set_LinearDuration(58, 0.001f);
+	m_pModelCom->Set_LinearDuration(59, 0.001f);
 
 
 	if (m_Moveset.m_Down_Battle_Jump)
@@ -838,6 +842,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	//벽력일섬 콤보용
@@ -854,15 +861,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 	}
 	//마나제한
-	//if (m_Moveset.m_iAwaken < 2)
-	//{
-	//	if (m_isCan_Mp_Skill == false)
-	//	{
-	//		m_Moveset.m_Down_Skill_Normal = false;
-	//		m_Moveset.m_Down_Skill_Move = false;
-	//		m_Moveset.m_Down_Skill_Guard = false;
-	//	}
-	//}
+	if (m_Moveset.m_iAwaken < 2)
+	{
+		if (m_isCan_Mp_Skill == false)
+		{
+			m_Moveset.m_Down_Skill_Normal = false;
+			m_Moveset.m_Down_Skill_Move = false;
+			m_Moveset.m_Down_Skill_Guard = false;
+		}
+	}
 
 	
 	if (m_isHit_Hekireki)
@@ -940,25 +947,27 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI_AIR);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				//if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
-				//{
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+				{
 					if (Get_LockOn_MonPos())
 					{
 						m_LockOnPos.y -= 0.6f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
 					}
-				//}
+				}
+				
 			}
 			else
 			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				//if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
-				//{
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+				{
 					if (Get_LockOn_MonPos())
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-				//}
+				}
+				
 			}
 			
 			Use_Mp_Skill();
@@ -1002,6 +1011,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
+		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
 			if (Get_LockOn_MonPos())
@@ -1013,6 +1023,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Use_Mp_Skill();
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
+
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
