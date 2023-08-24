@@ -35,6 +35,7 @@
 
 #include "PlayerManager.h"
 #include "SoundMgr.h"
+#include "Camera_Manager.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -105,6 +106,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
+	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
 
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");

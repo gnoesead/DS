@@ -51,6 +51,8 @@ public:
 private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);
+	void NewAdventureCamera(_double dTimeDelta);
+
 	void BattleCamera(_double dTimeDelta);
 	void FocusCamera(_double dTimeDelta);
 	void SideCamera(_double dTimeDelta);
@@ -60,6 +62,7 @@ private:
 
 private:
 	void Turn_Camera(_double TimeDelta);
+	void New_Turn_Camera(_double TimeDelta);
 	void LockMouse();
 
 private:
