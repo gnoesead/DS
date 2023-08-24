@@ -59,8 +59,6 @@ HRESULT CCharacter::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	
-
 	if (nullptr != pArg)
 	{
 		//초기 위치 설정
