@@ -86,12 +86,10 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
-
 	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
@@ -705,7 +703,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_Moveset.m_State_Battle_Run)
 	{
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
 		m_fMove_Speed = 2.0f;
 
 		if(m_isCanNavi)
@@ -727,7 +726,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 {
 	if (m_Moveset.m_Down_Battle_JumpMove)
 	{
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_Moveset.m_Down_Battle_JumpMove = false;
 		m_isJump_Move = true;
 
@@ -744,6 +744,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		//Go_Straight_Deceleration(dTimeDelta, 86, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
 	}
 	Ground_Animation_Play(85, 86);
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_JUMP, 0.001f);
+	m_pModelCom->Set_LinearDuration(84, 0.001f);
+	m_pModelCom->Set_LinearDuration(85, 0.001f);
+	m_pModelCom->Set_LinearDuration(86, 0.001f);
 
 
 	if (m_Moveset.m_Down_Battle_Jump)
@@ -767,7 +771,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		if(Get_LockOn_MonPos())
 			m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
-
+		
 		//콤보 첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
@@ -1092,7 +1096,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos())
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
 
@@ -1202,7 +1207,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Step = false;
 
-		m_pTransformCom->Set_Look(m_vLook);
+		//m_pTransformCom->Set_Look(m_vLook);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
 		if(m_isForward)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_F);
 		else if(m_isBack)
@@ -1365,7 +1371,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isConnectHitting = true;
 		}
 
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		//m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_iSmallHit_Index == 0)
@@ -1407,7 +1414,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Big = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 	}
@@ -1422,7 +1429,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1440,7 +1447,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_BigBlow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1459,7 +1466,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Upper = false;
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.7f, 0.03f);
@@ -1486,7 +1493,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 	}
 	//Go_Straight_Constant(dTimeDelta, 138, 2.0f);
 	Go_Straight_Deceleration(dTimeDelta, 138, 3.0f, 0.03f);
@@ -1523,7 +1531,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 
 		if (m_Moveset.m_State_Battle_Run)
 		{
-			m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+			//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f);
 			m_fMove_Speed = 2.0f;
 
 			if (m_isCanNavi)
@@ -1571,12 +1580,14 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 		if (m_isPlayerStatus_OnRoof == false)
 		{
-			m_pTransformCom->Set_Look(m_vPlayerToBoxDir);
+			//m_pTransformCom->Set_Look(m_vPlayerToBoxDir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_vPlayerToBoxDir), 0.8f);
 		}
 		else
 		{
 			// 지붕에 올라가있을때, dl
-			m_pTransformCom->Set_Look(m_ReverseDir);
+			//m_pTransformCom->Set_Look(m_ReverseDir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_ReverseDir), 0.8f);
 
 			m_eCurNavi = m_eNextNavi;
 
@@ -1625,7 +1636,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		{
 			m_isFirst_Jump2_To_Box = false;
 
-			m_pTransformCom->Set_Look(m_Dir_ScondJump_Box);
+			//m_pTransformCom->Set_Look(m_Dir_ScondJump_Box);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_ScondJump_Box), 0.8f);
 			//떨어지는
 			if(m_isPlayerStatus_OnRoof)
 				Jumping(1.1f, 0.07f);		// 두번째 올라갈때 점프(땅)

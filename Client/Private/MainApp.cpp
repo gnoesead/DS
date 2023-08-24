@@ -751,7 +751,7 @@ HRESULT CMainApp::Load_Effect_Resources()
 
 				_tchar FullFilePath[MAX_PATH] = TEXT("");
 
-				_int iLength = strlen(szFull) + 1;
+				_int iLength = (_int)strlen(szFull) + 1;
 
 				MultiByteToWideChar(CP_ACP, 0, szFull, (_int)iLength, FullFilePath, MAX_PATH);
 
@@ -764,7 +764,7 @@ HRESULT CMainApp::Load_Effect_Resources()
 				strcpy_s(szProtoTag, "Prototype_Component_Texture_");
 				strcat_s(szProtoTag, filename);
 
-				iLength = strlen(szProtoTag) + 1;
+				iLength = (_int)strlen(szProtoTag) + 1;
 
 				_tchar* RealProtoTag = new _tchar[iLength];
 
@@ -805,7 +805,7 @@ HRESULT CMainApp::Load_Effect_Resources()
 
 				_tchar FullFilePath[MAX_PATH] = TEXT("");
 
-				_int iLength = strlen(szFull) + 1;
+				_int iLength = (_int)strlen(szFull) + 1;
 
 				MultiByteToWideChar(CP_ACP, 0, szFull, (_int)iLength, FullFilePath, MAX_PATH);
 
@@ -818,7 +818,7 @@ HRESULT CMainApp::Load_Effect_Resources()
 				strcpy_s(szProtoTag, "Prototype_Component_Texture_");
 				strcat_s(szProtoTag, filename);
 
-				iLength = strlen(szProtoTag) + 1;
+				iLength = (_int)strlen(szProtoTag) + 1;
 
 				_tchar* RealProtoTag = new _tchar[iLength];
 
@@ -864,7 +864,7 @@ HRESULT CMainApp::Load_Effect_Resources()
 				strcpy_s(szProtoTag, "Prototype_Component_Model_");
 				strcat_s(szProtoTag, filename);
 
-				_int iLength = strlen(szProtoTag) + 1;
+				_int iLength = (_int)strlen(szProtoTag) + 1;
 
 				_tchar* RealProtoTag = new _tchar[iLength];
 

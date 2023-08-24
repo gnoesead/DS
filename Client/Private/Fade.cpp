@@ -100,7 +100,7 @@ void CFade::Tick(_double TimeDelta)
 	
 		if (m_Is_Ink_On == true) {
 
-			m_Ink_Sprite += TimeDelta * 35.f;
+			m_Ink_Sprite += (_float)TimeDelta * 35.f;
 
 			if (m_Ink_Sprite > 55.f) {
 				CFadeManager::GetInstance()->Set_Ink_In(false);

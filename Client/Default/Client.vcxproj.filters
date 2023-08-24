@@ -298,6 +298,9 @@
     <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
       <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp">
+      <UniqueIdentifier>{b7224a9e-5e9a-4867-b09d-ad10e90f0ca0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -558,6 +561,9 @@
     <ClInclude Include="..\Public\AlertCircle.h">
       <Filter>02. GameObjects\Environment\AlertCircle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_Swamp.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -808,6 +814,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AlertCircle.cpp">
       <Filter>02. GameObjects\Environment\AlertCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Swamp.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

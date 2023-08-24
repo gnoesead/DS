@@ -100,7 +100,7 @@ public:
 		return m_StatusDesc;
 	}
 
-
+	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
