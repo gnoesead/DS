@@ -5,7 +5,6 @@
 #include "Camera_Manager.h"
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
-#include "EffectPlayer.h"
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -75,7 +74,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	if (true == m_AtkCollDesc.bBullet)
 	{
 		if (nullptr != m_AtkCollDesc.pEffectTag)
-			CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom, &m_AtkCollDesc.EffectWorldDesc);
 	}
 }
 

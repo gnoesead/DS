@@ -306,6 +306,9 @@ public:
 	void Set_EffectType(int eType) {
 		m_eEffectDesc.eEffectType = eType;
 	}
+	void Set_PlaySpeed(_double dSpeed) {
+		m_dPlaySpeed = dSpeed;
+	}
 
 public:
 	HRESULT Add_Component_Texture(_uint iLevelIndex, const _tchar* pComponentTag, int eType);
@@ -396,6 +399,8 @@ protected:
 
 	_float2					m_vPaddingStart = { 0.f, 0.f };
 	_float2					m_vPaddingEnd = { 0.f, 0.f };
+
+	_double					m_dPlaySpeed = { 1.0 };
 
 public:
 	//static CEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

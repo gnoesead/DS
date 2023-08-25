@@ -67,7 +67,7 @@ void CParticleSystem::Tick(_double dTimeDelta)
 		m_bPlay = false;
 	}
 
-	if (m_bPlay && m_pEffect)
+	if (m_bPlay && (nullptr != m_pEffect))
 	{
 		m_dTimeAccTotal += dTimeDelta;
 		m_dTimeAccCycle += dTimeDelta;
@@ -108,7 +108,7 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 
 	if (nullptr != m_pParentTransform)	
 	{
-		if (m_pEffect)     // ±øÅë X
+		if (nullptr != m_pEffect)     // ±øÅë X
 		{
 			if (m_pEffect->Get_SimulationSpace() == CEffect::SPACE_LOCAL)
 				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());

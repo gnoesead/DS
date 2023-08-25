@@ -61,13 +61,17 @@ HRESULT CEffect_Mesh::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CEffect_Mesh::Tick(_double dTimeDelta)
+void CEffect_Mesh::Tick(_double _dTimeDelta)
 {
+	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
+
 	__super::Tick(dTimeDelta);
 }
 
-void CEffect_Mesh::LateTick(_double dTimeDelta)
+void CEffect_Mesh::LateTick(_double _dTimeDelta)
 {
+	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
+
 	__super::LateTick(dTimeDelta);
 }
 
