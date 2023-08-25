@@ -15,24 +15,12 @@ END
 
 BEGIN(Client)
 
-class CAlertCircle final : public CGameObject
+class CRoomSmoke final : public CGameObject
 {
-public:
-	enum STATE { STATE_SHOWON, STATE_SHOWOFF };
-	enum TYPE { TYPE_KICKDOWN, TYPE_ROOMCHANGE };
-	typedef struct tagEffectDesc
-	{
-		CTransform* pOwnerTransform = { nullptr };
-		_uint		iType = { 0 };
-		
-	}EFFECTDESC;
-
-	
-
 private:
-	CAlertCircle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAlertCircle(const CAlertCircle& rhs);
-	virtual ~CAlertCircle() = default;
+	CRoomSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CRoomSmoke(const CRoomSmoke& rhs);
+	virtual ~CRoomSmoke() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -45,6 +33,8 @@ private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();
 
+	void	Update_Frame(_double TimeDelta);
+
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
@@ -53,19 +43,23 @@ private:
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
 private:
-	_float4x4				m_WorldMatrix, m_ViewMatrix, m_ProjMatrix;
-	EFFECTDESC				m_EffectDesc;
+	_uint					m_iNumX = 6;
+	_uint					m_iNumY = 6;
 
 private:
-	_float					m_fAlpha = 0.1f;
-	_float					m_fLandY = { 0.f };
-	_float					m_fScale = { 9.f };
+	_double					m_FrameAccTime = { 0.0 };
+	_uint					m_iFrame = { 0 };
 
-	_float4					m_vLook = { 0.f , 0.f , 0.f , 0.f };
-	STATE					m_eState = STATE_SHOWON;
+	_float3					m_vSize = { 0.f ,0.f , 0.f };
+	_double					m_dFrameSpeed = { 0.f };
+	_double					m_dSpeedX = { 0.f };
+	_double					m_dSpeedY = { 0.f };
+	_float					m_fSizeSpeed = { 0.f };
 
+	_float					m_fPlusX = { 0.f };
+	_float					m_fPlusZ = { 0.f };
 public:
-	static CAlertCircle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CRoomSmoke* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
