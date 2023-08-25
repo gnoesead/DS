@@ -20,9 +20,9 @@ public:
 	enum  STATE
 	{
 		STATE_INTERACT, STATE_BEGIN, STATE_NEXTPHASE, STATE_HEAL, STATE_AWAKE,
-		STATE_GUARD,
+		STATE_GUARD, STATE_LINKERCMB,
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
-		STATE_STOMPKICK, STATE_ATKPUNCH,
+		STATE_STOMPKICK, STATE_ATKPUNCH, 
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
@@ -155,6 +155,7 @@ public:
 	void Trigger_AtkStep(); 
 	void Trigger_StompKick();
 	void Trigger_AtkPunch();
+	void Trigger_LinkerCmb();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -188,6 +189,7 @@ private: //패턴 함수들
 	void Update_AtkStep(_double dTimeDelta); 
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
+	void Update_LinkerCmb(_double dTimeDelta);
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
@@ -206,6 +208,7 @@ private: //패턴 함수들
 
 #pragma endregion
 private: // _bool
+	_bool	m_bAtkStepType = { false };
 
 private: // time
 
@@ -215,7 +218,7 @@ private: // time
 private:
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
-	
+	_uint	m_iAtkStepTypeNum = { 0 };
 	_uint	m_iIdleCnt = { 0 };
 	_uint	m_iTriggerCnt = { 0 };
 	

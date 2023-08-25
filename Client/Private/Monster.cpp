@@ -207,6 +207,18 @@ _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float f
 	return vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
 }
 
+_vector CMonster::Rotation_Dir(_fvector vDir, _float fAngleX, _float fAngleY)
+{
+	_float fAngle = fAngleX;
+	_matrix RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(fAngle));
+	_vector vRotationDir = XMVector3TransformNormal(vDir, RotationMatrix);
+
+	fAngle = fAngleY;
+	
+	RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(fAngle));
+	return vRotationDir = XMVector3TransformNormal(vRotationDir, RotationMatrix);
+}
+
 void CMonster::Dir_Setting(_bool Reverse)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
