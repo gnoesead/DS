@@ -445,7 +445,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index) // 0.3
 			{				
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
