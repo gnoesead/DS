@@ -13,6 +13,14 @@ class CEffectPlayer
 {
 public:
 	enum TEXTURETYPE { TEX_DIFFUSE, TEX_MASK, TEX_RAMP, TEX_NOISE, TEX_NOISE2, TEX_DISTORTION, TEX_NORMAL, TEX_END };
+	
+	typedef struct tagEffectWorldDesc {
+		_float fScale		= { 1.f };
+		_float3 vRotation	= { 0.f, 0.f, 0.f };
+		_float3 vPosition	= { 0.f, 0.f, 0.f };
+		_double dSpeed		= { 1.0 };
+	}EFFECTWORLDDESC;
+
 public:
 	static CEffectPlayer* Get_Instance()
 	{
@@ -69,7 +77,7 @@ public:
 	}
 
 public:
-	void	Play(const char* pEffectTag, class CTransform* pTransformCom = nullptr);
+	void	Play(const char* pEffectTag, class CTransform* pTransformCom = nullptr, EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
 	void	Stop(const char* pEffectTag);
 	_bool Find_ModelKey(const _tchar* pModelKey);
 	_bool Find_TextureKey(int iTextureIndex, const _tchar* pTextureKey);
@@ -93,6 +101,8 @@ private:
 	list<class CEffect*>								m_EffectTexturePool;
 	list<class CEffect*>								m_EffectMeshPool;
 	list<class CEffect*>								m_EffectParticlePool;
+
+	EFFECTWORLDDESC										m_EffectWorldDesc;
 
 public:
 	void Release(void);

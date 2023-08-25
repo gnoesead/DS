@@ -52,12 +52,15 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 		pParentParticleSystem->Add_Parts(pParticleSystem);
 
 		vFloat3 = pParticleSystemOrigin->Get_Postion();
+		vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
 		pParticleSystem->Set_Position(vFloat3);
 
 		vFloat3 = pParticleSystemOrigin->Get_Rotation();
+		vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
 		pParticleSystem->Set_Rotation(vFloat3);
 
 		vFloat3 = pParticleSystemOrigin->Get_Scale();
+		vFloat3 = { vFloat3.x + m_EffectWorldDesc.fScale, vFloat3.y + m_EffectWorldDesc.fScale, vFloat3.z + m_EffectWorldDesc.fScale };
 		pParticleSystem->Set_Scale(vFloat3);
 		
 		CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
@@ -83,6 +86,7 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 
 		pEffectDescOrigin = pEffectOrigin->Get_EffectDesc();
 		pEffect->Set_EffectDesc(pEffectDescOrigin);
+		pEffect->Set_PlaySpeed(m_EffectWorldDesc.dSpeed);
 
 		pEffect->Reserve_BurstList(pEffectDescOrigin->iNumBursts);
 
@@ -396,12 +400,22 @@ CEffect* CEffectPlayer::Reuse_EffectParticle(CTransform* pParentTransformCom, CP
 	return pEffectParticle;
 }
 
-void CEffectPlayer::Play(const char* pEffectTag, class CTransform* pTransformCom)
+void CEffectPlayer::Play(const char* pEffectTag, class CTransform* pTransformCom, EFFECTWORLDDESC* pEffectWorldDesc)
 {
 	CParticleSystem* pParticleSystem = Find_ParticleSystem(pEffectTag);
 
 	if (nullptr == pParticleSystem)
 		return;
+
+	if (nullptr != pEffectWorldDesc)
+		m_EffectWorldDesc = (*pEffectWorldDesc);
+	else
+	{
+		m_EffectWorldDesc.fScale = { 1.f };
+		m_EffectWorldDesc.vRotation = { 0.f, 0.f, 0.f };
+		m_EffectWorldDesc.vPosition = { 0.f, 0.f, 0.f };
+		m_EffectWorldDesc.dSpeed = { 1.0 };
+	}
 
 	pParticleSystem->Set_PartsParent(pTransformCom);
 	pParticleSystem->Set_isPlaying(true);
