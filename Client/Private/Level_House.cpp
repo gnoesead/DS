@@ -199,6 +199,15 @@ HRESULT CLevel_House::Ready_Layer_BackGround(const _tchar* pLayerTag)
     //    return E_FAIL;
     //}
 
+	/* For.TrainSmoke*/
+
+	 if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	    TEXT("Prototype_GameObject_AlertRect"))))
+	{
+	    MSG_BOX("Failed to Add_GameObject : AlertRect");
+	    return E_FAIL;
+	}
+
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -1745,6 +1754,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkStepB.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkStepB");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk");
 		return E_FAIL;
 	}
 
