@@ -261,7 +261,7 @@ void CAtkCollider::Tick_KyogaiDelayBullet(_double dTimeDelta)
 	{
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
-		if (m_dTimeAcc > 0.5)
+		//if (m_dTimeAcc > 0.5)
 			m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, XMLoadFloat4(&m_AtkCollDesc.AtkDir));
 	}
 

@@ -475,9 +475,9 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				dLongLifeTime = 5.f;
 
-				////tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				//Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//	CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET);
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET);
 
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
 					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
