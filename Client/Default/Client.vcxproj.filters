@@ -301,6 +301,12 @@
     <Filter Include="02. GameObjects\Character\Monster\Swamp">
       <UniqueIdentifier>{b7224a9e-5e9a-4867-b09d-ad10e90f0ca0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\RoomSmoke">
+      <UniqueIdentifier>{3ede2645-e084-4d91-b1df-068b00737579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\AlertRect">
+      <UniqueIdentifier>{b14fd503-70cd-41dc-9a37-4cda1a419f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -567,6 +573,12 @@
     <ClInclude Include="..\Public\SwampManager.h">
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RoomSmoke.h">
+      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AlertRect.h">
+      <Filter>02. GameObjects\Environment\AlertRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -823,6 +835,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RoomSmoke.cpp">
+      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AlertRect.cpp">
+      <Filter>02. GameObjects\Environment\AlertRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CAlertCircle final : public CGameObject
+class CAlertRect final : public CGameObject
 {
 public:
 	enum STATE { STATE_SHOWON, STATE_SHOWOFF };
@@ -30,9 +30,9 @@ public:
 	
 
 private:
-	CAlertCircle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAlertCircle(const CAlertCircle& rhs);
-	virtual ~CAlertCircle() = default;
+	CAlertRect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAlertRect(const CAlertRect& rhs);
+	virtual ~CAlertRect() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -57,7 +57,7 @@ private:
 	EFFECTDESC				m_EffectDesc;
 
 private:
-	_float					m_fAlpha = 0.1f;
+	_float					m_fAlpha = 1.f;
 	_float					m_fLandY = { 0.f };
 	_float					m_fScale = { 9.f };
 
@@ -65,7 +65,7 @@ private:
 	STATE					m_eState = STATE_SHOWON;
 
 public:
-	static CAlertCircle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAlertRect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

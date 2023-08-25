@@ -178,6 +178,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\AlertCircle.h" />
+    <ClInclude Include="..\Public\AlertRect.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
     <ClInclude Include="..\Public\BackGround.h" />
@@ -248,6 +249,7 @@
     <ClInclude Include="..\Public\Player_Battle_Ult_Frame.h" />
     <ClInclude Include="..\Public\Player_Tanjiro.h" />
     <ClInclude Include="..\Public\Player_Zenitsu.h" />
+    <ClInclude Include="..\Public\RoomSmoke.h" />
     <ClInclude Include="..\Public\RotationMapObject.h" />
     <ClInclude Include="..\Public\Skill_Name.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -271,6 +273,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\AlertCircle.cpp" />
+    <ClCompile Include="..\Private\AlertRect.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
@@ -340,6 +343,7 @@
     <ClCompile Include="..\Private\Player_Battle_Ult_Frame.cpp" />
     <ClCompile Include="..\Private\Player_Tanjiro.cpp" />
     <ClCompile Include="..\Private\Player_Zenitsu.cpp" />
+    <ClCompile Include="..\Private\RoomSmoke.cpp" />
     <ClCompile Include="..\Private\RotationMapObject.cpp" />
     <ClCompile Include="..\Private\Skill_Name.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />

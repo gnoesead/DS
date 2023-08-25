@@ -62,6 +62,9 @@
 #include "CollisionBox.h"
 
 #include "TrainSmoke.h"
+#include "RoomSmoke.h"
+#include "AlertCircle.h"
+#include "AlertRect.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -659,7 +662,16 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
-	
+	/* For.Prototype_GameObject_AlertCircle*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle"),
+		CAlertCircle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_AlertRect*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertRect"),
+		CAlertRect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 
 
@@ -1065,6 +1077,12 @@ HRESULT CLoader::LoadingForHouse()
 #pragma region GAMEOBJECTS
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+
+	/* For.Prototype_GameObject_RoomSmoke*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RoomSmoke"),
+		CRoomSmoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region Object
 	
 #pragma endregion
