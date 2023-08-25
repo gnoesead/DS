@@ -17,6 +17,7 @@ float			g_fTimeAcc;
 float2			g_vPanningSpeed;
 float			g_fAlpha;
 float			g_fUVRatio;
+float			g_fDiffuseRatio;
 
 struct VS_IN
 {
@@ -255,6 +256,19 @@ PS_OUT  PS_ALPHA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_ALPHA_REAL(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
+	Out.vDiffuse.a *= g_fAlpha;
+
+	return Out;
+}
+
+
 PS_OUT  PS_WIND(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
@@ -414,6 +428,18 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_FOG();
+	}
+
+	pass Alpha_Real // 10
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ALPHA_REAL();
 	}
 };
 

@@ -23,18 +23,40 @@ HRESULT CAlertRect::Initialize_Prototype()
 	return S_OK;
 }
 
+static _float  Get_Angle(_fvector vLook)
+{
+	_vector vNormalizeLook = XMVector3Normalize(vLook);
+
+	float fAngle = atan2f(XMVectorGetZ(vNormalizeLook), XMVectorGetX(vNormalizeLook));
+
+	fAngle = XMConvertToDegrees(fAngle);
+
+	if (fAngle >= 180.f)
+		fAngle += 180.f;
+
+	return fAngle ;
+}
+
 HRESULT CAlertRect::Initialize(void* pArg)
 {
+	if (pArg == nullptr)
+		return E_FAIL;
+
+	memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
+	_vector vPos = XMVectorSetY(m_EffectDesc.vPos, 0.01f);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f, 0.05f, 123.840f, 1.f));
-	m_pTransformCom->Scaling(_float3(0.5f, 50.f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->Scaling(_float3(0.01f, 1.f, 0.1f));
+
+	m_pTransformCom->Rotation(_float3(0.f, Get_Angle(m_EffectDesc.vLook), 0.f));
 	
 	return S_OK;
 }
@@ -42,8 +64,10 @@ HRESULT CAlertRect::Initialize(void* pArg)
 void CAlertRect::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
-
 	
+	m_pTransformCom->Rotation(_float3(0.f, -Get_Angle(m_EffectDesc.vLook), 0.f));
+
+	m_pTransformCom->Scaling(_float3(1.5f, 1.f, 0.003f));
 }
 
 void CAlertRect::LateTick(_double TimeDelta)
@@ -67,9 +91,17 @@ HRESULT CAlertRect::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(18);
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	m_pVIBufferCom->Render();
+	for (_uint i = 0; i < iNumMeshes; ++i)
+	{
+		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+			return E_FAIL;
+
+		m_pShaderCom->Begin(10);
+
+		m_pModelCom->Render(i);
+	}
 
 	return S_OK;
 }
@@ -87,18 +119,13 @@ HRESULT CAlertRect::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxTex"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 
-	/* For.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
-		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
-		return E_FAIL;
-
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_AlertRect"),
-		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	/* For.Com_Model*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_AlertRect"),
+		TEXT("Com_Texture"), (CComponent**)&m_pModelCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -123,11 +150,17 @@ HRESULT CAlertRect::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+	_float4 vCamPos = pGameInstance->Get_CameraPosition();
+
+	if (FAILED(m_pShaderCom->SetUp_Vector("g_vCamPosition", &vCamPos)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_fAlpha, sizeof _float)))
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fDiffuseRatio", &m_fDiffuseRatio, sizeof _float)))
+		return E_FAIL;
+
 
 	Safe_Release(pGameInstance);
 
@@ -166,6 +199,5 @@ void CAlertRect::Free()
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pVIBufferCom);
-	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pModelCom);
 }

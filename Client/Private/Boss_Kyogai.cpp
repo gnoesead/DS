@@ -8,6 +8,7 @@
 #include "PlayerManager.h"
 #include "AtkCollManager.h"
 #include "AlertCircle.h"
+#include "AlertRect.h"
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -473,18 +474,52 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)	// 1.0
 			{
+				CAlertRect::EFFECTDESC EffectDesc;
+				EffectDesc.vLook = vMonsterDir;
+
+				_uint iCurLevel = pGameInstance->Get_CurLevelIdx();
+				CTransform* pTransform = nullptr;
+
 				dLongLifeTime = 5.f;
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.x = -1.f;
+
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
 					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
+
+				/*pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_GameObject(iCurLevel, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(iCurLevel, TEXT("Layer_MonsterAtk"))-1)->Get_Component(TEXT("Com_Transform")));
+				EffectDesc.vPos = pTransform->Get_State(CTransform::STATE_POSITION);
+
+				pGameInstance->Add_GameObject(iCurLevel , TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+				EffectWorldDesc.vPosition.x = 0.f;
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk", &EffectWorldDesc);
+
+				pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_GameObject(iCurLevel, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(iCurLevel, TEXT("Layer_MonsterAtk") ) - 1)->Get_Component(TEXT("Com_Transform")));
+				EffectDesc.vPos = pTransform->Get_State(CTransform::STATE_POSITION);
+
+				pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+				EffectWorldDesc.vPosition.x = 1.f;
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
-					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk", &EffectWorldDesc);
+
+				pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_GameObject(iCurLevel, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(iCurLevel, TEXT("Layer_MonsterAtk") ) - 1)->Get_Component(TEXT("Com_Transform")));
+				EffectDesc.vPos = pTransform->Get_State(CTransform::STATE_POSITION);
+				pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);*/
+
+
+			
+
+				
+			
 			}
 		}
 
