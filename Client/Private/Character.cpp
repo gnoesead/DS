@@ -541,7 +541,7 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 
 void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime,
 	CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform,
-	_double Speed, CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag)
+	_double Speed, CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc)
 {
 	CAtkCollider::ATKCOLLDESC AtkCollDesc;
 	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
@@ -563,6 +563,13 @@ void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _floa
 	if (true == AtkCollDesc.bBullet)
 	{
 		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
+	}
+
+	if (nullptr != pEffectWorldDesc)
+		AtkCollDesc.EffectWorldDesc = *pEffectWorldDesc;
+	else
+	{
+		AtkCollDesc.EffectWorldDesc = CEffectPlayer::EFFECTWORLDDESC();
 	}
 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector3Normalize(vAtkDir));
