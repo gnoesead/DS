@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Collider.h"
+#include "EffectPlayer.h"
 
 BEGIN(Engine)
 
@@ -38,6 +39,7 @@ public:
 		
 		_bool		bBullet;
 		char		pEffectTag[MAX_PATH] = { "" };
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 	}ATKCOLLDESC;
 private:
 	CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
