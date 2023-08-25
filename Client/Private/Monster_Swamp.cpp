@@ -498,7 +498,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 		else 
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
-			Jumping(0.9f, 0.01f);
+			Jumping(1.1f, 0.01f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
 		}
 	}
@@ -510,7 +510,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			m_isFirst_Atk_0 = false;
 
 			m_pModelCom->Set_Animation(ANIM_ATK_CROSS);
-			Set_FallingStatus(0.0f, 0.05f);
+			Set_FallingStatus(0.0f, 0.04f);
 		}
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_CROSS, 4.0f, 0.2f);
