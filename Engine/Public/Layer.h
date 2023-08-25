@@ -11,6 +11,7 @@ private:
 	
 public:
 	class CComponent*	Get_Component(const _tchar* pComponentTag);
+	class CComponent*	Get_Component(_uint iIndex, const _tchar* pComponentTag);
 	class CGameObject*	Get_GameObject(_uint iIndex);	//레이어의 iIndex번째 객체 리턴
 	list<class CGameObject*>*	Get_GameObjects() {		//레이어의 객체 list(모든 객체들) 리턴
 		return &m_GameObjects;
