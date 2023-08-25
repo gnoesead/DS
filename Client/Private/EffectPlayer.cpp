@@ -60,7 +60,7 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 		pParticleSystem->Set_Rotation(vFloat3);
 
 		vFloat3 = pParticleSystemOrigin->Get_Scale();
-		vFloat3 = { vFloat3.x + m_EffectWorldDesc.fScale, vFloat3.y + m_EffectWorldDesc.fScale, vFloat3.z + m_EffectWorldDesc.fScale };
+		vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
 		pParticleSystem->Set_Scale(vFloat3);
 		
 		CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
