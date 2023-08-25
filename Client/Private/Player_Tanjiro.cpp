@@ -714,10 +714,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
 		m_fMove_Speed = 2.0f;
 
-		if(m_isCanNavi)
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
-		else
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
+		{
+			if (m_isCanNavi)
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			else
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 	}
 
@@ -1811,7 +1814,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	//차지공격 시 무빙제한
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 32 == iCurAnimIndex || 33 == iCurAnimIndex )
 	{
-		
+		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 	}
 	//스킬공격 시 무빙제한

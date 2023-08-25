@@ -285,27 +285,46 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
+
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
-	
+
+
+	//메인 상태
 	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
-		if (m_dCooltime_Atk_Pattern > 5.0f)
+
+		if (m_isSwamping == false)
 		{
-			m_dCooltime_Atk_Pattern = 0.0;
+			Animation_Control_Walk(dTimeDelta);
 
-			m_eCurState = STATE_ATTACK;
-			m_eCurPattern = PATTERN_JUMPSTOMP;
+			if (m_dCooltime_Atk_Pattern > 5.0f)
+			{
+				m_dCooltime_Atk_Pattern = 0.0;
+
+				m_eCurState = STATE_ATTACK;
+				m_eCurPattern = PATTERN_SWAMP_IN;
+			}
 		}
+		else
+		{
+			if (m_dCooltime_Atk_Pattern > 2.0f)
+			{
+				m_dCooltime_Atk_Pattern = 0.0;
 
+				m_eCurState = STATE_ATTACK;
+				m_eCurPattern = PATTERN_SHORYU;
+			}
+		}
 	}
+	//스왐프 서브 상태
 	else
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
 
 		if (m_isSwamping == false)
 		{
-			if (m_dCooltime_Atk_Pattern > 1.0f)
+			if (m_dCooltime_Atk_Pattern > 0.4f)
 			{
 				m_dCooltime_Atk_Pattern = 0.0;
 
@@ -317,7 +336,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		}
 		else
 		{
-			if (m_dCooltime_Atk_Pattern > 1.0f)
+			if (m_dCooltime_Atk_Pattern > 1.2f)
 			{
 				m_dCooltime_Atk_Pattern = 0.0;
 
@@ -325,9 +344,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 				m_eCurPattern = PATTERN_SWAMP_SCREW;
 			}
 		}
-		
 	}
-
 }
 
 
@@ -335,7 +352,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 	//네비 타는거
-	if (iCurAnim == ANIM_SWAMP_IN || iCurAnim == ANIM_SWAMP_IDLE_IN)
+	if (iCurAnim == ANIM_SWAMP_IN || iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0)
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = -2.0f;
@@ -356,7 +373,6 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNavi_Y_Off = false;
 		m_isSwamping = false;
 	}
-
 }
 
 void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackIndex)
@@ -372,19 +388,28 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 	case 2: //Pattern_Swamp_In
 		Animation_Control_Swamp_In(dTimeDelta);
 		break;
+	case 3:	//PATTERN_COMBO
+		Animation_Control_Combo(dTimeDelta);
+		break;
+	case 4: //PATTERN_SHORYU
+		Animation_Control_Shoryu(dTimeDelta);
+		break;
 	default:
 		break;
 	}
-
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE)
 	{
 		m_eCurState = STATE_IDLE;
 		
+		
+
 		m_isAtkFinish = true;
 
 		m_isFrist_Atk_Pattern = true;
 		m_isFirst_Atk_0 = true;
+
+		m_isOff_Dash = false;
 	}
 }
 
@@ -394,12 +419,101 @@ void CMonster_Swamp::Animation_Control_JumpStomp(_double dTimeDelta)
 	{
 		m_isFrist_Atk_Pattern = false;
 
-		m_pModelCom->Set_Animation(ANIM_ATK_JUMPSTOMP);
+		m_isFirst_Dash = true;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	Go_Straight_Constant(dTimeDelta, 4, 2.0f);
-	Go_Straight_Deceleration(dTimeDelta, 5, 2.0f, 0.3f);
+	if (m_isOff_Dash == false)
+	{
+		if (Animation_Control_Dash(dTimeDelta, 3.0f))
+			m_isOff_Dash = true;
+	}
+	else
+	{
+		if (m_isFirst_Atk_0)
+		{
+			m_isFirst_Atk_0 = false;
+
+			m_pModelCom->Set_Animation(ANIM_ATK_JUMPSTOMP);
+		}
+		Go_Straight_Constant(dTimeDelta, 4, 2.0f);
+		Go_Straight_Deceleration(dTimeDelta, 5, 2.0f, 0.3f);
+	}
+}
+
+void CMonster_Swamp::Animation_Control_Combo(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_isFirst_Dash = true;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (m_isOff_Dash == false)
+	{
+		if (Animation_Control_Dash(dTimeDelta, 1.5f))
+			m_isOff_Dash = true;
+	}
+	else
+	{
+		if (m_isFirst_Atk_0)
+		{
+			m_isFirst_Atk_0 = false;
+
+			m_pModelCom->Set_Animation(ANIM_ATK_COMBO);
+		}
+		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 2.0f, 0.5f);
+		Go_Straight_Deceleration(dTimeDelta, 12, 2.0f, 0.5f);
+		Go_Straight_Deceleration(dTimeDelta, 13, 2.0f, 0.5f);
+		Go_Straight_Deceleration(dTimeDelta, 14, 2.0f, 0.5f);
+		m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.6f);
+		m_pModelCom->Set_EarlyEnd(12, true, 0.6f);
+		m_pModelCom->Set_EarlyEnd(13, true, 0.6f);
+	}
+}
+
+void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
+		if ( 1.f < Calculate_Distance_From_Pos(PlayerPos) )
+		{
+			_float4 Dir;
+			XMStoreFloat4(&Dir, Calculate_Dir_FixY());
+			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 2.0f, Dir);
+		}
+		else 
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
+			Jumping(0.9f, 0.01f);
+			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
+		}
+	}
+
+	if (iCurAnim == ANIM_JUMP_IDLE)
+	{
+		if (m_isFirst_Atk_0)
+		{
+			m_isFirst_Atk_0 = false;
+
+			m_pModelCom->Set_Animation(ANIM_ATK_CROSS);
+			Set_FallingStatus(0.0f, 0.05f);
+		}
+	}
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_CROSS, 4.0f, 0.2f);
 }
 
 void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
@@ -410,7 +524,13 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
 		Jumping(0.01f, 0.01f);
-		m_iScrewPosIndex = rand() % 5;
+		
+		if (m_CharacterDesc.SwampHorn == 1)
+			m_iScrewPosIndex = rand() % 5;
+		if (m_CharacterDesc.SwampHorn == 2)
+			m_iScrewPosIndex = rand() % 4;
+		if (m_CharacterDesc.SwampHorn == 3)
+			m_iScrewPosIndex = rand() % 3;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -444,14 +564,113 @@ void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
 		m_isFrist_Atk_Pattern = false;
 
 		m_pModelCom->Set_Animation(ANIM_STEP_SWAMPIN);
-		
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-
 	if(iCurAnim == ANIM_SWAMP_IDLE)
 		m_fLand_Y = -2.0;
+}
 
+void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)
+{
+	_float fDistance = Calculate_Distance();
+
+	m_dDelay_Walk += dTimeDelta;
+
+	if (fDistance < 4.0f)
+	{
+		if (m_isFirst_Walk_0 && m_dDelay_Walk > 1.0f)
+		{
+			m_isFirst_Walk_0 = false;
+			m_isFirst_Walk_1 = true;
+
+			m_pModelCom->Set_Animation(ANIM_WALK_B);
+			m_dDelay_Walk = 0.0;
+			m_isWalk_Back = true;
+		}
+	}
+	else if (4.0f <= fDistance && fDistance < 10.0f )
+	{
+		if (m_isFirst_Walk_1 && m_dDelay_Walk > 1.0f)
+		{
+			m_isFirst_Walk_0 = true;
+			m_isFirst_Walk_1 = false;
+
+			if(m_isWalk_Back)
+				m_pModelCom->Set_Animation(ANIM_WALK_B_END);
+			else
+				m_pModelCom->Set_Animation(ANIM_WALK_F_END);
+			m_dDelay_Walk = 0.0;
+		}
+
+		if (m_dDelay_Walk > 3.0)
+		{
+			if (m_isFirst_Walk_Side)
+			{
+				m_isFirst_Walk_Side = false;
+
+				if (m_isWalk_Left)
+				{
+					m_isWalk_Left = false;
+					m_pModelCom->Set_Animation(ANIM_WALK_L);
+				}
+				else
+				{
+					m_isWalk_Left = true;
+					m_pModelCom->Set_Animation(ANIM_WALK_R);
+				}
+			}
+		}
+	}
+	else if (10.0f <= fDistance )
+	{
+		if (m_isFirst_Walk_0 && m_dDelay_Walk > 1.0f)
+		{
+			m_isFirst_Walk_0 = false;
+			m_isFirst_Walk_1 = true;
+
+			m_pModelCom->Set_Animation(ANIM_WALK_F);
+			m_dDelay_Walk = 0.0;
+			m_isWalk_Back = false;
+		}
+	}
+	Go_Straight_Constant(dTimeDelta, ANIM_WALK_F, 0.6f);
+	Go_Straight_Constant(dTimeDelta, 63, 0.6f);
+	Go_Backward_Constant(dTimeDelta, ANIM_WALK_B, 0.6f);
+	Go_Backward_Constant(dTimeDelta, 60, 0.6f);
+
+	_float4		Dir;
+	XMStoreFloat4(&Dir, Calculate_Dir_Cross());
+	_float4		reverseDir;
+	XMStoreFloat4(&reverseDir, -Calculate_Dir_Cross());
+	Go_Dir_Constant(dTimeDelta, ANIM_WALK_L, 0.45f, Dir);
+	Go_Dir_Constant(dTimeDelta, 66, 0.45f, Dir);
+	Go_Dir_Constant(dTimeDelta, ANIM_WALK_R, 0.45f, reverseDir);
+	Go_Dir_Constant(dTimeDelta, 69, 0.45f, reverseDir);
+}
+
+_bool CMonster_Swamp::Animation_Control_Dash(_double dTimeDelta, _float fDistance)
+{
+	if (m_isFirst_Dash)
+	{
+		m_isFirst_Dash = false;
+
+		m_pModelCom->Set_Animation(ANIM_RUN);
+	}
+
+	if (fDistance < Calculate_Distance())
+	{
+		Go_Straight_Constant(dTimeDelta, 40, 2.7f);
+	}
+	else if (Calculate_Distance() <= fDistance)
+	{
+		m_pModelCom->Set_Animation(ANIM_RUN_END);
+		return true;
+	}
+
+	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
+
+	return false;
 }
 
 void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)

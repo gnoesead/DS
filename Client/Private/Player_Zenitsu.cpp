@@ -573,10 +573,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_fMove_Speed = 2.0f;
 
-		if (m_isCanNavi)
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
-		else
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		if (m_pModelCom->Get_iCurrentAnimIndex() == 62)
+		{
+			if (m_isCanNavi)
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			else
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		}
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -1574,6 +1577,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 20 == iCurAnimIndex || 21 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 
 		if (21 == iCurAnimIndex)
