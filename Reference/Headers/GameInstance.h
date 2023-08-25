@@ -49,6 +49,7 @@ public: /*for Level_Manager*/
 
 public: /*for Object_Manager*/
     class CComponent*           Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag);
+    class CComponent*           Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, _uint iIndex, const _tchar * pComponentTag);
     class CGameObject*          Get_GameObject(_uint iLevelIndex, const _tchar * pLayerTag, _uint iIndex = 0);
     list<class CGameObject*>*   Get_GameObjects(_uint iLevelIndex, const _tchar * pLayerTag);
     size_t						Get_GameObject_ListSize(_uint iLevelIndex, const _tchar * pLayerTag);

@@ -25,8 +25,8 @@ HRESULT CLevel_Logo::Initialize()
         return E_FAIL;
 
 
-    _tchar szBgm[MAX_PATH] = TEXT("Intro.mp3");
-    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+    //_tchar szBgm[MAX_PATH] = TEXT("Intro.mp3");
+    //CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 
     return S_OK;

@@ -109,8 +109,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
 
-	_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
+	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 	return S_OK;
 }
