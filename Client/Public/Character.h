@@ -48,6 +48,7 @@ public:
 
 		NPCDESC				NPCDesc;
 
+		_int	SwampHorn = { 0 };
 	}CHARACTERDESC;
 
 	typedef struct tagCharacterStatusDesc
@@ -100,7 +101,7 @@ public:
 		return m_StatusDesc;
 	}
 
-
+	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -132,7 +133,8 @@ protected:
 	void	JumpStop(_double dDuration);
 
 	//콜라이더 관련`
-	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, _bool bBullet = false, const char* pEffectTag = { "" });
+	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, CAtkCollider::BULLET_TYPE eBulletType = CAtkCollider::TYPE_DEFAULT);
+	void	Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform, _double Speed = 5.f, CAtkCollider::BULLET_TYPE eBulletType = CAtkCollider::TYPE_BULLET, const char* pEffectTag = { "" });
 	void	Check_HitCollDead();
 	void	Check_HitType();
 

@@ -13,6 +13,7 @@
 #include "Boss_Kyogai.h"
 #include "Monster_Spider.h"
 #include "Monster_Zako.h"
+#include "Monster_Swamp.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -444,7 +445,30 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 	
-
+	/* Prototype_Component_Model_Monster_Swamp_Horn1 */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn1/SwampHorn1.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn1");
+		return E_FAIL;
+	}
+	/* Prototype_Component_Model_Monster_Swamp_Horn2 */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn2/SwampHorn2.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn2");
+		return E_FAIL;
+	}
+	/* Prototype_Component_Model_Monster_Swamp_Horn3 */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn3"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn3/SwampHorn3.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn3");
+		return E_FAIL;
+	}
 
 #pragma endregion
 
@@ -622,6 +646,14 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+	/* Prototype_GameObject_Monster_Swamp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Swamp"),
+		CMonster_Swamp::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Swamp");
+		return E_FAIL;
+	}
+
 	/* Prototype_GameObject_Monster_Test */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Test"),
 		CMonster_Test::Create(m_pDevice, m_pContext))))
@@ -639,6 +671,8 @@ HRESULT CLoader::LoadingForLobby()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertRect"),
 		CAlertRect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+
 
 
 #pragma endregion

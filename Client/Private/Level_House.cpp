@@ -1745,6 +1745,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk");
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 

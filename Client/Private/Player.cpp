@@ -950,7 +950,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 	//박스에 점프하기
 	if (m_Moveset.m_isRestrict_Adventure == false )
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_K) && m_isCan_Jump_To_Box)
+		if (pGameInstance->Get_DIKeyDown(DIK_SPACE) && m_isCan_Jump_To_Box)
 		{
 			m_isCan_Jump_To_Box = false;
 
@@ -1229,19 +1229,27 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		}
 
 		m_dDelay_Swapping_Pos = 0.0;
-	}
-	/*
-	m_dDelay_Swapping_Pos += dTimeDelta;
-	if (m_dDelay_Swapping_Pos < 0.85f)
-	{
-		_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
-		_float4 MyPos;
-		XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-
-		SwappingPos.y = MyPos.y;
 		
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
-	}*/
+	}
+	
+	
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
+	{
+		m_dDelay_Swapping_Pos += dTimeDelta;
+		if (m_dDelay_Swapping_Pos < 0.85f)
+		{
+			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			SwappingPos.y = MyPos.y;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
+		}	
+	}
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer::Add_Components()

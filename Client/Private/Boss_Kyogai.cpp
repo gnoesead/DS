@@ -323,24 +323,39 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 	if (EventCallProcess())
 	{
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		_vector vDir = Calculate_Dir();
+		_vector vDir = Calculate_Dir_ZeroY();
 
-		_float RandomAngle = Random::Generate_Float(0.f, 15.f);
-		_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
-		_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
-
-		RandomAngle = Random::Generate_Float(-20.f, 20.f);
-		RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 1.f), XMConvertToRadians(RandomAngle));
-		vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
-
+		_vector vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
+		
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
+		_double dSpeed = 5.0;
 #pragma region AWAKE_ComboPunch
  		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
+				
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom);
+
+				
+			}
+			if (1 == m_iEvent_Index)	// 0.25
+			{
+				
+				dLongLifeTime = 6.0;
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET);
+			}
+			if (2 == m_iEvent_Index)	// 1.20
+			{
+				dLongLifeTime = 6.0;
+				
+				
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET);
 			}
 		}
 
@@ -348,7 +363,17 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
+				
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom);
+				
+				
+			}
+			if (1 == m_iEvent_Index)	// 0.25
+			{
+				dLongLifeTime = 3.0;
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET);
 			}
 		}
 
@@ -432,10 +457,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index) // 0.4
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10", m_pTransformCom);
-
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+								
 			}
 
 
@@ -445,7 +467,24 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);							
+				
+				
+			}
+			if (1 == m_iEvent_Index)	// 1.0
+			{
+				dLongLifeTime = 5.f;
+
+				////tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				//Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//	CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET);
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET , "Kyogai_BladeAtk");
 			}
 		}
 

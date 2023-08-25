@@ -39,7 +39,6 @@ HRESULT CNPC::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -98,15 +97,7 @@ HRESULT CNPC::Initialize(void* pArg)
 		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
 	}
 
-	
 	Safe_Release(pGameInstance);
-
-
-
-
-
-
-
 
 
 	return S_OK;

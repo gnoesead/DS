@@ -230,6 +230,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterManager.h" />
     <ClInclude Include="..\Public\Monster_Spider.h" />
+    <ClInclude Include="..\Public\Monster_Swamp.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\Monster_Zako.h" />
     <ClInclude Include="..\Public\NPC.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\Public\StaticMapObject.h" />
     <ClInclude Include="..\Public\Story_Board.h" />
     <ClInclude Include="..\Public\Story_Manager.h" />
+    <ClInclude Include="..\Public\SwampManager.h" />
     <ClInclude Include="..\Public\Sword.h" />
     <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
@@ -322,6 +324,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterManager.cpp" />
     <ClCompile Include="..\Private\Monster_Spider.cpp" />
+    <ClCompile Include="..\Private\Monster_Swamp.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\Monster_Zako.cpp" />
     <ClCompile Include="..\Private\NPC.cpp" />
@@ -348,6 +351,7 @@
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\Story_Board.cpp" />
     <ClCompile Include="..\Private\Story_Manager.cpp" />
+    <ClCompile Include="..\Private\SwampManager.cpp" />
     <ClCompile Include="..\Private\Sword.cpp" />
     <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />

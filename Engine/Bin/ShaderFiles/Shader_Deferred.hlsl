@@ -615,9 +615,9 @@ float m_ShadowTexH = 7200.f;
 
 static const float Weight[13] =
 {
-	/*0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
-	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561*/
-	 0.002216,
+	0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
+	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561
+	/* 0.002216,
 	0.008764,
 	0.026995,
 	0.064759,
@@ -629,12 +629,12 @@ static const float Weight[13] =
 	0.064759,
 	0.026995,
 	0.008764,
-	0.002216,
+	0.002216,*/
 	//0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462, 2, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122
 
 
 };
-static const float Total = /*6.2108*/1.00000012 /*12.4216*/;
+static const float Total = 6.2108/*1.00000012*/ /*12.4216*/;
 //static const float Total = 2.636;
 //static const float FinalWeight[7] =
 //{
@@ -810,7 +810,7 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	//vector      vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexUV);
+	
 	if (vFinal.a == 0.f)
 		discard;
 
@@ -874,9 +874,7 @@ PS_OUT PS_ShadowBlurY(PS_IN _In)
 		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-
 	Out.vColor /= Total;
-
 
 	if (Out.vColor.a == 0.f)
 		discard;
@@ -899,7 +897,6 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 
 	/*if (vFinal.a == 0.f) // 0812
 		discard;*/
-
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
@@ -925,7 +922,6 @@ PS_OUT PS_Combine_ShadowBlur(PS_IN In)
 
 	/*if (vFinal.a == 0.f) // 0812
 		discard;*/
-
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 

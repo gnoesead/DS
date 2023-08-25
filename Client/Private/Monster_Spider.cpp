@@ -355,7 +355,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 		if (m_fCrawling_Y <= 6.74f)
 		{
 			m_fLand_Y = m_fCrawling_Y;
-			m_fCrawling_Y += dTimeDelta * m_fCrawlingSpeed;
+			m_fCrawling_Y += (_float)dTimeDelta * m_fCrawlingSpeed;
 			//m_fLand_Y = 8.0f;
 		}
 		else if (6.74f < m_fCrawling_Y)
