@@ -289,11 +289,17 @@
     <Filter Include="02. GameObjects\UI\12.Battle_Signal">
       <UniqueIdentifier>{0c5e686d-a9c2-4f43-9a8d-d31d2bd7b04f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Environment\TrainSmoke">
-      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Player\PlayerManager">
       <UniqueIdentifier>{b8c29c98-f2c8-4acc-a6d5-e826cfb59d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\AlertCircle">
+      <UniqueIdentifier>{1fcc66ec-5608-4569-b4b0-91886eb7715f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
+      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp">
+      <UniqueIdentifier>{b7224a9e-5e9a-4867-b09d-ad10e90f0ca0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -544,13 +550,19 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TrainSmoke.h">
-      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OptionManager.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\PlayerManager.h">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AlertCircle.h">
+      <Filter>02. GameObjects\Environment\AlertCircle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster_Swamp.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -792,13 +804,19 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TrainSmoke.cpp">
-      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OptionManager.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\PlayerManager.cpp">
       <Filter>02. GameObjects\Character\Player\PlayerManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AlertCircle.cpp">
+      <Filter>02. GameObjects\Environment\AlertCircle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Swamp.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

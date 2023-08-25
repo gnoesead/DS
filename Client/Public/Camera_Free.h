@@ -11,7 +11,7 @@ BEGIN(Client)
 class CCamera_Free final : public CCamera
 {
 
-	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, AKAZA_FINISH, END_FINISH };
+	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, AKAZA_FINISH, PLAYER_AWAKE , BOSS_AWAKE , END_FINISH };
 
 	typedef struct Cut_In_Camera_Desc
 	{
@@ -51,6 +51,8 @@ public:
 private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);
+	void NewAdventureCamera(_double dTimeDelta);
+
 	void BattleCamera(_double dTimeDelta);
 	void FocusCamera(_double dTimeDelta);
 	void SideCamera(_double dTimeDelta);
@@ -60,6 +62,7 @@ private:
 
 private:
 	void Turn_Camera(_double TimeDelta);
+	void New_Turn_Camera(_double TimeDelta);
 	void LockMouse();
 
 private:
@@ -74,6 +77,8 @@ private:
 
 
 	_bool           m_bIs_Pos_Set= { false };
+
+	_bool           m_bIs_Dist_Update = { true };
 
 private:
 	_float4			m_fCameraLook = {};

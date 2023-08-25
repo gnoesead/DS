@@ -92,7 +92,7 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃ÷
 	{
-		Player_Change_Setting_Status();
+		Player_Change_Setting_Status(dTimeDelta);
 		Animation_Control(dTimeDelta);
 	}
 	else
@@ -243,7 +243,7 @@ HRESULT CPlayer_Zenitsu::Render_ShadowDepth()
 	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
-
+	
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
@@ -469,7 +469,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_END == m_pModelCom->Get_iCurrentAnimIndex())
@@ -483,7 +483,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_AIR_END == m_pModelCom->Get_iCurrentAnimIndex())
@@ -562,7 +562,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_Moveset.m_State_Battle_Run)
 	{
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_fMove_Speed = 2.0f;
 
 		if (m_isCanNavi)
@@ -583,7 +584,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 {
 	if (m_Moveset.m_Down_Battle_JumpMove)
 	{
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_Moveset.m_Down_Battle_JumpMove = false;
 		m_isJump_Move = true;
 
@@ -600,6 +602,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		//Go_Straight_Deceleration(dTimeDelta, 59, m_fMove_Speed * 1.2f * m_fScaleChange, 0.36f * m_fScaleChange); // Down
 	}
 	Ground_Animation_Play(58, 59);
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_JUMP, 0.001f);
+	m_pModelCom->Set_LinearDuration(57, 0.001f);
+	m_pModelCom->Set_LinearDuration(58, 0.001f);
+	m_pModelCom->Set_LinearDuration(59, 0.001f);
 
 
 	if (m_Moveset.m_Down_Battle_Jump)
@@ -836,6 +842,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	//º®·ÂÀÏ¼¶ ÄÞº¸¿ë
@@ -852,15 +861,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 	}
 	//¸¶³ªÁ¦ÇÑ
-	//if (m_Moveset.m_iAwaken < 2)
-	//{
-	//	if (m_isCan_Mp_Skill == false)
-	//	{
-	//		m_Moveset.m_Down_Skill_Normal = false;
-	//		m_Moveset.m_Down_Skill_Move = false;
-	//		m_Moveset.m_Down_Skill_Guard = false;
-	//	}
-	//}
+	if (m_Moveset.m_iAwaken < 2)
+	{
+		if (m_isCan_Mp_Skill == false)
+		{
+			m_Moveset.m_Down_Skill_Normal = false;
+			m_Moveset.m_Down_Skill_Move = false;
+			m_Moveset.m_Down_Skill_Guard = false;
+		}
+	}
 
 	
 	if (m_isHit_Hekireki)
@@ -938,25 +947,27 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI_AIR);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
 					if (Get_LockOn_MonPos())
 					{
-						m_LockOnPos.y -= 0.5f;
+						m_LockOnPos.y -= 0.6f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
 					}
 				}
+				
 			}
 			else
 			{
 				m_pModelCom->Set_Animation(ANIM_ATK_SKILL_HEKIREKI);
 				//m_pTransformCom->LookAt(m_vBattleTargetPos);
 
-				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
 					if (Get_LockOn_MonPos())
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 				}
+				
 			}
 			
 			Use_Mp_Skill();
@@ -1000,6 +1011,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
 
+		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
 			if (Get_LockOn_MonPos())
@@ -1011,6 +1023,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Use_Mp_Skill();
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
+
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
@@ -1026,7 +1040,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos())
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
 
@@ -1135,7 +1150,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Step = false;
 
-		m_pTransformCom->Set_Look(m_vLook);
+		//m_pTransformCom->Set_Look(m_vLook);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
 		if (m_isForward)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_F);
 		else if (m_isBack)
@@ -1291,7 +1307,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isConnectHitting = true;
 		}
 
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		//m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		if (m_iSmallHit_Index == 0)
@@ -1332,7 +1349,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Big = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 	}
@@ -1348,7 +1365,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1367,7 +1384,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_BigBlow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1386,7 +1403,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Upper = false;
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		m_pTransformCom->Set_Look(reverseAtkDir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.7f, 0.03f);
@@ -1413,10 +1430,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 	}
 	//Go_Straight_Constant(dTimeDelta, 138, 2.0f);
-	Go_Straight_Deceleration(dTimeDelta, 138, 3.0f, 0.03f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_DOWN_GETUP_MOVE, 3.0f, 0.03f);
 	m_pModelCom->Set_EarlyEnd(ANIM_DOWN_GETUP_MOVE, true);
 
 
@@ -1430,6 +1448,7 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_First_Player_Change(false);
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+		m_isJump_Move = false;
 		m_dDelay_Player_Change = 0.0;
 		CPlayerManager::GetInstance()->Set_First_Setting_Status(true);
 
@@ -1438,6 +1457,8 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Special_Cnt(m_StatusDesc.iSpecial_Cnt);
 		CPlayerManager::GetInstance()->Set_Special(m_StatusDesc.fSpecial);
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
+
+		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -1447,20 +1468,34 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
 	{
 		if (m_dDelay_Player_Change < 1.5)
-			m_pTransformCom->Go_Up(dTimeDelta * 3.0f);
+		{
+			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+
+			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			SwappingPos.y = MyPos.y;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
+		}
 		else
 			m_isSwap_OnSky = true;
 
 		m_isJumpOn = true;
 	}
 
-	_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
-	_float4 CurPos;
-	XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	AnotherPos.y = CurPos.y;
 	if (m_isSwap_OnSky)
-		AnotherPos.y = 10.0f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	{
+		_float4 AnotherPos = CPlayerManager::GetInstance()->Get_PlayerPos_Change();
+		_float4 CurPos;
+		XMStoreFloat4(&CurPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		AnotherPos.y = CurPos.y;
+
+		AnotherPos.y = 13.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
+	}
+	
 }
 
 void CPlayer_Zenitsu::Moving_Restrict()

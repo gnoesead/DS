@@ -31,7 +31,20 @@ void CCameraManager::Tick(_double dTimeDelta)
 		if (m_Focus_TimeAcc > m_Focus_Time) {
 			m_Focus_TimeAcc = 0.f;
 
+			// 바로 해제 X 원래 위치로 보간해서 이동 후 false로 바꿈
 			m_Is_Focus_On = false;
+		}
+
+	}
+
+	if (m_bIs_Dist_Update == false) {
+
+		m_Dist_Update_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Dist_Update_TimeAcc > m_Dist_Update_Time) {
+			m_Dist_Update_TimeAcc = 0.f;
+
+			m_bIs_Dist_Update = true;
 		}
 
 	}
@@ -148,11 +161,8 @@ void CCameraManager::Zoom_Out(_float Zoom, _float Time)
 
 void CCameraManager::Zoom_Fix(_float Zoom)
 {
-	
 	m_Zoom = Zoom;
 }
-
-
 
 _float CCameraManager::Get_Zoom()
 {
@@ -167,6 +177,19 @@ void CCameraManager::Set_Is_Battle_LockFree(_bool Is)
 _bool CCameraManager::Get_Is_Battle_LockFree()
 {
 	return m_Is_Battle_LockFree;
+}
+
+void CCameraManager::Set_Is_Dist_Update(_bool Is, _float Time)
+{
+	m_bIs_Dist_Update = Is;
+	m_Dist_Update_Time = Time;
+	m_Dist_Update_TimeAcc = 0.f;
+}
+
+_bool CCameraManager::Get_Is_Dist_Update()
+{
+
+	return m_bIs_Dist_Update;
 }
 
 void CCameraManager::Free()

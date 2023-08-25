@@ -28,6 +28,7 @@
 #include "ColliderManager.h"
 
 #include "PlayerManager.h"
+#include "Camera_Manager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -98,6 +99,8 @@ HRESULT CLevel_Train::Initialize()
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(true);
+
+	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
     return S_OK;
 }
@@ -268,7 +271,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 	//Left
 	for (_int i = 0; i < 20; i++)
 	{
-		_float fZ = i + 221;
+		_float fZ = (_float)(i + 221);
 
 		CharacterDesc.WorldInfo.vPosition = _float4(201.3f, 6.9f, fZ, 1.f);
 		
@@ -283,7 +286,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 	//Right
 	for (_int i = 0; i < 20; i++)
 	{
-		_float fZ = i + 221;
+		_float fZ = (_float)(i + 221);
 
 		CharacterDesc.WorldInfo.vPosition = _float4(209.2f, 6.9f, fZ, 1.f);
 

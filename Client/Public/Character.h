@@ -32,7 +32,8 @@ public:
 		_bool			isNPC_NaviOff = { false };
 		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
 		_uint           Icon_Type = { 99 };
-		
+		_uint           Dialog_Type = { 99 };
+
 		_float4			WalkSpot[3];
 	}NPCDESC;
 
@@ -99,7 +100,7 @@ public:
 		return m_StatusDesc;
 	}
 
-
+	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -131,7 +132,8 @@ protected:
 	void	JumpStop(_double dDuration);
 
 	//콜라이더 관련`
-	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, _bool bBullet = false, const char* pEffectTag = { "" });
+	void	Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, CAtkCollider::BULLET_TYPE eBulletType = CAtkCollider::TYPE_DEFAULT);
+	void	Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform, _double Speed = 5.f, CAtkCollider::BULLET_TYPE eBulletType = CAtkCollider::TYPE_BULLET, const char* pEffectTag = { "" });
 	void	Check_HitCollDead();
 	void	Check_HitType();
 
@@ -221,6 +223,7 @@ protected:
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
+	
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();

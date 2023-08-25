@@ -54,7 +54,17 @@ void CCamera_Free::Tick(_double dTimeDelta)
 
 	if (m_bIs_Pos_Set == false) {
 		m_bIs_Pos_Set = true;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 130.f, 0.f, 140.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 573.f, 4.5f, 242.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 8.f, 0.f, 10.f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 205.57f, 7.38f, 224.0f, 1.f });
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 	}
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_0))
@@ -94,13 +104,22 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// Test
+	// Test(LockOn)
 	if (m_Is_Battle == true) {
 		if (pGameInstance->Get_DIKeyDown(DIK_R)) {
 			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(!m_bIs_Battle_LockFree);
 		}
 
 		m_bIs_Battle_LockFree = CCameraManager::GetInstance()->Get_Is_Battle_LockFree();
+	}
+
+	// Test(DistUpdate)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
+		if (pGameInstance->Get_DIKeyDown(DIK_I)) {
+			CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.f);
+		}
+
+		m_bIs_Dist_Update = CCameraManager::GetInstance()->Get_Is_Dist_Update();
 	}
 
 	// Camera_Shake
@@ -118,10 +137,24 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		if (m_Swap_TimeAcc >= 1.5f)
-			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (m_bIs_Dist_Update == false) {
 
+			if (m_Swap_TimeAcc >= 1.5f) {
+
+				_float Y = XMVectorGetY(m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION));
+
+				m_vTargetPos = XMVectorSetY(m_vTargetPos, Y);
+
+			}
+
+		}
+		else {
+			if (m_Swap_TimeAcc >= 1.5f)
+				m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		}
+		
 		m_fLandY = pPlayer->Get_LandY();
+
 	}
 
 	m_Player_Index = CPlayerManager::GetInstance()->Get_PlayerIndex();
@@ -204,20 +237,20 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	
 
 	// Combo_On
-	_float dist = XMVectorGetX(XMVector3Length(m_vTargetPos - m_vBattleTargetPos));
-
+	
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 3) {
-			//m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 		else {
-			//m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 
-		if (dist > 7.f) {
+
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
 			m_bIs_Combo_On = false;
 		}
 
@@ -228,7 +261,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// 사이드캠 이펙트 작업 시 주석 해제
 	// Side_Cam_Key
 	if (pGameInstance->Get_DIKeyDown(DIK_GRAVE)) {
-		m_bIs_Combo_On = !m_bIs_Combo_On;
+		//m_bIs_Combo_On = !m_bIs_Combo_On;
 	}
 	//=============================================
 
@@ -280,7 +313,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 					m_fDamping = { 5.f };
 				}
 
-				AdventureCamera(dTimeDelta);
+				NewAdventureCamera(dTimeDelta);
 
 			}
 			// Battle
@@ -370,10 +403,6 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 
 	Turn_Camera(dTimeDelta);
 
-	_vector vDist = vCamPosition - m_vTargetPos;
-
-	_float dist = XMVectorGetX(XMVector3Length(vDist));
-
 	m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
 	m_vDist = XMVector3Normalize(m_vDist);
 
@@ -403,6 +432,52 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
+void CCamera_Free::NewAdventureCamera(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vUp = XMVector3Normalize({ 0.f,1.f,0.f });
+
+	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	New_Turn_Camera(dTimeDelta);
+
+	//m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
+	m_vDist = XMVector3Normalize(m_vDist);
+
+	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
+
+
+	if (pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D)) {
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
+	}
+	else {
+		_float t = (_float)dTimeDelta * m_fDamping * 2.f;
+
+		if (t > 1.0f)
+			t = 1.0f;
+		else if (t < 0.f)
+			t = 0.0f;
+
+		_vector CamPos = XMVectorLerp(vCamPosition, vDest, t);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
+	}
+
+
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
+
+	//m_pTransformCom->Chase_Target(vDest, dTimeDelta, 0.7f);
+
+	_vector NewLook = m_vTargetPos + m_vLookOffSet;
+
+	m_pTransformCom->LookAt(NewLook);
+
+
+	Safe_Release(pGameInstance);
+}
+
 void CCamera_Free::BattleCamera(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -412,30 +487,33 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 
 	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false) {
-		m_fDistance = 6.f + m_Zoom;
+	if (m_bIs_Dist_Update) {
 
-		m_vDist = m_vTargetPos - m_vBattleTargetPos;
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false) {
+			m_fDistance = 6.f + m_Zoom;
 
-		_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(-m_vCameraAngle));
+			m_vDist = m_vTargetPos - m_vBattleTargetPos;
 
-		m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+			_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(-m_vCameraAngle));
 
-		m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
+			m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
-		m_vDist = XMVector3Normalize(m_vDist);
+			m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
+
+			m_vDist = XMVector3Normalize(m_vDist);
+		}
+		else {
+			m_fDistance = 8.f + m_Zoom;
+
+			Turn_Camera(dTimeDelta);
+
+			m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
+
+			m_vDist = XMVector3Normalize(m_vDist);
+
+		}
 	}
-	else {
-		m_fDistance = 8.f + m_Zoom;
 
-		Turn_Camera(dTimeDelta);
-		
-		m_vDist = { XMVectorGetX(m_vDist), 0.12f ,XMVectorGetZ(m_vDist), 0.f };
-
-		m_vDist = XMVector3Normalize(m_vDist);
-
-	}
-		
 	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
 
 	_float t = (_float)dTimeDelta * m_fDamping;
@@ -512,18 +590,21 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 	_vector vRight = {};
 
-	vRight = m_vTargetPos - m_vBattleTargetPos;
+	if (m_bIs_Dist_Update) {
+
+		vRight = m_vTargetPos - m_vBattleTargetPos;
+
+		m_vDist = XMVector3Cross(vRight, vUp);
+
+		m_vDist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
+
+		m_vDist = XMVector3Normalize(m_vDist);
+
+		_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(8.f));
+
+		m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+	}
 	
-	m_vDist = XMVector3Cross(vRight, vUp);
-
-	m_vDist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
-
-	m_vDist = XMVector3Normalize(m_vDist);
-
-	_matrix		RotationMatrix = XMMatrixRotationAxis(vUp, XMConvertToRadians(8.f));
-
-	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
-
 	_vector vDest = {};
 
 	vDest = m_vBattleCenter + m_vOffSet + (m_vDist * m_fDistance);
@@ -673,6 +754,56 @@ void CCamera_Free::Turn_Camera(_double TimeDelta)
 
 	Safe_Release(pGameInstance);
 
+}
+
+void CCamera_Free::New_Turn_Camera(_double TimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+
+
+	// 마우스로 회전
+	_long		MouseMove = 0;
+
+	if (fabs(MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_X)))
+	{
+		_matrix		RotationMatrix = XMMatrixRotationAxis({ 0.f,1.f,0.f }, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+		m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+	}
+
+	_vector vUp = XMVector3Normalize({ 0.f,1.f,0.f });
+	m_vDist = XMVector3Normalize(m_vDist);
+
+	_float angle = acos(XMVectorGetX(XMVector3Dot(vUp, m_vDist)));
+
+	if (fabs(MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y)))
+	{
+
+		if (MouseMove > 0) {
+			if (angle > XMConvertToRadians(20.f)) {
+				_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+				m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+			}
+
+		}
+		else {
+			if (angle < XMConvertToRadians(100.f)) {
+				_matrix		RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(90.0f) * _float(TimeDelta * MouseMove * 0.07f));
+
+				m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
+
+			}
+		}
+
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CCamera_Free::LockMouse()

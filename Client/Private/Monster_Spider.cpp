@@ -75,7 +75,10 @@ HRESULT CMonster_Spider::Initialize(void* pArg)
 		m_isLeft = false;
 	}
 
-	m_fCrawlingSpeed = ((rand() % 100) + 50 ) * 0.01f ;
+	m_fCrawlingSpeed = ((rand() % 100) + 50 ) * 0.01f;
+
+	m_StatusDesc.fHp = 50.0f;
+	m_StatusDesc.fHp_Max = 50.0f;
 
 	return S_OK;
 }
@@ -352,7 +355,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 		if (m_fCrawling_Y <= 6.74f)
 		{
 			m_fLand_Y = m_fCrawling_Y;
-			m_fCrawling_Y += dTimeDelta * m_fCrawlingSpeed;
+			m_fCrawling_Y += (_float)dTimeDelta * m_fCrawlingSpeed;
 			//m_fLand_Y = 8.0f;
 		}
 		else if (6.74f < m_fCrawling_Y)
