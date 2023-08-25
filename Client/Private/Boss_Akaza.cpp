@@ -343,6 +343,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 #pragma region AWAKE_ComboPunch
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -15.f, 15.f);
+
 			if (0 <= m_iEvent_Index && 35 >= m_iEvent_Index)
 			{
 				if (0 == m_iEvent_Index || 5 == m_iEvent_Index || 12 == m_iEvent_Index || 
@@ -354,7 +356,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				}
 				//이펙트용 콜라이더
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), dLifeTime,
 					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch");
 			}
 		}
