@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {

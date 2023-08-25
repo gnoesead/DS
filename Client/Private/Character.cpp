@@ -702,6 +702,11 @@ void CCharacter::Status_Work(_double dTimeDelta)
 	}
 
 	//스페셜게이지
+	if (m_StatusDesc.iSpecial_Cnt >= 3)
+	{
+		m_StatusDesc.fSpecial = 0.0f;
+	}
+
 	if (100.0f <= m_StatusDesc.fSpecial)
 	{
 		m_StatusDesc.fSpecial = 0.0f;
