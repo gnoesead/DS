@@ -117,8 +117,11 @@ private: //애니메이션 제어용 함수
 	//늪상태
 	void	Animation_Control_SwampScrew(_double dTimeDelta);
 
+
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
+
+	void	Navigation_Y_Control();
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -130,6 +133,12 @@ private: //애니메이션 제어용 변수들
 	_int	m_iPhase = { 0 };
 	
 private:
+	//attack pattern
+	_bool	m_isFrist_Atk_Pattern = { true };
+	_double m_dCooltime_Atk_Pattern = { 0.0 };
+	_bool	m_isAtkFinish = { false };
+
+
 	//Hit_DMg_Combo
 	_double		m_dDelay_ComboChain = { 0.0 };
 	_int		m_iSmallHit_Index = { 0 };

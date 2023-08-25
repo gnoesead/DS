@@ -43,8 +43,6 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 
 	if (FAILED(Add_Components_Model()))
 		return E_FAIL;
-
-	m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE);
 	
 	if (FAILED(Read_Animation_Control_File("SwampHorn3.bin")))
 	{
@@ -53,6 +51,16 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	}
 
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
+
+
+	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+	{
+		m_pModelCom->Set_Animation(ANIM_IDLE);
+	}
+	else
+	{
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE);
+	}
 
 	return S_OK;
 }
@@ -276,30 +284,24 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
-	//네비 타는거
-	if (iCurAnim == ANIM_SWAMP_IN)
-	{
-		m_isNavi_Y_Off = true;
-		m_fLand_Y = -2.0f;
-	}
-	else if (iCurAnim == ANIM_SWAMP_IDLE)
-	{
-		m_isNavi_Y_Off = true;
-		m_fLand_Y = -1.0f;
-	}
-	else
-	{
-		m_isNavi_Y_Off = false;
-	}
-	
+	Navigation_Y_Control();
 	
 	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
 	{
-		m_pModelCom->Set_Animation(ANIM_IDLE);
+		m_dCooltime_Atk_Pattern += dTimeDelta;
+		if (m_dCooltime_Atk_Pattern > 5.0f)
+		{
+			m_dCooltime_Atk_Pattern = 0.0;
+
+			m_isFrist_Atk_Pattern = true;
+			m_eCurState = STATE_ATTACK;
+			m_eCurPattern = PATTERN_JUMPSTOMP;
+		}
+
 	}
 	else
 	{
-		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE);
+		
 	}
 
 }
@@ -324,15 +326,30 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 	{
 		m_eCurState = STATE_IDLE;
 		
+		m_isAtkFinish = true;
 	}
 }
 
 void CMonster_Swamp::Animation_Control_JumpStomp(_double dTimeDelta)
 {
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_JUMPSTOMP);
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+
+
 }
 
 void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 {
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+	}
 }
 
 
@@ -629,6 +646,27 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 	{
 		m_eCurState = STATE_IDLE;
 	}*/
+
+}
+
+void CMonster_Swamp::Navigation_Y_Control()
+{
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+	//네비 타는거
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_isNavi_Y_Off = true;
+		m_fLand_Y = -2.0f;
+	}
+	else if (iCurAnim == ANIM_SWAMP_IDLE)
+	{
+		m_isNavi_Y_Off = true;
+		m_fLand_Y = -1.0f;
+	}
+	else
+	{
+		m_isNavi_Y_Off = false;
+	}
 
 }
 
