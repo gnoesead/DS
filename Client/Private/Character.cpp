@@ -759,6 +759,38 @@ void CCharacter::Use_Mp_Skill()
 	}
 }
 
+_float4 CCharacter::Calculate_Dir_From_Pos(_float4 Pos)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, vMyPos);
+
+	Pos.y = MyPos.y;
+	_vector vTarget = XMLoadFloat4(&Pos);
+	
+	_float4		Dir;
+	XMStoreFloat4(&Dir, XMVector3Normalize(vTarget - vMyPos));
+
+	return Dir;
+}
+
+_float CCharacter::Calculate_Distance_From_Pos(_float4 Pos)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, vMyPos);
+
+	Pos.y = MyPos.y;
+	_vector vTarget = XMLoadFloat4(&Pos);
+	
+	_vector vDir = XMVector3Normalize(vTarget - vMyPos);
+	_float fDistance = Convert::GetLength(vTarget - vMyPos);
+
+	return fDistance;
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);

@@ -14,7 +14,7 @@ class CMonster_Swamp final : public CMonster
 public:
 	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END};
 	enum PATTERN { 
-		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, 
+		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_END };
 
 	enum ANIM {
@@ -41,7 +41,7 @@ public:
 
 		ANIM_IDLE = 35,
 		ANIM_SWAMP_IDLE = 36,
-		ANIM_SWAMP_ANGRY = 37,
+		ANIM_SWAMP_IDLE_IN = 37,
 		
 		ANIM_RUN = 40, ANIM_RUN_END = 41,
 		ANIM_STEP_B = 42, ANIM_STEP_F = 43, ANIM_STEP_L = 46, ANIM_STEP_R = 50,
@@ -112,16 +112,16 @@ private: //애니메이션 제어용 함수
 
 
 	void	Animation_Control_Attack(_double dTimeDelta, _int AttackIndex);
+	void	Navigation_Y_Control(_double dTimeDelta);
 	//일반상태
 	void	Animation_Control_JumpStomp(_double dTimeDelta);
 	//늪상태
 	void	Animation_Control_SwampScrew(_double dTimeDelta);
+	void	Animation_Control_Swamp_In(_double dTimeDelta);
 
 
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
-
-	void	Navigation_Y_Control();
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -131,13 +131,25 @@ private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };
 	_int	m_iPhase = { 0 };
+	_bool	m_isSwamping = { false };
+
+	_int	m_iTime_Index = { 0 };
+
+
+	
 	
 private:
 	//attack pattern
 	_bool	m_isFrist_Atk_Pattern = { true };
+	_bool	m_isFirst_Atk_0 = { true };
+
 	_double m_dCooltime_Atk_Pattern = { 0.0 };
 	_bool	m_isAtkFinish = { false };
+	_float4 m_SaveDir = { 0.0f, 0.0f, 0.0f ,0.0f };
 
+	//pattern swamp screw
+	_float4	 m_ScrewPos[5];
+	_int	m_iScrewPosIndex = { 0 };
 
 	//Hit_DMg_Combo
 	_double		m_dDelay_ComboChain = { 0.0 };

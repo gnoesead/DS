@@ -80,9 +80,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	
-	m_pSword->Tick(dTimeDelta);
-	m_pSwordHome->Tick(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->Tick(dTimeDelta);
+		m_pSwordHome->Tick(dTimeDelta);
+	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -107,18 +109,21 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		Player_Change(dTimeDelta);
 	}
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
 
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
 
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			return;
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+			return;
+	}
 
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -127,9 +132,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 {
-
-	m_pSword->LateTick(dTimeDelta);
-	m_pSwordHome->LateTick(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->LateTick(dTimeDelta);
+		m_pSwordHome->LateTick(dTimeDelta);
+	}
 
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) // 탄지로
