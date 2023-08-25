@@ -263,7 +263,7 @@ void CAnimCharacter_Tool::Save_Animations()
 	char FindFile[MAX_PATH] = { "" };
 	WIN32_FIND_DATAA fdFind;
 	//¡Ú
-	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Kyogai/Kyogai/*.bin", &fdFind);
+	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Kyogai/*.bin", &fdFind);
 	if (hFindOut != INVALID_HANDLE_VALUE)
 	{
 		do

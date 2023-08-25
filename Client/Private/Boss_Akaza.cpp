@@ -583,9 +583,12 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (m_bAwake == true)
 			{
-
+				vRandomDir = Random_Dir(vMonsterDir, 15.f, 60.f, -20.f, 20.f); // 조절 하면 될듯~
+				// -> Rotation_Dir() 이건 원하는 방향으로 
+				 
 				if (0 == m_iEvent_Index)
 				{
+					
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
