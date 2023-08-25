@@ -778,7 +778,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 #pragma endregion
 
 
-// FIcon (임시) 실제로는 객체가 파츠로 소유할거임
+// FIcon 
 	CFIcon::UIDESC UIDesc8;
 	// 락온 아이콘
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
@@ -787,11 +787,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 7;
 	UIDesc8.m_Up_Mount = 1.95f;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 	// 락온 글로우
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
@@ -800,43 +800,14 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 8;
 	UIDesc8.m_Up_Mount = 1.95f;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 
-// Interaction UI
-	//CInteraction::UIDESC UIDesc9;
-	//ZeroMemory(&UIDesc9, sizeof UIDesc9);
-
-	//// 배경
-	//UIDesc9.m_Is_Reverse = false;
-	//UIDesc9.m_Type = 0;
-	//UIDesc9.m_Up_Mount = 2.f;
-
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
-
-	//ZeroMemory(&UIDesc9, sizeof UIDesc9);
-
-	//// F 상호작용
-	//UIDesc9.m_Is_Reverse = false;
-	//UIDesc9.m_Type = 1;
-	//UIDesc9.m_Up_Mount = 2.f;
-
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
-
-
-	// Fade
+// Fade
 	CFade::UIDESC UIDesc11;
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 

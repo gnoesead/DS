@@ -231,20 +231,22 @@ void CFIcon::LateTick(_double TimeDelta)
 	// 월드 트리거
 	else {
 
-		m_fY += (_float)TimeDelta * m_Y_Dir;
+		m_fY += (_float)TimeDelta * m_Y_Dir * 0.8f;
 
-		if (m_fY > 0.5f) {
+		if (m_fY > 0.1f) {
+			m_fY = 0.1f;
 			m_Y_Dir *= -1.f;
 		}
 
-		if (m_fY < -0.5f) {
+		if (m_fY < -0.2f) {
+			m_fY = -0.2f;
 			m_Y_Dir *= -1.f;
 		}
 
-		//_vector Pos = { XMVectorGetX(m_UI_Desc.Pos),XMVectorGetY(m_UI_Desc.Pos) + m_fY ,XMVectorGetZ(m_UI_Desc.Pos) , 1.f };
+		_vector Pos = { XMVectorGetX(m_UI_Desc.Pos),XMVectorGetY(m_UI_Desc.Pos) + m_fY ,XMVectorGetZ(m_UI_Desc.Pos) , 1.f };
 
-		m_pTransformCom->Scaling({ m_Origin_X * 1.5f, m_Origin_Y * 1.5f , 1.f });
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
+		m_pTransformCom->Scaling({ m_Origin_X * 1.8f, m_Origin_Y * 1.8f , 1.f });
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	
 	

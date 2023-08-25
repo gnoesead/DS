@@ -1583,6 +1583,34 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
     }
 
 
+ // FIcon 
+    CFIcon::UIDESC UIDesc10;
+    // 락온 아이콘
+    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+    UIDesc10.m_Is_Reverse = false;
+    UIDesc10.m_Type = 7;
+    UIDesc10.m_Up_Mount = 2.1f;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_FIcon"), &UIDesc10))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    // 락온 글로우
+    ZeroMemory(&UIDesc10, sizeof UIDesc10);
+
+    UIDesc10.m_Is_Reverse = false;
+    UIDesc10.m_Type = 8;
+    UIDesc10.m_Up_Mount = 2.1f;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_FIcon"), &UIDesc10))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
 
 
     Safe_Release(pGameInstance);
