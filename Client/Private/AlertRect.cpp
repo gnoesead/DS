@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "..\Public\AlertCircle.h"
+#include "..\Public\AlertRect.h"
 
 #include "GameInstance.h"
 
-CAlertCircle::CAlertCircle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAlertRect::CAlertRect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
 {
 
 }
 
-CAlertCircle::CAlertCircle(const CAlertCircle& rhs)
+CAlertRect::CAlertRect(const CAlertRect& rhs)
 	: CGameObject(rhs)
 {
 
 }
 
-HRESULT CAlertCircle::Initialize_Prototype()
+HRESULT CAlertRect::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -23,61 +23,30 @@ HRESULT CAlertCircle::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CAlertCircle::Initialize(void* pArg)
+HRESULT CAlertRect::Initialize(void* pArg)
 {
-	if (nullptr == pArg)
-		return E_FAIL;
-
-	memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	if (m_EffectDesc.iType == TYPE_KICKDOWN)
-	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_pTransformCom->Scaling(_float3(6.f, 6.f, 6.f));
-	}
-	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
-	{
-		static _float fOffsetY = 0.f;
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f , 0.05f + fOffsetY,123.840f , 1.f));
-
-		fOffsetY += 0.01f;
-	}
 	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
-	
 
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f, 0.05f, 123.840f, 1.f));
+	m_pTransformCom->Scaling(_float3(0.5f, 50.f, 1.f));
+	
 	return S_OK;
 }
 
-void CAlertCircle::Tick(_double TimeDelta)
+void CAlertRect::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	if (m_EffectDesc.iType == TYPE_KICKDOWN)
-	{
-		_vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION) + XMVector3Normalize(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_LOOK)) * 0.8f;
-		vPos = XMVectorSetY(vPos, m_fLandY + 0.05f);
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-	}
-	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
-	{
-		m_pTransformCom->Scaling(_float3(m_fScale, m_fScale, m_fScale));
-		m_fScale += 20.f * (_float)TimeDelta;
-
-		if (m_fScale > 50.f)
-			m_isDead = true;
-	}
 	
 }
 
-void CAlertCircle::LateTick(_double TimeDelta)
+void CAlertRect::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
@@ -87,30 +56,10 @@ void CAlertCircle::LateTick(_double TimeDelta)
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
 		return;
 
-	if (m_EffectDesc.iType == TYPE_KICKDOWN)
-	{
-		if (STATE_SHOWON == m_eState)
-		{
-			m_fAlpha += 1.5f * (_double)TimeDelta;
-			if (m_fAlpha > 1.f)
-				m_eState = STATE_SHOWOFF;
-		}
-		else
-			m_fAlpha -= 2.f * (_double)TimeDelta;
-
-		if (m_fAlpha < 0.f)
-			m_isDead = true;
-	}
-	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
-	{
-		m_fAlpha = 0.8f;
-	}
-	
-
 	Safe_Release(pGameInstance);
 }
 
-HRESULT CAlertCircle::Render()
+HRESULT CAlertRect::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -125,7 +74,7 @@ HRESULT CAlertCircle::Render()
 	return S_OK;
 }
 
-HRESULT CAlertCircle::Add_Components()
+HRESULT CAlertRect::Add_Components()
 {
 	/* For.Com_Transform */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
@@ -148,14 +97,14 @@ HRESULT CAlertCircle::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_e_Circle3_02"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_AlertRect"),
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CAlertCircle::SetUp_ShaderResources()
+HRESULT CAlertRect::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -185,32 +134,32 @@ HRESULT CAlertCircle::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CAlertCircle* CAlertCircle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAlertRect* CAlertRect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CAlertCircle* pInstance = new CAlertCircle(pDevice, pContext);
+	CAlertRect* pInstance = new CAlertRect(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CAlertCircle");
+		MSG_BOX("Failed to Created : CAlertRect");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
-CGameObject* CAlertCircle::Clone(void* pArg)
+CGameObject* CAlertRect::Clone(void* pArg)
 {
-	CAlertCircle* pInstance = new CAlertCircle(*this);
+	CAlertRect* pInstance = new CAlertRect(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CAlertCircle");
+		MSG_BOX("Failed to Cloned : CAlertRect");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CAlertCircle::Free()
+void CAlertRect::Free()
 {
 	__super::Free();
 

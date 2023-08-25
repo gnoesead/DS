@@ -48,6 +48,7 @@ public:
 
 		NPCDESC				NPCDesc;
 
+		_int	SwampHorn = { 0 };
 	}CHARACTERDESC;
 
 	typedef struct tagCharacterStatusDesc
