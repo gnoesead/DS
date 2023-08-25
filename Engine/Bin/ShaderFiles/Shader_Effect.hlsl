@@ -107,6 +107,9 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 	
+	if (0.f == vDiffuse.a)
+		discard;
+
 	Out.vColor = vDiffuse;
 	
 

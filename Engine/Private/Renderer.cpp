@@ -143,7 +143,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.Target_EffectDiffuse */
 	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
-		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_EffectDiffuse)))
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
 		return E_FAIL;
 	/* For.Target_EffectBloom */
 	_float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 1.f };
@@ -467,7 +467,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_Bloom");
 		return E_FAIL;
 	}
-
+	
 	if (FAILED(Render_RadialBlur())) // 최종적으로 그려짐
 	{
 		MSG_BOX("Failed to Render_RadialBlur");

@@ -442,9 +442,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);							
-				
-				
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);											
 			}
 			if (1 == m_iEvent_Index)	// 1.0
 			{
