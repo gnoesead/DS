@@ -14,6 +14,7 @@ class CMonster_Swamp final : public CMonster
 public:
 	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END};
 	enum PATTERN { 
+		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, 
 		PATTERN_END };
 
 	enum ANIM {
@@ -111,7 +112,10 @@ private: //애니메이션 제어용 함수
 
 
 	void	Animation_Control_Attack(_double dTimeDelta, _int AttackIndex);
-
+	//일반상태
+	void	Animation_Control_JumpStomp(_double dTimeDelta);
+	//늪상태
+	void	Animation_Control_SwampScrew(_double dTimeDelta);
 
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
@@ -123,7 +127,7 @@ private:
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };
-	
+	_int	m_iPhase = { 0 };
 	
 private:
 	//Hit_DMg_Combo

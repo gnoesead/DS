@@ -276,6 +276,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
+	//네비 타는거
 	if (iCurAnim == ANIM_SWAMP_IN)
 	{
 		m_isNavi_Y_Off = true;
@@ -291,6 +292,15 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		m_isNavi_Y_Off = false;
 	}
 	
+	
+	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+	{
+		m_pModelCom->Set_Animation(ANIM_IDLE);
+	}
+	else
+	{
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE);
+	}
 
 }
 
@@ -298,11 +308,11 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 {	
 	switch (AttackIndex)
 	{
-	case 0: //ANIM_ATK_CLAWS
-		
+	case 0: //PATTERN_JUMPSTOMP
+		Animation_Control_JumpStomp(dTimeDelta);
 		break;
-	case 1: // ANIM_ATK_TACKLE
-		
+	case 1: // PATTERN_SWAMP_SCREW
+		Animation_Control_SwampScrew(dTimeDelta);
 		break;
 	
 	default:
@@ -315,6 +325,14 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		m_eCurState = STATE_IDLE;
 		
 	}
+}
+
+void CMonster_Swamp::Animation_Control_JumpStomp(_double dTimeDelta)
+{
+}
+
+void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
+{
 }
 
 
