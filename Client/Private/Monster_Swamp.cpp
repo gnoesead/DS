@@ -395,7 +395,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
 	}
-	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0)
+	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0 )
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
@@ -548,6 +548,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
 			Jumping(1.1f, 0.01f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
+			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 4.0f;
 		}
 	}
 
