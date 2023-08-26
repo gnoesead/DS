@@ -79,7 +79,7 @@ public:
 		int				eStartRotationOption = { OP_CONSTANT };		//EFFECTOPTION
 		bool			is3DStartRotation = { false };
 		_float3			vStartRotationMin = { 0.f, 0.f, 0.f };
-		_float3			vStartRotationMax = { 0.f, 0.f, 0.f };
+		_float3			vStartRotationMax = { 0.f, 0.f, 0.f }; 
 		int				eStartColorOption = { OP_COLOR };		//COLOROPTION
 		_float4			vColor = { 1.f, 1.f, 1.f, 1.f };
 		int				eSimulationSpace = { SPACE_LOCAL };		//SPACE
