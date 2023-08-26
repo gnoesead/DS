@@ -429,7 +429,6 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 		//ø∑ ¿Ãµø
 		m_dCoolTime_SideMove += dTimeDelta;
 		if (3.7f < m_dCoolTime_SideMove)
-		
 		{
 			m_dCoolTime_SideMove = 0.0;
 
