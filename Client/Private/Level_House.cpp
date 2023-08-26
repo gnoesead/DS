@@ -287,7 +287,25 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
-	CharacterDesc.WorldInfo.vPosition = _float4(43.f, 0.f, 120.f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
+	}
+
+	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
+	}
+
+	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -1399,6 +1417,33 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 
 
+// FIcon 
+	CFIcon::UIDESC UIDesc12;
+	// 락온 아이콘
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 7;
+	UIDesc12.m_Up_Mount = 2.1f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// 락온 글로우
+	ZeroMemory(&UIDesc12, sizeof UIDesc12);
+
+	UIDesc12.m_Is_Reverse = false;
+	UIDesc12.m_Type = 8;
+	UIDesc12.m_Up_Mount = 2.1f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc12))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 
@@ -1465,8 +1510,8 @@ HRESULT CLevel_House::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
 #pragma region Boss_Battle_Hp
 
 	CBoss_Battle_Hp::UIDESC UIDesc2;
-	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 	UIDesc2.m_Is_Reverse = false;
 	UIDesc2.m_Type = 0;
 
@@ -1511,52 +1556,55 @@ HRESULT CLevel_House::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
 
 // Monster_Hp
 	CWorld_UI_Hp::UIDESC UIDesc3;
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 0;
-	UIDesc3.m_Monster_Index = 0;
-	UIDesc3.m_Up_Mount = 1.7f;
+	for (int i = 0; i < 3; i++) {
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+		ZeroMemory(&UIDesc3, sizeof UIDesc3);
+		UIDesc3.m_Is_Reverse = false;
+		UIDesc3.m_Type = 0;
+		UIDesc3.m_Monster_Index = i;
+		UIDesc3.m_Up_Mount = 1.7f;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 1;
-	UIDesc3.m_Monster_Index = 0;
-	UIDesc3.m_Up_Mount = 1.7f;
+		ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+		UIDesc3.m_Is_Reverse = false;
+		UIDesc3.m_Type = 1;
+		UIDesc3.m_Monster_Index = i;
+		UIDesc3.m_Up_Mount = 1.7f;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 2;
-	UIDesc3.m_Monster_Index = 0;
-	UIDesc3.m_Up_Mount = 1.7f;
+		ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+		UIDesc3.m_Is_Reverse = false;
+		UIDesc3.m_Type = 2;
+		UIDesc3.m_Monster_Index = i;
+		UIDesc3.m_Up_Mount = 1.7f;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 3;
-	UIDesc3.m_Monster_Index = 0;
-	UIDesc3.m_Up_Mount = 1.7f;
+		ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
+		UIDesc3.m_Is_Reverse = false;
+		UIDesc3.m_Type = 3;
+		UIDesc3.m_Monster_Index = i;
+		UIDesc3.m_Up_Mount = 1.7f;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
 	}
 
 #pragma endregion

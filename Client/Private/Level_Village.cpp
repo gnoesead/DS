@@ -1635,7 +1635,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
-
+    
     // 락온 글로우
     ZeroMemory(&UIDesc10, sizeof UIDesc10);
 

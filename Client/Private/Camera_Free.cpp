@@ -118,10 +118,14 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyDown(DIK_I)) {
 			CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
-			m_Hekireki_Dir *= -1;
+			if (m_bIs_Side_Off == false && m_bIs_Combo_On == true)
+				m_Hekireki_Dir *= -1;
 		}
 
 		m_bIs_Dist_Update = CCameraManager::GetInstance()->Get_Is_Dist_Update();
+	}
+	else {
+		m_Hekireki_Dir = 1;
 	}
 
 	// Camera_Shake
@@ -191,6 +195,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 		}
 
+		m_Lock_On_Is_Boss = false;
+
 	}
 	else if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
@@ -201,6 +207,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
+		m_Lock_On_Is_Boss = true;
 	}
 	else {
 		m_Is_Battle = false;
@@ -260,11 +267,18 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 
-
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
 			m_bIs_Combo_On = false;
 		}
 
+		_float Dist = Convert::GetLength(m_vTargetPos - m_vBattleTargetPos);
+
+		if (Dist > 7.5) {
+			m_bIs_Side_Off = true;
+		}
+		else {
+			m_bIs_Side_Off = false;
+		}
 	}
 
 	
@@ -331,7 +345,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			else if (m_Is_Battle == true) {
 
 				// Side
-				if (m_bIs_Combo_On == true) {
+				if (m_bIs_Combo_On == true && m_bIs_Side_Off == false) {
 
 					m_fDistance = { 5.3f };
 					m_vOffSet = { 0.f, 1.1f, 0.f, 0.f };

@@ -217,8 +217,11 @@ void CFIcon::LateTick(_double TimeDelta)
 
 		if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
 			m_Is_Render = pCamera->Get_Is_Battle();
-		}
 
+			if (pCamera->Get_Lock_On_Is_Boss() == true) {
+				m_Is_Render = false;
+			}
+		}
 
 	}
 	// Npc
