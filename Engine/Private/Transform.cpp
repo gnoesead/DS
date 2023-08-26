@@ -377,20 +377,51 @@ void CTransform::LerpVector(_fvector vTargetLook, _float weight)
 {
 	_float3      vScale = Get_Scaled();
 
-
 	_vector      vCurrentLook = Get_State(CTransform::STATE_LOOK);
 	_vector      vInterPolatedLook = XMVectorLerp(vCurrentLook, vTargetLook, weight);
 
 	_vector      vLook = XMVector3Normalize(vInterPolatedLook) * vScale.z;
-
 	_vector      vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook)) * vScale.x;
-
 	_vector      vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight)) * vScale.y;
 
 	Set_State(CTransform::STATE_RIGHT, vRight);
 	Set_State(CTransform::STATE_UP, vUp);
 	Set_State(CTransform::STATE_LOOK, vLook);
 
+}
+
+_bool CTransform::LerpVector_Get_End(_fvector vTargetLook, _float weight)
+{
+	_float3      vScale = Get_Scaled();
+
+	_vector      vCurrentLook = Get_State(CTransform::STATE_LOOK);
+	_vector      vInterPolatedLook = XMVectorLerp(vCurrentLook, vTargetLook, weight);
+
+	_vector      vLook = XMVector3Normalize(vInterPolatedLook) * vScale.z;
+	_vector      vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook)) * vScale.x;
+	_vector      vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight)) * vScale.y;
+
+	Set_State(CTransform::STATE_RIGHT, vRight);
+	Set_State(CTransform::STATE_UP, vUp);
+	Set_State(CTransform::STATE_LOOK, vLook);
+
+	_float4		CurLook;
+	XMStoreFloat4(&CurLook, vCurrentLook);
+	_float4		LerpLook;
+	XMStoreFloat4(&LerpLook, vLook);
+
+	if ((CurLook.x - LerpLook.x) < 0.01f)
+	{
+		if ((CurLook.y - LerpLook.y) < 0.01f)
+		{
+			if ((CurLook.z - LerpLook.z) < 0.01f)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 void CTransform::LookAt(_fvector vTargetPos)

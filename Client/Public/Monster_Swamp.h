@@ -12,11 +12,13 @@ BEGIN(Client)
 class CMonster_Swamp final : public CMonster
 {
 public:
-	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END};
+	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END };
+
 	enum PATTERN { 
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
-		PATTERN_END };
+		PATTERN_END 
+	};
 
 	enum ANIM {
 		ANIM_ANGRY_CUTSCENE = 0, ANIM_BURST = 1,
@@ -88,7 +90,6 @@ public:
 
 		ANIM_END = 117
 	};
-
 private:
 	CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster_Swamp(const CMonster_Swamp& rhs);
@@ -169,7 +170,7 @@ private:
 	_bool	m_isOff_Dash = { false };
 
 	//pattern swamp screw
-	_float4	 m_ScrewPos[5];
+	_float4	 m_ScrewPos[10];
 	_int	m_iScrewPosIndex = { 0 };
 
 	//Hit_DMg_Combo

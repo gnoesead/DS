@@ -56,11 +56,17 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	m_pModelCom->Set_Animation(ANIM_IDLE);
 
 
-	m_ScrewPos[0] = { 140.f , 0.04f, 119.f, 1.0f };
-	m_ScrewPos[1] = { 141.f , 0.04f, 144.f, 1.0f };
-	m_ScrewPos[2] = { 123.f , 0.04f, 139.f, 1.0f };
-	m_ScrewPos[3] = { 122.f , 0.04f, 130.f, 1.0f };
-	m_ScrewPos[4] = { 132.f , 0.04f, 118.f, 1.0f };
+	m_ScrewPos[0] = { 430.18f, 3.35f, 320.6f, 1.0f };
+	m_ScrewPos[1] = { 419.84f, 3.35f, 294.57f, 1.0f };
+	m_ScrewPos[2] = { 423.05f, 3.35f, 320.9f, 1.0f };
+	m_ScrewPos[3] = { 430.24f, 3.35f, 294.36f, 1.0f };
+	m_ScrewPos[4] = { 424.16f, 3.35f, 312.7f, 1.0f };
+	m_ScrewPos[5] = { 419.02f, 3.35f, 308.9f, 1.0f };
+	m_ScrewPos[6] = { 430.5f, 3.35f, 308.3f, 1.0f };
+	m_ScrewPos[7] = { 420.01f, 3.35f, 325.34f, 1.0f };
+	m_ScrewPos[8] = { 426.0f, 3.35f, 301.7f, 1.0f };
+	m_ScrewPos[9] = { 423.14f, 3.35f, 294.6f, 1.0f };
+	
 
 
 	return S_OK;
@@ -383,10 +389,16 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 	//네비 타는거
-	if (iCurAnim == ANIM_SWAMP_IN || iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0)
+	if (iCurAnim == ANIM_SWAMP_IN)
 	{
 		m_isNavi_Y_Off = true;
-		m_fLand_Y = -2.0f;
+		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
+		m_isSwamping = true;
+	}
+	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0)
+	{
+		m_isNavi_Y_Off = true;
+		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
 	}
 	else if (iCurAnim == ANIM_SWAMP_IDLE)
@@ -394,9 +406,9 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNavi_Y_Off = true;
 		m_isSwamping = true;
 
-		if (m_fLand_Y < -1.0f )
+		if (m_fLand_Y < m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f )
 		{
-			m_fLand_Y += 0.01f;
+			m_fLand_Y += 0.02f;
 		}
 	}
 	else
@@ -604,11 +616,11 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 		Jumping(0.01f, 0.01f);
 		
 		if (m_CharacterDesc.SwampHorn == 1)
-			m_iScrewPosIndex = rand() % 5;
+			m_iScrewPosIndex = rand() % 10;
 		if (m_CharacterDesc.SwampHorn == 2)
-			m_iScrewPosIndex = rand() % 4;
+			m_iScrewPosIndex = rand() % 9;
 		if (m_CharacterDesc.SwampHorn == 3)
-			m_iScrewPosIndex = rand() % 3;
+			m_iScrewPosIndex = rand() % 8;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -646,7 +658,7 @@ void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	if(iCurAnim == ANIM_SWAMP_IDLE)
-		m_fLand_Y = -2.0;
+		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 2.0f;
 }
 
 void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)

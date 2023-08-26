@@ -1542,14 +1542,26 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_State_Battle_Run)
 		{
 			//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f);
 			m_fMove_Speed = 2.0f;
+			
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.44f);
 
 			if (m_isCanNavi)
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
 			else
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
 			//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+			
+			/*
+			if (m_pTransformCom->LerpVector_Get_End(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f))
+			{
+				if (m_isCanNavi)
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+			}
+			*/
 		}
 
 		if (m_Moveset.m_Up_Battle_Run)
