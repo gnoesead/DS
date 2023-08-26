@@ -268,7 +268,12 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
     }
-  
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+        return E_FAIL;
+    }
 
     Safe_Release(pGameInstance);
 
