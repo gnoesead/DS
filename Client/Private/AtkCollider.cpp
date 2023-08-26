@@ -296,8 +296,22 @@ void CAtkCollider::Setting_KyogaiBullet()
 void CAtkCollider::Setting_KyogaiDelayBullet()
 {
 	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	/*_vector vRightDir = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_vector vUpDir = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+	_vector vLookDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	m_AtkCollDesc.fPos.x = 0.f;
+	m_AtkCollDesc.fPos.y = 0.f;
+	m_AtkCollDesc.fPos.z = 10.f;*/
+	
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	vPos = XMVectorSetY(vPos, 0.f);
+	
+	/*vPos += vRightDir * m_AtkCollDesc.fPos.x;
+	vPos += vUpDir * m_AtkCollDesc.fPos.y;
+	vPos += vLookDir * m_AtkCollDesc.fPos.z;*/
+	
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 

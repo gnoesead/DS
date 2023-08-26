@@ -470,8 +470,8 @@ void CMonster_Swamp::Animation_Control_JumpStomp(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_ATK_JUMPSTOMP);
 		}
-		Go_Straight_Constant(dTimeDelta, 4, 2.0f);
-		Go_Straight_Deceleration(dTimeDelta, 5, 2.0f, 0.3f);
+		Go_Straight_Constant(dTimeDelta, 4, 1.8f);
+		Go_Straight_Deceleration(dTimeDelta, 5, 1.8f, 0.35f);
 	}
 }
 
@@ -498,10 +498,10 @@ void CMonster_Swamp::Animation_Control_Combo(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_ATK_COMBO);
 		}
-		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 2.0f, 0.5f);
-		Go_Straight_Deceleration(dTimeDelta, 12, 2.0f, 0.5f);
-		Go_Straight_Deceleration(dTimeDelta, 13, 2.0f, 0.5f);
-		Go_Straight_Deceleration(dTimeDelta, 14, 2.0f, 0.5f);
+		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 2.0f, 0.6f);
+		Go_Straight_Deceleration(dTimeDelta, 12, 2.0f, 0.6f);
+		Go_Straight_Deceleration(dTimeDelta, 13, 2.0f, 0.6f);
+		Go_Straight_Deceleration(dTimeDelta, 14, 2.0f, 0.6f);
 		m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.6f);
 		m_pModelCom->Set_EarlyEnd(12, true, 0.6f);
 		m_pModelCom->Set_EarlyEnd(13, true, 0.6f);
@@ -738,7 +738,7 @@ _bool CMonster_Swamp::Animation_Control_Dash(_double dTimeDelta, _float fDistanc
 
 	if (fDistance < Calculate_Distance())
 	{
-		Go_Straight_Constant(dTimeDelta, 40, 2.7f);
+		Go_Straight_Constant(dTimeDelta, 40, 2.3f);
 	}
 	else if (Calculate_Distance() <= fDistance)
 	{
@@ -746,7 +746,7 @@ _bool CMonster_Swamp::Animation_Control_Dash(_double dTimeDelta, _float fDistanc
 		return true;
 	}
 
-	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
+	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.2f);
 
 	return false;
 }

@@ -143,7 +143,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.Target_EffectDiffuse */
 	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
-		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_EffectDiffuse)))
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
 		return E_FAIL;
 	/* For.Target_EffectBloom */
 	_float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 1.f };
@@ -174,6 +174,12 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_RadialBlur")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_RadialColor)))
 		return E_FAIL;
+
+	_float4 vColor_EffectRadialColor = { 0.f, 0.f, 0.f, 0.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectRadialBlur")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectRadialColor)))
+		return E_FAIL;
+
 	_float4 vColor_Emissive = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Emissive")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_Emissive)))
@@ -255,6 +261,8 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectBlurY"), TEXT("Target_EffectBlurY"))))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectCombineBlur"), TEXT("Target_EffectCombineBlur"))))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectRadialBlur"), TEXT("Target_EffectRadialBlur"))))
 		return E_FAIL;
 
 
@@ -426,14 +434,14 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 	{
 		MSG_BOX("Failed to Render_SSAOFinalBlur");
 		return E_FAIL;
-	}	
+	}
 
 	if (FAILED(Render_Lights()))
 	{
 		MSG_BOX("Failed to Render_Lights");
 		return E_FAIL;
-	}	
-	
+	}
+
 	if (FAILED(Render_Deferred()))
 	{
 		MSG_BOX("Failed to Render_Deferred");
@@ -1172,16 +1180,16 @@ HRESULT CRenderer::Render_NonLight()
 	}
 
 	m_RenderObjects[RENDER_NONLIGHT].clear();*/
-	
-	
+
+
 	m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
 		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
 		});
 
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
 		return E_FAIL;
-	
-	
+
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_NONLIGHT])
 	{
 		if (nullptr != pGameObject)
@@ -1278,10 +1286,10 @@ HRESULT CRenderer::Render_NonLight()
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BlurTexture")))
-		return E_FAIL;
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurX"), m_pEffectShader, "g_BlurTexture")))
+	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BlurTexture")))
 		return E_FAIL;*/
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurX"), m_pEffectShader, "g_BlurTexture")))
+		return E_FAIL;
 
 	if (FAILED(m_pEffectShader->Begin(3)))
 		return E_FAIL;
@@ -1321,7 +1329,7 @@ HRESULT CRenderer::Render_NonLight()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
-
+	
 	// 블룸적용
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1330,7 +1338,8 @@ HRESULT CRenderer::Render_NonLight()
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-
+	//if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurY"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
+	//	return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectCombineBlur"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BloomTextrue"))) // 블룸 -> 밝은 부분만 추출
@@ -1343,6 +1352,7 @@ HRESULT CRenderer::Render_NonLight()
 
 	if (FAILED(m_pVIBuffer->Render()))
 		return E_FAIL;
+	
 
 	return S_OK;
 }
@@ -1602,7 +1612,7 @@ HRESULT CRenderer::Render_World_UI()
 	m_RenderObjects[RENDER_WORLD_UI].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
 		return dynamic_cast<CUI*>(pDest)->Get_UI_Layer() < dynamic_cast<CUI*>(pSrc)->Get_UI_Layer();
 
-	});
+		});
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_WORLD_UI])
 	{
@@ -1776,7 +1786,7 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;*/
 
 
-	// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
+		// 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
