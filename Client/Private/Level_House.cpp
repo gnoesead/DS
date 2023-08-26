@@ -2094,7 +2094,7 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			}
 
 			//Material
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eMaterialRenderingMode), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRenderGroupOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotScale), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotRot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vModelPivotPos), sizeof(_float3));

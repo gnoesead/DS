@@ -342,7 +342,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom , &EffectWorldDesc);
 			}
 			if (1 == m_iEvent_Index)	// 0.25
 			{
@@ -374,7 +379,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom , &EffectWorldDesc);
 			}
 			if (1 == m_iEvent_Index)	// 0.25
 			{
@@ -392,12 +402,22 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.19
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom , &EffectWorldDesc);
 			}
 
 			if (1 == m_iEvent_Index)	// 0.62
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom , &EffectWorldDesc);
 			}
 
 		}
@@ -457,7 +477,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index)	// 0.95
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom , &EffectWorldDesc);
 
 				CAlertCircle::EFFECTDESC EffectDesc;
 				EffectDesc.pOwnerTransform = m_pTransformCom;
@@ -481,7 +506,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 1.30
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.6f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 2.0f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom , &EffectWorldDesc);
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
@@ -489,7 +519,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			if (1 == m_iEvent_Index) // 1.50
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 2.0f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom, &EffectWorldDesc);
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
@@ -502,12 +537,22 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.2
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10_2", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.6f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 2.0f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10_2", m_pTransformCom , &EffectWorldDesc);
 			}
 
 			if (1 == m_iEvent_Index) // 0.4
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 2.0f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10", m_pTransformCom , &EffectWorldDesc);
 
 			}
 
@@ -522,7 +567,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
 			{
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.vPosition.z += 0.5f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom , &EffectWorldDesc);
 			}
 			if (1 == m_iEvent_Index)	// 1.0
 			{
