@@ -120,6 +120,7 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 }
 
 //==============================Bloom======================================
+float fGamma = 0.5f;
 PS_OUT PS_Bloom(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
@@ -156,15 +157,15 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 	if (vHDRColor.a == 0.f)
 		discard;
 
-	vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
+	vector vBloom = pow(pow(abs(vBloomColor), 0.5f) + pow(abs(vBloomOriTex), 0.5f), 1.f / 0.5f);
 
 	vector vOut = (vHDRColor);
 
-	vOut = pow(abs(vOut), 2.2f);
-	vBloom = pow(abs(vBloom), 2.2f);
+	vOut = pow(abs(vOut), 0.5f);
+	vBloom = pow(abs(vBloom), 0.5f);
 
-	vOut += vBloom;
-	Out.vColor = pow(abs(vOut), 1 / 2.2f);
+	vOut += vBloom * 1.f;
+	Out.vColor = pow(abs(vOut), 1 / 0.5f);
 
 	if (Out.vColor.a == 0.f)
 		discard;
