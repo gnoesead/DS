@@ -208,6 +208,10 @@ private: //패턴 함수들
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
+private:
+	enum BLADETYPE { BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
+	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
+
 
 #pragma endregion
 private: // _bool
