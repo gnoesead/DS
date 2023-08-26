@@ -428,6 +428,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.15
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Push", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(6.0f, 6.0f, 6.0f), _float3(0.f, 3.0f, 0.0f), dLongLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);
