@@ -48,6 +48,7 @@ public:
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
+	void Set_SSAO(_bool Is) { m_bSSAOSwitch = Is; }
 
 private:
 	list<class CGameObject*>	m_RenderObjects[RENDER_END];

@@ -45,7 +45,11 @@ public:
 
 public:
 	void Set_UI();
+	void Get_Mouse_Pos();
 	void Cloud_Control(_double dTimeDelta);
+	void CameraOption();
+	void GraphicOption();
+	void SoundOption();
 
 private:
 	CShader* m_pShaderCom = { nullptr };
@@ -77,22 +81,21 @@ private:
 	_bool                   m_Is_Select = { 0 };
 	_int                    m_Select_Num = { 0 };
 
-
+private:
 	vector<wstring>         m_szCameraMenu = { };
 	_tchar                  m_szCameraMenu_1[MAX_PATH] = { };
-	_int                    m_szCameraMenu_1_Int = { 20 };  // 카메라 감도 0 ~ 20
+	_int                    m_szCameraMenu_1_Int = { 0 };  // 카메라 감도 0 ~ 20
 	vector<wstring>         m_szCameraMenu_2 = { };
 	_int                    m_szCameraMenu_2_Num = { 0 };
-	
+private:
 	vector<wstring>         m_szGraphicMenu = { };
 	_tchar                  m_szGraphicMenu_1[MAX_PATH] = { };
 	_int                    m_szGraphicMenu_1_Int = { 10 }; // 밝기 0 ~ 20
 	vector<wstring>         m_szGraphicMenu_2 = { }; // SSAO On/Off
 	_int                    m_szGraphicMenu_2_Num = { 0 };
-
 	vector<wstring>         m_szGraphicMenu_3 = { }; // 블러 정도
 	_int                    m_szGraphicMenu_3_Num = { 0 }; // 블러 정도
-
+private:
 	vector<wstring>         m_szSoundMenu = { };
 	_tchar                  m_szSoundMenu_1[MAX_PATH] = { }; // 소리 0 ~ 20
 	_tchar                  m_szSoundMenu_2[MAX_PATH] = { };
@@ -113,7 +116,7 @@ private:
 
 	_bool                   m_Is_Font_Render = { false };
 	_bool                   m_Is_Reset = { false };
-
+	_float                  m_UV_Cull = { 1.0f };
 
 private:
 	HRESULT Add_Components();

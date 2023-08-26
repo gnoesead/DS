@@ -22,6 +22,8 @@ public:
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
 		_float   m_Up_Mount = { 0.f };
+		CTransform* pParentTransform = { nullptr };
+		_vector Pos = {};
 	}UIDESC;
 
 
@@ -80,6 +82,7 @@ private:
 
 	_vector m_vBattle_Targt = {};
 
+	_bool m_Trigger_On = { false };
 
 private:
 	HRESULT Add_Components();

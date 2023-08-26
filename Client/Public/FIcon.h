@@ -90,7 +90,9 @@ private:
 
 	_vector m_vBattle_Targt = {};
 
-	
+	_float m_fY = { 0.f };
+	_float m_Y_Dir = { 1.f };
+
 	
 private:
 	HRESULT Add_Components();

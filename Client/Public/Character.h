@@ -33,6 +33,8 @@ public:
 		_float4			DirNPC = { 0.0f, 0.0f, -1.0f, 0.0f };
 		_uint           Icon_Type = { 99 };
 		_uint           Dialog_Type = { 99 };
+		_bool           Interaction = { false };
+
 
 		_float4			WalkSpot[3];
 	}NPCDESC;
@@ -182,6 +184,8 @@ protected: //status 게이지 관련
 	_bool  m_isHit_Success = { false };
 
 	_double m_dDelay_ComboReset = { 0.0 };
+	_double m_dDelay_ComboReset_2 = { 0.0 };
+
 
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
