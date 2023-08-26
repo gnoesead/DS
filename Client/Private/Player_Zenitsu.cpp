@@ -72,9 +72,11 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	m_pSword->Tick(dTimeDelta);
-	m_pSwordHome->Tick(dTimeDelta);
-
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->Tick(dTimeDelta);
+		m_pSwordHome->Tick(dTimeDelta);
+	}
 
 	if (true == m_isDead)
 		return;
@@ -88,7 +90,6 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 #endif // _DEBUG
 
 	
-
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
@@ -100,24 +101,30 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 		Player_Change(dTimeDelta);
 	}
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
 
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
+
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			return;
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+			return;
+	}
 }
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 {
-
-	m_pSword->LateTick(dTimeDelta);
-	m_pSwordHome->LateTick(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->LateTick(dTimeDelta);
+		m_pSwordHome->LateTick(dTimeDelta);
+	}
 
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
@@ -566,10 +573,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_fMove_Speed = 2.0f;
 
-		if (m_isCanNavi)
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
-		else
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		if (m_pModelCom->Get_iCurrentAnimIndex() == 62)
+		{
+			if (m_isCanNavi)
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			else
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		}
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -1567,6 +1577,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 20 == iCurAnimIndex || 21 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 
 		if (21 == iCurAnimIndex)

@@ -92,12 +92,18 @@ BlendState	 BS_Default
 BlendState	 BS_Default_Engine
 {
 	/* [0] : 0¹øÂ° ·»´õÅ¸°Ù¿¡ ±×¸±¶§ ºí·»µùÀ» ÇÒ²¨´Ù ¸»²¨´Ù.*/
-	BlendEnable[0] = true;
+	/*BlendEnable[0] = true;
 	BlendEnable[1] = true;
-	BlendEnable[2] = true;
-	/*BlendEnable[0] = false;
+	BlendEnable[2] = true;*/
+	BlendEnable[0] = false;
 	BlendEnable[1] = false;
-	BlendEnable[2] = false;*/
+	BlendEnable[2] = false;
+	BlendEnable[3] = false;
+	BlendEnable[4] = false;
+	BlendEnable[5] = false;
+	BlendEnable[6] = false;
+	BlendEnable[7] = false;
+
 
 };
 BlendState	 BS_AlphaBlending

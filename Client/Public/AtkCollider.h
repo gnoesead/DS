@@ -27,7 +27,10 @@ public:
 		CCollider::COLLIDERDESC ColliderDesc;
 		_double		dLifeTime = { 0.0 };
 
-		_float		fDamage = { 0.0 };
+		_float		fDamage = { 0.0f };
+
+		_float3		fPos = { 0.f, 0.f, 0.f };
+
 		_double 	Speed = { 5.0 };
 		ATK_TYPE	eAtkType = {TYPE_END};
 		BULLET_TYPE eBulletType = { TYPE_BULLET_END };
@@ -50,6 +53,8 @@ public:
 	_uint Get_CollCount() {
 		return m_iCollCount;
 	}
+
+	_vector Get_Dir() { return m_vDir; }
 	_bool Get_IsAttack(CGameObject* pHitObj);
 	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
 

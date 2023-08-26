@@ -12,7 +12,7 @@ texture2D      g_BlurTexture;
 texture2D      g_BlurXTexture;
 texture2D      g_BlurYTexture;
 texture2D      g_CombineBlurTexture;
-
+texture2D      g_RadialBlurTexture;
 texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
 texture2D	   g_HDRTexture; // 블룸 + 블러 텍스처
@@ -106,9 +106,12 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 	PS_OUT         Out = (PS_OUT)0;
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
-	
+
+	if (0.f == vDiffuse.a)
+		discard;
+
 	Out.vColor = vDiffuse;
-	
+
 
 	if (0.f == Out.vColor.a)
 		discard;
@@ -117,27 +120,28 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 }
 
 //==============================Bloom======================================
+float fGamma = 0.5f;
 PS_OUT PS_Bloom(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
 
 	float fBrightColor = 0.f;
 	vector vDiffuseColor = g_FinalTexture.Sample(LinearSampler, In.vTexUV);
-	
+
 	vector vFragColor = vDiffuseColor;
 	if (vFragColor.a == 0.f)
 		discard;
-	
+
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
-	
-	if (fBrightness > 0.99f)
+
+	if (fBrightness > 0.90f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	
+
 
 	return Out;
 }
@@ -152,20 +156,30 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 	if (vHDRColor.a == 0.f)
 		discard;
-	
-	vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
+
+	vector vBloom = pow(pow(abs(vBloomColor), 0.5f) + pow(abs(vBloomOriTex), 0.5f), 1.f / 0.5f);
 
 	vector vOut = (vHDRColor);
 
-	vOut = pow(abs(vOut), 2.2f);
-	vBloom = pow(abs(vBloom), 2.2f);
+	vOut = pow(abs(vOut), 0.5f);
+	vBloom = pow(abs(vBloom), 0.5f);
 
-	vOut += vBloom;
-	Out.vColor = pow(abs(vOut), 1 / 2.2f);
+	vOut += vBloom * 1.f;
+	Out.vColor = pow(abs(vOut), 1 / 0.5f);
 
 	if (Out.vColor.a == 0.f)
 		discard;
 
+	//// 레디얼 블러
+	//float2 Direction = _In.vTexUV - float2(0.5f, 0.5f);
+	//float3 c = float3(0.0, 0.0, 0.0);
+	//float f = 1.0 / 24;
+
+	//for (int i = 0; i < 24; i++)
+	//{
+	//	c += g_BlurTexture.Sample(BlurSampler, _In.vTexUV - 0.01 * Direction * float(i)) * f;
+	//	Out.vColor.rgb = c;
+	//}
 
 
 	return Out;
@@ -237,7 +251,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	
+
 	return Out;
 }
 
@@ -262,7 +276,16 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
+
+
 	
+	
+	
+
+	/*if (Out.vColor.a == 0.f)
+		discard;*/
+
+
 
 	return Out;
 }
@@ -323,16 +346,49 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	/*if (vFinal.a < 0.2f)
 		discard;*/
 
-		
+
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
 	if (Out.vColor.a == 0.0f)
 		discard;
-		
+
 
 	return Out;
 }
 
+PS_OUT PS_RadialBlur(PS_IN In)
+{
+	PS_OUT         Out = (PS_OUT)0;
+
+	vector vFinalColor = g_RadialBlurTexture.Sample(LinearSampler, In.vTexUV); // 원본 텍스처
+
+	if (vFinalColor.a == 0.f)
+		discard;
+
+	//if (true == g_bRadialBlur)
+	//{
+	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+	//	float3 c = float3(0.0, 0.0, 0.0);
+	//	float f = 1.0 / 12;
+
+	//	for (int i = 0; i < 12; i++)
+	//	{
+	//		c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
+	//		Out.vColor.rgb = c;
+	//	}
+	//	
+	//	Out.vColor.a = vFinalColor.a;
+	//	/*if (Out.vColor.a == 0.f)
+	//		discard;*/
+	//}
+	//else
+		Out.vColor = vFinalColor;
+		Out.vColor.a = 1.f;
+	if (Out.vColor.a == 0.f)
+		discard;
+
+	return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -449,5 +505,17 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Apply_Bloom();
+	}
+	pass RadialBlur
+	{//8
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_RadialBlur();
 	}
 }

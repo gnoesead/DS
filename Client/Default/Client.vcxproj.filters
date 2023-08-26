@@ -307,6 +307,12 @@
     <Filter Include="02. GameObjects\Environment\AlertRect">
       <UniqueIdentifier>{b14fd503-70cd-41dc-9a37-4cda1a419f8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\Manager">
+      <UniqueIdentifier>{733d127c-e77d-40ee-87b3-9c1089fb2735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\SwampShot">
+      <UniqueIdentifier>{67ecd14f-1a0a-463c-81aa-ba4f15ad5bc8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -570,14 +576,14 @@
     <ClInclude Include="..\Public\Monster_Swamp.h">
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SwampManager.h">
-      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\RoomSmoke.h">
       <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AlertRect.h">
       <Filter>02. GameObjects\Environment\AlertRect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SwampManager.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -833,14 +839,14 @@
     <ClCompile Include="..\Private\Monster_Swamp.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SwampManager.cpp">
-      <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\RoomSmoke.cpp">
       <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AlertRect.cpp">
       <Filter>02. GameObjects\Environment\AlertRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwampManager.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

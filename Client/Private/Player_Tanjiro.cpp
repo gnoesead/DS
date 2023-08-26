@@ -80,9 +80,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	
-	m_pSword->Tick(dTimeDelta);
-	m_pSwordHome->Tick(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->Tick(dTimeDelta);
+		m_pSwordHome->Tick(dTimeDelta);
+	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -107,18 +109,21 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		Player_Change(dTimeDelta);
 	}
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
 
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
 
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			return;
+		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+			return;
+	}
 
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -127,9 +132,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 {
-
-	m_pSword->LateTick(dTimeDelta);
-	m_pSwordHome->LateTick(dTimeDelta);
+	if (m_isSwap_OnSky == false)
+	{
+		m_pSword->LateTick(dTimeDelta);
+		m_pSwordHome->LateTick(dTimeDelta);
+	}
 
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) // 탄지로
@@ -707,10 +714,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
 		m_fMove_Speed = 2.0f;
 
-		if(m_isCanNavi)
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
-		else
-			m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
+		{
+			if (m_isCanNavi)
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			else
+				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 	}
 
@@ -1532,14 +1542,26 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_State_Battle_Run)
 		{
 			//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f);
 			m_fMove_Speed = 2.0f;
+			
+			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.44f);
 
 			if (m_isCanNavi)
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
 			else
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
 			//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+			
+			/*
+			if (m_pTransformCom->LerpVector_Get_End(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.3f))
+			{
+				if (m_isCanNavi)
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+			}
+			*/
 		}
 
 		if (m_Moveset.m_Up_Battle_Run)
@@ -1804,7 +1826,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	//차지공격 시 무빙제한
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 32 == iCurAnimIndex || 33 == iCurAnimIndex )
 	{
-		
+		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 	}
 	//스킬공격 시 무빙제한
