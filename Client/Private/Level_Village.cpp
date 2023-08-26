@@ -282,13 +282,40 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
 
     CharacterDesc.WorldInfo.vPosition = _float4(426.f, 3.f, 290.f, 1.f);
 
+    /*
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
         TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
         return E_FAIL;
     }
-
+    */
+    
+    CharacterDesc.WorldInfo.vPosition = _float4(429.7f, 3.35f, 292.0f, 1.f);
+    CharacterDesc.SwampHorn = 1;
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Monster_Swamp"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Monster_Swamp");
+        return E_FAIL;
+    }
+    CharacterDesc.WorldInfo.vPosition = _float4(424.57f, 3.35f, 291.7f, 1.f);
+    CharacterDesc.SwampHorn = 2;
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Monster_Swamp"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Monster_Swamp");
+        return E_FAIL;
+    }
+    CharacterDesc.WorldInfo.vPosition = _float4(419.5f, 3.35f, 290.7f, 1.f);
+    CharacterDesc.SwampHorn = 3;
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_Monster_Swamp"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : Monster_Swamp");
+        return E_FAIL;
+    }
+    
 
     Safe_Release(pGameInstance);
 
