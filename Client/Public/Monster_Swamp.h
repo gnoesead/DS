@@ -15,7 +15,7 @@ public:
 	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END};
 	enum PATTERN { 
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
-		PATTERN_COMBO = 3, PATTERN_SHORYU = 4,
+		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
 		PATTERN_END };
 
 	enum ANIM {
@@ -118,10 +118,12 @@ private: //애니메이션 제어용 함수
 	//일반상태
 	void	Animation_Control_JumpStomp(_double dTimeDelta);
 	void	Animation_Control_Combo(_double dTimeDelta);
+	//반늪상태
 	void	Animation_Control_Shoryu(_double dTimeDelta);
-	//늪상태
+	void	Animation_Control_Teleport_Shoryu(_double dTimeDelta);
 	void	Animation_Control_SwampScrew(_double dTimeDelta);
 	void	Animation_Control_Swamp_In(_double dTimeDelta);
+	
 
 	void	Animation_Control_Walk(_double dTimeDelta);
 	_bool	Animation_Control_Dash(_double dTimeDelta, _float fDistance);
@@ -139,8 +141,9 @@ private: //애니메이션 제어용 변수들
 	_int	m_iPhase = { 0 };
 	_bool	m_isSwamping = { false };
 
-	_int	m_iTime_Index = { 0 };
-
+	_int	m_iIndex_Normal = { 0 };
+	_int	m_iIndex_Swamping = { 0 };
+	
 
 	//walk
 	_bool	m_isFirst_Walk_0 = { true };
@@ -159,6 +162,7 @@ private:
 	_double m_dCooltime_Atk_Pattern = { -1.0 };
 	_bool	m_isAtkFinish = { false };
 	_float4 m_SaveDir = { 0.0f, 0.0f, 0.0f ,0.0f };
+	_double	m_dDelay_Atk = { 0.0 };
 
 	//dash
 	_bool	m_isFirst_Dash = { true };
