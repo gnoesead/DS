@@ -34,6 +34,8 @@
 #include "Option.h"
 
 #include "PlayerManager.h"
+#include "OptionManager.h"
+
 
 
 CLevel_Village::CLevel_Village(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -46,6 +48,8 @@ HRESULT CLevel_Village::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+    COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
     CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -124,6 +128,8 @@ HRESULT CLevel_Village::Initialize()
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(false);
+
+   
 
     return S_OK;
 }
@@ -1929,7 +1935,7 @@ HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
 
         if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
         {
-            tLight.vLightDiffuse = _float4(0.4f, 0.4f, 0.4f, 1.f);
+            tLight.vLightDiffuse = _float4(0.4f ,  0.4f , 0.4f , 1.f);
         }
            
 

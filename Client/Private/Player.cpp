@@ -9,6 +9,7 @@
 #include "PlayerManager.h"
 
 #include "EffectPlayer.h"
+#include "OptionManager.h"
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -66,6 +67,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+
+	if (COptionManager::GetInstance()->Get_Graphic_Option(1) == 0) {
+		m_pRendererCom->Set_SSAO(true);
+	}
+	else {
+		m_pRendererCom->Set_SSAO(false);
+	}
+
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

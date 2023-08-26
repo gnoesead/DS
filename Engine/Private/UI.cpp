@@ -50,7 +50,50 @@ HRESULT CUI::Render()
 
 _bool CUI::Pt_InUI()
 {
-	return _bool();
+	_vector Pt = { m_MouseX,m_MouseY,0 };
+
+	_vector Axis;
+	_vector dir;
+
+	_vector LT = { m_fX - m_fSizeX * 0.5f,m_fY + m_fSizeY * 0.5f,0 };
+	_vector RT = { m_fX + m_fSizeX * 0.5f,m_fY + m_fSizeY * 0.5f,0 };
+	_vector LD = { m_fX - m_fSizeX * 0.5f,m_fY - m_fSizeY * 0.5f,0 };
+	_vector RD = { m_fX + m_fSizeX * 0.5f,m_fY - m_fSizeY * 0.5f,0 };
+
+	// LT
+	Axis = LT - LD;
+	dir = Pt - LT;
+
+	if (XMVectorGetX(XMVector3Dot(Axis, dir)) > 0) {
+		return FALSE;
+	}
+
+	// RT
+	Axis = RT - LT;
+	dir = Pt - RT;
+
+	if (XMVectorGetX(XMVector3Dot(Axis, dir)) > 0) {
+		return FALSE;
+	}
+
+	// RD
+	Axis = RD - RT;
+	dir = Pt - RD;
+
+	if (XMVectorGetX(XMVector3Dot(Axis, dir)) > 0) {
+		return FALSE;
+	}
+
+	// LD
+	Axis = LD - RD;
+	dir = Pt - LD;
+
+	if (XMVectorGetX(XMVector3Dot(Axis, dir)) > 0) {
+		return FALSE;
+	}
+
+
+	return TRUE;
 }
 
 void CUI::Free()

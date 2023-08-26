@@ -88,6 +88,11 @@ private:
 	_vector         m_vDist = { 0.f, 0.f, -1.f, 0.f };
 
 	_vector         m_vTargetPos = {};
+	_vector         m_vPreTargetPos = {};
+	_vector         m_vLookPos = {};
+	_vector         m_vLerpPos = {};
+
+
 	_vector         m_vFocusPos = {};
 	_vector			m_vMonsterPos = {};
 	_vector         m_vBattleTargetPos = {};

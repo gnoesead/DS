@@ -36,6 +36,14 @@ public: //Getter
 	void	Set_State(STATE eState, _fvector vState);
 	void	Set_Speed(_double dSpeed) { m_TransformDesc.dSpeedPerSec = dSpeed; }
 
+	void    Set_vTarget(_fvector vec) {
+		m_Target = vec;
+	}
+
+	_vector Get_vTarget() {
+		return m_Target;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -74,6 +82,7 @@ public:
 private:
 	_float4x4		m_WorldMatrix;
 	TRANSFORMDESC	m_TransformDesc;
+	_vector         m_Target;
 
 public:
 	static CTransform* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);

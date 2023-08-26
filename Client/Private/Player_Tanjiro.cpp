@@ -13,6 +13,8 @@
 #include "PlayerManager.h"
 
 #include "Camera_Manager.h"
+#include "OptionManager.h"
+
 
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -36,6 +36,7 @@
 #include "PlayerManager.h"
 #include "SoundMgr.h"
 #include "Camera_Manager.h"
+#include "OptionManager.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -47,6 +48,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -1473,6 +1476,11 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 		ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
 		ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
 
+
+		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+		{
+			tLight.vLightDiffuse = _float4(0.1f, 0.1f, 0.2f, 1.f);
+		}
 
 		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
 			return E_FAIL;

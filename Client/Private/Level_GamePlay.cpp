@@ -32,6 +32,7 @@
 #include "Fade_Manager.h"
 #include "Camera_Manager.h"
 #include "FIcon.h"
+#include "OptionManager.h"
 
 
 
@@ -45,6 +46,8 @@ HRESULT CLevel_GamePlay::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -100,8 +103,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
-	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
-
+	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);  
+	
 
     return S_OK;
 }

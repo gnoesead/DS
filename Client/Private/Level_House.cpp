@@ -38,6 +38,7 @@
 #include "PlayerManager.h"
 #include "FIcon.h"
 #include "DialogManager.h"
+#include "OptionManager.h"
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -50,6 +51,8 @@ HRESULT CLevel_House::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -123,6 +126,7 @@ HRESULT CLevel_House::Initialize()
 	CFadeManager::GetInstance()->Set_Is_Battle(false);
 
 	CDialogManager::GetInstance()->Set_Dialog_Type(99);
+	
 
     return S_OK;
 }
@@ -1686,7 +1690,7 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 
         if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
         {
-            tLight.vLightDiffuse = _float4(0.05f, 0.05f, 0.05f, 1.f);
+			tLight.vLightDiffuse = _float4(0.05f, 0.05f, 0.05f, 1.f);
         }
 
 
