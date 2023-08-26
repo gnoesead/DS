@@ -54,7 +54,7 @@ static const float Weight[25] =
 	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
 	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706
 };
-static const float Total = /*6.2108*/ /*1.00000012 *//*12.4216*/32.6324;
+static const float Total = /*6.2108*/ /*1.00000012 *//*12.4216*/22.799;
 //static const float Total = 2.636;
 //static const float FinalWeight[7] =
 //{

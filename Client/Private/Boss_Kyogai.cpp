@@ -343,6 +343,11 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom);
+
+				CRotationMapObject* pRotationMapObject = dynamic_cast<CRotationMapObject*>(pGameInstance->Get_GameObject(iCurLevel, TEXT("Layer_MapObject"), 101));
+				pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_PLUS);
+
+
 			}
 			if (1 == m_iEvent_Index)	// 0.25
 			{
