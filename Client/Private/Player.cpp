@@ -5,6 +5,7 @@
 #include "SoundMgr.h"
 #include "Camera_Free.h"
 #include "Fade_Manager.h"
+#include "Monster.h"
 
 #include "PlayerManager.h"
 
@@ -259,6 +260,12 @@ _vector CPlayer::Get_Dir_To_LockOnPos()
 
 void CPlayer::Trigger_Hit(_double dTimeDelta)
 {
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	CMonster* pMonster = dynamic_cast<CMonster*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
+
+	Safe_Release(pGameInstance);*/
 	
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 	{

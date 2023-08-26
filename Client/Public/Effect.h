@@ -31,7 +31,7 @@ public:
 	enum SORTMODE { SORT_NONE, BY_DISTANCE, OLDEST_INFRONT, YOUNGEST_INFRONT, BYDEPTH, SORTMODE_END };
 	enum CULLMODE { CULL_OFF, CULL_FRONT, CULL_BACK, CULLMODE_END };
 	enum MATERIALRENDERINGMODE { ADDITIVE, SUBTRACTIVE, MATERIALRENDERINGMODE_END };
-	enum SHADEROPTION { OPT_DEFAULT, OPT_BY_ALPHA, OPT_BY_RED, OPT_BY_GREEN, OPT_BY_BLUE, OPT_END };
+	enum SHADEROPTION { OPT_DEFAULT, OPT_BY_ALPHA, OPT_BY_RED, OPT_BY_GREEN, OPT_BY_BLUE, OPT_NO_ZWRITE, OPT_BLACK_NO_DISCARD, OPT_END };
 
 public:
 	typedef struct tagParentDesc
@@ -306,6 +306,9 @@ public:
 	void Set_EffectType(int eType) {
 		m_eEffectDesc.eEffectType = eType;
 	}
+	void Set_PlaySpeed(_double dSpeed) {
+		m_dPlaySpeed = dSpeed;
+	}
 
 public:
 	HRESULT Add_Component_Texture(_uint iLevelIndex, const _tchar* pComponentTag, int eType);
@@ -396,6 +399,8 @@ protected:
 
 	_float2					m_vPaddingStart = { 0.f, 0.f };
 	_float2					m_vPaddingEnd = { 0.f, 0.f };
+
+	_double					m_dPlaySpeed = { 1.0 };
 
 public:
 	//static CEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

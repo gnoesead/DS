@@ -26,6 +26,8 @@ public:
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_ShadowDepth();
+public:
+	void Set_Attack_Success(_bool bHit) { m_bAttack = bHit; }
 
 protected:
 	void Get_PlayerComponent();
@@ -41,7 +43,7 @@ protected: // Calculate
 	_vector Calculate_Dir_ZeroY();
 	_vector Calculate_Dir_Cross();
 	_vector Random_Dir(_fvector vDir, _float fMinY = -30.f, _float fMaxY = 30.f, _float fMinX = -20.f, _float fMaxX = 20.f);
-
+	_vector Rotation_Dir(_fvector vDir, _float fAngleX = 0.f, _float fAngleY = 0.f);
 
 protected:
 	//플레이어 정보 calculate
@@ -64,7 +66,6 @@ protected:
 	_float		m_fSpeed = { 5.f };
 
 
-
 protected: //애니메이션 제어용 함수들
 	void	Dir_Setting(_bool Reverse);
 	void	Pos_FixY();
@@ -74,6 +75,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_isDeath_Motion = { false };
 	_bool	m_bAir_Motion = { false };
 
+	_bool	m_bAttack = { false };
 	_bool	m_bStart = { false };
 	_bool	m_bHeal = { false };
 	_bool	m_bTrigger = { false };

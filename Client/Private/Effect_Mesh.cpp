@@ -61,13 +61,17 @@ HRESULT CEffect_Mesh::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CEffect_Mesh::Tick(_double dTimeDelta)
+void CEffect_Mesh::Tick(_double _dTimeDelta)
 {
+	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
+
 	__super::Tick(dTimeDelta);
 }
 
-void CEffect_Mesh::LateTick(_double dTimeDelta)
+void CEffect_Mesh::LateTick(_double _dTimeDelta)
 {
+	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
+
 	__super::LateTick(dTimeDelta);
 }
 
@@ -172,7 +176,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 		if (nullptr != m_pTextures[TEX_RAMP])
 			m_iPassIndex = 4;
 		else
-			m_iPassIndex = 6;
+		{
+			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+				m_iPassIndex = 11;
+			else
+				m_iPassIndex = 6;
+		}
 
 		if (nullptr != m_pTextures[TEX_NOISE])
 			m_iPassIndex = 7;

@@ -295,9 +295,6 @@
     <Filter Include="02. GameObjects\Environment\AlertCircle">
       <UniqueIdentifier>{1fcc66ec-5608-4569-b4b0-91886eb7715f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
-      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Swamp">
       <UniqueIdentifier>{b7224a9e-5e9a-4867-b09d-ad10e90f0ca0}</UniqueIdentifier>
     </Filter>
@@ -306,6 +303,9 @@
     </Filter>
     <Filter Include="02. GameObjects\Environment\AlertRect">
       <UniqueIdentifier>{b14fd503-70cd-41dc-9a37-4cda1a419f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\TrainSmoke">
+      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -556,7 +556,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TrainSmoke.h">
-      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OptionManager.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
@@ -819,7 +819,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TrainSmoke.cpp">
-      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OptionManager.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>

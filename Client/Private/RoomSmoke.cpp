@@ -43,7 +43,7 @@ HRESULT CRoomSmoke::Initialize(void* pArg)
 
 	m_dSpeedY = (_double)Random::Generate_Float(8.f, 12.f);
 
-	m_iFrame = Random::Generate_Int(0.f, 10.f);
+	m_iFrame = Random::Generate_Int(0, 10);
 
 	m_vSize = { Random::Generate_Float(1.f, 2.f) , Random::Generate_Float(1.f, 5.f),Random::Generate_Float(1.f, 2.f)};
 

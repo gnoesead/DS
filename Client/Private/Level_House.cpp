@@ -203,14 +203,6 @@ HRESULT CLevel_House::Ready_Layer_BackGround(const _tchar* pLayerTag)
     //    return E_FAIL;
     //}
 
-	/* For.TrainSmoke*/
-
-	 if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-	    TEXT("Prototype_GameObject_AlertRect"))))
-	{
-	    MSG_BOX("Failed to Add_GameObject : AlertRect");
-	    return E_FAIL;
-	}
 
     Safe_Release(pGameInstance);
 

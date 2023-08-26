@@ -18,9 +18,25 @@ CComponent* CLayer::Get_Component(const _tchar* pComponentTag)
 	return nullptr;
 }
 
+CComponent* CLayer::Get_Component(_uint iIndex, const _tchar* pComponentTag)
+{
+	if (0 == m_GameObjects.size() || m_GameObjects.size() <= iIndex)
+		return nullptr;
+
+	auto iter = m_GameObjects.begin();
+
+	for (_uint i = 0; i < iIndex; i++)
+		iter++;
+
+	if (nullptr != (*iter))
+		return (*iter)->Get_Component(pComponentTag);
+
+	return nullptr;
+}
+
 CGameObject* CLayer::Get_GameObject(_uint iIndex)
 {
-	if (0 == m_GameObjects.size())
+	if (0 == m_GameObjects.size() || m_GameObjects.size() <= iIndex)
 		return nullptr;
 
 	auto iter = m_GameObjects.begin();

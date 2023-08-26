@@ -112,8 +112,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
 
-	_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
+	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 	return S_OK;
 }
@@ -1514,6 +1514,12 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_2_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_BulletPunch.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_BulletPunch");
 		return E_FAIL;
 	}
 

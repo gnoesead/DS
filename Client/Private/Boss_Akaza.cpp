@@ -343,189 +343,24 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 #pragma region AWAKE_ComboPunch
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			//if (0 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -15.f, 15.f);
 
-			//}
-			//if (1 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//}
-			//if (2 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//}
-			//if (3 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//}
-			//if (4 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//}
-			//if (5 == m_iEvent_Index)
-			//{
-			//	//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//}
-			if (0 == m_iEvent_Index)
+			if (0 <= m_iEvent_Index && 35 >= m_iEvent_Index)
 			{
+				if (0 == m_iEvent_Index || 5 == m_iEvent_Index || 12 == m_iEvent_Index || 
+					19 == m_iEvent_Index || 26 == m_iEvent_Index || 33 == m_iEvent_Index)
+				{//피격용 콜라이더
+					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+				}
+				//이펙트용 콜라이더
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 0.5f;
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), dLifeTime,
+					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*	vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-			}
-			if (2 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-			}
-			if (3 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-			}
-			if (4 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*	vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-					vRandomDir = Random_Dir(vDir);
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-			}
-			if (5 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				/*vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");
-				vRandomDir = Random_Dir(vDir);
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fSmallDmg, true, "Akaza_ATK_Projectile");*/
-			}
-
 		}
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -607,16 +442,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index) // 0.2
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
-
+				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-
-
 			}
 			if (1 == m_iEvent_Index) // 0.3
-			{
+			{				
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
@@ -753,9 +587,12 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (m_bAwake == true)
 			{
-
+				vRandomDir = Random_Dir(vMonsterDir, 15.f, 60.f, -20.f, 20.f); // 조절 하면 될듯~
+				// -> Rotation_Dir() 이건 원하는 방향으로 
+				 
 				if (0 == m_iEvent_Index)
 				{
+					
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");

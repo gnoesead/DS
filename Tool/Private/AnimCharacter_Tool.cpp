@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/SwampHorn3.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Kyogai.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -263,7 +263,7 @@ void CAnimCharacter_Tool::Save_Animations()
 	char FindFile[MAX_PATH] = { "" };
 	WIN32_FIND_DATAA fdFind;
 	//★
-	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn3/*.bin", &fdFind);
+	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Kyogai/*.bin", &fdFind);
 	if (hFindOut != INVALID_HANDLE_VALUE)
 	{
 		do
@@ -439,7 +439,7 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Swamp_Horn1"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Kyogai"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CAnimCharacter_Tool");

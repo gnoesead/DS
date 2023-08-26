@@ -20,9 +20,9 @@ public:
 	enum  STATE
 	{
 		STATE_INTERACT, STATE_BEGIN, STATE_NEXTPHASE, STATE_HEAL, STATE_AWAKE,
-		STATE_GUARD,
+		STATE_GUARD, STATE_LINKERCMB,
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
-		STATE_STOMPKICK, STATE_ATKPUNCH,
+		STATE_STOMPKICK, STATE_ATKPUNCH, 
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
@@ -53,7 +53,7 @@ public:
 		////////////////// 스킬 ///////////////////////
 		ANIM_ATKCMB1 = 1, // 배꼽에 있는 북 3연방 -> 톱날 세번나오는듯?
 		ANIM_ATKCMB2 = 2, // 두방침
-		ANIM_ATKCMB3 = 3, // 라스트
+		ANIM_ATKCMB3 = 3, // 라스트 -> 북 한방은 이 모션으로 해야할 듯?
 
 		//페이즈 2 배꼽 북 연속치기
 		ANIM_ATKCMB_01READY = 4, // 연속 배꼽치기 준비자세
@@ -62,9 +62,12 @@ public:
 
 		ANIM_ATKSKCMB = 8, // 으으 기모으고 배꼽치기 와다다다닥
 		ANIM_ATKPUNCH = 9, // 강펀치~
-		ANIM_ATKPUNCH2 = 10,
-
+		ANIM_ATKPUNCH2 = 10, // 연속펀치~ 10 -11 / 10 - 12 / 0.54
+		
 		ANIM_KICKDOWN = 11, // 왼발 내려찍기
+
+		ANIM_ATKCMBW05 = 12, // 발 내밀고 배꼽 땅땅~
+
 		ANIM_STOMPKICK = 13, // 내려찍기 준비자세하고 함 이거쓰자
 
 		ANIM_ATKSK_READY = 18, // 갈매기 레디
@@ -155,6 +158,7 @@ public:
 	void Trigger_AtkStep(); 
 	void Trigger_StompKick();
 	void Trigger_AtkPunch();
+	void Trigger_LinkerCmb();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -188,6 +192,7 @@ private: //패턴 함수들
 	void Update_AtkStep(_double dTimeDelta); 
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
+	void Update_LinkerCmb(_double dTimeDelta);
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
@@ -203,9 +208,14 @@ private: //패턴 함수들
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
+private:
+	enum BLADETYPE { BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
+	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
+
 
 #pragma endregion
 private: // _bool
+	_bool	m_bAtkStepType = { false };
 
 private: // time
 
@@ -214,8 +224,9 @@ private: // time
 
 private:
 	_uint	m_iRandomDirNum = { 0 };
+	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
-	
+	_uint	m_iAtkStepTypeNum = { 0 };
 	_uint	m_iIdleCnt = { 0 };
 	_uint	m_iTriggerCnt = { 0 };
 	

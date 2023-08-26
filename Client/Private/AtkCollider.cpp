@@ -5,7 +5,6 @@
 #include "Camera_Manager.h"
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
-#include "EffectPlayer.h"
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -75,7 +74,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	if (true == m_AtkCollDesc.bBullet)
 	{
 		if (nullptr != m_AtkCollDesc.pEffectTag)
-			CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom, &m_AtkCollDesc.EffectWorldDesc);
 	}
 }
 
@@ -250,9 +249,10 @@ void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
 	{
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
-		m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+			//m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
 	}
-
 }
 
 void CAtkCollider::Tick_KyogaiDelayBullet(_double dTimeDelta)
@@ -290,6 +290,8 @@ void CAtkCollider::Setting_KyogaiBullet()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vTargetPos = m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_POSITION);
+	m_pTransformCom->LookAt_FixY(vTargetPos);
+
 	m_vDir = vTargetPos - vPos;
 	m_vDir = XMVector3Normalize(m_vDir);
 }
@@ -297,8 +299,22 @@ void CAtkCollider::Setting_KyogaiBullet()
 void CAtkCollider::Setting_KyogaiDelayBullet()
 {
 	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	/*_vector vRightDir = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_vector vUpDir = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+	_vector vLookDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	m_AtkCollDesc.fPos.x = 0.f;
+	m_AtkCollDesc.fPos.y = 0.f;
+	m_AtkCollDesc.fPos.z = 10.f;*/
+	
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	vPos = XMVectorSetY(vPos, 0.f);
+	
+	/*vPos += vRightDir * m_AtkCollDesc.fPos.x;
+	vPos += vUpDir * m_AtkCollDesc.fPos.y;
+	vPos += vLookDir * m_AtkCollDesc.fPos.z;*/
+	
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 

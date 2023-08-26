@@ -410,7 +410,7 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 	// Prototype_Component_Model_Akaza
-	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PivotMatrix = XMMatrixScaling(0.007f, 0.007f, 0.007f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Kyogai"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Kyogai/Kyogai.bin", PivotMatrix))))
 	{
@@ -469,6 +469,8 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn3");
 		return E_FAIL;
 	}
+
+
 
 #pragma endregion
 
@@ -1698,6 +1700,11 @@ HRESULT CLoader::Load_MapObjectModel_AllStage(CGameInstance* pGameInstance)
 	/* For.Prototype_Component_Model_Fog5*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Fog5"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Fog5.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_AlertRect*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_AlertRect"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/AlertRect.bin", PivotMatrix))))
 		return E_FAIL;
 
 	return S_OK;
