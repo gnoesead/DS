@@ -22,6 +22,58 @@ matrix         g_matViewInv;
 matrix         g_matProjInv;
 matrix         g_matLightView;
 
+//ºí·¯
+float m_TexW = 1280.f;
+float m_TexH = 720.f;
+
+//static const float Weight[13] =
+//{
+//	/*0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
+//	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561*/
+//	/* 0.002216,
+//	0.008764,
+//	0.026995,
+//	0.064759,
+//	0.120985,
+//	0.176033,
+//	0.199471,
+//	0.176033,
+//	0.120985,
+//	0.064759,
+//	0.026995,
+//	0.008764,
+//	0.002216,*/
+//	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462, 2, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122
+//
+//
+//};
+static const float Weight[25] =
+{
+	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
+	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122,
+	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
+	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706
+};
+static const float Total = /*6.2108*/ /*1.00000012 *//*12.4216*/32.6324;
+//static const float Total = 2.636;
+//static const float FinalWeight[7] =
+//{
+//
+//	0.2434, 0.36305, 0.46155,
+//	0.5, 0.46155, 0.36305, 0.2434
+//};
+////static const float FinalTotal = 5.272;
+//static const float FinalTotal = 2.636;
+static const float FinalWeight[7] =
+{
+
+	0.1434, 0.26305, 0.46155,
+	0.5, 0.46155, 0.26305, 0.1434
+};
+//static const float FinalTotal = 5.272;
+static const float FinalTotal = 2.236;
+
+
 sampler HDRSampler = sampler_state
 {
 	texture = g_FinalTexture;
@@ -110,6 +162,7 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 	if (0.f == vDiffuse.a)
 		discard;
 
+	
 	Out.vColor = vDiffuse;
 
 
@@ -134,7 +187,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 
-	if (fBrightness > 0.90f)
+	if (fBrightness > 0.99f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -186,49 +239,6 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 }
 
 //==============================Blur======================================
-float m_TexW = 1280.f;
-float m_TexH = 720.f;
-
-static const float Weight[13] =
-{
-	0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
-	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561
-	/* 0.002216,
-	0.008764,
-	0.026995,
-	0.064759,
-	0.120985,
-	0.176033,
-	0.199471,
-	0.176033,
-	0.120985,
-	0.064759,
-	0.026995,
-	0.008764,
-	0.002216,*/
-	//0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462, 2, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122
-
-
-};
-static const float Total = 6.2108 /*1.00000012 *//*12.4216*/;
-//static const float Total = 2.636;
-//static const float FinalWeight[7] =
-//{
-//
-//	0.2434, 0.36305, 0.46155,
-//	0.5, 0.46155, 0.36305, 0.2434
-//};
-////static const float FinalTotal = 5.272;
-//static const float FinalTotal = 2.636;
-static const float FinalWeight[7] =
-{
-
-	0.1434, 0.26305, 0.46155,
-	0.5, 0.46155, 0.26305, 0.1434
-};
-//static const float FinalTotal = 5.272;
-static const float FinalTotal = 2.236;
-
 
 
 PS_OUT PS_BlurX(PS_IN _In)
@@ -240,13 +250,13 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	float	tu = 1.f / m_TexW;
 
-	for (int i = -6; i < 6; ++i)
+	for (int i = -12; i < 12; ++i)
 	{
 		uv = t + float2(tu * i, 0);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 
 	if (Out.vColor.a == 0.f)
@@ -264,27 +274,17 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	float tv = 1.f / (m_TexH / 2.f);
 
-	for (int i = -6; i < 6; ++i)
+	for (int i = -12; i < 12; ++i)
 	{
 		uv = t + float2(0, tv * i);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 
 	if (Out.vColor.a == 0.f)
 		discard;
-
-
-	
-	
-	
-
-	/*if (Out.vColor.a == 0.f)
-		discard;*/
-
 
 
 	return Out;
