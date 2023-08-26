@@ -311,6 +311,9 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 				m_eCurState = STATE_ATTACK;
 
+				m_eCurPattern = PATTERN_SHOTSWAMP;
+				/*
+				//실제 패턴
 				if (m_iIndex_Normal == 0)
 				{
 					m_eCurPattern = PATTERN_JUMPSTOMP;
@@ -326,6 +329,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 					m_eCurPattern = PATTERN_SWAMP_IN;
 					m_iIndex_Normal = 0;
 				}
+				*/
 			}
 		}
 		else
@@ -440,6 +444,9 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 	case 5: // pattern_Teleport_Shoryu
 		Animation_Control_Teleport_Shoryu(dTimeDelta);
 		break;
+	case 6: // PATTERN_SHOTSWAMP
+		Animation_Control_ShotSwamp(dTimeDelta);
+		break;
 	default:
 		break;
 	}
@@ -519,6 +526,22 @@ void CMonster_Swamp::Animation_Control_Combo(_double dTimeDelta)
 		m_pModelCom->Set_EarlyEnd(13, true, 0.6f);
 
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.02f);
+	}
+}
+
+void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ATK_SHOT);
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_ATK_SHOT)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.2f);
 	}
 }
 
