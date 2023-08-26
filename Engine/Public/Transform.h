@@ -71,6 +71,7 @@ public:
 	void LookAt_FixY(_fvector vTargetPos);
 	void Set_Look(_float4 vDir_0);
 	void LerpVector(_fvector vTargetLook, _float weight);
+	_bool	LerpVector_Get_End(_fvector vTargetLook, _float weight);
 
 private:
 	_float4x4		m_WorldMatrix;
