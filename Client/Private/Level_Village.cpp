@@ -1750,7 +1750,7 @@ HRESULT CLevel_Village::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
     }
 
  // Monster_Hp
-    CWorld_UI_Hp::UIDESC UIDesc3;
+   /* CWorld_UI_Hp::UIDESC UIDesc3;
     ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
     UIDesc3.m_Is_Reverse = false;
@@ -1797,7 +1797,7 @@ HRESULT CLevel_Village::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
         Safe_Release(pGameInstance);
         return E_FAIL;
-    }
+    }*/
 
 #pragma endregion
 

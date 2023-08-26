@@ -115,8 +115,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Test(DistUpdate)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
+
 		if (pGameInstance->Get_DIKeyDown(DIK_I)) {
-			CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.f);
+			CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+			m_Hekireki_Dir *= -1;
 		}
 
 		m_bIs_Dist_Update = CCameraManager::GetInstance()->Get_Is_Dist_Update();
@@ -137,9 +139,9 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		if (m_bIs_Dist_Update == false) {
+		/*if (m_bIs_Dist_Update == false) {
 
-			if (m_Swap_TimeAcc >= 1.5f) {
+			if (m_Swap_TimeAcc >= 1.2f) {
 
 				_float Y = XMVectorGetY(m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION));
 
@@ -147,11 +149,11 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 			}
 
-		}
-		else {
-			if (m_Swap_TimeAcc >= 1.5f)
+		}*/
+		//else {
+			if (m_Swap_TimeAcc >= 1.2f)
 				m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
-		}
+		//}
 		
 		m_fLandY = pPlayer->Get_LandY();
 
@@ -220,8 +222,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 	// Center
 	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, m_fLandY);
-	if (m_Swap_TimeAcc < 1.5f)
+
+	if (m_Swap_TimeAcc < 1.2f)
 		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
+
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 	// Lock_Free
@@ -613,7 +617,7 @@ void CCamera_Free::SideCamera(_double dTimeDelta)
 
 		vRight = m_vTargetPos - m_vBattleTargetPos;
 
-		m_vDist = XMVector3Cross(vRight, vUp);
+		m_vDist = XMVector3Cross(m_Hekireki_Dir * vRight, vUp);
 
 		m_vDist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
 

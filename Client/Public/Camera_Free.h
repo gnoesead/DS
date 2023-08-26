@@ -79,7 +79,9 @@ private:
 	_bool           m_bIs_Pos_Set= { false };
 
 	_bool           m_bIs_Dist_Update = { true };
+	_bool           m_bIs_Side_Off = { false };
 
+	_int            m_Hekireki_Dir = { 1 };
 private:
 	_float4			m_fCameraLook = {};
 	_float			m_fDistance = {};
