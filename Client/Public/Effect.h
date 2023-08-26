@@ -30,7 +30,7 @@ public:
 	enum MATERIALTYPE { MAT_NONE, DEFAULT_DIFFUSE, DEFAULT_MATERIAL, DEFAULT_PARTICLE, DEFAULT_PARTICLESYSTEM, MATERIALTYPE_END };
 	enum SORTMODE { SORT_NONE, BY_DISTANCE, OLDEST_INFRONT, YOUNGEST_INFRONT, BYDEPTH, SORTMODE_END };
 	enum CULLMODE { CULL_OFF, CULL_FRONT, CULL_BACK, CULLMODE_END };
-	enum MATERIALRENDERINGMODE { ADDITIVE, SUBTRACTIVE, MATERIALRENDERINGMODE_END };
+	enum RENDERGROUPOPTION { NON_LIGHT, BLEND, RENDERGROUPOPTION_END };
 	enum SHADEROPTION { OPT_DEFAULT, OPT_BY_ALPHA, OPT_BY_RED, OPT_BY_GREEN, OPT_BY_BLUE, OPT_NO_ZWRITE, OPT_BLACK_NO_DISCARD, OPT_END };
 
 public:
@@ -79,7 +79,7 @@ public:
 		int				eStartRotationOption = { OP_CONSTANT };		//EFFECTOPTION
 		bool			is3DStartRotation = { false };
 		_float3			vStartRotationMin = { 0.f, 0.f, 0.f };
-		_float3			vStartRotationMax = { 0.f, 0.f, 0.f };
+		_float3			vStartRotationMax = { 0.f, 0.f, 0.f }; 
 		int				eStartColorOption = { OP_COLOR };		//COLOROPTION
 		_float4			vColor = { 1.f, 1.f, 1.f, 1.f };
 		int				eSimulationSpace = { SPACE_LOCAL };		//SPACE
@@ -180,6 +180,7 @@ public:
 		float			fMaxParticleSize = { 0.5f };
 		_float3			vPivot = { 0.f, 3.f, 0.f };
 		float			fTextureOrder = { 0.f };
+		int				eRenderGroupOption = { NON_LIGHT };	//RENDERGROUPOPTION
 
 		// Texture
 		_float2			vFlip = { 1.f, 1.f };
@@ -220,7 +221,6 @@ public:
 		int				iNumAlpha = { 0 };
 
 		//Material
-		int				eMaterialRenderingMode = { ADDITIVE };	//MATERIALRENDERINGMODE
 
 		_float3			vModelPivotScale = { 1.f, 1.f, 1.f };
 		_float3			vModelPivotRot = { 0.f, 0.f, 0.f };
