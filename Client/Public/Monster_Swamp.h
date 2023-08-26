@@ -17,7 +17,7 @@ public:
 	enum PATTERN { 
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
-		PATTERN_SHOTSWAMP = 6, 
+		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7,
 		PATTERN_END 
 	};
 
@@ -122,6 +122,7 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Combo(_double dTimeDelta);
 	void	Animation_Control_ShotSwamp(_double dTimeDelta);
 	//반늪상태
+	void	Animation_Control_BigSwamp(_double dTimeDelta);
 	void	Animation_Control_Shoryu(_double dTimeDelta);
 	void	Animation_Control_Teleport_Shoryu(_double dTimeDelta);
 	void	Animation_Control_SwampScrew(_double dTimeDelta);

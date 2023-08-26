@@ -600,7 +600,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		m_isJump_Move = true;
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
-		Jumping(4.5f, 0.2f);
+		Jumping(4.0f, 0.2f);
 
 		m_pModelCom->Set_EarlyEnd(58, true);
 	}
@@ -624,7 +624,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		m_isJump_Move = false;
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
-		Jumping(4.5f * m_fScaleChange, 0.2f * m_fScaleChange);
+		Jumping(4.0f * m_fScaleChange, 0.2f * m_fScaleChange);
 
 		m_pModelCom->Set_EarlyEnd(58, true);
 	}
@@ -645,8 +645,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		//콤보 첫 애니메이션 설정
 		if (m_pModelCom->Get_Combo_Doing() == false)
 		{
+			m_pModelCom->Set_EarlyEnd(ANIM_ATK_AIRCOMBO, true, 0.5f);
 			m_pModelCom->Set_Combo_Doing(true);
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRCOMBO);
+			
 
 			JumpStop(0.40);
 		}
@@ -655,11 +657,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Combo_Trigger(true);
 
-			m_pModelCom->Set_EarlyEnd(18, true);
-			JumpStop(0.85);
+			//m_pModelCom->Set_EarlyEnd(18, true);
+			JumpStop(0.95);
 			m_isFirst_JumpAtk = false;
 		}
 	}
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_AIRCOMBO, false, 0.5f);
 
 
 	//공중 트랙공격 (이동키 + 공격키)
@@ -716,11 +719,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			else
 			{
 				if(3 == iCurAnimIndex)
-					m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.4f);
+					m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.3f);
 				else if( 4 == iCurAnimIndex)
-					m_pModelCom->Set_EarlyEnd(4, true, 0.4f);
+					m_pModelCom->Set_EarlyEnd(4, true, 0.3f);
 				else if(5 == iCurAnimIndex)
-					m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
+					m_pModelCom->Set_EarlyEnd(5, true, 0.3f);
 
 				m_pModelCom->Set_Combo_Trigger(true);
 				//콤보 분기 설정
@@ -748,19 +751,19 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
-	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.4f);
-	m_pModelCom->Set_EarlyEnd(4, false, 0.4f);
-	m_pModelCom->Set_EarlyEnd(5, false, 0.4f);
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.3f);
+	m_pModelCom->Set_EarlyEnd(4, false, 0.3f);
+	m_pModelCom->Set_EarlyEnd(5, false, 0.3f);
 
 	if (fDistance > 0.7f)
 	{
 		// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
-		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange, 0.15f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange, 0.12f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange, 0.10f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.12f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.10f * m_fScaleChange);
 
 		//분기
-		Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange, 0.07f * m_fScaleChange); // Normal
+		Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange); // Normal
 	}
 	Ground_Animation_Play(9, 10);
 
@@ -847,7 +850,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
 	}
-	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange, 0.15f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
@@ -1203,14 +1206,14 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	_vector vDir = XMLoadFloat4(&m_Moveset.m_Input_Dir);
 	_float4 fDir;
 	XMStoreFloat4(&fDir, -vDir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_F, 4.5f * m_fScaleChange, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_B, 4.5f * m_fScaleChange, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_L, 4.5f * m_fScaleChange, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
-	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_R, 4.5f * m_fScaleChange, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_F, 4.5f * m_fScaleChange * m_fMoving_Ratio, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_B, 4.5f * m_fScaleChange * m_fMoving_Ratio, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_L, 4.5f * m_fScaleChange * m_fMoving_Ratio, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_R, 4.5f * m_fScaleChange * m_fMoving_Ratio, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
 
 	//더블스텝
-	Go_Dir_Deceleration(dTimeDelta, 71, 5.0f * m_fScaleChange, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
-	Go_Dir_Deceleration(dTimeDelta, 73, 5.0f * m_fScaleChange, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, 71, 5.0f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, 73, 5.0f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -1344,10 +1347,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	}
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Deceleration(dTimeDelta, 138, 1.5f, 0.01f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f, 0.015f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f, 0.015f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 138, 1.5f * m_fDmg_Move_Ratio, 0.01f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
 	}
 #pragma endregion
 
@@ -1363,7 +1366,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f * m_fDmg_Move_Ratio, 0.035f, AtkDir);
 
 #pragma endregion
 
@@ -1380,8 +1383,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		Jumping(1.2f, 0.05f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 85, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Ground_Animation_Play(85, 86);
 
 #pragma endregion
@@ -1399,9 +1402,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		Jumping(1.2f, 0.05f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 110, 3.0f, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, 111, 3.0f, 0.1f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 111, 3.0f * m_fDmg_Move_Ratio, 0.1f, AtkDir);
 	Ground_Animation_Play(110, 111);
 
 #pragma endregion
@@ -1418,8 +1421,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		Jumping(1.7f, 0.03f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 100, 0.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 100, 0.5f * m_fDmg_Move_Ratio, AtkDir);
 	Ground_Animation_Play(100, 101);
 #pragma endregion
 
@@ -1444,7 +1447,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 	}
 	//Go_Straight_Constant(dTimeDelta, 138, 2.0f);
-	Go_Straight_Deceleration(dTimeDelta, ANIM_DOWN_GETUP_MOVE, 3.0f, 0.03f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_DOWN_GETUP_MOVE, 3.0f * m_fMoving_Ratio, 0.03f);
 	m_pModelCom->Set_EarlyEnd(ANIM_DOWN_GETUP_MOVE, true);
 
 

@@ -305,14 +305,12 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 			Animation_Control_Walk(dTimeDelta);
 
 			
-			if (m_dCooltime_Atk_Pattern > 8.0f)
+			if (m_dCooltime_Atk_Pattern > 4.0f)
 			{
 				m_dCooltime_Atk_Pattern = 0.0;
 
 				m_eCurState = STATE_ATTACK;
 
-				m_eCurPattern = PATTERN_SHOTSWAMP;
-				/*
 				//실제 패턴
 				if (m_iIndex_Normal == 0)
 				{
@@ -324,16 +322,21 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 					m_eCurPattern = PATTERN_COMBO;
 					m_iIndex_Normal++;
 				}
-				else if (m_iIndex_Normal == 2)
+				else if (m_iIndex_Normal == 2 )
+				{
+					m_eCurPattern = PATTERN_SWAMP_IN;
+					m_iIndex_Normal++;
+				}
+				else if (m_iIndex_Normal == 3 )
 				{
 					m_eCurPattern = PATTERN_SWAMP_IN;
 					m_iIndex_Normal = 0;
 				}
-				*/
 			}
 		}
 		else
 		{
+			//실제 패턴
 			if (m_iIndex_Swamping == 0)
 			{
 				if (m_dCooltime_Atk_Pattern > 0.85f)
@@ -354,6 +357,18 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 					m_eCurState = STATE_ATTACK;
 					m_eCurPattern = PATTERN_TELESHORYU;
+
+					m_iIndex_Swamping++;
+				}
+			}
+			else if (m_iIndex_Swamping == 2)
+			{
+				if (m_dCooltime_Atk_Pattern > 0.3f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_BIGSWAMP;
 
 					m_iIndex_Swamping = 0;
 				}
@@ -405,6 +420,16 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
 	}
+	else if (iCurAnim == ANIM_ATK_SWAMP_SWIM || iCurAnim == 16 || iCurAnim == 17)
+	{
+		m_isNavi_Y_Off = true;
+		m_isSwamping = true;
+
+		if (m_fLand_Y < m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f)
+		{
+			m_fLand_Y += 0.02f;
+		}
+	}
 	else if (iCurAnim == ANIM_SWAMP_IDLE)
 	{
 		m_isNavi_Y_Off = true;
@@ -446,6 +471,9 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		break;
 	case 6: // PATTERN_SHOTSWAMP
 		Animation_Control_ShotSwamp(dTimeDelta);
+		break;
+	case 7: //PATTERN_BIGSWAMP
+		Animation_Control_BigSwamp(dTimeDelta);
 		break;
 	default:
 		break;
@@ -545,6 +573,43 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 	}
 }
 
+void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+
+		if (m_CharacterDesc.SwampHorn == 1)
+			m_iScrewPosIndex = rand() % 10;
+		if (m_CharacterDesc.SwampHorn == 2)
+			m_iScrewPosIndex = rand() % 9;
+		if (m_CharacterDesc.SwampHorn == 3)
+			m_iScrewPosIndex = rand() % 8;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+
+		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
+		{
+			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
+		}
+		else
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SWIM);
+			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
+		}
+	}
+
+	
+
+}
+
 void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 {
 	if (m_isFrist_Atk_Pattern)
@@ -569,7 +634,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 		else 
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
-			Jumping(1.1f, 0.01f);
+			Jumping(1.1f, 0.03f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
 			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 4.0f;
 		}

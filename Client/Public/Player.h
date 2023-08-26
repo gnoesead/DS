@@ -196,7 +196,10 @@ protected:
 	//스왑시
 	_bool		m_isSwap_OnSky = { false };
 	
-
+	//공격시 거리줄임.
+	_float	m_fAtk_Move_Ratio = { 0.7f };
+	_float	m_fDmg_Move_Ratio = { 0.65f };
+	_float	m_fMoving_Ratio = { 0.6f };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
