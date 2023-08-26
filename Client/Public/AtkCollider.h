@@ -50,6 +50,8 @@ public:
 	_uint Get_CollCount() {
 		return m_iCollCount;
 	}
+
+	_vector Get_Dir() { return m_vDir; }
 	_bool Get_IsAttack(CGameObject* pHitObj);
 	void Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc);
 

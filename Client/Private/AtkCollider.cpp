@@ -249,9 +249,10 @@ void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
 	{
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
-		m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+			//m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
 	}
-
 }
 
 void CAtkCollider::Tick_KyogaiDelayBullet(_double dTimeDelta)
@@ -289,6 +290,8 @@ void CAtkCollider::Setting_KyogaiBullet()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_vector vTargetPos = m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_POSITION);
+	m_pTransformCom->LookAt_FixY(vTargetPos);
+
 	m_vDir = vTargetPos - vPos;
 	m_vDir = XMVector3Normalize(m_vDir);
 }

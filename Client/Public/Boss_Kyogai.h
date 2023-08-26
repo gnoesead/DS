@@ -203,6 +203,10 @@ private: //패턴 함수들
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
+private:
+	enum BLADETYPE { BLADE_THREE , BLADE_FIVE};
+	void	Create_AlertRect(BLADETYPE eBladeType);
+
 
 #pragma endregion
 private: // _bool

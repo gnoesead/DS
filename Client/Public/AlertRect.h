@@ -17,6 +17,8 @@ BEGIN(Client)
 class CAlertRect final : public CGameObject
 {
 public:
+	enum  STATE{ STATE_SHOWON , STATE_WAIT,STATE_SHOWOFF};
+
 	typedef struct tagEffectDesc
 	{
 		_vector		vLook;
@@ -52,12 +54,15 @@ private:
 	EFFECTDESC				m_EffectDesc;
 
 private:
-	_float					m_fAlpha = 1.f;
+	_float					m_fAlpha = 0.f;
 	_float					m_fLandY = { 0.f };
 	_float					m_fScale = { 9.f };
 
 	_float4					m_vLook = { 0.f , 0.f , 0.f , 0.f };
 	_float					m_fDiffuseRatio = { 1.5f };
+
+	STATE					m_eSTATE = { STATE_SHOWON};
+	_double					m_dWaitAccTime = { 0.f };
 
 public:
 	static CAlertRect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -91,12 +91,12 @@ void CAlertCircle::LateTick(_double TimeDelta)
 	{
 		if (STATE_SHOWON == m_eState)
 		{
-			m_fAlpha += 1.5f * (_double)TimeDelta;
+			m_fAlpha += 1.5f * (_float)TimeDelta;
 			if (m_fAlpha > 1.f)
 				m_eState = STATE_SHOWOFF;
 		}
 		else
-			m_fAlpha -= 2.f * (_double)TimeDelta;
+			m_fAlpha -= 2.f * (_float)TimeDelta;
 
 		if (m_fAlpha < 0.f)
 			m_isDead = true;

@@ -67,7 +67,30 @@ void CAlertRect::Tick(_double TimeDelta)
 	
 	m_pTransformCom->Rotation(_float3(0.f, -Get_Angle(m_EffectDesc.vLook), 0.f));
 
-	m_pTransformCom->Scaling(_float3(1.5f, 1.f, 0.003f));
+	m_pTransformCom->Scaling(_float3(1.5f, 1.f, 0.0025f));
+
+	switch (m_eSTATE)
+	{
+	case Client::CAlertRect::STATE_SHOWON:
+		m_fAlpha += 1.2f * (_float)TimeDelta;
+
+		if (m_fAlpha > 1.f)
+			m_eSTATE = STATE_WAIT;
+		break;
+	case Client::CAlertRect::STATE_WAIT:
+		m_dWaitAccTime += TimeDelta;
+
+		if (m_dWaitAccTime > 0.2)
+			m_eSTATE = STATE_SHOWOFF;
+		break;
+	case Client::CAlertRect::STATE_SHOWOFF:
+		m_fAlpha -= 1.2f * (_float)TimeDelta;
+
+		if (m_fAlpha < 0.f)
+			m_isDead = true;
+		break;
+	
+	}
 }
 
 void CAlertRect::LateTick(_double TimeDelta)

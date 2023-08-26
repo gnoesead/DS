@@ -747,13 +747,12 @@ PS_OUT  PS_MASKRAMPDISTORTION(PS_IN In)
 		}
 	}
 
-	vector vMask = g_MaskTexture.Sample(LinearSampler, float2(UVX, UVY));
-
 	vector vDistortion = g_DistortionTexture.Sample(LinearSampler, In.vTexUV);
 	float2 fWeight;
-	fWeight.x = cos(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * vMask.r * g_fDistortionStrength;
-	fWeight.y = sin(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * vMask.r * g_fDistortionStrength;
+	fWeight.x = cos(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * g_fDistortionStrength;
+	fWeight.y = sin(vDistortion.r * g_fTimeAcc * g_fDistortionSpeed) * g_fDistortionStrength;
 
+	vector vMask = g_MaskTexture.Sample(LinearSampler, float2(UVX + fWeight.x, UVY + fWeight.y));
 	vector vRamp;
 
 	if (g_vGradientOffset.x <= vMask.r && g_vGradientTilling.x >= vMask.r)
@@ -763,10 +762,8 @@ PS_OUT  PS_MASKRAMPDISTORTION(PS_IN In)
 	else if (g_vGradientOffset.x > vMask.r)
 		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientOffset.x, 0.f));
 
-	
-	Out.vDiffuse = g_MaskTexture.Sample(LinearSampler, In.vTexUV + fWeight) * vRamp ;
-
-	Out.vDiffuse.a = Out.vDiffuse.r * g_fAlpha;
+	Out.vDiffuse = vRamp;
+	Out.vDiffuse.a = Out.vDiffuse.a * g_fAlpha;
 
 	if (Out.vDiffuse.a < 0.1f)
 		discard;
