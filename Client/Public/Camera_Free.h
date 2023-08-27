@@ -50,7 +50,7 @@ public:
 	_bool       Get_Is_Battle() { return m_Is_Battle; }
 	_bool       Get_Is_Cut_In() { return m_Is_Cut_In; }
 	_bool       Get_Lock_On_Is_Boss() { return  m_Lock_On_Is_Boss; }
-
+	_bool       Get_Lock_On_UI_Render() { return   m_Lock_On_UI_Render; }
 
 private:
 	void FreeCamera(_double dTimeDelta);
@@ -88,6 +88,7 @@ private:
 	_int            m_Hekireki_Dir = { 1 };
 
 	_bool           m_Lock_On_Is_Boss = { false };
+	_bool           m_Lock_On_UI_Render = { true };
 private:
 	_float4			m_fCameraLook = {};
 	_float			m_fDistance = {};

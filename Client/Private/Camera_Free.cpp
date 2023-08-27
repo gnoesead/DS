@@ -102,7 +102,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-// Test(LockOn)
+//  LockOn
 	if (m_Is_Battle == true) {
 		if (pGameInstance->Get_DIKeyDown(DIK_R)) {
 			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(!m_bIs_Battle_LockFree);
@@ -111,7 +111,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_bIs_Battle_LockFree = CCameraManager::GetInstance()->Get_Is_Battle_LockFree();
 	}
 
-// Test(DistUpdate)
+//  Dist_Update
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
 
 		if (pGameInstance->Get_DIKeyDown(DIK_I)) {
@@ -179,6 +179,15 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 			m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 			m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+
+			if (pMon->Get_Status().fHp <= 0) {
+				m_Lock_On_UI_Render = false;
+			}
+			else {
+				m_Lock_On_UI_Render = true;
+			}
+
 		}
 
 		m_Lock_On_Is_Boss = false;
@@ -246,10 +255,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 3) {
-			//m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 		else {
-			//m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
 		}
 
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
@@ -275,7 +284,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	// 사이드캠 이펙트 작업 시 주석 해제
 	// Side_Cam_Key
 	if (pGameInstance->Get_DIKeyDown(DIK_GRAVE)) {
-		m_bIs_Combo_On = !m_bIs_Combo_On;
+		//m_bIs_Combo_On = !m_bIs_Combo_On;
 	}
 	//=============================================
 
@@ -751,9 +760,9 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 	_vector vDest = {};
 
 	if (Desc.bTarget_Is_Player)
-		vDest = m_vBattleTargetPos + m_vOffSet + Desc.vOffSet + (m_vDist * Desc.fDistance);
-	else
 		vDest = m_vTargetPos + m_vOffSet + Desc.vOffSet + (m_vDist * Desc.fDistance);
+	else
+		vDest = m_vBattleTargetPos + m_vOffSet + Desc.vOffSet + (m_vDist * Desc.fDistance);
 	
 	if (Desc.bIs_Lerp == true) {
 		_float t = (_float)dTimeDelta * m_fDamping;
