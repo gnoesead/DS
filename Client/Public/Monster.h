@@ -36,6 +36,7 @@ protected: // Calculate
 	void  Calculate_To_Player();
 
 	_bool Check_Distance(_float fDistance);
+	_bool Check_Distance_FixY(_float fDistance);
 	_vector Calculate_PlayerPos();
 	_float Calculate_Distance();
 	_vector Calculate_Dir();
