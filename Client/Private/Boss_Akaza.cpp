@@ -3198,8 +3198,9 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 	Safe_Release(pGameInstance);
 	// OutlineThickness
 
-	//m_fOutlineThickness = 0.6f;
-	//m_fOutlineFaceThickness = 0.f;
+	m_fOutlineThickness = 0.8f;
+	m_fOutlineFaceThickness = 0.f;
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;
 

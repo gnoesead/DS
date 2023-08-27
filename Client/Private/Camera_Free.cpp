@@ -815,11 +815,14 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_2);
 
 	// 아카자 각성
-	CutInCamDesc Akaza_Awake_1 = { false,false, 10.f, 0.f, 1.2f, 2.f , false , {0.f, -0.3f ,0.f} };
-	CutInCamDesc Akaza_Awake_2 = { false,false, 0.f, 5.f, 1.f, 3.f , true , {0.f, -0.6f ,0.f} };
+	CutInCamDesc Akaza_Awake_1 = { false,false, 0.f, 0.f, 1.2f, 1.7f , false , {0.f, -0.3f ,0.f} };
+	CutInCamDesc Akaza_Awake_2 = { false,false, 5.f, 0.f, 0.8f, 0.3f , true , {0.f, -0.3f ,0.f} };
+	CutInCamDesc Akaza_Awake_3 = { false,false, 5.f, 5.f, 1.f, 2.5f , true , {0.f, -0.6f ,0.f} };
 
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_1);
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_2);
+	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_3);
+
 
 
 }
