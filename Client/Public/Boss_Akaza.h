@@ -306,12 +306,8 @@ private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	
 private:
-	_uint	m_iRandomDirNum = { 0 };
-	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iPunchCount = { 0 };
-	_uint	m_iIdleCnt = { 0 };
-	_uint	m_iTriggerCnt = { 0 };
-	_uint	m_iSmallHit_Index = { 0 };
+	
 
 private:
 	PHASE   m_eCurPhase = PHASE_1;

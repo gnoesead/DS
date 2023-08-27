@@ -9,6 +9,7 @@ BEGIN(Engine)
 
 #ifdef _DEBUG
 class CRenderer;
+class CNavigation;
 #endif // _DEBUG
 END
 
@@ -83,7 +84,7 @@ private:
 private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
-
+	CNavigation* m_pNavigationCom = { nullptr };
 	list<CGameObject*>	m_AtkObj;
 
 private:

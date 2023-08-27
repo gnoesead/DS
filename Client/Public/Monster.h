@@ -36,6 +36,7 @@ protected: // Calculate
 	void  Calculate_To_Player();
 
 	_bool Check_Distance(_float fDistance);
+	_bool Check_Distance_FixY(_float fDistance);
 	_vector Calculate_PlayerPos();
 	_float Calculate_Distance();
 	_vector Calculate_Dir();
@@ -74,7 +75,7 @@ protected: //애니메이션 제어용 함수들
 protected: // 애니메이션 제어용 변수들
 	_bool	m_isDeath_Motion = { false };
 	_bool	m_bAir_Motion = { false };
-
+		
 	_bool	m_bAttack = { false };
 	_bool	m_bStart = { false };
 	_bool	m_bHeal = { false };
@@ -94,6 +95,10 @@ protected:
 
 protected:
 	_uint	m_iSmallHit_Index = { 0 };
+	_uint	m_iIdleCnt = { 0 };
+	_uint	m_iTriggerCnt = { 0 };
+	_uint	m_iRandomPatternNum = { 0 };
+	_uint	m_iRandomDirNum = { 0 };
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };

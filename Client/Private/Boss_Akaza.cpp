@@ -53,6 +53,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	m_eCurPhase = BEGIN;
 	m_eCurNavi = NAVI_ACAZA;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
+	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START,1.0);
 	return S_OK;
 
 }
@@ -60,7 +61,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 void CBoss_Akaza::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
-
+	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START, 1.2);
 	if (true == m_isDead)
 		return;
 
@@ -222,6 +223,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_INSERT))
 		{
 			m_StatusDesc.fHp += 20.f;
+			m_isDead = true;
 		}
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
@@ -468,7 +470,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 			}
 			if (1 == m_iEvent_Index) // 0.3
-			{				
+			{	
+				
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
@@ -1606,6 +1609,7 @@ void CBoss_Akaza::Trigger_DashKick()
 	m_eCurstate = STATE_DASHKICK;
 	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 	m_pModelCom->Set_AnimisFinish(ANIM_COMBO_DOWN);
+	m_bMove = false;
 }
 
 void CBoss_Akaza::Trigger_JumpAirGun()
@@ -1708,6 +1712,7 @@ void CBoss_Akaza::Trigger_Awake_ComboPunch()
 	m_eCurstate = STATE_AWAKE_COMBOPUNCH;
 	m_bDashOn = false;
 	m_bStep_B = false;
+	m_bMove = false;
 	m_iPunchCount = 0;
 	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
@@ -2153,9 +2158,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 		if (0.10 < m_dJumpStompTime && m_dJumpStompTime <= 0.10 + dTimeDelta)
 			JumpStop(3.0);
 		if (m_dJumpStompTime <= 3.0)
-		{
-			/*m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			m_pTransformCom->Go_Straight(dTimeDelta * 1.50, m_pNavigationCom[m_eCurNavi]);*/
+		{			
+			if (Check_Distance_FixY(5.f) == false)
 			m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
 		}
 
@@ -2216,17 +2220,22 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
 		m_eCurAnimIndex = ANIM_COMBO_DOWN;
-
-	//if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_DOWN, 0.80, dTimeDelta))
-
+		
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
 		Trigger_Interact();
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_DASH, 10.f);
-	Go_Straight_Deceleration(dTimeDelta, ANIM_COMBO_DOWN, 1.f, 0.2f);
+
+	if (Check_Distance(2.f) == true)
+		m_bMove = true;
+
+	if (Check_Distance(2.f) == false && m_bMove == false)
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.f, 0.01, 1.0);
+
+	
+	
 
 
 }
@@ -2636,7 +2645,12 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.0f, 0.1, 1.00);
+	if (Check_Distance(2.f) == true)
+		m_bMove = true;
+
+	if (Check_Distance(2.f) == false && m_bMove == false)
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.f, 0.01, 1.0);
+	
 
 	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_STEP_BEHIND, 3.0f, 0.2, 0.70);
 
