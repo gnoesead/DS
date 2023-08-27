@@ -11,8 +11,8 @@ private:
 	virtual ~CLight_Manager() = default;
 
 public:
-	const LIGHTDESC*	Get_Light(_uint iIndex) const;
-	void				Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue);
+	LIGHTDESC*	Get_Light(_uint iIndex);
+	void		Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue);
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc , class CTransform* pOwnerTransform = nullptr);
 	HRESULT	Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);

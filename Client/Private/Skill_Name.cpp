@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Fade_Manager.h"
 #include "Battle_UI_Manager.h"
+#include "PlayerManager.h"
+
 
 
 CSkill_Name::CSkill_Name(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -67,7 +69,7 @@ HRESULT CSkill_Name::Initialize(void * pArg)
 	m_szTanjiro_Skill.push_back(L"제2형 물방아");
 	m_szTanjiro_Skill.push_back(L"제6형 비틀린 소용돌이");
 
-	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬");
+	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬 극의");
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -155,6 +157,11 @@ HRESULT CSkill_Name::Render()
 				if (m_Player_Index == 0) {
 
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTanjiro_Skill[m_Player_Skill_Index].c_str(),
+						_float2((_float)m_fX - 151.f, (_float)m_fY - 22.f), _float2(0.45f, 0.45f), XMVectorSet(255.f / 255.f, 255.f / 255.f, 255.f / 255.f, 1.f))))
+						return E_FAIL;
+				}
+				else if(m_Player_Index == 1){
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szZenitsu_Skill[m_Player_Skill_Index].c_str(),
 						_float2((_float)m_fX - 151.f, (_float)m_fY - 22.f), _float2(0.45f, 0.45f), XMVectorSet(255.f / 255.f, 255.f / 255.f, 255.f / 255.f, 1.f))))
 						return E_FAIL;
 				}

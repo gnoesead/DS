@@ -198,8 +198,15 @@ _vector CMonster::Calculate_Dir_Cross()
 
 _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
 {
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	
+	_float3 vCheck = Convert::ToFloat3(vRight);
+	if (0.f == vCheck.x && 0.f == vCheck.y && 0.f == vCheck.z)
+		return vDir;
+
 	_float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
-	_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
+	_matrix RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(RandomAngle));
+	
 	_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 	RandomAngle = Random::Generate_Float(fMinX, fMaxX);

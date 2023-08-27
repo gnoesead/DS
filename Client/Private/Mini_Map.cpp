@@ -9,6 +9,7 @@
 #include "Mini_Map_Manager.h"
 #include "Fade_Manager.h"
 #include "Camera_Manager.h"
+#include "PlayerManager.h"
 
 
 
@@ -595,8 +596,10 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 
 	// Player
-	CTransform* m_pTargetTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
+	CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
+	
 	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {

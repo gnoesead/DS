@@ -9,6 +9,8 @@
 #include "PlayerManager.h"
 
 #include "Camera_Manager.h"
+#include "Battle_UI_Manager.h"
+
 
 CPlayer_Zenitsu::CPlayer_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -475,6 +477,10 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
@@ -569,8 +575,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_Moveset.m_State_Battle_Run)
 	{
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_fMove_Speed = 2.0f;
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == 62)
@@ -594,8 +600,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 {
 	if (m_Moveset.m_Down_Battle_JumpMove)
 	{
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_Moveset.m_Down_Battle_JumpMove = false;
 		m_isJump_Move = true;
 
@@ -1053,8 +1059,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos())
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
 
@@ -1163,8 +1169,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Step = false;
 
-		//m_pTransformCom->Set_Look(m_vLook);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
+		m_pTransformCom->Set_Look(m_vLook);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
 		if (m_isForward)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_F);
 		else if (m_isBack)
@@ -1580,7 +1586,6 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 20 == iCurAnimIndex || 21 == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
-		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 
 		if (21 == iCurAnimIndex)

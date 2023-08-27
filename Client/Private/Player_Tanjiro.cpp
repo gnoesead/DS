@@ -13,6 +13,8 @@
 #include "PlayerManager.h"
 
 #include "Camera_Manager.h"
+#include "OptionManager.h"
+
 
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -710,8 +712,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_Moveset.m_State_Battle_Run)
 	{
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
 		m_fMove_Speed = 2.0f;
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
@@ -736,8 +738,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 {
 	if (m_Moveset.m_Down_Battle_JumpMove)
 	{
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_Moveset.m_Down_Battle_JumpMove = false;
 		m_isJump_Move = true;
 
@@ -1108,8 +1110,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos())
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
+		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
 
@@ -1219,8 +1221,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Step = false;
 
-		//m_pTransformCom->Set_Look(m_vLook);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
+		m_pTransformCom->Set_Look(m_vLook);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_vLook), 0.8f);
 		if(m_isForward)
 			m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_F);
 		else if(m_isBack)
@@ -1829,7 +1831,6 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	else if (ANIM_ATK_CHARGE == iCurAnimIndex || 32 == iCurAnimIndex || 33 == iCurAnimIndex )
 	{
 		m_Moveset.m_isRestrict_Move = true;
-		m_Moveset.m_isRestrict_Jump = true;
 		m_Moveset.m_isRestrict_Charge = true;
 	}
 	//스킬공격 시 무빙제한
