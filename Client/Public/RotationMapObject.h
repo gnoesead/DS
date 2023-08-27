@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "MapObject.h"
+#include "GameInstance.h"
 
 BEGIN(Client)
 

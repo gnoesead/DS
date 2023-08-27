@@ -50,6 +50,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	m_eCurPhase = BEGIN;
 	m_eCurNavi = NAVI_ACAZA;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
+	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START,1.0);
 	return S_OK;
 
 }
@@ -57,7 +58,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 void CBoss_Akaza::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
-
+	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START, 1.2);
 	if (true == m_isDead)
 		return;
 
@@ -219,6 +220,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_INSERT))
 		{
 			m_StatusDesc.fHp += 20.f;
+			m_isDead = true;
 		}
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
@@ -448,7 +450,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 			}
 			if (1 == m_iEvent_Index) // 0.3
-			{				
+			{	
+				
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
