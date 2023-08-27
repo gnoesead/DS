@@ -298,7 +298,6 @@ HRESULT COption::Initialize(void* pArg)
 	m_szSoundMenu.push_back(L"음성 음량");
 
 
-
 	m_szButtonMenu.push_back(L"결정");
 	m_szButtonMenu.push_back(L"돌아가기");
 
