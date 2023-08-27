@@ -22,12 +22,17 @@ public:
 		STATE_INTERACT, STATE_BEGIN, STATE_NEXTPHASE, STATE_HEAL, STATE_AWAKE,
 		STATE_GUARD, STATE_LINKERCMB,
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
-		STATE_STOMPKICK, STATE_ATKPUNCH, 
+		STATE_STOMPKICK, STATE_ATKPUNCH, STATE_ATKSKCMB,
+		STATE_ATK_TURN_IDLE, STATE_ATK_TURN_RF, STATE_ATK_TURN_LF, STATE_ATK_TURN_RB, STATE_ATK_TURN_LB,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
 		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
 
+	};
+	enum TURN
+	{
+		TURN_IDLE, TURN_PLUSX, TURN_MINUSX, TURN_PLUSZ, TURN_MINUSZ, TURN_END
 	};
 
 #pragma region AnimIndex
@@ -159,6 +164,12 @@ public:
 	void Trigger_StompKick();
 	void Trigger_AtkPunch();
 	void Trigger_LinkerCmb();
+	void Trigger_AtkSkCmb();
+	void Trigger_AtkTurnIdle();
+	void Trigger_AtkTurnRF();
+	void Trigger_AtkTurnLF();
+	void Trigger_AtkTurnRB();
+	void Trigger_AtkTurnLB();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -193,6 +204,12 @@ private: //패턴 함수들
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
+	void Update_AtkSkCmb(_double dTimeDelta);
+	void Update_AtkTurnIdle(_double dTimeDelta);
+	void Update_AtkTurnRF(_double dTimeDelta);
+	void Update_AtkTurnLF(_double dTimeDelta);
+	void Update_AtkTurnRB(_double dTimeDelta);
+	void Update_AtkTurnLB(_double dTimeDelta);
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
@@ -212,28 +229,51 @@ private:
 	enum BLADETYPE { BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
 	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
 	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed);
+	
+private:
+	void Turn_Trigger(_double dTimeDelta);
+	void TurnRoom();
 
 
 #pragma endregion
 private: // _bool
 	_bool	m_bAtkStepType = { false };
+	_bool	m_bAnimFinish2 = { false };
+	_bool	m_bAnimFinish3 = { false };
+
+	_bool	m_bTurnRoom = { false };
+	_bool	m_bTurn = { false };
+	_bool	m_bPreTurn = { false };
+	_bool	m_bTurnRF = { false };
+	_bool	m_bTurnLF = { false };
+	_bool	m_bTurnRB = { false };
+	_bool	m_bTurnLB = { false };
 
 private: // time
-
-	_double m_dAwakeTime = { 0.0 };
-	_double m_dTriggerTime = { 0.0 };
-
+	_double m_dTimeAcc = { 0.0 };
+	_double m_dTurnTime = { 0.0 };
+	_double m_dReturnTime = { 0.0 };
+	
 private:
-	_uint	m_iRandomDirNum = { 0 };
+	_float	m_fPreAngleX = { 0.f };
+	_float	m_fPreAngleZ = { 0.f };
+	_float  m_fCurAngleX = { 0.f };
+	_float  m_fCurANgleZ = { 0.f };
+	_float	m_fDist = { 0.f };
+private:
+	_vector m_vPos = { 0.f, 0.f, 0.f, 0.f };
+	_vector m_vDir = { 0.f, 0.f, 0.f, 0.f };
+	_vector	m_vRotDir = { 0.f, 0.f, 0.f, 0.f };
+private:
+	
 	_uint	m_iLinkerNum = { 0 };
-	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };
-	_uint	m_iIdleCnt = { 0 };
-	_uint	m_iTriggerCnt = { 0 };
+
 	
 private:
 	PHASE   m_eCurPhase = PHASE_1;
 	STATE	m_eCurstate = STATE_INTERACT;
+	TURN	m_eCurTurn = TURN_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDLE;
 	ANIM	m_ePreAnimIndex = ANIM_IDLE;
 
