@@ -11,6 +11,8 @@
 
 #include "EffectPlayer.h"
 #include "OptionManager.h"
+#include "Camera_Manager.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -843,6 +845,8 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
+			CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+			CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
 			m_Moveset.m_iAwaken = 2;
 			m_StatusDesc.iAwaken = 2;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
