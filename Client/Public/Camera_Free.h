@@ -12,7 +12,7 @@ class CCamera_Free final : public CCamera
 {
 
 public:
-	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, RENGOKU_FINISH, AKAZA_FINISH, TANJIRO_AWAKE , ZENITSU_AWAKE , RENGOKU_AWAKE, AKAZA_AWAKE , END_FINISH };
+	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, RENGOKU_FINISH, AKAZA_FINISH, TANJIRO_AWAKE , ZENITSU_AWAKE , RENGOKU_AWAKE, AKAZA_AWAKE , TANJIRO_EXECUTION , END_FINISH };
 
 	typedef struct Cut_In_Camera_Desc
 	{
@@ -107,6 +107,7 @@ private:
 	_vector         m_vBattleTargetPos_Offer = {};
 	_vector         m_vBattleCenter = {};
 	_vector         m_vCutInTargetPos = {};
+	_vector         m_vCutInBattleTargetPos = {};
 
 
 	_float          m_vCameraAngle = { 10.f };
@@ -139,6 +140,8 @@ private:
 	_float m_Cut_In_Finish_TimeAcc = { 0.f };
 
 	_bool  m_Cut_In_IsDone = { true };
+
+	_vector m_Cut_In_Dist = {};
 
 public:
 	static CCamera_Free* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -22,7 +22,7 @@ public:
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
 		_float   m_Up_Mount = { 0.f };
-		_uint    m_Monster_Index = { 0 };
+		CGameObject*    m_pMonster = { nullptr };
 	}UIDESC;
 
 

@@ -14,6 +14,7 @@
 
 #include "Camera_Manager.h"
 #include "OptionManager.h"
+#include "Camera_Free.h"
 
 
 
@@ -957,6 +958,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 	//서지 히트시
 	if (m_isHit_SurgeCutScene)
 	{
+
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_EXECUTION);
+
+
 		m_isHit_SurgeCutScene = false;
 
 		m_pModelCom->Set_Animation(28);
