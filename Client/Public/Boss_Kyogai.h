@@ -248,6 +248,7 @@ private: // _bool
 	_bool	m_bTurnLF = { false };
 	_bool	m_bTurnRB = { false };
 	_bool	m_bTurnLB = { false };
+		
 
 private: // time
 	_double m_dTimeAcc = { 0.0 };
