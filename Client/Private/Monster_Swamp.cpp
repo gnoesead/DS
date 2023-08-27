@@ -247,7 +247,20 @@ void CMonster_Swamp::Trigger()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
-			m_eCurState = STATE_HIT;
+			if (m_isNonHitState)
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			}
+			else
+			{
+				m_eCurState = STATE_HIT;
+			}
 		}
 	}
 	else
@@ -375,7 +388,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 			}
 		}
 	}
-	//스왐프 서브 상태
+	//서브 상태
 	else
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
@@ -413,12 +426,16 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
+
+		m_isNonHitState = true;
 	}
 	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0 )
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
+
+		m_isNonHitState = true;
 	}
 	else if (iCurAnim == ANIM_ATK_SWAMP_SWIM || iCurAnim == 16 || iCurAnim == 17)
 	{
@@ -429,6 +446,8 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		{
 			m_fLand_Y += 0.02f;
 		}
+
+		m_isNonHitState = true;
 	}
 	else if (iCurAnim == ANIM_SWAMP_IDLE)
 	{
@@ -439,11 +458,23 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		{
 			m_fLand_Y += 0.02f;
 		}
+
+		m_isNonHitState = true;
+	}
+	//넌히트만을 위한 곳
+	else if (iCurAnim == ANIM_ATK_SWAMP_SCREW || iCurAnim == 7)
+	{
+		m_isNavi_Y_Off = false;
+		m_isSwamping = false;
+
+		m_isNonHitState = true;
 	}
 	else
 	{
 		m_isNavi_Y_Off = false;
 		m_isSwamping = false;
+
+		m_isNonHitState = false;
 	}
 }
 
@@ -605,8 +636,6 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 		}
 	}
-
-	
 
 }
 
@@ -882,11 +911,13 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 1.0;
 		pPlayer->Set_Hit_Success(true); // 플레이어가 맞았따
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 			Jumping(0.3f, 0.030f);
 			m_dDelay_ComboChain = 6.0;
 		}
@@ -894,26 +925,32 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			if (m_iSmallHit_Index == 0)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
 				m_iSmallHit_Index++;
 			}
 			else if (m_iSmallHit_Index == 1)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
 				m_iSmallHit_Index++;
 			}
 			else if (m_iSmallHit_Index == 2)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 3)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
 				m_iSmallHit_Index = 0;
 			}
 		}
 	}
 	if (m_isConnectHitting == false)
 	{
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.1f, 0.04f, AtkDir);
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.1f, 0.04f, AtkDir);
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.1f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_F, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_L, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_R, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_U, 0.8f, 0.04f, AtkDir);
 	}
 	
 	
@@ -926,21 +963,22 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 			m_dDelay_ComboChain = 4.0;
 		}
 		else
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
+			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			m_dDelay_ComboChain = 1.7;
 		}
 	}
-	//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.6f, 0.05f, AtkDir);
 #pragma endregion
 
 
@@ -951,25 +989,27 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 6.0;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.85f, 0.03f);
+		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
+		Jumping(1.75f, 0.03f);
 	}
 
 	//어퍼시 수직상승 여부
 	if (m_isStrictUpper == false)
 	{
-		//Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_DMG_FALL, 0.5f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 104, 0.5f, 0.01f, AtkDir);
 	}
 
 	if (m_isBounding)
 	{
-		//Ground_Animation_Play(111, ANIM_DMG_BOUND);
+		Ground_Animation_Play(104, ANIM_DMG_BOUND);
 	}
 	else
-		Ground_Animation_Play(111, 112);
+		Ground_Animation_Play(104, ANIM_DMG_FALL_END);
 #pragma endregion
 
 
@@ -981,32 +1021,34 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 15.0;
 		m_isBounding = true;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 			Set_FallingStatus(3.0f, 0.0f);
 		}
 		else
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
+			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
 		}
 	}
-	//Ground_Animation_Play(96, 97);
-	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 91, 0.3f, AtkDir);
 
-	/*if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_BOUND && m_isBounding)
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_BOUND && m_isBounding)
 	{
 		if (m_isFirst_Anim)
 		{
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.0f, 0.05f);
+			Jumping(1.85f, 0.05f);
 		}
-	}*/
+	}
 #pragma endregion
 
 
@@ -1017,14 +1059,16 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 2.5;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		Jumping(1.2f, 0.05f);
+		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+		Jumping(1.1f, 0.05f);
 	}
-	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
-	Ground_Animation_Play(92, 93);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 86, 2.5f, AtkDir);
+	Ground_Animation_Play(86, 87);
 #pragma endregion
 
 
@@ -1036,11 +1080,13 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		pPlayer->Set_Hit_SurgeCutScene(true);
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		m_dDelay_ComboChain = 5.5;
 
-		//m_pModelCom->Set_Animation(ANIM_DEATH);
+		m_pModelCom->Set_Animation(ANIM_DEATH);
 	}
 #pragma endregion
 
@@ -1053,18 +1099,20 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 5.5;
 		pPlayer->Set_Hit_Success(true);
 		pPlayer->Set_Hit_Success_Hekireki(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_FALL);
+		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 		m_isStrictUpper = true;
 
 		if (m_isJumpOn == false)
 		{
-			Jumping(1.85f, 0.03f);
+			Jumping(1.75f, 0.03f);
 		}
 		else
 		{
-			Jumping(0.85f, 0.030f);
+			Jumping(0.75f, 0.030f);
 		}
 	}
 #pragma endregion
@@ -1072,9 +1120,42 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 
 #pragma region Death_Motion
-	if (m_StatusDesc.fHp <= 0.0f)
+	if (m_isSwamp_Deathing)
 	{
-		//m_pModelCom->Set_Animation(ANIM_DEATH);
+		m_isSwamp_Deathing = false;
+
+		if (CSwampManager::GetInstance()->Get_Hp_Phase() == 0)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= CSwampManager::GetInstance()->Get_Hp_Max() * 0.666f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+				CSwampManager::GetInstance()->Set_Hp_Phase_Up();
+
+				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
+				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+			}
+		}
+		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 1)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= CSwampManager::GetInstance()->Get_Hp_Max() * 0.333f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+				CSwampManager::GetInstance()->Set_Hp_Phase_Up();
+
+				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
+				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+			}
+		}
+		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= 0.0f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+			}
+		}
 	}
 #pragma endregion
 
@@ -1091,28 +1172,16 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_eCurState = STATE_IDLE;
 		
 	}
-	/*
-	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim ==  112) //112는 fall마지막 모션
+	
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END) 
 	{
 		m_dDelay_ComboChain = 0.0;
-
-		m_isFirst_Move_0 = true;
-		m_isFirst_Move_1 = true;
-		m_isCoolTime_On = true;
 
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_DOWN;
-
-		_int i = rand() % 3;
-		if (i == 0)
-			m_iAttackIndex = 0;
-		else if (i == 1)
-			m_iAttackIndex = 2;
-		else if (i == 2)
-			m_iAttackIndex = 5;
 	}
-	*/
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -1120,7 +1189,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	/*
+	
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
 	{
 		m_isDeath_Motion = true;
@@ -1137,14 +1206,14 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 			if(iCurAnim == ANIM_DEATH_IDLE)
 				m_pModelCom->Set_Animation(ANIM_DEATH_GETUP);
 			else
-				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
+				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
 		}
 	}
 
 	if (iCurAnim == ANIM_IDLE)
 	{
 		m_eCurState = STATE_IDLE;
-	}*/
+	}
 
 }
 

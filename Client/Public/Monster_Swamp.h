@@ -17,7 +17,7 @@ public:
 	enum PATTERN { 
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
-		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7,
+		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7, PATTERN_SWAP = 8,
 		PATTERN_END 
 	};
 
@@ -79,7 +79,7 @@ public:
 		ANIM_DOWN_GETUP_MOVE = 96, // 96~97
 
 		ANIM_DMG_FALL = 103, //103~104end
-		ANIM_DMG_FALL_END = 104,
+		ANIM_DMG_FALL_END = 105,
 
 		ANIM_DMG_GUARDBRK = 107,
 		ANIM_DMG_BINGLEAIR = 108,
@@ -182,6 +182,9 @@ private:
 	
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
+
+	//Death
+	_bool		m_isSwamp_Deathing = { false };
 	
 private:
 	/* 임시 코드 */
