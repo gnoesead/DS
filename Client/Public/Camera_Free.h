@@ -24,7 +24,6 @@ public:
 		_float fLifeTime = {};
 		_bool bIs_Lerp = {};
 		_vector vOffSet = {};
-		
 
 	}CutInCamDesc;
 
