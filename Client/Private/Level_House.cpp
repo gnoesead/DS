@@ -1554,58 +1554,7 @@ HRESULT CLevel_House::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-// Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
 
-	for (int i = 0; i < 3; i++) {
-
-		ZeroMemory(&UIDesc3, sizeof UIDesc3);
-		UIDesc3.m_Is_Reverse = false;
-		UIDesc3.m_Type = 0;
-		UIDesc3.m_Monster_Index = i;
-		UIDesc3.m_Up_Mount = 1.7f;
-
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-			Safe_Release(pGameInstance);
-			return E_FAIL;
-		}
-
-		ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-		UIDesc3.m_Is_Reverse = false;
-		UIDesc3.m_Type = 1;
-		UIDesc3.m_Monster_Index = i;
-		UIDesc3.m_Up_Mount = 1.7f;
-
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-			Safe_Release(pGameInstance);
-			return E_FAIL;
-		}
-
-		ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-		UIDesc3.m_Is_Reverse = false;
-		UIDesc3.m_Type = 2;
-		UIDesc3.m_Monster_Index = i;
-		UIDesc3.m_Up_Mount = 1.7f;
-
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-			Safe_Release(pGameInstance);
-			return E_FAIL;
-		}
-
-		ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-		UIDesc3.m_Is_Reverse = false;
-		UIDesc3.m_Type = 3;
-		UIDesc3.m_Monster_Index = i;
-		UIDesc3.m_Up_Mount = 1.7f;
-
-		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-			Safe_Release(pGameInstance);
-			return E_FAIL;
-		}
-	}
 
 #pragma endregion
 

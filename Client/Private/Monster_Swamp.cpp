@@ -13,6 +13,7 @@
 #include "PlayerManager.h"
 
 #include "SwampManager.h"
+#include "SwampShot.h"
 
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -307,110 +308,162 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
-
-	//메인 상태
-	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
 
+		Animation_Control_Walk(dTimeDelta);
+
 		if (m_isSwamping == false)
 		{
-			Animation_Control_Walk(dTimeDelta);
-
-			
-			if (m_dCooltime_Atk_Pattern > 4.0f)
-			{
-				m_dCooltime_Atk_Pattern = 0.0;
-
-				m_eCurState = STATE_ATTACK;
-
-				//실제 패턴
-				if (m_iIndex_Normal == 0)
-				{
-					m_eCurPattern = PATTERN_JUMPSTOMP;
-					m_iIndex_Normal++;
-				}
-				else if (m_iIndex_Normal == 1)
-				{
-					m_eCurPattern = PATTERN_COMBO;
-					m_iIndex_Normal++;
-				}
-				else if (m_iIndex_Normal == 2 )
-				{
-					m_eCurPattern = PATTERN_SWAMP_IN;
-					m_iIndex_Normal++;
-				}
-				else if (m_iIndex_Normal == 3 )
-				{
-					m_eCurPattern = PATTERN_SWAMP_IN;
-					m_iIndex_Normal = 0;
-				}
-			}
-		}
-		else
-		{
-			//실제 패턴
-			if (m_iIndex_Swamping == 0)
-			{
-				if (m_dCooltime_Atk_Pattern > 0.85f)
-				{
-					m_dCooltime_Atk_Pattern = 0.0;
-
-					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_SHORYU;
-
-					m_iIndex_Swamping++;
-				}
-			}
-			else if (m_iIndex_Swamping == 1)
+			if (m_iIndex_Rage == 0)
 			{
 				if (m_dCooltime_Atk_Pattern > 0.1f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
+					m_iIndex_Rage++;
 
 					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_TELESHORYU;
-
-					m_iIndex_Swamping++;
+					m_eCurPattern = PATTERN_RAGE_PIOHYO;
 				}
 			}
-			else if (m_iIndex_Swamping == 2)
+			else if (m_iIndex_Rage == 1)
 			{
-				if (m_dCooltime_Atk_Pattern > 0.3f)
+				if (m_dCooltime_Atk_Pattern > 4.0f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
 
 					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_BIGSWAMP;
-
-					m_iIndex_Swamping = 0;
+					m_eCurPattern = PATTERN_SWAMP_IN;
 				}
-			}
-		}
-	}
-	//서브 상태
-	else
-	{
-		m_dCooltime_Atk_Pattern += dTimeDelta;
-
-		if (m_isSwamping == false)
-		{
-			if (m_dCooltime_Atk_Pattern > 0.4f)
-			{
-				m_dCooltime_Atk_Pattern = 0.0;
-
-				m_eCurState = STATE_ATTACK;
-				m_eCurPattern = PATTERN_SWAMP_IN;
 			}
 		}
 		else
 		{
-			if (m_dCooltime_Atk_Pattern > 1.2f)
+			if (m_iIndex_Rage == 1)
 			{
-				m_dCooltime_Atk_Pattern = 0.0;
+				if (m_dCooltime_Atk_Pattern > 0.7f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+					m_iIndex_Rage++;
 
-				m_eCurState = STATE_ATTACK;
-				m_eCurPattern = PATTERN_SWAMP_SCREW;
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_RAGE_YABAI;
+				}
+			}
+		}
+
+	}
+	else
+	{
+		//메인 상태
+		if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+		{
+			m_dCooltime_Atk_Pattern += dTimeDelta;
+
+			if (m_isSwamping == false)
+			{
+				Animation_Control_Walk(dTimeDelta);
+
+				if (m_dCooltime_Atk_Pattern > 4.0f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+
+					//실제 패턴
+					if (m_iIndex_Normal == 0)
+					{
+						m_eCurPattern = PATTERN_JUMPSTOMP;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 1)
+					{
+						m_eCurPattern = PATTERN_SHOTSWAMP;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 2)
+					{
+						m_eCurPattern = PATTERN_COMBO;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 3)
+					{
+						m_eCurPattern = PATTERN_SWAMP_IN;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 4)
+					{
+						m_eCurPattern = PATTERN_SWAMP_IN;
+						m_iIndex_Normal = 0;
+					}
+				}
+			}
+			else
+			{
+				//실제 패턴
+				if (m_iIndex_Swamping == 0)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.85f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SHORYU;
+
+						m_iIndex_Swamping++;
+					}
+				}
+				else if (m_iIndex_Swamping == 1)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_TELESHORYU;
+
+						m_iIndex_Swamping++;
+					}
+				}
+				else if (m_iIndex_Swamping == 2)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.3f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_BIGSWAMP;
+
+						m_iIndex_Swamping = 0;
+					}
+				}
+			}
+		}
+		//서브 상태
+		else
+		{
+			m_dCooltime_Atk_Pattern += dTimeDelta;
+
+			if (m_isSwamping == false)
+			{
+				if (m_dCooltime_Atk_Pattern > 0.4f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_SWAMP_IN;
+				}
+			}
+			else
+			{
+				if (m_dCooltime_Atk_Pattern > 1.2f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_SWAMP_SCREW;
+				}
 			}
 		}
 	}
@@ -462,7 +515,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNonHitState = true;
 	}
 	//넌히트만을 위한 곳
-	else if (iCurAnim == ANIM_ATK_SWAMP_SCREW || iCurAnim == 7)
+	else if (iCurAnim == ANIM_ATK_SWAMP_SCREW || iCurAnim == 7 || iCurAnim == ANIM_ANGRY_CUTSCENE)
 	{
 		m_isNavi_Y_Off = false;
 		m_isSwamping = false;
@@ -505,6 +558,12 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		break;
 	case 7: //PATTERN_BIGSWAMP
 		Animation_Control_BigSwamp(dTimeDelta);
+		break;
+	case 8: //pioHyo 
+		Animation_Control_Piohyo(dTimeDelta);
+		break;
+	case 9: //yabai
+		Animation_Control_Yabai( dTimeDelta);
 		break;
 	default:
 		break;
@@ -601,6 +660,13 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 	if (iCurAnim == ANIM_ATK_SHOT)
 	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.2f);
+
+		if (m_isFirst_Atk_0)
+		{
+			m_isFirst_Atk_0 = false;
+
+			Swamp_Create(1, 1);
+		}
 	}
 }
 
@@ -777,6 +843,33 @@ void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
 
 	if(iCurAnim == ANIM_SWAMP_IDLE)
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 2.0f;
+}
+
+void CMonster_Swamp::Animation_Control_Piohyo(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ANGRY_CUTSCENE);
+	}
+}
+
+void CMonster_Swamp::Animation_Control_Yabai(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+	}
 }
 
 void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)
@@ -1215,6 +1308,43 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 		m_eCurState = STATE_IDLE;
 	}
 
+}
+
+void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	CSwampShot::SHOTDESC ShotDesc;
+
+	ShotDesc.iType = iType; // 0:밑장판, 1:늪공격, 2:큰장판, 3:
+
+	if (iNumSwamp == 1)
+	{	
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		Pos = Pos + Dir * 1.0f;
+
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
+	else
+	{
+		for (_int i = 0; i < iNumSwamp; i++)
+		{
+			ShotDesc.WorldInfo.vPosition = _float4(137.f, 0.f, 137.f, 1.f);
+			if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+			{
+				MSG_BOX("Failed to Add_GameObject : SwampShot");
+				return;
+			}
+		}
+	}
+	
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CMonster_Swamp::Add_Components()

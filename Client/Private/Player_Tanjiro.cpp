@@ -14,6 +14,7 @@
 
 #include "Camera_Manager.h"
 #include "OptionManager.h"
+#include "Camera_Free.h"
 
 
 
@@ -716,7 +717,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.5f);
 		m_fMove_Speed = 2.0f;
 
-		if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
+		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN || m_pModelCom->Get_iCurrentAnimIndex() == 88)
 		{
 			if (m_isCanNavi)
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
@@ -959,6 +960,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 	//서지 히트시
 	if (m_isHit_SurgeCutScene)
 	{
+
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_EXECUTION);
+
+
 		m_isHit_SurgeCutScene = false;
 
 		m_pModelCom->Set_Animation(28);

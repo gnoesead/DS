@@ -11,6 +11,7 @@
 
 #include "Player.h"
 #include "PlayerManager.h"
+#include "World_UI_Hp.h"
 
 CMonster_Zako::CMonster_Zako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -32,7 +33,7 @@ HRESULT CMonster_Zako::Initialize_Prototype()
 
 HRESULT CMonster_Zako::Initialize(void* pArg)
 {
-	
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -50,7 +51,64 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
-	
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	// Monster_Hp
+	CWorld_UI_Hp::UIDESC UIDesc3;
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 0;
+	UIDesc3.m_pMonster = this;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 1;
+	UIDesc3.m_pMonster = this;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 2;
+	UIDesc3.m_pMonster = this;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 3;
+	UIDesc3.m_pMonster = this;
+	UIDesc3.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+
+	Safe_Release(pGameInstance);
+
 
 	return S_OK;
 }

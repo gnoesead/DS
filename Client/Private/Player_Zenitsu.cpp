@@ -578,8 +578,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_fMove_Speed = 2.0f;
-
-		if (m_pModelCom->Get_iCurrentAnimIndex() == 62)
+		
+		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN )
 		{
 			if (m_isCanNavi)
 				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
