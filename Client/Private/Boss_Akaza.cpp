@@ -441,6 +441,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+		if (ANIM_NACHIM == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0.05
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Compass", m_pTransformCom);
+			}
+
+		}
 		if (ANIM_DASH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			dLifeTime = 0.3;

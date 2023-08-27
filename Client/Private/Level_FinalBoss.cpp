@@ -1501,6 +1501,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Push");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Compass.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Compass");
+		return E_FAIL;
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_WindRing.bin"))))
 	{
