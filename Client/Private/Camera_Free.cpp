@@ -823,6 +823,28 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_2);
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_3);
 
+	 
+	// Á¨ÀÌÃ÷ °¢¼º
+	CutInCamDesc Zenitsu_Awake_1 = { true,true, 0.f, 0.f, 1.3f, 0.7f , false , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_2 = { true,true, 0.f, 0.f, 1.f, 0.5f , true , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_3 = { true,true, 0.f, 0.f, 2.8f, 2.2f , true , {0.f, -0.8f ,0.f} };
+
+	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_1);
+	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_2);
+	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_3);
+
+
+	// Äì¿ì°¡ÀÌ °¢¼º
+	CutInCamDesc Kyogai_Awake_1 = { false,false, 0.f, 0.f, 1.5f, 0.6f , false , {0.f, 0.6f ,0.f} };
+	CutInCamDesc Kyogai_Awake_2 = { false,false, 0.f, 0.f, 3.f, 1.f , true , {0.f, 0.3f ,0.f} };
+	CutInCamDesc Kyogai_Awake_3 = { false,false, 0.f, 0.f, 6.f, 2.f , true , {0.f, 0.f ,0.f} };
+
+	m_Cut_In_Finish[KYOGAI_AWAKE].push_back(Kyogai_Awake_1);
+	m_Cut_In_Finish[KYOGAI_AWAKE].push_back(Kyogai_Awake_2);
+	m_Cut_In_Finish[KYOGAI_AWAKE].push_back(Kyogai_Awake_3);
+
+
+	
 
 
 }

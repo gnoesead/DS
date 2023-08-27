@@ -846,7 +846,11 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		else if (m_Moveset.m_iAwaken == 1)
 		{
 			CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
-			CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
+			else if(CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
+				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::ZENITSU_AWAKE);
+
 			m_Moveset.m_iAwaken = 2;
 			m_StatusDesc.iAwaken = 2;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;

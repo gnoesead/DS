@@ -9,6 +9,9 @@
 #include "AtkCollManager.h"
 #include "AlertCircle.h"
 #include "AlertRect.h"
+#include "Camera_Manager.h"
+#include "Camera_Free.h"
+
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -1301,6 +1304,10 @@ void CBoss_Kyogai::Trigger_Heal()
 
 void CBoss_Kyogai::Trigger_Awake()
 {
+
+	CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+	CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::KYOGAI_AWAKE);
+
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_eCurstate = STATE_AWAKE;
