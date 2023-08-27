@@ -665,7 +665,7 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 		{
 			m_isFirst_Atk_0 = false;
 
-			Swamp_Create(1, 1);
+			Swamp_Create(1, 1);// 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
 		}
 	}
 }
@@ -1322,7 +1322,7 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 	{	
 		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-		Pos = Pos + Dir * 1.0f;
+		Pos = Pos + Dir * 1.65f;
 
 		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
 		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
