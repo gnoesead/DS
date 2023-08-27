@@ -9,6 +9,8 @@
 #include "PlayerManager.h"
 
 #include "Camera_Manager.h"
+#include "Battle_UI_Manager.h"
+
 
 CPlayer_Zenitsu::CPlayer_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -475,6 +477,10 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}

@@ -343,8 +343,16 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
 	{
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
-			return;
+		if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
+				return;
+		}
+		else if (BLEND == m_eEffectDesc.eRenderGroupOption)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+				return;
+		}
 	}
 }
 

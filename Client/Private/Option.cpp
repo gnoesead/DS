@@ -103,7 +103,6 @@ HRESULT COption::Initialize(void* pArg)
 	// Bar_Back
 	if (m_UI_Desc.m_Type == 5) {
 
-		
 		m_Origin_X = 460.f;
 		m_Origin_Y = 28.f;
 		m_Size_Param = 0.7f;
@@ -113,7 +112,6 @@ HRESULT COption::Initialize(void* pArg)
 	// Bar
 	if (m_UI_Desc.m_Type == 6) {
 
-		
 		m_Origin_X = 450.f;
 		m_Origin_Y = 28.f;
 		m_Size_Param = 0.7f;
@@ -466,6 +464,11 @@ void COption::Tick(_double dTimeDelta)
 				m_Alpha = 0.f;
 				m_Is_Font_Render = false;
 			}
+			else {
+				CameraOption();
+			}
+
+		
 		}
 		if (COptionManager::GetInstance()->Get_Select_Num() == 1) {
 
@@ -477,6 +480,9 @@ void COption::Tick(_double dTimeDelta)
 				m_Alpha = 0.f;
 				m_Is_Font_Render = false;
 			}
+			else {
+				GraphicOption();
+			}
 		}
 		if (COptionManager::GetInstance()->Get_Select_Num() == 2) {
 
@@ -484,7 +490,15 @@ void COption::Tick(_double dTimeDelta)
 				m_Alpha = 0.f;
 				m_Is_Font_Render = false;
 			}
+			else {
+				SoundOption();
+			}
 		}
+
+		
+
+
+
 	}
 
 
@@ -659,8 +673,64 @@ void COption::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-
+	Get_Mouse_Pos();
+	
 	m_Is_Reset = COptionManager::GetInstance()->Get_Is_Reset();
+
+	if (m_UI_Desc.m_Type == 3 || m_UI_Desc.m_Type == 4) {
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 0) {
+
+			m_szCameraMenu_1_Int = COptionManager::GetInstance()->Get_Camera_Option(0); 
+			m_szCameraMenu_2_Num = COptionManager::GetInstance()->Get_Camera_Option(1);
+		}
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 1) {
+
+			m_szGraphicMenu_1_Int = COptionManager::GetInstance()->Get_Graphic_Option(0);
+			m_szGraphicMenu_2_Num = COptionManager::GetInstance()->Get_Graphic_Option(1);
+			m_szGraphicMenu_3_Num = COptionManager::GetInstance()->Get_Graphic_Option(2);
+
+		}
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 2) {
+			for (int i = 0; i < 4; i++) {
+				m_szSoundMenu_Int[i] = COptionManager::GetInstance()->Get_Sound_Option(i);
+			}
+			
+		}
+
+	}
+
+	if (m_UI_Desc.m_Type == 6) {
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 0) {
+			
+			m_UV_Cull = 1.f - (_float)(COptionManager::GetInstance()->Get_Camera_Option(0) / 20.f);
+			
+		}
+		
+		if (COptionManager::GetInstance()->Get_Select_Num() == 1) {
+			
+			m_UV_Cull = 1.f - (_float)(COptionManager::GetInstance()->Get_Graphic_Option(0) / 20.f);
+			
+		}
+
+		if (COptionManager::GetInstance()->Get_Select_Num() == 2) {
+			
+			if (m_UI_Desc.m_Line_Num < 4) {
+				m_UV_Cull = 1.f - (_float)(COptionManager::GetInstance()->Get_Sound_Option(m_UI_Desc.m_Line_Num) / 20.f);
+			}
+		}
+
+
+		if (m_UV_Cull > 1.f) {
+			m_UV_Cull = 1.f;
+		}
+
+	}
+
+	
 
 
 	if (m_Alpha == 0.f) {
@@ -698,7 +768,14 @@ HRESULT COption::Render()
 			m_pShaderCom->Begin(17);
 		}
 		else {
-			m_pShaderCom->Begin(1);
+
+			if (m_UI_Desc.m_Type == 6) {
+				m_pShaderCom->Begin(5);
+			}
+			else {
+				m_pShaderCom->Begin(1);
+			}
+
 		}
 
 
@@ -919,6 +996,30 @@ void COption::Set_UI()
 	XMStoreFloat4x4(&m_WorldMatrix, TransformMatrix);
 }
 
+void COption::Get_Mouse_Pos()
+{
+	_uint				iNumViewports = { 1 };
+	D3D11_VIEWPORT		Viewport;
+	m_pContext->RSGetViewports(&iNumViewports, &Viewport);
+
+	POINT ptCursor;
+	GetCursorPos(&ptCursor);
+	ScreenToClient(g_hWnd, &ptCursor);
+
+	m_MouseX = ptCursor.x;
+	m_MouseY = ptCursor.y;
+
+	m_ScreenWidth = g_iWinSizeX;
+	m_ScreenHeight = g_iWinSizeY;
+
+	if (m_MouseX < 0) { m_MouseX = 0; }
+	if (m_MouseY < 0) { m_MouseY = 0; }
+
+	if (m_MouseX > m_ScreenWidth) { m_MouseX = m_ScreenWidth; }
+	if (m_MouseY > m_ScreenHeight) { m_MouseY = m_ScreenHeight; }
+}
+
+
 void COption::Cloud_Control(_double dTimeDelta)
 {
 	// Cloud_LT
@@ -1051,6 +1152,171 @@ void COption::Cloud_Control(_double dTimeDelta)
 	}
 }
 
+void COption::CameraOption()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+
+	if (Pt_InUI() && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::DIM_LB)) {
+
+			if (m_UI_Desc.m_Line_Num == 0) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szCameraMenu_1_Int--;
+				else
+					m_szCameraMenu_1_Int++;
+
+				if (m_szCameraMenu_1_Int < 0) {
+					m_szCameraMenu_1_Int = 0;
+				}
+
+				if (m_szCameraMenu_1_Int > 20) {
+					m_szCameraMenu_1_Int = 20;
+				}
+
+				COptionManager::GetInstance()->Set_Camera_Option(m_UI_Desc.m_Line_Num, m_szCameraMenu_1_Int);
+
+			}
+
+			if (m_UI_Desc.m_Line_Num == 1) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szCameraMenu_2_Num--;
+				else
+					m_szCameraMenu_2_Num++;
+
+				if (m_szCameraMenu_2_Num < 0) {
+					m_szCameraMenu_2_Num = 0;
+				}
+
+				if (m_szCameraMenu_2_Num > 2) {
+					m_szCameraMenu_2_Num = 2;
+				}
+
+				COptionManager::GetInstance()->Set_Camera_Option(m_UI_Desc.m_Line_Num, m_szCameraMenu_2_Num);
+
+			}
+
+
+		}
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void COption::GraphicOption()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+
+	if (Pt_InUI() && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::DIM_LB)) {
+
+			if (m_UI_Desc.m_Line_Num == 0) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szGraphicMenu_1_Int--;
+				else
+					m_szGraphicMenu_1_Int++;
+
+				if (m_szGraphicMenu_1_Int < 0) {
+					m_szGraphicMenu_1_Int = 0;
+				}
+
+				if (m_szGraphicMenu_1_Int > 20) {
+					m_szGraphicMenu_1_Int = 20;
+				}
+
+				COptionManager::GetInstance()->Set_Graphic_Option(m_UI_Desc.m_Line_Num, m_szGraphicMenu_1_Int);
+
+			}
+
+			if (m_UI_Desc.m_Line_Num == 1) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szGraphicMenu_2_Num--;
+				else
+					m_szGraphicMenu_2_Num++;
+
+				if (m_szGraphicMenu_2_Num < 0) {
+					m_szGraphicMenu_2_Num = 0;
+				}
+
+				if (m_szGraphicMenu_2_Num > 1) {
+					m_szGraphicMenu_2_Num = 1;
+				}
+
+				COptionManager::GetInstance()->Set_Graphic_Option(m_UI_Desc.m_Line_Num, m_szGraphicMenu_2_Num);
+
+			}
+
+			if (m_UI_Desc.m_Line_Num == 2) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szGraphicMenu_3_Num--;
+				else
+					m_szGraphicMenu_3_Num++;
+
+				if (m_szGraphicMenu_3_Num < 0) {
+					m_szGraphicMenu_3_Num = 0;
+				}
+
+				if (m_szGraphicMenu_3_Num > 2) {
+					m_szGraphicMenu_3_Num = 2;
+				}
+
+				COptionManager::GetInstance()->Set_Graphic_Option(m_UI_Desc.m_Line_Num, m_szGraphicMenu_3_Num);
+
+			}
+
+
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+}
+
+void COption::SoundOption()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (Pt_InUI() && COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+
+		if (pGameInstance->Get_DIMouseDown(CInput_Device::DIM_LB)) {
+
+
+			if (m_UI_Desc.m_Line_Num < 4) {
+
+				if (m_UI_Desc.m_Arrow_Type == 0)
+					m_szSoundMenu_Int[m_UI_Desc.m_Line_Num]--;
+				else
+					m_szSoundMenu_Int[m_UI_Desc.m_Line_Num]++;
+
+				if (m_szSoundMenu_Int[m_UI_Desc.m_Line_Num] < 0) {
+					m_szSoundMenu_Int[m_UI_Desc.m_Line_Num] = 0;
+				}
+
+				if (m_szSoundMenu_Int[m_UI_Desc.m_Line_Num] > 20) {
+					m_szSoundMenu_Int[m_UI_Desc.m_Line_Num] = 20;
+				}
+
+				COptionManager::GetInstance()->Set_Sound_Option(m_UI_Desc.m_Line_Num, m_szSoundMenu_Int[m_UI_Desc.m_Line_Num]);
+
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
+}
+
 HRESULT COption::Add_Components()
 {
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"),
@@ -1107,6 +1373,9 @@ HRESULT COption::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_Alpha, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_UV_Cull", &m_UV_Cull, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Time_X", &m_Time_X, sizeof(_float))))

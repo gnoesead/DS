@@ -2,6 +2,8 @@
 #include "FMOD/fmod.hpp"
 #include "FMOD/fmod_errors.h"
 #include "SoundMgr.h"
+#include "OptionManager.h"
+
 
 CSoundMgr* CSoundMgr::m_pInstance = nullptr;
 
@@ -24,6 +26,11 @@ void CSoundMgr::Initialize()
 	FMOD_System_Init(m_pSystem, 32, FMOD_INIT_NORMAL, NULL);
 
 	LoadSoundFile();
+
+
+
+
+
 }
 void CSoundMgr::Release()
 {
@@ -89,9 +96,6 @@ int CSoundMgr::Pause(CHANNELID eID)
 	return 0;
 }
 
-
-
-
 void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID, _float _vol)
 {
 	map<TCHAR*, FMOD_SOUND*>::iterator iter;
@@ -144,6 +148,14 @@ void CSoundMgr::StopAll()
 {
 	for (int i = 0; i < MAXCHANNEL; ++i)
 		FMOD_Channel_Stop(m_pChannelArr[i]);
+}
+
+void CSoundMgr::Tick()
+{
+
+	m_BGMvolume = SOUND_DEFAULT * (COptionManager::GetInstance()->Get_Sound_Option(0) / 10.f) * (COptionManager::GetInstance()->Get_Sound_Option(1) / 10.f);
+
+	m_volume = SOUND_DEFAULT * (COptionManager::GetInstance()->Get_Sound_Option(0) / 10.f) * (COptionManager::GetInstance()->Get_Sound_Option(2) / 10.f);
 }
 
 void CSoundMgr::LoadSoundFile()

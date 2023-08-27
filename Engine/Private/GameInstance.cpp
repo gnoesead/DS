@@ -382,7 +382,7 @@ CComponent* CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar* pPro
 	return m_pComponenet_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
-const LIGHTDESC* CGameInstance::Get_Light(_uint iIndex) const
+LIGHTDESC* CGameInstance::Get_Light(_uint iIndex)
 {
 	if (nullptr == m_pLight_Manager)
 		return nullptr;

@@ -201,7 +201,7 @@ void CFIcon::LateTick(_double TimeDelta)
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
 
-	m_pTransformCom->LookAt(m_vTargetPos);
+	m_pTransformCom->LookAt_FixY(m_vTargetPos);
 
 
 	// (락온 UI)
@@ -217,8 +217,11 @@ void CFIcon::LateTick(_double TimeDelta)
 
 		if (m_UI_Desc.m_Type == 7 || m_UI_Desc.m_Type == 8) {
 			m_Is_Render = pCamera->Get_Is_Battle();
-		}
 
+			if (pCamera->Get_Lock_On_Is_Boss() == true) {
+				m_Is_Render = false;
+			}
+		}
 
 	}
 	// Npc
@@ -230,8 +233,23 @@ void CFIcon::LateTick(_double TimeDelta)
 	}
 	// 월드 트리거
 	else {
-		m_pTransformCom->Scaling({ m_Origin_X * 1.5f, m_Origin_Y * 1.5f , 1.f });
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_UI_Desc.Pos);
+
+		m_fY += (_float)TimeDelta * m_Y_Dir * 0.8f;
+
+		if (m_fY > 0.1f) {
+			m_fY = 0.1f;
+			m_Y_Dir *= -1.f;
+		}
+
+		if (m_fY < -0.2f) {
+			m_fY = -0.2f;
+			m_Y_Dir *= -1.f;
+		}
+
+		_vector Pos = { XMVectorGetX(m_UI_Desc.Pos),XMVectorGetY(m_UI_Desc.Pos) + m_fY ,XMVectorGetZ(m_UI_Desc.Pos) , 1.f };
+
+		m_pTransformCom->Scaling({ m_Origin_X * 1.8f, m_Origin_Y * 1.8f , 1.f });
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Pos);
 	}
 	
 	
