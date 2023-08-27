@@ -167,7 +167,7 @@ void CPause::LateTick(_double TimeDelta)
 			}
 		}
 	}
-
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
 
 		if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {

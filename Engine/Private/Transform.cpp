@@ -158,6 +158,16 @@ void CTransform::Go_Up(_double dTimeDelta)
 	Set_State(STATE_POSITION, vPosition);
 }
 
+void CTransform::Set_Up(_float fDist, _fvector  vDir)
+{
+	_vector	vPosition = Get_State(STATE_POSITION);
+
+	vPosition += vDir * fDist;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
+
+
 void CTransform::Go_Down(_double dTimeDelta)
 {
 	_vector vPosition = Get_State(STATE_POSITION);
