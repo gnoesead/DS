@@ -12,9 +12,14 @@ BEGIN(Client)
 class CMonster_Swamp final : public CMonster
 {
 public:
-	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END};
+	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END };
+
 	enum PATTERN { 
-		PATTERN_END };
+		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
+		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
+		PATTERN_SHOTSWAMP = 6, 
+		PATTERN_END 
+	};
 
 	enum ANIM {
 		ANIM_ANGRY_CUTSCENE = 0, ANIM_BURST = 1,
@@ -26,21 +31,22 @@ public:
 		ANIM_ATK_CROSS = 10,
 		ANIM_ATK_COMBO = 11, //11~14, screw8
 		ANIM_ATK_SWAMP_SWIM = 15, // 15~17
-		ANIM_ATK_PULLOUT = 18, 
+		ANIM_ATK_SHOT = 18, 
 		ANIM_ATK_JUMP_TO_SWAMP = 19, //19,21
-		ANIM_ATK_SHORYU_TO_SWAMP_0 = 22,
+		ANIM_ATK_SHORYU_TO_SWAMP_0 = 22, // to jump
 		ANIM_ATK_SHORYU_TO_IDLE = 23,
-		ANIM_ATK_SHORYU_TO_SWAMP_1 = 24,
+		ANIM_ATK_SHORYU_TO_SWAMP_1 = 24, // to swamp_in
 
 		ANIM_BATTLESTART = 25,
 		ANIM_SWAMP_IN = 28,
 		ANIM_GUARD = 29, // 29~30, 31guardend
 		ANIM_GUARD_HIT = 32,
+		ANIM_JUMP_IDLE = 33,
 		ANIM_JUMP_GROUND = 34,
 
 		ANIM_IDLE = 35,
 		ANIM_SWAMP_IDLE = 36,
-		ANIM_SWAMP_ANGRY = 37,
+		ANIM_SWAMP_IDLE_IN = 37,
 		
 		ANIM_RUN = 40, ANIM_RUN_END = 41,
 		ANIM_STEP_B = 42, ANIM_STEP_F = 43, ANIM_STEP_L = 46, ANIM_STEP_R = 50,
@@ -85,7 +91,6 @@ public:
 
 		ANIM_END = 117
 	};
-
 private:
 	CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster_Swamp(const CMonster_Swamp& rhs);
@@ -111,7 +116,20 @@ private: //애니메이션 제어용 함수
 
 
 	void	Animation_Control_Attack(_double dTimeDelta, _int AttackIndex);
+	void	Navigation_Y_Control(_double dTimeDelta);
+	//일반상태
+	void	Animation_Control_JumpStomp(_double dTimeDelta);
+	void	Animation_Control_Combo(_double dTimeDelta);
+	void	Animation_Control_ShotSwamp(_double dTimeDelta);
+	//반늪상태
+	void	Animation_Control_Shoryu(_double dTimeDelta);
+	void	Animation_Control_Teleport_Shoryu(_double dTimeDelta);
+	void	Animation_Control_SwampScrew(_double dTimeDelta);
+	void	Animation_Control_Swamp_In(_double dTimeDelta);
+	
 
+	void	Animation_Control_Walk(_double dTimeDelta);
+	_bool	Animation_Control_Dash(_double dTimeDelta, _float fDistance);
 
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
@@ -121,11 +139,42 @@ private:
 
 
 private: //애니메이션 제어용 변수들
-	STATE  m_eCurState = { STATE_IDLE };
-	PATTERN	   m_eCurPattern = { PATTERN_END };
+	STATE	m_eCurState = { STATE_IDLE };
+	PATTERN	m_eCurPattern = { PATTERN_END };
+	_int	m_iPhase = { 0 };
+	_bool	m_isSwamping = { false };
+
+	_int	m_iIndex_Normal = { 0 };
+	_int	m_iIndex_Swamping = { 0 };
 	
+
+	//walk
+	_bool	m_isFirst_Walk_0 = { true };
+	_bool	m_isFirst_Walk_1 = { true };
+	_double	m_dDelay_Walk = { 0.0 };
+	_bool	m_isWalk_Back = { false };
+	
+	_bool	m_isFirst_Walk_Side = { true };
+	_bool	m_isWalk_Left = { false };
 	
 private:
+	//attack pattern
+	_bool	m_isFrist_Atk_Pattern = { true };
+	_bool	m_isFirst_Atk_0 = { true };
+
+	_double m_dCooltime_Atk_Pattern = { -1.0 };
+	_bool	m_isAtkFinish = { false };
+	_float4 m_SaveDir = { 0.0f, 0.0f, 0.0f ,0.0f };
+	_double	m_dDelay_Atk = { 0.0 };
+
+	//dash
+	_bool	m_isFirst_Dash = { true };
+	_bool	m_isOff_Dash = { false };
+
+	//pattern swamp screw
+	_float4	 m_ScrewPos[10];
+	_int	m_iScrewPosIndex = { 0 };
+
 	//Hit_DMg_Combo
 	_double		m_dDelay_ComboChain = { 0.0 };
 	_int		m_iSmallHit_Index = { 0 };

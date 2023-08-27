@@ -143,6 +143,9 @@ protected:
 	void	Status_Work(_double dTimeDelta);
 	void	Use_Mp_Skill(); 
 	
+	//calculate
+	_float4	Calculate_Dir_From_Pos(_float4 Pos);
+	_float	Calculate_Distance_From_Pos(_float4 Pos);
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
