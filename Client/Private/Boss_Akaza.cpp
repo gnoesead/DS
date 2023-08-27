@@ -7,6 +7,9 @@
 #include "PlayerManager.h"
 
 #include "AtkCollManager.h"
+#include "Camera_Manager.h"
+#include "Camera_Free.h"
+
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -1045,6 +1048,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	// 개방하고 25초 유지 m_bAwake가 활성되면 25초 후에 다시 false
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.7f && m_bFirstAwake == false)
 	{
+		
 		m_bFirstAwake = true;
 		m_bAwake = true;
 		m_bNoDmg = true;
@@ -1059,6 +1063,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
 	{
+		
 		m_bSecondAwake = true;
 		m_bAwake = true;
 		m_bNoDmg = true;
@@ -2553,6 +2558,8 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE_START;
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
@@ -3190,14 +3197,17 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 
 	Safe_Release(pGameInstance);
 	// OutlineThickness
+
+	//m_fOutlineThickness = 0.6f;
+	//m_fOutlineFaceThickness = 0.f;
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
-		return E_FAIL;
+	//if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

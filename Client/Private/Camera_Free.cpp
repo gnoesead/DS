@@ -785,6 +785,7 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 
 void CCamera_Free::Ready_CutInFinish()
 {
+	// 탄지로 오의(테스트)
 	CutInCamDesc TanjiroCam1 = { true,true, 20.f, -20.f, 7.f, 0.8f };
 	CutInCamDesc TanjiroCam2 = { true,true, 20.f, -20.f, 2.f, 0.5f };
 	CutInCamDesc TanjiroCam3 = { true,true, 150.f, 20.f, 3.f, 0.8f };
@@ -799,19 +800,26 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam5);
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam6);
 
-
+	// 탄지로 각성
 	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, -10.f, 0.f, 0.8f, 2.f , false , {0.f,-0.3f,0.f} };
 	CutInCamDesc Tanjiro_Awake_Cam2 = { true,true, 10.f, 0.f, 1.9f, 1.5f , true, {0.f,-0.7f,0.f} };
 	
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam1);
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam2);
 
-
+	// 탄지로 처형
 	CutInCamDesc Tanjiro_Execution_1 = { true,true, 90.f, 0.f, 0.8f, 0.6f , false , {0.f, 0.6f ,0.f} };
 	CutInCamDesc Tanjiro_Execution_2 = { true,true, 30.f, -10.f, 3.f, 2.f , false , {0.f,-1.f,0.f} };
 
 	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_1);
 	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_2);
+
+	// 아카자 각성
+	CutInCamDesc Akaza_Awake_1 = { false,false, 10.f, 0.f, 1.2f, 2.f , false , {0.f, -0.3f ,0.f} };
+	CutInCamDesc Akaza_Awake_2 = { false,false, 0.f, 5.f, 1.f, 3.f , true , {0.f, -0.6f ,0.f} };
+
+	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_1);
+	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_2);
 
 
 }
