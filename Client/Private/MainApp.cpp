@@ -114,6 +114,8 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	COptionManager::GetInstance()->Tick(dTimeDelta);
 
+	//CSoundMgr::Get_Instance()->Tick();
+
 	// 전투 종료
 	if (m_pGameInstance->Get_DIKeyDown(DIK_9)) {
 

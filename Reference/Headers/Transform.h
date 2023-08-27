@@ -36,6 +36,7 @@ public: //Getter
 	void	Set_State(STATE eState, _fvector vState);
 	void	Set_Speed(_double dSpeed) { m_TransformDesc.dSpeedPerSec = dSpeed; }
 
+	
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;

@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "Character.h"
 #include "FIcon.h"
+#include "Interaction.h"
 
 BEGIN(Engine)
 
@@ -27,6 +28,11 @@ public:
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_ShadowDepth();
+
+
+protected:
+	void Create_Icon();
+	void Create_Interaction();
 
 
 protected: //애니메이션 제어용 함수들
@@ -63,6 +69,10 @@ protected:
 	
 private:
 	CFIcon* m_pIcon = { nullptr };
+	CInteraction* m_pInteraction = { nullptr };
+	CInteraction* m_pInteraction_Back = { nullptr };
+
+
 	_vector m_Player_Pos = {};
 
 protected:

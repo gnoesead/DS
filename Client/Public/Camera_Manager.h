@@ -62,6 +62,21 @@ public:
 	void Set_Is_Dist_Update(_bool Is , _float Time);
 	_bool Get_Is_Dist_Update();
 
+
+// CutIn
+public:
+	void Set_Is_Cut_In_On(_bool Is);
+	_bool Get_Is_Cut_In_On();
+
+
+	void Set_Cut_In_Finish_Type(_uint Type);
+	_uint Get_Cut_In_Finish_Type() {
+		return m_Cut_In_Finish_Type;
+	}
+
+	void Set_Cut_In_IsDone(_bool Is);
+	_bool Get_Cut_In_IsDone();
+
 private: // Shake
 	_bool m_Is_Shake_On = { false };
 	_bool m_Is_Shake_Done = { false };
@@ -92,6 +107,12 @@ private: // Battle
 	_bool m_bIs_Dist_Update = { true };
 	_float m_Dist_Update_TimeAcc = { 0.f };
 	_float m_Dist_Update_Time = { 0.f };
+
+private: // CutIn
+	_bool m_Is_Cut_In_On = { false };
+	_uint m_Cut_In_Finish_Type = { 0 };
+	_bool m_Cut_In_IsDone = { true };
+
 
 public:
 	virtual void Free() override;

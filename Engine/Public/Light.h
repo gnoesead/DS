@@ -10,7 +10,7 @@ private:
 	virtual ~CLight() = default;
 
 public:
-	const LIGHTDESC* Get_LightDesc() const {
+	LIGHTDESC* Get_LightDesc() {
 		return &m_LightDesc;
 	}
 	void Set_LightDesc(_uint iOption, _float4 vLightValue);

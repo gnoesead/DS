@@ -345,7 +345,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 #pragma region AWAKE_ComboPunch
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -15.f, 15.f);
+			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
 
 			if (0 <= m_iEvent_Index && 35 >= m_iEvent_Index)
 			{
@@ -358,16 +358,31 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				}
 				//이펙트용 콜라이더
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.fScale = 0.5f;
+				EffectWorldDesc.fScale = 0.75f;
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), dLifeTime,
-					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.3,
+					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
 			}
 		}
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = -1.f;
+				EffectWorldDesc.fScale = 1.5f;
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+
+				EffectWorldDesc.fScale = 1.f;
+				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.z = -2.f;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.dSpeed = 0.8;
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, m_fBigBlowDmg); // 빅블로우
@@ -415,6 +430,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.15
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Push", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(6.0f, 6.0f, 6.0f), _float3(0.f, 3.0f, 0.0f), dLongLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);

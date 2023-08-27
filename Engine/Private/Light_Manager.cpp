@@ -9,7 +9,7 @@ CLight_Manager::CLight_Manager()
 
 }
 
-const LIGHTDESC* CLight_Manager::Get_Light(_uint iIndex) const
+LIGHTDESC* CLight_Manager::Get_Light(_uint iIndex)
 {
 	if (m_Lights.size() <= iIndex)
 		return nullptr;
