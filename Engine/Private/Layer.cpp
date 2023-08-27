@@ -110,14 +110,20 @@ void CLayer::LateTick(_double dTimeDelta)
 	{
 		if (nullptr != pGameObject) {
 
-			if (CObject_Manager::GetInstance()->Get_Is_Time_Stop() == true) {
-				pGameObject->LateTick(0);
-			}
-			else if (CObject_Manager::GetInstance()->Get_Is_Time_Slow() == true) {
-				pGameObject->LateTick(dTimeDelta * CObject_Manager::GetInstance()->Get_Time_Slow_Amount());
+			if (pGameObject->Get_TimeFree()) {
+				pGameObject->Tick(dTimeDelta);
 			}
 			else {
-				pGameObject->LateTick(dTimeDelta);
+
+				if (CObject_Manager::GetInstance()->Get_Is_Time_Stop() == true) {
+					pGameObject->LateTick(0);
+				}
+				else if (CObject_Manager::GetInstance()->Get_Is_Time_Slow() == true) {
+					pGameObject->LateTick(dTimeDelta * CObject_Manager::GetInstance()->Get_Time_Slow_Amount());
+				}
+				else {
+					pGameObject->LateTick(dTimeDelta);
+				}
 			}
 		}
 		

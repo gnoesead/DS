@@ -42,8 +42,6 @@ HRESULT CCamera_Free::Initialize(void* pArg)
 	Ready_CutInFinish();
 
 
-
-
 	return S_OK;
 }
 
@@ -92,7 +90,7 @@ void CCamera_Free::Tick(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-
+	
 
 	__super::Tick(dTimeDelta);
 }
@@ -160,6 +158,10 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		//}
 		
 		m_fLandY = pPlayer->Get_LandY();
+
+
+		m_vCutInTargetPos = m_vTargetPos + 5.f * m_pTargetTransformCom->Get_State(CTransform::STATE_LOOK);
+
 
 	}
 
@@ -291,11 +293,20 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	//=============================================
 
 	// 플레이어와 몬스터에게 컷씬 상태인지 , 어떤 컷씬인지 받아옴
-	/*if (pGameInstance->Get_DIKeyDown(DIK_7)) {
-		m_Is_Cut_In = true;
-		m_Cut_In_IsDone = false;
-		m_Cut_In_Finish_Type = 0;
-	}*/
+	if (CCameraManager::GetInstance()->Get_Is_Cut_In_On() == true) {
+
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(false);
+
+		if (m_Is_Cut_In == false && m_Cut_In_IsDone == true) {
+			m_Is_Cut_In = true;
+			m_Cut_In_IsDone = false;
+			m_Cut_In_Finish_Type = CCameraManager::GetInstance()->Get_Cut_In_Finish_Type();
+		}
+
+	}
+
+	// 카메라 컷씬 중인지 아닌지
+	CCameraManager::GetInstance()->Set_Cut_In_IsDone(m_Cut_In_IsDone);
 
 
 	// 카메라 함수
@@ -306,6 +317,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 			m_vOffSet = { 0.f, 1.5f, 0.f, 0.f };
 			m_vLookOffSet = { 0.f, 1.7f, 0.f, 0.f };
+			m_fDamping = { 5.f };
 
 			CutInCamera(dTimeDelta);
 		}
@@ -688,7 +700,6 @@ void CCamera_Free::CutInCamera(_double dTimeDelta)
 		m_Cut_In_Finish_Cam_Num++;
 
 		if (m_Cut_In_Finish_Cam_Num > m_Cut_In_Finish[m_Cut_In_Finish_Type].size() - 1) {
-
 			m_Cut_In_Finish_Cam_Num = 0;
 			m_Cut_In_IsDone = true;
 			m_Is_Cut_In = false;
@@ -711,9 +722,9 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 	Safe_AddRef(pGameInstance);
 
 	if (Desc.bTarget_Is_Player)
-		m_vDist = m_vBattleTargetPos - m_vTargetPos;
+		m_vDist = m_vCutInTargetPos - m_vTargetPos;
 	else
-		m_vDist = m_vTargetPos - m_vBattleTargetPos;
+		m_vDist = m_vTargetPos - m_vCutInTargetPos;
 
 	m_vDist = XMVector3Normalize(m_vDist);
 
@@ -728,12 +739,19 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 
 	m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
-
+	
 	_vector vDest = m_vTargetPos + m_vOffSet + Desc.vOffSet + (m_vDist * Desc.fDistance);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
+	if (Desc.bIs_Lerp == true) {
+		_float t = (_float)dTimeDelta * m_fDamping;
 
-
+		_vector CamPos = XMVectorLerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), vDest, t);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
+	}
+	else {
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
+	}
+	
 	if (Desc.bLookTarget_Is_Player)
 		m_pTransformCom->LookAt(m_vTargetPos + m_vLookOffSet + Desc.vOffSet);
 	else
@@ -749,7 +767,7 @@ void CCamera_Free::Ready_CutInFinish()
 	CutInCamDesc TanjiroCam2 = { true,true, 20.f, -20.f, 2.f, 0.5f };
 	CutInCamDesc TanjiroCam3 = { true,true, 150.f, 20.f, 3.f, 0.8f };
 	CutInCamDesc TanjiroCam4 = { true,true, 20.f, 5.f, 8.f, 1.2f};
-	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.3f, {0.f,4.f,0.f} };
+	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.3f, false, {0.f,4.f,0.f} };
 	CutInCamDesc TanjiroCam6 = { true,false, 0.f, -10.f, 1.f, 1.5f };
 
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam1);
@@ -758,6 +776,16 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam4);
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam5);
 	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam6);
+
+
+	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, -10.f, 0.f, 0.8f, 2.f , false , {0.f,-0.3f,0.f} };
+	CutInCamDesc Tanjiro_Awake_Cam2 = { true,true, 10.f, 0.f, 1.7f, 1.5f , true, {0.f,-0.7f,0.f} };
+	CutInCamDesc Tanjiro_Awake_Cam3 = { true,true, 100.f, 0.f, 4.f, 0.2f , true};
+
+	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam1);
+	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam2);
+	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam3);
+
 }
 
 void CCamera_Free::Turn_Camera(_double TimeDelta)

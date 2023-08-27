@@ -192,6 +192,31 @@ _bool CCameraManager::Get_Is_Dist_Update()
 	return m_bIs_Dist_Update;
 }
 
+void CCameraManager::Set_Is_Cut_In_On(_bool Is)
+{
+	m_Is_Cut_In_On = Is;
+}
+
+_bool CCameraManager::Get_Is_Cut_In_On()
+{
+	return m_Is_Cut_In_On;
+}
+
+void CCameraManager::Set_Cut_In_Finish_Type(_uint Type)
+{
+	m_Cut_In_Finish_Type = Type;
+}
+
+void CCameraManager::Set_Cut_In_IsDone(_bool Is)
+{
+	m_Cut_In_IsDone = Is;
+}
+
+_bool CCameraManager::Get_Cut_In_IsDone()
+{
+	return m_Cut_In_IsDone;
+}
+
 void CCameraManager::Free()
 {
 	
