@@ -157,6 +157,46 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 			pEffect->Add_AlphaOverLifeTime(LifetimeValue);
 		}
 
+		for (int j = 0; j < pEffectDescOrigin->iNumRateOverTime; ++j)
+		{
+			CEffect::LIFETIMEVALUE LifetimeValue;
+			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+			LifetimeValue = *pEffectOrigin->Get_RateOverTime(j);
+
+			pEffect->Add_RateOverLifetime(LifetimeValue);
+		}
+
+		for (int j = 0; j < pEffectDescOrigin->iNumSpeedOverLifeTimes; ++j)
+		{
+			CEffect::LIFETIMEVALUE LifetimeValue;
+			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+			LifetimeValue = *pEffectOrigin->Get_SpeedOverLifeTime(j);
+
+			pEffect->Add_SpeedOverLifetime(LifetimeValue);
+		}
+
+		for (int j = 0; j < pEffectDescOrigin->iNumGravityModiferOverLifetimes; ++j)
+		{
+			CEffect::LIFETIMEVALUE LifetimeValue;
+			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+			LifetimeValue = *pEffectOrigin->Get_GravityOverLifeTime(j);
+
+			pEffect->Add_GravityModiferOverLifetime(LifetimeValue);
+		}
+
+		for (int j = 0; j < pEffectDescOrigin->iNumFrameOverTime; ++j)
+		{
+			CEffect::LIFETIMEVALUE LifetimeValue;
+			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+			LifetimeValue = *pEffectOrigin->Get_FrameOverTime(j);
+
+			pEffect->Add_FrameOverLifetime(LifetimeValue);
+		}
+
 		float fOrder = pEffect->Get_Order();
 		pEffect->Set_Order(fOrder);
 
