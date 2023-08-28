@@ -119,6 +119,38 @@ HRESULT CMission::Initialize(void * pArg)
 		m_UI_Layer = 2;
 	}
 
+	// Main_Effect
+	if (m_UI_Desc.m_Type == 5) {
+
+		m_fX = 363;
+		m_fY = 137;
+		m_Origin_PosX = 363;
+		m_Origin_PosY = 137;
+		m_Start_PosX = 333;
+		m_Start_PosY = 137;
+
+		m_Origin_X = 64;
+		m_Origin_Y = 64;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
+	// Sub_Effect
+	if (m_UI_Desc.m_Type == 6) {
+
+		m_fX = 363;
+		m_fY = 137;
+		m_Origin_PosX = 363;
+		m_Origin_PosY = 137;
+		m_Start_PosX = 333;
+		m_Start_PosY = 137;
+
+		m_Origin_X = 64;
+		m_Origin_Y = 64;
+		m_Size_Param = 0.666678f;
+		m_UI_Layer = 2;
+	}
+
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
 
@@ -126,34 +158,27 @@ HRESULT CMission::Initialize(void * pArg)
 
 	// 메인
 	m_szMain.push_back(L"혈귀가 남긴 냄새를 수색해라");
-	m_szMain.push_back(L"메인임무2");
-	m_szMain.push_back(L"메인임무3");
-
+	m_szMain.push_back(L"혈귀가 숨은 방을 찾아라");
+	
 	// 메인 서브
 	m_szMain_Sub.push_back(L"혈귀가 남긴 냄새");
-	m_szMain_Sub.push_back(L"달성상황2");
-	m_szMain_Sub.push_back(L"달성상황3");
+	m_szMain_Sub.push_back(L"방안에 있는 수상한 종이");
+	
 
 	// 메인 서브 달성률
-	m_szMain_Sub_Num_Total.push_back(L"/4");
-	m_Main_Sub_Num_Total.push_back(4);
 	m_szMain_Sub_Num_Total.push_back(L"/3");
 	m_Main_Sub_Num_Total.push_back(3);
-	m_szMain_Sub_Num_Total.push_back(L"/5");
-	m_Main_Sub_Num_Total.push_back(5);
-
+	m_szMain_Sub_Num_Total.push_back(L"/3");
+	m_Main_Sub_Num_Total.push_back(3);
+	
 	// 서브
-	m_szSub.push_back(L"걱정하고 있는 마을 사람들");
-	m_szSub.push_back(L"하고 있는 마을 사람들");
-	m_szSub.push_back(L"마을 사람들");
+	m_szSub.push_back(L"북서쪽 마을의 정보 수집");
+	
 
 	// 서브 달성률
-	m_szSub_Num_Total.push_back(L"/2");
-	m_Sub_Num_Total.push_back(2);
-	m_szSub_Num_Total.push_back(L"/4");
-	m_Sub_Num_Total.push_back(4);
-	m_szSub_Num_Total.push_back(L"/3");
-	m_Sub_Num_Total.push_back(3);
+	m_szSub_Num_Total.push_back(L"/5");
+	m_Sub_Num_Total.push_back(5);
+	
 	
 
 	return S_OK;
@@ -254,6 +279,14 @@ void CMission::LateTick(_double TimeDelta)
 	m_Main_Type = CMissionManager::GetInstance()->Get_Main_Mission_Type();
 	m_Sub_Type = CMissionManager::GetInstance()->Get_Sub_Mission_Type();
 
+
+
+	m_Main_Sub_Num = CMissionManager::GetInstance()->Get_Main_Sub_Num();
+	m_Sub_Num = CMissionManager::GetInstance()->Get_Sub_Num();
+
+
+
+
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
@@ -310,13 +343,27 @@ HRESULT CMission::Render()
 			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub[m_Main_Type].c_str(), _float2((_float)m_fX  - 120.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
 				return E_FAIL;
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num_Total[m_Main_Type].c_str(), _float2((_float)m_fX + 23.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
-				return E_FAIL;
+			if (m_Main_Type == 0) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num_Total[m_Main_Type].c_str(), _float2((_float)m_fX + 23.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+					return E_FAIL;
+			}
+			else if (m_Main_Type == 1) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num_Total[m_Main_Type].c_str(), _float2((_float)m_fX + 80.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+					return E_FAIL;
+			}
 
+			
 			wsprintf(m_szMain_Sub_Num, TEXT("%d"), m_Main_Sub_Num);
 			
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num , _float2((_float)m_fX + 13.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
-				return E_FAIL;
+			if (m_Main_Type == 0) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num, _float2((_float)m_fX + 13.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+					return E_FAIL;
+			}
+			else if (m_Main_Type == 1) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_Sub_Num, _float2((_float)m_fX + 70.f, (_float)m_fY + 19.f), _float2(0.45f, 0.45f))))
+					return E_FAIL;
+			}
+			
 		}
 
 

@@ -94,23 +94,60 @@ HRESULT CDialog::Initialize(void * pArg)
 
 	Set_UI();
 
-	// 0
-	m_szText_1.push_back(L"방해되니까 비켜");
-	m_szText_1.push_back(L"말씀이 심하시네요");
-	m_szText_1.push_back(L"좀 비켜주실래요?");
-	m_szText_1.push_back(L"이게 맞아? 이게 맞냐고");
-	
-	// 1
-	m_szText_2.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szText_2.push_back(L"어멋 탄지로상 아리가또네");
-	
-	
+
 	m_szName[TANJIRO] = L"카마도 탄지로";
 	m_szName[GIRL] = L"소녀";
 	m_szName[MOTHER] = L"여자";
+
+
+// Main
+	// 0
+	m_szMain_1.push_back(L"방해되니까 비켜");
+	m_szMain_1.push_back(L"말씀이 심하시네요");
+	m_szMain_1.push_back(L"좀 비켜주실래요?");
 	
+	// 1
+	m_szMain_2.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szMain_2.push_back(L"아리가또");
+	
+	// 2
+	m_szMain_3.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szMain_3.push_back(L"아리가또");
+	
+// Sub
+	// 3
+	m_szSub_1.push_back(L"방해되니까 비켜");
+	m_szSub_1.push_back(L"말씀이 심하시네요");
+
+	// 4
+	m_szSub_2.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szSub_2.push_back(L"아리가또");
+
+	// 5
+	m_szSub_3.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szSub_3.push_back(L"아리가또");
+
+	// 6
+	m_szSub_4.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szSub_4.push_back(L"아리가또");
+
+	// 7
+	m_szSub_5.push_back(L"여긴 위험하니 집으로 들어가세요");
+	m_szSub_5.push_back(L"아리가또");
 
 
+// Talk
+	// 8
+	m_szTalk_1.push_back(L"방해되니까 비켜");
+	m_szTalk_1.push_back(L"말씀이 심하시네요");
+
+	// 9
+	m_szTalk_2.push_back(L"방해되니까 비켜");
+	m_szTalk_2.push_back(L"말씀이 심하시네요");
+
+	// 10
+	m_szTalk_3.push_back(L"방해되니까 비켜");
+	m_szTalk_3.push_back(L"말씀이 심하시네요");
 
 
 	return S_OK;
@@ -147,8 +184,9 @@ void CDialog::LateTick(_double TimeDelta)
 		m_Cur_Num++;
 		m_Name_Type *= -1;
 
+		// Main
 		if (m_Dialog_Type == 0) {
-			if (m_Cur_Num > m_szText_1.size() - 1) {
+			if (m_Cur_Num > m_szMain_1.size() - 1) {
 				m_Cur_Num = 0;
 				m_Is_Out = true;
 				m_Is_Font_Render = false;
@@ -156,7 +194,86 @@ void CDialog::LateTick(_double TimeDelta)
 			}
 		}
 		else if (m_Dialog_Type == 1) {
-			if (m_Cur_Num > m_szText_2.size() - 1) {
+			if (m_Cur_Num > m_szMain_2.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 2) {
+			if (m_Cur_Num > m_szMain_3.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		// Sub
+		else if (m_Dialog_Type == 3) {
+			if (m_Cur_Num > m_szSub_1.size() - 1) {
+				
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 4) {
+			if (m_Cur_Num > m_szSub_2.size() - 1) {
+				
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 5) {
+			if (m_Cur_Num > m_szSub_3.size() - 1) {
+				
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 6) {
+			if (m_Cur_Num > m_szSub_4.size() - 1) {
+				
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 7) {
+			if (m_Cur_Num > m_szSub_5.size() - 1) {
+				
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		// Talk
+		else if (m_Dialog_Type == 8) {
+			if (m_Cur_Num > m_szTalk_1.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 9) {
+			if (m_Cur_Num > m_szTalk_2.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 10) {
+			if (m_Cur_Num > m_szTalk_3.size() - 1) {
 				m_Cur_Num = 0;
 				m_Is_Out = true;
 				m_Is_Font_Render = false;
@@ -227,18 +344,64 @@ HRESULT CDialog::Render()
 		if (m_UI_Desc.m_Type == 0) {
 			if (m_Dialog_Type == 0) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szMain_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 1) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szText_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szMain_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
+			else if (m_Dialog_Type == 2) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szMain_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szMain_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 3) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 4) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 5) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 6) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_4[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_4[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 7) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_5[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_5[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 8) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szTalk_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 9) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szTalk_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 10) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szTalk_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+
 		}
 		else if (m_UI_Desc.m_Type == 1) {
 			if (m_Dialog_Type == 0) {
-				
+
 				if (m_Name_Type == 1) {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
@@ -247,7 +410,7 @@ HRESULT CDialog::Render()
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
-				
+
 			}
 			else if (m_Dialog_Type == 1) {
 
@@ -257,6 +420,114 @@ HRESULT CDialog::Render()
 				}
 				else {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[MOTHER].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 2) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 3) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 4) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 5) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 6) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 7) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 8) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 9) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type == 10) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 

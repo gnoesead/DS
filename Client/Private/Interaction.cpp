@@ -58,9 +58,9 @@ HRESULT CInteraction::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.25f;
-		m_Size_Param = 1.f;
+		m_Size_Param = 1.5f;
+		m_Origin_X = 0.5f * m_Size_Param;
+		m_Origin_Y = 0.25f * m_Size_Param;
 		m_UI_Layer = 7;
 		m_fZ = 0.01f;
 

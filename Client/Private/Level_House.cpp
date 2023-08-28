@@ -39,6 +39,8 @@
 #include "FIcon.h"
 #include "DialogManager.h"
 #include "OptionManager.h"
+#include "MissionManager.h"
+
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -127,6 +129,7 @@ HRESULT CLevel_House::Initialize()
 
 	CDialogManager::GetInstance()->Set_Dialog_Type(99);
 	
+	CMissionManager::GetInstance()->Set_Main_Mission_Type(1);
 
     return S_OK;
 }

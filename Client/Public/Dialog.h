@@ -53,9 +53,20 @@ public:
 private:
 	wstring					m_szName[NAME_END] = {};
 
-	vector<wstring>			m_szText_1 = {};
+	vector<wstring>			m_szMain_1 = {};
+	vector<wstring>			m_szMain_2 = {};
+	vector<wstring>			m_szMain_3 = {};
 
-	vector<wstring>			m_szText_2 = {};
+	vector<wstring>			m_szSub_1 = {};
+	vector<wstring>			m_szSub_2 = {};
+	vector<wstring>			m_szSub_3 = {};
+	vector<wstring>			m_szSub_4 = {};
+	vector<wstring>			m_szSub_5 = {};
+
+	vector<wstring>			m_szTalk_1 = {};
+	vector<wstring>			m_szTalk_2 = {};
+	vector<wstring>			m_szTalk_3 = {};
+
 
 	_uint                   m_Dialog_Type = { 99 };
 
