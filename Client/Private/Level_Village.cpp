@@ -1068,7 +1068,50 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+ // Interaction
+    CInteraction::UIDESC UIDesc5;
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 598.f, 4.5f, 311.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 11;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 607.f, 7.5f, 255.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 12;
+   
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 586.f, 4.5f, 351.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 13;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
    
 

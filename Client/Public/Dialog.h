@@ -67,6 +67,14 @@ private:
 	vector<wstring>			m_szTalk_2 = {};
 	vector<wstring>			m_szTalk_3 = {};
 
+	vector<wstring>			m_szVillageSmell_1 = {};
+	vector<wstring>			m_szVillageSmell_2 = {};
+	vector<wstring>			m_szVillageSmell_3 = {};
+
+	vector<wstring>			m_szHouseSmell_1 = {};
+	vector<wstring>			m_szHouseSmell_2 = {};
+	vector<wstring>			m_szHouseSmell_3 = {};
+
 
 	_uint                   m_Dialog_Type = { 99 };
 

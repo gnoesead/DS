@@ -150,6 +150,35 @@ HRESULT CDialog::Initialize(void * pArg)
 	m_szTalk_3.push_back(L"¸»¾¸ÀÌ ½ÉÇÏ½Ã³×¿ä");
 
 
+// Village Smell
+	// 11
+	m_szVillageSmell_1.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î1)");
+	m_szVillageSmell_1.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+	// 12
+	m_szVillageSmell_2.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î2)");
+	m_szVillageSmell_2.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+	// 13
+	m_szVillageSmell_3.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î3)");
+	m_szVillageSmell_3.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+
+// House Smell
+	// 14
+	m_szHouseSmell_1.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î1)");
+	m_szHouseSmell_1.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+	// 15
+	m_szHouseSmell_2.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î2)");
+	m_szHouseSmell_2.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+	// 16
+	m_szHouseSmell_3.push_back(L"(Ç÷±ÍÀÇ ³¿»õ°¡ ³²¾ÆÀÖ¾î3)");
+	m_szHouseSmell_3.push_back(L"(....¼­µÎ¸£ÀÚ)");
+
+
+
 	return S_OK;
 }
 
@@ -280,6 +309,56 @@ void CDialog::LateTick(_double TimeDelta)
 				m_Name_Type = 1;
 			}
 		}
+		// Village Smell
+		else if (m_Dialog_Type == 11) {
+			if (m_Cur_Num > m_szVillageSmell_1.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 12) {
+			if (m_Cur_Num > m_szVillageSmell_2.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 13) {
+			if (m_Cur_Num > m_szVillageSmell_3.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		// House Smell
+		else if (m_Dialog_Type == 14) {
+			if (m_Cur_Num > m_szHouseSmell_1.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 15) {
+			if (m_Cur_Num > m_szHouseSmell_2.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
+		else if (m_Dialog_Type == 16) {
+			if (m_Cur_Num > m_szHouseSmell_3.size() - 1) {
+				m_Cur_Num = 0;
+				m_Is_Out = true;
+				m_Is_Font_Render = false;
+				m_Name_Type = 1;
+			}
+		}
 
 	}
 
@@ -395,6 +474,36 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 10) {
 
 				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szTalk_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 11) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szVillageSmell_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 12) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szVillageSmell_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 13) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szVillageSmell_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 14) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szHouseSmell_1[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szHouseSmell_1[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 15) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szHouseSmell_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szHouseSmell_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+					return E_FAIL;
+			}
+			else if (m_Dialog_Type == 16) {
+
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szHouseSmell_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szHouseSmell_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 
@@ -528,6 +637,18 @@ HRESULT CDialog::Render()
 				}
 				else {
 					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+
+			}
+			else if (m_Dialog_Type >= 11 && m_Dialog_Type <= 16) {
+
+				if (m_Name_Type == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 

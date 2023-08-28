@@ -528,8 +528,31 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	ZeroMemory(&UIDesc6, sizeof UIDesc6);
 
 	UIDesc6.m_Type = 1;
-	UIDesc6.Pos = { 78.f, 0.f, 26.f , 1.f };
+	UIDesc6.Pos = { 31.f, 0.f, 32.f , 1.f };
 	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 81.f, 0.f, 56.f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 48.f, 0.f, 15.85f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
