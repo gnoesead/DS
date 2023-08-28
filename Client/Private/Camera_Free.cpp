@@ -102,14 +102,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-//  LockOn
-	if (m_Is_Battle == true) {
-		if (pGameInstance->Get_DIKeyDown(DIK_R)) {
-			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(!m_bIs_Battle_LockFree);
-		}
-
-		m_bIs_Battle_LockFree = CCameraManager::GetInstance()->Get_Is_Battle_LockFree();
-	}
 
 //  Dist_Update
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
@@ -208,6 +200,22 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 	else {
 		m_Is_Battle = false;
+
+
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			m_Is_Battle = true;
+			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
+		}
+
+	}
+
+//  LockOn
+	if (m_Is_Battle == true) {
+		if (pGameInstance->Get_DIKeyDown(DIK_R)) {
+			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(!m_bIs_Battle_LockFree);
+		}
+
+		m_bIs_Battle_LockFree = CCameraManager::GetInstance()->Get_Is_Battle_LockFree();
 	}
 
 // Lock_On_Change
@@ -239,14 +247,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
 
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
-
-// Lock_Free
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE || pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
-		m_bIs_LockFree = false;
-	}
-	else {
-		m_bIs_LockFree = true;
-	}
 
 
 // Combo_On
@@ -305,7 +305,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 // 카메라 컷씬 중인지 아닌지
 	CCameraManager::GetInstance()->Set_Cut_In_IsDone(m_Cut_In_IsDone);
 
-
 	// 카메라 함수
 	if (m_bCamChange == true)
 	{
@@ -318,6 +317,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 			CutInCamera(dTimeDelta);
 		}
+		// Focus
 		else if (m_Is_Focus_On == true) {
 
 			m_fDistance = { 6.f + m_Zoom};
@@ -332,23 +332,13 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			// adventure
 			if (m_Is_Battle != true) {
 
-				if (m_bIs_LockFree != true) {
-					m_fDistance = { 3.f + m_Zoom };
-					m_vOffSet = { 0.f, 1.f, 0.f, 0.f };
-					m_vLookOffSet = { 0.f, 0.2f, 0.f, 0.f };
-					m_fLookDamping = { 6.f };
-					m_fDamping = { 7.f };
-				}
-				else {
-					m_fDistance = { 6.f + m_Zoom };
-					m_vOffSet = { 0.f, 4.f, 0.f, 0.f };
-					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
-					m_fLookDamping = { 7.f };
-					m_fDamping = { 5.f };
-				}
+				m_fDistance = { 3.f + m_Zoom };
+				m_vOffSet = { 0.f, 1.f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.2f, 0.f, 0.f };
+				m_fLookDamping = { 6.f };
+				m_fDamping = { 7.f };
 
 				NewAdventureCamera(dTimeDelta);
-
 			}
 			// Battle
 			else if (m_Is_Battle == true) {
@@ -364,6 +354,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 					SideCamera(dTimeDelta);
 				}
+				// Origin
 				else {
 					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
@@ -379,10 +370,13 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		}
 
 	}
+	// FreeCam
 	else
 	{
 		FreeCamera(dTimeDelta);
 	}
+
+
 
 	XMStoreFloat4(&m_fCameraLook, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
 
@@ -775,9 +769,9 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 	}
 	
 	if (Desc.bLookTarget_Is_Player)
-		m_pTransformCom->LookAt(m_vTargetPos + m_vLookOffSet + Desc.vOffSet);
+		m_pTransformCom->LookAt(m_vTargetPos + m_vLookOffSet + Desc.vLookOffSet + Desc.vOffSet);
 	else
-		m_pTransformCom->LookAt(m_vBattleTargetPos + m_vLookOffSet + Desc.vOffSet);
+		m_pTransformCom->LookAt(m_vBattleTargetPos + m_vLookOffSet + Desc.vLookOffSet + Desc.vOffSet);
 
 
 	Safe_Release(pGameInstance);
@@ -785,34 +779,13 @@ void CCamera_Free::CutInFinish(_double dTimeDelta, const CutInCamDesc& Desc)
 
 void CCamera_Free::Ready_CutInFinish()
 {
-	// 탄지로 오의(테스트)
-	CutInCamDesc TanjiroCam1 = { true,true, 20.f, -20.f, 7.f, 0.8f };
-	CutInCamDesc TanjiroCam2 = { true,true, 20.f, -20.f, 2.f, 0.5f };
-	CutInCamDesc TanjiroCam3 = { true,true, 150.f, 20.f, 3.f, 0.8f };
-	CutInCamDesc TanjiroCam4 = { true,true, 20.f, 5.f, 8.f, 1.2f};
-	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.3f, false, {0.f,4.f,0.f} };
-	CutInCamDesc TanjiroCam6 = { true,false, 0.f, -10.f, 1.f, 1.5f };
-
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam1);
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam2);
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam3);
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam4);
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam5);
-	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam6);
-
+	
 	// 탄지로 각성
-	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, -10.f, 0.f, 0.8f, 2.f , false , {0.f,-0.3f,0.f} };
+	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, 3.f, 0.f, 0.67f, 2.f , false , {0.f, -0.2f,0.f} , {0.f, -0.8f,0.f} };
 	CutInCamDesc Tanjiro_Awake_Cam2 = { true,true, 10.f, 0.f, 1.9f, 1.5f , true, {0.f,-0.7f,0.f} };
 	
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam1);
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam2);
-
-	// 탄지로 처형
-	CutInCamDesc Tanjiro_Execution_1 = { true,true, 90.f, 0.f, 0.8f, 0.6f , false , {0.f, 0.6f ,0.f} };
-	CutInCamDesc Tanjiro_Execution_2 = { true,true, 30.f, -10.f, 3.f, 2.f , false , {0.f,-1.f,0.f} };
-
-	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_1);
-	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_2);
 
 	// 아카자 각성
 	CutInCamDesc Akaza_Awake_1 = { false,false, 0.f, 0.f, 1.2f, 1.7f , false , {0.f, -0.3f ,0.f} };
@@ -823,7 +796,6 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_2);
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_3);
 
-	 
 	// 젠이츠 각성
 	CutInCamDesc Zenitsu_Awake_1 = { true,true, 0.f, 0.f, 1.3f, 0.7f , false , {0.f, -0.8f ,0.f} };
 	CutInCamDesc Zenitsu_Awake_2 = { true,true, 0.f, 0.f, 1.f, 0.5f , true , {0.f, -0.8f ,0.f} };
@@ -832,7 +804,6 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_1);
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_2);
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_3);
-
 
 	// 쿄우가이 각성
 	CutInCamDesc Kyogai_Awake_1 = { false,false, 0.f, 0.f, 1.5f, 0.6f , false , {0.f, 0.6f ,0.f} };
@@ -844,6 +815,28 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[KYOGAI_AWAKE].push_back(Kyogai_Awake_3);
 
 
+	// 탄지로 처형
+	CutInCamDesc Tanjiro_Execution_1 = { true,true, 90.f, 0.f, 0.8f, 0.6f , false , {0.f, 0.6f ,0.f} };
+	CutInCamDesc Tanjiro_Execution_2 = { true,true, 30.f, -10.f, 3.f, 2.f , false , {0.f,-1.f,0.f} };
+
+	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_1);
+	m_Cut_In_Finish[TANJIRO_EXECUTION].push_back(Tanjiro_Execution_2);
+
+
+	// 탄지로 오의(테스트)
+	CutInCamDesc TanjiroCam1 = { true,true, 20.f, -20.f, 7.f, 0.8f };
+	CutInCamDesc TanjiroCam2 = { true,true, 20.f, -20.f, 2.f, 0.5f };
+	CutInCamDesc TanjiroCam3 = { true,true, 150.f, 20.f, 3.f, 0.8f };
+	CutInCamDesc TanjiroCam4 = { true,true, 20.f, 5.f, 8.f, 1.2f };
+	CutInCamDesc TanjiroCam5 = { true,false, 0.f, -30.f, 3.f, 2.3f, false, {0.f,4.f,0.f} };
+	CutInCamDesc TanjiroCam6 = { true,false, 0.f, -10.f, 1.f, 1.5f };
+
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam1);
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam2);
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam3);
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam4);
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam5);
+	m_Cut_In_Finish[TANJIRO_FINISH].push_back(TanjiroCam6);
 	
 
 
