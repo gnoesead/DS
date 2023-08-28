@@ -112,7 +112,8 @@ void CPlayer::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	Set_Height();
+	if(m_isSwampHit == false)
+		Set_Height();
 
 	Check_Change_Position(dTimeDelta);
 
@@ -273,7 +274,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 	{
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
-			CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
@@ -338,7 +340,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
 
-			m_Moveset.m_Down_Dmg_Upper = true;
+			m_Moveset.m_Down_Dmg_Swamp = true;
 		}
 	}
 	else

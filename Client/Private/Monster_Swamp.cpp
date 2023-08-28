@@ -68,7 +68,10 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	m_ScrewPos[8] = { 426.0f, 3.35f, 301.7f, 1.0f };
 	m_ScrewPos[9] = { 423.14f, 3.35f, 294.6f, 1.0f };
 	
-
+	if (m_CharacterDesc.SwampHorn == 1)
+	{
+		m_iIndex_Swamping = 2;
+	}
 
 	return S_OK;
 }
@@ -219,16 +222,99 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 	if (EventCallProcess())
 	{
 #pragma region Attack
-		/*
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (5 == m_pModelCom->Get_iCurrentAnimIndex()) //jumpstomp
 		{
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_SMALL, AtkDir, 5.0f);
+			}
+		}
+
+		if (7 == m_pModelCom->Get_iCurrentAnimIndex()) //screw
+		{
+			if (0 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (1 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (2 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (3 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (4 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (5 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (6 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (7 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (8 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.8, CAtkCollider::TYPE_BIGBLOW, AtkDir, 10.0f);
+		}
+
+		if (ANIM_ATK_CROSS == m_pModelCom->Get_iCurrentAnimIndex()) 
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
+					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
+			}
+		}
+
+
+		if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
 			}
 		}
-	*/
+		else if (12 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
+					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+			}
+		}
+		else if (13 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
+					CAtkCollider::TYPE_BIG, AtkDir, 8.0f);
+			}
+		}
+
+
+		if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
+					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+			}
+		}
+		else if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
+					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+			}
+		}
+		else if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
+					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+			}
+		}
+
+
 
 #pragma endregion
 		m_iEvent_Index++;
@@ -307,18 +393,17 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
-
+	
+	//레이지 모드
 	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
-
-		Animation_Control_Walk(dTimeDelta);
 
 		if (m_isSwamping == false)
 		{
 			if (m_iIndex_Rage == 0)
 			{
-				if (m_dCooltime_Atk_Pattern > 0.1f)
+				if (m_dCooltime_Atk_Pattern > 1.7f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
 					m_iIndex_Rage++;
@@ -329,31 +414,71 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 			}
 			else if (m_iIndex_Rage == 1)
 			{
-				if (m_dCooltime_Atk_Pattern > 4.0f)
-				{
-					m_dCooltime_Atk_Pattern = 0.0;
-
-					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_SWAMP_IN;
-				}
-			}
-		}
-		else
-		{
-			if (m_iIndex_Rage == 1)
-			{
-				if (m_dCooltime_Atk_Pattern > 0.7f)
+				if (m_dCooltime_Atk_Pattern > 0.8f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
 					m_iIndex_Rage++;
 
 					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_RAGE_YABAI;
+					m_eCurPattern = PATTERN_SHOTSWAMP;
+					m_iIndex_SwampShot = 4;
+				}
+			}
+			else if (m_iIndex_Rage == 2)
+			{
+				if (m_iCnt_Duduge == 4)
+				{
+					if (m_dCooltime_Atk_Pattern > 3.f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+						//m_iIndex_Rage++;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SWAMP_IN;
+					}
+				}
+				else
+				{
+					if (m_dCooltime_Atk_Pattern > 0.2f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+						//m_iIndex_Rage++;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SWAMP_IN;
+					}
 				}
 			}
 		}
+		else
+		{
+			if (m_iIndex_Rage == 2)
+			{
+				if (m_dCooltime_Atk_Pattern > 0.1f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+
+					if (m_iCnt_Duduge < 4)
+					{
+						m_iCnt_Duduge++;
+
+						m_eCurPattern = PATTERN_RAGE_DUDUGE;
+					}
+					else if (m_iCnt_Duduge == 4)
+					{
+						m_iCnt_Duduge = 0;
+
+						m_eCurPattern = PATTERN_RAGE_DUDUGE_ATK;
+					}
+				}
+			}
+			
+		}
 
 	}
+	//일반 모드
 	else
 	{
 		//메인 상태
@@ -365,36 +490,136 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 			{
 				Animation_Control_Walk(dTimeDelta);
 
-				if (m_dCooltime_Atk_Pattern > 4.0f)
+				//실제 패턴
+				if (m_iIndex_Normal == 0)
 				{
-					m_dCooltime_Atk_Pattern = 0.0;
-
-					m_eCurState = STATE_ATTACK;
-
-					//실제 패턴
-					if (m_iIndex_Normal == 0)
+					if (m_dCooltime_Atk_Pattern > 1.0f)
 					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_STEP;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 1)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
 						m_eCurPattern = PATTERN_JUMPSTOMP;
+
 						m_iIndex_Normal++;
 					}
-					else if (m_iIndex_Normal == 1)
+				}
+				else if (m_iIndex_Normal == 2)
+				{
+					if (m_dCooltime_Atk_Pattern > 4.1f)
 					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
 						m_eCurPattern = PATTERN_SHOTSWAMP;
+
 						m_iIndex_Normal++;
 					}
-					else if (m_iIndex_Normal == 2)
+				}
+				else if (m_iIndex_Normal == 3)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
 					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_STEP;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 4)
+				{
+					if (m_dCooltime_Atk_Pattern > 4.4f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
 						m_eCurPattern = PATTERN_COMBO;
+
 						m_iIndex_Normal++;
 					}
-					else if (m_iIndex_Normal == 3)
+				}
+				else if (m_iIndex_Normal == 5)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
 					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
 						m_eCurPattern = PATTERN_SWAMP_IN;
+
 						m_iIndex_Normal++;
 					}
-					else if (m_iIndex_Normal == 4)
+				}
+				else if (m_iIndex_Normal == 6)
+				{
+					if (m_dCooltime_Atk_Pattern > 5.4f)
 					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_COMBO;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 7)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_STEP;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 8)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SHOTSWAMP;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 9)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SHOTSWAMP;
+
+						m_iIndex_Normal++;
+					}
+				}
+				else if (m_iIndex_Normal == 10)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
 						m_eCurPattern = PATTERN_SWAMP_IN;
+
 						m_iIndex_Normal = 0;
 					}
 				}
@@ -457,12 +682,38 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 			}
 			else
 			{
-				if (m_dCooltime_Atk_Pattern > 1.2f)
+				if (m_iIndex_Swamping == 0)
 				{
-					m_dCooltime_Atk_Pattern = 0.0;
+					if (m_dCooltime_Atk_Pattern > 0.4f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+						m_iIndex_Swamping++;
 
-					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_SWAMP_SCREW;
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SWAMP_SCREW;
+					}
+				}
+				else if (m_iIndex_Swamping == 1)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.5f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+						m_iIndex_Swamping++;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SHORYU;
+					}
+				}
+				else if (m_iIndex_Swamping == 2)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.4f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+						m_iIndex_Swamping = 0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_TELESHORYU;
+					}
 				}
 			}
 		}
@@ -482,7 +733,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 
 		m_isNonHitState = true;
 	}
-	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0 )
+	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0  ||iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_1)
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
@@ -562,8 +813,14 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 	case 8: //pioHyo 
 		Animation_Control_Piohyo(dTimeDelta);
 		break;
-	case 9: //yabai
-		Animation_Control_Yabai( dTimeDelta);
+	case 9: //Step
+		Animation_Control_Step( dTimeDelta);
+		break;
+	case 10: //Rage_DUDUGE
+		Animation_Control_Rage_Duduge(dTimeDelta);
+		break;
+	case 11: // Rage_Duduge_atk
+		Animation_Control_Rage_Duduge_Atk(dTimeDelta);
 		break;
 	default:
 		break;
@@ -667,12 +924,27 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 
 			if (m_iIndex_SwampShot == 0)
 			{
-				Swamp_Create(1, 2); // 0:싱글, 1:쿼드, 2:큰장판, 3:스왐핑 4:두더쥐
+				Swamp_Create(1, 0); // 0:싱글, 1:쿼드, 2:큰장판, 3:스왐핑 4:두더쥐
 				m_iIndex_SwampShot++;
 			}
 			else if (m_iIndex_SwampShot == 1)
 			{
+				Swamp_Create(4, 1);
+				m_iIndex_SwampShot++;
+			}
+			else if (m_iIndex_SwampShot == 2)
+			{
 				Swamp_Create(1, 0);
+				m_iIndex_SwampShot++;
+			}
+			else if (m_iIndex_SwampShot == 3)
+			{
+				Swamp_Create(4, 1);
+				m_iIndex_SwampShot = 0;
+			}
+			else if (m_iIndex_SwampShot == 4)
+			{
+				Swamp_Create(10, 4);
 				m_iIndex_SwampShot = 0;
 			}
 		}
@@ -709,6 +981,7 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SWIM);
 			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
+			Swamp_Create(1, 2);
 		}
 	}
 
@@ -754,7 +1027,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			Set_FallingStatus(0.0f, 0.04f);
 		}
 	}
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_CROSS, 4.0f, 0.1f);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_CROSS, 4.0f, 0.25f);
 }
 
 void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
@@ -777,9 +1050,15 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 		_float4 MyPos;
 		XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
+		_vector Dir = -Calculate_Dir_FixY();
+		
 		PlayerPos.y = MyPos.y;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&PlayerPos));
+		_vector vPlayerPos = XMLoadFloat4(&PlayerPos);
+
+		vPlayerPos = vPlayerPos + Dir * 1.7f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
 	}
@@ -831,8 +1110,8 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 		}
 	}
-	Go_Dir_Constant(dTimeDelta, 7, 2.3f, m_SaveDir);
-	Go_Dir_Deceleration(dTimeDelta, 8, 2.3f, 0.13f, m_SaveDir);
+	Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
+	Go_Dir_Deceleration(dTimeDelta, 8, 2.6f, 0.15f, m_SaveDir);
 
 	if (iCurAnim == ANIM_ATK_SWAMP_SCREW)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
@@ -864,7 +1143,7 @@ void CMonster_Swamp::Animation_Control_Piohyo(_double dTimeDelta)
 	}
 }
 
-void CMonster_Swamp::Animation_Control_Yabai(_double dTimeDelta)
+void CMonster_Swamp::Animation_Control_Rage_Duduge(_double dTimeDelta)
 {
 	if (m_isFrist_Atk_Pattern)
 	{
@@ -872,12 +1151,106 @@ void CMonster_Swamp::Animation_Control_Yabai(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
 		Jumping(0.01f, 0.01f);
+		m_pModelCom->Set_EarlyEnd(ANIM_SWAMP_IDLE_IN, true, 0.1f);
+		m_dDelay_Rage_Duduge = 0.0;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_SWAMP_IN)
+	
+	m_dDelay_Rage_Duduge += dTimeDelta;
+
+	if (iCurAnim == ANIM_SWAMP_IN && m_dDelay_Rage_Duduge > 0.25f)
 	{
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		m_dDelay_Rage_Duduge = 0.0;
+
+		_int index = rand() % 10;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ScrewPos[index]));
+		m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
+	}
+	_float4 Dir;
+	XMStoreFloat4(&Dir, Calculate_Dir_FixY());
+	m_pTransformCom->Set_Look(Dir);
+}
+
+void CMonster_Swamp::Animation_Control_Rage_Duduge_Atk(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+		m_pModelCom->Set_EarlyEnd(ANIM_SWAMP_IDLE_IN, true, 0.1f);
+		m_dDelay_Rage_Duduge = 0.0;
+		m_isDuduge_Atk = false;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN )
+	{
+		if (m_isDuduge_Atk)
+		{
+			m_isDuduge_Atk = false;
+
+			_int index = rand() % 10;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ScrewPos[index]));
+			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
+		}
+		else
+		{
+			m_isDuduge_Atk = true;
+
+			_float4 PlayerPos;
+			XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
+
+			_float4 MyPos;
+			XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+			_vector Dir = -Calculate_Dir_FixY();
+
+			PlayerPos.y = MyPos.y;
+
+			_vector vPlayerPos = XMLoadFloat4(&PlayerPos);
+
+			vPlayerPos = vPlayerPos + Dir * 1.7f;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+
+			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_1);
+			Jumping(3.2f, 0.15f);
+		}
+	}
+	_float4 Dir;
+	XMStoreFloat4(&Dir, Calculate_Dir_FixY());
+	m_pTransformCom->Set_Look(Dir);
+}
+
+void CMonster_Swamp::Animation_Control_Step(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_STEP_B);
+		Jumping(0.01f, 0.01f);
+
+		if (m_isStepLeft)
+			m_isStepLeft = false;
+		else
+			m_isStepLeft = true;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	Go_Backward_Deceleration(dTimeDelta, ANIM_STEP_B, 2.0f, 0.1f);
+
+	if (iCurAnim == ANIM_STEP_L && m_isStepLeft == false)
+	{
+		m_pModelCom->Set_Animation(ANIM_STEP_R);
+		Go_Left_Deceleration(dTimeDelta, ANIM_STEP_L, 1.8f, 0.2f);
+	}
+	if (iCurAnim == ANIM_STEP_R)
+	{
+		Go_Right_Deceleration(dTimeDelta, ANIM_STEP_R, 1.8f, 0.2f);
 	}
 }
 

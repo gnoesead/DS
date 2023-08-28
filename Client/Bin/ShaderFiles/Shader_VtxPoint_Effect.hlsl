@@ -22,6 +22,9 @@ float4			g_vPanningSpeedNormal = { 0.f, 0.f, 0.f, 0.f };
 float2			g_vOffset = { 0.f, 0.f };
 float2			g_vTilling = { 1.f, 1.f };
 
+float2			g_vGradientOffset = { 0.f, 0.f };
+float2			g_vGradientTilling = { 1.f, 1.f };
+
 float			g_fDissolveAmount;
 //float			g_fDissolveSoftness;
 float			g_fDistortionStrength = { 0.f };
@@ -38,6 +41,9 @@ float2			g_fCameraRightLookPos = { 0.f, 0.f };
 
 float2			g_vPaddingStart = { 0.f, 0.f };
 float2			g_vPaddingEnd = { 0.f, 0.f };
+
+float2			g_vTileSize = { 1.f, 1.f };			// Width, Height
+float2			g_vCurTile = { 0.f, 0.f };			// 열, 행
 
 //--------------------------------------------------
 
@@ -93,7 +99,7 @@ void GS_DEFAULT(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 	vLook.y = 0;
 	float3		vNormalizedLook = normalize(vLook);
 	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * g_vSize.x * 0.5f;
-	float3		vUp = normalize(cross(vLook, vRight)) * g_vSize.y * 0.5f;
+	float3		vUp = float3(0.f, 1.f, 0.f) * g_vSize.y * 0.5f;
 
 	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
@@ -370,11 +376,15 @@ PS_OUT PS_MASKRAMP(PS_IN In)
 	vector vMask = g_MaskTexture.Sample(LinearSampler, float2(UVX, UVY));
 	vector vRamp;
 
-	vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r, 0.f));
-	Out.vColor = vRamp;
-	Out.vColor.a = vMask.r;
+	if (g_vGradientOffset.x <= vMask.r && g_vGradientTilling.x >= vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r, 0.f));
+	else if (g_vGradientTilling.x < vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientTilling.x, 0.f));
+	else if (g_vGradientOffset.x > vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientOffset.x, 0.f));
 
-	Out.vColor.a *= g_fAlpha;
+	Out.vColor = vRamp;
+	Out.vColor.a = vMask.r * g_fAlpha;
 	
 	if (Out.vColor.a < 0.05f)
 		discard;
@@ -606,6 +616,199 @@ PS_OUT PS_MASKCOLOR(PS_IN In)
 	return Out;
 }
 
+PS_OUT PS_DIFFUSESPRITE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
+		g_vCurTile.y + UVY * g_vTileSize.y);
+
+	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
+
+	Out.vColor = vDiffuse;
+
+	Out.vColor.a *= g_fAlpha;
+
+	return Out;
+}
+
+PS_OUT PS_MASKCOLORSPRITE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
+		g_vCurTile.y + UVY * g_vTileSize.y);
+
+	vector vMask = g_MaskTexture.Sample(LinearSampler, spriteUV);
+
+	Out.vColor = g_vColor;
+	
+	Out.vColor.a = vMask.r * g_fAlpha;
+
+	return Out;
+}
+
+PS_OUT PS_MASKRAMPSPRITE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
+		g_vCurTile.y + UVY * g_vTileSize.y);
+
+	vector vMask = g_MaskTexture.Sample(LinearSampler, spriteUV);
+	vector vRamp;
+
+	if (g_vGradientOffset.x <= vMask.r && g_vGradientTilling.x >= vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r, 0.f));
+	else if (g_vGradientTilling.x < vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientTilling.x, 0.f));
+	else if (g_vGradientOffset.x > vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientOffset.x, 0.f));
+
+	Out.vColor = vRamp;
+	Out.vColor.a = vMask.r * g_fAlpha;
+
+	return Out;
+}
+
 /* 각각의 하드웨어에 맞는 셰이더버젼으로 셰이더를 구동해주기 위해. */
 technique11 DefaultTechnique {
 	pass Default // 0
@@ -697,5 +900,44 @@ technique11 DefaultTechnique {
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKCOLOR();
+	}
+
+	pass DiffuseSprite		// 7
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_DEFAULT();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFFUSESPRITE();
+	}
+
+	pass MaskColorSprite		// 8
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_DEFAULT();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKCOLORSPRITE();
+	}
+
+	pass MaskRampSprite		// 9
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_DEFAULT();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE();
 	}
 };

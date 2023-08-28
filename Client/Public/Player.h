@@ -34,6 +34,7 @@ public:
 		_bool	m_Down_Dmg_Spin = { false };
 		_bool	m_Down_Dmg_Bound = { false };
 		_bool	m_Down_Dmg_Great_Blow = { false };
+		_bool	m_Down_Dmg_Swamp = { false };
 
 		// 제한
 		_bool	m_isRestrict_KeyInput = { false };
@@ -217,6 +218,11 @@ protected: // 애니메이션 제어용 변수들
 
 	//히트모션 인덱스 스몰
 	_int m_iSmallHit_Index = { 0 };
+
+	//hit swamp
+	_bool m_isSwampHit = { false };
+	_double m_dSwampHit = { 0.0 };
+	_bool	m_isSwamp_Escape = { false };
 
 	//쿨타임 적용
 	_bool		m_isCool_MoveKey = { false };

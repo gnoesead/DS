@@ -10,6 +10,7 @@ CMasterEffect::CMasterEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 CMasterEffect::CMasterEffect(const CMasterEffect& rhs)
 	: CGameObject(rhs)
 	, m_fTextureOrder(rhs.m_fTextureOrder)
+	, m_eEffectDesc(rhs.m_eEffectDesc)
 {
 }
 

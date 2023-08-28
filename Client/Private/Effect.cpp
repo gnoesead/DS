@@ -41,11 +41,13 @@ void CEffect::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	if(!m_eEffectDesc.is3DStartSize)
+	if (m_eEffectDesc.eEffectType == EFFECT_PARTICLE)
+	{
 		m_pTransformCom->Scaling(m_eEffectDesc.vShapeScale);
+		m_pTransformCom->Rotation(m_eEffectDesc.vShapeRotation);
+	}
 	else
 		m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMin.y, m_eEffectDesc.vStartSizeMin.z));
-	m_pTransformCom->Rotation(m_eEffectDesc.vShapeRotation);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(m_eEffectDesc.vPivot.x, m_eEffectDesc.vPivot.y, m_eEffectDesc.vPivot.z, 1.f));
 
 	if (m_ParentDesc.pParent->Get_isPlaying())
@@ -70,188 +72,188 @@ void CEffect::Tick(_double dTimeDelta)
 		{
 			m_eEffectDesc.fTimeAcc += (_float)dTimeDelta;
 
-			if (0 >= m_fLifeTime)
+			if (2 != m_eEffectDesc.eEffectType)
 			{
-				if (m_eEffectDesc.isLooping)
+				if (0 >= m_fLifeTime)
 				{
-					if (OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+					if (m_eEffectDesc.isLooping)
+					{
+						if (OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+							m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+						else if (OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+						{
+							_float fRandNum = Random::Generate_Float(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax);
+							m_fLifeTime = fRandNum;
+						}
+					}
+					else
+					{
+						switch (m_eEffectDesc.eEffectType)
+						{
+						case 0:
+							CEffectPlayer::Get_Instance()->Collect_EffectTexture(this);
+							break;
+						case 1:
+							CEffectPlayer::Get_Instance()->Collect_EffectMesh(this);
+							break;
+						}
+						m_isCollect = true;
+						m_ParentDesc.pParent->Set_isCollect(true);
+
+						m_eEffectDesc.fTimeAcc = 0;
 						m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
-					else if (OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
-					{
-						_float fRandNum = Random::Generate_Float(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax);
-						m_fLifeTime = fRandNum;
 					}
 				}
-				else
+
+				if (OP_CURVE == m_eEffectDesc.eSizeOverLifetimeOption)
 				{
-					switch (m_eEffectDesc.eEffectType)
-					{
-					case 0:
-						CEffectPlayer::Get_Instance()->Collect_EffectTexture(this);
-						break;
-					case 1:
-						CEffectPlayer::Get_Instance()->Collect_EffectMesh(this);
-						break;
-					case 2:
-						CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
-						break;
-					}
-					m_isCollect = true;
-					m_ParentDesc.pParent->Set_isCollect(true);
-
-					m_eEffectDesc.fTimeAcc = 0;
-					m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
-				}
-			}
-
-			if (OP_CURVE == m_eEffectDesc.eSizeOverLifetimeOption)
-			{
-				size_t iSize = m_SizeOverLifeTimes[0].size();
-
-				if (0 < iSize)
-				{
-					if (!m_eEffectDesc.isSeparateAxesSzOverLifeTime)
-					{
-						if (m_iCurSizeIndex < iSize)
-						{
-							while (true)
-							{
-								if (m_fLifeTime >= m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime)
-									break;
-
-								++m_iCurSizeIndex;
-							}
-
-							_float y = fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue);
-							_float fWeight = fabs(m_fLifeTime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime)
-								/ fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime);
-
-							if (m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue < m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue)
-								y *= -1;
-
-							_float	fCurSize = fWeight * y + m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue;
-
-							if(!m_eEffectDesc.is3DStartSize)
-								m_pTransformCom->Scaling(fCurSize);
-							else
-								m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize));
-						}
-					}
-				}
-			}
-
-			if (OP_CURVE == m_eEffectDesc.eRotOverLifetimeOption)
-			{
-				if (m_eEffectDesc.isSeparateAxesRotOverLifeTime)
-				{
-					_float3	vCurRot = { 0.f, 0.f, 0.f };
-
-					for (int i = 0; i < 3; ++i)
-					{
-						size_t iSize = m_RotOverLifeTimes[i].size();
-
-						if (0 < iSize)
-						{
-							if (m_iCurRotIndex[i] < iSize)
-							{
-								while (true)
-								{
-									if (m_fLifeTime >= m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fLifetime)
-										break;
-
-									++m_iCurRotIndex[i];
-								}
-
-								_float y = fabs(m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fValue - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue);
-								_float fWeight = fabs(m_fLifeTime - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fLifetime)
-									/ fabs(m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fLifetime - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fLifetime);
-
-								if (m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fValue < m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue)
-									y *= -1;
-
-								if (0 == i)
-									vCurRot.x = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
-								else if (1 == i)
-									vCurRot.y = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
-								else if (2 == i)
-									vCurRot.z = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
-							}
-							m_pTransformCom->Rotation(vCurRot);
-						}
-					}
-				}
-			}
-		
-			if (OP_CURVE == m_eEffectDesc.ePosOverLifetimeOption)
-			{
-				for (int i = 0; i < 3; ++i)
-				{
-					size_t iSize = m_PosOverLifeTimes[i].size();
+					size_t iSize = m_SizeOverLifeTimes[0].size();
 
 					if (0 < iSize)
 					{
-						if (m_iCurPosIndex[i] < iSize)
+						if (!m_eEffectDesc.isSeparateAxesSzOverLifeTime)
 						{
-							while (true)
+							if (m_iCurSizeIndex < iSize)
 							{
-								if (m_iCurPosIndex[i] >= (_uint)iSize - 1)
-									m_iCurPosIndex[i] = (_uint)iSize - 2;
+								while (true)
+								{
+									if (m_fLifeTime >= m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime)
+										break;
 
-								if (m_fLifeTime >= m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fLifetime)
-									break;
+									++m_iCurSizeIndex;
+								}
 
-								++m_iCurPosIndex[i];
+								_float y = fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue);
+								_float fWeight = fabs(m_fLifeTime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime)
+									/ fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime);
 
-								if (m_iCurPosIndex[i] >= (_uint)iSize - 1)
-									m_iCurPosIndex[i] = (_uint)iSize - 2;
+								if (m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue < m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue)
+									y *= -1;
+
+								_float	fCurSize = fWeight * y + m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue;
+
+								if (!m_eEffectDesc.is3DStartSize)
+									m_pTransformCom->Scaling(fCurSize);
+								else
+									m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize));
 							}
-
-							_float y = fabs(m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fValue - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue);
-							_float fWeight = fabs(m_fLifeTime - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fLifetime)
-								/ fabs(m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fLifetime - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fLifetime);
-
-							if (m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fValue < m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue)
-								y *= -1;
-
-							if (0 == i)
-								m_vCurPos.x = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
-							else if (1 == i)
-								m_vCurPos.y = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
-							else if (2 == i)
-								m_vCurPos.z = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
 						}
-
 					}
 				}
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_vCurPos));
-			}
 
-			size_t iSizeAlpha = m_AlphaOverLifetimes.size();
-			if (0 < iSizeAlpha)
-			{
-				if (m_iCurAlphaIndex < iSizeAlpha)
+				if (OP_CURVE == m_eEffectDesc.eRotOverLifetimeOption)
 				{
-					while (true)
+					if (m_eEffectDesc.isSeparateAxesRotOverLifeTime)
 					{
-						if (m_fLifeTime >= m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime)
-							break;
+						_float3	vCurRot = { 0.f, 0.f, 0.f };
 
-						++m_iCurAlphaIndex;
+						for (int i = 0; i < 3; ++i)
+						{
+							size_t iSize = m_RotOverLifeTimes[i].size();
+
+							if (0 < iSize)
+							{
+								if (m_iCurRotIndex[i] < iSize)
+								{
+									while (true)
+									{
+										if (m_fLifeTime >= m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fLifetime)
+											break;
+
+										++m_iCurRotIndex[i];
+									}
+
+									_float y = fabs(m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fValue - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue);
+									_float fWeight = fabs(m_fLifeTime - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fLifetime)
+										/ fabs(m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fLifetime - m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fLifetime);
+
+									if (m_RotOverLifeTimes[i][m_iCurRotIndex[i] + 1].fValue < m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue)
+										y *= -1;
+
+									if (0 == i)
+										vCurRot.x = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
+									else if (1 == i)
+										vCurRot.y = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
+									else if (2 == i)
+										vCurRot.z = fWeight * y + m_RotOverLifeTimes[i][m_iCurRotIndex[i]].fValue;
+								}
+								m_pTransformCom->Rotation(vCurRot);
+							}
+						}
 					}
+				}
 
-					_float y = fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue - m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue);
-					_float fWeight = fabs(m_fLifeTime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime)
-						/ fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime);
+				if (OP_CURVE == m_eEffectDesc.ePosOverLifetimeOption)
+				{
+					for (int i = 0; i < 3; ++i)
+					{
+						size_t iSize = m_PosOverLifeTimes[i].size();
 
-					if (m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue < m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue)
-						y *= -1;
+						if (0 < iSize)
+						{
+							if (m_iCurPosIndex[i] < iSize)
+							{
+								while (true)
+								{
+									if (m_iCurPosIndex[i] >= (_uint)iSize - 1)
+										m_iCurPosIndex[i] = (_uint)iSize - 2;
 
-					m_fAlpha = fWeight * y + m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue;
+									if (m_fLifeTime >= m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fLifetime)
+										break;
 
-					if (m_fAlpha > 1)
-						m_fAlpha = 1;
-					else if (m_fAlpha < 0)
-						m_fAlpha = 0;
+									++m_iCurPosIndex[i];
+
+									if (m_iCurPosIndex[i] >= (_uint)iSize - 1)
+										m_iCurPosIndex[i] = (_uint)iSize - 2;
+								}
+
+								_float y = fabs(m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fValue - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue);
+								_float fWeight = fabs(m_fLifeTime - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fLifetime)
+									/ fabs(m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fLifetime - m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fLifetime);
+
+								if (m_PosOverLifeTimes[i][m_iCurPosIndex[i] + 1].fValue < m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue)
+									y *= -1;
+
+								if (0 == i)
+									m_vCurPos.x = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
+								else if (1 == i)
+									m_vCurPos.y = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
+								else if (2 == i)
+									m_vCurPos.z = fWeight * y + m_PosOverLifeTimes[i][m_iCurPosIndex[i]].fValue;
+							}
+
+						}
+					}
+					m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_vCurPos));
+				}
+
+				size_t iSizeAlpha = m_AlphaOverLifetimes.size();
+				if (0 < iSizeAlpha)
+				{
+					if (m_iCurAlphaIndex < iSizeAlpha)
+					{
+						while (true)
+						{
+							if (m_fLifeTime >= m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime)
+								break;
+
+							++m_iCurAlphaIndex;
+						}
+
+						_float y = fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue - m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue);
+						_float fWeight = fabs(m_fLifeTime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime)
+							/ fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime);
+
+						if (m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue < m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue)
+							y *= -1;
+
+						m_fAlpha = fWeight * y + m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue;
+
+						if (m_fAlpha > 1)
+							m_fAlpha = 1;
+						else if (m_fAlpha < 0)
+							m_fAlpha = 0;
+					}
 				}
 			}
 		}
@@ -487,6 +489,25 @@ void CEffect::Set_Initial_Data(void)
 	m_fTextureOrder = m_eEffectDesc.fTextureOrder;
 
 	m_vCurPos = _float3(0.f, 0.f, 0.f);
+
+	if (m_eEffectDesc.isTextureSheetAnimation)
+	{
+		m_fFrameTimeAcc = 0;
+
+		if (OP_RAND_TWO_CONSTANT != m_eEffectDesc.eStartFrameOption)
+			m_fCurFrame = m_eEffectDesc.iStartFrame.x;
+		else
+			m_fCurFrame = Random::Generate_Float(m_eEffectDesc.iStartFrame.x, m_eEffectDesc.iStartFrame.y);
+
+
+		if (OPT_SPEED == m_eEffectDesc.eTimeModeOption)
+		{
+			if (m_eEffectDesc.fFrameSpeedMin != m_eEffectDesc.fFrameSpeedMax)
+				m_fFrameSpeed = Random::Generate_Float(m_eEffectDesc.fFrameSpeedMin, m_eEffectDesc.fFrameSpeedMax);
+			else
+				m_fFrameSpeed = m_eEffectDesc.fFrameSpeedMin;
+		}
+	}
 }
 
 void CEffect::Reset_Data(void)
