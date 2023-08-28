@@ -637,6 +637,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Swamp())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(true);
+			}
 
 			pHitColl->Add_AtkObejct(this);
 		}
@@ -672,6 +676,7 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		m_isHit_Success = false;
 
 		m_dDelay_ComboReset = 0.0;
+		m_dDelay_ComboReset_2 = 0.0;
 		m_StatusDesc.iAttackCombo++;
 
 		if(m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)
@@ -682,7 +687,7 @@ void CCharacter::Status_Work(_double dTimeDelta)
 	if (m_StatusDesc.iAttackCombo > 0)
 	{
 		m_dDelay_ComboReset += dTimeDelta;
-		if (m_dDelay_ComboReset > 3.5f)
+		if (m_dDelay_ComboReset > 2.5f)
 		{
 			m_dDelay_ComboReset = 0.0;
 			m_StatusDesc.iAttackCombo = 0;
@@ -694,7 +699,7 @@ void CCharacter::Status_Work(_double dTimeDelta)
 	if (m_StatusDesc.iHitCombo > 0)
 	{
 		m_dDelay_ComboReset_2 += dTimeDelta;
-		if (m_dDelay_ComboReset_2 > 3.5f)
+		if (m_dDelay_ComboReset_2 > 2.5f)
 		{
 			m_dDelay_ComboReset_2 = 0.0;
 			m_StatusDesc.iHitCombo = 0;
