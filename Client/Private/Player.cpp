@@ -278,6 +278,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_Small = true;
 		}
@@ -287,6 +288,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_ConnectSmall = true;
 		}
@@ -296,6 +298,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_Big = true;
 		}
@@ -306,6 +309,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_Blow = true;
 		}
@@ -315,6 +319,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_BigBlow = true;
 		}
@@ -324,6 +329,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
 			m_Moveset.m_Down_Dmg_Upper = true;
 		}
@@ -654,7 +660,8 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
 		m_Moveset.m_Down_Skill_Normal = true;
 
-	if (false == m_Moveset.m_isRestrict_KeyInput)
+	m_dDelay_CanSkill += dTimeDelta;
+	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{
