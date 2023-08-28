@@ -38,27 +38,27 @@ void CRotationMapObject::Tick(_double TimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (m_bTriggerTurnRoom)
-    {
-        m_bTriggerTurnRoom = false;
-        m_bTurn = true;
+	if (m_bTriggerTurnRoom)
+	{
+		m_bTriggerTurnRoom = false;
+		m_bTurn = true;
 
-        switch (m_eRotation)
-        {
-        case ROT_X_PLUS:
-            m_vTargetRotAngle.x += 90.f;
-            break;
-        case ROT_X_MINUS:
-            m_vTargetRotAngle.x -= 90.f;
-            break;
-        case ROT_Z_PLUS:
-            m_vTargetRotAngle.z += 90.f;
-            break;
-        case ROT_Z_MINUS:
-            m_vTargetRotAngle.z -= 90.f;
-            break;
-        }
-    }
+		switch (m_eRotation)
+		{
+		case ROT_X_PLUS:
+			m_vTargetRotAngle.x += 90.f;
+			break;
+		case ROT_X_MINUS:
+			m_vTargetRotAngle.x -= 90.f;
+			break;
+		case ROT_Z_PLUS:
+			m_vTargetRotAngle.z += 90.f;
+			break;
+		case ROT_Z_MINUS:
+			m_vTargetRotAngle.z -= 90.f;
+			break;
+		}
+	}
 
     if (m_bTurn)
         TurnRoom(TimeDelta);
