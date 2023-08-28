@@ -436,7 +436,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Push", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(6.0f, 6.0f, 6.0f), _float3(0.f, 3.0f, 0.0f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.0f, 0.0f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);
 			}
 
@@ -2904,8 +2904,8 @@ void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 			m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 			m_eCurAnimIndex = ANIM_HIT_BLOW_LOOP;
 		}
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_SMALL_AIR, 1.f, 0.0, 0.7);
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_AIR_UPPER, 1.f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_SMALL_AIR, 0.7f, 0.0, 0.4);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_AIR_UPPER, 0.7f, 0.0, 0.4);
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_BLOW, 1.5f);
 
 	}
@@ -2948,9 +2948,9 @@ void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 	}
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_FRONT, 1.0f, 0.0, 0.7);
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_LEFT, 1.0f, 0.0, 0.7);
-		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_RIGHT, 1.0f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_FRONT, 0.7f, 0.0, 0.4);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_LEFT, 0.7f, 0.0, 0.4);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT_RIGHT, 0.7f, 0.0, 0.4);
 	}
 
 	Land_Anim_Play(ANIM_HIT_BLOW_LOOP, ANIM_HIT_BLOW_END);
