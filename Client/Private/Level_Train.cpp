@@ -118,10 +118,7 @@ void CLevel_Train::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_F1))
-    {
-        CFadeManager::GetInstance()->Set_Fade_Out(true);
-    }
+   
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
