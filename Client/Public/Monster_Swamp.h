@@ -154,6 +154,7 @@ private: //애니메이션 제어용 변수들
 
 	_int	m_iIndex_Normal = { 0 };
 	_int	m_iIndex_Swamping = { 0 };
+	_int	m_iIndex_SwampShot = { 0 };
 	_int	m_iIndex_Rage = { 0 };
 	
 

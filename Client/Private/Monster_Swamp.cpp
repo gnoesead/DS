@@ -665,7 +665,16 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 		{
 			m_isFirst_Atk_0 = false;
 
-			Swamp_Create(1, 1);// 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
+			if (m_iIndex_SwampShot == 0)
+			{
+				Swamp_Create(4, 1); // 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
+				m_iIndex_SwampShot++;
+			}
+			else if (m_iIndex_SwampShot == 1)
+			{
+				Swamp_Create(1, 0);
+				m_iIndex_SwampShot = 0;
+			}
 		}
 	}
 }
@@ -1318,7 +1327,7 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 
 	ShotDesc.iType = iType; // 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
 
-	if (iNumSwamp == 1)
+	if (iNumSwamp == 0)
 	{	
 		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -1331,11 +1340,30 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 			return;
 		}
 	}
-	else
+	else if (iNumSwamp == 1)
 	{
 		for (_int i = 0; i < iNumSwamp; i++)
 		{
-			ShotDesc.WorldInfo.vPosition = _float4(137.f, 0.f, 137.f, 1.f);
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_vector vDir = XMVector4Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+			_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+			_vector crossLeft = XMVector3Cross(vDir, vUp);
+
+			vPos = vPos + vDir * 1.65f;
+			if (i == 1)
+			{
+				vPos = vPos + crossLeft * 1.7f;
+			}
+			else if (i == 2)
+			{
+				vPos = vPos - crossLeft * 1.7f;
+			}
+			else if (i == 3)
+			{
+				vPos = vPos + crossLeft * 2.3f;
+			}
+
+			XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, vPos);
 			if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
 			{
 				MSG_BOX("Failed to Add_GameObject : SwampShot");
