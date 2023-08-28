@@ -94,8 +94,8 @@ void CBoss_Kyogai::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 	Update_AnimIndex(m_eCurAnimIndex);
-	if(m_bTurn == false)
-	Gravity(dTimeDelta);
+	if (m_bTurn == false)
+		Gravity(dTimeDelta);
 }
 
 HRESULT CBoss_Kyogai::Render()
@@ -352,7 +352,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom, &EffectWorldDesc);
-				
+
 
 			}
 			if (1 == m_iEvent_Index)	// 0.25
@@ -657,20 +657,27 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
-			if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+			if (m_bSuperArmor == false)
 			{
-				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-				Trigger_Hit_Small();
+				if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+				{
+					m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+					Trigger_Hit_Small();
+				}
+				if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+				{
+					m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+					Trigger_Hit_ConnectSmall();
+				}
+
+				if (true == m_isJumpOn)
+					Jumping(0.2f, 0.030f);
 			}
-			if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+			else
 			{
-				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-				Trigger_Hit_ConnectSmall();
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			}
-
-			if (true == m_isJumpOn)
-				Jumping(0.2f, 0.030f);
-
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -1275,6 +1282,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 void CBoss_Kyogai::Trigger_Interact()
 {
 	m_bTrigger = true;
+	m_bSuperArmor = false;
 	m_eCurstate = STATE_INTERACT;
 }
 
@@ -1328,6 +1336,7 @@ void CBoss_Kyogai::Trigger_AtkCmb()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKCMB;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_AtkCmb2()
@@ -1335,6 +1344,7 @@ void CBoss_Kyogai::Trigger_AtkCmb2()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKCMB2;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_AtkStep()
@@ -1342,6 +1352,7 @@ void CBoss_Kyogai::Trigger_AtkStep()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKSTEP;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 
 	if (m_bAtkStepType == false)
 		m_iAtkStepTypeNum++;
@@ -1364,6 +1375,7 @@ void CBoss_Kyogai::Trigger_StompKick()
 	m_bTrigger = true;
 	m_eCurstate = STATE_STOMPKICK;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_AtkPunch()
@@ -1371,6 +1383,7 @@ void CBoss_Kyogai::Trigger_AtkPunch()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKPUNCH;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_LinkerCmb()
@@ -1378,6 +1391,7 @@ void CBoss_Kyogai::Trigger_LinkerCmb()
 	m_bTrigger = true;
 	m_eCurstate = STATE_LINKERCMB;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 	m_iLinkerNum = Random::Generate_Int(1, 2);
 }
 
@@ -1388,9 +1402,10 @@ void CBoss_Kyogai::Trigger_AtkSkCmb()
 	m_bAnimFinish = false;
 	m_bAnimFinish2 = false;
 	m_bAnimFinish3 = false;
+	m_bSuperArmor = true;
 	//m_bTurnRF = false;
 	m_bTurn = false;
-	
+
 	m_dTimeAcc = 0.0;
 }
 
@@ -1523,6 +1538,7 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
 	{
+		
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
@@ -1549,6 +1565,7 @@ void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB2);
 		m_eCurAnimIndex = ANIM_ATKCMB3;
+		m_bSuperArmor = false;
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
 	{
@@ -1787,7 +1804,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 					m_eCurAnimIndex = ANIM_IDLE;
 					m_dReturnTime += dTimeDelta;
 					if (1.0 < m_dReturnTime)
-					{					
+					{
 						m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB3);
 						m_eCurAnimIndex = ANIM_ATKSK_LF;
 						m_bTurnLF = true;
@@ -1796,7 +1813,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 				}
 				if (m_fCurAngleX == 0.f && m_fCurANgleZ == 0.f)
 				{
-					
+
 					if (m_bAnimFinish3 == false)
 					{
 						m_bAnimFinish3 = true;
@@ -1808,12 +1825,12 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 						m_dTurnTime = 0.0;
 						m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
 						m_eCurAnimIndex = ANIM_IDLE;
-						m_eCurstate = STATE_INTERACT;
+						Trigger_Interact();
 					}
-					
+
 				}
 			}
-			
+
 
 		}
 		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_RF) || m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LF))
@@ -2238,7 +2255,7 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bSuperArmor, sizeof(_bool))))
 		return E_FAIL;
 
 	return S_OK;
