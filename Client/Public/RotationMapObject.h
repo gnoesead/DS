@@ -7,6 +7,7 @@ BEGIN(Client)
 
 class CRotationMapObject  final : public CMapObject
 {
+public:
 	enum ROTATION { ROT_X_PLUS, ROT_X_MINUS, ROT_Z_PLUS, ROT_Z_MINUS, ROT_END };
 private:
 	CRotationMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -14,7 +15,7 @@ private:
 	virtual ~CRotationMapObject() = default;
 
 public:
-	void	Set_TurnRoomTriggerOn() { m_bTriggerTurnRoom = true; }
+	void	Set_TurnRoomTriggerOn(ROTATION eRot) { m_bTriggerTurnRoom = true; m_eRotation = eRot; }
 
 public:
 	virtual HRESULT Initialize_Prototype();

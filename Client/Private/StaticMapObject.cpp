@@ -379,17 +379,26 @@ void CStaticMapObject::Control_RenderSmell(_double TimeDelta)
 
 			if(Compute::DistCheck(vPlayerPos , m_pTransformCom->Get_State(CTransform::STATE_POSITION) , 25.f))
 				m_bSmellOn = true;
-			
 		}
 	}
+
+	if (g_bSmellReset)
+		m_bSmellOn = false;
 
 
 	if(m_bSmellOn)
 	{
-		m_fAlpha += 1.f * (_float)TimeDelta;
+		m_fAlpha += 0.33f * (_float)TimeDelta;
 
 		if (m_fAlpha > 1.f)
 			m_fAlpha = 1.f;
+	}
+	else
+	{
+		m_fAlpha -= 0.33f * (_float)TimeDelta;
+
+		if (m_fAlpha < 0.f)
+			m_fAlpha = 0.f;
 	}
 
 	Safe_Release(pGameInstance);

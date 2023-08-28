@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 
@@ -15,8 +15,18 @@ END
 
 BEGIN(Client)
 
-class CRoomSmoke final : public CGameObject
+class CRoomSmoke final : public CMasterEffect
 {
+public:
+	enum TYPE { TYPE_ALLROOM , TYPE_PART};
+
+	typedef struct Effecttag
+	{
+		TYPE eType = TYPE_ALLROOM;
+		_vector vPos;
+
+	}EFFECTDESC;
+
 private:
 	CRoomSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CRoomSmoke(const CRoomSmoke& rhs);
@@ -57,7 +67,13 @@ private:
 	_float					m_fSizeSpeed = { 0.f };
 
 	_float					m_fPlusX = { 0.f };
+	_float					m_fPlusY = { 0.f };
 	_float					m_fPlusZ = { 0.f };
+
+	EFFECTDESC				m_EffectDesc;
+
+	_float					m_fAlpha = { 1.f };
+
 public:
 	static CRoomSmoke* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

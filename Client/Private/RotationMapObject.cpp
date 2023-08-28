@@ -38,34 +38,24 @@ void CRotationMapObject::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_bTriggerTurnRoom || pGameInstance->Get_DIKeyDown(DIK_P) )
+	if (m_bTriggerTurnRoom)
 	{
 		m_bTriggerTurnRoom = false;
 		m_bTurn = true;
-		_uint iRan = 0;
 
-		if ((_int)(fabsf(m_vTargetRotAngle.x / 90.f)) % 2 == 1)
-			iRan = (rand() % 2);
-		else
-			iRan = (rand() % 4);
-
-		switch (iRan)
+		switch (m_eRotation)
 		{
 		case ROT_X_PLUS:
 			m_vTargetRotAngle.x += 90.f;
-			m_eRotation = ROT_X_PLUS;
 			break;
 		case ROT_X_MINUS:
 			m_vTargetRotAngle.x -= 90.f;
-			m_eRotation = ROT_X_MINUS;
 			break;
 		case ROT_Z_PLUS:
 			m_vTargetRotAngle.z += 90.f;
-			m_eRotation = ROT_Z_PLUS;
 			break;
 		case ROT_Z_MINUS:
 			m_vTargetRotAngle.z -= 90.f;
-			m_eRotation = ROT_Z_MINUS;
 			break;
 		}
 	}

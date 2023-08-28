@@ -392,7 +392,7 @@ PS_OUT  PS_ROOMSMOKE(PS_IN In)
 	vector vDiffuse = g_Texture.Sample(LinearSampler, spriteUV);
 	vDiffuse.a = vDiffuse.r * g_Alpha * 0.9f;
 
-	vDiffuse.rgb = (0.5f, 0.5f, 0.5f);
+	vDiffuse.rgb = (0.4f, 0.4f, 0.3f);
 
 	Out.vColor = vDiffuse;
 

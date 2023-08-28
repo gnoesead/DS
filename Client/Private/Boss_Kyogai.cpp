@@ -9,6 +9,7 @@
 #include "AtkCollManager.h"
 #include "AlertCircle.h"
 #include "AlertRect.h"
+#include "RoomSmoke.h"
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -348,7 +349,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom , &EffectWorldDesc);
-			}
+			} 
 			if (1 == m_iEvent_Index)	// 0.25
 			{
 				dLongLifeTime = 6.0;
@@ -360,6 +361,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				Create_AlertRect(BLADE_THREE_RANDOM);
 				Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed);
+		
 			}
 			if (2 == m_iEvent_Index)	// 1.20
 			{
@@ -475,21 +477,19 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATKCMBW05 == m_pModelCom->Get_iCurrentAnimIndex()) // ¾Õ¹ß ³»¹Ð°í ¹è²Å ÆÎÆÎ 
 		{
 
-			if (0 == m_iEvent_Index)	// 0.95
+			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.8f;
 				EffectWorldDesc.vPosition.z += 0.5f;
-				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.fScale = 1.3f;
 
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_12", m_pTransformCom, &EffectWorldDesc);
 
-				CAlertCircle::EFFECTDESC EffectDesc;
-				EffectDesc.pOwnerTransform = m_pTransformCom;
-				EffectDesc.iType = CAlertCircle::TYPE_KICKDOWN;
+			}
 
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
-
+			if (1 == m_iEvent_Index)	// 0.95
+			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
@@ -568,9 +568,9 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.vPosition.y += 0.8f;
-				EffectWorldDesc.vPosition.z += 0.5f;
-				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.fScale = 1.f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom , &EffectWorldDesc);
 			}
@@ -1808,7 +1808,8 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType , _fvector vDir)
 
 	CAlertRect::EFFECTDESC EffectDesc;
 	
-
+	CRoomSmoke::EFFECTDESC SmokeEffectDesc;
+	SmokeEffectDesc.eType = CRoomSmoke::TYPE_PART;
 
 	switch (eBladeType)
 	{
@@ -1824,15 +1825,33 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType , _fvector vDir)
 
 		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		
 
 		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+		SmokeEffectDesc.vPos = EffectDesc.vPos;
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		
 
 		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-		break;
+		SmokeEffectDesc.vPos = EffectDesc.vPos;
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 	}
-	
+	break;
 	case BLADE_FIVE_RANDOM:
 	case BLADE_FIVE_FRONT:
 	{

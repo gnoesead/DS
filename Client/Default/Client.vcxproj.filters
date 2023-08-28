@@ -313,6 +313,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Swamp\SwampShot">
       <UniqueIdentifier>{67ecd14f-1a0a-463c-81aa-ba4f15ad5bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\SmellBundle">
+      <UniqueIdentifier>{7b0f0804-7c3f-42c5-a3fd-ae27b19aa658}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -585,6 +588,9 @@
     <ClInclude Include="..\Public\SwampManager.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SmellBundle.h">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -847,6 +853,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SmellBundle.cpp">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
