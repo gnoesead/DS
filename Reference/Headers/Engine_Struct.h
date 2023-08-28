@@ -158,9 +158,13 @@ namespace Engine
 		XMFLOAT4		vUp;
 		XMFLOAT4		vLook;
 		XMFLOAT4		vTranslation;
-		XMFLOAT4		vColor;
+		XMFLOAT4		vColor;						// StartSize X, Y, Z, CurSizeIndex
 		XMFLOAT2		vPSize;
-		XMFLOAT4		vAdditional;
+		XMFLOAT4		vAdditional;				// Lifetime, Alpha, TimeAcc, EndSize
+		XMFLOAT4		vAdditional2;				// SizeY(Spark)Acc, StartSpeed, GravityModifier, CurGravityIndex
+		XMFLOAT4		vLinearSpeed;				// x, y, z, CurSpeedIndex
+		XMFLOAT4		vFrame;						// FrameTimeAcc, StartFrame, FrameSpeed, CurFrameIndex
+		XMFLOAT4		vAdditional3;				// CurFrame
 	}VTXINSTANCEEFFECT;
 
 	typedef struct tagVertex_ModelInstance
@@ -188,8 +192,8 @@ namespace Engine
 
 	typedef struct ENGINE_DLL tagVertex_Point_Instance_Effect_Declaration
 	{
-		const static unsigned int			iNumElements = { 8 };
-		static D3D11_INPUT_ELEMENT_DESC		Elements[8];
+		const static unsigned int			iNumElements = { 12 };
+		static D3D11_INPUT_ELEMENT_DESC		Elements[12];
 	}VTXPOINTINSTANCEEFFECT_DECL;
 
 	typedef struct ENGINE_DLL tagVertex_MODEL_Instance_Declaration
