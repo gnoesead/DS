@@ -291,13 +291,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//if (m_Moveset.m_iAwaken == 0)					
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+				if (m_Moveset.m_iAwaken == 0)					
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
-				CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -310,11 +310,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				//if (m_Moveset.m_iAwaken == 0)
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
-
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -334,11 +333,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-				//if (m_Moveset.m_iAwaken == 0)
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3", m_pTransformCom);
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{

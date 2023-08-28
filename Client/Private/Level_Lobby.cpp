@@ -1228,137 +1228,131 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	//	return E_FAIL;
 	//}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo1.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo1");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo1");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo2.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo3.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo3");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo3");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Normal.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Normal");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Normal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Normal");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air1.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air1");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air1");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air2.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air2");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo_Air2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo_Air2");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_Tilt");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_Super1");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_Super2");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super2");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_Super3");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo3.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Down.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Down");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Down");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Up.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Up");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Up");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air1.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air1");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air1");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air2.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air2");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air2");
+		return E_FAIL;
+	}
 
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeTilt.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeTilt");
-	//	return E_FAIL;
-	//}
-
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Small.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Hit_Small");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeTilt.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeTilt");
+		return E_FAIL;
+	}
 
 #pragma region COMMON
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Spark.bin"))))
