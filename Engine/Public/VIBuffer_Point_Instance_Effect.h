@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VIBuffer_Instance.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 
@@ -9,21 +10,8 @@ class ENGINE_DLL CVIBuffer_Point_Instance_Effect final : public CVIBuffer_Instan
 public:
 	typedef struct tagInstanceDesc
 	{
-		/* 큐브형태의 범위지정. */
-		_float3				vRange;
-		_float				fMinSpeed, fMaxSpeed;			
-		class CEffect*		pParent = { nullptr };
-		_int				eShapeType = { 0 };
-		_float				fStartLifeTimeMin = { 0 };
-		_float				fLifetime = { 0 };
-		_bool				isLooping = { true };
+		class CMasterEffect*		pParent = { nullptr };
 	}INSTANCEDESC;
-
-	typedef struct tagParticleDesc
-	{
-		_float				fSpeed = { 0.f };
-		//_float3			vRotation = { 0.f, 0.f, 0.f };
-	}PARTICLEDESC;
 
 private:
 	CVIBuffer_Point_Instance_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -38,20 +26,28 @@ public:
 //	// 함수로 기능 제어
 	virtual void Tick(_double TimeDelta) {};
 	virtual void Tick(_double TimeDelta, INSTANCEDESC* pDesc);
-//	void InitialSetting();
-
-//protected:
-//	_uint						m_iNumIndicesPerInstance = { 0 };
-//	_uint						m_iInstanceStride = { 0 };
-//	_uint						m_iNumInstance = { 0 };
-//	ID3D11Buffer*				m_pVBInstance = { nullptr };
+	virtual HRESULT Render() override;
+	void InitialSetting();
 
 private:
-	PARTICLEDESC*		m_pParticleDescriptions = { nullptr };
 	INSTANCEDESC		m_InstanceDesc;
 	_double				m_dTimeAcc = { 0.0 };
+	_double				m_dTimeAccDuration = { 0.0 };
+	_double				m_dTimeAccRateOverTime = { 0.0 };
 	size_t				m_iStartIndex = { 0 };
 	_bool				m_bStart = { true };
+
+	_float				m_fSpeedModifier = { 1.f };
+	_float				m_fGravityModifier = { 0.f };
+	_uint				m_iCurRateOverTimeIndex = { 0 };
+
+	CMasterEffect::EFFECTDESC				m_eEffectDesc;
+	vector<CMasterEffect::LIFETIMEVALUE>	m_RateOverTimes;
+	vector<CMasterEffect::LIFETIMEVALUE>	m_SpeedOverLifeTimes;
+	vector<CMasterEffect::LIFETIMEVALUE>	m_GravityModiferOverLifetimes;
+	vector<CMasterEffect::LIFETIMEVALUE>	m_FrameOverTime;
+
+	vector<CMasterEffect::LIFETIMEVALUE>	m_SizeOverLifeTimesX;
 
 public:
 	static CVIBuffer_Point_Instance_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iNumInstance);
