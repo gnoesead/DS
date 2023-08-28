@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "ParticleSystem.h"
 
+#include "EffectPlayer.h"
+
 CEffect_Particle::CEffect_Particle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CEffect(pDevice, pContext)
 {
@@ -70,15 +72,23 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 
 	if (m_ParentDesc.pParent->Get_isPlaying())
 	{
+		if (m_fDelayTimeAcc > m_fStartDelay)
+		{
+			if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + max(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax))
+			{
+				CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
+
+				m_isCollect = true;
+				m_ParentDesc.pParent->Set_isCollect(true);
+
+				m_eEffectDesc.fTimeAcc = 0;
+				m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+			}
+		}
+
 		CVIBuffer_Point_Instance_Effect::INSTANCEDESC InstanceDesc;
 		ZeroMemory(&InstanceDesc, sizeof InstanceDesc);
 
-		InstanceDesc.eShapeType = m_eEffectDesc.eShapeType;
-		InstanceDesc.fStartLifeTimeMin = m_eEffectDesc.fStartLifeTimeMin;
-		InstanceDesc.isLooping = m_eEffectDesc.isLooping;
-		InstanceDesc.fMinSpeed = 1.f;
-		InstanceDesc.fMaxSpeed = 2.f;
-		InstanceDesc.vRange = _float3(0.0f, 0.0f, 0.0f);
 		InstanceDesc.pParent = this;
 
 		m_pVIBufferCom->Tick(dTimeDelta, &InstanceDesc);
@@ -86,7 +96,7 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 	}
 	else if ((m_ParentDesc.pParent->Get_isStopped()))
 	{
-		m_pVIBufferCom->Set_NumInstance(0);
+		m_pVIBufferCom->Set_NumInstanceUsing(0);
 	}
 }
 
@@ -118,9 +128,7 @@ HRESULT CEffect_Particle::Add_Components(void)
 
 	CVIBuffer_Point_Instance_Effect::INSTANCEDESC		InstanceDesc;
 
-	InstanceDesc.fMinSpeed = 1.f;
-	InstanceDesc.fMaxSpeed = 2.f;
-	InstanceDesc.vRange = _float3(0.0f, 0.0f, 0.0f);
+
 	InstanceDesc.pParent = this;
 
 	/* For.Com_VIBufferPointInstanceEffect */
@@ -141,12 +149,57 @@ HRESULT CEffect_Particle::SetUp_ShaderResources(void)
 	if (FAILED(__super::SetUp_ShaderResources()))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bAlignToDir", (void*)&m_eEffectDesc.isAlignToDirection, sizeof(_bool))))
+		return E_FAIL;
+
+	if (m_eEffectDesc.isTextureSheetAnimation)
+	{
+		_float2 vTileSize = _float2(1.f / m_eEffectDesc.vTiles.x, 1.f / m_eEffectDesc.vTiles.y);
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTileSize", (void*)&vTileSize, sizeof(_float2))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTiles", (void*)&m_eEffectDesc.vTiles, sizeof(_float2))))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
 void CEffect_Particle::Check_PassIndex(void)
 {
 	m_iPassIndex = 0;
+
+	if (nullptr != m_pTextures[TEX_DIFFUSE])
+	{
+		m_iPassIndex = 1;
+
+		if (m_eEffectDesc.isTextureSheetAnimation)
+			m_iPassIndex = 2;
+	}
+
+	if (nullptr != m_pTextures[TEX_MASK])
+	{
+		m_iPassIndex = 3;
+
+		if (m_eEffectDesc.isTextureSheetAnimation)
+			m_iPassIndex = 4;
+
+		if (nullptr != m_pTextures[TEX_RAMP])
+		{
+			m_iPassIndex = 5;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 6;
+		}
+	}
+}
+
+void CEffect_Particle::Set_Initial_Data(void)
+{
+	__super::Set_Initial_Data();
+
+	m_pVIBufferCom->InitialSetting();
 }
 
 CEffect_Particle* CEffect_Particle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

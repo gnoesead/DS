@@ -31,6 +31,7 @@ private:
 	HRESULT Add_Components(void);
 	virtual HRESULT SetUp_ShaderResources(void) override;
 	virtual void Check_PassIndex(void) override;
+	virtual void Set_Initial_Data(void) override;
 
 public:
 	static CEffect_Particle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);

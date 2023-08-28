@@ -10,6 +10,8 @@ CVIBuffer_Instance::CVIBuffer_Instance(const CVIBuffer_Instance& rhs)
 	, m_iNumIndicesPerInstance(rhs.m_iNumIndicesPerInstance)
 	, m_iInstanceStride(rhs.m_iInstanceStride)
 	, m_iNumInstance(rhs.m_iNumInstance)
+	, m_iMaxNumInstance(rhs.m_iMaxNumInstance)
+	, m_iNumInstanceUsing(rhs.m_iNumInstanceUsing)
 {
 }
 
