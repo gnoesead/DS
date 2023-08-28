@@ -1332,8 +1332,28 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		if (m_isJumpOn)
 		{
-			m_pModelCom->Set_Animation(ANIM_FALL);
-			Jumping(0.3f, 0.030f);
+			Jumping(0.12f, 0.030f);
+
+			if (m_iSmallHit_Index == 0)
+			{
+				m_pModelCom->Set_Animation(ANIM_FALL);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 1)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_0);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 2)
+			{
+				m_pModelCom->Set_Animation(ANIM_FALL);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 3)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_1);
+				m_iSmallHit_Index = 0;
+			}
 		}
 		else
 		{
@@ -1399,7 +1419,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Blow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1418,7 +1439,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_BigBlow = false;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		Jumping(1.2f, 0.05f);
@@ -1441,12 +1463,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.7f, 0.03f);
+		Jumping(1.85f, 0.03f);
 	}
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 100, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.35f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 100, 0.35f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(100, 101);
 #pragma endregion
