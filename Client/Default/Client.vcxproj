@@ -253,6 +253,7 @@
     <ClInclude Include="..\Public\RotationMapObject.h" />
     <ClInclude Include="..\Public\Skill_Name.h" />
     <ClInclude Include="..\Public\Sky.h" />
+    <ClInclude Include="..\Public\SmellBundle.h" />
     <ClInclude Include="..\Public\SoundMgr.h" />
     <ClInclude Include="..\Public\StaticMapObject.h" />
     <ClInclude Include="..\Public\Story_Board.h" />
@@ -348,6 +349,7 @@
     <ClCompile Include="..\Private\RotationMapObject.cpp" />
     <ClCompile Include="..\Private\Skill_Name.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
+    <ClCompile Include="..\Private\SmellBundle.cpp" />
     <ClCompile Include="..\Private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\Story_Board.cpp" />

@@ -313,6 +313,9 @@
     <Filter Include="02. GameObjects\Camera\Free\Boss_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\SmellBundle">
+      <UniqueIdentifier>{7b0f0804-7c3f-42c5-a3fd-ae27b19aa658}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -585,6 +588,9 @@
     <ClInclude Include="..\Public\SwampManager.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SmellBundle.h">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\SwampShot.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
     </ClInclude>
@@ -853,6 +859,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampShot.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SmellBundle.cpp">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
