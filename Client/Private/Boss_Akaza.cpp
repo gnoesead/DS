@@ -346,7 +346,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_double dLongLifeTime = 1.0;
 		_double dSpeed = 5.0;
 #pragma region AWAKE_ComboPunch
-		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
+ 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
 
@@ -356,7 +356,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					19 == m_iEvent_Index || 26 == m_iEvent_Index || 33 == m_iEvent_Index)
 				{//피격용 콜라이더
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 				}
 				//이펙트용 콜라이더
@@ -733,6 +733,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				{
 					m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
 					Trigger_Hit_Small();
+
 				}
 				if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 				{
@@ -742,6 +743,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
+				CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			}
 			else
 			{
@@ -762,6 +765,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -775,6 +780,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -791,6 +798,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -804,7 +813,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
-
+			
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -2406,24 +2417,27 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 
 		if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_PIST))
 		{
-			m_pModelCom->Set_AnimResetTimeAcc(ANIM_COMBO_PIST);
-			m_iRandomPatternNum = Random::Generate_Int(1, 12);
-
+			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
+			
 			if (m_eCurPhase == PHASE_1)
 			{
-				if (m_iRandomPatternNum > 8)
+				m_iRandomPatternNum++;
+				if (m_iRandomPatternNum >= 4)
+					m_iRandomPatternNum = 1;
+
+				if (m_iRandomPatternNum == 1)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_UpperKick();
 				}
 
-				if (m_iRandomPatternNum < 5)
+				if (m_iRandomPatternNum == 2)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_DashPunch();
 				}
 
-				if (5 <= m_iRandomPatternNum && m_iRandomPatternNum <= 8)
+				if (m_iRandomPatternNum == 3)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_Nachim();
@@ -2431,25 +2445,29 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 			}
 			else if (m_eCurPhase == PHASE_2)
 			{
-				if (m_iRandomPatternNum > 9)
+				m_iRandomPatternNum++;
+				if (m_iRandomPatternNum >= 5)
+					m_iRandomPatternNum = 1;
+
+				if (m_iRandomPatternNum == 1)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_UpperKick();
 				}
 
-				if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 9)
+				if (m_iRandomPatternNum == 2)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_DashKick();
 				}
 
-				if (4 <= m_iRandomPatternNum && m_iRandomPatternNum <= 6)
+				if (m_iRandomPatternNum == 3)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_JumpStomp();
 				}
 
-				if (m_iRandomPatternNum < 4)
+				if (m_iRandomPatternNum == 4)
 				{
 					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_JumpAirGun();
@@ -2489,7 +2507,7 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 	}
 	else
 	{
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_UP, 0.70, dTimeDelta))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_UP, 0.75, dTimeDelta))
 		{
 			m_eCurAnimIndex = ANIM_IDEL;
 
