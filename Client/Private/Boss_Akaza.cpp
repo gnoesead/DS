@@ -346,7 +346,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_double dLongLifeTime = 1.0;
 		_double dSpeed = 5.0;
 #pragma region AWAKE_ComboPunch
-		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
+ 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
 
@@ -356,7 +356,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					19 == m_iEvent_Index || 26 == m_iEvent_Index || 33 == m_iEvent_Index)
 				{//피격용 콜라이더
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 				}
 				//이펙트용 콜라이더
@@ -2407,8 +2407,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 		if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_PIST))
 		{
 			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
-			//m_iRandomPatternNum = Random::Generate_Int(1, 12);
-
+			
 			if (m_eCurPhase == PHASE_1)
 			{
 				m_iRandomPatternNum++;
@@ -2497,7 +2496,7 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 	}
 	else
 	{
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_UP, 0.70, dTimeDelta))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_UP, 0.75, dTimeDelta))
 		{
 			m_eCurAnimIndex = ANIM_IDEL;
 

@@ -9,6 +9,7 @@
 #include "AtkCollManager.h"
 #include "AlertCircle.h"
 #include "AlertRect.h"
+#include "Camera_Manager.h"
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -268,7 +269,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
+			Trigger_JumpStep();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
@@ -424,6 +425,23 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+
+		if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex() ||
+			ANIM_ATKSK_RB == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LB == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+
+			if (0 == m_iEvent_Index)	// 0.5 or 0.55
+			{
+				CAlertCircle::EFFECTDESC EffectDesc;
+				EffectDesc.pOwnerTransform = m_pTransformCom;
+				EffectDesc.iType = CAlertCircle::TYPE_ROOMCHANGE;
+
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+
+			}
+
+
+		}
 		if (ANIM_KICKDOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
@@ -459,11 +477,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
-				for (_uint i = 0; i < 70; ++i)
-				{
-					pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Effect"),
-						TEXT("Prototype_GameObject_RoomSmoke"));
-				}
+				
 			}
 
 			if (1 == m_iEvent_Index) // 1.65
@@ -503,10 +517,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			CAlertCircle::EFFECTDESC EffectDesc;
-			EffectDesc.pOwnerTransform = m_pTransformCom;
-			EffectDesc.iType = CAlertCircle::TYPE_ROOMCHANGE;
-
+		
 			if (0 == m_iEvent_Index) // 1.30
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -516,7 +527,6 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom, &EffectWorldDesc);
 
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
 			}
 
@@ -532,7 +542,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+
 			}
 
 		}
@@ -781,6 +791,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Kyogai::STATE_GUARD:
 		Update_Guard(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_JUMP_STEP:
+		Update_JumpStep(dTimeDelta);
 		break;
 	case CBoss_Kyogai::STATE_ATKCMB:
 		Update_AtkCmb(dTimeDelta);
@@ -1321,7 +1334,17 @@ void CBoss_Kyogai::Trigger_Awake()
 }
 
 void CBoss_Kyogai::Trigger_JumpStep()
-{
+{	
+	m_vDir = Calculate_Dir_FixY();
+	m_vDir = Random_Dir(m_vDir,0.f,0.f,-50.f,50.f);
+	
+	m_pTransformCom->LerpVector(m_vDir, 1.0f);
+
+	m_bTrigger = true;
+	m_bSuperArmor = true;
+	m_bAnimFinish = false;
+	m_eCurstate = STATE_JUMP_STEP;
+
 }
 
 void CBoss_Kyogai::Trigger_AtkCmb()
@@ -1531,7 +1554,7 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
 	{
-		
+
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
@@ -1540,6 +1563,30 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_STEP_FRONT2;
+		Jumping(1.5f, 0.065f);
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_STEP_FRONT2))
+	{		
+		m_pModelCom->Set_AnimisFinish(ANIM_STEP_FRONT2);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+	if (m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.01) && !m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.538))
+	{
+		Go_Dir_Constant(dTimeDelta, ANIM_STEP_FRONT2, 3.f, Convert::ToFloat4(m_vDir));
+		
+	}
+	
+	_vector vDir = Calculate_Dir_FixY();
+	m_pTransformCom->LerpVector(vDir, 0.3f);
+
+	//Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STEP_FRONT2, 3.f, 0.01, 0.538);
+	
+		
 }
 
 void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
@@ -1775,7 +1822,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 			Turn_Trigger(dTimeDelta); // 방돌리기
 			TurnRoom(); // 쿄우가이 돌리기
 
-			if ((2.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
+			if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
 			{
 				if (m_bAnimFinish2 == false)
 				{
@@ -1835,6 +1882,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 	}
 
 }
+
 
 void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 {
@@ -2055,25 +2103,35 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 		m_dTimeAcc += dTimeDelta;
 	}
 
-	if (true == m_bTurnRF && m_dTimeAcc > 1.50)
+	if (2.0 < m_dTimeAcc && m_dTimeAcc <= 2.0 + dTimeDelta)
+	{
+		for (_uint i = 0; i < 70; ++i)
+		{
+			pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Effect"),
+				TEXT("Prototype_GameObject_RoomSmoke"));
+		}
+		CCameraManager::GetInstance()->Camera_Shake(0.5,200);
+	}
+
+	if (true == m_bTurnRF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_PLUS);
 	}
-	if (true == m_bTurnLF && m_dTimeAcc > 1.50)
+	if (true == m_bTurnLF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_MINUS);
 	}
-	if (true == m_bTurnRB && m_dTimeAcc > 1.50)
+	if (true == m_bTurnRB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_PLUS);
 	}
-	if (true == m_bTurnLB && m_dTimeAcc > 1.50)
+	if (true == m_bTurnLB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLB = false;
