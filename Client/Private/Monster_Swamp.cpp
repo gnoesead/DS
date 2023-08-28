@@ -667,7 +667,7 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 
 			if (m_iIndex_SwampShot == 0)
 			{
-				Swamp_Create(4, 1); // 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
+				Swamp_Create(4, 1); // 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ
 				m_iIndex_SwampShot++;
 			}
 			else if (m_iIndex_SwampShot == 1)
@@ -1325,9 +1325,10 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 	Safe_AddRef(pGameInstance);
 	CSwampShot::SHOTDESC ShotDesc;
 
-	ShotDesc.iType = iType; // 0:¹ØÀåÆÇ, 1:´Ë°ø°Ý, 2:Å«ÀåÆÇ, 3:
+	XMStoreFloat4(&ShotDesc.MonsterPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	ShotDesc.iType = iType; // 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ
 
-	if (iNumSwamp == 0)
+	if (iType == 0)
 	{	
 		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -1340,7 +1341,7 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 			return;
 		}
 	}
-	else if (iNumSwamp == 1)
+	else if (iType == 1)
 	{
 		for (_int i = 0; i < iNumSwamp; i++)
 		{
@@ -1360,7 +1361,7 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 			}
 			else if (i == 3)
 			{
-				vPos = vPos + crossLeft * 2.3f;
+				vPos = vPos + crossLeft * 3.4f;
 			}
 
 			XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, vPos);
@@ -1371,7 +1372,26 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 			}
 		}
 	}
-	
+	else if (iType == 2)
+	{
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
+	else if (iType == 3)
+	{
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
 	Safe_Release(pGameInstance);
 }
 
