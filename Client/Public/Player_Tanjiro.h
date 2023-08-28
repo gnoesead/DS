@@ -96,6 +96,7 @@ private:
 
 	//스케일 조정
 	_float m_fScaleChange = { 0.8f };
+	
 
 
 private: //애니메이션 제어용 변수들

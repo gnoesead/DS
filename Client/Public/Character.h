@@ -208,6 +208,7 @@ protected:
 	_bool	m_isConnectHitting = { false };
 
 	_bool	m_isStrictUpper = { false };
+	_bool	m_isNonHitState = { false };
 
 	//Attack MoveControl
 	_float	m_fAtk_MoveControl = { 0.0f };

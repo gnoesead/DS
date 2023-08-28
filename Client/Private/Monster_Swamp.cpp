@@ -13,6 +13,7 @@
 #include "PlayerManager.h"
 
 #include "SwampManager.h"
+#include "SwampShot.h"
 
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -247,7 +248,20 @@ void CMonster_Swamp::Trigger()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper()
 			|| m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
-			m_eCurState = STATE_HIT;
+			if (m_isNonHitState)
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			}
+			else
+			{
+				m_eCurState = STATE_HIT;
+			}
 		}
 	}
 	else
@@ -294,95 +308,162 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
-
-	//메인 상태
-	if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
 
+		Animation_Control_Walk(dTimeDelta);
+
 		if (m_isSwamping == false)
 		{
-			Animation_Control_Walk(dTimeDelta);
-
-			
-			if (m_dCooltime_Atk_Pattern > 8.0f)
-			{
-				m_dCooltime_Atk_Pattern = 0.0;
-
-				m_eCurState = STATE_ATTACK;
-
-				m_eCurPattern = PATTERN_SHOTSWAMP;
-				/*
-				//실제 패턴
-				if (m_iIndex_Normal == 0)
-				{
-					m_eCurPattern = PATTERN_JUMPSTOMP;
-					m_iIndex_Normal++;
-				}
-				else if (m_iIndex_Normal == 1)
-				{
-					m_eCurPattern = PATTERN_COMBO;
-					m_iIndex_Normal++;
-				}
-				else if (m_iIndex_Normal == 2)
-				{
-					m_eCurPattern = PATTERN_SWAMP_IN;
-					m_iIndex_Normal = 0;
-				}
-				*/
-			}
-		}
-		else
-		{
-			if (m_iIndex_Swamping == 0)
-			{
-				if (m_dCooltime_Atk_Pattern > 0.85f)
-				{
-					m_dCooltime_Atk_Pattern = 0.0;
-
-					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_SHORYU;
-
-					m_iIndex_Swamping++;
-				}
-			}
-			else if (m_iIndex_Swamping == 1)
+			if (m_iIndex_Rage == 0)
 			{
 				if (m_dCooltime_Atk_Pattern > 0.1f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
+					m_iIndex_Rage++;
 
 					m_eCurState = STATE_ATTACK;
-					m_eCurPattern = PATTERN_TELESHORYU;
-
-					m_iIndex_Swamping = 0;
+					m_eCurPattern = PATTERN_RAGE_PIOHYO;
 				}
 			}
-		}
-	}
-	//스왐프 서브 상태
-	else
-	{
-		m_dCooltime_Atk_Pattern += dTimeDelta;
-
-		if (m_isSwamping == false)
-		{
-			if (m_dCooltime_Atk_Pattern > 0.4f)
+			else if (m_iIndex_Rage == 1)
 			{
-				m_dCooltime_Atk_Pattern = 0.0;
+				if (m_dCooltime_Atk_Pattern > 4.0f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
 
-				m_eCurState = STATE_ATTACK;
-				m_eCurPattern = PATTERN_SWAMP_IN;
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_SWAMP_IN;
+				}
 			}
 		}
 		else
 		{
-			if (m_dCooltime_Atk_Pattern > 1.2f)
+			if (m_iIndex_Rage == 1)
 			{
-				m_dCooltime_Atk_Pattern = 0.0;
+				if (m_dCooltime_Atk_Pattern > 0.7f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+					m_iIndex_Rage++;
 
-				m_eCurState = STATE_ATTACK;
-				m_eCurPattern = PATTERN_SWAMP_SCREW;
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_RAGE_YABAI;
+				}
+			}
+		}
+
+	}
+	else
+	{
+		//메인 상태
+		if (m_CharacterDesc.SwampHorn == CSwampManager::GetInstance()->Get_Phase1_MainIndex())
+		{
+			m_dCooltime_Atk_Pattern += dTimeDelta;
+
+			if (m_isSwamping == false)
+			{
+				Animation_Control_Walk(dTimeDelta);
+
+				if (m_dCooltime_Atk_Pattern > 4.0f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+
+					//실제 패턴
+					if (m_iIndex_Normal == 0)
+					{
+						m_eCurPattern = PATTERN_JUMPSTOMP;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 1)
+					{
+						m_eCurPattern = PATTERN_SHOTSWAMP;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 2)
+					{
+						m_eCurPattern = PATTERN_COMBO;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 3)
+					{
+						m_eCurPattern = PATTERN_SWAMP_IN;
+						m_iIndex_Normal++;
+					}
+					else if (m_iIndex_Normal == 4)
+					{
+						m_eCurPattern = PATTERN_SWAMP_IN;
+						m_iIndex_Normal = 0;
+					}
+				}
+			}
+			else
+			{
+				//실제 패턴
+				if (m_iIndex_Swamping == 0)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.85f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_SHORYU;
+
+						m_iIndex_Swamping++;
+					}
+				}
+				else if (m_iIndex_Swamping == 1)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.1f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_TELESHORYU;
+
+						m_iIndex_Swamping++;
+					}
+				}
+				else if (m_iIndex_Swamping == 2)
+				{
+					if (m_dCooltime_Atk_Pattern > 0.3f)
+					{
+						m_dCooltime_Atk_Pattern = 0.0;
+
+						m_eCurState = STATE_ATTACK;
+						m_eCurPattern = PATTERN_BIGSWAMP;
+
+						m_iIndex_Swamping = 0;
+					}
+				}
+			}
+		}
+		//서브 상태
+		else
+		{
+			m_dCooltime_Atk_Pattern += dTimeDelta;
+
+			if (m_isSwamping == false)
+			{
+				if (m_dCooltime_Atk_Pattern > 0.4f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_SWAMP_IN;
+				}
+			}
+			else
+			{
+				if (m_dCooltime_Atk_Pattern > 1.2f)
+				{
+					m_dCooltime_Atk_Pattern = 0.0;
+
+					m_eCurState = STATE_ATTACK;
+					m_eCurPattern = PATTERN_SWAMP_SCREW;
+				}
 			}
 		}
 	}
@@ -398,12 +479,28 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
+
+		m_isNonHitState = true;
 	}
 	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0 )
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
 		m_isSwamping = true;
+
+		m_isNonHitState = true;
+	}
+	else if (iCurAnim == ANIM_ATK_SWAMP_SWIM || iCurAnim == 16 || iCurAnim == 17)
+	{
+		m_isNavi_Y_Off = true;
+		m_isSwamping = true;
+
+		if (m_fLand_Y < m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f)
+		{
+			m_fLand_Y += 0.02f;
+		}
+
+		m_isNonHitState = true;
 	}
 	else if (iCurAnim == ANIM_SWAMP_IDLE)
 	{
@@ -414,11 +511,23 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		{
 			m_fLand_Y += 0.02f;
 		}
+
+		m_isNonHitState = true;
+	}
+	//넌히트만을 위한 곳
+	else if (iCurAnim == ANIM_ATK_SWAMP_SCREW || iCurAnim == 7 || iCurAnim == ANIM_ANGRY_CUTSCENE)
+	{
+		m_isNavi_Y_Off = false;
+		m_isSwamping = false;
+
+		m_isNonHitState = true;
 	}
 	else
 	{
 		m_isNavi_Y_Off = false;
 		m_isSwamping = false;
+
+		m_isNonHitState = false;
 	}
 }
 
@@ -446,6 +555,15 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		break;
 	case 6: // PATTERN_SHOTSWAMP
 		Animation_Control_ShotSwamp(dTimeDelta);
+		break;
+	case 7: //PATTERN_BIGSWAMP
+		Animation_Control_BigSwamp(dTimeDelta);
+		break;
+	case 8: //pioHyo 
+		Animation_Control_Piohyo(dTimeDelta);
+		break;
+	case 9: //yabai
+		Animation_Control_Yabai( dTimeDelta);
 		break;
 	default:
 		break;
@@ -542,7 +660,58 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 	if (iCurAnim == ANIM_ATK_SHOT)
 	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.2f);
+
+		if (m_isFirst_Atk_0)
+		{
+			m_isFirst_Atk_0 = false;
+
+			if (m_iIndex_SwampShot == 0)
+			{
+				Swamp_Create(4, 1); // 0:싱글, 1:쿼드, 2:큰장판, 3:스왐핑
+				m_iIndex_SwampShot++;
+			}
+			else if (m_iIndex_SwampShot == 1)
+			{
+				Swamp_Create(1, 0);
+				m_iIndex_SwampShot = 0;
+			}
+		}
 	}
+}
+
+void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+
+		if (m_CharacterDesc.SwampHorn == 1)
+			m_iScrewPosIndex = rand() % 10;
+		if (m_CharacterDesc.SwampHorn == 2)
+			m_iScrewPosIndex = rand() % 9;
+		if (m_CharacterDesc.SwampHorn == 3)
+			m_iScrewPosIndex = rand() % 8;
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+
+		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
+		{
+			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
+		}
+		else
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SWIM);
+			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
+		}
+	}
+
 }
 
 void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
@@ -569,7 +738,7 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 		else 
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
-			Jumping(1.1f, 0.01f);
+			Jumping(1.1f, 0.03f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
 			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 4.0f;
 		}
@@ -683,6 +852,33 @@ void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
 
 	if(iCurAnim == ANIM_SWAMP_IDLE)
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 2.0f;
+}
+
+void CMonster_Swamp::Animation_Control_Piohyo(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_ANGRY_CUTSCENE);
+	}
+}
+
+void CMonster_Swamp::Animation_Control_Yabai(_double dTimeDelta)
+{
+	if (m_isFrist_Atk_Pattern)
+	{
+		m_isFrist_Atk_Pattern = false;
+
+		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
+		Jumping(0.01f, 0.01f);
+	}
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+	}
 }
 
 void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)
@@ -817,11 +1013,13 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 1.0;
 		pPlayer->Set_Hit_Success(true); // 플레이어가 맞았따
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 			Jumping(0.3f, 0.030f);
 			m_dDelay_ComboChain = 6.0;
 		}
@@ -829,26 +1027,32 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			if (m_iSmallHit_Index == 0)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_FRONT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
 				m_iSmallHit_Index++;
 			}
 			else if (m_iSmallHit_Index == 1)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_LEFT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
 				m_iSmallHit_Index++;
 			}
 			else if (m_iSmallHit_Index == 2)
 			{
-				//m_pModelCom->Set_Animation(ANIM_DMG_SMALL_RIGHT);
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
+				m_iSmallHit_Index++;
+			}
+			else if (m_iSmallHit_Index == 3)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
 				m_iSmallHit_Index = 0;
 			}
 		}
 	}
 	if (m_isConnectHitting == false)
 	{
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_FRONT, 1.1f, 0.04f, AtkDir);
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.1f, 0.04f, AtkDir);
-		//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.1f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_F, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_L, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_R, 0.8f, 0.04f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_U, 0.8f, 0.04f, AtkDir);
 	}
 	
 	
@@ -861,21 +1065,22 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 			m_dDelay_ComboChain = 4.0;
 		}
 		else
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
+			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			m_dDelay_ComboChain = 1.7;
 		}
 	}
-	//Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.6f, 0.05f, AtkDir);
 #pragma endregion
 
 
@@ -886,25 +1091,27 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 6.0;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.85f, 0.03f);
+		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
+		Jumping(1.75f, 0.03f);
 	}
 
 	//어퍼시 수직상승 여부
 	if (m_isStrictUpper == false)
 	{
-		//Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_DMG_FALL, 0.5f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 104, 0.5f, 0.01f, AtkDir);
 	}
 
 	if (m_isBounding)
 	{
-		//Ground_Animation_Play(111, ANIM_DMG_BOUND);
+		Ground_Animation_Play(104, ANIM_DMG_BOUND);
 	}
 	else
-		Ground_Animation_Play(111, 112);
+		Ground_Animation_Play(104, ANIM_DMG_FALL_END);
 #pragma endregion
 
 
@@ -916,32 +1123,34 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 15.0;
 		m_isBounding = true;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		if (m_isJumpOn)
 		{
-			//m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 			Set_FallingStatus(3.0f, 0.0f);
 		}
 		else
 		{
-			//m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
+			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
 		}
 	}
-	//Ground_Animation_Play(96, 97);
-	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 91, 0.3f, AtkDir);
 
-	/*if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_BOUND && m_isBounding)
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_BOUND && m_isBounding)
 	{
 		if (m_isFirst_Anim)
 		{
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.0f, 0.05f);
+			Jumping(1.85f, 0.05f);
 		}
-	}*/
+	}
 #pragma endregion
 
 
@@ -952,14 +1161,16 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_dDelay_ComboChain = 2.5;
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		Jumping(1.2f, 0.05f);
+		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+		Jumping(1.1f, 0.05f);
 	}
-	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
-	Ground_Animation_Play(92, 93);
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 86, 2.5f, AtkDir);
+	Ground_Animation_Play(86, 87);
 #pragma endregion
 
 
@@ -971,11 +1182,13 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		pPlayer->Set_Hit_SurgeCutScene(true);
 		pPlayer->Set_Hit_Success(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
 		m_dDelay_ComboChain = 5.5;
 
-		//m_pModelCom->Set_Animation(ANIM_DEATH);
+		m_pModelCom->Set_Animation(ANIM_DEATH);
 	}
 #pragma endregion
 
@@ -988,18 +1201,20 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 5.5;
 		pPlayer->Set_Hit_Success(true);
 		pPlayer->Set_Hit_Success_Hekireki(true);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		//m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		CSwampManager::GetInstance()->Set_Dmg(m_pColliderCom[COLL_SPHERE]->Get_fDamage());
+		m_isSwamp_Deathing = true;
 
-		//m_pModelCom->Set_Animation(ANIM_FALL);
+		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 		m_isStrictUpper = true;
 
 		if (m_isJumpOn == false)
 		{
-			Jumping(1.85f, 0.03f);
+			Jumping(1.75f, 0.03f);
 		}
 		else
 		{
-			Jumping(0.85f, 0.030f);
+			Jumping(0.75f, 0.030f);
 		}
 	}
 #pragma endregion
@@ -1007,9 +1222,42 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 
 #pragma region Death_Motion
-	if (m_StatusDesc.fHp <= 0.0f)
+	if (m_isSwamp_Deathing)
 	{
-		//m_pModelCom->Set_Animation(ANIM_DEATH);
+		m_isSwamp_Deathing = false;
+
+		if (CSwampManager::GetInstance()->Get_Hp_Phase() == 0)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= CSwampManager::GetInstance()->Get_Hp_Max() * 0.666f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+				CSwampManager::GetInstance()->Set_Hp_Phase_Up();
+
+				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
+				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+			}
+		}
+		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 1)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= CSwampManager::GetInstance()->Get_Hp_Max() * 0.333f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+				CSwampManager::GetInstance()->Set_Hp_Phase_Up();
+
+				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
+				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+			}
+		}
+		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
+		{
+			if (CSwampManager::GetInstance()->Get_Hp() <= 0.0f)
+			{
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+				m_isDeath_Motion = true;
+			}
+		}
 	}
 #pragma endregion
 
@@ -1026,28 +1274,16 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_eCurState = STATE_IDLE;
 		
 	}
-	/*
-	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim ==  112) //112는 fall마지막 모션
+	
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END) 
 	{
 		m_dDelay_ComboChain = 0.0;
-
-		m_isFirst_Move_0 = true;
-		m_isFirst_Move_1 = true;
-		m_isCoolTime_On = true;
 
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_DOWN;
-
-		_int i = rand() % 3;
-		if (i == 0)
-			m_iAttackIndex = 0;
-		else if (i == 1)
-			m_iAttackIndex = 2;
-		else if (i == 2)
-			m_iAttackIndex = 5;
 	}
-	*/
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -1055,7 +1291,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	/*
+	
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
 	{
 		m_isDeath_Motion = true;
@@ -1072,15 +1308,91 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 			if(iCurAnim == ANIM_DEATH_IDLE)
 				m_pModelCom->Set_Animation(ANIM_DEATH_GETUP);
 			else
-				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
+				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
 		}
 	}
 
 	if (iCurAnim == ANIM_IDLE)
 	{
 		m_eCurState = STATE_IDLE;
-	}*/
+	}
 
+}
+
+void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	CSwampShot::SHOTDESC ShotDesc;
+
+	XMStoreFloat4(&ShotDesc.MonsterPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	ShotDesc.iType = iType; // 0:싱글, 1:쿼드, 2:큰장판, 3:스왐핑
+
+	if (iType == 0)
+	{	
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		Pos = Pos + Dir * 1.65f;
+
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
+	else if (iType == 1)
+	{
+		for (_int i = 0; i < iNumSwamp; i++)
+		{
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_vector vDir = XMVector4Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+			_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+			_vector crossLeft = XMVector3Cross(vDir, vUp);
+
+			vPos = vPos + vDir * 1.65f;
+			if (i == 1)
+			{
+				vPos = vPos + crossLeft * 1.7f;
+			}
+			else if (i == 2)
+			{
+				vPos = vPos - crossLeft * 1.7f;
+			}
+			else if (i == 3)
+			{
+				vPos = vPos + crossLeft * 3.4f;
+			}
+
+			XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, vPos);
+			if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+			{
+				MSG_BOX("Failed to Add_GameObject : SwampShot");
+				return;
+			}
+		}
+	}
+	else if (iType == 2)
+	{
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
+	else if (iType == 3)
+	{
+		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, Pos);
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+		{
+			MSG_BOX("Failed to Add_GameObject : SwampShot");
+			return;
+		}
+	}
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CMonster_Swamp::Add_Components()

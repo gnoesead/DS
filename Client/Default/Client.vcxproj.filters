@@ -585,6 +585,9 @@
     <ClInclude Include="..\Public\SwampManager.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SwampShot.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -847,6 +850,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwampShot.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
