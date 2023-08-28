@@ -1407,7 +1407,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 		}
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f * m_fDmg_Move_Ratio, 0.035f, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f, AtkDir);
 
 #pragma endregion
 
@@ -1570,7 +1570,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		|| ANIM_DMG_SMALL == iCurAnimIndex || ANIM_DMG_BIG == iCurAnimIndex
 		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 103 == iCurAnimIndex || 104 == iCurAnimIndex
 		|| ANIM_GETUP == iCurAnimIndex || 96 == iCurAnimIndex 
-		|| 138 == iCurAnimIndex || 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex)
+		|| 138 == iCurAnimIndex || 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex
+		|| ANIM_DMG_AIR_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_CONNECT_1 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
 

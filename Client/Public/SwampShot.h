@@ -41,6 +41,7 @@ public:
 	void	Tick_Type_DuDudge(_double dTimeDelta);
 
 	_vector	Calculate_Dir_From_Pos(_float4 Pos);
+	_float	Calculate_Distance_From_Pos(_float4 Pos);
 	
 
 private:
