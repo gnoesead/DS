@@ -51,6 +51,20 @@ HRESULT CSwampShot::Initialize(void* pArg)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_WorldInfo.vPosition));
 	}
 
+	if (m_ShotDesc.iType == 4)
+	{
+		m_DuDudgePos[0] = { 430.18f, 3.35f, 320.6f, 1.0f };
+		m_DuDudgePos[1] = { 419.84f, 3.35f, 294.57f, 1.0f };
+		m_DuDudgePos[2] = { 423.05f, 3.35f, 320.9f, 1.0f };
+		m_DuDudgePos[3] = { 430.24f, 3.35f, 294.36f, 1.0f };
+		m_DuDudgePos[4] = { 424.16f, 3.35f, 312.7f, 1.0f };
+		m_DuDudgePos[5] = { 419.02f, 3.35f, 308.9f, 1.0f };
+		m_DuDudgePos[6] = { 430.5f, 3.35f, 308.3f, 1.0f };
+		m_DuDudgePos[7] = { 420.01f, 3.35f, 325.34f, 1.0f };
+		m_DuDudgePos[8] = { 426.0f, 3.35f, 301.7f, 1.0f };
+		m_DuDudgePos[9] = { 423.14f, 3.35f, 294.6f, 1.0f };
+	}
+
 	return S_OK;
 }
 
@@ -58,7 +72,7 @@ void CSwampShot::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	// 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ
+	// 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ 4:µÎ´õÁã
 	if (m_ShotDesc.iType == 0)
 		Tick_Type_Single(dTimeDelta);
 	else if (m_ShotDesc.iType == 1)
@@ -67,11 +81,23 @@ void CSwampShot::Tick(_double dTimeDelta)
 		Tick_Type_Big(dTimeDelta);
 	else if (m_ShotDesc.iType == 3)
 		Tick_Type_Swamping(dTimeDelta);
+	else if (m_ShotDesc.iType == 4)
+		Tick_Type_DuDudge(dTimeDelta);
 
 
 	m_dDelay_All += dTimeDelta;
-	if (m_dDelay_All > 10.0)
-		m_isDead = true;
+
+	if (m_ShotDesc.iType == 4)
+	{
+		if (m_dDelay_All > 25.0)
+			m_isDead = true;
+	}
+	else
+	{
+		if (m_dDelay_All > 10.0)
+			m_isDead = true;
+	}
+
 	if (true == m_isDead)
 		return;
 }
@@ -174,15 +200,18 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 void CSwampShot::Tick_Type_Big(_double dTimeDelta)
 {
 	_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-	if (m_isFirst)
-	{
-		m_isFirst = false;
-
-		_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 0.0f, 0.0f), 10.0,
-			CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
-	}
 	
+	if (3.0f < m_dDelay_All )
+	{
+		if (m_isFirst)
+		{
+			m_isFirst = false;
+
+			_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
+			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(5.0f, 5.0f, 5.0f), _float3(0.f, 0.0f, 0.0f), 10.0,
+				CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
+		}
+	}
 }
 
 void CSwampShot::Tick_Type_Swamping(_double dTimeDelta)
@@ -197,6 +226,11 @@ void CSwampShot::Tick_Type_Swamping(_double dTimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 
 	Safe_Release(pGameInstance);
+}
+
+void CSwampShot::Tick_Type_DuDudge(_double dTimeDelta)
+{
+
 }
 
 _vector CSwampShot::Calculate_Dir_From_Pos(_float4 Pos)
