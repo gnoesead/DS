@@ -268,70 +268,89 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 	CMonster* pMonster = dynamic_cast<CMonster*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
 
 	Safe_Release(pGameInstance);*/
-	
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+
+	if (m_Moveset.m_isDownMotion == false)
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		{
+			CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
 
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
-		m_StatusDesc.iHitCombo++;
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
-		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_Small = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 
-		m_StatusDesc.iHitCombo++;
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
-		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_ConnectSmall = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
-		m_StatusDesc.iHitCombo++;
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
-		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_Big = true;
-	}
+		}
 
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
-		m_StatusDesc.iHitCombo++;
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
-		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_Blow = true;
-	}
-	
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+		}
 
-		m_StatusDesc.iHitCombo++;
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_BigBlow = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
-		m_StatusDesc.iHitCombo++;
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
 
-		if (m_Moveset.m_isDownMotion == false)
 			m_Moveset.m_Down_Dmg_Upper = true;
-	}
+		}
 
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Swamp())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+
+			m_Moveset.m_Down_Dmg_Upper = true;
+		}
+	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+	}
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -641,7 +660,8 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
 		m_Moveset.m_Down_Skill_Normal = true;
 
-	if (false == m_Moveset.m_isRestrict_KeyInput)
+	m_dDelay_CanSkill += dTimeDelta;
+	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{

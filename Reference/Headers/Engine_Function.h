@@ -218,6 +218,11 @@ namespace Engine
 		{
 			return XMVectorGetX(XMVector3Length(_vVec));
 		}
+
+		static float GetLength_Y(FXMVECTOR _vVec)
+		{
+			return XMVectorGetY(XMVector3Length(_vVec));
+		}
 	};
 
 	class Remove

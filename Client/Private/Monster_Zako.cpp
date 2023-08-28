@@ -1123,7 +1123,6 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
 		}
 	}
-	//Ground_Animation_Play(96, 97);
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
 
