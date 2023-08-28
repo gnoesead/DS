@@ -1337,6 +1337,7 @@ void CBoss_Kyogai::Trigger_AtkCmb2()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKCMB2;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_AtkStep()
@@ -1344,6 +1345,7 @@ void CBoss_Kyogai::Trigger_AtkStep()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKSTEP;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 
 	if (m_bAtkStepType == false)
 		m_iAtkStepTypeNum++;
@@ -1366,6 +1368,7 @@ void CBoss_Kyogai::Trigger_StompKick()
 	m_bTrigger = true;
 	m_eCurstate = STATE_STOMPKICK;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_AtkPunch()
@@ -1373,6 +1376,7 @@ void CBoss_Kyogai::Trigger_AtkPunch()
 	m_bTrigger = true;
 	m_eCurstate = STATE_ATKPUNCH;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_LinkerCmb()
@@ -1380,6 +1384,7 @@ void CBoss_Kyogai::Trigger_LinkerCmb()
 	m_bTrigger = true;
 	m_eCurstate = STATE_LINKERCMB;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 	m_iLinkerNum = Random::Generate_Int(1, 2);
 }
 
@@ -1390,6 +1395,7 @@ void CBoss_Kyogai::Trigger_AtkSkCmb()
 	m_bAnimFinish = false;
 	m_bAnimFinish2 = false;
 	m_bAnimFinish3 = false;
+	m_bSuperArmor = true;
 	//m_bTurnRF = false;
 	m_bTurn = false;
 
@@ -1552,6 +1558,7 @@ void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB2);
 		m_eCurAnimIndex = ANIM_ATKCMB3;
+		m_bSuperArmor = false;
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
 	{
@@ -1811,7 +1818,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 						m_dTurnTime = 0.0;
 						m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
 						m_eCurAnimIndex = ANIM_IDLE;
-						m_eCurstate = STATE_INTERACT;
+						Trigger_Interact();
 					}
 
 				}

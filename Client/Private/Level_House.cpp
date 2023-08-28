@@ -80,11 +80,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -141,10 +141,7 @@ void CLevel_House::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_F1))
-    {
-        CFadeManager::GetInstance()->Set_Fade_Out(true);
-    }
+   
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 

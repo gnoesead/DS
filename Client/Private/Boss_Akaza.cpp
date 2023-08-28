@@ -288,7 +288,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-			Trigger_NextPhase2();
+			Trigger_Awake_ComboPunch();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
@@ -739,7 +739,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
 					Trigger_Hit_ConnectSmall();
 				}
-				
+
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
 			}
@@ -1242,7 +1242,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (1.00 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1254,12 +1254,12 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 
 				if (fDistance <= 5.f)
 				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
 					{
 						m_iTriggerCnt = 5;
 						m_bTrigger = false;
 					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
+					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
 					{
 						m_iTriggerCnt = 2;
 						m_bTrigger = false;
@@ -1361,15 +1361,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			}
 		}
 	}
-	/*if (m_StatusDesc.fHp <= 0.f)
-	{
-		m_bTrigger = false;
-		m_bPatternStart = false;
-		m_bNoDmg = true;
-		m_iTriggerCnt = 5;
-		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
-	}*/
+	
 }
 
 void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
@@ -1497,12 +1489,12 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 
 				if (fDistance <= 3.f)
 				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 9)
+					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 9)
 					{
 						m_iTriggerCnt = 8;
 						m_bTrigger = false;
 					}
-					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum >= 12)
+					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
 					{
 						m_iTriggerCnt = 4;
 						m_bTrigger = false;
@@ -1627,6 +1619,7 @@ void CBoss_Akaza::Trigger_Nachim()
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 	m_eCurstate = STATE_NACHIM;
 	m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
+	m_bSuperArmor = true;
 }
 
 void CBoss_Akaza::Trigger_ComboPunch()
@@ -1854,7 +1847,7 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(1.8f, 0.03f);
+	Jumping(1.5f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
@@ -2265,13 +2258,20 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
+	{
+		m_bSuperArmor = true;
 		m_eCurAnimIndex = ANIM_COMBO_DOWN;
+	}
 
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDEL;
-		Trigger_Interact();
+
+		if (Check_Player_Y() == true)
+			Trigger_Awake_ComboPunch();
+		else
+			Trigger_Interact();
 	}
 
 	if (Check_Distance(2.f) == true)
@@ -2412,27 +2412,48 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 			if (m_eCurPhase == PHASE_1)
 			{
 				if (m_iRandomPatternNum > 8)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_UpperKick();
+				}
 
 				if (m_iRandomPatternNum < 5)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_DashPunch();
+				}
 
 				if (5 <= m_iRandomPatternNum && m_iRandomPatternNum <= 8)
-					Trigger_AirGun();
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
+					Trigger_Nachim();
+				}
 			}
 			else if (m_eCurPhase == PHASE_2)
 			{
 				if (m_iRandomPatternNum > 9)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_UpperKick();
+				}
 
-				if (7 <= m_iRandomPatternNum && 9 <= m_iRandomPatternNum)
+				if (7 <= m_iRandomPatternNum && m_iRandomPatternNum <= 9)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_DashKick();
+				}
 
-				if (4 <= m_iRandomPatternNum && 6 <= m_iRandomPatternNum)
+				if (4 <= m_iRandomPatternNum && m_iRandomPatternNum <= 6)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_JumpStomp();
+				}
 
 				if (m_iRandomPatternNum < 4)
+				{
+					m_eCurAnimIndex = ANIM_IDEL;
 					Trigger_JumpAirGun();
+				}
 			}
 		}
 	}
@@ -2457,11 +2478,25 @@ void CBoss_Akaza::Update_UpperKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
 		m_eCurAnimIndex = ANIM_COMBO_UP;
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_UP) == true)
+	if (Check_Player_Y() == false)
 	{
-		m_eCurAnimIndex = ANIM_IDEL;
-		Trigger_Interact();
+
+		if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_UP) == true)
+		{
+			m_eCurAnimIndex = ANIM_IDEL;
+			Trigger_Interact();
+		}
 	}
+	else
+	{
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_UP, 0.70, dTimeDelta))
+		{
+			m_eCurAnimIndex = ANIM_IDEL;
+
+			Trigger_Awake_ComboPunch();
+		}
+	}
+
 
 	if (Check_Distance(2.f) == true)
 		m_bMove = true;
@@ -2644,8 +2679,14 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 
-		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_READY;
 
+	}
+
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_READY) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_READY);
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
@@ -2691,10 +2732,10 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_COMBOPUNCH_END, 0.30))
 		Go_Straight_Constant(dTimeDelta, ANIM_AWAKE_COMBOPUNCH_END, 1.f);
 
-	if (Check_Distance(2.f) == true)
+	if (Check_Distance_FixY(2.f) == true)
 		m_bMove = true;
 
-	if (Check_Distance(2.f) == false && m_bMove == false)
+	if (Check_Distance_FixY(2.f) == false && m_bMove == false)
 		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_DASH, 10.f, 0.01, 1.0);
 
 
@@ -2716,8 +2757,13 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 		_vector vChangePos = vMonsterPos + (vDir * fDistance);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vChangePos);
-		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_READY;
 
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_READY) == true)
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_READY);
+		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)

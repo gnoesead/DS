@@ -143,6 +143,20 @@ _bool CMonster::Check_Distance_FixY(_float fDistance)
 	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
+_bool CMonster::Check_Player_Y()
+{
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float vPlayerY = XMVectorGetY(vPlayerPos);
+	if (vPlayerY > m_fLand_Y)
+	{
+		return true;
+	}
+	else
+		return false;
+
+
+}
+
 _vector CMonster::Calculate_PlayerPos()
 {
 	Get_PlayerComponent();
