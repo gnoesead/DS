@@ -35,6 +35,25 @@ void COptionManager::Tick(_double dTimeDelta)
 			m_Option_Move = 40.f;
 		}
 	}
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_Light(0) != nullptr) {
+
+		if (m_Is_Set_Origin_Light == false) {
+			m_Light_Origin = Convert::ToVector(pGameInstance->Get_Light(0)->vLightDiffuse);
+			m_Is_Set_Origin_Light = true;
+		}
+		
+		_vector Light = m_Light_Origin;
+
+		Light *= COptionManager::GetInstance()->Get_Graphic_Option(0) / 10.f;
+
+		pGameInstance->Get_Light(0)->vLightDiffuse = Convert::ToFloat4(Light);
+	}
+
+	Safe_Release(pGameInstance);
 	
 }
 
@@ -77,6 +96,41 @@ void COptionManager::Set_Select_Num(_int num)
 _int COptionManager::Get_Select_Num()
 {
 	return m_Select_Num;
+}
+
+void COptionManager::Set_Camera_Option(_uint i , _int num)
+{
+	m_Camera_Option[i] = num;
+}
+
+_int COptionManager::Get_Camera_Option(_uint i)
+{
+	return m_Camera_Option[i];
+}
+
+void COptionManager::Set_Graphic_Option(_uint i, _int num)
+{
+	m_Graphic_Option[i] = num;
+}
+
+_int COptionManager::Get_Graphic_Option(_uint i)
+{
+	return m_Graphic_Option[i];
+}
+
+void COptionManager::Set_Sound_Option(_uint i, _int num)
+{
+	m_Sound_Option[i] = num;
+}
+
+_int COptionManager::Get_Sound_Option(_uint i)
+{
+	return m_Sound_Option[i];
+}
+
+void COptionManager::Set_Is_Set_Origin_Light(_bool Is)
+{
+	m_Is_Set_Origin_Light = Is;
 }
 
 

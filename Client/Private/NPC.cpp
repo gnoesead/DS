@@ -13,6 +13,7 @@
 
 
 
+
 CNPC::CNPC(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
 {
@@ -39,12 +40,92 @@ HRESULT CNPC::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	Create_Icon();
+	Create_Interaction();
+
+
+	return S_OK;
+}
+
+void CNPC::Tick(_double dTimeDelta)
+{
+	__super::Tick(dTimeDelta);
+
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+	CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
+
+	m_Player_Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (Distance < 2.f) {
+		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
+	}
+
+	
+
+	Safe_Release(pGameInstance);
+
+	if (m_pIcon != nullptr)
+		m_pIcon->Tick(dTimeDelta);
+
+	if (m_pInteraction != nullptr) {
+		m_pInteraction->Tick(dTimeDelta);
+	}
+
+	if (m_pInteraction_Back != nullptr) {
+		m_pInteraction_Back->Tick(dTimeDelta);
+	}
+
+	if (true == m_isDead)
+		return;
+
+
+}
+
+void CNPC::LateTick(_double dTimeDelta)
+{
+	__super::LateTick(dTimeDelta);
+
+	if (m_pIcon != nullptr)
+		m_pIcon->LateTick(dTimeDelta);
+
+	if (m_pInteraction != nullptr) {
+		m_pInteraction->LateTick(dTimeDelta);
+	}
+
+	if (m_pInteraction_Back != nullptr) {
+		m_pInteraction_Back->LateTick(dTimeDelta);
+	}
+
+}
+
+HRESULT CNPC::Render()
+{
+	
+
+	return S_OK;
+}
+
+HRESULT CNPC::Render_ShadowDepth()
+{
+
+	return S_OK;
+}
+
+void CNPC::Create_Icon()
+{
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	CFIcon::UIDESC UIDesc;
 	ZeroMemory(&UIDesc, sizeof UIDesc);
-	
+
 
 	if (m_CharacterDesc.NPCDesc.Icon_Type == 0) {
 		UIDesc.m_Is_Reverse = false;
@@ -98,64 +179,33 @@ HRESULT CNPC::Initialize(void* pArg)
 	}
 
 	Safe_Release(pGameInstance);
-
-
-	return S_OK;
 }
 
-void CNPC::Tick(_double dTimeDelta)
+void CNPC::Create_Interaction()
 {
-	__super::Tick(dTimeDelta);
-
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+	CInteraction::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-	CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
+	if (m_CharacterDesc.NPCDesc.Interaction == true) {
+		UIDesc.m_Is_Reverse = false;
+		UIDesc.m_Type = 1;
+		UIDesc.m_Up_Mount = 1.2f;
+		UIDesc.pParentTransform = m_pTransformCom;
 
-	m_Player_Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_pInteraction = dynamic_cast<CInteraction*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Interaction"), &UIDesc));
 
-	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		//UIDesc.m_Type = 0;
 
-	if (Distance < 2.f) {
-		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
+		//m_pInteraction_Back = dynamic_cast<CInteraction*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Interaction"), &UIDesc));
+
 	}
 
-	
 
 	Safe_Release(pGameInstance);
-
-	if (m_pIcon != nullptr)
-		m_pIcon->Tick(dTimeDelta);
-
-	if (true == m_isDead)
-		return;
-
-
-}
-
-void CNPC::LateTick(_double dTimeDelta)
-{
-	__super::LateTick(dTimeDelta);
-
-	if (m_pIcon != nullptr)
-		m_pIcon->LateTick(dTimeDelta);
-
-}
-
-HRESULT CNPC::Render()
-{
-	
-
-	return S_OK;
-}
-
-HRESULT CNPC::Render_ShadowDepth()
-{
-
-	return S_OK;
 }
 
 void CNPC::Dir_Setting(_bool Reverse)
@@ -385,6 +435,8 @@ CGameObject* CNPC::Clone(void* pArg)
 void CNPC::Free()
 {
 	Safe_Release(m_pIcon);
+	Safe_Release(m_pInteraction);
+	Safe_Release(m_pInteraction_Back);
 
 
 	__super::Free();

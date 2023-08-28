@@ -14,6 +14,7 @@
 #include "Monster_Spider.h"
 #include "Monster_Zako.h"
 #include "Monster_Swamp.h"
+#include "SwampShot.h"
 
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -656,6 +657,14 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Swamp");
 		return E_FAIL;
 	}
+	/* Prototype_GameObject_SwampShot */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SwampShot"),
+		CSwampShot::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_SwampShot");
+		return E_FAIL;
+	}
+
 
 	/* Prototype_GameObject_Monster_Test */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Test"),

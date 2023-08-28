@@ -60,9 +60,14 @@ public:
 	void StopSound(CHANNELID eID);
 	void StopAll();
 
+	void Tick();
+
 private:
 	float m_volume = SOUND_DEFAULT;
 	float m_BGMvolume = SOUND_DEFAULT;
+
+
+
 	FMOD_BOOL m_bool;
 
 private:

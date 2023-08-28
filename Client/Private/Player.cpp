@@ -10,6 +10,9 @@
 #include "PlayerManager.h"
 
 #include "EffectPlayer.h"
+#include "OptionManager.h"
+#include "Camera_Manager.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -67,6 +70,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+
+
+	if (COptionManager::GetInstance()->Get_Graphic_Option(1) == 0) {
+		m_pRendererCom->Set_SSAO(true);
+	}
+	else {
+		m_pRendererCom->Set_SSAO(false);
+	}
+
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -256,58 +268,89 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 	CMonster* pMonster = dynamic_cast<CMonster*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
 
 	Safe_Release(pGameInstance);*/
-	
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+
+	if (m_Moveset.m_isDownMotion == false)
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		{
+			CEffectPlayer::Get_Instance()->Play("Hit_Small", m_pTransformCom);
 
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_Small = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_ConnectSmall = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_Big = true;
-	}
+		}
 
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_Blow = true;
-	}
-	
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+		}
 
-		if (m_Moveset.m_isDownMotion == false)
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_BigBlow = true;
-	}
+		}
 
-	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
-	{
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
-		if (m_Moveset.m_isDownMotion == false)
+			m_StatusDesc.iHitCombo++;
+			m_dDelay_ComboReset_2 = 0.0;
+
 			m_Moveset.m_Down_Dmg_Upper = true;
-	}
+		}
 
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Swamp())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+
+			m_Moveset.m_Down_Dmg_Upper = true;
+		}
+	}
+	else
+	{
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+	}
 }
 
 void CPlayer::Key_Input(_double dTimeDelta)
@@ -617,7 +660,8 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
 		m_Moveset.m_Down_Skill_Normal = true;
 
-	if (false == m_Moveset.m_isRestrict_KeyInput)
+	m_dDelay_CanSkill += dTimeDelta;
+	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{
@@ -821,6 +865,8 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
+			CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+			CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
 			m_Moveset.m_iAwaken = 2;
 			m_StatusDesc.iAwaken = 2;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;

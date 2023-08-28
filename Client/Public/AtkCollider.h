@@ -9,6 +9,7 @@ BEGIN(Engine)
 
 #ifdef _DEBUG
 class CRenderer;
+class CNavigation;
 #endif // _DEBUG
 END
 
@@ -17,7 +18,7 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
-	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_EFFECT, TYPE_END };
+	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_EFFECT, TYPE_END };
 	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAIBULLET, TYPE_KYOGAIDELAYBULLET,TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
@@ -83,7 +84,7 @@ private:
 private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
-
+	CNavigation* m_pNavigationCom = { nullptr };
 	list<CGameObject*>	m_AtkObj;
 
 private:

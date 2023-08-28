@@ -637,6 +637,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Swamp())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(true);
+			}
 
 			pHitColl->Add_AtkObejct(this);
 		}
@@ -672,13 +676,14 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		m_isHit_Success = false;
 
 		m_dDelay_ComboReset = 0.0;
+		
 		m_StatusDesc.iAttackCombo++;
 
 		if(m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)
 			m_StatusDesc.fSpecial += 13.3f;
 	}
 	
-	//ÄÞº¸
+	//ÄÞº¸(Attack)
 	if (m_StatusDesc.iAttackCombo > 0)
 	{
 		m_dDelay_ComboReset += dTimeDelta;
@@ -688,23 +693,17 @@ void CCharacter::Status_Work(_double dTimeDelta)
 			m_StatusDesc.iAttackCombo = 0;
 		}
 
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
+	}
 
-		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")) != nullptr) {
-
-			CCamera_Free* pCam = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera")));
-
-			_float dist = XMVectorGetX(XMVector3Length(m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pCam->Get_Battle_Target_Pos()));
-
-			if (dist > 7.5f) {
-				m_dDelay_ComboReset = 0.0;
-				m_StatusDesc.iAttackCombo = 0;
-			}
-
+	//ÄÞº¸(Hit)
+	if (m_StatusDesc.iHitCombo > 0)
+	{
+		m_dDelay_ComboReset_2 += dTimeDelta;
+		if (m_dDelay_ComboReset_2 > 3.5f)
+		{
+			m_dDelay_ComboReset_2 = 0.0;
+			m_StatusDesc.iHitCombo = 0;
 		}
-
-		Safe_Release(pGameInstance);
 
 	}
 

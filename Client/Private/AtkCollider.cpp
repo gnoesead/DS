@@ -50,7 +50,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 
 	m_AtkCollDesc = *pAtkCollDesc;
 	Safe_AddRef(m_AtkCollDesc.pParentTransform);
-
+	
 	Setting_AtkCollDesc();
 
 	m_pColliderCom->ReMake_Collider(m_AtkCollDesc.ColliderDesc.vPosition, m_AtkCollDesc.ColliderDesc.vSize.x, m_pTransformCom->Get_WorldMatrix());
@@ -284,7 +284,7 @@ void CAtkCollider::Setting_KyogaiBullet()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vPos += XMLoadFloat4(&m_AtkCollDesc.AtkDir) * 16.5f;
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 16.5f;
 	vPos = XMVectorSetY(vPos, 0.f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
@@ -332,6 +332,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 	m_pColliderCom->Set_Hit_Bound(false);
 	m_pColliderCom->Set_Hit_CutScene(false);
 	m_pColliderCom->Set_Hit_Hekireki(false);
+	m_pColliderCom->Set_Hit_Swamp(false);
 
 	//값 넣어주기
 	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
@@ -354,6 +355,8 @@ void CAtkCollider::Setting_AtkCollDesc()
 		m_pColliderCom->Set_Hit_CutScene(true);
 	else if (TYPE_HEKIREKI == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Hekireki(true);
+	else if (TYPE_SWAMP == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Swamp(true);
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);

@@ -31,6 +31,9 @@
 #include "Fade.h"
 #include "Fade_Manager.h"
 #include "Camera_Manager.h"
+#include "FIcon.h"
+#include "OptionManager.h"
+
 
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -43,6 +46,8 @@ HRESULT CLevel_GamePlay::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -98,8 +103,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 
-	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
-
+	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);  
+	
 
     return S_OK;
 }
@@ -114,11 +119,7 @@ void CLevel_GamePlay::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Get_DIKeyDown(DIK_F1))
-	{
-		CFadeManager::GetInstance()->Set_Fade_Out(true);
-	}
+		
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -1092,56 +1093,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-// Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc11;
-	ZeroMemory(&UIDesc11, sizeof UIDesc11);
-
-	UIDesc11.m_Is_Reverse = false;
-	UIDesc11.m_Type = 0;
-	UIDesc11.m_Monster_Index = 0;
-	UIDesc11.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc11, sizeof UIDesc11);
-
-	UIDesc11.m_Is_Reverse = false;
-	UIDesc11.m_Type = 1;
-	UIDesc11.m_Monster_Index = 0;
-	UIDesc11.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc11, sizeof UIDesc11);
-
-	UIDesc11.m_Is_Reverse = false;
-	UIDesc11.m_Type = 2;
-	UIDesc11.m_Monster_Index = 0;
-	UIDesc11.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc11, sizeof UIDesc11);
-
-	UIDesc11.m_Is_Reverse = false;
-	UIDesc11.m_Type = 3;
-	UIDesc11.m_Monster_Index = 0;
-	UIDesc11.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc11))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
 
 // Pause
 	CPause::UIDESC UIDesc12;
@@ -1475,6 +1426,35 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+
+// FIcon 
+	CFIcon::UIDESC UIDesc14;
+	// 락온 아이콘
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 7;
+	UIDesc14.m_Up_Mount = 2.1f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	// 락온 글로우
+	ZeroMemory(&UIDesc14, sizeof UIDesc14);
+
+	UIDesc14.m_Is_Reverse = false;
+	UIDesc14.m_Type = 8;
+	UIDesc14.m_Up_Mount = 2.1f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 	Safe_Release(pGameInstance);

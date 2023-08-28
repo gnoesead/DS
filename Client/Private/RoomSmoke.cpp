@@ -39,7 +39,7 @@ HRESULT CRoomSmoke::Initialize(void* pArg)
 		m_fPlusX = Random::Generate_Float(-16.f, 16.f);
 		m_fPlusZ = Random::Generate_Float(-16.f, 16.f);
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f + m_fPlusX, 0.2f, 123.840f + m_fPlusZ, 1.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f + m_fPlusX, 0.5f, 123.840f + m_fPlusZ, 1.f));
 
 		m_dFrameSpeed = (_double)Random::Generate_Float(0.01f, 0.03f);
 
@@ -49,7 +49,7 @@ HRESULT CRoomSmoke::Initialize(void* pArg)
 
 		m_iFrame = Random::Generate_Int(0, 10);
 
-		m_vSize = { Random::Generate_Float(1.f, 2.f) , Random::Generate_Float(1.f, 5.f),Random::Generate_Float(1.f, 2.f) };
+		m_vSize = { Random::Generate_Float(1.f, 3.f) , Random::Generate_Float(2.f, 5.f),Random::Generate_Float(1.f, 3.f) };
 	}
 	else if (TYPE_PART == m_EffectDesc.eType)
 	{

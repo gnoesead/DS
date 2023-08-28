@@ -285,9 +285,24 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 
 	// 종이와의 거리
-	if (Compute::DistCheck(vPlayerPos, vMyPos, 6.f))
-		m_bChangeRoomTrigger = true;
+	if (pGameInstance->Get_DIKeyDown(DIK_F) && Compute::DistCheck(vPlayerPos, vMyPos, 2.f))
+	{
+		m_bChageRoomRealTrigger = true;
+	}
 
+	if (m_bChageRoomRealTrigger)
+	{
+		m_AccTime += TimeDelta;
+
+		if (m_AccTime >= 3.0)
+		{
+			m_bChangeRoomTrigger = true;
+			m_bChageRoomRealTrigger = false;
+			m_AccTime = 0.0;
+		}
+	}
+
+	
 	if (m_bChangeRoomTrigger)
 	{
 		if (m_AccTime == 0.0)

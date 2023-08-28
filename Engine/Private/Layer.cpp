@@ -119,6 +119,7 @@ void CLayer::LateTick(_double dTimeDelta)
 			else {
 				pGameObject->LateTick(dTimeDelta);
 			}
+
 		}
 		
 	}

@@ -202,7 +202,7 @@ PS_OUT  PS_Main(PS_IN _In)
 
 
 	Out.vDiffuse = vMtrlDiffuse;
-
+	
 	/*if (vMtrlDiffuse.a < 0.1f)
 		discard;*/
 

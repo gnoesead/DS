@@ -29,6 +29,7 @@
 
 #include "PlayerManager.h"
 #include "Camera_Manager.h"
+#include "OptionManager.h"
 
 CLevel_Train::CLevel_Train(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -40,6 +41,8 @@ HRESULT CLevel_Train::Initialize()
 {
     if (FAILED(__super::Initialize()))
         return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -115,10 +118,7 @@ void CLevel_Train::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-    if (pGameInstance->Get_DIKeyDown(DIK_F1))
-    {
-        CFadeManager::GetInstance()->Set_Fade_Out(true);
-    }
+   
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -1358,7 +1358,7 @@ HRESULT CLevel_Train::Load_Lights_Info(const _tchar* pPath)
 
 		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
 		{
-			tLight.vLightDiffuse = _float4(0.1f, 0.1f, 0.1f, 1.f);
+			tLight.vLightDiffuse = _float4(0.1f , 0.1f , 0.1f , 1.f);
 		}
 
 

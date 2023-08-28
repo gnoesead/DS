@@ -36,6 +36,7 @@
 #include "PlayerManager.h"
 #include "SoundMgr.h"
 #include "Camera_Manager.h"
+#include "OptionManager.h"
 
 CLevel_FinalBoss::CLevel_FinalBoss(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel(pDevice, pContext)
@@ -47,6 +48,8 @@ HRESULT CLevel_FinalBoss::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
+
+	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
@@ -124,11 +127,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Get_DIKeyDown(DIK_F1))
-	{
-		CFadeManager::GetInstance()->Set_Fade_Out(true);
-	}
+		
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -778,7 +777,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 #pragma endregion
 
 
-// FIcon (임시) 실제로는 객체가 파츠로 소유할거임
+// FIcon 
 	CFIcon::UIDESC UIDesc8;
 	// 락온 아이콘
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
@@ -787,11 +786,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 7;
 	UIDesc8.m_Up_Mount = 1.95f;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 	// 락온 글로우
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
@@ -800,43 +799,14 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc8.m_Type = 8;
 	UIDesc8.m_Up_Mount = 1.95f;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc8))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 
-// Interaction UI
-	//CInteraction::UIDESC UIDesc9;
-	//ZeroMemory(&UIDesc9, sizeof UIDesc9);
-
-	//// 배경
-	//UIDesc9.m_Is_Reverse = false;
-	//UIDesc9.m_Type = 0;
-	//UIDesc9.m_Up_Mount = 2.f;
-
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
-
-	//ZeroMemory(&UIDesc9, sizeof UIDesc9);
-
-	//// F 상호작용
-	//UIDesc9.m_Is_Reverse = false;
-	//UIDesc9.m_Type = 1;
-	//UIDesc9.m_Up_Mount = 2.f;
-
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
-	//	TEXT("Prototype_GameObject_Interaction"), &UIDesc9))) {
-	//	Safe_Release(pGameInstance);
-	//	return E_FAIL;
-	//}
-
-
-	// Fade
+// Fade
 	CFade::UIDESC UIDesc11;
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
@@ -1503,6 +1473,11 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 		ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
 
 
+		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+		{
+			tLight.vLightDiffuse = _float4(0.1f, 0.1f, 0.2f, 1.f);
+		}
+
 		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
 			return E_FAIL;
 	}
@@ -1517,6 +1492,23 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Push.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Push");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Compass.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Compass");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_WindRing.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_WindRing");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Combo_0.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_0");
@@ -1541,6 +1533,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_BulletPunch.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_BulletPunch");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_BulletPunch_Long.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_BulletPunch_Long");
 		return E_FAIL;
 	}
 

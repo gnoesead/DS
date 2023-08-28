@@ -105,7 +105,7 @@ void CSmellBundle::PlayerCheck(_double TimeDelta)
 	_vector vPlayerPos = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (Compute::DistCheck(vPlayerPos, vMyPos, 3.f) && pGameInstance->Get_DIKeyDown(DIK_F))
+	if (Compute::DistCheck(vPlayerPos, vMyPos, 2.f) && pGameInstance->Get_DIKeyDown(DIK_F))
 	{
 		EFFECTDESC EffectDesc;
 		EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

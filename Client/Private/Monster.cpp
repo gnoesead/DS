@@ -129,6 +129,34 @@ _bool CMonster::Check_Distance(_float fDistance)
 	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
+_bool CMonster::Check_Distance_FixY(_float fDistance)
+{
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);	
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPlayerPos = XMVectorSetY(vPlayerPos, 0.f);
+	vMonsterPos = XMVectorSetY(vMonsterPos, 0.f);
+
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+}
+
+_bool CMonster::Check_Player_Y()
+{
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float vPlayerY = XMVectorGetY(vPlayerPos);
+	if (vPlayerY > m_fLand_Y)
+	{
+		return true;
+	}
+	else
+		return false;
+
+
+}
+
 _vector CMonster::Calculate_PlayerPos()
 {
 	Get_PlayerComponent();
@@ -198,8 +226,15 @@ _vector CMonster::Calculate_Dir_Cross()
 
 _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
 {
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	
+	_float3 vCheck = Convert::ToFloat3(vRight);
+	if (0.f == vCheck.x && 0.f == vCheck.y && 0.f == vCheck.z)
+		return vDir;
+
 	_float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
-	_matrix RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(RandomAngle));
+	_matrix RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(RandomAngle));
+	
 	_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 	RandomAngle = Random::Generate_Float(fMinX, fMaxX);

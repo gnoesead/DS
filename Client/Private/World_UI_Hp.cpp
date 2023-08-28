@@ -27,8 +27,11 @@ HRESULT CWorld_UI_Hp::Initialize_Prototype()
 
 HRESULT CWorld_UI_Hp::Initialize(void * pArg)
 {
-	if (pArg != nullptr)
+	if (pArg != nullptr) {
 		m_UI_Desc = *(UIDESC*)pArg;
+		Safe_AddRef(m_UI_Desc.m_pMonster);
+	}
+		
 
 	m_Is_Reverse = m_UI_Desc.m_Is_Reverse;
 
@@ -114,13 +117,13 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
 
-	m_pTransformCom->LookAt(m_vTargetPos);
+	m_pTransformCom->LookAt_FixY(m_vTargetPos);
 
 
 	// Monster_Pos
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index) != nullptr) {
+	if (m_UI_Desc.m_pMonster != nullptr) {
 
-		CGameObject* pGameObject = pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index);
+		CGameObject* pGameObject = m_UI_Desc.m_pMonster;
 
 		CCharacter* pMon = dynamic_cast<CCharacter*>(pGameObject);
 
@@ -129,6 +132,7 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 		m_vBattle_Targt = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vBattle_Targt);
+
 	}
 	else {
 		m_Is_Render = false;
@@ -322,18 +326,13 @@ HRESULT CWorld_UI_Hp::SetUp_ShaderResources()
 
 void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 {
-	if (GetKeyState('H') < 0) {
-
-		m_UV_Cull += (_float)TimeDelta * 0.5f;
-
-	}
-
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) != nullptr) {
+	if (m_UI_Desc.m_pMonster != nullptr) {
 
-		CCharacter* pMonster = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), m_UI_Desc.m_Monster_Index));
+		CCharacter* pMonster = dynamic_cast<CCharacter*>(m_UI_Desc.m_pMonster);
 
 		_float Hp = pMonster->Get_Status().fHp;
 		_float Hp_Max = pMonster->Get_Status().fHp_Max;
@@ -343,6 +342,7 @@ void CWorld_UI_Hp::Get_Boss_Info(_double TimeDelta)
 		if (m_UV_Cull > 1.f) {
 			m_UV_Cull = 1.f;
 			m_Is_Render = false;
+			m_isDead = true;
 		}
 	}
 
@@ -402,5 +402,7 @@ void CWorld_UI_Hp::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);
+
+	Safe_Release(m_UI_Desc.m_pMonster);
 
 }
