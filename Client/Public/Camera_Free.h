@@ -11,7 +11,8 @@ BEGIN(Client)
 class CCamera_Free final : public CCamera
 {
 
-	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, AKAZA_FINISH, PLAYER_AWAKE , BOSS_AWAKE , END_FINISH };
+public:
+	enum CUT_IN_FINISH { TANJIRO_FINISH, ZENITSU_FINISH, RENGOKU_FINISH, AKAZA_FINISH, TANJIRO_AWAKE , ZENITSU_AWAKE , RENGOKU_AWAKE, AKAZA_AWAKE , TANJIRO_EXECUTION , END_FINISH };
 
 	typedef struct Cut_In_Camera_Desc
 	{
@@ -21,8 +22,8 @@ class CCamera_Free final : public CCamera
 		_float Angle_Verti = {};
 		_float fDistance = {};
 		_float fLifeTime = {};
-		_vector vOffSet = {};
 		_bool bIs_Lerp = {};
+		_vector vOffSet = {};
 
 	}CutInCamDesc;
 
@@ -48,7 +49,7 @@ public:
 	_bool       Get_Is_Battle() { return m_Is_Battle; }
 	_bool       Get_Is_Cut_In() { return m_Is_Cut_In; }
 	_bool       Get_Lock_On_Is_Boss() { return  m_Lock_On_Is_Boss; }
-
+	_bool       Get_Lock_On_UI_Render() { return   m_Lock_On_UI_Render; }
 
 private:
 	void FreeCamera(_double dTimeDelta);
@@ -77,7 +78,7 @@ private:
 	_bool           m_bIs_LockFree = { false };
 	_bool           m_bIs_Battle_LockFree = { false };
 
-
+	_bool           m_bIs_Cut_Dist_Set = { false };
 	_bool           m_bIs_Pos_Set= { false };
 
 	_bool           m_bIs_Dist_Update = { true };
@@ -86,6 +87,7 @@ private:
 	_int            m_Hekireki_Dir = { 1 };
 
 	_bool           m_Lock_On_Is_Boss = { false };
+	_bool           m_Lock_On_UI_Render = { true };
 private:
 	_float4			m_fCameraLook = {};
 	_float			m_fDistance = {};
@@ -104,6 +106,9 @@ private:
 	_vector         m_vBattleTargetPos = {};
 	_vector         m_vBattleTargetPos_Offer = {};
 	_vector         m_vBattleCenter = {};
+	_vector         m_vCutInTargetPos = {};
+	_vector         m_vCutInBattleTargetPos = {};
+
 
 	_float          m_vCameraAngle = { 10.f };
 	_float          m_vAdventureCameraAngle = { 0.f };
@@ -134,7 +139,9 @@ private:
 
 	_float m_Cut_In_Finish_TimeAcc = { 0.f };
 
-	_bool  m_Cut_In_IsDone = { false };
+	_bool  m_Cut_In_IsDone = { true };
+
+	_vector m_Cut_In_Dist = {};
 
 public:
 	static CCamera_Free* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

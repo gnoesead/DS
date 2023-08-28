@@ -637,6 +637,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Swamp())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(true);
+			}
 
 			pHitColl->Add_AtkObejct(this);
 		}
@@ -672,6 +676,7 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		m_isHit_Success = false;
 
 		m_dDelay_ComboReset = 0.0;
+		
 		m_StatusDesc.iAttackCombo++;
 
 		if(m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)

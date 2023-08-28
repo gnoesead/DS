@@ -129,6 +129,34 @@ _bool CMonster::Check_Distance(_float fDistance)
 	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
+_bool CMonster::Check_Distance_FixY(_float fDistance)
+{
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
+
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);	
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPlayerPos = XMVectorSetY(vPlayerPos, 0.f);
+	vMonsterPos = XMVectorSetY(vMonsterPos, 0.f);
+
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+}
+
+_bool CMonster::Check_Player_Y()
+{
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float vPlayerY = XMVectorGetY(vPlayerPos);
+	if (vPlayerY > m_fLand_Y)
+	{
+		return true;
+	}
+	else
+		return false;
+
+
+}
+
 _vector CMonster::Calculate_PlayerPos()
 {
 	Get_PlayerComponent();

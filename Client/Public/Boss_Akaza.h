@@ -153,6 +153,8 @@ public:
 		ANIM_FINAL_CUTSCENE = 111, // ÆÄÀÌ³Î ÄÆ½Å 
 		ANIM_AWAKE_START = 48, // °³¹æ ÄÆ½Å
 		ANIM_AWAKE_END = 49,
+
+		ANIM_AWAKE_COMBOPUNCH_READY = 28,
 		ANIM_AWAKE_COMBOPUNCH_Start = 29,
 		ANIM_AWAKE_COMBOPUNCH = 30,
 		ANIM_AWAKE_COMBOPUNCH_LOOP = 31,
@@ -306,12 +308,8 @@ private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	
 private:
-	_uint	m_iRandomDirNum = { 0 };
-	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iPunchCount = { 0 };
-	_uint	m_iIdleCnt = { 0 };
-	_uint	m_iTriggerCnt = { 0 };
-	_uint	m_iSmallHit_Index = { 0 };
+	
 
 private:
 	PHASE   m_eCurPhase = PHASE_1;
