@@ -450,7 +450,7 @@ HRESULT CColliderManager::Check_MonsterToMonster(_uint iLevelIndex, _double dTim
 								_vector vMoveDir = XMVector3Normalize(vDir); // 방향 벡터를 정규화
 								//_float fMoveDistance = (fRad - fDis - 0.05f) / 2.0f;
 								//_float fMoveDistance = fRad - fDis - 0.1f;
-								_float fMoveDistance = ((fRad - fDis) * 0.95f) / 2.0f;
+								_float fMoveDistance = ((fRad - fDis) * 0.65f) / 2.0f;
 								_vector vMove = vMoveDir * fMoveDistance;
 
 								_vector vPlayerPos = pSourTransform->Get_State(CTransform::STATE_POSITION);

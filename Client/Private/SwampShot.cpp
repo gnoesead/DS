@@ -89,7 +89,7 @@ void CSwampShot::Tick(_double dTimeDelta)
 
 	if (m_ShotDesc.iType == 4)
 	{
-		if (m_dDelay_All > 25.0)
+		if (m_dDelay_All > 100.0)
 			m_isDead = true;
 	}
 	else
@@ -154,7 +154,7 @@ void CSwampShot::Tick_Type_Single(_double dTimeDelta)
 		m_isFirst = false;
 
 		_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.0f), 10.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 0.0f, 0.0f), 10.0,
 			CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
 	}
 }
@@ -167,7 +167,7 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 		m_isFirst = false;
 
 		_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.0f), 10.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 0.0f, 0.0f), 10.0,
 			CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
 	}
 
@@ -179,7 +179,7 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 	{
 		m_pTransformCom->Go_Dir(dTimeDelta, -Calculate_Dir_From_Pos(m_ShotDesc.MonsterPos));
 	}
-	else if (2.0f <= m_dDelay_All && m_dDelay_All < 6.0f)
+	else if (2.0f <= m_dDelay_All && m_dDelay_All < 4.5f)
 	{
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
@@ -230,7 +230,24 @@ void CSwampShot::Tick_Type_Swamping(_double dTimeDelta)
 
 void CSwampShot::Tick_Type_DuDudge(_double dTimeDelta)
 {
+	_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
 
+	if (3.5f < m_dDelay_All)
+	{
+		if (m_isFirst)
+		{
+			m_isFirst = false;
+
+			_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
+			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 0.0f, 0.0f), 100.0,
+				CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
+		}
+
+		if (Calculate_Distance_From_Pos(m_DuDudgePos[m_ShotDesc.iDududgeIndex]) > 0.2f)
+		{
+			m_pTransformCom->Go_Dir(dTimeDelta, Calculate_Dir_From_Pos(m_DuDudgePos[m_ShotDesc.iDududgeIndex]));
+		}
+	}
 }
 
 _vector CSwampShot::Calculate_Dir_From_Pos(_float4 Pos)
@@ -244,6 +261,21 @@ _vector CSwampShot::Calculate_Dir_From_Pos(_float4 Pos)
 	_vector vTarget = XMLoadFloat4(&Pos);
 
 	return XMVector3Normalize(vTarget - vMyPos);
+}
+
+_float CSwampShot::Calculate_Distance_From_Pos(_float4 Pos)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, vMyPos);
+
+	Pos.y = MyPos.y;
+	_vector vTarget = XMLoadFloat4(&Pos);
+
+	_float fDistance = Convert::GetLength(vTarget - vMyPos);
+
+	return fDistance;
 }
 
 HRESULT CSwampShot::Add_Components()
