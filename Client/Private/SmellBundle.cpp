@@ -43,7 +43,7 @@ HRESULT CSmellBundle::Initialize(void* pArg)
 
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 	EffectWorldDesc.vPosition.y += 0.6f;	
-	EffectWorldDesc.fScale = 0.9f;
+	EffectWorldDesc.fScale = 0.9f * m_EffectDesc.fScale;
 
 	if(TYPE_NORMAL == m_EffectDesc.eType)
 		CEffectPlayer::Get_Instance()->Play("SmellBundle", m_pTransformCom, &EffectWorldDesc);
