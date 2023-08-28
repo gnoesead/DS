@@ -15,6 +15,7 @@ public:
 	typedef struct tagShotDesc
 	{
 		_float4		MonsterPos = { 0.0f, 0.0f, 0.0f ,1.0f };
+		_int		iDududgeIndex = { 0 };
 		CGameObject::WORLDINFO		WorldInfo;
 		_int	iType; // 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ
 		
@@ -37,6 +38,7 @@ public:
 	void	Tick_Type_Quad(_double dTimeDelta);
 	void	Tick_Type_Big(_double dTimeDelta);
 	void	Tick_Type_Swamping(_double dTimeDelta);
+	void	Tick_Type_DuDudge(_double dTimeDelta);
 
 	_vector	Calculate_Dir_From_Pos(_float4 Pos);
 	
@@ -50,6 +52,8 @@ private:
 	_bool		m_isFirst = { true };
 
 	_double		m_dDelay_All = { 0.0 };
+
+	_float4	 m_DuDudgePos[10];
 
 private:
 	PrimitiveBatch<DirectX::VertexPositionColor>* m_pPrimitiveBatch = { nullptr };

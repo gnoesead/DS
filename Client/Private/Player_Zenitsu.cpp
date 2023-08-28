@@ -663,8 +663,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Combo_Trigger(true);
 
-			//m_pModelCom->Set_EarlyEnd(18, true);
-			JumpStop(0.95);
+			m_pModelCom->Set_EarlyEnd(18, true, 0.8f);
+			JumpStop(0.65);
 			m_isFirst_JumpAtk = false;
 		}
 	}
@@ -729,7 +729,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 				else if( 4 == iCurAnimIndex)
 					m_pModelCom->Set_EarlyEnd(4, true, 0.3f);
 				else if(5 == iCurAnimIndex)
-					m_pModelCom->Set_EarlyEnd(5, true, 0.3f);
+					m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
 
 				m_pModelCom->Set_Combo_Trigger(true);
 				//ÄÞº¸ ºÐ±â ¼³Á¤
@@ -759,7 +759,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	}
 	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.3f);
 	m_pModelCom->Set_EarlyEnd(4, false, 0.3f);
-	m_pModelCom->Set_EarlyEnd(5, false, 0.3f);
+	m_pModelCom->Set_EarlyEnd(5, false, 0.4f);
 
 	if (fDistance > 0.7f)
 	{
@@ -1029,7 +1029,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	if (m_Moveset.m_Down_Skill_Guard)
 	{
 		m_Moveset.m_Down_Skill_Guard = false;
-
+		m_dDelay_CanSkill = 0.0;
 		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
@@ -1218,8 +1218,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	Go_Dir_Deceleration(dTimeDelta, ANIM_BATTLE_STEP_R, 4.5f * m_fScaleChange * m_fMoving_Ratio, 0.18f * m_fScaleChange, m_Moveset.m_Input_Dir);
 
 	//´õºí½ºÅÜ
-	Go_Dir_Deceleration(dTimeDelta, 71, 5.0f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
-	Go_Dir_Deceleration(dTimeDelta, 73, 5.0f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, 71, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	Go_Dir_Deceleration(dTimeDelta, 73, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -1435,6 +1435,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	if (m_Moveset.m_Down_Dmg_Upper)
 	{
 		m_Moveset.m_Down_Dmg_Upper = false;
+		m_isConnectHitting = false;
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
 		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
@@ -1442,8 +1443,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		Jumping(1.7f, 0.03f);
 	}
-	Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f * m_fDmg_Move_Ratio, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 100, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 100, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+	}
 	Ground_Animation_Play(100, 101);
 #pragma endregion
 

@@ -654,7 +654,8 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
 		m_Moveset.m_Down_Skill_Normal = true;
 
-	if (false == m_Moveset.m_isRestrict_KeyInput)
+	m_dDelay_CanSkill += dTimeDelta;
+	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_I))
 		{

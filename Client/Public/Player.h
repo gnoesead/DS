@@ -199,7 +199,7 @@ protected:
 	//공격시 거리줄임.
 	_float	m_fAtk_Move_Ratio = { 0.7f };
 	_float	m_fDmg_Move_Ratio = { 0.65f };
-	_float	m_fMoving_Ratio = { 0.6f };
+	_float	m_fMoving_Ratio = { 0.85f };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
@@ -251,6 +251,9 @@ protected: // 애니메이션 제어용 변수들
 	//젠이츠 벽력용
 	_bool	m_isCan_Air_Hekireki = { false };
 	_bool	m_isHit_Hekireki = { false };
+
+	//skill 용
+	_double m_dDelay_CanSkill = { 0.0 };
 
 	//Dash
 	_double		m_dDelay_Dash = { 0.0 };

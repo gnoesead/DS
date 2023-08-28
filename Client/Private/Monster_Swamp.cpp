@@ -667,7 +667,7 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 
 			if (m_iIndex_SwampShot == 0)
 			{
-				Swamp_Create(4, 1); // 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ
+				Swamp_Create(1, 2); // 0:½Ì±Û, 1:Äõµå, 2:Å«ÀåÆÇ, 3:½º¿ÑÇÎ 4:µÎ´õÁã
 				m_iIndex_SwampShot++;
 			}
 			else if (m_iIndex_SwampShot == 1)
@@ -1390,6 +1390,22 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 		{
 			MSG_BOX("Failed to Add_GameObject : SwampShot");
 			return;
+		}
+	}
+	else if (iType == 4)
+	{
+		for (_int i = 0; i < iNumSwamp; i++)
+		{
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			XMStoreFloat4(&ShotDesc.WorldInfo.vPosition, vPos);
+
+			ShotDesc.iDududgeIndex = i;
+
+			if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_SwampShot"), &ShotDesc)))
+			{
+				MSG_BOX("Failed to Add_GameObject : SwampShot");
+				return;
+			}
 		}
 	}
 	Safe_Release(pGameInstance);
