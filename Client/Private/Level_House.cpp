@@ -299,7 +299,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	/*CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -315,7 +315,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}
+	}*/
 
 
 	Safe_Release(pGameInstance);
@@ -1775,6 +1775,11 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 HRESULT CLevel_House::Ready_Layer_Effect()
 {
 #pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Down");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws");
@@ -1783,6 +1788,26 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Left.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Left");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up_Right.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up_Right");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Spin");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Spin_Wind");
 		return E_FAIL;
 	}
 #pragma endregion

@@ -307,9 +307,6 @@
     <Filter Include="02. GameObjects\Character\Monster\Swamp\SwampShot">
       <UniqueIdentifier>{67ecd14f-1a0a-463c-81aa-ba4f15ad5bc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Camera\Free\Boss_Akaza">
-      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Environment\SmellBundle">
       <UniqueIdentifier>{7b0f0804-7c3f-42c5-a3fd-ae27b19aa658}</UniqueIdentifier>
     </Filter>
@@ -318,6 +315,9 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\05.Mission\Mission_Paper">
       <UniqueIdentifier>{e817ebb6-58c9-427c-9d1b-ef22a995441c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza">
+      <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -517,7 +517,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Boss_Akaza.h">
-      <Filter>02. GameObjects\Camera\Free\Boss_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NPC.h">
       <Filter>02. GameObjects\Character\NPC</Filter>
@@ -789,7 +789,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Boss_Akaza.cpp">
-      <Filter>02. GameObjects\Camera\Free\Boss_Akaza</Filter>
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NPC.cpp">
       <Filter>02. GameObjects\Character\NPC</Filter>

@@ -68,7 +68,7 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 {
 	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
 
-	__super::Tick(dTimeDelta);
+	//__super::Tick(dTimeDelta);
 
 	if (m_ParentDesc.pParent->Get_isPlaying())
 	{
@@ -86,12 +86,12 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 			}
 		}
 
-		CVIBuffer_Point_Instance_Effect::INSTANCEDESC InstanceDesc;
+		/*CVIBuffer_Point_Instance_Effect::INSTANCEDESC InstanceDesc;
 		ZeroMemory(&InstanceDesc, sizeof InstanceDesc);
 
 		InstanceDesc.pParent = this;
 
-		m_pVIBufferCom->Tick(dTimeDelta, &InstanceDesc);
+		m_pVIBufferCom->Tick(dTimeDelta, &InstanceDesc);*/
 
 	}
 	else if ((m_ParentDesc.pParent->Get_isStopped()))
@@ -124,7 +124,7 @@ HRESULT CEffect_Particle::Render(void)
 HRESULT CEffect_Particle::Add_Components(void)
 {
 	if (FAILED(__super::Add_Components()))
-		return E_FAIL;
+		return E_FAIL; 
 
 	CVIBuffer_Point_Instance_Effect::INSTANCEDESC		InstanceDesc;
 
@@ -199,7 +199,7 @@ void CEffect_Particle::Set_Initial_Data(void)
 {
 	__super::Set_Initial_Data();
 
-	m_pVIBufferCom->InitialSetting();
+	//m_pVIBufferCom->InitialSetting();
 }
 
 CEffect_Particle* CEffect_Particle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

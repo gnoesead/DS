@@ -95,6 +95,10 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
+	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	{
+		CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+	}
 	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
