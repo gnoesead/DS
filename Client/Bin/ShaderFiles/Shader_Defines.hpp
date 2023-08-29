@@ -158,6 +158,7 @@ BlendState    BS_OneByOne_Engine
 	SrcBlend = ONE;
 	DestBlend = ONE;
 	BlendOp = Add;
+	
 };
 
 DepthStencilState DS_Default
