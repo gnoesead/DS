@@ -1497,6 +1497,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Push");
 		return E_FAIL;
 	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Compass.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Compass");
@@ -1726,6 +1727,24 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartRotationMax), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartColorOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vColor), sizeof(_float4));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eGravityModifierOption), sizeof(int));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGravityModifier), sizeof(_float2));	// 추가
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumGravityModiferOverLifetimes), sizeof(int));	// 추가
+
+			pParticleSystem->Get_Effect()->Reserve_GravityModiferOverLifeTime(EffectDesc.iNumGravityModiferOverLifetimes);
+
+			for (int k = 0; k < EffectDesc.iNumGravityModiferOverLifetimes; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_GravityModiferOverLifetime(LifetimeValue);
+			}
+
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSimulationSpace), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSimulationSpeed), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eScalingMode), sizeof(int));
@@ -1737,6 +1756,22 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverTimeOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMax), sizeof(float));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumRateOverTime), sizeof(int));	// 추가
+
+			pParticleSystem->Get_Effect()->Reserve_RateOverLifeTime(EffectDesc.iNumRateOverTime);
+
+			for (int k = 0; k < EffectDesc.iNumRateOverTime; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_RateOverLifetime(LifetimeValue);
+			}
+
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverDistanceOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMax), sizeof(float));
@@ -1762,8 +1797,13 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 				pParticleSystem->Get_Effect()->Add_BurstDesc(BurstDesc);
 			}
 
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumParticlesPerFrame), sizeof(int));	// 추가
+
 			// Shape
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isShape), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSpark), sizeof(bool));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fYExtendSpeed), sizeof(float));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fYExtendEndSize), sizeof(_float2));	// 추가
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eShapeType), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeAngle), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeRadius), sizeof(float));
@@ -1796,6 +1836,21 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocitySpeedModifierOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMax), sizeof(float));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumSpeedOverLifeTimes), sizeof(int)); // 추가
+
+			pParticleSystem->Get_Effect()->Reserve_SpeedOverLifeTime(EffectDesc.iNumSpeedOverLifeTimes);
+
+			for (int k = 0; k < EffectDesc.iNumSpeedOverLifeTimes; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_SpeedOverLifetime(LifetimeValue);
+			}
 
 			// Limit Velocity over Lifetime
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesLimitVelocity), sizeof(bool));
@@ -1890,6 +1945,30 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 			// Collision
 			// SubEmitters
 			// Texture Sheet Animation
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isTextureSheetAnimation), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vTiles), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eTimeModeOption), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eFrameOverTimeOption), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartFrameOption), sizeof(int));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumFrameOverTime), sizeof(int));
+
+			pParticleSystem->Get_Effect()->Reserve_FrameOverLifeTime(EffectDesc.iNumFrameOverTime);
+
+			for (int k = 0; k < EffectDesc.iNumFrameOverTime; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_FrameOverLifetime(LifetimeValue);
+			}
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iStartFrame), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fFrameSpeedMin), sizeof(float));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fFrameSpeedMax), sizeof(float));
 			// Trail
 			// Renderer
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRenderer), sizeof(bool));

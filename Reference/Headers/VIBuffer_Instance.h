@@ -20,8 +20,8 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void Set_NumInstance(_uint iNum) {
-		m_iNumInstance = iNum;
+	void Set_NumInstanceUsing(_uint iNum) {
+		m_iNumInstanceUsing = iNum;
 	}
 
 protected:
@@ -29,6 +29,7 @@ protected:
 	_uint			m_iInstanceStride = { 0 };
 	_uint			m_iNumInstance = { 0 };
 	_uint			m_iMaxNumInstance = { 0 };
+	_uint			m_iNumInstanceUsing = { 0 };
 	ID3D11Buffer*	m_pVBInstance = { nullptr };
 
 public:

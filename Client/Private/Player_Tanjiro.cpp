@@ -296,7 +296,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
-				//CEffectPlayer::Get_Instance()->Play("ATK_Combo_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -309,12 +310,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2", m_pTransformCom);
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2", m_pTransformCom);
-
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -719,10 +718,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN || m_pModelCom->Get_iCurrentAnimIndex() == 88)
 		{
-			if (m_isCanNavi)
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
-			else
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+			if (m_isSwamp_Escape == false)
+			{
+				if (m_isCanNavi)
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+			}
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 	}
@@ -1100,10 +1102,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
-		Jumping(3.0f * m_fScaleChange, 0.05f * m_fScaleChange);
+		Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
 
 		Use_Mp_Skill();
 	}
+	Ground_Animation_Play(37, 86);
 	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
 }
 
@@ -1476,7 +1479,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 		}
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f * m_fDmg_Move_Ratio, 0.035f,  AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f,  AtkDir);
 	
 #pragma endregion
 
@@ -1542,6 +1545,43 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	Ground_Animation_Play(125, 126);
 #pragma endregion
 
+
+#pragma region Dmg_SwampBind
+	if (m_Moveset.m_Down_Dmg_Swamp)
+	{
+		m_Moveset.m_Down_Dmg_Swamp = false;
+
+
+		m_pModelCom->Set_Animation(ANIM_DMG_SWAMPBIND);
+		
+		m_isSwampHit = true;
+		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f;
+		Jumping(0.01f, 0.01f);
+	}
+
+	if (m_isSwampHit)
+	{
+		m_dSwampHit += dTimeDelta;
+		if (m_dSwampHit > 1.3f)
+		{
+			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_SWAMPBIND)
+			{
+				m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
+			}
+			m_isSwamp_Escape = true;
+
+			if(m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) > m_fLand_Y)
+				m_fLand_Y += 0.01f;
+			else
+			{
+				m_dSwampHit = 0.0;
+				m_isSwampHit = false;
+				m_isSwamp_Escape = false;
+			}
+		}
+	}
+
+#pragma endregion
 
 
 	if (m_Moveset.m_Down_GetUp)
@@ -1639,6 +1679,11 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		m_Moveset.m_Down_ADV_Jump_To_Object = false;
 
 		m_pModelCom->Set_Animation(ANIM_ADV_JUMP);
+
+		m_pModelCom->Set_LinearDuration(2, 0.001f);
+		m_pModelCom->Set_LinearDuration(3, 0.001f);
+		m_pModelCom->Set_LinearDuration(4, 0.001f);
+
 		
 		//m_isBoxJumping = true;
 		//¶³¾îÁö´Â
@@ -1836,7 +1881,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| ANIM_DMG_SMALL == iCurAnimIndex || ANIM_DMG_SMALL_RETURN == iCurAnimIndex || ANIM_DMG_BIG_RETURN == iCurAnimIndex || ANIM_DMG_BIG == iCurAnimIndex
 		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 138 == iCurAnimIndex
 		|| ANIM_DOWN_GETUP == iCurAnimIndex || 135 == iCurAnimIndex
-		|| 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex)
+		|| 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex || ANIM_DMG_SWAMPBIND == iCurAnimIndex
+		|| ANIM_DMG_AIR_SMALL_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_1 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_2 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
 		

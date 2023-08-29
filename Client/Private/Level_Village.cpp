@@ -35,6 +35,7 @@
 
 #include "PlayerManager.h"
 #include "OptionManager.h"
+#include "SmellBundle.h"
 
 
 
@@ -125,6 +126,11 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_SmellBundle(TEXT("Layer_SmellBundle"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_Village");
+        return E_FAIL;
+    }
 
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(false);
@@ -1800,6 +1806,47 @@ HRESULT CLevel_Village::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
 
     Safe_Release(pGameInstance);
 
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_SmellBundle(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+    CSmellBundle::EFFECTDESC EffectDesc;
+
+
+    EffectDesc.vPos = XMVectorSet(598.f, 4.5f, 311.f, 1.f);
+    EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+        return E_FAIL;
+
+    EffectDesc.vPos = XMVectorSet(607.f, 7.5f, 255.f, 1.f);
+    EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+        return E_FAIL;
+
+    EffectDesc.vPos = XMVectorSet(586.f, 4.5f, 351.f, 1.f);
+    EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+        return E_FAIL;
+
+    EffectDesc.eType = CSmellBundle::TYPE_WORLD;
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+        return E_FAIL;
+
+    Safe_Release(pGameInstance);
     return S_OK;
 }
 
