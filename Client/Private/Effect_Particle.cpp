@@ -74,15 +74,31 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 	{
 		if (m_fDelayTimeAcc > m_fStartDelay)
 		{
-			if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + max(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax))
+			if (m_eEffectDesc.eStartLifeTimeOption == OP_CONSTANT)
 			{
-				CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
+				if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + m_eEffectDesc.fStartLifeTimeMin)
+				{
+					CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
 
-				m_isCollect = true;
-				m_ParentDesc.pParent->Set_isCollect(true);
+					m_isCollect = true;
+					m_ParentDesc.pParent->Set_isCollect(true);
 
-				m_eEffectDesc.fTimeAcc = 0;
-				m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+					m_eEffectDesc.fTimeAcc = 0;
+					m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+				}
+			}
+			else if (m_eEffectDesc.eStartLifeTimeOption == OP_RAND_TWO_CONSTANT)
+			{
+				if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + max(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax))
+				{
+					CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
+
+					m_isCollect = true;
+					m_ParentDesc.pParent->Set_isCollect(true);
+
+					m_eEffectDesc.fTimeAcc = 0;
+					m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+				}
 			}
 		}
 

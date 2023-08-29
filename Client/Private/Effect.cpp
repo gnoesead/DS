@@ -72,7 +72,7 @@ void CEffect::Tick(_double dTimeDelta)
 		{
 			m_eEffectDesc.fTimeAcc += (_float)dTimeDelta;
 
-			if (2 != m_eEffectDesc.eEffectType)
+			if (2 != m_eEffectDesc.eEffectType)			// Particle이 아닌경우
 			{
 				if (0 >= m_fLifeTime)
 				{
