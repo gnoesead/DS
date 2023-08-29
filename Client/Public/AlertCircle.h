@@ -63,6 +63,11 @@ private:
 
 	_float4					m_vLook = { 0.f , 0.f , 0.f , 0.f };
 	STATE					m_eState = STATE_SHOWON;
+	_double					m_dAccTime = 0.0;
+	_bool					m_bMakeAlertCircle = { false };
+	_uint					m_iNum = { 0 };
+	_bool					m_bDeadTrigger = { false };
+	_double					m_dCreateTimeInterval = { 0.0 };
 
 public:
 	static CAlertCircle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
