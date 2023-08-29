@@ -1131,6 +1131,12 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		{
 			vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
 
+			if (NAVI_HOUSE_0_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F4))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
+
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
