@@ -91,6 +91,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bSecondAwake = { false };
 	_bool	m_bNoDmg = { false };
 	_bool	m_bSuperArmor = { false };
+	_bool	m_bMove = { false };
 
 protected:
 	_double m_dAwakeTime = { 0.0 };
