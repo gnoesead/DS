@@ -445,7 +445,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.05
 			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_Compass", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.f;
+				CEffectPlayer::Get_Instance()->Play("Akaza_Compass", m_pTransformCom, &EffectWorldDesc);
 			}
 
 		}

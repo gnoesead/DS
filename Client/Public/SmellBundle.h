@@ -22,6 +22,7 @@ public:
 	typedef struct tagEffectDesc
 	{
 		_vector vPos;
+		_float fScale = 1.f;
 		TYPE eType = TYPE_NORMAL;
 
 	}EFFECTDESC;

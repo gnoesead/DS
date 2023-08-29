@@ -280,27 +280,54 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			{//0.10
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
-			{
+			{//0.17
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
 			}
 			if (2 == m_iEvent_Index)
-			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			{//0.30
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
 			}
 			if (3 == m_iEvent_Index)
-			{
+			{//0.35
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
 			}
 			if (4 == m_iEvent_Index)
-			{
+			{//0.50
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+			}
+			if (5 == m_iEvent_Index)
+			{//0.61
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
+			if (6 == m_iEvent_Index)
+			{//0.80
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+			}
+			if (7 == m_iEvent_Index)
+			{//0.84
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
+			if (8 == m_iEvent_Index)
+			{//1.30
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.7f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.x = -0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+			}
+			if (9 == m_iEvent_Index)
+			{//1.39
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
