@@ -195,7 +195,7 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 		m_dTimeAcc = 0.0;
 		m_iCollCount = 0;
 		m_bSaveTransform = false;
-
+		
 		Set_Dead();
 	}
 
