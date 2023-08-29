@@ -220,7 +220,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
-	
+
 	//Out.vShade = saturate(Out.vShade);
 	//Out.vShade = ceil(Out.vShade * 1.5) / 1.5f;
 
@@ -273,7 +273,7 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 
 	 */
 
-	/* 투영공간상에 위치 .*/
+	 /* 투영공간상에 위치 .*/
 	vWorldPos.x = In.vTexUV.x * 2.f - 1.f;
 	vWorldPos.y = In.vTexUV.y * -2.f + 1.f;
 	vWorldPos.z = vDepth.y;
@@ -294,8 +294,8 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	float      fAtt = saturate((g_fLightRange - fDistance) / g_fLightRange);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	if (g_bSSAOSwitch == false)
-	Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-	else if(g_bSSAOSwitch == true)
+		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	else if (g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 
 	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
@@ -333,12 +333,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (vDiffuse.a == 0.f)
 		discard;
-	
+
 
 	Out.vColor = vDiffuse * vShade;
 
 	Out.vColor.rgb += vEmissive.rgb;
-	
+
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
 	float3 grayColor = { grayValue , grayValue ,grayValue };
 
@@ -360,13 +360,13 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
 		if (c.r == 1.f && c.b == 1.f)
 			discard;
-		
+
 		Out.vColor.rgb = c * vShade.rgb;
 		Out.vColor.a = vDiffuse.a * vShade.a;
-		
+
 		Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
 	}*/
-	
+
 
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
@@ -382,7 +382,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		Out.vColor = vector(sepia.r, sepia.g, sepia.b, sepia.a);
 	}*/
 
-	
+
 
 	//그림자 적용
 
@@ -504,7 +504,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness >0.99f)
+	if (fBrightness > 0.99f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -525,27 +525,27 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 	/*if (vHDRColor.a == 0.f)
 		discard;*/
-	/*if (vBloomOriTex.a == 0.f)
-		discard;
-	if (vBloomColor.a == 0.f)
-		discard;*/
+		/*if (vBloomOriTex.a == 0.f)
+			discard;
+		if (vBloomColor.a == 0.f)
+			discard;*/
 
-	//if (true == g_bGrayScale)
-	//{
-	//	//Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
-	//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
-	//	float3 c = float3(0.0, 0.0, 0.0);
-	//	float f = 1.0 / 6;
-	//	for (int i = 0; i < 6; i++)
-	//	{
-	//		c += g_FinalTexture.Sample(LinearSampler, In.vTexUV - 0.01 * Direction * float(i)).rgb * f;
-	//		Out.vColor.rgb = c;
-	//	}
-	//	/*if ( )
-	//		discard;*/
+			//if (true == g_bGrayScale)
+			//{
+			//	//Out.vColor.rgb = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+			//	float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
+			//	float3 c = float3(0.0, 0.0, 0.0);
+			//	float f = 1.0 / 6;
+			//	for (int i = 0; i < 6; i++)
+			//	{
+			//		c += g_FinalTexture.Sample(LinearSampler, In.vTexUV - 0.01 * Direction * float(i)).rgb * f;
+			//		Out.vColor.rgb = c;
+			//	}
+			//	/*if ( )
+			//		discard;*/
 
-	//}
-	//else
+			//}
+			//else
 	{
 		if (vHDRColor.a == 0.f)
 			discard;
@@ -563,7 +563,7 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 			discard;
 		Out.vColor.a = 1.f;
 
-		
+
 	}
 
 
@@ -586,7 +586,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 		float f = 1.0 / 12;
 
 		for (int i = 0; i < 12; i++)
-		{			
+		{
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
@@ -810,7 +810,7 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	
+
 	if (vFinal.a == 0.f)
 		discard;
 
