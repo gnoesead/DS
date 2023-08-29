@@ -596,7 +596,7 @@ void CMini_Map::Get_Player_Info(_double TimeDelta)
 
 
 	// Player
-	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+	CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
 
 	CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 	

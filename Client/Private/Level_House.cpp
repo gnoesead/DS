@@ -28,6 +28,8 @@
 #include "Battle_Signal.h"
 #include "Pause.h"
 #include "Option.h"
+#include "Paper.h"
+
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -130,6 +132,7 @@ HRESULT CLevel_House::Initialize()
 	CDialogManager::GetInstance()->Set_Dialog_Type(99);
 	
 	CMissionManager::GetInstance()->Set_Main_Mission_Type(1);
+	CMissionManager::GetInstance()->Set_Main_Sub_Num(0);
 
     return S_OK;
 }
@@ -479,6 +482,19 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	// Eff_1
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 5;
+	UIDesc3.m_Eff_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
 
 // Dialog
@@ -509,13 +525,24 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 
 // Icon
-
 	CFIcon::UIDESC UIDesc5;
 	ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
 	UIDesc5.m_Type = 0;
 	UIDesc5.Pos = { 67.f, 0.f, 19.9f , 1.f };
 	UIDesc5.m_Up_Mount = 1.7f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Type = 0;
+	UIDesc5.Pos = { 127.f, 0.f, 57.5f , 1.f };
+	UIDesc5.m_Up_Mount = 1.6f;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
@@ -531,6 +558,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.Pos = { 31.f, 0.f, 32.f , 1.f };
 	UIDesc6.m_Up_Mount = 1.2f;
 	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
@@ -542,6 +570,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.Pos = { 81.f, 0.f, 56.f , 1.f };
 	UIDesc6.m_Up_Mount = 1.2f;
 	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
@@ -553,9 +582,35 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.Pos = { 48.f, 0.f, 15.85f , 1.f };
 	UIDesc6.m_Up_Mount = 1.2f;
 	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 77.f, 0.f, 26.f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = false;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Paper
+	CPaper::UIDESC UIDesc7;
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Type = 0;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Paper_UI"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
@@ -1767,17 +1822,20 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkStepB.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_12.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Kyogai_AtkStepB");
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_11");
 		return E_FAIL;
 	}
+
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk");
 		return E_FAIL;
 	}
+
+	
 
 	return S_OK;
 }
@@ -1895,6 +1953,24 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vStartRotationMax), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartColorOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vColor), sizeof(_float4));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eGravityModifierOption), sizeof(int));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vGravityModifier), sizeof(_float2));	// 추가
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumGravityModiferOverLifetimes), sizeof(int));	// 추가
+
+			pParticleSystem->Get_Effect()->Reserve_GravityModiferOverLifeTime(EffectDesc.iNumGravityModiferOverLifetimes);
+
+			for (int k = 0; k < EffectDesc.iNumGravityModiferOverLifetimes; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_GravityModiferOverLifetime(LifetimeValue);
+			}
+
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSimulationSpace), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSimulationSpeed), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eScalingMode), sizeof(int));
@@ -1906,6 +1982,22 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverTimeOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverTimeMax), sizeof(float));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumRateOverTime), sizeof(int));	// 추가
+
+			pParticleSystem->Get_Effect()->Reserve_RateOverLifeTime(EffectDesc.iNumRateOverTime);
+
+			for (int k = 0; k < EffectDesc.iNumRateOverTime; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_RateOverLifetime(LifetimeValue);
+			}
+
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eRateOverDistanceOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fRateOverDistanceMax), sizeof(float));
@@ -1931,8 +2023,13 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 				pParticleSystem->Get_Effect()->Add_BurstDesc(BurstDesc);
 			}
 
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumParticlesPerFrame), sizeof(int));	// 추가
+
 			// Shape
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isShape), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSpark), sizeof(bool));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fYExtendSpeed), sizeof(float));	// 추가
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fYExtendEndSize), sizeof(_float2));	// 추가
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eShapeType), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeAngle), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fShapeRadius), sizeof(float));
@@ -1965,6 +2062,21 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eVelocitySpeedModifierOption), sizeof(int));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fSpeedModifierMax), sizeof(float));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumSpeedOverLifeTimes), sizeof(int)); // 추가
+
+			pParticleSystem->Get_Effect()->Reserve_SpeedOverLifeTime(EffectDesc.iNumSpeedOverLifeTimes);
+
+			for (int k = 0; k < EffectDesc.iNumSpeedOverLifeTimes; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_SpeedOverLifetime(LifetimeValue);
+			}
 
 			// Limit Velocity over Lifetime
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSeparateAxesLimitVelocity), sizeof(bool));
@@ -2059,6 +2171,30 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			// Collision
 			// SubEmitters
 			// Texture Sheet Animation
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isTextureSheetAnimation), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vTiles), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eTimeModeOption), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eFrameOverTimeOption), sizeof(int));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eStartFrameOption), sizeof(int));
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iNumFrameOverTime), sizeof(int));
+
+			pParticleSystem->Get_Effect()->Reserve_FrameOverLifeTime(EffectDesc.iNumFrameOverTime);
+
+			for (int k = 0; k < EffectDesc.iNumFrameOverTime; ++k)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fLifetime), sizeof(float));
+				inputFile.read(reinterpret_cast<char*>(&LifetimeValue.fValue), sizeof(float));
+
+				pParticleSystem->Get_Effect()->Add_FrameOverLifetime(LifetimeValue);
+			}
+
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.iStartFrame), sizeof(_float2));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fFrameSpeedMin), sizeof(float));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fFrameSpeedMax), sizeof(float));
 			// Trail
 			// Renderer
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRenderer), sizeof(bool));

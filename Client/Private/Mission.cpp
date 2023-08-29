@@ -120,35 +120,37 @@ HRESULT CMission::Initialize(void * pArg)
 	}
 
 	// Main_Effect
-	if (m_UI_Desc.m_Type == 5) {
+	if (m_UI_Desc.m_Type == 5 && m_UI_Desc.m_Eff_Type == 0) {
 
-		m_fX = 363;
-		m_fY = 137;
-		m_Origin_PosX = 363;
-		m_Origin_PosY = 137;
-		m_Start_PosX = 333;
-		m_Start_PosY = 137;
+		m_fX = 180;
+		m_fY = 50;
+		m_Origin_PosX = 180;
+		m_Origin_PosY = 50;
+		m_Start_PosX = 150;
+		m_Start_PosY = 50;
 
-		m_Origin_X = 64;
-		m_Origin_Y = 64;
+		m_Origin_X = 535.f;
+		m_Origin_Y = 64.f;
 		m_Size_Param = 0.666678f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 3;
+		m_Alpha = 0.f;
 	}
 
 	// Sub_Effect
-	if (m_UI_Desc.m_Type == 6) {
+	if (m_UI_Desc.m_Type == 5 && m_UI_Desc.m_Eff_Type == 1) {
 
-		m_fX = 363;
-		m_fY = 137;
-		m_Origin_PosX = 363;
-		m_Origin_PosY = 137;
-		m_Start_PosX = 333;
-		m_Start_PosY = 137;
+		m_fX = 210;
+		m_fY = 140;
+		m_Origin_PosX = 210;
+		m_Origin_PosY = 140;
+		m_Start_PosX = 180;
+		m_Start_PosY = 140;
 
-		m_Origin_X = 64;
+		m_Origin_X = 356 * 1.9f;
 		m_Origin_Y = 64;
 		m_Size_Param = 0.666678f;
-		m_UI_Layer = 2;
+		m_UI_Layer = 3;
+		m_Alpha = 0.f;
 	}
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
@@ -187,12 +189,99 @@ HRESULT CMission::Initialize(void * pArg)
 void CMission::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
+	if (m_UI_Desc.m_Type != 5) {
 
-	if(m_Is_In == true)
-		Fade_In(TimeDelta);
+		if (m_Is_In == true)
+			Fade_In(TimeDelta);
 
-	if (m_Is_Out == true)
-		Fade_Out(TimeDelta);
+		if (m_Is_Out == true)
+			Fade_Out(TimeDelta);
+
+	}
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		m_Main_Time = 0.f;
+		m_Sub_Time = 0.f;
+	}
+	else {
+		m_Main_Time = 0.5f;
+		m_Sub_Time = 0.5f;
+	}
+
+	Safe_Release(pGameInstance);
+
+	if (m_Is_Main_Num_Change == true) {
+		m_Main_TimeAcc += (_float)TimeDelta;
+
+		if (m_Main_TimeAcc > m_Main_Time) {
+			m_Main_TimeAcc = 0.f;
+			m_Is_Main_Num_Eff = true;
+			m_Is_Main_Num_Change = false;
+			m_Is_Num_Change_Reset = false;
+		}
+	}
+
+	if (m_Is_Sub_Num_Change == true) {
+		m_Sub_TimeAcc += (_float)TimeDelta;
+
+		if (m_Sub_TimeAcc > m_Sub_Time) {
+			m_Sub_TimeAcc = 0.f;
+			m_Is_Sub_Num_Eff = true;
+			m_Is_Sub_Num_Change = false;
+			m_Is_Num_Change_Reset = false;
+		}
+	}
+
+
+	if (m_UI_Desc.m_Type == 5) {
+
+		if (m_Is_Main_Num_Eff == true && m_Is_Dialog_On == false ) {
+
+			if (m_UI_Desc.m_Eff_Type == 0) {
+
+
+				if (m_Is_Num_Change_Reset == false) {
+					m_Origin_X = 535.f;
+					m_Alpha = 1.f;
+					m_Is_Num_Change_Reset = true;
+				}
+
+				m_Origin_X += (_float)TimeDelta * 200.f;
+				m_Alpha -= (_float)TimeDelta * 0.7f;
+
+
+				if (m_Alpha <= 0.f) {
+					m_Alpha = 0.f;
+					m_Is_Main_Num_Eff = false;
+				}
+
+			}
+		}
+
+		if (m_Is_Sub_Num_Eff == true && m_Is_Dialog_On == false ) {
+
+			if (m_UI_Desc.m_Eff_Type == 1) {
+
+				if (m_Is_Num_Change_Reset == false) {
+					m_Origin_X = 356 * 1.9f;
+					m_Alpha = 1.f;
+					m_Is_Num_Change_Reset = true;
+				}
+
+				m_Origin_X += (_float)TimeDelta * 200.f;
+				m_Alpha -= (_float)TimeDelta * 0.7f;
+
+				if (m_Alpha <= 0.f) {
+					m_Alpha = 0.f;
+					m_Is_Sub_Num_Eff = false;
+				}
+			}
+		}
+
+	}
 
 	Set_UI();
 
@@ -257,7 +346,6 @@ void CMission::LateTick(_double TimeDelta)
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		}
 
-
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
@@ -284,8 +372,20 @@ void CMission::LateTick(_double TimeDelta)
 	m_Main_Sub_Num = CMissionManager::GetInstance()->Get_Main_Sub_Num();
 	m_Sub_Num = CMissionManager::GetInstance()->Get_Sub_Num();
 
+	if (m_UI_Desc.m_Type == 5) {
 
+		if ((m_Main_Sub_Num != m_Pre_Main_Sub_Num) && m_UI_Desc.m_Eff_Type == 0) {
+			m_Pre_Main_Sub_Num = m_Main_Sub_Num;
+			m_Is_Main_Num_Change = true;
 
+		}
+
+		if ((m_Sub_Num != m_Pre_Sub_Num) && m_UI_Desc.m_Eff_Type == 1) {
+			m_Pre_Sub_Num = m_Sub_Num;
+			m_Is_Sub_Num_Change = true;
+		
+		}
+	}
 
 	Safe_Release(pGameInstance);
 

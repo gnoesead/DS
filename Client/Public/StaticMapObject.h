@@ -46,6 +46,7 @@ private:
 	_bool	 m_bStop = { false };
 
 	// πÊ ¿Ãµø
+	_bool	m_bChageRoomRealTrigger = { false };
 	_bool	m_bChangeRoomTrigger = { false };
 	_bool	m_bChageRoom = { false };
 	_bool	m_bSetInvert = { false };

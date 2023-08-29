@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CRoomSmoke::CRoomSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CRoomSmoke::CRoomSmoke(const CRoomSmoke& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }
@@ -25,27 +25,47 @@ HRESULT CRoomSmoke::Initialize_Prototype()
 
 HRESULT CRoomSmoke::Initialize(void* pArg)
 {
+	if(nullptr != pArg)
+		memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
+	if (TYPE_ALLROOM == m_EffectDesc.eType)
+	{
+		m_fPlusX = Random::Generate_Float(-16.f, 16.f);
+		m_fPlusZ = Random::Generate_Float(-16.f, 16.f);
 
-	m_fPlusX = Random::Generate_Float(-16.f, 16.f);
-	m_fPlusZ = Random::Generate_Float(-16.f, 16.f);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f + m_fPlusX, 0.5f, 123.840f + m_fPlusZ, 1.f));
+
+		m_dFrameSpeed = (_double)Random::Generate_Float(0.01f, 0.03f);
+
+		m_dSpeedX = (_double)Random::Generate_Float(-2.f, 2.f);
+
+		m_dSpeedY = (_double)Random::Generate_Float(8.f, 12.f);
+
+		m_iFrame = Random::Generate_Int(0, 10);
+
+		m_vSize = { Random::Generate_Float(1.f, 3.f) , Random::Generate_Float(2.f, 5.f),Random::Generate_Float(1.f, 3.f) };
+	}
+	else if (TYPE_PART == m_EffectDesc.eType)
+	{
+		m_fPlusX = Random::Generate_Float(-1.f, 1.f);
+		m_fPlusY = Random::Generate_Float(0.f, 0.8f);
+		m_fPlusZ = Random::Generate_Float(-1.f, 1.f);
+
+		m_dFrameSpeed = (_double)Random::Generate_Float(0.02f, 0.02f);
+
+		m_vSize = { Random::Generate_Float(1.f, 3.f) , Random::Generate_Float(2.f, 4.f),Random::Generate_Float(1.f, 3.f) };
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY + 0.5f, m_fPlusZ, 0.f));
+		m_iFrame = 0;
+	}
 	
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f + m_fPlusX, 0.2f, 123.840f + m_fPlusZ, 1.f));
-
-	m_dFrameSpeed = (_double)Random::Generate_Float(0.01f, 0.03f);
-
-	m_dSpeedX = (_double)Random::Generate_Float(-2.f, 2.f);
-
-	m_dSpeedY = (_double)Random::Generate_Float(8.f, 12.f);
-
-	m_iFrame = Random::Generate_Int(0, 10);
-
-	m_vSize = { Random::Generate_Float(1.f, 2.f) , Random::Generate_Float(1.f, 5.f),Random::Generate_Float(1.f, 2.f)};
+	m_fTextureOrder = 3.f;
+	m_fAlpha = 0.4f;
 
 	return S_OK;
 }
@@ -56,13 +76,25 @@ void CRoomSmoke::Tick(_double TimeDelta)
 
 	Update_Frame(TimeDelta);
 
-	//m_fSize += m_fSizeSpeed * (_float)TimeDelta;
+	if (m_iFrame > 16)
+	{
+		//m_vSize.y -= 16.f * (_float)TimeDelta;
+		/*m_pTransformCom->Set_Speed(10.0);
+		m_pTransformCom->Go_Down(TimeDelta);*/
+
+		m_fAlpha -= 0.5f * (_float)TimeDelta;
+	}
+	else
+	{
+		m_vSize.x += 2.f * (_float)TimeDelta;
+		m_vSize.y += 3.f * (_float)TimeDelta;
+		m_vSize.z += 2.f * (_float)TimeDelta;
+	}
+
 	m_pTransformCom->Scaling(m_vSize);
 
-	/*m_pTransformCom->Set_Speed(m_dSpeedY);
-	m_pTransformCom->Go_Up(TimeDelta);*/
-	//m_pTransformCom->Set_Speed(m_dSpeedX);
-	//m_pTransformCom->Go_Left(TimeDelta);
+	if (m_fAlpha < 0.f)
+		m_isDead = true;
 }
 
 void CRoomSmoke::LateTick(_double TimeDelta)
@@ -78,7 +110,6 @@ void CRoomSmoke::LateTick(_double TimeDelta)
 	m_vTargetPos = { XMVectorGetX(m_vTargetPos), XMVectorGetY(m_vTargetPos) ,XMVectorGetZ(m_vTargetPos), XMVectorGetW(m_vTargetPos) };
 
 	m_pTransformCom->LookAt(m_vTargetPos);
-
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
 		return;
@@ -164,9 +195,7 @@ HRESULT CRoomSmoke::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fUVRatioY", &fUVRatioY, sizeof _float)))
 		return E_FAIL;
 
-	_float fAlpha = 1.f - ((_float)m_iFrame / (m_iNumX * m_iNumY - 1));
-
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &fAlpha, sizeof _float)))
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -184,9 +213,7 @@ void CRoomSmoke::Update_Frame(_double TimeDelta)
 		m_FrameAccTime = 0.0;
 		if (m_iFrame >= m_iNumX * m_iNumY)
 		{
-			m_iFrame = 0;
-
-			m_isDead = true;
+			m_iFrame = m_iNumX * m_iNumY - 1;
 
 			//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f + m_fPlusZ, 0.05f, 123.840f + m_fPlusZ, 1.f));
 		}

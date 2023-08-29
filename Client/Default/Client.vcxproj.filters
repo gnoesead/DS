@@ -160,9 +160,6 @@
     <Filter Include="02. GameObjects\UI\06.Map\Mini">
       <UniqueIdentifier>{196a8218-dd1d-48ec-af3d-0905c9415e49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\07.Cut_In_Effect">
-      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\08.Mini_Game">
       <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
     </Filter>
@@ -312,6 +309,15 @@
     </Filter>
     <Filter Include="02. GameObjects\Camera\Free\Boss_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\SmellBundle">
+      <UniqueIdentifier>{7b0f0804-7c3f-42c5-a3fd-ae27b19aa658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\07.Gimmick">
+      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Paper">
+      <UniqueIdentifier>{e817ebb6-58c9-427c-9d1b-ef22a995441c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -585,8 +591,14 @@
     <ClInclude Include="..\Public\SwampManager.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SmellBundle.h">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\SwampShot.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Paper.h">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Paper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -853,6 +865,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampShot.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\SwampShot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SmellBundle.cpp">
+      <Filter>02. GameObjects\Environment\SmellBundle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Paper.cpp">
+      <Filter>02. GameObjects\UI\05.Mission\Mission_Paper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

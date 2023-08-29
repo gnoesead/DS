@@ -18,7 +18,7 @@ public:
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
 		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7, PATTERN_RAGE_PIOHYO = 8,
-		PATTERN_RAGE_YABAI = 9,
+		PATTERN_STEP = 9, PATTERN_RAGE_DUDUGE = 10, PATTERN_RAGE_DUDUGE_ATK = 11,
 		PATTERN_END 
 	};
 
@@ -122,6 +122,7 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_JumpStomp(_double dTimeDelta);
 	void	Animation_Control_Combo(_double dTimeDelta);
 	void	Animation_Control_ShotSwamp(_double dTimeDelta);
+	void	Animation_Control_Step(_double dTimeDelta);
 	//반늪상태
 	void	Animation_Control_BigSwamp(_double dTimeDelta);
 	void	Animation_Control_Shoryu(_double dTimeDelta);
@@ -130,7 +131,9 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Swamp_In(_double dTimeDelta);
 	//레이지상태
 	void	Animation_Control_Piohyo(_double dTimeDelta);
-	void	Animation_Control_Yabai(_double dTimeDelta);
+	void	Animation_Control_Rage_Duduge(_double dTimeDelta);
+	void	Animation_Control_Rage_Duduge_Atk(_double dTimeDelta);
+
 
 	void	Animation_Control_Walk(_double dTimeDelta);
 	_bool	Animation_Control_Dash(_double dTimeDelta, _float fDistance);
@@ -181,9 +184,17 @@ private:
 	_bool	m_isFirst_Dash = { true };
 	_bool	m_isOff_Dash = { false };
 
+	//step
+	_bool	m_isStepLeft = { true };
+
 	//pattern swamp screw
 	_float4	 m_ScrewPos[10];
 	_int	m_iScrewPosIndex = { 0 };
+
+	//pattern swamp rage duduge
+	_double		m_dDelay_Rage_Duduge = { 0.0 };
+	_bool		m_isDuduge_Atk = { false };
+	_int		m_iCnt_Duduge = { 0 };
 
 	//Hit_DMg_Combo
 	_double		m_dDelay_ComboChain = { 0.0 };

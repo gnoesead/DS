@@ -350,7 +350,7 @@ PS_OUT PS_SSAO(PS_IN _In)
 	}
 	vNormal = normalize(vNormal * 2.f - 1.f);
 	vNormal.a = 0.f;
-	float fViewZ = vDepth.r * g_fFar;
+	float fViewZ = vDepth.b * g_fFar;
 	half3 vHNormal = vNormal.rgb;
 
 	vector      vPosition;
