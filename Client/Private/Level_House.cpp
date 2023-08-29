@@ -42,6 +42,7 @@
 #include "DialogManager.h"
 #include "OptionManager.h"
 #include "MissionManager.h"
+#include "SmellBundle.h"
 
 
 
@@ -84,11 +85,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-	{
-		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
-		return E_FAIL;
-	}
+	//if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	//{
+	//	MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
+	//	return E_FAIL;
+	//}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -122,7 +123,13 @@ HRESULT CLevel_House::Initialize()
 
 	if (FAILED(Ready_Layer_Effect()))
 	{
-		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		MSG_BOX("Failed to Ready_Layer_Effect : CLevel_House");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Layer_SmellBundle(TEXT("Layer_SmellBundle"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_SmellBundle : CLevel_House");
 		return E_FAIL;
 	}
 
@@ -1641,6 +1648,53 @@ HRESULT CLevel_House::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
 	return S_OK;
 }
 
+HRESULT CLevel_House::Ready_Layer_SmellBundle(const _tchar* pLayerTag)
+{
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	CSmellBundle::EFFECTDESC EffectDesc;
+
+
+	EffectDesc.vPos = XMVectorSet(31.36f, -0.5f, 32.f, 1.f);
+	EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+	EffectDesc.fScale = 1.3f;
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+		return E_FAIL;
+
+	EffectDesc.vPos = XMVectorSet(81.15f, -0.5f, 56.77f, 1.f);
+	EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+	EffectDesc.fScale = 1.3f;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+		return E_FAIL;
+
+	EffectDesc.vPos = XMVectorSet(48.71f, 0.5f, 15.85f, 1.f);
+	EffectDesc.eType = CSmellBundle::TYPE_NORMAL;
+	EffectDesc.fScale = 1.3f;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+		return E_FAIL;
+
+	EffectDesc.eType = CSmellBundle::TYPE_WORLD;
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+	return S_OK;
+}
+
 HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
 {
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -1873,8 +1927,24 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
+		return E_FAIL;
+	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Atk_Push.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Atk_Push");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Atk_26.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Atk_26");
+		return E_FAIL;
+	}
+	
 	return S_OK;
 }
 

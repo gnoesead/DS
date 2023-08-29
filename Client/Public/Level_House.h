@@ -31,6 +31,7 @@ private:
 	HRESULT	Ready_Layer_Player_UI(const _tchar* pLayerTag);
 	HRESULT	Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag);
 	HRESULT	Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag);
+	HRESULT	Ready_Layer_SmellBundle(const _tchar* pLayerTag);
 
 
 private:

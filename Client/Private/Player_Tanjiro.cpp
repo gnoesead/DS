@@ -573,7 +573,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 #pragma region Air_Attack
 		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
+			}
 		}
 		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
 		{

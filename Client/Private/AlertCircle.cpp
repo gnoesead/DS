@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+static _uint iNum = 0;
+
 CAlertCircle::CAlertCircle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -45,10 +47,16 @@ HRESULT CAlertCircle::Initialize(void* pArg)
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{
 		static _float fOffsetY = 0.f;
+		
+		m_dCreateTimeInterval = 0.4;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f , 0.05f + fOffsetY,123.840f , 1.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(126.536f , 0.01f + fOffsetY,123.840f , 1.f));
 
-		fOffsetY += 0.01f;
+		fOffsetY += 0.001f;
+
+		++iNum;
+
+		m_iNum = iNum;
 	}
 	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
 	
@@ -69,10 +77,38 @@ void CAlertCircle::Tick(_double TimeDelta)
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{
 		m_pTransformCom->Scaling(_float3(m_fScale, m_fScale, m_fScale));
-		m_fScale += 60.f * (_float)TimeDelta;
+		m_fScale += 55.f * (_float)TimeDelta;
+
+		m_dAccTime += TimeDelta;
+
+		if (!m_bMakeAlertCircle  && (m_dAccTime > m_dCreateTimeInterval) && m_iNum <3)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			CAlertCircle::EFFECTDESC EffectDesc;
+			EffectDesc.pOwnerTransform = m_pTransformCom;
+			EffectDesc.iType = CAlertCircle::TYPE_ROOMCHANGE;
+
+			pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+
+			Safe_Release(pGameInstance);
+
+			m_bMakeAlertCircle = true;
+		}
 
 		if (m_fScale > 50.f)
-			m_isDead = true;
+		{
+			m_fScale = 50.f;
+
+			if (m_dAccTime > 0.7 + m_dCreateTimeInterval * (3 - m_iNum))
+				m_isDead = true;
+
+			if (3 == m_iNum)
+			{
+				iNum = 0;
+			}
+		}
 	}
 	
 }
@@ -103,10 +139,9 @@ void CAlertCircle::LateTick(_double TimeDelta)
 	}
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{
-		m_fAlpha = 0.8f;
+		m_fAlpha = 0.6f;
 	}
 	
-
 	Safe_Release(pGameInstance);
 }
 
@@ -121,6 +156,8 @@ HRESULT CAlertCircle::Render()
 	m_pShaderCom->Begin(18);
 
 	m_pVIBufferCom->Render();
+
+
 
 	return S_OK;
 }
