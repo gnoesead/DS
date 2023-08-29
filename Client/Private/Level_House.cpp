@@ -85,11 +85,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -299,7 +299,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 
-	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
@@ -322,7 +322,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}*/
+	}
 
 
 	Safe_Release(pGameInstance);
@@ -1828,6 +1828,19 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_House::Ready_Layer_Effect()
 {
+#pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Left.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Left");
+		return E_FAIL;
+	}
+#pragma endregion
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_1_1");
