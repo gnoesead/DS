@@ -142,7 +142,7 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 
 	if (true == m_AtkCollDesc.bBullet)
 	{
-		CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play(m_AtkCollDesc.pEffectTag, m_pTransformCom, &m_AtkCollDesc.EffectWorldDesc);
 	}
 
 	return S_OK;
