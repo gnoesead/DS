@@ -98,6 +98,8 @@ struct PS_OUT
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
 	vector		vAdditional : SV_TARGET3;
+	vector		vDistortion : SV_TARGET4;
+	float2		vWeight : SV_TARGET5;
 };
 
 PS_OUT  PS_DEFAULT(PS_IN In)
@@ -491,7 +493,8 @@ PS_OUT  PS_NORMALDISTORTION(PS_IN In)
 	Out.vDiffuse = Out.vDiffuse.r * 1.4f;
 	
 	Out.vDiffuse.a *= g_fAlpha;
-
+	Out.vDistortion = vDistortion;
+	Out.vWeight = fWeight;
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
 

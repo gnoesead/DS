@@ -285,9 +285,24 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 
 	// 종이와의 거리
-	if (Compute::DistCheck(vPlayerPos, vMyPos, 6.f))
-		m_bChangeRoomTrigger = true;
+	if (pGameInstance->Get_DIKeyDown(DIK_F) && Compute::DistCheck(vPlayerPos, vMyPos, 2.f))
+	{
+		m_bChageRoomRealTrigger = true;
+	}
 
+	if (m_bChageRoomRealTrigger)
+	{
+		m_AccTime += TimeDelta;
+
+		if (m_AccTime >= 3.0)
+		{
+			m_bChangeRoomTrigger = true;
+			m_bChageRoomRealTrigger = false;
+			m_AccTime = 0.0;
+		}
+	}
+
+	
 	if (m_bChangeRoomTrigger)
 	{
 		if (m_AccTime == 0.0)
@@ -379,17 +394,26 @@ void CStaticMapObject::Control_RenderSmell(_double TimeDelta)
 
 			if(Compute::DistCheck(vPlayerPos , m_pTransformCom->Get_State(CTransform::STATE_POSITION) , 25.f))
 				m_bSmellOn = true;
-			
 		}
 	}
+
+	if (g_bSmellReset)
+		m_bSmellOn = false;
 
 
 	if(m_bSmellOn)
 	{
-		m_fAlpha += 1.f * (_float)TimeDelta;
+		m_fAlpha += 0.33f * (_float)TimeDelta;
 
 		if (m_fAlpha > 1.f)
 			m_fAlpha = 1.f;
+	}
+	else
+	{
+		m_fAlpha -= 0.33f * (_float)TimeDelta;
+
+		if (m_fAlpha < 0.f)
+			m_fAlpha = 0.f;
 	}
 
 	Safe_Release(pGameInstance);

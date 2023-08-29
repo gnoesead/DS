@@ -6,6 +6,8 @@
 #include "Layer.h"
 #include "Player.h"
 #include "PlayerManager.h"
+#include "MissionManager.h"
+#include "DialogManager.h"
 
 
 CInteraction::CInteraction(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -58,9 +60,9 @@ HRESULT CInteraction::Initialize(void * pArg)
 	if (m_UI_Desc.m_Type == 1) {
 		m_fX = 919;
 		m_fY = 65;
-		m_Origin_X = 0.5f;
-		m_Origin_Y = 0.25f;
-		m_Size_Param = 1.f;
+		m_Size_Param = 1.5f;
+		m_Origin_X = 0.5f * m_Size_Param;
+		m_Origin_Y = 0.25f * m_Size_Param;
 		m_UI_Layer = 7;
 		m_fZ = 0.01f;
 
@@ -81,8 +83,7 @@ void CInteraction::Tick(_double TimeDelta)
 
 	_float dist = Convert::GetLength(m_vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (dist < 2.f && m_Trigger_On == false) {
-
+	if (dist < 2.f && m_Trigger_On == false && m_Is_Smell_Check == false) {
 		m_Alpha += (_float)TimeDelta * 2.f;
 
 		if (m_Alpha > 1.f)
@@ -99,8 +100,19 @@ void CInteraction::Tick(_double TimeDelta)
 
 	if (dist < 2.f) {
 
+		if (m_UI_Desc.m_Is_Smell == true) {
+			CDialogManager::GetInstance()->Set_Dialog_Type(m_UI_Desc.m_Dialog_Type);
+		}
+
 		if (pGameInstance->Get_DIKeyDown(DIK_F)) {
+
 			m_Trigger_On = true;
+
+			if (m_UI_Desc.m_Is_Smell == true && m_Is_Smell_Check == false) {
+				m_Is_Smell_Check = true;
+				CMissionManager::GetInstance()->Plus_Main_Sub_Num();
+
+			}
 		}
 	}
 	else {

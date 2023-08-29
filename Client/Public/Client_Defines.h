@@ -15,6 +15,8 @@ namespace Client
 extern HWND g_hWnd;
 extern HINSTANCE g_hInstance;
 
+extern bool	g_bSmellReset;
+
 #include <io.h>
 
 using namespace Client;

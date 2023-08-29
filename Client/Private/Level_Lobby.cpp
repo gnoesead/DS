@@ -1375,6 +1375,19 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : SmellBundle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle_Disappear.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : SmellBundle_Disappear");
+		return E_FAIL;
+	}
+
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Shock.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Shock");
