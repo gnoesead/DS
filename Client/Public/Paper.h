@@ -12,23 +12,23 @@ END
 
 BEGIN(Client)
 
-class CDialog final : public CUI
+class CPaper final : public CUI
 {
-	enum NAME_TYPE { TANJIRO, MOTHER, GIRL, NAME_END };
-
-
+	
 public:
 	typedef struct tagUIDesc
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
+		_uint    m_Paper_Type = { 0 };
+
 	}UIDESC;
 
 
 private:
-	CDialog(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CDialog(const CDialog& rhs);
-	virtual ~CDialog() = default;
+	CPaper(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CPaper(const CPaper& rhs);
+	virtual ~CPaper() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -51,36 +51,17 @@ public:
 
 
 private:
-	wstring					m_szName[NAME_END] = {};
+	vector<wstring>			m_szText_0 = {};
 
-	vector<wstring>			m_szMain_1 = {};
-	vector<wstring>			m_szMain_2 = {};
-	vector<wstring>			m_szMain_3 = {};
+	vector<wstring>			m_szText_1 = {};
 
-	vector<wstring>			m_szSub_1 = {};
-	vector<wstring>			m_szSub_2 = {};
-	vector<wstring>			m_szSub_3 = {};
-	vector<wstring>			m_szSub_4 = {};
-	vector<wstring>			m_szSub_5 = {};
+	vector<wstring>			m_szText_2 = {};
 
-	vector<wstring>			m_szTalk_1 = {};
-	vector<wstring>			m_szTalk_2 = {};
-	vector<wstring>			m_szTalk_3 = {};
+	vector<wstring>			m_szText_3 = {};
 
-	vector<wstring>			m_szVillageSmell_1 = {};
-	vector<wstring>			m_szVillageSmell_2 = {};
-	vector<wstring>			m_szVillageSmell_3 = {};
+	_int                   m_Cur_Num = { 0 };
 
-	vector<wstring>			m_szHouseSmell_1 = {};
-	vector<wstring>			m_szHouseSmell_2 = {};
-	vector<wstring>			m_szHouseSmell_3 = {};
-
-
-	_uint                   m_Dialog_Type = { 99 };
-
-	_uint                   m_Cur_Num = { 0 };
-
-	_int                    m_Name_Type = { 1 };
+	_bool                   m_Is_Selected = { false };
 
 private:
 	_bool m_Is_In = { false };
@@ -130,7 +111,7 @@ private:
 
 
 public:
-	static CDialog* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CPaper* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

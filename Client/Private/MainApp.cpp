@@ -271,9 +271,6 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	Load_Effect_Resources();
 
 #pragma region UI
-
-	/* Prototype_Component_Texture_UI */
-
 	/* Protoype_GameObject_Title*/
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),
 		CTitle::Create(m_pDevice, m_pContext))))
@@ -325,7 +322,6 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Battle_Manager/Rank_%d.png"), 6))))
 		return E_FAIL;
 #pragma endregion
-
 
 #pragma region Skill_Name
 
@@ -573,6 +569,30 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		return E_FAIL;
 
 #pragma endregion	
+
+#pragma region Paper_UI	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Paper"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Paper/Paper.png")))))
+		return E_FAIL;
+
+#pragma endregion	
+
+#pragma region Jump_UI	
+
+	
+
+#pragma endregion	
+
+#pragma region MiniGame_UI	
+
+	
+
+#pragma endregion	
+
+
+
+
 
 
 #pragma endregion

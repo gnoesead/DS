@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Fade_Manager.h"
 #include "Character.h"
+#include "SwampManager.h"
+
 
 CBoss_Battle_Hp::CBoss_Battle_Hp(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -367,20 +369,36 @@ void CBoss_Battle_Hp::Get_Boss_Info(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
 
-		CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss"), 0));
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {
 
-		_float Hp = pBoss->Get_Status().fHp;
-		_float Hp_Max = pBoss->Get_Status().fHp_Max;
+		_float Hp = CSwampManager::GetInstance()->Get_Hp();
+		_float Hp_Max = CSwampManager::GetInstance()->Get_Hp_Max();
 
 		m_Boss_Hp = (_double)(Hp / Hp_Max);
 
 		if (m_Boss_Hp < 0) {
 			m_Boss_Hp = 0;
 		}
-		
+
 	}
+	else {
+		if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
+
+			CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss"), 0));
+
+			_float Hp = pBoss->Get_Status().fHp;
+			_float Hp_Max = pBoss->Get_Status().fHp_Max;
+
+			m_Boss_Hp = (_double)(Hp / Hp_Max);
+
+			if (m_Boss_Hp < 0) {
+				m_Boss_Hp = 0;
+			}
+
+		}
+	}
+	
 
 
 	Safe_Release(pGameInstance);

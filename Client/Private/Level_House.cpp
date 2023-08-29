@@ -28,6 +28,8 @@
 #include "Battle_Signal.h"
 #include "Pause.h"
 #include "Option.h"
+#include "Paper.h"
+
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -39,7 +41,9 @@
 #include "FIcon.h"
 #include "DialogManager.h"
 #include "OptionManager.h"
+#include "MissionManager.h"
 #include "SmellBundle.h"
+
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -134,6 +138,8 @@ HRESULT CLevel_House::Initialize()
 
 	CDialogManager::GetInstance()->Set_Dialog_Type(99);
 	
+	CMissionManager::GetInstance()->Set_Main_Mission_Type(1);
+	CMissionManager::GetInstance()->Set_Main_Sub_Num(0);
 
     return S_OK;
 }
@@ -293,7 +299,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
@@ -316,7 +322,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}
+	}*/
 
 
 	Safe_Release(pGameInstance);
@@ -483,6 +489,19 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	// Eff_1
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 5;
+	UIDesc3.m_Eff_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 
 
 // Dialog
@@ -513,7 +532,6 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 
 // Icon
-
 	CFIcon::UIDESC UIDesc5;
 	ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
@@ -527,16 +545,79 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+	UIDesc5.m_Type = 0;
+	UIDesc5.Pos = { 127.f, 0.f, 57.5f , 1.f };
+	UIDesc5.m_Up_Mount = 1.6f;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
 // Interaction
 	CInteraction::UIDESC UIDesc6;
 	ZeroMemory(&UIDesc6, sizeof UIDesc6);
 
 	UIDesc6.m_Type = 1;
-	UIDesc6.Pos = { 78.f, 0.f, 26.f , 1.f };
+	UIDesc6.Pos = { 31.f, 0.f, 32.f , 1.f };
 	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 81.f, 0.f, 56.f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 48.f, 0.f, 15.85f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = true;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	UIDesc6.m_Type = 1;
+	UIDesc6.Pos = { 77.f, 0.f, 26.f , 1.f };
+	UIDesc6.m_Up_Mount = 1.2f;
+	UIDesc6.m_Dialog_Type = 99;
+	UIDesc6.m_Is_Smell = false;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Paper
+	CPaper::UIDESC UIDesc7;
+	ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+	UIDesc7.m_Type = 0;
+	
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Paper_UI"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

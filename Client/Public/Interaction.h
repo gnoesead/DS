@@ -24,6 +24,8 @@ public:
 		_float   m_Up_Mount = { 0.f };
 		CTransform* pParentTransform = { nullptr };
 		_vector Pos = {};
+		_bool    m_Is_Smell = { false };
+		_uint    m_Dialog_Type = { 0 };
 	}UIDESC;
 
 
@@ -83,6 +85,8 @@ private:
 	_vector m_vBattle_Targt = {};
 
 	_bool m_Trigger_On = { false };
+	_bool m_Is_Smell_Check = { false };
+
 
 private:
 	HRESULT Add_Components();

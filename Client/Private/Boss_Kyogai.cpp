@@ -11,6 +11,8 @@
 #include "AlertRect.h"
 #include "RoomSmoke.h"
 #include "Camera_Manager.h"
+#include "Camera_Free.h"
+
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -1329,6 +1331,9 @@ void CBoss_Kyogai::Trigger_Heal()
 
 void CBoss_Kyogai::Trigger_Awake()
 {
+
+	
+
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_eCurstate = STATE_AWAKE;
@@ -1571,6 +1576,8 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE;
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::KYOGAI_AWAKE);
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
 	{
