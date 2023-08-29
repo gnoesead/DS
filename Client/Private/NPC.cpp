@@ -51,7 +51,6 @@ void CNPC::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -64,7 +63,19 @@ void CNPC::Tick(_double dTimeDelta)
 	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 	if (Distance < 2.f) {
+
 		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
+
+		if (m_CharacterDesc.NPCDesc.Dialog_Type >= 3 && m_CharacterDesc.NPCDesc.Dialog_Type <= 7) {
+
+			if (pGameInstance->Get_DIKeyDown(DIK_F) == true && m_Sub_Up_Done == false) {
+				m_Sub_Up_Done = true;
+				CMissionManager::GetInstance()->Plus_Sub_Num();
+			}
+				
+
+		}
+	
 	}
 
 	

@@ -35,6 +35,7 @@
 
 #include "PlayerManager.h"
 #include "OptionManager.h"
+#include "MissionManager.h"
 #include "SmellBundle.h"
 
 
@@ -135,7 +136,9 @@ HRESULT CLevel_Village::Initialize()
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(false);
 
-   
+    CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
+    CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
+
 
     return S_OK;
 }
@@ -271,12 +274,7 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
     }
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
-        TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
-        return E_FAIL;
-    }
+   
 
     Safe_Release(pGameInstance);
 
@@ -361,9 +359,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.WalkSpot[0] = { 572.8f, 4.55f, 258.05f, 1.f };
     CharacterDesc.NPCDesc.WalkSpot[1] = { 573.95f, 4.55f, 276.12f, 1.f };
     CharacterDesc.NPCDesc.WalkSpot[2] = { 583.37f, 4.55f, 276.15f, 1.f };
-    CharacterDesc.NPCDesc.Icon_Type = 1;
-    CharacterDesc.NPCDesc.Dialog_Type = 0;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Dialog_Type = 99;
+    CharacterDesc.NPCDesc.Interaction = false;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -377,8 +375,8 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 #pragma region First Street
     CharacterDesc.WorldInfo.vPosition = _float4(565.6f, 4.55f, 254.97f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SIT;
-    CharacterDesc.NPCDesc.Icon_Type = 5;
-    CharacterDesc.NPCDesc.Dialog_Type = 0;
+    CharacterDesc.NPCDesc.Icon_Type = 3;
+    CharacterDesc.NPCDesc.Dialog_Type = 3;
     CharacterDesc.NPCDesc.Interaction = true;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
@@ -391,7 +389,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_STAND;
     CharacterDesc.NPCDesc.Icon_Type = 0;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -414,7 +412,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.WorldInfo.vPosition = _float4(565.7f, 4.55f, 270.24f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK;
     CharacterDesc.NPCDesc.Icon_Type = 3;
-    CharacterDesc.NPCDesc.Dialog_Type = 99;
+    CharacterDesc.NPCDesc.Dialog_Type = 4;
     CharacterDesc.NPCDesc.Interaction = true;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 1.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
@@ -439,7 +437,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
     CharacterDesc.NPCDesc.Icon_Type = 4;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -455,7 +453,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SITTALK;
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -467,7 +465,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SITTALK;
     CharacterDesc.NPCDesc.Icon_Type = 4;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -479,7 +477,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -491,7 +489,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -504,7 +502,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_DOWN;
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -673,6 +671,31 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+    // Eff_1
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 5;
+    UIDesc.m_Eff_Type = 0;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    // Eff_2
+    UIDesc.m_Is_Reverse = false;
+    UIDesc.m_Type = 5;
+    UIDesc.m_Eff_Type = 1;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Mission"), &UIDesc))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
 
 // Mini_Map
     CMini_Map::UIDESC UIDesc2;
@@ -1071,7 +1094,64 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
+ // Interaction
+    CInteraction::UIDESC UIDesc5;
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 598.f, 4.5f, 311.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 11;
+
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 607.f, 7.5f, 255.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 12;
+   
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+    ZeroMemory(&UIDesc5, sizeof UIDesc5);
+
+    UIDesc5.m_Type = 1;
+    UIDesc5.Pos = { 586.f, 4.5f, 351.f , 1.f };
+    UIDesc5.m_Up_Mount = 1.2f;
+    UIDesc5.m_Is_Smell = true;
+    UIDesc5.m_Dialog_Type = 13;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
+
+ // Icon
+    CFIcon::UIDESC UIDesc6;
+    ZeroMemory(&UIDesc6, sizeof UIDesc6);
+
+    UIDesc6.m_Type = 0;
+    UIDesc6.Pos = { 600.3f, 4.5f, 318.37f , 1.f };
+    UIDesc6.m_Up_Mount = 1.7f;
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+        TEXT("Prototype_GameObject_FIcon"), &UIDesc6))) {
+        Safe_Release(pGameInstance);
+        return E_FAIL;
+    }
 
    
 
