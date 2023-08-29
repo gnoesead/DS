@@ -69,7 +69,7 @@ void CAlertCircle::Tick(_double TimeDelta)
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{
 		m_pTransformCom->Scaling(_float3(m_fScale, m_fScale, m_fScale));
-		m_fScale += 20.f * (_float)TimeDelta;
+		m_fScale += 60.f * (_float)TimeDelta;
 
 		if (m_fScale > 50.f)
 			m_isDead = true;

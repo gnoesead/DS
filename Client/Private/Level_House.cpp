@@ -80,11 +80,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -1693,6 +1693,19 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_House::Ready_Layer_Effect()
 {
+#pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Left.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Left");
+		return E_FAIL;
+	}
+#pragma endregion
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_1_1");
