@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Tanjiro.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Rengoku.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -87,6 +87,19 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 
 		fin.close();
 	
+
+	//칼
+	m_isSwordOn = true;
+	if (m_isSwordOn)
+	{
+		CSword::SWORDDESC SwordDesc;
+		ZeroMemory(&SwordDesc, sizeof SwordDesc);
+		SwordDesc.m_PlayerName = CSword::PLAYER_RENGOKU;
+		SwordDesc.pParentTransform = m_pTransformCom;
+		SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
+		m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
+	}
+
 	Safe_Release(pGameInstance);
 	
 	return S_OK;
@@ -95,6 +108,9 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 void CAnimCharacter_Tool::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
+	
+	if (m_isSwordOn)
+		m_pSword->Tick(dTimeDelta);
 
 	if (true == m_isDead)
 		return;
@@ -116,6 +132,8 @@ void CAnimCharacter_Tool::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	if (m_isSwordOn)
+		m_pSword->LateTick(dTimeDelta);
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -133,6 +151,9 @@ HRESULT CAnimCharacter_Tool::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
+	if (m_isSwordOn)
+		m_pSword->Render();
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
@@ -263,7 +284,7 @@ void CAnimCharacter_Tool::Save_Animations()
 	char FindFile[MAX_PATH] = { "" };
 	WIN32_FIND_DATAA fdFind;
 	//★
-	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Tanjiro/*.bin", &fdFind);
+	HANDLE hFindOut = ::FindFirstFileA("../../Client/Bin/Resources/Models/Character/Rengoku/*.bin", &fdFind);
 	if (hFindOut != INVALID_HANDLE_VALUE)
 	{
 		do
@@ -439,7 +460,7 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Tanjiro"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rengoku"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CAnimCharacter_Tool");
@@ -511,6 +532,8 @@ void CAnimCharacter_Tool::Free()
 {
 	__super::Free();
 
+	if (m_isSwordOn)
+		Safe_Release(m_pSword);
 
 	Safe_Release(m_pImGui_Anim);
 

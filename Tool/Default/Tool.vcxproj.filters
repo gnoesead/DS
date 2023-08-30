@@ -94,6 +94,9 @@
     <Filter Include="02. GameObjects\AtkCollider">
       <UniqueIdentifier>{187cb364-3b7c-430a-81da-b8f6876d0806}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Sword">
+      <UniqueIdentifier>{720774fd-7fbe-4417-b016-9a23ba863cd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -207,6 +210,9 @@
     <ClInclude Include="..\Public\AtkCollider.h">
       <Filter>02. GameObjects\AtkCollider</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sword.h">
+      <Filter>02. GameObjects\Character\Sword</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tool.cpp">
@@ -304,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AtkCollider.cpp">
       <Filter>02. GameObjects\AtkCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sword.cpp">
+      <Filter>02. GameObjects\Character\Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

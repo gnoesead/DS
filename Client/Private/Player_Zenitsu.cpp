@@ -838,11 +838,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	}
 
 
-	if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge > 1.0f)
+	if (m_Moveset.m_Up_Battle_Charge && m_pModelCom->Get_iCurrentAnimIndex() == 20)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
-		m_dDelay_Charge = 0.0;
-
+	
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
 			if (Get_LockOn_MonPos())
@@ -850,11 +849,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 		}
 		m_pModelCom->Set_Animation(21);
 	}
-	else if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge <= 1.0f)
+	else if (m_Moveset.m_Up_Battle_Charge )
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
-		m_dDelay_Charge = 0.0;
-
+		
 		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
 	}
 	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
