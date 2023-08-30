@@ -449,7 +449,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Jump(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_ATK_AIR_COMBO);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_AIR_COMBO, true, 0.5f);
 
-			JumpStop(0.3);
+			JumpStop(0.6);
 		}
 		//아닐경우, 다음 콤보로 진행
 		else
@@ -457,7 +457,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Jump(_double dTimeDelta)
 			m_pModelCom->Set_Combo_Trigger(true);
 
 			m_pModelCom->Set_EarlyEnd(9, true, 0.7f);
-			JumpStop(0.55);
+			JumpStop(0.85);
 			m_isFirst_JumpAtk = false;
 		}
 	}
@@ -478,12 +478,12 @@ void CPlayer_Rengoku::Animation_Control_Battle_Jump(_double dTimeDelta)
 		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
-		JumpStop(0.3);
-		Set_FallingStatus(3.0f, 0.0f);
+		JumpStop(0.45);
+		Set_FallingStatus(3.2f, 0.0f);
 	}
 	Ground_Animation_Play(25, 26);
-	Go_Straight_Constant(dTimeDelta, 25, 4.f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 26, 4.f * m_fScaleChange, 0.2f * m_fScaleChange); // Down
+	Go_Straight_Constant(dTimeDelta, 25, 4.2f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 26, 4.2f * m_fScaleChange, 0.2f * m_fScaleChange); // Down
 
 	m_pModelCom->Set_EarlyEnd(26, true, 0.6f);
 }
@@ -519,11 +519,11 @@ void CPlayer_Rengoku::Animation_Control_Battle_Attack(_double dTimeDelta)
 			m_pModelCom->Set_Combo_Trigger(true);
 
 			if(ANIM_ATK_COMBO == iCurAnimIndex)
-				m_pModelCom->Set_EarlyEnd(0, true, 0.4f);
+				m_pModelCom->Set_EarlyEnd(0, true, 0.25f);
 			if (1 == iCurAnimIndex)
-				m_pModelCom->Set_EarlyEnd(1, true, 0.4f);
+				m_pModelCom->Set_EarlyEnd(1, true, 0.33f);
 			if (2 == iCurAnimIndex)
-				m_pModelCom->Set_EarlyEnd(2, true, 0.55f);
+				m_pModelCom->Set_EarlyEnd(2, true, 0.50f);
 			if (ANIM_ATK_COMBO_NORMAL == iCurAnimIndex)
 				m_pModelCom->Set_EarlyEnd(4, true, 0.99f);
 
@@ -550,15 +550,15 @@ void CPlayer_Rengoku::Animation_Control_Battle_Attack(_double dTimeDelta)
 			}
 		}
 	}
-	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.4f);
-	m_pModelCom->Set_EarlyEnd(1, false, 0.4f);
-	m_pModelCom->Set_EarlyEnd(2, false, 0.55f);
+	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.25f);
+	m_pModelCom->Set_EarlyEnd(1, false, 0.33f);
+	m_pModelCom->Set_EarlyEnd(2, false, 0.50f);
 
 	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO_NORMAL, false, 0.99f);
 
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.3f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 1, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.16f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 2.8f * m_fScaleChange * m_fAtk_Move_Ratio, 0.3f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 1, 2.8f * m_fScaleChange * m_fAtk_Move_Ratio, 0.16f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 2, 4.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.11f * m_fScaleChange);
 	//분기
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO_DOWN, 3.2f * m_fScaleChange * m_fAtk_Move_Ratio, 0.05f * m_fScaleChange); // Down
@@ -690,7 +690,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_IDLE);
 	}
-	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.03f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.012f * m_fScaleChange);
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
