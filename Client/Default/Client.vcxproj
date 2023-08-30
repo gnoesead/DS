@@ -248,6 +248,7 @@
     <ClInclude Include="..\Public\Player_Battle_Mp.h" />
     <ClInclude Include="..\Public\Player_Battle_Ult_Effect.h" />
     <ClInclude Include="..\Public\Player_Battle_Ult_Frame.h" />
+    <ClInclude Include="..\Public\Player_Rengoku.h" />
     <ClInclude Include="..\Public\Player_Tanjiro.h" />
     <ClInclude Include="..\Public\Player_Zenitsu.h" />
     <ClInclude Include="..\Public\RoomSmoke.h" />
@@ -345,6 +346,7 @@
     <ClCompile Include="..\Private\Player_Battle_Mp.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Ult_Effect.cpp" />
     <ClCompile Include="..\Private\Player_Battle_Ult_Frame.cpp" />
+    <ClCompile Include="..\Private\Player_Rengoku.cpp" />
     <ClCompile Include="..\Private\Player_Tanjiro.cpp" />
     <ClCompile Include="..\Private\Player_Zenitsu.cpp" />
     <ClCompile Include="..\Private\RoomSmoke.cpp" />
