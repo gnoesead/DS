@@ -319,6 +319,15 @@ void CMission::LateTick(_double TimeDelta)
 
 	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
+
+	if (pGameInstance->Get_DIKeyDown(DIK_F3) ){
+		m_Is_Boss_Encounter = true;
+		CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
+		CFadeManager::GetInstance()->Set_Fade_Color(true);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+	}
+
+
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
 
 		// Boss
