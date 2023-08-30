@@ -28,7 +28,7 @@ private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
 
 	HRESULT Ready_Layer_Effect();
-	HRESULT LoadEffects(const _tchar* pPath);
+	HRESULT LoadEffects(const _tchar* pPath, _bool isParticle = false, _int iCnt = 1);
 
 private:
 	_uint  m_Select = { 0 };
