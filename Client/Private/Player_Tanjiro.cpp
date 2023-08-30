@@ -957,6 +957,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			m_isCan_Surge = false;
 		}
 	}
+	
+	if (m_pModelCom->Get_iCurrentAnimIndex() != 25)
+	{
+		m_isCan_Surge = false;
+		m_Moveset.m_Down_Battle_Combo_Surge = false;
+	}
+
 
 	if (m_Moveset.m_Down_Battle_Combo_Surge)
 	{
@@ -1032,11 +1039,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 	}
 
 
-	if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge > 1.0f)
+	if (m_Moveset.m_Up_Battle_Charge && m_pModelCom->Get_iCurrentAnimIndex() == 32)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
-		m_dDelay_Charge = 0.0;
-
+		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
 			if (Get_LockOn_MonPos())
@@ -1044,11 +1050,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
 		}
 		m_pModelCom->Set_Animation(33);
 	}
-	else if (m_Moveset.m_Up_Battle_Charge && m_dDelay_Charge <= 1.0f)
+	else if (m_Moveset.m_Up_Battle_Charge)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
-		m_dDelay_Charge = 0.0;
-
+		
 		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
 	}
 	Go_Straight_Deceleration(dTimeDelta, 33, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.03f * m_fScaleChange);

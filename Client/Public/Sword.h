@@ -16,7 +16,7 @@ BEGIN(Client)
 class CSword final : public CGameObject
 {
 public:
-	enum PlayerName {PLAYER_TANJIRO, PLAYER_KYOJURO, PLAYER_ZENITSU, PLAYER_END};
+	enum PlayerName {PLAYER_TANJIRO, PLAYER_ZENITSU, PLAYER_RENGOKU, PLAYER_END};
 	
 	typedef struct tagSwordDesc
 	{

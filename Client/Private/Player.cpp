@@ -655,12 +655,10 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 			m_Moveset.m_Up_Battle_Charge = true;
 		}
 		
-
-		if (pGameInstance->Get_DIKeyState(DIK_H))
+		/*if (pGameInstance->Get_DIKeyState(DIK_H))
 		{
 			m_dDelay_Charge += dTimeDelta;
-		}
-		
+		}*/
 	}
 
 	Safe_Release(pGameInstance);
