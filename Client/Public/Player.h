@@ -224,6 +224,7 @@ protected: // 애니메이션 제어용 변수들
 	_double m_dSwampHit = { 0.0 };
 	_bool	m_isSwamp_Escape = { false };
 
+
 	//쿨타임 적용
 	_bool		m_isCool_MoveKey = { false };
 	_double		m_dTime_MoveKey = { 0.0 };
@@ -244,8 +245,6 @@ protected: // 애니메이션 제어용 변수들
 	_bool		m_isThrowing = { false };
 	_bool		m_isMaintain_Guard = { false };
 
-	//charge 딜레이
-	_double		m_dDelay_Charge = { 0.0 };
 
 	//Step 용
 	_float4		m_vLook = { 0.0f, 0.0f, 0.0f, 0.0f };

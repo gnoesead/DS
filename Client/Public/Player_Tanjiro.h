@@ -24,7 +24,7 @@ public:
 		ANIM_ADV_SLIDE = 15,
 		ANIM_ADV_TALK = 16,
 		ANIM_ADV_TOUCH = 17, //17~19
-		ANIM_ATK_COMBO = 21, // 21~23, 242526 은 분기 27컷씬레디, 28컷씬
+		ANIM_ATK_COMBO = 21, // 21~23, 24 25 26 은 분기 27컷씬레디, 28컷씬
 		ANIM_ATK_AIRCOMBO = 29,
 		ANIM_ATK_CHARGE = 31, // 33이 어택임
 		ANIM_ATK_SKILL_GUARD = 34, ANIM_ATK_SKILL_MOVE = 38, ANIM_ATK_SKILL_NORMAL = 42,
@@ -106,8 +106,6 @@ private: //애니메이션 제어용 변수들
 	_float	m_fMove_Speed = { 20.0f  }; 
 
 	
-
-
 
 
 	//오의 용

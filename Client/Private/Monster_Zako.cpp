@@ -419,8 +419,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
-					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 0.4,
+					CAtkCollider::TYPE_SMALL, AtkDir, 6.0f);
 			}
 		}
 
