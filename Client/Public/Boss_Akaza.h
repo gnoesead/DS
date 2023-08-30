@@ -307,7 +307,7 @@ private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	
 private:
-	_uint	m_iPunchCount = { 0 };
+	
 	
 
 private:

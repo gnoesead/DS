@@ -95,6 +95,8 @@ public:
 
 
 		////////////////// 히트모션 ///////////////////
+		ANIM_HIT_RETURN = 31, // 허리 숙인채로 돌아옴 빅?
+
 		ANIM_GUARD_READY = 32, // 가드 준비자세
 		ANIM_GUARD_LOOP = 33, // 가드 루프
 		ANIM_GUARD_END = 34, // 가드 풀었다
@@ -103,19 +105,25 @@ public:
 		ANIM_BASETURN_L = 52, // 왼쪽 어깨 살짝 히트모션 아닌데 쓸만할듯?
 		ANIM_BASETURN_R = 53, // 오른쪽 어깨 살짝
 
+		ANIM_DEATH = 66, // 데스모션
+		ANIM_GETUP = 69, // 데스모션 일어남 -> 72 -> 31 연결
+
+		ANIM_HIT_DOWN_0 = 70, // 1페이즈 체력 0 되면 하면 될듯?
+		ANIM_HIT_DOWN_1 = 71,
+		ANIM_HIT_DOWN_2 = 72, // 31번이랑 연결
+
+		ANIM_SPIN = 73, // 스핀 날아감
+		ANIM_SPIN_LOOP = 74,
+		ANIM_SPIN_END = 75,
+
+		ANIM_GETUP_SPIN = 68, // 새우잠자네 ㅠ 
+
 		ANIM_HIT = 67, // 히트다 히트~
 
 		////////////////// 엔드모션 ///////////////////
 		ANIM_HEAL,
-		ANIM_DEATH = 66, // 데스
 		ANIM_DEATH_GETUP = 69, // 죽음에서 살아나기
 		
-		ANIM_GETUP = 68, // 일어나기
-		ANIM_HITDOWN = 70, // 무릎꿇으면서 앉음
-		ANIM_HITDOWN_LOOP = 71, // 무릎꿇는 자세 루프
-		ANIM_HITDOWN_GETUP = 72, // 머리털고 일어남
-		ANIM_HITDOWN_RETURN = 31, // 연결
-
 		////////////////// 컷신모션 ///////////////////
 		ANIM_AWAKE = 0 // 개방신
 
@@ -221,9 +229,10 @@ private: //패턴 함수들
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
 private:
-	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
+	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT , BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
+	};
 	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
-	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed);
+	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed, CAtkCollider::BULLET_TYPE eBulletType, _float fPosX = 0.f);
 	
 private:
 	void Turn_Trigger(_double dTimeDelta);
@@ -264,6 +273,7 @@ private:
 	
 	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };
+	
 
 	
 private:

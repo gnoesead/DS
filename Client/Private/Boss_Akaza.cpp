@@ -1606,7 +1606,7 @@ void CBoss_Akaza::Trigger_AirGun()
 {
 	m_bTrigger = true;
 	m_bAnimFinish = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_eCurstate = STATE_AIRGUN;
 	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
 	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
@@ -1721,7 +1721,7 @@ void CBoss_Akaza::Trigger_NextPhase3()
 	m_bStep_B = false;
 	m_bHeal = false;
 
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 	m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
@@ -1765,7 +1765,7 @@ void CBoss_Akaza::Trigger_Awake_ComboPunch()
 	m_bDashOn = false;
 	m_bStep_B = false;
 	m_bMove = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
@@ -1780,7 +1780,7 @@ void CBoss_Akaza::Trigger_Nachim_ComboPunch()
 	m_eCurstate = STATE_NACHIM_COMBOPUNCH;
 	m_bAnimFinish = false;
 	m_bStep_B = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
@@ -2104,12 +2104,12 @@ void CBoss_Akaza::Update_AirGun(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN) == true)
 	{
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AIRGUN2;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AIRGUN2, 0.90, dTimeDelta))
-			m_iPunchCount++;
-		if (m_iPunchCount >= 3 && m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == true)
+			m_iLoopCount++;
+		if (m_iLoopCount >= 3 && m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == true)
 			m_eCurAnimIndex = ANIM_AIRGUN3;
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN3) == true)
@@ -2573,13 +2573,13 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
@@ -2718,13 +2718,13 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
@@ -2795,13 +2795,13 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
