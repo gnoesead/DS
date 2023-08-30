@@ -690,7 +690,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_IDLE);
 	}
-	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.012f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.01f * m_fScaleChange);
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
