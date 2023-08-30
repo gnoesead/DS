@@ -10,6 +10,9 @@
 #include "AlertCircle.h"
 #include "AlertRect.h"
 #include "RoomSmoke.h"
+#include "Camera_Manager.h"
+#include "Camera_Free.h"
+
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -48,14 +51,21 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 
 	m_eCurAnimIndex = ANIM_IDLE;
 	m_eCurstate = STATE_INTERACT;
-	m_eCurPhase = PHASE_1;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
+	m_eCurPhase = BEGIN;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(123.f, 0.f, 126.f, 1.f));
 	m_eCurNavi = NAVI_HOUSE_4_0;
 
 	//m_eCurNavi = NAVI_ACAZA;
 	m_StatusDesc.fHp = 100.f;
 	m_StatusDesc.fHp_Max = 100.f;
 
+	_vector vPlayerDir = m_pPlayerTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	_vector vRandomDir = Random_Dir(vPlayerDir, 0.f, 0.f, 0.f, 360.f);
+
+	_double dLifeTime = 0.20;
+	_double dLongLifeTime = 1.0;
+	_double dSpeed = 5.0;
 
 	return S_OK;
 }
@@ -269,11 +279,11 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
+			Trigger_JumpStep();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
-
+			Trigger_Awake_AtkskCmb();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
@@ -350,7 +360,9 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom , &EffectWorldDesc);
-			} 
+
+	
+			}  
 			if (1 == m_iEvent_Index)	// 0.25
 			{
 				dLongLifeTime = 6.0;
@@ -360,8 +372,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CAtkCollider* pAtkCollider = dynamic_cast<CAtkCollider*> (pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("Layer_MonsterAtk")) - 1));
 
-				Create_AlertRect(BLADE_THREE_RANDOM);
-				Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed);
+				Create_AlertRect(BLADE_FIVE_RANDOM);
+				Create_BladeEffect(BLADE_FIVE_RANDOM, vRandomDir, dLongLifeTime, dSpeed);
 		
 			}
 			if (2 == m_iEvent_Index)	// 1.20
@@ -424,6 +436,23 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+
+		if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex() ||
+			ANIM_ATKSK_RB == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LB == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+
+			if (0 == m_iEvent_Index)	// 0.5 or 0.55
+			{
+				CAlertCircle::EFFECTDESC EffectDesc;
+				EffectDesc.pOwnerTransform = m_pTransformCom;
+				EffectDesc.iType = CAlertCircle::TYPE_ROOMCHANGE;
+
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+
+			}
+
+
+		}
 		if (ANIM_KICKDOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
@@ -438,9 +467,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
-
 			}
 
 
@@ -459,20 +487,32 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
-				for (_uint i = 0; i < 70; ++i)
-				{
-					pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Effect"),
-						TEXT("Prototype_GameObject_RoomSmoke"));
-				}
+			
 			}
 
 			if (1 == m_iEvent_Index) // 1.65
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 			}
 
+
+		}
+		if (ANIM_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+
+			if (0 == m_iEvent_Index) // 0.0
+			{
+
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.f, 0.0f), dLongLifeTime,
+					CAtkCollider::TYPE_BIG, vMonsterDir, 0.f);
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_Push", m_pTransformCom);
+			}
 
 		}
 		if (ANIM_ATKCMBW05 == m_pModelCom->Get_iCurrentAnimIndex()) // 앞발 내밀고 배꼽 팡팡 
@@ -492,7 +532,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)	// 0.95
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 3.5f), dLifeTime,
+					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg);
+
+			}
+			if (2 == m_iEvent_Index)	// 1.05
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.5f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
 
 			}
@@ -501,9 +548,6 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATKPUNCH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			CAlertCircle::EFFECTDESC EffectDesc;
-			EffectDesc.pOwnerTransform = m_pTransformCom;
-			EffectDesc.iType = CAlertCircle::TYPE_ROOMCHANGE;
 
 			if (0 == m_iEvent_Index) // 1.30
 			{
@@ -514,7 +558,6 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom, &EffectWorldDesc);
 
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
 			}
 
@@ -527,13 +570,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom, &EffectWorldDesc);
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+
 			}
 
 		}
+
 		if (ANIM_ATKPUNCH2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index) // 0.2
@@ -559,7 +603,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			if (2 == m_iEvent_Index) // 0.5
 			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 		}
@@ -627,6 +671,33 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed);
 				}
+			}
+		}
+
+		if (ANIM_ROOMCHANGE_START == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 1.f;
+			EffectWorldDesc.fScale = 2.1f;
+
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (1 == m_iEvent_Index)	// 0.28
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (2 == m_iEvent_Index)	// 0.56
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (3 == m_iEvent_Index)	// 0.84
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom , &EffectWorldDesc);
 			}
 		}
 
@@ -778,6 +849,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_GUARD:
 		Update_Guard(dTimeDelta);
 		break;
+	case CBoss_Kyogai::STATE_JUMP_STEP:
+		Update_JumpStep(dTimeDelta);
+		break;
 	case CBoss_Kyogai::STATE_ATKCMB:
 		Update_AtkCmb(dTimeDelta);
 		break;
@@ -798,6 +872,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Kyogai::STATE_ATKSKCMB:
 		Update_AtkSkCmb(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_AWAKE_ROOMCHANGE:
+		Update_Awake_AtkskCmb(dTimeDelta);
 		break;
 	case CBoss_Kyogai::STATE_HIT_SMALL:
 		Update_Hit_Small(dTimeDelta);
@@ -827,51 +904,66 @@ void CBoss_Kyogai::Update_Interact(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Begin(_double dTimeDelta)
 {
-
+	m_eCurAnimIndex = ANIM_IDLE;
+	_float fDistance = Calculate_Distance();
+	if (Check_Distance_FixY(5.f) == true)
+	{
+		m_dTriggerTime = 0.0;
+		m_eCurPhase = PHASE_1;
+		m_iTriggerCnt = 1;
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
 }
 
 void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 {
-	if (m_StatusDesc.fHp <= 0.f)
+	if (m_StatusDesc.fHp <= 0.f && m_bNoDmg == false)
 	{
+		m_StatusDesc.fHp = 0.f;
 		m_bTrigger = false;
 		m_bPatternStart = false;
+		m_bNoDmg = true;
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
 	}
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_bFirstAwake == false)
+	{
+		m_bFirstAwake = true;
+		m_bTrigger = false;
+		m_iTriggerCnt = 4;
+		m_dTriggerTime = 0.0;
+
+	}
 
 	if (m_bTrigger == false)
 	{
-		if (m_StatusDesc.fHp > 50.f)
+
+		switch (m_iTriggerCnt)
 		{
+		case 1:
+			Trigger_Interact();
+			break;
+		case 2:
+			Trigger_AtkStep();
+			break;
+		case 3:
+			Trigger_JumpStep();
+			break;
+		case 4:
+			Trigger_AtkSkCmb();
+			break;
+		case 5:
+			Trigger_AtkPunch();
+			break;
+		case 6:
+			Trigger_StompKick();
+			break;
+		case 7:
+			Trigger_LinkerCmb();
+			break;
 
-			switch (m_iTriggerCnt)
-			{
-			case 1:
-				Trigger_Begin();
-				break;
-
-			case 2:
-				Trigger_Interact();
-				break;
-
-			}
-
-
-		}
-		if (m_StatusDesc.fHp <= 50.f)
-		{
-			switch (m_iTriggerCnt)
-			{
-			case 1:
-				Trigger_Begin();
-				break;
-
-			case 5:
-				Trigger_NextPhase();
-				break;
-			}
 		}
 
 	}
@@ -953,151 +1045,78 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
 
-	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) > 0.5f)
+
+	if (m_bPatternStart == false)
 	{
-		if (m_bPatternStart == false)
+		m_dTriggerTime += dTimeDelta;
+		if (0.3 < m_dTriggerTime && m_dTriggerTime <= 0.3 + dTimeDelta)
+			m_iIdleCnt++;
+
+		if (m_iIdleCnt == 1)
 		{
-			m_dTriggerTime += dTimeDelta;
-			if (0.6 < m_dTriggerTime && m_dTriggerTime <= 0.6 + dTimeDelta)
-				m_iIdleCnt++;
+			m_dTriggerTime = 0.0;
+			m_iIdleCnt = 0;
+			m_bTrigger = false;
+			m_iTriggerCnt++;
 
-			if (m_iIdleCnt == 1)
+			if (m_iTriggerCnt >= 8)
 			{
-				m_iIdleCnt = 0;
-				m_bTrigger = false;
-				m_iTriggerCnt++;
-
-				if (m_iTriggerCnt >= 6)
-				{
-					m_iTriggerCnt = 1;
-					m_bPatternStart = true;
-				}
-			}
-		}
-		if (m_bPatternStart == true)
-		{
-			_float fDistance = Calculate_Distance();
-			m_dTriggerTime += dTimeDelta;
-			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
-			{
-				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
-
-				m_iRandomPatternNum = Random::Generate_Int(1, 10);
-
-
-				if (fDistance <= 5.f) //가까울 때
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 7)
-					{
-						m_iTriggerCnt = 5;
-						m_bTrigger = false;
-					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum > 10)
-					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
-					}
-				}
-				if (fDistance > 5.f) // 멀 때
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 5)
-					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
-					}
-					if (5 <= m_iRandomPatternNum && m_iRandomPatternNum < 8)
-					{
-						m_iTriggerCnt = 3;
-						m_bTrigger = false;
-					}
-					if (8 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
-					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
-					}
-				}
-			}
-		}
-	}
-	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max) > 0.f)
-	{
-		if (m_bPatternStart == true)
-		{
-			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
-			{
-				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
-				m_bTrigger = false;
 				m_iTriggerCnt = 1;
-				m_bPatternStart = false;
-
-			}
-		}
-		if (m_bPatternStart == false)
-		{
-			_float fDistance = Calculate_Distance();
-			m_dTriggerTime += dTimeDelta;
-			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
-			{
-				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
-				m_iRandomPatternNum = Random::Generate_Int(1, 12);
-
-
-				if (fDistance <= 5.f) // 거리가 가까울 때 
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
-					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
-					{
-						m_iTriggerCnt = 1;
-						m_bTrigger = false;
-					}
-					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum < 12)
-					{
-						m_iTriggerCnt = 3;
-						m_bTrigger = false;
-					}
-				}
-				if (fDistance > 5.f) // 거리가 멀 때
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
-					{
-						m_iTriggerCnt = 1;
-						m_bTrigger = false;
-					}
-					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
-					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
-					{
-						m_iTriggerCnt = 3;
-						m_bTrigger = false;
-					}
-					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
-					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
-					}
-				}
+				m_bPatternStart = true;
 			}
 		}
 	}
+	if (m_bPatternStart == true)
+	{
+		_float fDistance = Calculate_Distance();
+		m_dTriggerTime += dTimeDelta;
+		if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
+			m_iIdleCnt++;
+
+		if (m_iIdleCnt == 1)
+		{
+			m_dTriggerTime = 0.0;
+			m_iIdleCnt = 0;
+
+			m_iRandomPatternNum = Random::Generate_Int(2, 7);
+
+
+			if (fDistance > 7.f) //멀 때
+			{
+				m_iTriggerCnt = 3;
+				m_bTrigger = false;
+
+			}
+			if (fDistance <= 7.f) // 가까울 때
+			{
+				if (m_iRandomPatternNum == 2)
+				{
+					m_iTriggerCnt = 2;
+					m_bTrigger = false;
+				}
+				if (m_iRandomPatternNum == 4)
+				{
+					m_iTriggerCnt = 5;
+					m_bTrigger = false;
+				}
+				if (m_iRandomPatternNum == 5)
+				{
+					m_iTriggerCnt = 6;
+					m_bTrigger = false;
+				}
+				if (m_iRandomPatternNum == 6)
+				{
+					m_iTriggerCnt = 7;
+					m_bTrigger = false;
+				}
+
+
+			}
+		}
+	}
+
+
+
 
 }
 
@@ -1281,7 +1300,8 @@ void CBoss_Kyogai::Trigger_Interact()
 
 void CBoss_Kyogai::Trigger_Begin()
 {
-	m_eCurstate = STATE_BEGIN;
+	m_bTrigger = true;
+	m_eCurstate = STATE_INTERACT;
 }
 
 
@@ -1311,6 +1331,9 @@ void CBoss_Kyogai::Trigger_Heal()
 
 void CBoss_Kyogai::Trigger_Awake()
 {
+
+	
+
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_eCurstate = STATE_AWAKE;
@@ -1318,6 +1341,16 @@ void CBoss_Kyogai::Trigger_Awake()
 
 void CBoss_Kyogai::Trigger_JumpStep()
 {
+	m_vDir = Calculate_Dir_FixY();
+	m_vDir = Random_Dir(m_vDir, 0.f, 0.f, -50.f, 50.f);
+
+	m_pTransformCom->LerpVector(m_vDir, 1.0f);
+
+	m_bTrigger = true;
+	m_bSuperArmor = true;
+	m_bAnimFinish = false;
+	m_eCurstate = STATE_JUMP_STEP;
+
 }
 
 void CBoss_Kyogai::Trigger_AtkCmb()
@@ -1365,6 +1398,7 @@ void CBoss_Kyogai::Trigger_StompKick()
 	m_eCurstate = STATE_STOMPKICK;
 	m_bAnimFinish = false;
 	m_bSuperArmor = true;
+	m_bMove = false;
 }
 
 void CBoss_Kyogai::Trigger_AtkPunch()
@@ -1377,10 +1411,16 @@ void CBoss_Kyogai::Trigger_AtkPunch()
 
 void CBoss_Kyogai::Trigger_LinkerCmb()
 {
+	m_vDir = Calculate_Dir_FixY();
+	m_vDir = Random_Dir(m_vDir, 0.f, 0.f, -50.f, 50.f);
+
+	m_pTransformCom->LerpVector(m_vDir, 1.0f);
+
 	m_bTrigger = true;
 	m_eCurstate = STATE_LINKERCMB;
 	m_bAnimFinish = false;
 	m_bSuperArmor = true;
+	m_bMove = false;
 	m_iLinkerNum = Random::Generate_Int(1, 2);
 }
 
@@ -1392,10 +1432,16 @@ void CBoss_Kyogai::Trigger_AtkSkCmb()
 	m_bAnimFinish2 = false;
 	m_bAnimFinish3 = false;
 	m_bSuperArmor = true;
-	//m_bTurnRF = false;
 	m_bTurn = false;
 
 	m_dTimeAcc = 0.0;
+}
+
+void CBoss_Kyogai::Trigger_Awake_AtkskCmb()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_AWAKE_ROOMCHANGE;
+	m_bAnimFinish = false;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Small()
@@ -1520,14 +1566,21 @@ void CBoss_Kyogai::Update_Heal(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 {
+
 	if (m_bAnimFinish == false)
 	{
 		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_PUSHAWAY;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_PUSHAWAY))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE;
+		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
+		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::KYOGAI_AWAKE);
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE))
 	{
-		
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
@@ -1536,6 +1589,30 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_STEP_FRONT2;
+		Jumping(1.5f, 0.065f);
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_STEP_FRONT2))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_STEP_FRONT2);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+	if (m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.01) && !m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.538))
+	{
+		Go_Dir_Constant(dTimeDelta, ANIM_STEP_FRONT2, 3.f, Convert::ToFloat4(m_vDir));
+
+	}
+
+	_vector vDir = Calculate_Dir_FixY();
+	m_pTransformCom->LerpVector(vDir, 0.3f);
+
+	//Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STEP_FRONT2, 3.f, 0.01, 0.538);
+
+
 }
 
 void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
@@ -1655,7 +1732,11 @@ void CBoss_Kyogai::Update_StompKick(_double dTimeDelta)
 		m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		Jumping(1.f, 0.06f);
 	}
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STOMPKICK, 1.f, 0.38, 0.56);
+	if (Check_Distance_FixY(2.f) == true)
+		m_bMove = true;
+
+	if (Check_Distance_FixY(2.f) == false && m_bMove == false)
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STOMPKICK, 1.f, 0.38, 0.56);
 }
 
 void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
@@ -1688,55 +1769,85 @@ void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
 void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
 {
 	//거리가 멀다면 스텝으로 다가가 주먹 발차기 스텝북
-	if (m_bAnimFinish == false)
-	{
-		m_bAnimFinish = true;
-		m_eCurAnimIndex = ANIM_ATKPUNCH;
-	}
+	if (Check_Distance_FixY(7.f) == true)
+		m_bMove = true;
 
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKPUNCH, 0.70, dTimeDelta))
+	if (false == Check_Distance_FixY(7.f) && false == m_bMove)
 	{
-		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH);
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKPUNCH);
-		m_eCurAnimIndex = ANIM_ATKPUNCH2;
 
-	}
-	//if (m_pModelCom->Get_AnimFinish(ANIM_ATKPUNCH2))
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKPUNCH2, 0.540, dTimeDelta))
-	{
-		m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH2);
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKPUNCH2);
-		if (m_iLinkerNum == 1)
+		if (m_bAnimFinish == false)
 		{
-			m_eCurAnimIndex = ANIM_KICKDOWN;
-			CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_STEP_FRONT2;
+			Jumping(1.5f, 0.065f);
 		}
-		if (m_iLinkerNum == 2)
+		if (m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.01) && !m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.538))
 		{
-			m_eCurAnimIndex = ANIM_ATKCMBW05;
+			Go_Dir_Constant(dTimeDelta, ANIM_STEP_FRONT2, 3.f, Convert::ToFloat4(m_vDir));
+
 		}
-	}
 
-	//if (m_pModelCom->Get_AnimFinish(ANIM_STOMPKICK))
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_KICKDOWN, 0.850, dTimeDelta) || m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMBW05, 0.850, dTimeDelta))
+		_vector vDir = Calculate_Dir_FixY();
+		m_pTransformCom->LerpVector(vDir, 0.3f);
+
+	}
+	//if(m_bMove == true)
 	{
-		m_pModelCom->Set_AnimisFinish(ANIM_KICKDOWN);
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_KICKDOWN);
-		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMBW05);
-		m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKCMBW05);
-		Trigger_AtkStep();
-	}
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_ATKPUNCH;
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_STEP_FRONT2))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_STEP_FRONT2);
+			m_eCurAnimIndex = ANIM_ATKPUNCH;
 
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_KICKDOWN, 0.130, dTimeDelta))
-	{
-		m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-		Jumping(0.9f, 0.06f);
-	}
+		}
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKPUNCH, 0.70, dTimeDelta))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKPUNCH);
+			m_eCurAnimIndex = ANIM_ATKPUNCH2;
 
-	_vector vDir = Calculate_Dir_FixY();
-	m_pTransformCom->LerpVector(vDir, 0.7f);
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_KICKDOWN, 1.2f, 0.13, 0.39);
+		}
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKPUNCH2, 0.540, dTimeDelta))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKPUNCH2);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKPUNCH2);
+			if (m_iLinkerNum == 1)
+			{
+				m_eCurAnimIndex = ANIM_KICKDOWN;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+			}
+			if (m_iLinkerNum == 2)
+			{
+				m_eCurAnimIndex = ANIM_ATKCMBW05;
+			}
+		}
+
+		//if (m_pModelCom->Get_AnimFinish(ANIM_STOMPKICK))
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_KICKDOWN, 0.850, dTimeDelta) || m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMBW05, 0.850, dTimeDelta))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_KICKDOWN);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_KICKDOWN);
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKCMBW05);
+			m_pModelCom->Set_AnimResetTimeAcc(ANIM_ATKCMBW05);
+			Trigger_AtkStep();
+		}
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_KICKDOWN, 0.130, dTimeDelta))
+		{
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			Jumping(0.9f, 0.06f);
+		}
+
+		_vector vDir = Calculate_Dir_FixY();
+		m_pTransformCom->LerpVector(vDir, 0.7f);
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
+		Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_KICKDOWN, 1.2f, 0.13, 0.39);
+	}
 }
 
 void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
@@ -1745,9 +1856,25 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 	{
 		if (m_bTurn == false)
 		{
-			if (m_bAnimFinish == false)
+			if (Check_Distance_FixY(3.f) == true)
 			{
-				m_bAnimFinish = true;
+				if (m_bAnimFinish == false)
+				{
+					m_bAnimFinish = true;
+					m_eCurAnimIndex = ANIM_PUSHAWAY;
+				}
+			}
+			else
+			{
+				if (m_bAnimFinish == false)
+				{
+					m_bAnimFinish = true;
+					m_eCurAnimIndex = ANIM_ATKSK_READY;
+				}
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_PUSHAWAY))
+			{
+				m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
 				m_eCurAnimIndex = ANIM_ATKSK_READY;
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_READY))
@@ -1771,7 +1898,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 			Turn_Trigger(dTimeDelta); // 방돌리기
 			TurnRoom(); // 쿄우가이 돌리기
 
-			if ((2.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
+			if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
 			{
 				if (m_bAnimFinish2 == false)
 				{
@@ -1831,6 +1958,32 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 	}
 
 }
+
+void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ROOMCHANGE_READY;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_READY))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_READY);
+		m_eCurAnimIndex = ANIM_ROOMCHANGE_START;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_START))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_START);
+		m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_END))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_END);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+}
+
 
 void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 {
@@ -1932,12 +2085,27 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 	CAtkCollider* pAtkCollider = dynamic_cast<CAtkCollider*> (pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("Layer_MonsterAtk")) - 1));
 
 	CAlertRect::EFFECTDESC EffectDesc;
-	
+
 	CRoomSmoke::EFFECTDESC SmokeEffectDesc;
 	SmokeEffectDesc.eType = CRoomSmoke::TYPE_PART;
 
 	switch (eBladeType)
 	{
+	case BLADE_ONE_RANDOM:
+	{
+		EffectDesc.vLook = pAtkCollider->Get_Dir();
+
+		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
+
+		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+	}
+
 	case BLADE_THREE_RANDOM:
 	case BLADE_THREE_FRONT:
 	{
@@ -1955,7 +2123,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		
+
 
 		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
@@ -1965,7 +2133,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		
+
 
 		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
@@ -2017,6 +2185,11 @@ void CBoss_Kyogai::Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _doub
 
 	switch (eBladeType)
 	{
+	case BLADE_ONE_RANDOM:
+		EffectWorldDesc.vPosition.x = 0.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+		break;
 	case BLADE_THREE_RANDOM:
 		EffectWorldDesc.vPosition.x = -1.f;
 
@@ -2047,8 +2220,51 @@ void CBoss_Kyogai::Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _doub
 			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
 		break;
 	case BLADE_FIVE_RANDOM:
+		EffectWorldDesc.vPosition.x = -2.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-2.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 0.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 1.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 2.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.0f, 1.0f), _float3(2.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
 		break;
 	case BLADE_FIVE_FRONT:
+		EffectWorldDesc.vPosition.x = -2.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-2.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 0.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 1.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
+
+		EffectWorldDesc.vPosition.x = 2.f;
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(2.f, 1.0f, 0.f), dLongLifeTime,
+			CAtkCollider::TYPE_EFFECT, vDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAIDELAYBULLET, "Kyogai_BladeAtk", &EffectWorldDesc);
 		break;
 	default:
 		break;
@@ -2070,25 +2286,35 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 		m_dTimeAcc += dTimeDelta;
 	}
 
-	if (true == m_bTurnRF && m_dTimeAcc > 1.50)
+	if (2.0 < m_dTimeAcc && m_dTimeAcc <= 2.0 + dTimeDelta)
+	{
+		for (_uint i = 0; i < 70; ++i)
+		{
+			pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Effect"),
+				TEXT("Prototype_GameObject_RoomSmoke"));
+		}
+		CCameraManager::GetInstance()->Camera_Shake(0.5, 200);
+	}
+
+	if (true == m_bTurnRF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_PLUS);
 	}
-	if (true == m_bTurnLF && m_dTimeAcc > 1.50)
+	if (true == m_bTurnLF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_MINUS);
 	}
-	if (true == m_bTurnRB && m_dTimeAcc > 1.50)
+	if (true == m_bTurnRB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_PLUS);
 	}
-	if (true == m_bTurnLB && m_dTimeAcc > 1.50)
+	if (true == m_bTurnLB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLB = false;

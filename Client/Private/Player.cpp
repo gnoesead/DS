@@ -272,7 +272,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 	if (m_Moveset.m_isDownMotion == false)
 	{
-		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+ 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
@@ -288,6 +288,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -298,6 +300,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -309,6 +313,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -319,6 +325,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -329,6 +337,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -339,6 +349,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Swamp())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_Moveset.m_Down_Dmg_Swamp = true;
 		}
@@ -868,7 +880,11 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		else if (m_Moveset.m_iAwaken == 1)
 		{
 			CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
-			CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
+			else if(CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
+				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::ZENITSU_AWAKE);
+
 			m_Moveset.m_iAwaken = 2;
 			m_StatusDesc.iAwaken = 2;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
@@ -1114,6 +1130,12 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A])
 		{
 			vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
+
+			if (NAVI_HOUSE_0_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F4))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{

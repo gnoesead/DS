@@ -24,6 +24,7 @@ public:
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
 		STATE_STOMPKICK, STATE_ATKPUNCH, STATE_ATKSKCMB,
 		STATE_ATK_TURN_IDLE, STATE_ATK_TURN_RF, STATE_ATK_TURN_LF, STATE_ATK_TURN_RB, STATE_ATK_TURN_LB,
+		STATE_JUMP_STEP,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
@@ -74,6 +75,8 @@ public:
 		ANIM_ATKCMBW05 = 12, // 발 내밀고 배꼽 땅땅~
 
 		ANIM_STOMPKICK = 13, // 내려찍기 준비자세하고 함 이거쓰자
+
+		ANIM_PUSHAWAY = 14, // 찐따같이 푸아아아ㅏ악 소리지름
 
 		ANIM_ATKSK_READY = 18, // 갈매기 레디
 		ANIM_ATKSK_LOOP = 19, // 레디 루프
@@ -153,11 +156,11 @@ public:
 	void Trigger_Interact();
 	void Trigger_Begin();
 	void Trigger_Guard();
-	void Trigger_PushAway();
+	void Trigger_PushAway(); // 안함
 	void Trigger_NextPhase();
 	void Trigger_Heal();
 	void Trigger_Awake();
-	void Trigger_JumpStep();// 아직안함 0820
+	void Trigger_JumpStep();
 	void Trigger_AtkCmb();
 	void Trigger_AtkCmb2();
 	void Trigger_AtkStep(); 
@@ -165,11 +168,7 @@ public:
 	void Trigger_AtkPunch();
 	void Trigger_LinkerCmb();
 	void Trigger_AtkSkCmb();
-	void Trigger_AtkTurnIdle();
-	void Trigger_AtkTurnRF();
-	void Trigger_AtkTurnLF();
-	void Trigger_AtkTurnRB();
-	void Trigger_AtkTurnLB();
+	void Trigger_Awake_AtkskCmb();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -192,12 +191,12 @@ public:
 private: //패턴 함수들
 	void Update_State(_double dTimeDelta);
 	void Update_Interact(_double dTimeDelta);
-	void Update_PushAway(_double dTimeDelta);
+	void Update_PushAway(_double dTimeDelta); // 안함
 	void Update_Guard(_double dTimeDelta);
 	void Update_NextPhase(_double dTimeDelta);
 	void Update_Heal(_double dTimeDelta);
 	void Update_Awake(_double dTimeDelta);
-	void Update_JumpStep(_double dTimeDelta);// 아직안함 0820
+	void Update_JumpStep(_double dTimeDelta);
 	void Update_AtkCmb(_double dTimeDelta);
 	void Update_AtkCmb2(_double dTimeDelta);
 	void Update_AtkStep(_double dTimeDelta); 
@@ -205,11 +204,7 @@ private: //패턴 함수들
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
 	void Update_AtkSkCmb(_double dTimeDelta);
-	void Update_AtkTurnIdle(_double dTimeDelta);
-	void Update_AtkTurnRF(_double dTimeDelta);
-	void Update_AtkTurnLF(_double dTimeDelta);
-	void Update_AtkTurnRB(_double dTimeDelta);
-	void Update_AtkTurnLB(_double dTimeDelta);
+	void Update_Awake_AtkskCmb(_double dTimeDelta);	
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
@@ -226,7 +221,7 @@ private: //패턴 함수들
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
 private:
-	enum BLADETYPE { BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
+	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
 	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
 	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed);
 	
@@ -272,7 +267,7 @@ private:
 
 	
 private:
-	PHASE   m_eCurPhase = PHASE_1;
+	PHASE   m_eCurPhase = BEGIN;
 	STATE	m_eCurstate = STATE_INTERACT;
 	TURN	m_eCurTurn = TURN_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDLE;

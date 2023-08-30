@@ -72,8 +72,8 @@ private:
 	CInteraction* m_pInteraction = { nullptr };
 	CInteraction* m_pInteraction_Back = { nullptr };
 
-
 	_vector m_Player_Pos = {};
+	_bool m_Sub_Up_Done = { false };
 
 protected:
 	HRESULT Add_Components();

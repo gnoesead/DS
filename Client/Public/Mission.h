@@ -20,6 +20,8 @@ public:
 	{
 		_bool    m_Is_Reverse = { false };
 		_uint    m_Type = { 0 };
+		_uint    m_Eff_Type = { 0 };
+
 	}UIDESC;
 
 
@@ -56,6 +58,8 @@ private:
 	vector<_uint>           m_Main_Sub_Num_Total = { 0 };
 	_tchar                  m_szMain_Sub_Num[MAX_PATH] = {};
 	_uint                   m_Main_Sub_Num = { 0 };
+	_uint                   m_Pre_Main_Sub_Num = { 0 };
+
 
 	vector<wstring>			m_szSub = {};
 	vector<wstring>			m_szSub_Check = {};
@@ -63,10 +67,29 @@ private:
 	vector<_uint>           m_Sub_Num_Total = { 0 };
 	_tchar                  m_szSub_Num[MAX_PATH] = {};
 	_uint                   m_Sub_Num = { 0 };
+	_uint                   m_Pre_Sub_Num = { 0 };
+
 
 	_uint    m_Main_Type = { 0 };
 	_uint    m_Sub_Type = { 0 };
 	_bool    m_Is_Dialog_On = { false };
+
+
+	_bool m_Is_Main_Num_Change = { false };
+	_bool m_Is_Main_Num_Eff = { false };
+	_float m_Main_TimeAcc = { 0.f };
+	_float m_Main_Time = { 1.f };
+
+
+	_bool m_Is_Sub_Num_Change = { false };
+	_bool m_Is_Sub_Num_Eff = { false };
+	_float m_Sub_TimeAcc = { 0.f };
+	_float m_Sub_Time = { 1.f };
+
+
+	_bool m_Is_Num_Change_Reset = { false };
+
+
 
 
 private:

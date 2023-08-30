@@ -569,7 +569,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 #pragma region Air_Attack
 		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			if (0 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
+			}
 		}
 		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -739,7 +745,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 {
-	if (m_isSwamp_Escape == false)
+	if (m_isSwamp_Escape == false && m_isSwampHit == false)
 	{
 		if (m_Moveset.m_Down_Battle_JumpMove)
 		{
@@ -779,7 +785,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 		}
 	}
 	//´ËºüÁü Á¡ÇÁ
-	else
+	else if (m_isSwamp_Escape || m_isSwampHit)
 	{
 		if (m_Moveset.m_Down_Battle_Jump)
 		{
@@ -787,7 +793,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 			m_isJump_Move = false;
 
 			m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
-			Jumping(0.4f , 0.02f);
+			Jumping(0.3f , 0.02f);
 
 			m_pModelCom->Set_EarlyEnd(85, true);
 		}
@@ -1578,19 +1584,21 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	if (m_isSwampHit)
 	{
 		m_dSwampHit += dTimeDelta;
-		if (m_dSwampHit > 1.3f)
+		if (m_dSwampHit > 1.5f)
 		{
 			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_SWAMPBIND)
 			{
+				m_isSwamp_Escape = true;
 				m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
+				Jumping(0.01f, 0.01f);
 			}
-			m_isSwamp_Escape = true;
 
 			_float4 Pos;
 			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 			if (m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) > Pos.y/*m_fLand_Y*/)
 			{
 				//m_fLand_Y += 0.01f;
+				_int ak = 47;
 			}
 			else
 			{
@@ -1920,6 +1928,13 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		{
 			m_Moveset.m_isGetUpMotion = true;
 		}
+	}
+	else if (ANIM_DMG_SWAMPBIND == iCurAnimIndex)
+	{
+		if (m_isSwamp_Escape)
+			m_Moveset.m_isRestrict_Jump = false;
+		else
+			m_Moveset.m_isDownMotion = true;
 	}
 	//ÄÞº¸°ø°Ý½Ã ¹«ºùÁ¦ÇÑ
 	else if (ANIM_ATK_COMBO == iCurAnimIndex

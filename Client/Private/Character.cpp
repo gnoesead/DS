@@ -560,7 +560,7 @@ void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _floa
 	AtkCollDesc.Speed = Speed;
 
 	AtkCollDesc.bBullet = true;
-	if (true == AtkCollDesc.bBullet)
+	//if (true == AtkCollDesc.bBullet)
 	{
 		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
 	}

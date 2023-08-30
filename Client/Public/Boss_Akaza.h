@@ -40,7 +40,7 @@ public:
 	enum  ANIM {
 		////////////////// 기본 MOVE///////////////////
 
-		ANIM_IDEL = 0,
+		ANIM_IDLE = 0,
 		ANIM_BATTLE_START = 4, // 뒤로 한바퀴 돌고 시작함
 		ANIM_BATTLE_END = 1, // 2,3
 		ANIM_RUN = 66,
@@ -300,7 +300,6 @@ private: // _bool
 	_bool	m_bStep_B = { false };
 	_bool	m_bRunPunch = { false };
 	_bool	m_bDashOn = { false };
-	_bool	m_bMove = { false };
 	_bool	m_bJump = { false };
 			
 
@@ -314,8 +313,8 @@ private:
 private:
 	PHASE   m_eCurPhase = PHASE_1;
 	STATE	m_eCurstate = STATE_IDLE;
-	ANIM    m_eCurAnimIndex = ANIM_IDEL;
-	ANIM	m_ePreAnimIndex = ANIM_IDEL;
+	ANIM    m_eCurAnimIndex = ANIM_IDLE;
+	ANIM	m_ePreAnimIndex = ANIM_IDLE;
 
 private:
 	HRESULT Add_Components();

@@ -45,6 +45,36 @@ _bool CMissionManager::Get_Is_Dialog_On()
 	return m_Is_Dialog_On;
 }
 
+void CMissionManager::Set_Main_Sub_Num(_uint Type)
+{
+	m_Main_Sub_Num = Type;
+}
+
+_uint CMissionManager::Get_Main_Sub_Num()
+{
+	return m_Main_Sub_Num;
+}
+
+void CMissionManager::Set_Sub_Num(_uint Type)
+{
+	m_Sub_Num = Type;
+}
+
+_uint CMissionManager::Get_Sub_Num()
+{
+	return m_Sub_Num;
+}
+
+void CMissionManager::Plus_Main_Sub_Num()
+{
+	m_Main_Sub_Num++;
+}
+
+void CMissionManager::Plus_Sub_Num()
+{
+	m_Sub_Num++;
+}
+
 void CMissionManager::Free()
 {
 }
