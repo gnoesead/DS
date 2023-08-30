@@ -118,6 +118,7 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 			return;
 	}
+
 }
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)

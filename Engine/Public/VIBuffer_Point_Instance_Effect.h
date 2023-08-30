@@ -27,7 +27,8 @@ public:
 	virtual void Tick(_double TimeDelta) {};
 	virtual void Tick(_double TimeDelta, INSTANCEDESC* pDesc);
 	virtual HRESULT Render() override;
-	void InitialSetting();
+	void InitialSetting();		// 로드할때
+	void Reset_Data();		// Collect할때
 
 private:
 	INSTANCEDESC		m_InstanceDesc;

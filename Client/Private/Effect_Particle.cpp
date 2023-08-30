@@ -70,7 +70,7 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	if (m_ParentDesc.pParent->Get_isPlaying())
+	if (m_ParentDesc.pParent->Get_isPlaying() && !m_isCollect)
 	{
 		if (m_fDelayTimeAcc > m_fStartDelay)
 		{
@@ -78,26 +78,30 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 			{
 				if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + m_eEffectDesc.fStartLifeTimeMin)
 				{
-					CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
-
+					//CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
+				
 					m_isCollect = true;
 					m_ParentDesc.pParent->Set_isCollect(true);
 
 					m_eEffectDesc.fTimeAcc = 0;
 					m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+
+					m_pVIBufferCom->Reset_Data();
 				}
 			}
 			else if (m_eEffectDesc.eStartLifeTimeOption == OP_RAND_TWO_CONSTANT)
-			{
+			{	
 				if (m_eEffectDesc.fTimeAcc > m_eEffectDesc.fDuration + max(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax))
 				{
-					CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
+					//CEffectPlayer::Get_Instance()->Collect_EffectParticle(this);
 
 					m_isCollect = true;
 					m_ParentDesc.pParent->Set_isCollect(true);
 
 					m_eEffectDesc.fTimeAcc = 0;
 					m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
+
+					m_pVIBufferCom->Reset_Data();
 				}
 			}
 		}
@@ -107,7 +111,8 @@ void CEffect_Particle::Tick(_double _dTimeDelta)
 
 		InstanceDesc.pParent = this;
 
-		m_pVIBufferCom->Tick(dTimeDelta, &InstanceDesc);
+		if(!m_isCollect)
+			m_pVIBufferCom->Tick(dTimeDelta, &InstanceDesc);
 
 	}
 	else if ((m_ParentDesc.pParent->Get_isStopped()))
@@ -131,8 +136,11 @@ HRESULT CEffect_Particle::Render(void)
 	if (FAILED(m_pShaderCom->Begin(m_iPassIndex)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
+	if (!m_isCollect)
+	{
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -143,7 +151,6 @@ HRESULT CEffect_Particle::Add_Components(void)
 		return E_FAIL;
 
 	CVIBuffer_Point_Instance_Effect::INSTANCEDESC		InstanceDesc;
-
 
 	InstanceDesc.pParent = this;
 
@@ -218,7 +225,7 @@ void CEffect_Particle::Set_Initial_Data(void)
 	m_pVIBufferCom->InitialSetting();
 }
 
-CEffect_Particle* CEffect_Particle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CEffect_Particle* CEffect_Particle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* pComponentTag)
 {
 	CEffect_Particle* pInstance = new CEffect_Particle(pDevice, pContext);
 
