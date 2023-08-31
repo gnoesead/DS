@@ -96,6 +96,12 @@ public:
 	void Set_ParentMatrix(_float4x4 WorldMatrix) {
 		m_ParentWorldMatrix = WorldMatrix;
 	}
+	void Set_IsParticle(_bool isParticle) {
+		m_isParticle = isParticle;
+	}
+	void Set_Tag(const char* pTag) {
+		m_pTag = pTag;
+	}
 
 
 public:
@@ -139,6 +145,9 @@ private:
 	_double					m_dTimeAccCycle = { 0.0 };
 	_bool					m_bCollect = { false };
 	_bool					m_bInitialTransformSetting = { true };
+
+	_bool					m_isParticle = { false };
+	const char*				m_pTag = { nullptr };
 
 private:
 	HRESULT Add_Components(void);

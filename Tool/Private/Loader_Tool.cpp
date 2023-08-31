@@ -12,6 +12,8 @@
 #include "AnimCharacter_Tool.h"
 #include "ImGui_Animation_Tool.h"
 
+#include "Sword.h"
+
 //MapObject
 #include "StaticMapObject.h"
 #include "TerrainMapObject.h"
@@ -210,6 +212,25 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			return E_FAIL;
 		}
 
+		/* Prototype_Component_Model_Rengoku */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rengoku"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Rengoku/Rengoku.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_Rengoku");
+			return E_FAIL;
+		}
+
+		// Prototype_Component_Model_Rengoku_Sword
+		PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rengoku_Sword"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../../Client/Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword");
+			return E_FAIL;
+		}
+
+
 		/* Prototype_Component_Model_NPC_Female */
 		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_Female"),
@@ -372,6 +393,8 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			return E_FAIL;
 		}
 
+
+
 		//AnimTool¿ë
 		/* Prototype_GameObject_AnimCharacter_Tool */
 		if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AnimCharacter_Tool"),
@@ -380,6 +403,15 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			MSG_BOX("Failed to Add_Prototype_GameObject_AnimCharacter_Tool");
 			return E_FAIL;
 		}
+
+		/* Prototype_GameObject_AnimCharacter_Tool */
+		if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sword"),
+			CSword::Create(m_pDevice, m_pContext))))
+		{
+			MSG_BOX("Failed to Add_Prototype_GameObject_Sword");
+			return E_FAIL;
+		}
+
 #pragma endregion
 
 #pragma region Environment

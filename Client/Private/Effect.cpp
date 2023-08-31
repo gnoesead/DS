@@ -107,36 +107,101 @@ void CEffect::Tick(_double dTimeDelta)
 
 				if (OP_CURVE == m_eEffectDesc.eSizeOverLifetimeOption)
 				{
-					size_t iSize = m_SizeOverLifeTimes[0].size();
-
-					if (0 < iSize)
+					if (!m_eEffectDesc.isSeparateAxesSzOverLifeTime)
 					{
-						if (!m_eEffectDesc.isSeparateAxesSzOverLifeTime)
+						size_t iSize = m_SizeOverLifeTimes[0].size();
+
+						if (0 < iSize)
 						{
-							if (m_iCurSizeIndex < iSize)
+							if (m_iCurSizeIndex[0] < iSize)
 							{
 								while (true)
 								{
-									if (m_fLifeTime >= m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime)
+									if (m_fLifeTime >= m_SizeOverLifeTimes[0][m_iCurSizeIndex[0] + 1].fLifetime)
 										break;
 
-									++m_iCurSizeIndex;
+									++m_iCurSizeIndex[0];
 								}
 
-								_float y = fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue);
-								_float fWeight = fabs(m_fLifeTime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime)
-									/ fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fLifetime - m_SizeOverLifeTimes[0][m_iCurSizeIndex].fLifetime);
+								_float y = fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex[0] + 1].fValue - m_SizeOverLifeTimes[0][m_iCurSizeIndex[0]].fValue);
+								_float fWeight = fabs(m_fLifeTime - m_SizeOverLifeTimes[0][m_iCurSizeIndex[0]].fLifetime)
+									/ fabs(m_SizeOverLifeTimes[0][m_iCurSizeIndex[0] + 1].fLifetime - m_SizeOverLifeTimes[0][m_iCurSizeIndex[0]].fLifetime);
 
-								if (m_SizeOverLifeTimes[0][m_iCurSizeIndex + 1].fValue < m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue)
+								if (m_SizeOverLifeTimes[0][m_iCurSizeIndex[0] + 1].fValue < m_SizeOverLifeTimes[0][m_iCurSizeIndex[0]].fValue)
 									y *= -1;
 
-								_float	fCurSize = fWeight * y + m_SizeOverLifeTimes[0][m_iCurSizeIndex].fValue;
+								_float	fCurSize = fWeight * y + m_SizeOverLifeTimes[0][m_iCurSizeIndex[0]].fValue;
 
-								if (!m_eEffectDesc.is3DStartSize)
-									m_pTransformCom->Scaling(fCurSize);
+								if (1 == m_eEffectDesc.eEffectType)
+								{
+									if (!m_eEffectDesc.is3DStartSize)
+										m_pTransformCom->Scaling(fCurSize);
+									else
+										m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize));
+								}
 								else
-									m_pTransformCom->Scaling(_float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize));
+								{
+									if (!m_eEffectDesc.is3DStartSize)
+										m_vStartSize = _float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, fCurSize, fCurSize);
+									else
+										m_vStartSize = _float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize);
+								}
 							}
+						}
+					}
+					else
+					{
+						_float3	vSize = { 0.f, 0.f, 0.f };
+
+						for (int i = 0; i < 3; ++i)
+						{
+							size_t iSize = m_SizeOverLifeTimes[i].size();
+
+							if (m_iCurSizeIndex[i] < iSize)
+							{
+								while (true)
+								{
+									if (m_iCurSizeIndex[i] >= iSize - 1)
+										m_iCurSizeIndex[i] = (_uint)iSize - 2;
+
+									if (m_fLifeTime >= m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fLifetime)
+										break;
+
+									++m_iCurSizeIndex[i];
+
+									if (m_iCurSizeIndex[i] >= iSize - 1)
+										m_iCurSizeIndex[i] = (_uint)iSize - 2;
+								}
+
+								_float y = fabs(m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fValue - m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue);
+								_float fWeight = fabs(m_fLifeTime - m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fLifetime)
+									/ fabs(m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fLifetime - m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fLifetime);
+
+								if (m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fValue < m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue)
+									y *= -1;
+
+								if (0 == i)
+									vSize.x = fWeight * y + m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue;
+								else if (1 == i)
+									vSize.y = fWeight * y + m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue;
+								else if (2 == i)
+									vSize.z = fWeight * y + m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue;
+							}
+						}
+
+						if (EFFECT_TEXTURE == m_eEffectDesc.eEffectType)
+						{
+							if (!m_eEffectDesc.is3DStartSize)
+								m_vStartSize = _float3(vSize.x, vSize.y, vSize.z);
+							else
+								m_vStartSize = _float3(m_eEffectDesc.vStartSizeMin.x * vSize.x, m_eEffectDesc.vStartSizeMin.y * vSize.y, m_eEffectDesc.vStartSizeMin.z * vSize.z);
+						}
+						else
+						{
+							if (!m_eEffectDesc.is3DStartSize)
+								m_pTransformCom->Scaling(_float3(vSize.x, vSize.y, vSize.z));
+							else
+								m_pTransformCom->Scaling(_float3(vSize.x * m_eEffectDesc.vStartSizeMin.x, vSize.y * m_eEffectDesc.vStartSizeMin.y, vSize.z * m_eEffectDesc.vStartSizeMin.z));
 						}
 					}
 				}
@@ -343,17 +408,20 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	Check_PassIndex();
 
-	if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
+	if (!m_isCollect)
 	{
-		if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
+		if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
 		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
-				return;
-		}
-		else if (BLEND == m_eEffectDesc.eRenderGroupOption)
-		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
-				return;
+			if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
+			{
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
+					return;
+			}
+			else if (BLEND == m_eEffectDesc.eRenderGroupOption)
+			{
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+					return;
+			}
 		}
 	}
 }
@@ -463,7 +531,10 @@ void CEffect::Set_Initial_Data(void)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVector3TransformCoord(m_pTransformCom->Get_State(CTransform::STATE_POSITION),
 		XMMatrixTranslation(m_eEffectDesc.vPivot.x, m_eEffectDesc.vPivot.y, m_eEffectDesc.vPivot.z)));
 
-	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParentTransform->Get_WorldMatrix());
+	if (m_ParentDesc.pParentTransform != nullptr)
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParentTransform->Get_WorldMatrix());
+	else
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
 
 	if (OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
 		m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
@@ -508,11 +579,14 @@ void CEffect::Set_Initial_Data(void)
 				m_fFrameSpeed = m_eEffectDesc.fFrameSpeedMin;
 		}
 	}
+
+	m_vStartSize = m_eEffectDesc.vStartSizeMin;
 }
 
 void CEffect::Reset_Data(void)
 {
-	m_iCurSizeIndex = 0;
+	for (int i = 0; i < 3; ++i)
+		m_iCurSizeIndex[i] = 0;
 
 	for (int i = 0; i < 3; ++i)
 		m_iCurRotIndex[i] = 0;
@@ -575,7 +649,7 @@ HRESULT CEffect::SetUp_ShaderResources(void)
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//Safe_AddRef(pGameInstance);
+	Safe_AddRef(pGameInstance);
 
 	_float4x4 ViewMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_VIEW);
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
@@ -589,7 +663,7 @@ HRESULT CEffect::SetUp_ShaderResources(void)
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCamPosition", &vCameraPos, sizeof(_float4))))
 		return E_FAIL;
 
-	//Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
 	if (nullptr != m_pTextures[TEX_DIFFUSE])
 	{

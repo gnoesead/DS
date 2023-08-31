@@ -45,6 +45,8 @@ float2			g_vPaddingEnd = { 0.f, 0.f };
 float2			g_vTileSize = { 1.f, 1.f };			// Width, Height
 float2			g_vCurTile = { 0.f, 0.f };			// ї­, За
 
+float3			g_vAxis = { 0.f, 1.f, 0.f };
+
 //--------------------------------------------------
 
 float3			g_vSize;
@@ -98,31 +100,36 @@ void GS_DEFAULT(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 	float3		vLook = g_vCamPosition.xyz - In[0].vPosition.xyz;
 	vLook.y = 0;
 	float3		vNormalizedLook = normalize(vLook);
-	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * g_vSize.x * 0.5f;
-	float3		vUp = float3(0.f, 1.f, 0.f) * g_vSize.y * 0.5f;
+	float3		vRight;
+	float3		vUp;
+
+	vRight = normalize(cross(g_vAxis, vLook)) * g_vSize.x * 0.5f;
+	vUp = normalize(cross(vLook, vRight)) * g_vSize.y * 0.5f;
+	
 
 	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
 
-	Out[0].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight + vUp 
+	Out[0].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight + vUp
 		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[0].vPosition = mul(Out[0].vPosition, matVP);
 	Out[0].vTexUV = float2(0.f, 0.f);
 
-	Out[1].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight + vUp 
+	Out[1].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight + vUp
 		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[1].vPosition = mul(Out[1].vPosition, matVP);
 	Out[1].vTexUV = float2(1.f, 0.f);
 
-	Out[2].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight - vUp 
+	Out[2].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight - vUp
 		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[2].vPosition = mul(Out[2].vPosition, matVP);
 	Out[2].vTexUV = float2(1.f, 1.f);
 
-	Out[3].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight - vUp 
+	Out[3].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight - vUp
 		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[3].vPosition = mul(Out[3].vPosition, matVP);
 	Out[3].vTexUV = float2(0.f, 1.f);
+
 
 	OutStream.Append(Out[0]);
 	OutStream.Append(Out[1]);

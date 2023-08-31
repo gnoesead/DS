@@ -76,7 +76,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 			{
 				if (OPT_SPEED == m_eEffectDesc.eTimeModeOption)
 				{
-					m_fFrameTimeAcc += dTimeDelta * m_fFrameSpeed;
+					m_fFrameTimeAcc += (float)dTimeDelta * m_fFrameSpeed;
 
 					//if (m_eEffectDesc.fFrameSpeedMin != m_eEffectDesc.fFrameSpeedMax)
 					//	m_fFrameSpeed = Random::Generate_Float(m_eEffectDesc.fFrameSpeedMin, m_eEffectDesc.fFrameSpeedMax);
@@ -102,7 +102,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 							while (true)
 							{
 								if (m_iCurFrameIndex >= iSize - 1)
-									m_iCurFrameIndex = iSize - 2;
+									m_iCurFrameIndex = (_uint)iSize - 2;
 
 								if (m_fLifeTime >= m_FrameOverTime[m_iCurFrameIndex + 1].fLifetime)
 									break;
@@ -110,7 +110,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 								++m_iCurFrameIndex;
 
 								if (m_iCurFrameIndex >= iSize - 1)
-									m_iCurFrameIndex = iSize - 2;
+									m_iCurFrameIndex = (_uint)iSize - 2;
 							}
 
 							_float y = fabs(m_FrameOverTime[m_iCurFrameIndex + 1].fValue - m_FrameOverTime[m_iCurFrameIndex].fValue);
@@ -189,6 +189,22 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 
 		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
 			return E_FAIL;
+
+		if (0 != m_eEffectDesc.vStartRotationMin.x)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			_float4 vCameraPos = pGameInstance->Get_CameraPosition();
+
+			Safe_Release(pGameInstance);
+			
+			_float3 vAxis = _float3(0.f, 1.f, 0.f);
+			vAxis = Convert::ToFloat3(XMVector3TransformNormal(Convert::ToVector(vAxis), XMMatrixRotationAxis(Convert::ToVector(vCameraPos) - m_pTransformCom->Get_State(CTransform::STATE_POSITION), XMConvertToRadians(m_eEffectDesc.vStartRotationMin.x))));
+
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_vAxis", (void*)&vAxis, sizeof(_float3))))
+				return E_FAIL;
+		}
 	}
 
 	if (m_eEffectDesc.isTextureSheetAnimation)

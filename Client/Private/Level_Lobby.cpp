@@ -1284,7 +1284,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 
-
 #pragma region TANJIRO_SURGECOMBO
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1.bin"))))
 	{
@@ -1367,11 +1366,10 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 	
-
 #pragma region COMMON
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Spark.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Shock.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Hit_Spark");
+		MSG_BOX("Failed to Load Effect : Hit_Shock");
 		return E_FAIL;
 	}
 
@@ -1384,13 +1382,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle_Disappear.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : SmellBundle_Disappear");
-		return E_FAIL;
-	}
-
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Shock.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Hit_Shock");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -1409,7 +1400,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	return 	S_OK;
 }
 
-HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath)
+HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iCnt)
 {
 	char szFilePathChar[MAX_PATH] = "";
 	WideCharToMultiByte(CP_ACP, 0, pPath, MAX_PATH, szFilePathChar, MAX_PATH, nullptr, nullptr);
@@ -1944,6 +1935,12 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath)
 					}
 				}
 			}
+		}
+	
+		if (isParticle)
+		{
+			pEffectPlayer->Add_ParticlePool(pTagName);
+			pEffectPlayer->Add_Particles_In_Pool(pTagName, iCnt);
 		}
 	}
 

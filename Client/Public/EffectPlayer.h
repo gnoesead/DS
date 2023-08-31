@@ -53,8 +53,8 @@ public:
 	void Collect_EffectMesh(class CEffect* pEffect);
 	class CEffect* Reuse_EffectMesh(class CTransform* pParentTransformCom, class CParticleSystem* pParent);
 
-	void Collect_EffectParticle(class CEffect* pEffect);
-	class CEffect* Reuse_EffectParticle(class CTransform* pParentTransformCom, class CParticleSystem* pParent);
+	void Collect_EffectParticle(const char* pTag, class CParticleSystem* pParticleSystem);
+	class CParticleSystem* Reuse_EffectParticle(const char* pTag, class CTransform* pParentTransformCom);
 
 public:
 	void Set_NumParticleSystem(_uint iNum) {
@@ -81,15 +81,20 @@ public:
 	void	Stop(const char* pEffectTag);
 	_bool Find_ModelKey(const _tchar* pModelKey);
 	_bool Find_TextureKey(int iTextureIndex, const _tchar* pTextureKey);
+	void Add_ParticlePool(const char* pEffectTag);
+	HRESULT Add_Particles_In_Pool(const char* pEffectTag, int iCnt = 1);
+
 
 private:
 	class CParticleSystem* Find_ParticleSystem(const char* pEffectTag);
+	list<class CParticleSystem*>* Find_ParticlePool(const char* pEffectTag);
 
 private:
 	static CEffectPlayer* m_pInstance;
 
 private:
 	unordered_map<const char*, class CParticleSystem*>	m_Effects;
+	unordered_map<const char*, class CParticleSystem*>	m_EffectParticles;
 	list<const char*>									m_EffectTags;
 	_uint												m_iNumParticleSystem = { 0 };
 
@@ -97,12 +102,12 @@ private:
 	list<const _tchar*>									m_pTextureKeyList[TEX_END];
 
 private:
-	list<class CParticleSystem*>						m_ParticleSystemPool;
-	list<class CEffect*>								m_EffectTexturePool;
-	list<class CEffect*>								m_EffectMeshPool;
-	list<class CEffect*>								m_EffectParticlePool;
+	list<class CParticleSystem*>									m_ParticleSystemPool;
+	list<class CEffect*>											m_EffectTexturePool;
+	list<class CEffect*>											m_EffectMeshPool;
+	unordered_map <const char*, list<class CParticleSystem*>*>		m_EffectParticlePool;
 
-	EFFECTWORLDDESC										m_EffectWorldDesc;
+	EFFECTWORLDDESC											m_EffectWorldDesc;
 
 public:
 	void Release(void);

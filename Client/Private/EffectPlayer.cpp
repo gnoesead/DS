@@ -27,216 +27,220 @@ CParticleSystem* CEffectPlayer::Reuse_Effect(const char* pTag, class CTransform*
 	int iEnum = { 0 };
 	int iNum = { 0 };
 
-	CParticleSystem* pParentParticleSystemOrigin = Find_ParticleSystem(pTag);
+	list<CParticleSystem*>* pList = Find_ParticlePool(pTag);
 
-	if (nullptr == pParentParticleSystemOrigin)
+	if (nullptr == pList)
 	{
-		MSG_BOX("해당 태그를 가진 이펙트가 존재하지 않습니다.");
-		return nullptr;
+		CParticleSystem* pParentParticleSystemOrigin = Find_ParticleSystem(pTag);
+
+		if (nullptr == pParentParticleSystemOrigin)
+		{
+			MSG_BOX("해당 태그를 가진 이펙트가 존재하지 않습니다.");
+			return nullptr;
+		}
+
+		CParticleSystem* pParentParticleSystem = Reuse_ParticleSystem();
+
+		if (nullptr == pParentParticleSystem)
+			return nullptr;
+
+		iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
+		pParentParticleSystem->Set_NumEffects(iNumEffects);
+
+		pParentParticleSystem->Set_ParentMatrix(pTransformCom->Get_WorldFloat4x4());
+
+		for (int i = 0; i < iNumEffects; ++i)
+		{
+			CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);
+			CParticleSystem* pParticleSystem = Reuse_ParticleSystem();
+			pParentParticleSystem->Add_Parts(pParticleSystem);
+
+			vFloat3 = pParticleSystemOrigin->Get_Postion();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
+			pParticleSystem->Set_Position(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Rotation();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
+			pParticleSystem->Set_Rotation(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Scale();
+			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
+			pParticleSystem->Set_Scale(vFloat3);
+
+			CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
+			CEffect* pEffect = nullptr;
+			iEnum = pEffectOrigin->Get_EffectType();
+
+			switch (iEnum)
+			{
+			case CEffect::EFFECT_TEXTURE:
+				pEffect = Reuse_EffectTexture(pParticleSystem->Get_Transform(), pParticleSystem);
+				break;
+			case CEffect::EFFECT_MESH:
+				pEffect = Reuse_EffectMesh(pParticleSystem->Get_Transform(), pParticleSystem);
+				break;
+			}
+
+			pParticleSystem->Set_Effect(pEffect);
+
+			CEffect::EFFECTDESC* pEffectDescOrigin;
+
+			pEffectDescOrigin = pEffectOrigin->Get_EffectDesc();
+			pEffect->Set_EffectDesc(pEffectDescOrigin);
+			pEffect->Set_PlaySpeed(m_EffectWorldDesc.dSpeed);
+
+			pEffect->Reserve_BurstList(pEffectDescOrigin->iNumBursts);
+
+			for (int j = 0; j < pEffectDescOrigin->iNumBursts; ++j)
+			{
+				CEffect::BURSTDESC BurstDesc;
+				ZeroMemory(&BurstDesc, sizeof BurstDesc);
+
+				BurstDesc = *pEffectOrigin->Get_BurstDesc(j);
+
+				pEffect->Add_BurstDesc(BurstDesc);
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_SizeOverLifeTime(j, pEffectDescOrigin->iNumSizes[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumSizes[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_SizeOverLifeTime(j, k);
+
+					pEffect->Add_SizeOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_RotationOverLifeTime(j, pEffectDescOrigin->iNumRotations[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumRotations[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_RotationOverLifeTime(j, k);
+
+					pEffect->Add_RotationOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_PositionOverLifeTime(j, pEffectDescOrigin->iNumPositions[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumPositions[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_PositionOverLifeTime(j, k);
+
+					pEffect->Add_PositionOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			pEffect->Reserve_AlphaOverLifeTime(pEffectDescOrigin->iNumAlpha);
+
+			for (int j = 0; j < pEffectDescOrigin->iNumAlpha; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_AlphaOverLifeTime(j);
+
+				pEffect->Add_AlphaOverLifeTime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumRateOverTime; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_RateOverTime(j);
+
+				pEffect->Add_RateOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumSpeedOverLifeTimes; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_SpeedOverLifeTime(j);
+
+				pEffect->Add_SpeedOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumGravityModiferOverLifetimes; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_GravityOverLifeTime(j);
+
+				pEffect->Add_GravityModiferOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumFrameOverTime; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_FrameOverTime(j);
+
+				pEffect->Add_FrameOverLifetime(LifetimeValue);
+			}
+
+			float fOrder = pEffect->Get_Order();
+			pEffect->Set_Order(fOrder);
+
+			if (CEffect::EFFECT_TEXTURE == iEnum)
+			{
+				CEffect_Texture* pEffectTextureOrigin = dynamic_cast<CEffect_Texture*>(pEffectOrigin);
+
+				_float2 vCameraRightPos = pEffectTextureOrigin->Get_CameraRightLookPos();
+
+				CEffect_Texture* pEffectTexture = dynamic_cast<CEffect_Texture*>(pEffect);
+				pEffectTexture->Set_CameraRightLookPos(vCameraRightPos);
+			}
+
+			// Key
+			if (CEffect::EFFECT_MESH == iEnum)
+			{
+				const _tchar* pTag = pEffectOrigin->Get_ModelKey();
+				pEffect->Set_ModelKey(pTag);
+				if (lstrlen(pTag) >= 1)
+					dynamic_cast<CEffect_Mesh*>(pEffect)->Add_Component_Model(LEVEL_STATIC, pTag);
+			}
+
+			for (int j = 0; j < TEX_END; ++j)
+			{
+				const _tchar* pTextureTag = pEffectOrigin->Get_TextureKey(j);
+				pEffect->Set_TextureKey(j, pTextureTag);
+				if (lstrlen(pTextureTag) < 1)
+					continue;
+				pEffect->Add_Component_Texture(LEVEL_STATIC, pTextureTag, j);
+			}
+
+			pEffect->Set_Initial_Data();
+		}
+
+		pParentParticleSystem->Set_PartsParent(pTransformCom);
+		pParentParticleSystem->Set_isPlaying(true);
+		pParentParticleSystem->Set_isStopped(false);
+		pParentParticleSystem->Play_Parts(true);
+
+		return pParentParticleSystem;
 	}
-
-	CParticleSystem* pParentParticleSystem = Reuse_ParticleSystem();
-
-	if (nullptr == pParentParticleSystem)
-		return nullptr;
-
-	iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
-	pParentParticleSystem->Set_NumEffects(iNumEffects);
-
-	pParentParticleSystem->Set_ParentMatrix(pTransformCom->Get_WorldFloat4x4());
-
-	for (int i = 0; i < iNumEffects; ++i)
-	{
-		CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);
-		CParticleSystem* pParticleSystem = Reuse_ParticleSystem();
-		pParentParticleSystem->Add_Parts(pParticleSystem);
-
-		vFloat3 = pParticleSystemOrigin->Get_Postion();
-		vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
-		pParticleSystem->Set_Position(vFloat3);
-
-		vFloat3 = pParticleSystemOrigin->Get_Rotation();
-		vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
-		pParticleSystem->Set_Rotation(vFloat3);
-
-		vFloat3 = pParticleSystemOrigin->Get_Scale();
-		vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
-		pParticleSystem->Set_Scale(vFloat3);
-		
-		CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
-		CEffect* pEffect = nullptr;
-		iEnum = pEffectOrigin->Get_EffectType();
-		
-		switch (iEnum)
-		{
-		case CEffect::EFFECT_TEXTURE:
-			pEffect = Reuse_EffectTexture(pParticleSystem->Get_Transform(), pParticleSystem);
-			break;
-		case CEffect::EFFECT_MESH:
-			pEffect = Reuse_EffectMesh(pParticleSystem->Get_Transform(), pParticleSystem);
-			break;
-		case CEffect::EFFECT_PARTICLE:
-			pEffect = Reuse_EffectParticle(pParticleSystem->Get_Transform(), pParticleSystem);
-			break;
-		}
-
-		pParticleSystem->Set_Effect(pEffect);
-
-		CEffect::EFFECTDESC* pEffectDescOrigin;
-
-		pEffectDescOrigin = pEffectOrigin->Get_EffectDesc();
-		pEffect->Set_EffectDesc(pEffectDescOrigin);
-		pEffect->Set_PlaySpeed(m_EffectWorldDesc.dSpeed);
-
-		pEffect->Reserve_BurstList(pEffectDescOrigin->iNumBursts);
-
-		for (int j = 0; j < pEffectDescOrigin->iNumBursts; ++j)
-		{
-			CEffect::BURSTDESC BurstDesc;
-			ZeroMemory(&BurstDesc, sizeof BurstDesc);
-
-			BurstDesc = *pEffectOrigin->Get_BurstDesc(j);
-
-			pEffect->Add_BurstDesc(BurstDesc);
-		}
-
-		for (int j = 0; j < 3; ++j)
-		{
-			pEffect->Reserve_SizeOverLifeTime(j, pEffectDescOrigin->iNumSizes[j]);
-
-			for (int k = 0; k < pEffectDescOrigin->iNumSizes[j]; ++k)
-			{
-				CEffect::LIFETIMEVALUE LifetimeValue;
-				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-				LifetimeValue = *pEffectOrigin->Get_SizeOverLifeTime(j, k);
-
-				pEffect->Add_SizeOverLifeTime(j, LifetimeValue);
-			}
-		}
-
-		for (int j = 0; j < 3; ++j)
-		{
-			pEffect->Reserve_RotationOverLifeTime(j, pEffectDescOrigin->iNumRotations[j]);
-
-			for (int k = 0; k < pEffectDescOrigin->iNumRotations[j]; ++k)
-			{
-				CEffect::LIFETIMEVALUE LifetimeValue;
-				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-				LifetimeValue = *pEffectOrigin->Get_RotationOverLifeTime(j, k);
-
-				pEffect->Add_RotationOverLifeTime(j, LifetimeValue);
-			}
-		}
-
-		for (int j = 0; j < 3; ++j)
-		{
-			pEffect->Reserve_PositionOverLifeTime(j, pEffectDescOrigin->iNumPositions[j]);
-
-			for (int k = 0; k < pEffectDescOrigin->iNumPositions[j]; ++k)
-			{
-				CEffect::LIFETIMEVALUE LifetimeValue;
-				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-				LifetimeValue = *pEffectOrigin->Get_PositionOverLifeTime(j, k);
-
-				pEffect->Add_PositionOverLifeTime(j, LifetimeValue);
-			}
-		}
-
-		pEffect->Reserve_AlphaOverLifeTime(pEffectDescOrigin->iNumAlpha);
-
-		for (int j = 0; j < pEffectDescOrigin->iNumAlpha; ++j)
-		{
-			CEffect::LIFETIMEVALUE LifetimeValue;
-			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-			LifetimeValue = *pEffectOrigin->Get_AlphaOverLifeTime(j);
-
-			pEffect->Add_AlphaOverLifeTime(LifetimeValue);
-		}
-
-		for (int j = 0; j < pEffectDescOrigin->iNumRateOverTime; ++j)
-		{
-			CEffect::LIFETIMEVALUE LifetimeValue;
-			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-			LifetimeValue = *pEffectOrigin->Get_RateOverTime(j);
-
-			pEffect->Add_RateOverLifetime(LifetimeValue);
-		}
-
-		for (int j = 0; j < pEffectDescOrigin->iNumSpeedOverLifeTimes; ++j)
-		{
-			CEffect::LIFETIMEVALUE LifetimeValue;
-			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-			LifetimeValue = *pEffectOrigin->Get_SpeedOverLifeTime(j);
-
-			pEffect->Add_SpeedOverLifetime(LifetimeValue);
-		}
-
-		for (int j = 0; j < pEffectDescOrigin->iNumGravityModiferOverLifetimes; ++j)
-		{
-			CEffect::LIFETIMEVALUE LifetimeValue;
-			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-			LifetimeValue = *pEffectOrigin->Get_GravityOverLifeTime(j);
-
-			pEffect->Add_GravityModiferOverLifetime(LifetimeValue);
-		}
-
-		for (int j = 0; j < pEffectDescOrigin->iNumFrameOverTime; ++j)
-		{
-			CEffect::LIFETIMEVALUE LifetimeValue;
-			ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
-
-			LifetimeValue = *pEffectOrigin->Get_FrameOverTime(j);
-
-			pEffect->Add_FrameOverLifetime(LifetimeValue);
-		}
-
-		float fOrder = pEffect->Get_Order();
-		pEffect->Set_Order(fOrder);
-
-		if (CEffect::EFFECT_TEXTURE == iEnum)
-		{
-			CEffect_Texture* pEffectTextureOrigin = dynamic_cast<CEffect_Texture*>(pEffectOrigin);
-
-			_float2 vCameraRightPos = pEffectTextureOrigin->Get_CameraRightLookPos();
-
-			CEffect_Texture* pEffectTexture = dynamic_cast<CEffect_Texture*>(pEffect);
-			pEffectTexture->Set_CameraRightLookPos(vCameraRightPos);
-		}
-
-		// Key
-		if (CEffect::EFFECT_MESH == iEnum)
-		{
-			const _tchar* pTag = pEffectOrigin->Get_ModelKey();
-			pEffect->Set_ModelKey(pTag);
-			if (lstrlen(pTag) >= 1)
-				dynamic_cast<CEffect_Mesh*>(pEffect)->Add_Component_Model(LEVEL_STATIC, pTag);
-		} 
-
-		for (int j = 0; j < TEX_END; ++j)
-		{
-			const _tchar* pTextureTag = pEffectOrigin->Get_TextureKey(j);
-			pEffect->Set_TextureKey(j, pTextureTag);
-			if (lstrlen(pTextureTag) < 1)
-				continue;
-			pEffect->Add_Component_Texture(LEVEL_STATIC, pTextureTag, j);
-		}
-
-		pEffect->Set_Initial_Data();
-	}
-
-	pParentParticleSystem->Set_PartsParent(pTransformCom);
-	pParentParticleSystem->Set_isPlaying(true);
-	pParentParticleSystem->Set_isStopped(false);
-	pParentParticleSystem->Play_Parts(true);
-
-	return pParentParticleSystem;
+	else
+		return Reuse_EffectParticle(pTag, pTransformCom);
 }
 
 void CEffectPlayer::Collect_ParticleSystem(CParticleSystem* pParticleSystem)
@@ -390,54 +394,147 @@ CEffect* CEffectPlayer::Reuse_EffectMesh(CTransform* pParentTransformCom, CParti
 	return pEffectMesh;
 }
 
-void CEffectPlayer::Collect_EffectParticle(CEffect* pEffect)
+void CEffectPlayer::Collect_EffectParticle(const char* pTag, CParticleSystem* pParticleSystem)
 {
-	if (nullptr == pEffect)
+	if (nullptr == pParticleSystem)
 		return;
 
-	m_EffectParticlePool.push_back(pEffect);
+	list<class CParticleSystem*>* pList = Find_ParticlePool(pTag);
+
+	if (nullptr == pList)
+	{
+		MSG_BOX("해당 태그를 가진 파티클 이펙트가 존재하지 않습니다.");
+		return;
+	}
+
+	pList->push_back(pParticleSystem);
 }
 
-CEffect* CEffectPlayer::Reuse_EffectParticle(CTransform* pParentTransformCom, CParticleSystem* pParent)
+CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransform* pParentTransformCom)
 {
-	CEffect* pEffectParticle = nullptr;
+	CParticleSystem* pParentParticleSystem = nullptr;
 
 	if (m_EffectParticlePool.empty())
 	{
+		list<class CParticleSystem*>* pList = Find_ParticlePool(pTag);
+
+		if (nullptr == pList)
+		{
+			MSG_BOX("해당 태그를 가진 파티클 이펙트가 존재하지 않습니다.");
+			return nullptr;
+		}
+
+		Add_Particles_In_Pool(pTag);
+
+		pParentParticleSystem = pList->front();
+		pList->pop_front();
+
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
+		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParentParticleSystem);
 
-		//pEffectParticle = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectParticle"), nullptr));
+		int iNumEffects = pParentParticleSystem->Get_NumEffects();
+		for (int i = 0; i < iNumEffects; ++i)
+		{
+			CParticleSystem* pParticleSystem = nullptr;
+			pParticleSystem = pParentParticleSystem->Get_Part(i);
 
-		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), TEXT("Prototype_GameObject_EffectParticle"));
-		size_t iSize = pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"));
-		pEffectParticle = dynamic_cast<CEffect*>(pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), (_uint)iSize - 1));
+			if (nullptr == pParticleSystem)
+			{
+				Safe_Release(pGameInstance);
+				return nullptr;
+			}
+
+			pParticleSystem->Set_Collect(false);
+
+			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParticleSystem);
+
+			CEffect* pEffect = pParticleSystem->Get_Effect();
+
+			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pEffect);
+
+			if (nullptr == pEffect)
+			{
+				Safe_Release(pGameInstance);
+				return nullptr;
+			}
+
+			pEffect->Set_Collect(false);
+			pEffect->Reset_Data();
+		}
 
 		Safe_Release(pGameInstance);
 	}
 	else
 	{
-		pEffectParticle = m_EffectParticlePool.front();
-		m_EffectParticlePool.pop_front();
-		pEffectParticle->Clear();
+		list<class CParticleSystem*>* pList = Find_ParticlePool(pTag);
+
+		if (nullptr == pList)
+		{
+			MSG_BOX("해당 태그를 가진 파티클 이펙트가 존재하지 않습니다.");
+			return nullptr;
+		}
+
+		pParentParticleSystem = pList->front();
+		pList->pop_front();
+		//pEffectParticle->Clear();
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pEffectParticle);
+		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParentParticleSystem);
 
+		int iNumEffects = pParentParticleSystem->Get_NumEffects();
+		for (int i = 0; i < iNumEffects; ++i)
+		{
+			CParticleSystem* pParticleSystem = nullptr;
+			pParticleSystem = pParentParticleSystem->Get_Part(i);
+
+			if (nullptr == pParticleSystem)
+			{
+				Safe_Release(pGameInstance);
+				return nullptr;
+			}
+
+			pParticleSystem->Set_Collect(false);
+
+			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParticleSystem);
+
+			CEffect* pEffect = pParticleSystem->Get_Effect();
+
+			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pEffect);
+
+			if (nullptr == pEffect)
+			{
+				Safe_Release(pGameInstance);
+				return nullptr;
+			}
+
+			pEffect->Set_Collect(false);
+			pEffect->Reset_Data();
+			pEffect->Set_Parent(pParentTransformCom, pParticleSystem);
+		}
+		
 		Safe_Release(pGameInstance);
 	}
 
-	pEffectParticle->Set_Parent(pParentTransformCom, pParent);
 
-	if (nullptr == pEffectParticle)
+
+	if (nullptr == pParentParticleSystem)
 		return nullptr;
 
-	pEffectParticle->Set_Collect(false);
-	pEffectParticle->Reset_Data();
+	pParentParticleSystem->Set_Collect(false);
 
-	return pEffectParticle;
+
+	pParentParticleSystem->Set_ParentMatrix(pParentTransformCom->Get_WorldFloat4x4());			// 이거 해줘야 함
+
+	pParentParticleSystem->Set_PartsParent(pParentTransformCom);
+	pParentParticleSystem->Set_isPlaying(true);
+	pParentParticleSystem->Set_isStopped(false);
+	pParentParticleSystem->Play_Parts(true);
+
+
+	return pParentParticleSystem;
 }
 
 void CEffectPlayer::Play(const char* pEffectTag, class CTransform* pTransformCom, EFFECTWORLDDESC* pEffectWorldDesc)
@@ -487,6 +584,16 @@ CParticleSystem* CEffectPlayer::Find_ParticleSystem(const char* pEffectTag)
 	return iter->second;
 }
 
+list<class CParticleSystem*>* CEffectPlayer::Find_ParticlePool(const char* pEffectTag)
+{
+	auto iter = find_if(m_EffectParticlePool.begin(), m_EffectParticlePool.end(), CTag_Finder_Char(pEffectTag));
+
+	if (m_EffectParticlePool.end() == iter)
+		return nullptr;
+
+	return iter->second;
+}
+
 _bool CEffectPlayer::Find_ModelKey(const _tchar* pModelKey)
 {
 	auto iter = m_pModelKeyList.begin();
@@ -517,6 +624,243 @@ _bool CEffectPlayer::Find_TextureKey(int iTextureIndex, const _tchar* pTextureKe
 		return false;
 
 	return false;
+}
+
+void CEffectPlayer::Add_ParticlePool(const char* pEffectTag)
+{
+	list<class CParticleSystem*>* pList = Find_ParticlePool(pEffectTag);
+
+	if (nullptr != pList)
+	{
+		MSG_BOX("Pool이 이미 존재합니다.");
+		return;
+	}
+
+	pList = new list<class CParticleSystem*>;
+
+	m_EffectParticlePool.emplace(pEffectTag, pList);
+}
+
+HRESULT CEffectPlayer::Add_Particles_In_Pool(const char* pEffectTag, int iCnt)
+{
+	list<class CParticleSystem*>* pList = Find_ParticlePool(pEffectTag);
+
+	if (nullptr == pList)
+	{
+		MSG_BOX("해당 태그를 가진 파티클 이펙트 Pool이 존재하지 않습니다.");
+		return E_FAIL;
+	}
+
+	int iNumEffects = { 0 };
+	_float3 vFloat3 = { 0.f, 0.f, 0.f };
+	int iEnum = { 2 };
+	int iNum = { 0 };
+
+	CParticleSystem* pParentParticleSystemOrigin = Find_ParticleSystem(pEffectTag);
+
+	if (nullptr == pParentParticleSystemOrigin)
+	{
+		MSG_BOX("해당 태그를 가진 이펙트가 존재하지 않습니다.");
+		return E_FAIL;
+	}
+
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	for (int i = 0; i < iCnt; ++i)
+	{
+		_uint iLevelIndex = LEVEL_STATIC;
+		CParticleSystem* pParentParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex));
+
+		if (nullptr == pParentParticleSystem)
+		{
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+
+		iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
+		pParentParticleSystem->Set_NumEffects(iNumEffects);
+
+		//pParentParticleSystem->Set_ParentMatrix(pTransformCom->Get_WorldFloat4x4());
+
+		for (int i = 0; i < iNumEffects; ++i)
+		{
+			CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);
+			CParticleSystem* pParticleSystem = dynamic_cast<CParticleSystem*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ParticleSystem"), &iLevelIndex));
+			pParentParticleSystem->Add_Parts(pParticleSystem);
+
+			vFloat3 = pParticleSystemOrigin->Get_Postion();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
+			pParticleSystem->Set_Position(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Rotation();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
+			pParticleSystem->Set_Rotation(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Scale();
+			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
+			pParticleSystem->Set_Scale(vFloat3);
+
+			CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
+
+			CEffect* pEffect = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectParticle"), &iLevelIndex));
+
+			if (nullptr == pEffect)
+			{
+				Safe_Release(pGameInstance);
+				return E_FAIL;
+			}
+
+			pParticleSystem->Set_Effect(pEffect);
+
+			pParticleSystem->Set_IsParticle(true);
+			pParticleSystem->Set_Tag(pEffectTag);
+
+			CEffect::EFFECTDESC* pEffectDescOrigin;
+
+			pEffectDescOrigin = pEffectOrigin->Get_EffectDesc();
+			pEffect->Set_EffectDesc(pEffectDescOrigin);
+			pEffect->Set_PlaySpeed(m_EffectWorldDesc.dSpeed);
+
+			pEffect->Reserve_BurstList(pEffectDescOrigin->iNumBursts);
+
+			for (int j = 0; j < pEffectDescOrigin->iNumBursts; ++j)
+			{
+				CEffect::BURSTDESC BurstDesc;
+				ZeroMemory(&BurstDesc, sizeof BurstDesc);
+
+				BurstDesc = *pEffectOrigin->Get_BurstDesc(j);
+
+				pEffect->Add_BurstDesc(BurstDesc);
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_SizeOverLifeTime(j, pEffectDescOrigin->iNumSizes[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumSizes[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_SizeOverLifeTime(j, k);
+
+					pEffect->Add_SizeOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_RotationOverLifeTime(j, pEffectDescOrigin->iNumRotations[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumRotations[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_RotationOverLifeTime(j, k);
+
+					pEffect->Add_RotationOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			for (int j = 0; j < 3; ++j)
+			{
+				pEffect->Reserve_PositionOverLifeTime(j, pEffectDescOrigin->iNumPositions[j]);
+
+				for (int k = 0; k < pEffectDescOrigin->iNumPositions[j]; ++k)
+				{
+					CEffect::LIFETIMEVALUE LifetimeValue;
+					ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+					LifetimeValue = *pEffectOrigin->Get_PositionOverLifeTime(j, k);
+
+					pEffect->Add_PositionOverLifeTime(j, LifetimeValue);
+				}
+			}
+
+			pEffect->Reserve_AlphaOverLifeTime(pEffectDescOrigin->iNumAlpha);
+
+			for (int j = 0; j < pEffectDescOrigin->iNumAlpha; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_AlphaOverLifeTime(j);
+
+				pEffect->Add_AlphaOverLifeTime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumRateOverTime; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_RateOverTime(j);
+
+				pEffect->Add_RateOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumSpeedOverLifeTimes; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_SpeedOverLifeTime(j);
+
+				pEffect->Add_SpeedOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumGravityModiferOverLifetimes; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_GravityOverLifeTime(j);
+
+				pEffect->Add_GravityModiferOverLifetime(LifetimeValue);
+			}
+
+			for (int j = 0; j < pEffectDescOrigin->iNumFrameOverTime; ++j)
+			{
+				CEffect::LIFETIMEVALUE LifetimeValue;
+				ZeroMemory(&LifetimeValue, sizeof LifetimeValue);
+
+				LifetimeValue = *pEffectOrigin->Get_FrameOverTime(j);
+
+				pEffect->Add_FrameOverLifetime(LifetimeValue);
+			}
+
+			float fOrder = pEffect->Get_Order();
+			pEffect->Set_Order(fOrder);
+
+			for (int j = 0; j < TEX_END; ++j)
+			{
+				const _tchar* pTextureTag = pEffectOrigin->Get_TextureKey(j);
+				pEffect->Set_TextureKey(j, pTextureTag);
+				if (lstrlen(pTextureTag) < 1)
+					continue;
+				pEffect->Add_Component_Texture(LEVEL_STATIC, pTextureTag, j);
+			}
+
+			pEffect->Set_Initial_Data();
+		}
+
+		pParentParticleSystem->Set_IsParticle(true);
+		pParentParticleSystem->Set_Tag(pEffectTag);
+
+		pList->push_back(pParentParticleSystem);
+	}
+
+	Safe_Release(pGameInstance);
+
+	//pParentParticleSystem->Set_PartsParent(pTransformCom);
+	//pParentParticleSystem->Set_isPlaying(true);
+	//pParentParticleSystem->Set_isStopped(false);
+	//pParentParticleSystem->Play_Parts(true);
+
+	return S_OK;
 }
 
 void CEffectPlayer::Release()
@@ -559,8 +903,15 @@ void CEffectPlayer::Release()
 
 	m_EffectMeshPool.clear();
 
-	for (auto pEffect : m_EffectParticlePool)
-		Safe_Release(pEffect);
+
+	for (auto Pair : m_EffectParticlePool)
+	{
+		for (auto pParticleSystem : (*Pair.second))
+			Safe_Release(pParticleSystem);
+
+		Pair.second->clear();
+		Safe_Delete(Pair.second);
+	}
 
 	m_EffectParticlePool.clear();
 }

@@ -24,6 +24,7 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
 {
