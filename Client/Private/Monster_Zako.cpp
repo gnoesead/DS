@@ -262,7 +262,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.3
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.39
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
 			}
@@ -271,7 +275,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.55
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.64
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 3.0f);
 			}
@@ -318,12 +326,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (8 == m_iEvent_Index)
 			{//1.30
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.vPosition.x = 0.7f;
+				EffectWorldDesc.vPosition.x = 0.2f;
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.x = -0.7f;
+				EffectWorldDesc.vPosition.x = -0.2f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
 			}
 			if (9 == m_iEvent_Index)
@@ -336,18 +344,40 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.1
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 7.0f);
 			}
 		}
 
+		if (12 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			//if (0 == m_iEvent_Index)
+			//{//0.5
+			//}
+			if (1 == m_iEvent_Index)
+			{//0.65
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown_V2", m_pTransformCom);
+			}
+		}
 		if (13 == m_pModelCom->Get_iCurrentAnimIndex()) // 길게
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
+			}
+		}
+
+		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.15
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinKick", m_pTransformCom);
 			}
 		}
 
@@ -363,7 +393,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (24 == m_pModelCom->Get_iCurrentAnimIndex()) 
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.1
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.24
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
 			}
@@ -372,7 +406,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.1
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_Right", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.28
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 4.0f);
 			}
@@ -381,9 +419,13 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.4
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 7.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.5
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
 			}
 		}
 
@@ -395,21 +437,48 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BLOW, AtkDir, 8.0f);
 			}
 		}
+		if (31 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.05
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.2f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.x = -0.2f;
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
 
 		if (38 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.45
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin_Wind", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.59
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
 			}
-			if (1 == m_iEvent_Index)
-			{
+			if (2 == m_iEvent_Index)
+			{//0.9
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
+			}
+			if (3 == m_iEvent_Index)
+			{//0.99
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 4.0f);
 			}
-			if (2 == m_iEvent_Index)
-			{
+			if (4 == m_iEvent_Index)
+			{//1.9
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+			}
+			if (5 == m_iEvent_Index)
+			{//1.960
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 7.0f);
 			}
@@ -418,7 +487,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (44 == m_pModelCom->Get_iCurrentAnimIndex()) // 길게
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinPunch", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 6.0f);
 			}
@@ -594,34 +667,7 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		PATTERN_BUTTERFLY, PATTERN_CLAWCROSS, 
 		PATTERN_SPINMOVE, PATTERN_MOVE,
 		PATTERN_END };*/
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_CLAWS;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_TACKLE;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_SPINKICK;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
 	{
 		m_iAttackIndex = 10;
 
@@ -640,6 +686,33 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_eCurPattern = PATTERN_BUTTERFLY;
 	}
 	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINMOVE;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_JUMPKICK;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINKICK;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
 		m_iAttackIndex = 10;
 

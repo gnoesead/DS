@@ -95,6 +95,14 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
+	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	{
+		CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+	}
 	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
