@@ -108,6 +108,12 @@ private: //애니메이션 제어용 변수들
 
 	//skillnormal
 	_bool	m_isAir_Skill_Normal = { false };
+	_double m_dDelay_Skill_Normal = { 0.0 };
+	_bool	m_isAir_Skill_Normal_1 = { false };
+
+	//skillGuar
+	_bool	m_isSkill_Guard = { false };
+	_double m_dDelay_Skill_Guard = { 0.0 };
 
 
 	//오의 용
