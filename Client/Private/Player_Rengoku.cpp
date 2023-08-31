@@ -245,10 +245,9 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
-		/*
 		if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			/*if (0 == m_iEvent_Index)
 			{
 				if (m_Moveset.m_iAwaken == 0)					
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
@@ -257,38 +256,281 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			}*/
+			if (0 == m_iEvent_Index)
+			{
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
+			}
+		}
+		else if (1 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
 			}
-		}*/
+		}
+		else if (2 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.f);
+			}
+		}
+		else if (ANIM_ATK_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.5f);
+			}
+		}
+		else if (ANIM_ATK_COMBO_NORMAL == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.5f);
+			}
+		}
+		else if (ANIM_ATK_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.7f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.2f), 0.1,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+			}
+		}
+		if (ANIM_ATK_COMBO_SURGE == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.6f, 1.6f, 1.6f), _float3(0.f, 1.0f, 1.0f), 1.0,
+					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 1.0f);
+			}
+		}
+
 #pragma endregion
 
 
 
 #pragma region Super_Skill
-		
+		if (ANIM_ATK_SKILL_GUARD == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.4f, 2.4f, 2.4f), _float3(0.f, 1.0f, 2.5f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 4.3f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.8f, 2.8f, 2.8f), _float3(0.f, 1.0f, 2.5f), 0.3,
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 8.5f);
+			}
+		}
+
+		if (ANIM_ATK_SKILL_MOVE == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.4f, 2.4f, 2.4f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 4.3f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.8f, 2.8f, 2.8f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 8.5f);
+			}
+		}
+		if (ANIM_ATK_SKILL_MOVE_AIR == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.8f, 2.8f, 2.8f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 11.3f);
+			}
+			
+		}
+
+		if (ANIM_ATK_SKILL_NORMAL == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//이펙트용
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.5f);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (3 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (4 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (5 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (6 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (7 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (8 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.0f, 4.0f, 4.0f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (9 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(4.5f, 4.5f, 4.5f), _float3(0.f, 1.0f, 3.0f), 0.1,
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 11.2f);
+			}
+		}
+		if (ANIM_ATK_SKILL_NORMAL_AIR == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				//이펙트
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (3 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (4 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (5 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (6 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+			}
+			else if (7 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 10.0f);
+			}
+		}
+
 #pragma endregion
 
 
 
 #pragma region Air_Attack
-		
+		if (ANIM_ATK_AIR_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.8f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.3f, 2.3f, 2.3f), _float3(0.f, 1.0f, 1.8f), 0.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
+			}
+		}
+		else if (9 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.6f, 2.6f, 2.6f), _float3(0.f, 1.0f, 2.0f), 0.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.5f);
+			}
+		}
+
+		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 1.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+		}
 #pragma endregion
 
 
 
 #pragma region Dash_Tackle
-		
+		if (ANIM_DASH_RUN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 5.1,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+		}
 #pragma endregion
 
 
 
 #pragma region Charge_Attack
-	
+		if (12 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.8f), 1.1,
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 8.0f);
+			}
+		}
 #pragma endregion
 
 		m_iEvent_Index++;
@@ -558,7 +800,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Attack(_double dTimeDelta)
 	// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 2.8f * m_fScaleChange * m_fAtk_Move_Ratio, 0.3f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 1, 2.8f * m_fScaleChange * m_fAtk_Move_Ratio, 0.16f * m_fScaleChange);
-	Go_Straight_Deceleration(dTimeDelta, 2, 4.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.11f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 2, 4.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.08f * m_fScaleChange);
 	//분기
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO_DOWN, 3.2f * m_fScaleChange * m_fAtk_Move_Ratio, 0.05f * m_fScaleChange); // Down
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO_NORMAL, 5.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.35f * m_fScaleChange); // Normal
@@ -716,29 +958,50 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL_AIR);
-		Jumping(2.2f * m_fScaleChange, 0.09f * m_fScaleChange);
+		Jumping(1.2f * m_fScaleChange, 0.09f * m_fScaleChange);
 
 		Use_Mp_Skill();
 	}
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL_AIR, 1.5f * m_fScaleChange, 0.07f * m_fScaleChange);
-	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ATK_SKILL_NORMAL_AIR)
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ATK_SKILL_NORMAL_AIR && m_isAir_Skill_Normal == false && m_isAir_Skill_Normal_1 == false)
 	{
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		if( Pos.y <= m_fLand_Y)
 		{
 			m_isAir_Skill_Normal = true;
-			Jumping(0.5f, 0.035f);
+			m_dDelay_Skill_Normal = 0.0;
+		}
+		else
+		{
+			Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_NORMAL_AIR, 1.2f * m_fScaleChange);
 		}
 	}
 	if (m_isAir_Skill_Normal)
 	{
-		_float4 Pos;
-		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-
-		m_pTransformCom->Go_Backward(dTimeDelta * 1.5f, m_pNavigationCom[m_eCurNavi]);
-		if (Pos.y <= m_fLand_Y)
+		m_dDelay_Skill_Normal += dTimeDelta;
+		if (m_dDelay_Skill_Normal > 0.3f)
+		{
 			m_isAir_Skill_Normal = false;
+			m_dDelay_Skill_Normal = 0.0;
+			m_isAir_Skill_Normal_1 = true;
+			Jumping(1.f, 0.035f);
+		}
+	}
+	if (m_isAir_Skill_Normal_1)
+	{
+		Go_Backward_Constant(dTimeDelta, ANIM_ATK_SKILL_NORMAL_AIR, 1.3f);
+
+		m_dDelay_Skill_Normal += dTimeDelta;
+		if (m_dDelay_Skill_Normal > 0.1f)
+		{
+			_float4 Pos;
+			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			if (Pos.y <= m_fLand_Y)
+			{
+				m_isAir_Skill_Normal_1 = false;
+				m_dDelay_Skill_Normal = 0.0;
+			}
+		}
 	}
 
 	//스킬_노말 지상
@@ -772,12 +1035,13 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_MOVE_AIR);
-		JumpStop(1.0);
+		JumpStop(1.5);
+		Set_FallingStatus(0.10f, 0.1f);
 		
 		Use_Mp_Skill();
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE_AIR, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio);
-	Go_Straight_Deceleration(dTimeDelta, 19, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_MOVE_AIR, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.02f * m_fScaleChange);
+	//Go_Straight_Deceleration(dTimeDelta, 19, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange);
 	Ground_Animation_Play(19, 36);
 
 	//스킬_1 : 이동키 + I키
@@ -795,8 +1059,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 		
 		Use_Mp_Skill();
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio);
-	Go_Straight_Deceleration(dTimeDelta, 17, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.12f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_MOVE, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.02f * m_fScaleChange);
+	//Go_Straight_Deceleration(dTimeDelta, 17, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.08f * m_fScaleChange);
 
 	
 
@@ -815,12 +1079,24 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
-		Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
+
+		m_isSkill_Guard = true;
+		m_dDelay_Skill_Guard = 0.0;
 
 		Use_Mp_Skill();
 	}
 	Ground_Animation_Play(14, 15);
-	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.02f * m_fScaleChange);
+	if (m_isSkill_Guard)
+	{
+		m_dDelay_Skill_Guard += dTimeDelta;
+		if (m_dDelay_Skill_Guard > 0.5f)
+		{
+			m_dDelay_Skill_Guard = 0.0;
+			m_isSkill_Guard = false;
+			Jumping(1.50f * m_fScaleChange, 0.04f * m_fScaleChange);
+		}
+	}
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Guard(_double dTimeDelta)
@@ -1059,33 +1335,10 @@ void CPlayer_Rengoku::Animation_Control_Battle_Special(_double dTimeDelta)
 		}
 	}
 	m_dTime_Special_CutScene += dTimeDelta;
-/*
-	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SPECIAL_CUTSCENE, 1.0f * m_fScaleChange);
-	if (0.90f <= m_dTime_Special_CutScene)
-	{
-		Go_Left_Deceleration(dTimeDelta, ANIM_ATK_SPECIAL_CUTSCENE, 10.0f * m_fScaleChange, 0.1f * m_fScaleChange);
-	}
-	else if (0.65f <= m_dTime_Special_CutScene)
-	{
-		Go_Right_Deceleration(dTimeDelta, ANIM_ATK_SPECIAL_CUTSCENE, 10.0f * m_fScaleChange, 0.1f * m_fScaleChange);
-	}
-	else if (0.35f <= m_dTime_Special_CutScene )
-	{
-		Go_Left_Deceleration(dTimeDelta, ANIM_ATK_SPECIAL_CUTSCENE, 10.0f * m_fScaleChange, 0.1f * m_fScaleChange);
-	}
 
-	if (m_pModelCom->Get_iCurrentAnimIndex() == 103 && m_isFirst_Special_Jump)
-	{
-		m_isFirst_Special_Jump = false;
-		Jumping(2.65f * m_fScaleChange, 0.025f * m_fScaleChange);
-	}
-	
-	if (m_pModelCom->Get_iCurrentAnimIndex() == 106 && m_isSecond_Special_Jump)
-	{
-		m_isSecond_Special_Jump = false;
-		Jumping(1.0f * m_fScaleChange, 0.08f * m_fScaleChange);
-	}
-	Go_Straight_Deceleration(-dTimeDelta, 106, 1.0f * m_fScaleChange, 0.01f * m_fScaleChange);*/
+	Go_Straight_Constant(dTimeDelta, 113, 1.5f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, 114, 1.5f * m_fScaleChange, 0.015f);
+
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
