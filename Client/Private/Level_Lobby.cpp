@@ -1395,6 +1395,17 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+
+#pragma region ZENITSU
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Test_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Test_1");
+		return E_FAIL;
+	}
+
+	
+#pragma endregion
+
 	return 	S_OK;
 }
 
