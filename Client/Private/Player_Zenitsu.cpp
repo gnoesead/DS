@@ -478,8 +478,6 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma endregion
 
 
-
-
 #pragma region SuperSkill
 		if (ANIM_ATK_SKILL_HEKIREKI == m_pModelCom->Get_iCurrentAnimIndex())
 		{
