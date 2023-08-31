@@ -335,18 +335,36 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -356,10 +374,35 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
+
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f);
 			}
+			else if (1 == m_iEvent_Index) {
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.8f;
+				EffectWorldDesc.vPosition.x = 1.3f;
+				EffectWorldDesc.vPosition.y = 0.33f;
+				
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_3_Wind", m_pTransformCom, &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_3_Wind", m_pTransformCom, &EffectWorldDesc);
+
+			}
+
+
+
 		}
 
 		if (ANIM_ATK_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
