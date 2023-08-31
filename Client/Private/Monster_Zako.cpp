@@ -358,7 +358,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			//if (0 == m_iEvent_Index)
 			//{//0.5
-			//	CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown", m_pTransformCom);
 			//}
 			if (1 == m_iEvent_Index)
 			{//0.65

@@ -1879,11 +1879,6 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Slam");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown");
-		return E_FAIL;
-	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown_V2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown_V2");
