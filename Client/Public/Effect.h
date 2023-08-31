@@ -197,7 +197,7 @@ protected:
 	PARENTDESC				m_ParentDesc;
 	_uint					m_iPassIndex = { 0 };
 	_float					m_fLifeTime = { 0.f };
-	_uint					m_iCurSizeIndex = { 0 };
+	_uint					m_iCurSizeIndex[3] = { 0 };
 	_uint					m_iCurRotIndex[3] = { 0 };
 	_uint					m_iCurPosIndex[3] = { 0 };
 	_uint					m_iCurAlphaIndex = { 0 };
@@ -234,6 +234,8 @@ protected:
 	_float2					m_vPaddingEnd = { 0.f, 0.f };
 
 	_double					m_dPlaySpeed = { 1.0 };
+
+	_float3					m_vStartSize = { 1.f, 1.f, 1.f };
 
 public:
 	//static CEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

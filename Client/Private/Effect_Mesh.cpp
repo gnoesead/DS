@@ -174,7 +174,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 	else if (nullptr != m_pTextures[TEX_MASK])
 	{
 		if (nullptr != m_pTextures[TEX_RAMP])
+		{
 			m_iPassIndex = 4;
+
+			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+				m_iPassIndex = 14;
+		}
 		else
 		{
 			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)

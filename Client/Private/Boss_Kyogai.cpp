@@ -291,7 +291,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-
+			Trigger_Awake_AtkskCmb();
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -299,8 +299,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
-
-
+			Trigger_AtkSk();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
@@ -841,25 +840,108 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 			EffectWorldDesc.vPosition.y += 1.f;
 			EffectWorldDesc.fScale = 2.1f;
-
+			dLongLifeTime = 3.0;
+			
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
+				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				{
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(0, 8), 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
+				}
+				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				{
+					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+					dSpeed = 3.0;
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				}
 			}
 
 			if (1 == m_iEvent_Index)	// 0.28
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
+				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				{
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				}
+				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				{
+					dSpeed = 3.0;
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+
+
+				}
 			}
 
 			if (2 == m_iEvent_Index)	// 0.56
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
+				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				{
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
+				}
+				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				{
+					dSpeed = 3.0;
+					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+
+				}
 			}
 
 			if (3 == m_iEvent_Index)	// 0.84
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
+				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				{
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				}
+				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				{
+					dSpeed = 3.0;
+					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				}
 			}
 		}
 
@@ -1038,6 +1120,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_AWAKE_ROOMCHANGE:
 		Update_Awake_AtkskCmb(dTimeDelta);
 		break;
+	case CBoss_Kyogai::STATE_ATKSK:
+		Update_AtkSk(dTimeDelta);
+		break;
 	case CBoss_Kyogai::STATE_HIT_SMALL:
 		Update_Hit_Small(dTimeDelta);
 		break;
@@ -1153,8 +1238,8 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bFirstAwake == false)
 	{
-		m_bFirstAwake = true;		
-		m_bAwake = true;
+		m_bFirstAwake = true;
+		//m_bAwake = true;
 		m_bTrigger = false;
 		m_iTriggerCnt = 1;
 		m_dAwakeTime = 0.0;
@@ -1167,9 +1252,9 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 	if (m_bAwake == true)
 	{
 		m_dAwakeTime += dTimeDelta;
-		if (24.5 < m_dAwakeTime && m_dAwakeTime <= 24.5 + dTimeDelta)
+		if (65.5 < m_dAwakeTime && m_dAwakeTime <= 65.5 + dTimeDelta)
 			m_pRendererCom->Set_Invert();
-		if (m_dAwakeTime > 25.0)
+		if (m_dAwakeTime > 66.0)
 		{
 			m_dAwakeTime = 0.0;
 			m_pRendererCom->Set_Invert();
@@ -1185,7 +1270,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			switch (m_iTriggerCnt)
 			{
 			case 1:
-				Trigger_Begin();
+				Trigger_Interact();
 				break;
 
 
@@ -1199,7 +1284,9 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			case 1:
 				Trigger_Awake();
 				break;
-
+			case 2:
+				Trigger_Awake_AtkskCmb();
+				break;
 
 			}
 		}
@@ -1327,7 +1414,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 				m_iIdleCnt = 0;
 				m_iRandomPatternNum = Random::Generate_Int(1, 16);
 
-				if (fDistance <= 5.f)
+				if (fDistance <= 7.f)
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 12)
 					{
@@ -1340,7 +1427,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 						m_bTrigger = false;
 					}
 				}
-				if (fDistance > 5.f)
+				if (fDistance > 7.f)
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 3)
 					{
@@ -1386,75 +1473,10 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 			}
 		}
 	}
-	if (m_bAwake == true)
-	{
-		if (m_bPatternStart == true)
-		{
-			m_bPatternStart = false;
-			m_dTriggerTime = 0.0;
-			m_iIdleCnt = 0;
-			//m_bTrigger = false;
-
-		}
-		if (m_bPatternStart == false)
-		{
-			_float fDistance = Calculate_Distance();
-			m_dTriggerTime += dTimeDelta;
-			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
-			{
-				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
-				m_iRandomPatternNum = Random::Generate_Int(1, 12);
-
-				if (fDistance <= 3.f)
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum > 9)
-					{
-						m_iTriggerCnt = 8;
-						m_bTrigger = false;
-					}
-					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum >= 12)
-					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
-					}
-				}
-				if (fDistance > 3.f)
-				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 3)
-					{
-						m_iTriggerCnt = 1;
-						m_bTrigger = false;
-					}
-					if (3 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
-					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
-					}
-					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-					{
-						m_iTriggerCnt = 3;
-						m_bTrigger = false;
-					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
-					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
-					}
-					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
-					{
-						m_iTriggerCnt = 5;
-						m_bTrigger = false;
-					}
-				}
-			}
-		}
-	}
 
 }
+
+
 
 
 void CBoss_Kyogai::Trigger_Interact()
@@ -1603,7 +1625,8 @@ void CBoss_Kyogai::Trigger_AtkSkCmb()
 	m_bAnimFinish3 = false;
 	m_bSuperArmor = true;
 	m_bTurn = false;
-
+	m_dTurnTime = 0.0;
+	m_dReturnTime = 0.0;
 	m_dTimeAcc = 0.0;
 }
 
@@ -1612,6 +1635,17 @@ void CBoss_Kyogai::Trigger_Awake_AtkskCmb()
 	m_bTrigger = true;
 	m_eCurstate = STATE_AWAKE_ROOMCHANGE;
 	m_bAnimFinish = false;
+	m_bSuperArmor = true;
+	m_dTurnTime = 0.0;
+	m_dTimeAcc = 0.0;
+}
+
+void CBoss_Kyogai::Trigger_AtkSk()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKSK;
+	m_bAnimFinish = false;
+	m_iLoopCount = 0;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Small()
@@ -1721,32 +1755,23 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 
 		m_dTimeAcc += dTimeDelta;
 		if (m_dTimeAcc > 2.0)
-		{			
+		{
 			m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN);
 			m_eCurPhase = PHASE_2;
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
 		}
-				
+
 		if (m_StatusDesc.fHp <= m_StatusDesc.fHp_Max)
 		{
 			if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) >= 0.97)
 				m_StatusDesc.fHp = m_StatusDesc.fHp_Max;
 			else
-			m_StatusDesc.fHp = m_StatusDesc.fHp_Max * (_float)m_dTimeAcc * 0.5f;
+				m_StatusDesc.fHp = m_StatusDesc.fHp_Max * (_float)m_dTimeAcc * 0.5f;
 		}
 
 	}
-	/*_double dAnimRatio = m_pModelCom->Get_dAnimRatio(ANIM_HIT_DOWN_2);
-	_double dAnimRatio2 = m_pModelCom->Get_dAnimRatio(ANIM_HIT_RETURN);
-	_double dRatio = (dAnimRatio + dAnimRatio2) / 2.0;
-	if (dRatio > 0.0)
-	{
-		if (dRatio > 0.97)
-			dRatio = 1.0;
 
-		m_StatusDesc.fHp = m_StatusDesc.fHp_Max * (_float)dRatio;
-	}*/
 
 }
 
@@ -1810,7 +1835,8 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
 		m_eCurAnimIndex = ANIM_IDLE;
-		Trigger_Interact();
+		Trigger_Awake_AtkskCmb();
+
 	}
 }
 
@@ -1836,9 +1862,6 @@ void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
 
 	_vector vDir = Calculate_Dir_FixY();
 	m_pTransformCom->LerpVector(vDir, 0.3f);
-
-	//Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_STEP_FRONT2, 3.f, 0.01, 0.538);
-
 
 }
 
@@ -2204,19 +2227,69 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_READY))
 	{
-		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_READY);
-		m_eCurAnimIndex = ANIM_ROOMCHANGE_START;
+		m_bTurn = true;
+		m_dTurnTime += dTimeDelta;
+		if (m_dTurnTime < 56.5)
+			m_eCurAnimIndex = ANIM_ROOMCHANGE_START;
+
+		if (m_dTurnTime >= 56.5)
+		{
+			if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_START))
+			{
+				m_bTurn = false;
+				m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_READY);
+				m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_START);
+				m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
+			}
+		}
 	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_START))
-	{
-		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_START);
-		m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
-	}
+
 	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_END))
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_END);
 		m_eCurAnimIndex = ANIM_IDLE;
-		Trigger_Interact();
+		Trigger_AtkSk();
+	}
+
+	if (0.5 < m_dTurnTime && m_dTurnTime <= 0.5 + dTimeDelta) // 맨처음
+		m_bTurnRB = true;
+	if (6.0 < m_dTurnTime && m_dTurnTime <= 6.0 + dTimeDelta) // 첫방
+		m_bTurnRB = true;
+	if (11.5 < m_dTurnTime && m_dTurnTime <= 11.5 + dTimeDelta)
+		m_bTurnRF = true;
+	if (24.0 < m_dTurnTime && m_dTurnTime <= 24.0 + dTimeDelta)
+		m_bTurnLF = true;
+	if (29.5 < m_dTurnTime && m_dTurnTime <= 29.5 + dTimeDelta)
+		m_bTurnRB = true;
+	if (35.0 < m_dTurnTime && m_dTurnTime <= 35.0 + dTimeDelta)
+		m_bTurnRF = true;
+	if (40.5 < m_dTurnTime && m_dTurnTime <= 40.5 + dTimeDelta)
+		m_bTurnLF = true;
+	if (53.0 < m_dTurnTime && m_dTurnTime <= 53.0 + dTimeDelta) // 맨 마지막
+		m_bTurnRB = true;
+
+	Turn_Trigger(dTimeDelta);
+	TurnRoom();
+}
+
+void CBoss_Kyogai::Update_AtkSk(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKCMB3;
+	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMB3, 0.95, dTimeDelta))
+		m_iLoopCount++;
+	if (m_iLoopCount >= 2)
+	{
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB3);
+			m_eCurAnimIndex = ANIM_IDLE;
+			Trigger_Interact();
+		}
+
 	}
 }
 

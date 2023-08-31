@@ -24,7 +24,7 @@ public:
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
 		STATE_STOMPKICK, STATE_ATKPUNCH, STATE_ATKSKCMB,
 		STATE_ATK_TURN_IDLE, STATE_ATK_TURN_RF, STATE_ATK_TURN_LF, STATE_ATK_TURN_RB, STATE_ATK_TURN_LB,
-		STATE_JUMP_STEP,
+		STATE_JUMP_STEP, STATE_ATKSK,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
@@ -177,6 +177,7 @@ public:
 	void Trigger_LinkerCmb();
 	void Trigger_AtkSkCmb();
 	void Trigger_Awake_AtkskCmb();
+	void Trigger_AtkSk();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -212,7 +213,8 @@ private: //패턴 함수들
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
 	void Update_AtkSkCmb(_double dTimeDelta);
-	void Update_Awake_AtkskCmb(_double dTimeDelta);	
+	void Update_Awake_AtkskCmb(_double dTimeDelta);	//와다다다 패턴임
+	void Update_AtkSk(_double dTimeDelta);
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
