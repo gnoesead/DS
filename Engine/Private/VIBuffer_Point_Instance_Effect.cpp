@@ -894,6 +894,8 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 	}
 
 	m_iNumInstance = m_eEffectDesc.iMaxParticles;
+
+	m_iNumInstanceUsing = 0.f;
 }
 
 void CVIBuffer_Point_Instance_Effect::Reset_Data()
@@ -1090,6 +1092,8 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 		if (m_SpeedOverLifeTimes.size() > 0)
 			m_fSpeedModifier = m_SpeedOverLifeTimes[0].fValue;
 	}
+
+	m_iNumInstanceUsing = 0.f;
 }
 
 CVIBuffer_Point_Instance_Effect * CVIBuffer_Point_Instance_Effect::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iNumInstance)

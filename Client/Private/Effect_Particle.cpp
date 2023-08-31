@@ -148,7 +148,7 @@ HRESULT CEffect_Particle::Render(void)
 HRESULT CEffect_Particle::Add_Components(void)
 {
 	if (FAILED(__super::Add_Components()))
-		return E_FAIL;
+		return E_FAIL; 
 
 	CVIBuffer_Point_Instance_Effect::INSTANCEDESC		InstanceDesc;
 
