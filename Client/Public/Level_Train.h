@@ -36,6 +36,11 @@ private:
 
 	HRESULT Load_Lights_Info(const _tchar* pPath);
 
+private:
+	HRESULT	Ready_Layer_Effect();
+	HRESULT LoadEffects(const _tchar* pPath);
+
+
 
 private:
 	_float m_Battle_TimeAcc = { 0.f };

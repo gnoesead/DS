@@ -1627,6 +1627,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		{
 			m_Moveset.m_isDownMotion = true;
 			m_Moveset.m_Down_Dmg_Blow = false;
+
+			m_Moveset.m_isGetUpMotion = false;
 		}
 
 		//╟ы╬В ╩Себ

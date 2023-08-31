@@ -115,7 +115,7 @@ private:
 	_float		m_fEarlyEnd = { 0.65f };
 
 	//º¸°£duration
-	_double		m_dLinear_Duration = { 0.09 };
+	_double		m_dLinear_Duration = { 0.01 };
 
 public:
 	static CAnimation* Create(ANIMATIONDATA* pAnimationData, class CModel* pModel);

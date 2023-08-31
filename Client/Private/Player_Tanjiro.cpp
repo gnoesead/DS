@@ -95,7 +95,25 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
-	Safe_Release(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	{
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y = 1.f;
+		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
+			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET,
+			"SpiderWeb", &EffectWorldDesc);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
+	{
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y = 1.f;
+		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag, EffectDesc
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
+			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, 
+			"SpiderWeb_2", &EffectWorldDesc);
+	}
+	Safe_Release(pGameInstance); 
 
 	if (true == m_isDead)
 		return;
@@ -1083,13 +1101,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
-		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
+		Jumping(2.6f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 		Use_Mp_Skill();
 		
 	}
 	
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 3.0f * m_fScaleChange, 0.07f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 2.0f * m_fScaleChange, 0.07f * m_fScaleChange);
 		
 	
 
@@ -1925,6 +1943,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		{
 			m_Moveset.m_isDownMotion = true;
 			m_Moveset.m_Down_Dmg_Blow = false;
+
+			m_Moveset.m_isGetUpMotion = false;
 		}
 
 		//╟ы╬В ╩Себ
