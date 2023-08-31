@@ -106,6 +106,9 @@ private: //애니메이션 제어용 변수들
 	//Move
 	_float	m_fMove_Speed = { 20.0f  }; 
 
+	//skillnormal
+	_bool	m_isAir_Skill_Normal = { false };
+
 
 	//오의 용
 	_double		m_dTime_Special_Ready = { 0.0 };
