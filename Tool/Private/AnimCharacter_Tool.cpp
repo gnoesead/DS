@@ -88,17 +88,8 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		fin.close();
 	
 
-	//Į
-	m_isSwordOn = true;
-	if (m_isSwordOn)
-	{
-		CSword::SWORDDESC SwordDesc;
-		ZeroMemory(&SwordDesc, sizeof SwordDesc);
-		SwordDesc.m_PlayerName = CSword::PLAYER_RENGOKU;
-		SwordDesc.pParentTransform = m_pTransformCom;
-		SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
-		m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
-	}
+	
+	
 
 	Safe_Release(pGameInstance);
 	
@@ -109,9 +100,30 @@ void CAnimCharacter_Tool::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 	
-	if (m_isSwordOn)
-		m_pSword->Tick(dTimeDelta);
+	m_isSwordOn = m_pImGui_Anim->Get_SwordOn();
 
+	if (m_isSwordOn)
+	{
+		if (m_isFirst_Sword)
+		{
+			m_isFirst_Sword = false;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			//Į
+			CSword::SWORDDESC SwordDesc;
+			ZeroMemory(&SwordDesc, sizeof SwordDesc);
+			SwordDesc.m_PlayerName = CSword::PLAYER_RENGOKU;
+			SwordDesc.pParentTransform = m_pTransformCom;
+			SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
+			m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
+
+			Safe_Release(pGameInstance);
+		}
+
+
+		m_pSword->Tick(dTimeDelta);
+	}
 	if (true == m_isDead)
 		return;
 
@@ -135,11 +147,9 @@ void CAnimCharacter_Tool::LateTick(_double dTimeDelta)
 	if (m_isSwordOn)
 		m_pSword->LateTick(dTimeDelta);
 
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
-
-
-	
 
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -532,8 +542,8 @@ void CAnimCharacter_Tool::Free()
 {
 	__super::Free();
 
-	if (m_isSwordOn)
-		Safe_Release(m_pSword);
+
+	Safe_Release(m_pSword);
 
 	Safe_Release(m_pImGui_Anim);
 

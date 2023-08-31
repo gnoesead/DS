@@ -45,6 +45,9 @@ public: // GetSet
 
 	void	Set_iTest(_int i) { m_iTest = i; }
 
+	_bool	Get_SwordOn() { return m_isSwordOn; }
+	void	Set_SwordOn(_bool sword) { m_isSwordOn = sword; }
+
 private: 
 	// 재생 play
 	_bool	m_isPlay = { false };
@@ -87,6 +90,10 @@ private:
 
 	_bool	m_isGUINoMove[2] = { false, false };
 	_bool	m_isGUINoResize[2] = { false, false };
+
+	//sword
+	_bool	m_isSwordOn = { false };
+	
 
 public:
 	virtual void Free() override;

@@ -1091,13 +1091,13 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
-		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
+		Jumping(2.6f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 		Use_Mp_Skill();
 		
 	}
 	
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 3.0f * m_fScaleChange, 0.07f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 2.0f * m_fScaleChange, 0.07f * m_fScaleChange);
 		
 	
 
@@ -1933,6 +1933,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		{
 			m_Moveset.m_isDownMotion = true;
 			m_Moveset.m_Down_Dmg_Blow = false;
+
+			m_Moveset.m_isGetUpMotion = false;
 		}
 
 		//╟ы╬В ╩Себ

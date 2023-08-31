@@ -89,6 +89,8 @@ void CImGui_Animation_Tool::Animation_ImGui_Main()
 
 #pragma endregion
 
+    ImGui::Checkbox("SwordOn", &m_isSwordOn);
+
     ImGui::Text("");
 
 

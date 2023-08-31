@@ -1277,6 +1277,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		pPlayer->Set_Hit_Success(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
+		m_isFirst_Anim = true;
 		if (m_isJumpOn)
 		{
 			m_pModelCom->Set_Animation(ANIM_FALL);
