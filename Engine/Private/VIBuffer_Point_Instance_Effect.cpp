@@ -641,7 +641,6 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 			break;
 		}
 
-
 		// Spark
 		if (m_eEffectDesc.isSpark)
 		{
@@ -653,9 +652,9 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 		}
 
 		// Velocity Linear
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.x += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x;
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x;
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.z += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.x += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.z += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -796,6 +795,20 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 
 			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
 			_vector vLook = XMVector3Normalize(Convert::ToVector(vPosUpper) - vPos);
+			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
+			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
+		}
+		break;
+		case CMasterEffect::EDGE:
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(0.f, 0.f, Random::Generate_Float(0.f, m_eEffectDesc.fShapeRadius) + 0.001f, 1.f);
+
+			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
+			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
 			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
 			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
 
@@ -981,6 +994,19 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 
 			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
 			_vector vLook = XMVector3Normalize(Convert::ToVector(vPosUpper) - vPos);
+			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
+			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
+		}
+		break;
+		case CMasterEffect::EDGE:
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(0.f, 0.f, Random::Generate_Float(0.f, m_eEffectDesc.fShapeRadius) + 0.001f, 1.f);
+			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
+			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
 			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
 			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
 
