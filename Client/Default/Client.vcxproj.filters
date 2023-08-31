@@ -319,6 +319,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Player\Rengoku">
+      <UniqueIdentifier>{43216cd8-c095-4e0d-bcb8-50166c603d7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -600,6 +603,9 @@
     <ClInclude Include="..\Public\Paper.h">
       <Filter>02. GameObjects\UI\05.Mission\Mission_Paper</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Player_Rengoku.h">
+      <Filter>02. GameObjects\Character\Player\Rengoku</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -871,6 +877,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Paper.cpp">
       <Filter>02. GameObjects\UI\05.Mission\Mission_Paper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player_Rengoku.cpp">
+      <Filter>02. GameObjects\Character\Player\Rengoku</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

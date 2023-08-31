@@ -34,7 +34,7 @@ private:
 	virtual void Set_Initial_Data(void) override;
 
 public:
-	static CEffect_Particle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
+	static CEffect_Particle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* pComponentTag = nullptr);
 	virtual CGameObject* Clone(void* pArg = nullptr);
 	virtual void Free(void) override;
 };

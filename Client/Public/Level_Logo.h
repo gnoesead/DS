@@ -23,6 +23,9 @@ public:
 private:
 	HRESULT		Ready_Layer_BackGround(const _tchar* pLayerTag);
 
+	HRESULT Ready_Layer_Effect();
+	HRESULT LoadEffects(const _tchar* pPath, _bool isParticle = false, _int iCnt = 1);
+
 public:
 	static			CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void	Free() override;
