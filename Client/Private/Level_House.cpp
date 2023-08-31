@@ -85,11 +85,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	//if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-	//{
-	//	MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
-	//	return E_FAIL;
-	//}
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -1862,6 +1862,25 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin_Wind.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Spin_Wind");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_SpinKick.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_SpinKick");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_SpinPunch.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_SpinPunch");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Slam.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Slam");
+		return E_FAIL;
+	}if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown");
 		return E_FAIL;
 	}
 #pragma endregion

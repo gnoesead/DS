@@ -275,7 +275,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.55
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.64
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 3.0f);
 			}
@@ -350,12 +354,27 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (12 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.5
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown", m_pTransformCom);
+			}
+		}
 		if (13 == m_pModelCom->Get_iCurrentAnimIndex()) // 길게
 		{
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
+			}
+		}
+
+		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.15
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinKick", m_pTransformCom);
 			}
 		}
 
@@ -397,9 +416,13 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.4
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 7.0f);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.5
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
 			}
 		}
 
@@ -409,6 +432,20 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 8.0f);
+			}
+		}
+		if (31 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.05
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.2f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.x = -0.2f;
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -447,7 +484,11 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		if (44 == m_pModelCom->Get_iCurrentAnimIndex()) // 길게
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinPunch", m_pTransformCom);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
@@ -520,7 +561,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	//앞 뒤 이동
 	if (fDistance < 4.5f)
 	{
-		if (m_isFirst_Move_0)
+		if (m_isFirst_Move_0 && m_dDelay_Move > 1.0f)
 		{
 			m_isFirst_Move_0 = false;
 			m_isFirst_Move_1 = true;
@@ -531,7 +572,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	}
 	else if (4.5f <= fDistance && fDistance < 7.0f)
 	{
-		if (m_isFirst_Move_1)
+		if (m_isFirst_Move_1 && m_dDelay_Move > 1.0f)
 		{
 			m_isFirst_Move_0 = true;
 			m_isFirst_Move_1 = false;
@@ -592,7 +633,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	}
 	else if (7.0f <= fDistance)
 	{
-		if (m_isFirst_Move_0)
+		if (m_isFirst_Move_0 && m_dDelay_Move > 1.0f)
 		{
 			m_isFirst_Move_0 = false;
 			m_isFirst_Move_1 = true;
@@ -616,6 +657,70 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 	if(m_isCoolTime_On)
 		m_dCoolTime_AtkPattern += dTimeDelta;
 	
+#pragma region Cheat
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	/*enum PATTERN { PATTERN_CLAWS, PATTERN_TACKLE, PATTERN_SPINKICK, PATTERN_JUMPKICK, 
+		PATTERN_BUTTERFLY, PATTERN_CLAWCROSS, 
+		PATTERN_SPINMOVE, PATTERN_MOVE,
+		PATTERN_END };*/
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_JUMPKICK;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_BUTTERFLY;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINMOVE;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_JUMPKICK;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINKICK;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_CLAWCROSS;
+	}
+	Safe_Release(pGameInstance);
+#pragma endregion
+
 
 	if (m_iAttackIndex == 0)
 	{
@@ -1279,13 +1384,16 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_eCurState = STATE_IDLE;
 		
-		_int i = rand() % 3;
-		if (i == 0)
-			m_iAttackIndex = 0;
-		else if (i == 1)
-			m_iAttackIndex = 2;
-		else if (i == 2)
-			m_iAttackIndex = 5;
+		if (m_iAttackIndex != 10)
+		{
+			_int i = rand() % 3;
+			if (i == 0)
+				m_iAttackIndex = 0;
+			else if (i == 1)
+				m_iAttackIndex = 2;
+			else if (i == 2)
+				m_iAttackIndex = 5;
+		}
 	}
 
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim ==  112) //112는 fall마지막 모션
@@ -1300,13 +1408,16 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_eCurState = STATE_DOWN;
 
-		_int i = rand() % 3;
-		if (i == 0)
-			m_iAttackIndex = 0;
-		else if (i == 1)
-			m_iAttackIndex = 2;
-		else if (i == 2)
-			m_iAttackIndex = 5;
+		if (m_iAttackIndex != 10)
+		{
+			_int i = rand() % 3;
+			if (i == 0)
+				m_iAttackIndex = 0;
+			else if (i == 1)
+				m_iAttackIndex = 2;
+			else if (i == 2)
+				m_iAttackIndex = 5;
+		}
 	}
 
 	Safe_Release(pGameInstance);
