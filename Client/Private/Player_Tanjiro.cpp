@@ -97,13 +97,23 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
 	{
-		CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y = 1.f;
+		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
+			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET,
+			"SpiderWeb", &EffectWorldDesc);
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y = 1.f;
+		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag, EffectDesc
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
+			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, 
+			"SpiderWeb_2", &EffectWorldDesc);
 	}
-	Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance); 
 
 	if (true == m_isDead)
 		return;
