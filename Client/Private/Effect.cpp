@@ -162,7 +162,7 @@ void CEffect::Tick(_double dTimeDelta)
 								while (true)
 								{
 									if (m_iCurSizeIndex[i] >= iSize - 1)
-										m_iCurSizeIndex[i] = iSize - 2;
+										m_iCurSizeIndex[i] = (_uint)iSize - 2;
 
 									if (m_fLifeTime >= m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fLifetime)
 										break;
@@ -170,7 +170,7 @@ void CEffect::Tick(_double dTimeDelta)
 									++m_iCurSizeIndex[i];
 
 									if (m_iCurSizeIndex[i] >= iSize - 1)
-										m_iCurSizeIndex[i] = iSize - 2;
+										m_iCurSizeIndex[i] = (_uint)iSize - 2;
 								}
 
 								_float y = fabs(m_SizeOverLifeTimes[i][m_iCurSizeIndex[i] + 1].fValue - m_SizeOverLifeTimes[i][m_iCurSizeIndex[i]].fValue);
@@ -408,17 +408,20 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	Check_PassIndex();
 
-	if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
+	if (!m_isCollect)
 	{
-		if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
+		if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
 		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
-				return;
-		}
-		else if (BLEND == m_eEffectDesc.eRenderGroupOption)
-		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
-				return;
+			if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
+			{
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
+					return;
+			}
+			else if (BLEND == m_eEffectDesc.eRenderGroupOption)
+			{
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+					return;
+			}
 		}
 	}
 }
@@ -528,7 +531,10 @@ void CEffect::Set_Initial_Data(void)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVector3TransformCoord(m_pTransformCom->Get_State(CTransform::STATE_POSITION),
 		XMMatrixTranslation(m_eEffectDesc.vPivot.x, m_eEffectDesc.vPivot.y, m_eEffectDesc.vPivot.z)));
 
-	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParentTransform->Get_WorldMatrix());
+	if (m_ParentDesc.pParentTransform != nullptr)
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParentTransform->Get_WorldMatrix());
+	else
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix());
 
 	if (OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
 		m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;

@@ -76,7 +76,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 			{
 				if (OPT_SPEED == m_eEffectDesc.eTimeModeOption)
 				{
-					m_fFrameTimeAcc += dTimeDelta * m_fFrameSpeed;
+					m_fFrameTimeAcc += (float)dTimeDelta * m_fFrameSpeed;
 
 					//if (m_eEffectDesc.fFrameSpeedMin != m_eEffectDesc.fFrameSpeedMax)
 					//	m_fFrameSpeed = Random::Generate_Float(m_eEffectDesc.fFrameSpeedMin, m_eEffectDesc.fFrameSpeedMax);
@@ -102,7 +102,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 							while (true)
 							{
 								if (m_iCurFrameIndex >= iSize - 1)
-									m_iCurFrameIndex = iSize - 2;
+									m_iCurFrameIndex = (_uint)iSize - 2;
 
 								if (m_fLifeTime >= m_FrameOverTime[m_iCurFrameIndex + 1].fLifetime)
 									break;
@@ -110,7 +110,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 								++m_iCurFrameIndex;
 
 								if (m_iCurFrameIndex >= iSize - 1)
-									m_iCurFrameIndex = iSize - 2;
+									m_iCurFrameIndex = (_uint)iSize - 2;
 							}
 
 							_float y = fabs(m_FrameOverTime[m_iCurFrameIndex + 1].fValue - m_FrameOverTime[m_iCurFrameIndex].fValue);

@@ -440,6 +440,8 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(0.f, 0.f, 0.f, 1.f);
 			}
 		}
+		else
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.y = 1.f;
 
 		if (m_iNumInstance >= m_iMaxNumInstance)
 			m_iNumInstance = m_iMaxNumInstance - 1;
@@ -701,7 +703,7 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 
-	for (size_t i = m_iStartIndex; i < m_iMaxNumInstance; i++)
+	for (size_t i = m_iStartIndex; i < m_eEffectDesc.iMaxParticles; i++)
 	{
 
 		if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
@@ -879,6 +881,189 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 	}
 
 	m_iNumInstance = m_eEffectDesc.iMaxParticles;
+}
+
+void CVIBuffer_Point_Instance_Effect::Reset_Data()
+{
+	D3D11_MAPPED_SUBRESOURCE		SubResource;
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	for (size_t i = m_iStartIndex; i < m_eEffectDesc.iMaxParticles; i++)
+	{
+		if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x = m_eEffectDesc.fStartLifeTimeMin;
+		else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x = Random::Generate_Float(m_eEffectDesc.fStartLifeTimeMin, m_eEffectDesc.fStartLifeTimeMax);
+		}
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.y = 0.f;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.z = 0.f;
+
+		if (!m_eEffectDesc.is3DStartSize)
+		{
+			if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartSizeOption)
+			{
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize = _float2(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMin.x);
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.x;
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.y = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.y;
+			}
+			else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartSizeOption)
+			{
+				_float fSize = Random::Generate_Float(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMax.x);
+
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize = _float2(fSize, fSize);
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.x;
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.y = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.y;
+			}
+		}
+		else
+		{
+			if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartSizeOption)
+			{
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize = _float2(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMin.y);
+
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.x;
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.y = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.y;
+			}
+			else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartSizeOption)
+			{
+				_float fSizeX = Random::Generate_Float(m_eEffectDesc.vStartSizeMin.x, m_eEffectDesc.vStartSizeMax.x);
+				_float fSizeY = Random::Generate_Float(m_eEffectDesc.vStartSizeMin.y, m_eEffectDesc.vStartSizeMax.y);
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize = _float2(fSizeX, fSizeY);
+
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.x;
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.y = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.y;
+			}
+		}
+
+		switch (m_eEffectDesc.eShapeType)
+		{
+		case CMasterEffect::CIRCLE:
+		{
+			_float fAngle = Random::Generate_Float(0, m_eEffectDesc.fArc);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)), 0.f, sinf(XMConvertToRadians(fAngle)), 1.f);
+
+			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
+			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
+			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
+			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
+		}
+		break;
+		case CMasterEffect::SPHERE:
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(Random::Generate_Float(-10, 10) * 0.1f + 0.001f,
+				Random::Generate_Float(-10, 10) * 0.1f + 0.001f,
+				Random::Generate_Float(-10, 10) * 0.1f + 0.001f, 1.f);
+
+			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
+			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
+			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
+			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
+		}
+		break;
+		case CMasterEffect::CONE:
+		{
+			_float fRadius = Random::Generate_Float(0.001, m_eEffectDesc.fShapeRadius);
+			_float fAngle = Random::Generate_Float(0, m_eEffectDesc.fArc);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)) * fRadius, 0.f, sinf(XMConvertToRadians(fAngle)) * fRadius, 1.f);
+
+			_float fRadiusUpper = fRadius + tanf(XMConvertToRadians(m_eEffectDesc.fShapeAngle));
+			_float4 vPosUpper = _float4(cosf(XMConvertToRadians(fAngle)) * fRadiusUpper, 1.f, sinf(XMConvertToRadians(fAngle)) * fRadiusUpper, 1.f);
+
+			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
+			_vector vLook = XMVector3Normalize(Convert::ToVector(vPosUpper) - vPos);
+			_vector vRight = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook));
+			_vector vUp = XMVector3Normalize(XMVector3Cross(vLook, vRight));
+
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vRight, vRight);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vUp, vUp);
+			XMStoreFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLook, vLook);
+		}
+		break;
+		default:
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(Random::Generate_Float(-10.f, 10.f),
+				Random::Generate_Float(-10.f, 10.f),
+				Random::Generate_Float(-10.f, 10.f), 1.f);
+			break;
+		}
+
+		// EndSize
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.w = Random::Generate_Float(m_eEffectDesc.fYExtendEndSize.x, m_eEffectDesc.fYExtendEndSize.y);		// EndSize
+
+		if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartSpeedOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.y = Random::Generate_Float(m_eEffectDesc.fStartSpeedMin, m_eEffectDesc.fStartSpeedMax);
+		else if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartSpeedOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.y = m_eEffectDesc.fStartSpeedMin;
+
+		if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eVelocityLinearOption)
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x = m_eEffectDesc.vVelocityLinearMin.x;
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y = m_eEffectDesc.vVelocityLinearMin.y;
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z = m_eEffectDesc.vVelocityLinearMin.z;
+		}
+		else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eVelocityLinearOption)
+		{
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x = Random::Generate_Float(m_eEffectDesc.vVelocityLinearMin.x, m_eEffectDesc.vVelocityLinearMax.x);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y = Random::Generate_Float(m_eEffectDesc.vVelocityLinearMin.y, m_eEffectDesc.vVelocityLinearMax.y);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z = Random::Generate_Float(m_eEffectDesc.vVelocityLinearMin.z, m_eEffectDesc.vVelocityLinearMax.z);
+		}
+
+		if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eGravityModifierOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.z = m_eEffectDesc.vGravityModifier.x;
+		else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eGravityModifierOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.z = Random::Generate_Float(m_eEffectDesc.vGravityModifier.x, m_eEffectDesc.vGravityModifier.y);
+
+		// TextureSheet Animation
+		if (m_eEffectDesc.isTextureSheetAnimation)
+		{
+			if (CMasterEffect::OPT_SPEED == m_eEffectDesc.eTimeModeOption)
+			{
+				if (m_eEffectDesc.fFrameSpeedMin != m_eEffectDesc.fFrameSpeedMax)
+					((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.z = Random::Generate_Float(m_eEffectDesc.fFrameSpeedMin, m_eEffectDesc.fFrameSpeedMax);
+				else
+					((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.z = m_eEffectDesc.fFrameSpeedMin;
+			}
+		}
+
+		// CurSpeedIndex
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w = 0;
+
+		// CurSizeIndex
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = 0;
+
+		// CurGravityIndex
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w = 0;
+
+		// SizeYAcc
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.x = 1;
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_dTimeAcc = 0;
+	m_dTimeAccDuration = 0;
+	m_dTimeAccRateOverTime = 0;
+
+	m_iCurRateOverTimeIndex = 0;
+
+	if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eVelocitySpeedModifierOption)
+		m_fSpeedModifier = Random::Generate_Float(m_eEffectDesc.fSpeedModifierMin, m_eEffectDesc.fSpeedModifierMax);
+	else if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eVelocitySpeedModifierOption)
+		m_fSpeedModifier = m_eEffectDesc.fSpeedModifierMin;
+	else if (CMasterEffect::OP_CURVE == m_eEffectDesc.eVelocitySpeedModifierOption)
+	{
+		if (m_SpeedOverLifeTimes.size() > 0)
+			m_fSpeedModifier = m_SpeedOverLifeTimes[0].fValue;
+	}
 }
 
 CVIBuffer_Point_Instance_Effect * CVIBuffer_Point_Instance_Effect::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iNumInstance)
