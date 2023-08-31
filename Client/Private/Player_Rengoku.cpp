@@ -38,7 +38,6 @@ HRESULT CPlayer_Rengoku::Initialize_Prototype()
 
 HRESULT CPlayer_Rengoku::Initialize(void* pArg)
 {
-	
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -705,7 +704,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 	}
 
-	//스킬_0
+	//스킬_노말 공중
 	if (m_Moveset.m_Down_Skill_Normal && m_isJumpOn)
 	{
 		m_Moveset.m_Down_Skill_Normal = false;
@@ -717,10 +716,32 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL_AIR);
-		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
+		Jumping(2.2f * m_fScaleChange, 0.09f * m_fScaleChange);
 
 		Use_Mp_Skill();
 	}
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL_AIR, 1.5f * m_fScaleChange, 0.07f * m_fScaleChange);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ATK_SKILL_NORMAL_AIR)
+	{
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if( Pos.y <= m_fLand_Y)
+		{
+			m_isAir_Skill_Normal = true;
+			Jumping(0.5f, 0.035f);
+		}
+	}
+	if (m_isAir_Skill_Normal)
+	{
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		m_pTransformCom->Go_Backward(dTimeDelta * 1.5f, m_pNavigationCom[m_eCurNavi]);
+		if (Pos.y <= m_fLand_Y)
+			m_isAir_Skill_Normal = false;
+	}
+
+	//스킬_노말 지상
 	if (m_Moveset.m_Down_Skill_Normal)
 	{
 		m_Moveset.m_Down_Skill_Normal = false;
@@ -732,14 +753,32 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_NORMAL);
-		Jumping(4.0f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 		Use_Mp_Skill();
 	}
-	
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 3.0f * m_fScaleChange, 0.07f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 2.0f * m_fScaleChange, 0.07f * m_fScaleChange);
 		
 	
+
+	//스킬_1 : 이동키 + I키 (Air)
+	if (m_Moveset.m_Down_Skill_Move && m_isJumpOn)
+	{
+		m_Moveset.m_Down_Skill_Move = false;
+		m_dDelay_CanSkill = 0.0;
+
+		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		{
+			if (Get_LockOn_MonPos())
+				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+		}
+		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_MOVE_AIR);
+		JumpStop(1.0);
+		
+		Use_Mp_Skill();
+	}
+	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE_AIR, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio);
+	Go_Straight_Deceleration(dTimeDelta, 19, 1.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange);
+	Ground_Animation_Play(19, 36);
 
 	//스킬_1 : 이동키 + I키
 	if (m_Moveset.m_Down_Skill_Move)
@@ -753,15 +792,14 @@ void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_MOVE);
-		Jumping(0.3f * m_fScaleChange, 0.07f * m_fScaleChange);
-
-		m_pModelCom->Get_Animation()->Set_EarlyEnd(true);
-
+		
 		Use_Mp_Skill();
 	}
-	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 1.5f * m_fScaleChange * m_fAtk_Move_Ratio);
-	//Go_Straight_Constant(dTimeDelta, 40, 1.5f * m_fScaleChange * m_fAtk_Move_Ratio);
-	Go_Straight_Deceleration(dTimeDelta, 17, 1.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange);
+	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio);
+	Go_Straight_Deceleration(dTimeDelta, 17, 2.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.12f * m_fScaleChange);
+
+	
+
 
 
 	//스킬_2 : 가드키 + I키
@@ -1273,6 +1311,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 		{
 			m_Moveset.m_isDownMotion = true;
 			m_Moveset.m_Down_Dmg_Blow = false;
+
+			m_Moveset.m_isGetUpMotion = false;
 		}
 
 		//겟업 상태
