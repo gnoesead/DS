@@ -115,6 +115,10 @@ HRESULT CLevel_Train::Initialize()
 
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 
+	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
+
+	m_Battle_MaxTime = { 2.f };
+
     return S_OK;
 }
 
@@ -124,6 +128,14 @@ void CLevel_Train::Tick(_double dTimeDelta)
     SetWindowText(g_hWnd, TEXT("Train"));
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_TRAIN, dTimeDelta);
+
+	m_Battle_TimeAcc += (_float)dTimeDelta * m_Battle_TimeDir;
+
+	if (m_Battle_TimeAcc > m_Battle_MaxTime) {
+		m_Battle_TimeAcc = 0.f;
+		m_Battle_TimeDir = 0.f;
+		CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(true);
+	}
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
