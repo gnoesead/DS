@@ -1530,6 +1530,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Combo_2_1");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Atk_Combo_3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Atk_Combo_3");
+		return E_FAIL;
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_BulletPunch.bin"))))
 	{

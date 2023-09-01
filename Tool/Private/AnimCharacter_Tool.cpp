@@ -47,7 +47,7 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		//여기서 
 		char szFullPath[MAX_PATH] = { "" };
 		//★ 수정 필요
-		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Rengoku.bin");
+		strcpy_s(szFullPath, "../../Client/Bin/Resources/AnimToolBin/Akaza.bin");
 
 		ifstream fin;
 		fin.open(szFullPath, ios::binary);
@@ -470,7 +470,7 @@ void CAnimCharacter_Tool::Event_Call(_double dTimeDelta)
 HRESULT CAnimCharacter_Tool::Add_Components()
 {
 	// for.Com_Model 
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rengoku"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
 		MSG_BOX("Failed to Add_Com_Model : CAnimCharacter_Tool");

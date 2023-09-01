@@ -582,32 +582,26 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
-			if (0 == m_iEvent_Index)
+ 			if (0 <= m_iEvent_Index && 22 >= m_iEvent_Index)
 			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+				if (0 == m_iEvent_Index || 4 == m_iEvent_Index || 
+					11 == m_iEvent_Index ||	22 == m_iEvent_Index)
+				{//피격용 콜라이더
+					//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+				}
+
+				//이펙트용 콜라이더
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
+				EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (2 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (3 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (4 == m_iEvent_Index)
-			{
+			
+			if (23 == m_iEvent_Index)
+			{//0.7
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
