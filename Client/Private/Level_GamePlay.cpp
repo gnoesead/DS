@@ -425,7 +425,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA; //abcde
 
-
+	/*
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag, 
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
@@ -438,7 +438,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
 		return E_FAIL;
 	}
+	*/
 
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
+		TEXT("Prototype_GameObject_Player_Rengoku"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 
@@ -472,15 +479,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 		}
 	}*/
 	
-	/*
+	
 	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 140.f, 1.f);
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}*/
+	}
 	
+	/*
 	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 140.f, 1.f);
 	CharacterDesc.SwampHorn = 1;
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
@@ -505,7 +513,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : Monster_Swamp");
 		return E_FAIL;
 	}
-	
+	*/
 	Safe_Release(pGameInstance);
 
 	return S_OK;

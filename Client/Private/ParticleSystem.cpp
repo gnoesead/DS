@@ -60,7 +60,13 @@ void CParticleSystem::Tick(_double dTimeDelta)
 
 		m_bCollect = false;
 
-		CEffectPlayer::Get_Instance()->Collect_ParticleSystem(this);
+		if(!m_isParticle)
+			CEffectPlayer::Get_Instance()->Collect_ParticleSystem(this);
+		else
+		{
+			if (!m_pParent)
+				CEffectPlayer::Get_Instance()->Collect_EffectParticle(m_pTag, this);
+		}
 		m_isCollect = true;
 
 		m_bStop = true;

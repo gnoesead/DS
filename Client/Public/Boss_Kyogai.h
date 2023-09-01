@@ -233,12 +233,19 @@ private: //패턴 함수들
 private:
 	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT , BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
 	};
-	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
+	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f }, _float fMovepos = { 0.f }, _bool bLiarColor = { false });
 	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed, CAtkCollider::BULLET_TYPE eBulletType, _float fPosX = 0.f);
 	
 private:
 	void Turn_Trigger(_double dTimeDelta);
 	void TurnRoom();
+	void Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector vDir, CAtkCollider::BULLET_TYPE eBulletType);
+	void Grid_Bullet(_double dTimeDelta, _double dTime, _fvector vDir);
+	void Wave_Bullet(_double dTimeDelta, _double dTime, _fvector vDIr);
+	void Liar_Bullet(_double dTimeDelta, _double dTime, _fvector vDir);
+
+	_vector	Vertical_Dir();
+	_vector HorizonDir();
 
 
 #pragma endregion

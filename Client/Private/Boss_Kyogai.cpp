@@ -342,12 +342,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		_vector vDir = Calculate_Dir_ZeroY();
 		_vector vPlayerDir = m_pPlayerTransformCom->Get_State(CTransform::STATE_LOOK);
-
 		_vector vRandomDir = Random_Dir(vPlayerDir, 0.f, 0.f, 0.f, 360.f);
+		_vector vVerticalDir = Vertical_Dir();
+		_vector vHorizonDir = HorizonDir();
 
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
 		_double dSpeed = 5.0;
+
 #pragma region AWAKE_ComboPunch
 		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -428,13 +430,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				{
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.5f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
 					///*Create_AlertRect(BLADE_FIVE_FRONT);
 					//Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);*/
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.5f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
 					/*Create_AlertRect(BLADE_FIVE_FRONT);
 					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);*/
@@ -443,13 +445,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				{
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
 					/*Create_AlertRect(BLADE_FIVE_FRONT);
 					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 					/*Create_AlertRect(BLADE_FIVE_FRONT);
 					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
@@ -486,13 +488,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iLoopCount == 0)
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.5f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 					/*Create_AlertRect(BLADE_FIVE_FRONT);
 					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);*/
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.5f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 					/*Create_AlertRect(BLADE_FIVE_FRONT);
 					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);*/
@@ -725,7 +727,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 1) // 일직선
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
@@ -733,20 +735,20 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 2) // 삼각
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					vMonsterDir = Rotation_Dir(vMonsterDir, 10);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					vMonsterDir = Rotation_Dir(vMonsterDir, -20);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
@@ -756,7 +758,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 3) // 랜덤 두곳
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
@@ -764,7 +766,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
@@ -790,7 +792,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 1) // 일직선
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
@@ -798,20 +800,20 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 2) // 삼각
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					vMonsterDir = Rotation_Dir(vMonsterDir, 10);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					vMonsterDir = Rotation_Dir(vMonsterDir, -20);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
 					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
 					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
@@ -820,7 +822,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (m_iAtkStepTypeNum == 3) // 랜덤 두곳
 				{
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
@@ -828,7 +830,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
@@ -841,107 +843,107 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			EffectWorldDesc.vPosition.y += 1.f;
 			EffectWorldDesc.fScale = 2.1f;
 			dLongLifeTime = 3.0;
-			
+
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				//{
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(0, 8), 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
-				}
-				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				{
-					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-					dSpeed = 3.0;
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(0, 8), 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
+				//}
+				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				//{
+				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+				//	dSpeed = 5.0;
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
-					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
 
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-				}
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				//}
 			}
 
 			if (1 == m_iEvent_Index)	// 0.28
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				//{
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
-				}
-				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				{
-					dSpeed = 3.0;
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				//}
+				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				//{
+				//	dSpeed = 5.0;
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
-					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
 
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
 
 
-				}
+				//}
 			}
 
 			if (2 == m_iEvent_Index)	// 0.56
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				//{
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
-				}
-				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				{
-					dSpeed = 3.0;
-					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
+				//}
+				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				//{
+				//	dSpeed = 5.0;
+				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
-					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
 
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
 
-				}
+				//}
 			}
 
 			if (3 == m_iEvent_Index)	// 0.84
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
+				//{
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
-				}
-				if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				{
-					dSpeed = 3.0;
-					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				//}
+				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
+				//{
+				//	dSpeed = 5.0;
+				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
-					/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
+				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
 
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-				}
+				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
+				//}
 			}
 		}
 
@@ -2268,6 +2270,19 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	if (53.0 < m_dTurnTime && m_dTurnTime <= 53.0 + dTimeDelta) // 맨 마지막
 		m_bTurnRB = true;
 
+	_vector vMonsterLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	_vector vMonstervRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+
+	Rotation_Bullet(dTimeDelta, 4.0, vMonsterLook, CAtkCollider::TYPE_KYOGAI_BULLET);
+	Grid_Bullet(dTimeDelta, 9.5, vMonsterLook);
+	Liar_Bullet(dTimeDelta, 15.0, vMonsterLook);
+	Rotation_Bullet(dTimeDelta, 27.5, vMonsterLook, CAtkCollider::TYPE_KYOGAI_BULLET);
+	Grid_Bullet(dTimeDelta, 33.0, vMonsterLook);
+	Grid_Bullet(dTimeDelta, 38.5, vMonstervRight); // 이 룩이 문제됨 
+	Liar_Bullet(dTimeDelta, 44.0, vMonsterLook);
+	//Wave_Bullet(dTimeDelta, 44.0, vMonsterLook);
+
+
 	Turn_Trigger(dTimeDelta);
 	TurnRoom();
 }
@@ -2385,7 +2400,7 @@ void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
 {
 }
 
-void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
+void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir, _float fMovePos, _bool bLiarColor)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -2394,6 +2409,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 	CAtkCollider* pAtkCollider = dynamic_cast<CAtkCollider*> (pGameInstance->Get_GameObject(LEVEL_STATIC, TEXT("Layer_MonsterAtk"), (_uint)pGameInstance->Get_GameObject_ListSize(LEVEL_STATIC, TEXT("Layer_MonsterAtk")) - 1));
 
 	CAlertRect::EFFECTDESC EffectDesc;
+	EffectDesc.bLiarColor = bLiarColor;
 
 	CRoomSmoke::EFFECTDESC SmokeEffectDesc;
 	SmokeEffectDesc.eType = CRoomSmoke::TYPE_PART;
@@ -2406,7 +2422,8 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 
 		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
+		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
+		
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
@@ -2414,6 +2431,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 	}
+	break;
 
 	case BLADE_THREE_RANDOM:
 	case BLADE_THREE_FRONT:
@@ -2425,7 +2443,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 
 		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
+		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
@@ -2434,7 +2452,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 		SmokeEffectDesc.vPos = EffectDesc.vPos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
@@ -2444,7 +2462,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
 
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 		SmokeEffectDesc.vPos = EffectDesc.vPos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
@@ -2464,19 +2482,19 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir)
 
 		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
+		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 1.6f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 1.6f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 1.6f;
+		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 1.6f) + vNormalVector * fMovePos;
 		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false); }
 	break;
 	default:
@@ -2689,6 +2707,815 @@ void CBoss_Kyogai::TurnRoom()
 		m_fPreAngleZ = pRotationMapObject->Get_RotAngle().z;
 	}
 	Safe_Release(pGameInstance);
+}
+
+void CBoss_Kyogai::Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector vDir, CAtkCollider::BULLET_TYPE eBulletType)
+{
+	_vector vMonsterDir = vDir;
+	_double dSpeed = 4.0;
+	////////////////////////////////////////칼날 1개////////////////////////////////////////////////////
+	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta)
+	{
+		//vMonsterDir = Rotation_Dir(vMonsterDir, 30.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.1 < m_dTurnTime && m_dTurnTime <= dTime + 0.1 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 30.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.2 < m_dTurnTime && m_dTurnTime <= dTime + 0.2 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 60.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.3 < m_dTurnTime && m_dTurnTime <= dTime + 0.3 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 90.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.4 < m_dTurnTime && m_dTurnTime <= dTime + 0.4 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 120.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.5 < m_dTurnTime && m_dTurnTime <= dTime + 0.5 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 150.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.6 < m_dTurnTime && m_dTurnTime <= dTime + 0.6 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 180.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.7 < m_dTurnTime && m_dTurnTime <= dTime + 0.7 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 210.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.8 < m_dTurnTime && m_dTurnTime <= dTime + 0.8 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 240.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 0.9 < m_dTurnTime && m_dTurnTime <= dTime + 0.9 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 270.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 1.0 < m_dTurnTime && m_dTurnTime <= dTime + 1.0 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 300.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+	if (dTime + 1.1 < m_dTurnTime && m_dTurnTime <= dTime + 1.1 + dTimeDelta)
+	{
+		vMonsterDir = Rotation_Dir(vMonsterDir, 330.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, eBulletType);
+	}
+
+}
+
+void CBoss_Kyogai::Grid_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
+{
+	_vector vVerticalDir = Vertical_Dir();
+	_vector vHorizonDir = HorizonDir();
+
+	_vector vMonsterDir = vDir;
+	_double dSpeed = 4.0;
+	//////////////////////////////// 칼날 3개 or 5개 형 맘대로 /////////////////////////////////////
+	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta)
+	{
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir,12.f);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 12.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(-12.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir, -12.f);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -12.f);
+	}
+	if (dTime + 0.2 < m_dTurnTime && m_dTurnTime <= dTime + 0.2 + dTimeDelta)
+	{
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir, 12.f);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 12.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(-12.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Create_AlertRect(BLADE_FIVE_RANDOM, vHorizonDir, -12.f);
+		Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -12.f);
+
+
+	}
+
+	/////////////////////////////////////// 여기 부터는 칼날 1개짜리 /////////////////////////////////////////////////
+	if (dTime + 0.6 < m_dTurnTime && m_dTurnTime <= dTime + 0.6 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 20.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 0.7 < m_dTurnTime && m_dTurnTime <= dTime + 0.7 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 0.8 < m_dTurnTime && m_dTurnTime <= dTime + 0.8 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 60.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 0.9 < m_dTurnTime && m_dTurnTime <= dTime + 0.9 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 80.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 1.0 < m_dTurnTime && m_dTurnTime <= dTime + 1.0 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 100.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 1.10 < m_dTurnTime && m_dTurnTime <= dTime + 1.10 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 120.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+	if (dTime + 1.20 < m_dTurnTime && m_dTurnTime <= dTime + 1.20 + dTimeDelta)
+	{
+
+		vMonsterDir = Rotation_Dir(vMonsterDir, 140.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
+			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vMonsterDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+	}
+
+
+}
+
+void CBoss_Kyogai::Wave_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
+{
+	_vector vGoDir = vDir;
+	_vector vVerticalDir = Vertical_Dir();
+	_vector vHorizonDir = HorizonDir();
+	_int RandomNum = Random::Generate_Int(1, 2);
+	// + - / vertical horizon
+
+	_double dSpeed = 2.0;
+	_float fPosX = 1.f;
+
+	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		RandomNum = Random::Generate_Int(1, 2);
+		if (RandomNum == 1)
+			vGoDir = vVerticalDir;
+		else
+			vGoDir = vHorizonDir;
+
+		RandomNum = Random::Generate_Int(1, 2);
+
+		if (RandomNum == 1)
+			vGoDir *= -1.f;
+
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		fPosX *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+
+	}
+	if (dTime + 2.0 < m_dTurnTime && m_dTurnTime <= dTime + 2.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		RandomNum = Random::Generate_Int(1, 2);
+		if (RandomNum == 1)
+			vGoDir = vVerticalDir;
+		else
+			vGoDir = vHorizonDir;
+
+		RandomNum = Random::Generate_Int(1, 2);
+
+		if (RandomNum == 1)
+			vGoDir *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		fPosX *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+	}
+	if (dTime + 4.0 < m_dTurnTime && m_dTurnTime <= dTime + 4.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		RandomNum = Random::Generate_Int(1, 2);
+		if (RandomNum == 1)
+			vGoDir = vVerticalDir;
+		else
+			vGoDir = vHorizonDir;
+
+		RandomNum = Random::Generate_Int(1, 2);
+
+		if (RandomNum == 1)
+			vGoDir *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		fPosX *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+	}
+	if (dTime + 6.0 < m_dTurnTime && m_dTurnTime <= dTime + 6.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		RandomNum = Random::Generate_Int(1, 2);
+		if (RandomNum == 1)
+			vGoDir = vVerticalDir;
+		else
+			vGoDir = vHorizonDir;
+
+		RandomNum = Random::Generate_Int(1, 2);
+
+		if (RandomNum == 1)
+			vGoDir *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		fPosX *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+	}
+	if (dTime + 8.0 < m_dTurnTime && m_dTurnTime <= dTime + 8.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		RandomNum = Random::Generate_Int(1, 2);
+		if (RandomNum == 1)
+			vGoDir = vVerticalDir;
+		else
+			vGoDir = vHorizonDir;
+
+		RandomNum = Random::Generate_Int(1, 2);
+
+		if (RandomNum == 1)
+			vGoDir *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		fPosX *= -1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(2.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_EFFECT, vGoDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+	}
+}
+
+void CBoss_Kyogai::Liar_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
+{
+	_vector vMonsterDir = vDir;
+	_vector vVerticalDir = Vertical_Dir();
+	_vector vHorizonDir = HorizonDir();
+
+	_double dSpeed = 5.0;
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	
+
+	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);*/
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET, "Kyogai_BladeAtk");
+
+		/*Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		vVerticalDir = Rotation_Dir(vVerticalDir, 45.f, 0.f);
+		vHorizonDir = Rotation_Dir(vHorizonDir, 45.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);*/
+	}
+	if (dTime + 2.0 < m_dTurnTime && m_dTurnTime <= dTime + 2.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		vVerticalDir = Rotation_Dir(vVerticalDir, 30.f, 0.f);
+		vHorizonDir = Rotation_Dir(vHorizonDir, 30.f, 0.f);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		vVerticalDir = Rotation_Dir(vVerticalDir, 30.f, 0.f);
+		vHorizonDir = Rotation_Dir(vHorizonDir, 30.f, 0.f);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vVerticalDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, -vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+
+		Create_AlertRect(BLADE_ONE_RANDOM);
+		Create_BladeEffect(BLADE_ONE_RANDOM, -vHorizonDir, 3.0, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET);
+	}
+	if (dTime + 4.0 < m_dTurnTime && m_dTurnTime <= dTime + 4.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		dSpeed = 3.0;
+		_int iRandomDir = Random::Generate_Int(1, 2);
+		_int iRandomPos = Random::Generate_Int(1, 2);
+		_float fPosX = 1.f;
+
+		if (iRandomDir == 1)
+			vVerticalDir *= -1;
+		else
+			vVerticalDir *= 1;
+
+		iRandomDir = Random::Generate_Int(1, 2);
+
+		if (iRandomDir == 1)
+			vHorizonDir *= -1;
+		else
+			vHorizonDir *= 1;
+
+		if (iRandomPos == 1)
+			fPosX *= -1.f;
+		else
+			fPosX = 1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+
+
+	}
+	if (dTime + 6.0 < m_dTurnTime && m_dTurnTime <= dTime + 6.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		dSpeed = 3.0;
+		_int iRandomDir = Random::Generate_Int(1, 2);
+		_int iRandomPos = Random::Generate_Int(1, 2);
+		_float fPosX = 1.f;
+
+		if (iRandomDir == 1)
+			vVerticalDir *= -1;
+		else
+			vVerticalDir *= 1;
+
+		iRandomDir = Random::Generate_Int(1, 2);
+
+		if (iRandomDir == 1)
+			vHorizonDir *= -1;
+		else
+			vHorizonDir *= 1;
+
+		if (iRandomPos == 1)
+			fPosX *= -1.f;
+		else
+			fPosX = 1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+	}
+	if (dTime + 8.0 < m_dTurnTime && m_dTurnTime <= dTime + 8.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	{
+		dSpeed = 3.0;
+		_int iRandomDir = Random::Generate_Int(1, 2);
+		_int iRandomPos = Random::Generate_Int(1, 2);
+		_float fPosX = 1.f;
+
+		if (iRandomDir == 1)
+			vVerticalDir *= -1;
+		else
+			vVerticalDir *= 1;
+
+		iRandomDir = Random::Generate_Int(1, 2);
+
+		if (iRandomDir == 1)
+			vHorizonDir *= -1;
+		else
+			vHorizonDir *= 1;
+
+		if (iRandomPos == 1)
+			fPosX *= -1.f;
+		else
+			fPosX = 1.f;
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
+
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(0.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(4.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(8.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(12.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.f, 2.f, 2.f), _float3(16.f * fPosX, 1.0f, 0.f), 4.0,
+			CAtkCollider::TYPE_SMALL, vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
+	}
+
+}
+
+_vector CBoss_Kyogai::Vertical_Dir()
+{
+	_vector vRoomPos = { 126.536f, 0.f, 123.840f, 1.f };
+	_vector vVerticalPos = { 143.536f, 0.f, 123.840f, 1.f };
+
+
+	return XMVector3Normalize(vVerticalPos - vRoomPos);
+
+}
+
+_vector CBoss_Kyogai::HorizonDir()
+{
+	_vector vRoomPos = { 126.536f, 0.f, 123.840f, 1.f };
+	_vector vHorizonPos = { 126.536f, 0.f, 140.840f, 1.f };
+
+	return XMVector3Normalize(vHorizonPos - vRoomPos);
 }
 
 HRESULT CBoss_Kyogai::Add_Components()

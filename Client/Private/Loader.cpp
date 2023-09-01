@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Player_Tanjiro.h"
 #include "Player_Zenitsu.h"
+#include "Player_Rengoku.h"
 
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
@@ -397,13 +398,47 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Model_Zenitsu_Sword_In");
 		return E_FAIL;
 	}
-	// Prototype_Component_Model_Tanjiro_SwordHome 
+	// Prototype_Component_Model_Zenitsu_SwordHome 
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu_SwordHome"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Zenitsu_Sword/Zenitsu_SwordHome.bin", PivotMatrix))))
 	{
 		MSG_BOX("Failed to Add_Prototype_Model_Tanjiro_SwordHome");
 		return E_FAIL;
 	}
+
+
+	/* Prototype_Component_Model_Rengoku */
+	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Rengoku/Rengoku.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Rengoku");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_Rengoku_Sword
+	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_Rengoku_Sword_In
+	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword_In"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword_In");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_Rengoku_SwordHome 
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_SwordHome"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_SwordHome.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_SwordHome");
+		return E_FAIL;
+	}
+
 
 	// Prototype_Component_Model_Akaza
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -413,7 +448,7 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Model_Akaza");
 		return E_FAIL;
 	}
-	// Prototype_Component_Model_Akaza
+	// Prototype_Component_Model_Kyogai
 	PivotMatrix = XMMatrixScaling(0.007f, 0.007f, 0.007f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Kyogai"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Kyogai/Kyogai.bin", PivotMatrix))))
@@ -590,6 +625,13 @@ HRESULT CLoader::LoadingForLobby()
 		CPlayer_Zenitsu::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Zenitsu");
+		return E_FAIL;
+	}
+	/* Prototype_GameObject_Player_Rengoku */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player_Rengoku"),
+		CPlayer_Rengoku::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Player_Rengoku");
 		return E_FAIL;
 	}
 

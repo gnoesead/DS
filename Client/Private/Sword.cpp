@@ -137,6 +137,13 @@ HRESULT CSword::Add_Components()
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 	}
+	else if (m_SwordDesc.m_PlayerName == PLAYER_RENGOKU)
+	{
+		/* For.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword"),
+			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
+			return E_FAIL;
+	}
 
 
 	return S_OK;

@@ -5,6 +5,9 @@
 
 #include "ImGui_Animation_Tool.h"
 
+#include "Sword.h"
+
+
 BEGIN(Engine)
 
 END
@@ -40,6 +43,10 @@ public: // Å°ÀÎÇ²
 	void	Event_Call(_double dTimeDelta);
 
 private:
+	//Ä®
+	CSword* m_pSword = { nullptr };
+	_bool	m_isSwordOn = { false };
+
 	// ÀÓ½Ã ÄÚµå 
 	_uint	m_iNumAnim = { 0 };
 
