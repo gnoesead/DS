@@ -181,7 +181,7 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 
 	if (BILLBOARD == m_eEffectDesc.eRenderMode)
 	{
-		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSize", (void*)&m_eEffectDesc.vStartSizeMin, sizeof(_float3))))
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSize", (void*)&m_vStartSize, sizeof(_float3))))
 			return E_FAIL;
 		
 		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTextureOrder", (void*)&m_fTextureOrder, sizeof(float))))
