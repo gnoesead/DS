@@ -23,6 +23,7 @@ public:
 	{
 		_vector		vLook;
 		_vector		vPos;
+		_bool		bLiarColor = false;
 		
 	}EFFECTDESC;
 

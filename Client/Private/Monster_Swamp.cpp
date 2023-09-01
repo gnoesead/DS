@@ -83,16 +83,34 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Trigger();
-	Animation_Control(dTimeDelta);
+	//Cheat
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	{
+		CMonsterManager::GetInstance()->Get_BattleOn();
 
+		if (CMonsterManager::GetInstance()->Get_BattleOn())
+			CMonsterManager::GetInstance()->Set_BattleOn(false);
+		else
+			CMonsterManager::GetInstance()->Set_BattleOn(true);
+	}
+	Safe_Release(pGameInstance);
+
+	if (CMonsterManager::GetInstance()->Get_BattleOn())
+	{
+		Trigger();
+		Animation_Control(dTimeDelta);
+	}
+	 
+	
 	//애니메이션 처리
- 	m_pModelCom->Play_Animation(dTimeDelta);
+	m_pModelCom->Play_Animation(dTimeDelta);
 	RootAnimation(dTimeDelta);
 
-	//이벤트 콜
+		//이벤트 콜
 	EventCall_Control(dTimeDelta);
-
+	
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))

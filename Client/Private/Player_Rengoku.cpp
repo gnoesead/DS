@@ -247,18 +247,21 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 #pragma region Combo_Attack
 		if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			/*if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)
 			{
-				if (m_Moveset.m_iAwaken == 0)					
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
-				else
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+/*				if (m_Moveset.m_iAwaken == 0)	*/				
+					CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo1", m_pTransformCom);
+				//else
+				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			}*/
-			if (0 == m_iEvent_Index)
+			}
+			if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo1_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo1_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
@@ -268,10 +271,14 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo2", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
 			}
-			else if (1 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);

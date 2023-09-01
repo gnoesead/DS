@@ -366,6 +366,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.3,
 					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
 			}
+			if (32 == m_iEvent_Index)
+			{
+				int a = 0;
+			}
 		}
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -535,83 +539,139 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma region 평타콤보
-		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
-		{
-			//dLifeTime = 0.20;
-			if (0 == m_iEvent_Index)
-			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
+		//if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
+		//{
+		//	//dLifeTime = 0.20;
+		//	if (0 == m_iEvent_Index)
+		//	{
+		//		CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
+		//		//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+		//		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+		//			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//	}
 
-		}
-		if (ANIM_COMBO2 == m_pModelCom->Get_iCurrentAnimIndex())
-		{
-			//dLifeTime = 0.20;
-			if (0 == m_iEvent_Index)
-			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_1", m_pTransformCom);
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
-			}
+		//}
+		//if (ANIM_COMBO2 == m_pModelCom->Get_iCurrentAnimIndex())
+		//{
+		//	//dLifeTime = 0.20;
+		//	if (0 == m_iEvent_Index)
+		//	{
+		//		CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_1", m_pTransformCom);
+		//		//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+		//		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+		//			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+		//	}
 
-		}
-		if (ANIM_COMBO3 == m_pModelCom->Get_iCurrentAnimIndex())
-		{
-			if (0 == m_iEvent_Index)
-			{
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (1 == m_iEvent_Index)
-			{//0.75
-				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2_1", m_pTransformCom);
-			}
-			if (2 == m_iEvent_Index)
-			{//0.8
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
-			}
+		//}
+		//if (ANIM_COMBO3 == m_pModelCom->Get_iCurrentAnimIndex())
+		//{
+		//	if (0 == m_iEvent_Index)
+		//	{
+		//		CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
+		//		//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+		//		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+		//			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+		//	}
+		//	if (1 == m_iEvent_Index)
+		//	{//0.75
+		//		CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2_1", m_pTransformCom);
+		//	}
+		//	if (2 == m_iEvent_Index)
+		//	{//0.8
+		//		//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+		//		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+		//			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+		//	}
 
-		}
+		//}
 		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
-			if (0 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (1 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (2 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (3 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			}
-			if (4 == m_iEvent_Index)
-			{
-				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
-			}
+			//if (0 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (1 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (2 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (3 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (4 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+			//}
+
+			//if (0 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (4 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (11 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (18 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (19 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (20 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (21 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (22 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+			//}
+			//if (23 == m_iEvent_Index)
+			//{
+			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+			//		CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+			//}
+
 
 		}
 #pragma endregion 평타콤보 끝
@@ -1606,7 +1666,7 @@ void CBoss_Akaza::Trigger_AirGun()
 {
 	m_bTrigger = true;
 	m_bAnimFinish = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_eCurstate = STATE_AIRGUN;
 	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN);
 	m_pModelCom->Set_AnimisFinish(ANIM_AIRGUN2);
@@ -1690,6 +1750,7 @@ void CBoss_Akaza::Trigger_Dash_ComboPunch()
 	m_pModelCom->Set_AnimisFinish(ANIM_COMBO2);
 	m_pModelCom->Set_AnimisFinish(ANIM_COMBO3);
 	m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
+	m_dTimeAcc = 0.0;
 }
 
 void CBoss_Akaza::Trigger_UpperKick()
@@ -1721,7 +1782,7 @@ void CBoss_Akaza::Trigger_NextPhase3()
 	m_bStep_B = false;
 	m_bHeal = false;
 
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 	m_pModelCom->Set_AnimisFinish(ANIM_NACHIM);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
@@ -1765,7 +1826,7 @@ void CBoss_Akaza::Trigger_Awake_ComboPunch()
 	m_bDashOn = false;
 	m_bStep_B = false;
 	m_bMove = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 	m_pModelCom->Set_AnimisFinish(ANIM_DASH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
@@ -1780,7 +1841,7 @@ void CBoss_Akaza::Trigger_Nachim_ComboPunch()
 	m_eCurstate = STATE_NACHIM_COMBOPUNCH;
 	m_bAnimFinish = false;
 	m_bStep_B = false;
-	m_iPunchCount = 0;
+	m_iLoopCount = 0;
 
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH);
 	m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
@@ -2104,12 +2165,12 @@ void CBoss_Akaza::Update_AirGun(_double dTimeDelta)
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN) == true)
 	{
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AIRGUN2;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AIRGUN2, 0.90, dTimeDelta))
-			m_iPunchCount++;
-		if (m_iPunchCount >= 3 && m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == true)
+			m_iLoopCount++;
+		if (m_iLoopCount >= 3 && m_pModelCom->Get_AnimFinish(ANIM_AIRGUN2) == true)
 			m_eCurAnimIndex = ANIM_AIRGUN3;
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AIRGUN3) == true)
@@ -2415,6 +2476,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 			m_pModelCom->Set_AnimResetTimeAcc(ANIM_COMBO3);
 			m_eCurAnimIndex = ANIM_COMBO_PIST;
 			m_pTransformCom->LerpVector(vDir, 1.f);
+			m_bTrigger = true;
 		}
 
 		if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_PIST))
@@ -2479,6 +2541,135 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 	}
 	if (m_eCurAnimIndex == ANIM_RUN)
 		m_pTransformCom->LerpVector(vDir, 0.3f);
+	_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	if (m_eCurAnimIndex == ANIM_COMBO_PIST)
+	{
+		m_dTimeAcc += dTimeDelta;
+		///////////////////////////////////////////어택콜라이더 0.70 까지///////////////////////////////////////////////////////////
+		// Event_Time(타임델타, 부를시간, 누적시작)
+		if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
+		{
+			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+				CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		}
+		//if (Event_Time(dTimeDelta,0.30, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.39, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.520, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.70, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		/////////////////////////////////////////////이펙트 여기 아래부터//////////////////////////////////////////////////////////////////
+		//if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.270, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.30, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//
+		//if (Event_Time(dTimeDelta,0.320, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.340, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.360, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.390, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.410, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.430, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.450, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.470, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.490, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.520, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.540, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.560, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.580, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.60, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.620, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+		//if (Event_Time(dTimeDelta,0.640, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
+	}
 
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO1, 2.f, 0.0, 0.3);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO2, 1.5f, 0.0, 0.5);
@@ -2573,13 +2764,13 @@ void CBoss_Akaza::Update_NextPhase3(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
@@ -2718,13 +2909,13 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
 		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
@@ -2795,13 +2986,13 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
 	{
 
-		if (m_iPunchCount < 3)
+		if (m_iLoopCount < 3)
 			m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_LOOP;
 
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.90, dTimeDelta))
-			m_iPunchCount++;
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_COMBOPUNCH_LOOP, 0.98, dTimeDelta))
+			m_iLoopCount++;
 
-		if (m_iPunchCount >= 3)
+		if (m_iLoopCount >= 3)
 		{
 			if (m_bStep_B == false)
 			{
