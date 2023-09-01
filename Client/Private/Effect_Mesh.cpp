@@ -2,6 +2,7 @@
 #include "..\Public\Effect_Mesh.h"
 
 #include "GameInstance.h"
+#include "ParticleSystem.h"
 
 CEffect_Mesh::CEffect_Mesh(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CEffect(pDevice, pContext)
@@ -66,6 +67,66 @@ void CEffect_Mesh::Tick(_double _dTimeDelta)
 	_double dTimeDelta = _dTimeDelta * m_dPlaySpeed;
 
 	__super::Tick(dTimeDelta);
+
+	if (m_ParentDesc.pParent->Get_isPlaying())
+	{
+		if (m_fDelayTimeAcc > m_fStartDelay)
+		{
+			if (m_eEffectDesc.isTextureSheetAnimation)
+			{
+				if (OPT_SPEED == m_eEffectDesc.eTimeModeOption)
+				{
+					m_fFrameTimeAcc += (float)dTimeDelta * m_fFrameSpeed;
+
+					//if (m_eEffectDesc.fFrameSpeedMin != m_eEffectDesc.fFrameSpeedMax)
+					//	m_fFrameSpeed = Random::Generate_Float(m_eEffectDesc.fFrameSpeedMin, m_eEffectDesc.fFrameSpeedMax);
+					//else
+					//	m_fFrameSpeed = m_eEffectDesc.fFrameSpeedMin;
+
+					if (m_fFrameTimeAcc >= 1.f)
+					{
+						++m_fCurFrame;
+						m_fFrameTimeAcc = 0.0;
+						if (m_fCurFrame >= m_eEffectDesc.vTiles.x * m_eEffectDesc.vTiles.y)
+							m_fCurFrame = 0;
+					}
+				}
+				else if (OPT_LIFETIME == m_eEffectDesc.eTimeModeOption)
+				{
+					size_t iSize = m_FrameOverTime.size();
+
+					if (0 < iSize)
+					{
+						if (m_iCurFrameIndex < iSize)
+						{
+							while (true)
+							{
+								if (m_iCurFrameIndex >= iSize - 1)
+									m_iCurFrameIndex = (_uint)iSize - 2;
+
+								if (m_fLifeTime >= m_FrameOverTime[m_iCurFrameIndex + 1].fLifetime)
+									break;
+
+								++m_iCurFrameIndex;
+
+								if (m_iCurFrameIndex >= iSize - 1)
+									m_iCurFrameIndex = (_uint)iSize - 2;
+							}
+
+							_float y = fabs(m_FrameOverTime[m_iCurFrameIndex + 1].fValue - m_FrameOverTime[m_iCurFrameIndex].fValue);
+							_float fWeight = fabs(m_fLifeTime - m_FrameOverTime[m_iCurFrameIndex].fLifetime)
+								/ fabs(m_FrameOverTime[m_iCurFrameIndex + 1].fLifetime - m_FrameOverTime[m_iCurFrameIndex].fLifetime);
+
+							if (m_FrameOverTime[m_iCurFrameIndex + 1].fValue < m_FrameOverTime[m_iCurFrameIndex].fValue)
+								y *= -1.f;
+
+							m_fCurFrame = fWeight * y + m_FrameOverTime[m_iCurFrameIndex].fValue;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void CEffect_Mesh::LateTick(_double _dTimeDelta)
@@ -150,6 +211,19 @@ HRESULT CEffect_Mesh::SetUp_ShaderResources(void)
 			return E_FAIL;
 	}
 
+	if (m_eEffectDesc.isTextureSheetAnimation)
+	{
+		_float2 vTileSize = _float2(1.f / m_eEffectDesc.vTiles.x, 1.f / m_eEffectDesc.vTiles.y);
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTileSize", (void*)&vTileSize, sizeof(_float2))))
+			return E_FAIL;
+
+		_float2 vCurTile = _float2(vTileSize.x * ((int)m_fCurFrame % (int)m_eEffectDesc.vTiles.x), vTileSize.y * ((int)m_fCurFrame / (int)m_eEffectDesc.vTiles.x));
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCurTile", (void*)&vCurTile, sizeof(_float2))))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -166,6 +240,9 @@ void CEffect_Mesh::Check_PassIndex(void)
 			if (OPT_NO_ZWRITE == m_eEffectDesc.eTextureShaderOption[TEX_MASK])
 				m_iPassIndex = 17;
 		}
+
+		if (m_eEffectDesc.isTextureSheetAnimation)
+			m_iPassIndex = 18;
 
 		if (nullptr != m_pTextures[TEX_NOISE])
 		{
@@ -185,17 +262,23 @@ void CEffect_Mesh::Check_PassIndex(void)
 	}
 	else if (nullptr != m_pTextures[TEX_MASK])
 	{
+
 		if (nullptr != m_pTextures[TEX_RAMP])
 		{
 			m_iPassIndex = 4;
 
 			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
 				m_iPassIndex = 14;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 20;
 		}
 		else
 		{
 			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
 				m_iPassIndex = 11;
+			else if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 19;
 			else
 				m_iPassIndex = 6;
 		}
