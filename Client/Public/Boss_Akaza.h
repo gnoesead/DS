@@ -301,10 +301,12 @@ private: // _bool
 	_bool	m_bRunPunch = { false };
 	_bool	m_bDashOn = { false };
 	_bool	m_bJump = { false };
+	_bool	m_bTrigger = { false };
 			
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
+	_double m_dTimeAcc = { 0.0 };
 	
 private:
 	
