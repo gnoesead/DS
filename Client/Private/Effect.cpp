@@ -142,7 +142,7 @@ void CEffect::Tick(_double dTimeDelta)
 								else
 								{
 									if (!m_eEffectDesc.is3DStartSize)
-										m_vStartSize = _float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, fCurSize, fCurSize);
+										m_vStartSize = _float3(fCurSize, fCurSize, fCurSize);
 									else
 										m_vStartSize = _float3(m_eEffectDesc.vStartSizeMin.x * fCurSize, m_eEffectDesc.vStartSizeMin.y * fCurSize, m_eEffectDesc.vStartSizeMin.z * fCurSize);
 								}

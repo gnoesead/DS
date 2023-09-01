@@ -509,7 +509,17 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Hit_Spark");
 		return E_FAIL;
 	}
+#pragma endregion
 
+#pragma region RENGOKU
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1_DecalParticle");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region KYOGAI
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 60)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");

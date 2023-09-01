@@ -108,6 +108,9 @@ PS_OUT  PS_DEFAULT(PS_IN In)
 
 	Out.vDiffuse.a *= g_fAlpha;
 
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
+
 	return Out;
 }
 
@@ -138,6 +141,7 @@ PS_OUT  PS_DIFFUSE(PS_IN In)
 		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
 			discard;
 
+		// 밖으로 빼지 말것
 		if (g_vOffset.x > In.vTexUV.x)
 			discard;
 		else if (g_vTilling.x < In.vTexUV.x)
@@ -158,6 +162,7 @@ PS_OUT  PS_DIFFUSE(PS_IN In)
 		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
 			discard;
 
+		// 밖으로 빼지 말것
 		if (g_vOffset.y > In.vTexUV.y)
 			discard;
 		else if (g_vTilling.y < In.vTexUV.y)
@@ -175,6 +180,9 @@ PS_OUT  PS_DIFFUSE(PS_IN In)
 	Out.vDiffuse = vMtrlDiffuse;
 
 	Out.vDiffuse.a *= g_fAlpha;
+
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
 
 	return Out;
 }
@@ -249,6 +257,9 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 
 	Out.vDiffuse.a *= g_fAlpha;
 
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
+
 	return Out;
 }
 
@@ -268,6 +279,9 @@ PS_OUT  PS_DIFFDISSOLVE(PS_IN In)
 	In.vTexUV.x += g_vPaddingEnd.x;
 	In.vTexUV.y += g_vPaddingEnd.y;
 
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
 	if (g_vPanningSpeed.x == 0)
 	{
 		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
@@ -275,6 +289,17 @@ PS_OUT  PS_DIFFDISSOLVE(PS_IN In)
 
 		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
 			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
 	}
 
 	if (g_vPanningSpeed.y == 0)
@@ -284,31 +309,17 @@ PS_OUT  PS_DIFFDISSOLVE(PS_IN In)
 
 		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
 			discard;
-	}
 
-	float UVX = In.vTexUV.x;
-	float UVY = In.vTexUV.y;
-
-	if (g_vOffset.y > In.vTexUV.y)
-		discard;
-	else if (g_vTilling.y < In.vTexUV.y)
-		discard;
-	else
-	{
-		UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
-		UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
-		UVY += g_vDiscardedPixelMin.y;
-	}
-
-	if (g_vOffset.x > In.vTexUV.x)
-		discard;
-	else if (g_vTilling.x < In.vTexUV.x)
-		discard;
-	else
-	{
-		UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
-		UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
-		UVX += g_vDiscardedPixelMin.x;
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
 	}
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
@@ -339,6 +350,9 @@ PS_OUT  PS_DIFFDISSOLVE(PS_IN In)
 		discard;
 
 	Out.vDiffuse.a = g_fAlpha;
+
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
 
 	return Out;
 }
