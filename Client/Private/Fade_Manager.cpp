@@ -174,3 +174,76 @@ _bool CFadeManager::Get_Fade_Color()
 	return m_Fade_Color;
 }
 
+void CFadeManager::Set_Is_Village_Battle_Start(_bool Is)
+{
+
+	m_Is_Village_Battle_Start = Is;
+}
+
+_bool CFadeManager::Get_Is_Village_Battle_Start()
+{
+	return m_Is_Village_Battle_Start;
+}
+
+void CFadeManager::Set_Is_House_Monster_Battle_Start(_bool Is)
+{
+	m_Is_House_Monster_Battle_Start = Is;
+}
+
+_bool CFadeManager::Get_Is_House_Monster_Battle_Start()
+{
+	return m_Is_House_Monster_Battle_Start;
+}
+
+void CFadeManager::Set_Is_House_Boss_Battle_Start(_bool Is)
+{
+	m_Is_House_Boss_Battle_Start = Is;
+}
+
+_bool CFadeManager::Get_Is_House_Boss_Battle_Start()
+{
+	return m_Is_House_Boss_Battle_Start;
+}
+
+void CFadeManager::Set_Is_Train_Battle_Start(_bool Is)
+{
+	m_Is_Train_Battle_Start = Is;
+}
+
+_bool CFadeManager::Get_Is_Train_Battle_Start()
+{
+	return m_Is_Train_Battle_Start;
+}
+
+void CFadeManager::Set_Is_Final_Battle_Start(_bool Is)
+{
+	m_Is_Final_Battle_Start = Is;
+}
+
+_bool CFadeManager::Get_Is_Final_Battle_Start()
+{
+	return m_Is_Final_Battle_Start;
+}
+
+void CFadeManager::Set_Is_House_Monster_Encounter(_bool Is)
+{
+	m_Is_House_Monster_Encounter = Is;
+}
+
+_bool CFadeManager::Get_Is_House_Monster_Encounter()
+{
+
+	return m_Is_House_Monster_Encounter;
+}
+
+void CFadeManager::Set_Is_House_Boss_Encounter(_bool Is)
+{
+	m_Is_House_Boss_Encounter = Is;
+}
+
+_bool CFadeManager::Get_Is_House_Boss_Encounter()
+{
+
+	return m_Is_House_Boss_Encounter;
+}
+
