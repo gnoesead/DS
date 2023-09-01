@@ -157,9 +157,9 @@ void CEffect_Mesh::Check_PassIndex(void)
 {
 	if (nullptr != m_pTextures[TEX_DIFFUSE])
 	{
-		if (OPT_DEFAULT == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
-			m_iPassIndex = 1;
-		else if (OPT_BY_RED == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
+		m_iPassIndex = 1;
+		
+		if (OPT_BY_RED == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
 		{
 			m_iPassIndex = 2;
 
