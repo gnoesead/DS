@@ -521,6 +521,85 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 						}
 					}
 				}
+				else
+				{
+					if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x > 0)
+					{
+						_float2 vCurSize = { 1.f, 1.f };
+
+						for (int i = 0; i < 2; ++i)
+						{
+							if (i == 0)
+							{
+								size_t iSize = m_SizeOverLifeTimesX.size();
+
+								if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w < iSize)
+								{
+									while (true)
+									{
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w >= iSize - 1)
+											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = iSize - 2;
+
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime)
+											break;
+
+										++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w;
+
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w >= iSize - 1)
+											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = iSize - 2;
+									}
+
+									_float y = fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue);
+									_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime)
+										/ fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime);
+
+									if (m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue < m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue)
+										y *= -1;
+
+									vCurSize.x = fWeight * y + m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue;
+								}
+							}
+							else
+							{
+								size_t iSize = m_SizeOverLifeTimesY.size();
+
+								if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y < iSize)
+								{
+									while (true)
+									{
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y >= iSize - 1)
+											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y = iSize - 2;
+
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime)
+											break;
+
+										++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y;
+
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y >= iSize - 1)
+											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y = iSize - 2;
+									}
+
+									_float y = fabs(m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fValue - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fValue);
+									_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fLifetime)
+										/ fabs(m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fLifetime);
+
+									if (m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fValue < m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fValue)
+										y *= -1;
+
+									vCurSize.y = fWeight * y + m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fValue;
+								}
+							}
+						}
+
+						if (!m_eEffectDesc.is3DStartSize)
+							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize = _float2(vCurSize.x, vCurSize.y);
+						else
+						{
+							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.x * vCurSize.x;
+							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vPSize.y = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.y * vCurSize.y;
+						}
+					}
+				}
 			}
 		}
 
@@ -867,6 +946,7 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 
 		// CurSizeIndex
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = 0;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y = 0;
 
 		// CurGravityIndex
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w = 0;
@@ -1067,6 +1147,7 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 
 		// CurSizeIndex
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = 0;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y = 0;
 
 		// CurGravityIndex
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w = 0;
