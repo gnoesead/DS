@@ -24,7 +24,8 @@ public:
 	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
 
 	//NPC
-	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_LISTEN, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK, NPC_WORK, NPC_END };
+	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_LISTEN, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK,
+		NPC_WORK, NPC_CRY, NPC_END };
 public:
 	typedef struct tagNPC
 	{
@@ -96,6 +97,7 @@ public:
 
 public:
 	CTransform* Get_TransformCom();
+	CCollider* Get_ColliderCom() { return m_pColliderCom[CCollider::TYPE_SPHERE]; }
 	_bool	Get_IsJumpOn() { return m_isJumpOn; }
 
 	// Get_Status

@@ -322,6 +322,15 @@
     <Filter Include="02. GameObjects\Character\Player\Rengoku">
       <UniqueIdentifier>{43216cd8-c095-4e0d-bcb8-50166c603d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_AdultM">
+      <UniqueIdentifier>{73e3f0a7-3de8-47ba-9edc-ebdcd6ce38c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_ChildF">
+      <UniqueIdentifier>{b831d37c-58f5-4762-80ac-859ad47da1ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_ChildM">
+      <UniqueIdentifier>{166c0673-b791-4883-a767-e5019c73952a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -606,6 +615,15 @@
     <ClInclude Include="..\Public\Player_Rengoku.h">
       <Filter>02. GameObjects\Character\Player\Rengoku</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\NPC_AdultM.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_AdultM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_ChildF.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_ChildF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\NPC_ChildM.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -880,6 +898,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player_Rengoku.cpp">
       <Filter>02. GameObjects\Character\Player\Rengoku</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_AdultM.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_AdultM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_ChildF.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_ChildF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_ChildM.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -148,6 +148,9 @@ private:
 private:
 	_float	m_fScale = { 0.8f };
 
+	_bool	m_isTeleporting = { false };
+	_double m_dDelay_Teleporting = { 0.0 };
+	_bool	m_isFirst_Teleporting = { true };
 
 private: //애니메이션 제어용 변수들
 	STATE	m_eCurState = { STATE_IDLE };

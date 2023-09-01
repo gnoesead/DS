@@ -83,16 +83,34 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Trigger();
-	Animation_Control(dTimeDelta);
+	//Cheat
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	{
+		CMonsterManager::GetInstance()->Get_BattleOn();
 
+		if (CMonsterManager::GetInstance()->Get_BattleOn())
+			CMonsterManager::GetInstance()->Set_BattleOn(false);
+		else
+			CMonsterManager::GetInstance()->Set_BattleOn(true);
+	}
+	Safe_Release(pGameInstance);
+
+	if (CMonsterManager::GetInstance()->Get_BattleOn())
+	{
+		Trigger();
+		Animation_Control(dTimeDelta);
+	}
+	 
+	
 	//애니메이션 처리
- 	m_pModelCom->Play_Animation(dTimeDelta);
+	m_pModelCom->Play_Animation(dTimeDelta);
 	RootAnimation(dTimeDelta);
 
-	//이벤트 콜
+		//이벤트 콜
 	EventCall_Control(dTimeDelta);
-
+	
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -1019,6 +1037,8 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_JUMP_IDLE)
 	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+
 		if (m_isFirst_Atk_0)
 		{
 			m_isFirst_Atk_0 = false;
@@ -1039,11 +1059,17 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
 		Jumping(0.01f, 0.01f);
 		m_dDelay_Atk = 0.0;
+
+		m_isTeleporting = true;
+		m_dDelay_Teleporting = 0.0;
+		m_isFirst_Teleporting = true;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_SWAMP_IDLE_IN)
+	if (iCurAnim == ANIM_SWAMP_IN && m_isFirst_Teleporting)
 	{
+		m_isFirst_Teleporting = false;
+
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
 		
@@ -1059,21 +1085,31 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 		vPlayerPos = vPlayerPos + Dir * 1.7f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
-
-		m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
 	}
 
+	if (m_isTeleporting && iCurAnim == ANIM_SWAMP_IN)
+	{
+		m_dDelay_Teleporting += dTimeDelta;
+
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.9f);
+
+		if (m_dDelay_Teleporting > 0.6f)
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
+			m_isTeleporting = false;
+			m_dDelay_Teleporting = 0.0;
+		}
+	}
 
 	if (iCurAnim == ANIM_ATK_SHORYU_TO_IDLE)
 	{
 		m_dDelay_Atk += dTimeDelta;
-		if (m_isFirst_Atk_0 && m_dDelay_Atk > 0.2f)
+		if (m_isFirst_Atk_0 && m_dDelay_Atk > 0.1f)
 		{
 			m_isFirst_Atk_0 = false;
 
 			Jumping(4.2f, 0.65f);
 		}
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.9f);
 	}
 
 }
