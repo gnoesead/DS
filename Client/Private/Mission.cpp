@@ -285,6 +285,13 @@ void CMission::Tick(_double TimeDelta)
 
 	Set_UI();
 
+	if (pGameInstance->Get_DIKeyDown(DIK_F3)) {
+		m_Is_Boss_Encounter = true;
+		CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
+		CFadeManager::GetInstance()->Set_Fade_Color(true);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+	}
+
 }
 
 void CMission::LateTick(_double TimeDelta)
