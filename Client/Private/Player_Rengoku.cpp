@@ -271,10 +271,14 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo2", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
 			}
-			else if (1 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
