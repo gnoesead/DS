@@ -50,7 +50,7 @@
 
 
 #include "NPC_Female.h"
-
+#include "NPC_AdultM.h"
 
 #include "Sword.h"
 #include "SwordHome.h"
@@ -466,6 +466,8 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+
+
 	// Prototype_Component_Model_NPC_Female
 	PivotMatrix = XMMatrixScaling(0.0065f, 0.0065f, 0.0065f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_NPC_Female"),
@@ -474,6 +476,31 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
 		return E_FAIL;
 	}
+	// Prototype_Component_Model_NPC_AdultM
+	PivotMatrix = XMMatrixScaling(0.0065f, 0.0065f, 0.0065f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_NPC_AdultM"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/NPC_AdultM/NPC_AdultM.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_NPC_AdultM");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_NPC_ChildF
+	PivotMatrix = XMMatrixScaling(0.0065f, 0.0065f, 0.0065f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_NPC_ChildF"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/NPC_ChildF/NPC_ChildF.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_NPC_ChildF");
+		return E_FAIL;
+	}
+	// Prototype_Component_Model_NPC_ChildM
+	PivotMatrix = XMMatrixScaling(0.0065f, 0.0065f, 0.0065f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_NPC_ChildM"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/NPC_ChildM/NPC_ChildM.bin", PivotMatrix))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Model_NPC_ChildM");
+		return E_FAIL;
+	}
+
 
 	/* Prototype_Component_Model_Monster_Zako_0 */
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -635,6 +662,8 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+
+
 	/* Prototype_GameObject_NPC_Female */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Female"),
 		CNPC_Female::Create(m_pDevice, m_pContext))))
@@ -642,8 +671,21 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_Female");
 		return E_FAIL;
 	}
-	
-	
+	/* Prototype_GameObject_NPC_AdultM */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_AdultM"),
+		CNPC_AdultM::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_AdultM");
+		return E_FAIL;
+	}
+	/*// Prototype_GameObject_NPC_ChildF 
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_ChildF"),
+		CNPC_AdultM::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_ChildF");
+		return E_FAIL;
+	}*/
+
 
 
 	/* Prototype_GameObject_Sword */

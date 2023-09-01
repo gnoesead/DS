@@ -24,8 +24,14 @@ public:
 	void	Cnt_AttackOn_Down() { m_iCnt_AttackOn--; }
 	_bool	Can_Attack();
 
+	_bool	Get_BattleOn() { return m_isBattleOn; }
+	void	Set_BattleOn(_bool battle) { m_isBattleOn = battle; }
+
 private:
 	_int	m_iCnt_AttackOn = { 0 };
+
+
+	_bool	m_isBattleOn = { false };
 
 public:
 	virtual void Free() override;
