@@ -100,33 +100,32 @@ void GS_DEFAULT(point GS_IN In[1], inout TriangleStream<GS_OUT> OutStream)
 	float3		vLook = g_vCamPosition.xyz - In[0].vPosition.xyz;
 	vLook.y = 0;
 	float3		vNormalizedLook = normalize(vLook);
-	float3		vRight;
-	float3		vUp;
 
-	vRight = normalize(cross(g_vAxis, vLook)) * g_vSize.x * 0.5f;
-	vUp = normalize(cross(vLook, vRight)) * g_vSize.y * 0.5f;
-	
+	float3 vRight = normalize(cross(g_vAxis, vLook)) * g_vSize.x * 0.5f;
+	float3 vUp = normalize(cross(vLook, vRight)) * g_vSize.y * 0.5f;
+
+	float3 vOriginalRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook)) * g_vSize.x * 0.5f;
 
 	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
 
 	Out[0].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight + vUp
-		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
+		+ vOriginalRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[0].vPosition = mul(Out[0].vPosition, matVP);
 	Out[0].vTexUV = float2(0.f, 0.f);
 
 	Out[1].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight + vUp
-		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
+		+ vOriginalRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[1].vPosition = mul(Out[1].vPosition, matVP);
 	Out[1].vTexUV = float2(1.f, 0.f);
 
 	Out[2].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder - vRight - vUp
-		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
+		+ vOriginalRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[2].vPosition = mul(Out[2].vPosition, matVP);
 	Out[2].vTexUV = float2(1.f, 1.f);
 
 	Out[3].vPosition = float4(In[0].vPosition.xyz + vNormalizedLook * -0.01 * g_fTextureOrder + vRight - vUp
-		+ vRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
+		+ vOriginalRight * g_fCameraRightLookPos.x + vNormalizedLook * g_fCameraRightLookPos.y, 1.f);
 	Out[3].vPosition = mul(Out[3].vPosition, matVP);
 	Out[3].vTexUV = float2(0.f, 1.f);
 
@@ -160,6 +159,9 @@ PS_OUT PS_DEFAULT(PS_IN In)
 	Out.vColor = g_vColor;
 
 	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
 
 	return Out;
 }
@@ -230,6 +232,9 @@ PS_OUT PS_DIFFUSE(PS_IN In)
 
 	Out.vColor.a *= g_fAlpha;
 
+	if (Out.vColor.a < 0.01f)
+		discard;
+
 	return Out;
 }
 
@@ -270,6 +275,7 @@ PS_OUT PS_DIFFDISSOLVE(PS_IN In)
 			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
 			UVX += g_vDiscardedPixelMin.x;
 		}
+
 	}
 
 	if (g_vPanningSpeed.y == 0)
@@ -293,11 +299,9 @@ PS_OUT PS_DIFFDISSOLVE(PS_IN In)
 	}
 
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
-	vector vNoise = g_RampTexture.Sample(LinearSampler, In.vTexUV);
+	vector vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
 
 	Out.vColor = vDiffuse;
-
-	Out.vColor.a *= g_fAlpha;
 
 	// Dissolve 효과 계산
 	float fDissolveFactor = vNoise.r;
@@ -316,7 +320,10 @@ PS_OUT PS_DIFFDISSOLVE(PS_IN In)
 
 	//Out.vColor = finalCol;
 
-	//Out.vColor.a = alpha;
+	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
 
 	return Out;
 }
@@ -469,7 +476,7 @@ PS_OUT PS_DIFFDISTORTION(PS_IN In)
 
 	Out.vColor.a *= g_fAlpha;
 
-	if (Out.vColor.a <= 0.1f)
+	if (Out.vColor.a < 0.01f)
 		discard;
 
 	return Out;
@@ -547,6 +554,9 @@ PS_OUT PS_MASKDISTORTION_NONEZ(PS_IN In)
 	Out.vColor = vMtrlEffect;
 
 	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
 
 	return Out;
 }
@@ -682,6 +692,9 @@ PS_OUT PS_DIFFUSESPRITE(PS_IN In)
 
 	Out.vColor.a *= g_fAlpha;
 
+	if (Out.vColor.a < 0.01f)
+		discard;
+
 	return Out;
 }
 
@@ -743,6 +756,9 @@ PS_OUT PS_MASKCOLORSPRITE(PS_IN In)
 	Out.vColor = g_vColor;
 	
 	Out.vColor.a = vMask.r * g_fAlpha;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
 
 	return Out;
 }
@@ -812,6 +828,89 @@ PS_OUT PS_MASKRAMPSPRITE(PS_IN In)
 
 	Out.vColor = vRamp;
 	Out.vColor.a = vMask.r * g_fAlpha;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT PS_MASKCOLORDISSOLVE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	vector vMask = g_MaskTexture.Sample(LinearSampler, float2(UVX, UVY));
+	vector vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = g_vColor;
+	Out.vColor.a = vMask.r;
+
+	Out.vColor.a *= g_fAlpha;
+
+	// Dissolve 효과 계산
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
+
+	if (Out.vColor.a < 0.05f)
+		discard;
 
 	return Out;
 }
@@ -946,5 +1045,18 @@ technique11 DefaultTechnique {
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE();
+	}
+
+	pass MaskColorDissolve		// 10
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_DEFAULT();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKCOLORDISSOLVE();
 	}
 };

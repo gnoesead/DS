@@ -73,11 +73,11 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
-    if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+   /* if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
     {
         MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Village");
         return E_FAIL;
-    }
+    }*/
 
     if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
     {

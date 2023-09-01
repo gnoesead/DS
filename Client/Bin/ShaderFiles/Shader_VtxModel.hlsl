@@ -19,6 +19,8 @@ float			g_fAlpha;
 float			g_fUVRatio;
 float			g_fDiffuseRatio;
 
+bool			g_bLiarColor;
+
 struct VS_IN
 {
 	float3		vPosition	: POSITION;
@@ -262,8 +264,23 @@ PS_OUT  PS_ALPHA_REAL(PS_IN In)
 
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
-	Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
-	Out.vDiffuse.a *= g_fAlpha;
+	if (g_bLiarColor == false)
+	{
+		Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
+	}
+	else
+	{
+		Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
+		Out.vDiffuse.b = Out.vDiffuse.r;
+		Out.vDiffuse.r = 0.f;
+	}
+
+		Out.vDiffuse.a *= g_fAlpha;
+	
+
+
+
+
 
 	return Out;
 }

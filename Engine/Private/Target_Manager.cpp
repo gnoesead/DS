@@ -72,6 +72,10 @@ HRESULT CTarget_Manager::Add_MRT(const _tchar* pMRTTag, const _tchar* pTargetTag
 
 HRESULT CTarget_Manager::Begin_DefaultRT()
 {
+	ID3D11ShaderResourceView* pSRVs[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+
+	m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pSRVs);
+
 	m_pContext->OMGetRenderTargets(1, &m_pOldRTV, &m_pDSV);
 
 	m_pContext->ClearRenderTargetView(m_pDefaultRTV, (_float*)&m_vColor_Default);
@@ -83,9 +87,15 @@ HRESULT CTarget_Manager::Begin_DefaultRT()
 
 HRESULT CTarget_Manager::Begin_MRT(const _tchar* pMRTTag)
 {
+	ID3D11ShaderResourceView* pSRVs[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+
+	m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pSRVs);
+
 	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
 	if (nullptr == pMRTList)
 		return E_FAIL;
+
+	
 
 	m_pContext->OMGetRenderTargets(1, &m_pDefaultRTV, &m_pDSV);
 
@@ -129,6 +139,10 @@ HRESULT CTarget_Manager::Begin_MRT_NoneClear(const _tchar* pMRTTag)
 
 HRESULT CTarget_Manager::Begin_MRT_LightDepth(ID3D11DeviceContext* pContext, const _tchar* pMRTTag)
 {
+	ID3D11ShaderResourceView* pSRVs[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+
+	m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pSRVs);
+
 	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
 	if (nullptr == pMRTList)
 		return E_FAIL;
