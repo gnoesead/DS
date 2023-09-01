@@ -342,7 +342,7 @@ void CNPC_AdultM::Sway(_double dTimeDelta)
 			_float4 Dir;
 			XMStoreFloat4(&Dir, -Calculate_Dir_FixY());
 			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
-			Go_Dir_Constant(dTimeDelta, 25, 0.15f, Dir); // stagger
+			//Go_Dir_Constant(dTimeDelta, 25, 0.15f, Dir); // stagger
 		}
 	}
 

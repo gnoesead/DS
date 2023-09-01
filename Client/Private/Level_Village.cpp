@@ -440,9 +440,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_AdultM"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : NPC_Female");
+        MSG_BOX("Failed to Add_GameObject : NPC_AdultM");
         return E_FAIL;
     }
 
@@ -480,9 +480,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_AdultM"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : NPC_Female");
+        MSG_BOX("Failed to Add_GameObject : NPC_AdultM");
         return E_FAIL;
     }
 
@@ -492,9 +492,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_AdultM"), &CharacterDesc)))
     {
-        MSG_BOX("Failed to Add_GameObject : NPC_Female");
+        MSG_BOX("Failed to Add_GameObject : NPC_AdultM");
         return E_FAIL;
     }
 
