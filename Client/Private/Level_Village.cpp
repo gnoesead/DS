@@ -155,7 +155,27 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
 
+    if (pGameInstance->Get_DIKeyState(DIK_PGUP))
+    {
+        _float4 vAmbient = pGameInstance->Get_Light(0)->vLightAmbient;
 
+        vAmbient.x += 0.05f;
+        vAmbient.y += 0.05f;
+        vAmbient.z += 0.05f;
+
+        pGameInstance->Set_Light(0, 2, vAmbient);
+    }
+
+    if (pGameInstance->Get_DIKeyState(DIK_PGDN))
+    {
+        _float4 vAmbient = pGameInstance->Get_Light(0)->vLightDiffuse;
+
+        vAmbient.x -= 0.05f;
+        vAmbient.y -= 0.05f;
+        vAmbient.y -= 0.05f;
+
+        pGameInstance->Set_Light(0, 2, vAmbient);
+    }
    
     
    
