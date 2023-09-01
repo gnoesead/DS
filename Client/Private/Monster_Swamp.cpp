@@ -102,6 +102,8 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 		Trigger();
 		Animation_Control(dTimeDelta);
 	}
+	 
+	
 	//局聪皋捞记 贸府
 	m_pModelCom->Play_Animation(dTimeDelta);
 	RootAnimation(dTimeDelta);

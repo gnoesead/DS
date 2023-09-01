@@ -291,6 +291,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
+
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -302,6 +303,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
@@ -316,6 +318,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
+
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -328,6 +331,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
+
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -339,6 +343,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 			CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
 
 			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;

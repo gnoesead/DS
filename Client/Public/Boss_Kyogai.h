@@ -24,7 +24,7 @@ public:
 		STATE_ATKCMB, STATE_ATKCMB2, STATE_AWAKE_ROOMCHANGE, STATE_ATKSTEP,
 		STATE_STOMPKICK, STATE_ATKPUNCH, STATE_ATKSKCMB,
 		STATE_ATK_TURN_IDLE, STATE_ATK_TURN_RF, STATE_ATK_TURN_LF, STATE_ATK_TURN_RB, STATE_ATK_TURN_LB,
-		STATE_JUMP_STEP,
+		STATE_JUMP_STEP, STATE_ATKSK,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
@@ -95,6 +95,8 @@ public:
 
 
 		////////////////// 히트모션 ///////////////////
+		ANIM_HIT_RETURN = 31, // 허리 숙인채로 돌아옴 빅?
+
 		ANIM_GUARD_READY = 32, // 가드 준비자세
 		ANIM_GUARD_LOOP = 33, // 가드 루프
 		ANIM_GUARD_END = 34, // 가드 풀었다
@@ -103,19 +105,25 @@ public:
 		ANIM_BASETURN_L = 52, // 왼쪽 어깨 살짝 히트모션 아닌데 쓸만할듯?
 		ANIM_BASETURN_R = 53, // 오른쪽 어깨 살짝
 
+		ANIM_DEATH = 66, // 데스모션
+		ANIM_GETUP = 69, // 데스모션 일어남 -> 72 -> 31 연결
+
+		ANIM_HIT_DOWN_0 = 70, // 1페이즈 체력 0 되면 하면 될듯?
+		ANIM_HIT_DOWN_1 = 71,
+		ANIM_HIT_DOWN_2 = 72, // 31번이랑 연결
+
+		ANIM_SPIN = 73, // 스핀 날아감
+		ANIM_SPIN_LOOP = 74,
+		ANIM_SPIN_END = 75,
+
+		ANIM_GETUP_SPIN = 68, // 새우잠자네 ㅠ 
+
 		ANIM_HIT = 67, // 히트다 히트~
 
 		////////////////// 엔드모션 ///////////////////
 		ANIM_HEAL,
-		ANIM_DEATH = 66, // 데스
 		ANIM_DEATH_GETUP = 69, // 죽음에서 살아나기
 		
-		ANIM_GETUP = 68, // 일어나기
-		ANIM_HITDOWN = 70, // 무릎꿇으면서 앉음
-		ANIM_HITDOWN_LOOP = 71, // 무릎꿇는 자세 루프
-		ANIM_HITDOWN_GETUP = 72, // 머리털고 일어남
-		ANIM_HITDOWN_RETURN = 31, // 연결
-
 		////////////////// 컷신모션 ///////////////////
 		ANIM_AWAKE = 0 // 개방신
 
@@ -169,6 +177,7 @@ public:
 	void Trigger_LinkerCmb();
 	void Trigger_AtkSkCmb();
 	void Trigger_Awake_AtkskCmb();
+	void Trigger_AtkSk();
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
@@ -204,7 +213,8 @@ private: //패턴 함수들
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
 	void Update_AtkSkCmb(_double dTimeDelta);
-	void Update_Awake_AtkskCmb(_double dTimeDelta);	
+	void Update_Awake_AtkskCmb(_double dTimeDelta);	//와다다다 패턴임
+	void Update_AtkSk(_double dTimeDelta);
 
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
@@ -221,13 +231,21 @@ private: //패턴 함수들
 	void Update_Awake_RoomChange(_double dTimeDelta);
 
 private:
-	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT};
-	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f });
-	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed);
+	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT , BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
+	};
+	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f }, _float fMovepos = { 0.f }, _bool bLiarColor = { false });
+	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed, CAtkCollider::BULLET_TYPE eBulletType, _float fPosX = 0.f);
 	
 private:
 	void Turn_Trigger(_double dTimeDelta);
 	void TurnRoom();
+	void Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector vDir, CAtkCollider::BULLET_TYPE eBulletType);
+	void Grid_Bullet(_double dTimeDelta, _double dTime, _fvector vDir);
+	void Wave_Bullet(_double dTimeDelta, _double dTime, _fvector vDIr);
+	void Liar_Bullet(_double dTimeDelta, _double dTime, _fvector vDir);
+
+	_vector	Vertical_Dir();
+	_vector HorizonDir();
 
 
 #pragma endregion
@@ -264,6 +282,7 @@ private:
 	
 	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };
+	
 
 	
 private:

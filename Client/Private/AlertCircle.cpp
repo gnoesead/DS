@@ -139,7 +139,7 @@ void CAlertCircle::LateTick(_double TimeDelta)
 	}
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{
-		m_fAlpha = 0.6f;
+		m_fAlpha = 0.8f;
 	}
 	
 	Safe_Release(pGameInstance);
