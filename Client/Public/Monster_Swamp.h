@@ -148,6 +148,7 @@ private:
 private:
 	_float	m_fScale = { 0.8f };
 
+	
 
 private: //애니메이션 제어용 변수들
 	STATE	m_eCurState = { STATE_IDLE };
