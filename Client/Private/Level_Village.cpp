@@ -139,6 +139,7 @@ HRESULT CLevel_Village::Initialize()
     CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
     CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
 
+    CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
 
     return S_OK;
 }

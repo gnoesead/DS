@@ -141,6 +141,13 @@ HRESULT CLevel_House::Initialize()
 	CMissionManager::GetInstance()->Set_Main_Mission_Type(1);
 	CMissionManager::GetInstance()->Set_Main_Sub_Num(0);
 
+
+	CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);
+
+	CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
+	CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
+
     return S_OK;
 }
 
@@ -1829,6 +1836,11 @@ HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 HRESULT CLevel_House::Ready_Layer_Effect()
 {
 #pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Down");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws");
@@ -1837,6 +1849,46 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Left.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Left");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up_Right.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up_Right");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Spin");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Spin_Wind");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_SpinKick.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_SpinKick");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_SpinPunch.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_SpinPunch");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Slam.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Slam");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown_V2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown_V2");
 		return E_FAIL;
 	}
 #pragma endregion

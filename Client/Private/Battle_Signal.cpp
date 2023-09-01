@@ -95,6 +95,34 @@ void CBattle_Signal::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+
+
+	if (CFadeManager::GetInstance()->Get_Is_Village_Battle_Start() == true && m_Village_Battle_Start == false) {
+		m_Village_Battle_Start = true;
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
+	}
+
+	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() == true && m_House_Mon_Battle_Start == false) {
+		m_House_Mon_Battle_Start = true;
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
+	}
+
+	if (CFadeManager::GetInstance()->Get_Is_House_Boss_Battle_Start() == true && m_House_Boss_Battle_Start == false) {
+		m_House_Boss_Battle_Start = true;
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
+	}
+
+	if (CFadeManager::GetInstance()->Get_Is_Train_Battle_Start() == true && m_Train_Battle_Start == false) {
+		m_Train_Battle_Start = true;
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
+	}
+
+	if (CFadeManager::GetInstance()->Get_Is_Final_Battle_Start() == true && m_Final_Battle_Start == false) {
+		m_Final_Battle_Start = true;
+		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
+	}
+
+
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD2)) {
 
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);

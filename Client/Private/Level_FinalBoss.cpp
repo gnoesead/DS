@@ -110,7 +110,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
+	m_Battle_MaxTime = { 5.5f };
 
 	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
 	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
@@ -124,6 +126,17 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	SetWindowText(g_hWnd, TEXT("FinalBoss"));
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_FINALBOSS, dTimeDelta);
+
+
+	m_Battle_TimeAcc += (_float)dTimeDelta * m_Battle_TimeDir;
+	
+	if (m_Battle_TimeAcc > m_Battle_MaxTime) {
+		m_Battle_TimeAcc = 0.f;
+		m_Battle_TimeDir = 0.f;
+		CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
+	}
+
+
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

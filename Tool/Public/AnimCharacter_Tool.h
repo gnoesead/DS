@@ -46,6 +46,7 @@ private:
 	//칼
 	CSword* m_pSword = { nullptr };
 	_bool	m_isSwordOn = { false };
+	_bool	m_isFirst_Sword = { true };
 
 	// 임시 코드 
 	_uint	m_iNumAnim = { 0 };

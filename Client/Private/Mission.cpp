@@ -326,6 +326,24 @@ void CMission::LateTick(_double TimeDelta)
 
 	_vector Pos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	// 쿄우가이 바로가기
+	if (pGameInstance->Get_DIKeyDown(DIK_F3) ){
+		m_Is_Boss_Encounter = true;
+		CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
+		CFadeManager::GetInstance()->Set_Fade_Color(true);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(true);
+	}
+
+	// 쟈코 바로가기
+	if (pGameInstance->Get_DIKeyDown(DIK_F4)) {
+		m_Is_Mon_Encounter = true;
+		CFadeManager::GetInstance()->Set_Fade_Color(true);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
+	}
+
+
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
 
 		// Boss
@@ -339,6 +357,7 @@ void CMission::LateTick(_double TimeDelta)
 			CFadeManager::GetInstance()->Set_Is_House_Boss_On(true);
 			CFadeManager::GetInstance()->Set_Fade_Color(true);
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+			CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(true);
 		}
 
 		// Monster
@@ -351,6 +370,7 @@ void CMission::LateTick(_double TimeDelta)
 			m_Is_Mon_Encounter = true;
 			CFadeManager::GetInstance()->Set_Fade_Color(true);
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
 
 	}

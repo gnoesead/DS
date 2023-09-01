@@ -31,6 +31,7 @@ public:
 			return 2;
 		else if (m_iDead_3 == false)
 			return 3;
+		return 0;
 	}
 	
 
