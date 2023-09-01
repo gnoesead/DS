@@ -50,7 +50,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 
 	m_AtkCollDesc = *pAtkCollDesc;
 	Safe_AddRef(m_AtkCollDesc.pParentTransform);
-	
+
 	Setting_AtkCollDesc();
 
 	m_pColliderCom->ReMake_Collider(m_AtkCollDesc.ColliderDesc.vPosition, m_AtkCollDesc.ColliderDesc.vSize.x, m_pTransformCom->Get_WorldMatrix());
@@ -63,11 +63,20 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	case CAtkCollider::TYPE_BULLET:
 		Setting_BaseBullet();
 		break;
-	case CAtkCollider::TYPE_KYOGAIBULLET:
+	case CAtkCollider::TYPE_KYOGAI_BULLET:
 		Setting_KyogaiBullet();
 		break;
-	case CAtkCollider::TYPE_KYOGAIDELAYBULLET:
+	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
 		Setting_KyogaiDelayBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
+		Setting_KyogaiVerticalBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
+		Setting_KyogaiHorizonBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
+		Setting_KyogaiLiarBullet();
 		break;
 	}
 
@@ -132,11 +141,20 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	case CAtkCollider::TYPE_BULLET:
 		Setting_BaseBullet();
 		break;
-	case CAtkCollider::TYPE_KYOGAIBULLET:
+	case CAtkCollider::TYPE_KYOGAI_BULLET:
 		Setting_KyogaiBullet();
 		break;
-	case CAtkCollider::TYPE_KYOGAIDELAYBULLET:
+	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
 		Setting_KyogaiDelayBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
+		Setting_KyogaiVerticalBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
+		Setting_KyogaiHorizonBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
+		Setting_KyogaiLiarBullet();
 		break;
 	}
 
@@ -165,11 +183,20 @@ void CAtkCollider::Tick(_double dTimeDelta)
 	case CAtkCollider::TYPE_BULLET:
 		Tick_BaseBullet(dTimeDelta);
 		break;
-	case CAtkCollider::TYPE_KYOGAIBULLET:
+	case CAtkCollider::TYPE_KYOGAI_BULLET:
 		Tick_KyogaiBullet(dTimeDelta);
 		break;
-	case CAtkCollider::TYPE_KYOGAIDELAYBULLET:
+	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
 		Tick_KyogaiDelayBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
+		Tick_KyogaiVerticalBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
+		Tick_KyogaiHorizonBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
+		Tick_KyogaiLiarBullet(dTimeDelta);
 		break;
 	}
 
@@ -193,9 +220,10 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 
 		m_AtkObj.clear();
 		m_dTimeAcc = 0.0;
+		m_dStopAcc = 0.0;
 		m_iCollCount = 0;
-		m_bSaveTransform = false;
 		
+
 		Set_Dead();
 	}
 
@@ -251,7 +279,7 @@ void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
 
 		if (m_dTimeAcc > 0.5)
 			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
-			//m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
+		//m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
 	}
 }
 
@@ -266,6 +294,65 @@ void CAtkCollider::Tick_KyogaiDelayBullet(_double dTimeDelta)
 	}
 
 }
+
+void CAtkCollider::Tick_KyogaiVerticalBullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+	}
+}
+
+void CAtkCollider::Tick_KyogaiHorizonBullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+	}
+}
+
+void CAtkCollider::Tick_KyogaiLiarBullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+		_vector vTargetPos = m_AtkCollDesc.pParentTransform->Get_State(CTransform::STATE_POSITION);
+		_vector vOwnerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		if (0.5 < m_dTimeAcc)
+		{
+			if (Compute::DistCheck(vTargetPos, vOwnerPos, 6.f) == true && m_bStop == false && m_dStopAcc == 0.0)
+				m_bStop = true;
+
+			if (m_bStop == true)
+			{
+				m_dStopAcc += dTimeDelta;
+				if (m_dStopAcc > 0.30)
+				{
+					m_bStop = false;
+					m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), Random::Generate_Float(0.f, 360.f));
+				}
+			}
+			
+			if(false == m_bStop)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+		}
+
+		if (1.5 < m_dTimeAcc && m_dTimeAcc <= 1.5 + dTimeDelta)
+		{
+			m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), Random::Generate_Float(0.f, 360.f));
+			//m_AtkCollDesc.Speed *= 3.f;
+		}
+	}
+}
+
 
 void CAtkCollider::Setting_BaseBullet()
 {
@@ -284,7 +371,7 @@ void CAtkCollider::Setting_KyogaiBullet()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 16.5f;
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 17.f;
 	vPos = XMVectorSetY(vPos, 0.f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
@@ -300,22 +387,77 @@ void CAtkCollider::Setting_KyogaiDelayBullet()
 {
 	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 
-	/*_vector vRightDir = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	_vector vUpDir = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-	_vector vLookDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-	m_AtkCollDesc.fPos.x = 0.f;
-	m_AtkCollDesc.fPos.y = 0.f;
-	m_AtkCollDesc.fPos.z = 10.f;*/
-	
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	vPos = XMVectorSetY(vPos, 0.f);
-	
-	/*vPos += vRightDir * m_AtkCollDesc.fPos.x;
-	vPos += vUpDir * m_AtkCollDesc.fPos.y;
-	vPos += vLookDir * m_AtkCollDesc.fPos.z;*/
-	
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_vDir = XMLoadFloat4(&m_AtkCollDesc.AtkDir);
+	m_vDir = XMVector3Normalize(m_vDir);
+}
+
+void CAtkCollider::Setting_KyogaiVerticalBullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vOriginPos = { 126.536f, 0.f, 123.840f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 17.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vOriginPos);
+
+	m_vDir = vOriginPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
+
+}
+
+void CAtkCollider::Setting_KyogaiHorizonBullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vOriginPos = { 126.536f, 0.f, 123.840f, 1.f };
+
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 17.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vOriginPos);
+
+	m_vDir = vOriginPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
+
+
+}
+
+void CAtkCollider::Setting_KyogaiLiarBullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vOriginPos = { 126.536f, 0.f, 123.840f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 17.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vOriginPos);
+
+	m_vDir = vOriginPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
 }
 
 

@@ -50,7 +50,7 @@ HRESULT CAlertRect::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	_vector vPos = XMVectorSetY(m_EffectDesc.vPos, 0.01f);
+	_vector vPos = XMVectorSetY(m_EffectDesc.vPos, 0.1f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
@@ -184,6 +184,8 @@ HRESULT CAlertRect::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fDiffuseRatio", &m_fDiffuseRatio, sizeof _float)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bLiarColor", &m_EffectDesc.bLiarColor, sizeof _bool)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

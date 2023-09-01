@@ -86,10 +86,6 @@ HRESULT CAnimCharacter_Tool::Initialize(void* pArg)
 		}
 
 		fin.close();
-	
-
-	
-	
 
 	Safe_Release(pGameInstance);
 	

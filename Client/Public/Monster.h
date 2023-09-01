@@ -104,6 +104,7 @@ protected:
 	_uint	m_iTriggerCnt = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iRandomDirNum = { 0 };
+	_uint	m_iLoopCount = { 0 };
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
