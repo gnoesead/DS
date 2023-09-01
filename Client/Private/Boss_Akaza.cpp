@@ -2546,124 +2546,125 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 	{
 		m_dTimeAcc += dTimeDelta;
 		///////////////////////////////////////////어택콜라이더 0.70 까지///////////////////////////////////////////////////////////
-		if (0.25 < m_dTimeAcc && m_dTimeAcc <= 0.25 + dTimeDelta)
+		// Event_Time(타임델타, 부를시간, 누적시작)
+		if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
 		{
 			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
-				CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);			
+				CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		}
-		//if (0.30 < m_dTimeAcc && m_dTimeAcc <= 0.30 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.30, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.390 < m_dTimeAcc && m_dTimeAcc <= 0.390 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.39, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.520 < m_dTimeAcc && m_dTimeAcc <= 0.520 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.520, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.70 < m_dTimeAcc && m_dTimeAcc <= 0.70 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.70, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
 		/////////////////////////////////////////////이펙트 여기 아래부터//////////////////////////////////////////////////////////////////
-		//if (0.250 < m_dTimeAcc && m_dTimeAcc <= 0.250 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.270 < m_dTimeAcc && m_dTimeAcc <= 0.270 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.270, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.30 < m_dTimeAcc && m_dTimeAcc <= 0.30 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.30, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
 		//
-		//if (0.320 < m_dTimeAcc && m_dTimeAcc <= 0.320 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.320, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.340 < m_dTimeAcc && m_dTimeAcc <= 0.340 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.340, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.360 < m_dTimeAcc && m_dTimeAcc <= 0.360 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.360, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.390 < m_dTimeAcc && m_dTimeAcc <= 0.390 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.390, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.41 < m_dTimeAcc && m_dTimeAcc <= 0.41 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.410, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.430 < m_dTimeAcc && m_dTimeAcc <= 0.430 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.430, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.450 < m_dTimeAcc && m_dTimeAcc <= 0.450 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.450, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.470 < m_dTimeAcc && m_dTimeAcc <= 0.470 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.470, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.490 < m_dTimeAcc && m_dTimeAcc <= 0.490 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.490, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.520 < m_dTimeAcc && m_dTimeAcc <= 0.520 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.520, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.540 < m_dTimeAcc && m_dTimeAcc <= 0.540 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.540, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.560 < m_dTimeAcc && m_dTimeAcc <= 0.560 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.560, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.580 < m_dTimeAcc && m_dTimeAcc <= 0.580 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.580, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.60 < m_dTimeAcc && m_dTimeAcc <= 0.60 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.60, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.620 < m_dTimeAcc && m_dTimeAcc <= 0.620 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.620, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-		//if (0.640 < m_dTimeAcc && m_dTimeAcc <= 0.640 + dTimeDelta)
+		//if (Event_Time(dTimeDelta,0.640, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
