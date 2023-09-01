@@ -153,17 +153,17 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.Target_EffectBlurX */
 	_float4 vColor_EffectBlurX = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurX")
-		, (_uint)Viewport.Width * 0.01f, (_uint)Viewport.Height * 0.01f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
+		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
 		return E_FAIL;
 	/* For.Target_EffectBlurY */
 	_float4 vColor_EffectBlurY = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurY")
-		, (_uint)Viewport.Width * 0.01f, (_uint)Viewport.Height * 0.01f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
+		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
 		return E_FAIL;
 	/* For.Target_EffectCombineBlur */
 	_float4 vColor_EffectCombineBlur = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectCombineBlur")
-		, (_uint)Viewport.Width * 0.01f, (_uint)Viewport.Height * 0.01f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
+		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
 		return E_FAIL;
 	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
@@ -1259,8 +1259,8 @@ HRESULT CRenderer::Render_NonLight()
 	ZeroMemory(&VP, sizeof(D3D11_VIEWPORT));
 	VP.TopLeftX = 0.0f;
 	VP.TopLeftY = 0.0f;
-	VP.Width = 1280.f * 0.01f;
-	VP.Height = 720.f * 0.01f;
+	VP.Width = 1280.f * 0.5f;
+	VP.Height = 720.f * 0.5f;
 	VP.MinDepth = 0.0f;
 	VP.MaxDepth = 0.0f;
 
@@ -1278,6 +1278,7 @@ HRESULT CRenderer::Render_NonLight()
 
 	if (FAILED(m_pEffectShader->Begin(2)))
 		return E_FAIL;
+	
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 		return E_FAIL;*/
 
@@ -1315,10 +1316,7 @@ HRESULT CRenderer::Render_NonLight()
 
 	// 블러 적용
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectCombineBlur"))))
-		return E_FAIL;
-
-	
-
+		return E_FAIL;	
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
@@ -1343,6 +1341,7 @@ HRESULT CRenderer::Render_NonLight()
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
 	m_pContext->RSSetViewports(1, &m_VP);
+
 	// 블룸적용
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
