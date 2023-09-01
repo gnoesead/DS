@@ -363,8 +363,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 0.75f;
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.3,
-					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.f), 0.3,
+					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 2.5, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
 			}
 			if (32 == m_iEvent_Index)
 			{
@@ -379,7 +379,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x = -1.f;
 				EffectWorldDesc.fScale = 1.5f;
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
-					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
 
 				EffectWorldDesc.fScale = 1.f;
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
@@ -586,151 +586,50 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
- 		//	if (0 <= m_iEvent_Index && 22 >= m_iEvent_Index)
-			//{
-			//	if (0 == m_iEvent_Index || 4 == m_iEvent_Index || 
-			//		11 == m_iEvent_Index ||	22 == m_iEvent_Index)
-			//	{//피격 콜라이더
-			//		//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-			//		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-			//			CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-			//	}
-			//	
-			//	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-			//	EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
-			//	EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
+ 			if (0 <= m_iEvent_Index && 10 >= m_iEvent_Index)
+			{
+				if (0 == m_iEvent_Index || 2 == m_iEvent_Index ||
+					5 == m_iEvent_Index || 10 == m_iEvent_Index)
+				{//피격 콜라이더
+					//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+				}
 
-			//	CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
-			//}
-			//
-			//if (23 == m_iEvent_Index)
-			//{//0.7
-			//	//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-			//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-			//		CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
-			// 
-			//	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-			//	EffectWorldDesc.vPosition.x = -1.f;
-			//	EffectWorldDesc.fScale = 1.5f;
-			//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
-			//		CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
+				EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
 
-			//	EffectWorldDesc.fScale = 1.f;
-			//	CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 
-			//	EffectWorldDesc.vPosition.z = -2.f;
-			//	EffectWorldDesc.fScale = 1.5f;
-			//	EffectWorldDesc.dSpeed = 0.8;
+				EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
+				EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
 
-			//	CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
-			//}
+				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
+			}
+			
 
-			if (0 == m_iEvent_Index)
-			{//0.25
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (1 == m_iEvent_Index)
-			{//0.26
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (2 == m_iEvent_Index)
-			{//0.27
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (3 == m_iEvent_Index)
-			{//0.28
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (4 == m_iEvent_Index)
-			{//0.30
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (5 == m_iEvent_Index)
-			{//0.31
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (6 == m_iEvent_Index)
-			{//0.32
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (7 == m_iEvent_Index)
-			{//0.33
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (8 == m_iEvent_Index)
-			{//0.34
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (9 == m_iEvent_Index)
-			{//0.36
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (10 == m_iEvent_Index)
-			{//0.37
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
 			if (11 == m_iEvent_Index)
-			{//0.39
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (12 == m_iEvent_Index)
-			{//0.40
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (13 == m_iEvent_Index)
-			{//0.41
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (14 == m_iEvent_Index)
-			{//0.42
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (15 == m_iEvent_Index)
-			{//0.44
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (16 == m_iEvent_Index)
-			{//0.45
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (17 == m_iEvent_Index)
-			{//0.46
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (18 == m_iEvent_Index)
-			{//0.47
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (19 == m_iEvent_Index)
-			{//0.48
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (20 == m_iEvent_Index)
-			{//0.50
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (21 == m_iEvent_Index)
-			{//0.51
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (22 == m_iEvent_Index)
-			{//0.52
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
-					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
-			}
-			if (23 == m_iEvent_Index)
-			{//0.70
+			{//0.7
+				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
-				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom);
+			 
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = -1.f;
+				EffectWorldDesc.fScale = 1.5f;
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+
+				EffectWorldDesc.fScale = 1.f;
+				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.z = -2.f;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.dSpeed = 0.8;
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 #pragma endregion 평타콤보 끝
@@ -2601,21 +2500,19 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 	if (m_eCurAnimIndex == ANIM_RUN)
 		m_pTransformCom->LerpVector(vDir, 0.3f);
 
+	//==============================================================================
 
-	／／＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
-
-	_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	if (m_eCurAnimIndex == ANIM_COMBO_PIST)
-	{
-		m_dTimeAcc += dTimeDelta;
+	//_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	//if (m_eCurAnimIndex == ANIM_COMBO_PIST)
+	//{
+		//m_dTimeAcc += dTimeDelta;
 		///////////////////////////////////////////어택콜라이더 0.70 까지///////////////////////////////////////////////////////////
 		// Event_Time(타임델타, 부를시간, 누적시작)
-		if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
-		{
-			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
-				CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-		}
+		//if (Event_Time(dTimeDelta,0.250, m_dTimeAcc))
+		//{
+		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
+		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+		//}
 		//if (Event_Time(dTimeDelta,0.30, m_dTimeAcc))
 		//{
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
@@ -2733,9 +2630,9 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 		//	Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), 0.2,
 		//		CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 		//}
-	}
+	//}
 
-	／／＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	//==============================================================================
 
 
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO1, 2.f, 0.0, 0.3);
