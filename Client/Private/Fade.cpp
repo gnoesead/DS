@@ -304,6 +304,7 @@ void CFade::Fade_In(_double TimeDelta)
 		m_Alpha = 0.f;
 		CFadeManager::GetInstance()->Set_Fade_In(false);
 		CFadeManager::GetInstance()->Set_Fade_In_Done(true);
+
 	}
 
 	
@@ -324,6 +325,7 @@ void CFade::Fade_Out(_double TimeDelta)
 
 void CFade::Fade_OutIn(_double TimeDelta)
 {
+
 	m_Alpha += (_float)TimeDelta * 1.5f * m_Alpha_Dir * m_InOut_Speed;
 
 	if (m_Alpha >= 1.f)
@@ -356,6 +358,21 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_OutIn(false);
 		CFadeManager::GetInstance()->Set_Fade_OutIn_Done(true);
 		CFadeManager::GetInstance()->Set_Fade_Color(false);
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+			CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(true);
+		}
+		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Monster_Encounter() == true) {
+			CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(true);
+		}
+		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Boss_Encounter() == true) {
+			CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
+		}
+
+		Safe_Release(pGameInstance);
 	}
 
 

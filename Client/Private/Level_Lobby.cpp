@@ -1400,6 +1400,47 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+
+#pragma region ZENITSU
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_2_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_2_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_2_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_2_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_2_3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_2_3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_3_Slash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_3_Slash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_3_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_3_Slash");
+		return E_FAIL;
+	}
+
+	
+#pragma endregion
+
 	return 	S_OK;
 }
 

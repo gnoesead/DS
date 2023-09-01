@@ -458,7 +458,6 @@ void CCamera_Free::AdventureCamera(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(NewLook, New_t);
 
-	
 	Safe_Release(pGameInstance);
 }
 

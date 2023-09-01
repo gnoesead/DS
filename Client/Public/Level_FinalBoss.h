@@ -37,6 +37,13 @@ private:
 	HRESULT	Ready_Layer_Effect();
 	HRESULT LoadEffects(const _tchar* pPath);
 
+private:
+	_float m_Battle_TimeAcc = { 0.f };
+	_float m_Battle_MaxTime = { 2.f };
+	_float m_Battle_TimeDir = { 1.f };
+
+
+
 public:
 	static			CLevel_FinalBoss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void	Free() override;

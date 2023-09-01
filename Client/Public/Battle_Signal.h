@@ -51,6 +51,11 @@ public:
 private:
 	_float m_TimeAcc = { 0.f };
 
+	_bool m_Village_Battle_Start = { false };
+	_bool m_House_Mon_Battle_Start = { false };
+	_bool m_House_Boss_Battle_Start = { false };
+	_bool m_Train_Battle_Start = { false };
+	_bool m_Final_Battle_Start = { false };
 
 
 private:
