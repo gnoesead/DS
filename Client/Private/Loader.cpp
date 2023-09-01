@@ -48,9 +48,11 @@
 #include "Paper.h"
 
 
-
 #include "NPC_Female.h"
 #include "NPC_AdultM.h"
+#include "NPC_ChildF.h"
+#include "NPC_ChildM.h"
+
 
 #include "Sword.h"
 #include "SwordHome.h"
@@ -678,14 +680,20 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_AdultM");
 		return E_FAIL;
 	}
-	/*// Prototype_GameObject_NPC_ChildF 
+	// Prototype_GameObject_NPC_ChildF 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_ChildF"),
-		CNPC_AdultM::Create(m_pDevice, m_pContext))))
+		CNPC_ChildF::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_ChildF");
 		return E_FAIL;
-	}*/
-
+	}
+	// Prototype_GameObject_NPC_ChildM
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_ChildM"),
+		CNPC_ChildM::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_ChildM");
+		return E_FAIL;
+	}
 
 
 	/* Prototype_GameObject_Sword */
