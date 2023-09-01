@@ -231,6 +231,8 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 		}
 
 
+
+
 		/* Prototype_Component_Model_NPC_Female */
 		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_Female"),
@@ -239,15 +241,31 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
 			return E_FAIL;
 		}
-
 		/* Prototype_Component_Model_NPC_AdultM */
 		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_AdultM"),
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/NPC_AdultM/NPC_AdultM.bin", PivotMatrix))))
 		{
-			MSG_BOX("Failed to Add_Prototype_Model_NPC_Female");
+			MSG_BOX("Failed to Add_Prototype_Model_NPC_AdultM");
 			return E_FAIL;
 		}
+		/* Prototype_Component_Model_NPC_ChildM */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_ChildM"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/NPC_ChildM/NPC_ChildM.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_NPC_ChildM");
+			return E_FAIL;
+		}
+		/* Prototype_Component_Model_NPC_ChildF */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_NPC_ChildF"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/NPC_ChildF/NPC_ChildF.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_NPC_ChildF");
+			return E_FAIL;
+		}
+
 
 		/* Prototype_Component_Model_Monster_Spider */
 		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
