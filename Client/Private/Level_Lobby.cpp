@@ -1384,6 +1384,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Normal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Normal");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region COMMON

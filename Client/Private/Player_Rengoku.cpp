@@ -288,10 +288,14 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo3", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
 			}
-			else if (1 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.f);
@@ -313,6 +317,10 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		else if (ANIM_ATK_COMBO_NORMAL == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Normal", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.5f);

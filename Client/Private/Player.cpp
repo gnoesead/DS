@@ -1046,6 +1046,31 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 			m_Moveset.m_Down_ADV_Jump_To_Object = true;
 
 			m_eNextNavi = eNextNavi;
+
+			if (eNextNavi == NAVI_VILLAGE_INSIDEWALL1)
+			{
+				m_iSection = 4;
+				m_iSection_Sub = 4;
+			}
+			else if (eNextNavi == NAVI_VILLAGE_MAINROAD1)
+			{
+				if (m_isSection_RoofOn)
+				{
+					m_iSection = 3;
+					m_iSection_Sub = 3;
+				}
+				else
+				{
+					m_iSection = 2;
+					m_iSection_Sub = 1;
+				}
+			}
+			else if (eNextNavi == NAVI_VILLAGE_ROOF)
+			{
+				m_iSection = 2;
+				m_iSection_Sub = 3;
+				m_isSection_RoofOn = true;
+			}
 		}
 	}
 	else
