@@ -67,8 +67,6 @@ void CSwamp::Tick(_double TimeDelta)
 
 	Pattern_Setting(TimeDelta);
 
-
-
 	State_Setting(TimeDelta);
 
 	m_pTransformCom->Scaling(_float3(m_fSize, m_fSize, 1.f));
@@ -163,9 +161,9 @@ HRESULT CSwamp::SetUp_ShaderResources()
 
 void CSwamp::Position_Setting()
 {
-	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) ,3.4f + 0.001f * m_iNum);
+	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) ,3.3f + 0.001f * m_iNum);
 
-	if(STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
+	if( STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 }
@@ -188,9 +186,9 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_bWaterEffect = true;
 		}
 
-		if (m_fSize > 3.f)
+		if (m_fSize > 3.5f)
 		{
-			m_fSize = 3.f;
+			m_fSize = 3.5f;
 			m_eCurState = STATE_WAIT;
 			m_eCurPattern = PATTERN_NONE;
 			m_bWaterEffect = false;
@@ -199,7 +197,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		break;
 	case PATTERN_STEPOUT:
 		m_eCurState = STATE_DECREASING;
-		m_fScaleSpeed = 3.f;
+		m_fScaleSpeed = 3.5f;
 
 		if (!m_bWaterEffect)
 		{
@@ -261,6 +259,15 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_isDead = true;
 		}
 		break;
+	case PATTERN_THROWAWAY_NOWATEREEFCT:
+		m_eCurState = STATE_DECREASING;
+		m_fScaleSpeed = 2.f;
+
+		if (m_fSize < 0.001f)
+		{
+			m_isDead = true;
+		}
+		break;
 	case PATTERN_BIG:
 		m_eCurState = STATE_INCREASING;
 		m_fScaleSpeed = 8.f;
@@ -282,11 +289,24 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		m_eCurState = STATE_DECREASING;
 		m_fScaleSpeed = 15.f;
 
-		if (m_fSize < 3.f)
+		if (m_fSize < 3.5f)
 		{
-			m_fSize = 3.f;
+			m_fSize = 3.5f;
 			m_eCurState = STATE_WAIT;
 			m_eCurPattern = PATTERN_NONE;
+		}
+		break;
+	case PATTERN_TELEPORT:
+		m_eCurState = STATE_INCREASING;
+		m_fScaleSpeed = 8.f;
+
+		if (m_fSize > 3.5f)
+		{
+			m_fSize = 3.5f;
+
+			Create_WatterEffect();
+			m_bWaterEffect = true;
+			m_eCurPattern = PATTERN_SHORYU;
 		}
 		break;
 	default:
@@ -326,7 +346,7 @@ void CSwamp::Create_WatterEffect()
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);
 
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.1f, 0.8f, 0.00f, 0.f);
-	EffectDesc.vScale = _float3(-1.5f, 4.f, 1.f);
+	EffectDesc.vScale = _float3(-1.5f, 3.5f, 1.f);
 	EffectDesc.dDelay = 0.12;
 
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);

@@ -1199,6 +1199,8 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_dDelay_Teleporting = 0.0;
 		m_isFirst_Teleporting = true;
+
+		
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1222,6 +1224,10 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 		m_isTeleporting = true;
+
+		m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY_NOWATEREEFCT);
+
+		Create_MySwampEffect();
 	}
 
 	if (m_isTeleporting && iCurAnim == ANIM_SWAMP_IN)
@@ -1230,11 +1236,23 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.9f);
 
+		if (!m_bMakeNewSwamp)
+		{
+			if (m_dDelay_Teleporting > 0.1f)
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_TELEPORT);
+
+				m_bMakeNewSwamp = true;
+			}
+		}
+
 		if (m_dDelay_Teleporting > 0.6f)
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
 			m_isTeleporting = false;
 			m_dDelay_Teleporting = 0.0;
+
+			m_bMakeNewSwamp = false;
 		}
 	}
 
@@ -1246,9 +1264,10 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 			m_isFirst_Atk_0 = false;
 
 			Jumping(4.2f, 0.65f);
+
+	
 		}
 	}
-
 }
 
 void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)

@@ -231,6 +231,8 @@ private:
 private:
 	CSwamp* m_pMySwamp = { nullptr };
 
+	_bool	m_bMakeNewSwamp = { false };
+
 
 private:
 	HRESULT Add_Components();
