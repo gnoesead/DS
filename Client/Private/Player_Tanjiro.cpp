@@ -1784,7 +1784,11 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			Go_Straight_Constant(dTimeDelta, 2, 0.4f);
 		}
 	}
-
+	/*enum NAVI_TYPE { NAVI_VILLAGE_MAINROAD1,NAVI_VILLAGE_MAINROAD2, NAVI_VILLAGE_INSIDEWALL1,
+	NAVI_VILLAGE_INSIDEWALL2 , NAVI_VILLAGE_ROOF , NAVI_VILLAGE_WALL , NAVI_VILLAGE_BATTLE,
+	NAVI_HOUSE_0_0,NAVI_HOUSE_1_0,NAVI_HOUSE_1_1,NAVI_HOUSE_2_0,NAVI_HOUSE_3_0,NAVI_HOUSE_4_0, 
+	NAVI_TRAIN, NAVI_ACAZA, NAVI_END };
+*/
 	if (m_isPlayerStatus_OnRoof == false)
 	{
 		if (NAVI_VILLAGE_WALL == m_eNextNavi)
