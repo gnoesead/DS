@@ -221,14 +221,36 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = (g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * vSSAO)));
 
-	//Out.vShade = saturate(Out.vShade);
-	//Out.vShade = ceil(Out.vShade * 1.5) / 1.5f;
+	float fBrightness = dot(Out.vShade.rgb, float3(0.299, 0.587, 0.114)); // 밝기 계산 (RGB -> grayscale)
 
-	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
-		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + ((g_vLightAmbient * vSSAO)));
 
-////Out.vShade *= vSSAO;
-//Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+
+	/*if (fBrightness < 0.7)
+		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
+
+	else if(fBrightness < 0.5)
+		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
+
+		Out.vShade = saturate(Out.vShade * 0.5f);
+		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;*/
+
+
+		/*Out.vShade = saturate(Out.vShade);
+		if (Out.vShade.r < 0.71f && Out.vShade.g < 0.71f && Out.vShade.b < 0.71f)
+			Out.vShade.rgb = ceil(Out.vShade * 0.4f) / 0.4f;
+		else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+			Out.vShade.rgb = ceil(Out.vShade * 0.2f) / 0.2f;*/
+
+			/*else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+				Out.vShade.rgb = float3(0.5f, 0.5f, 0.5f);*/
+
+				/*else if ((Out.vShade.r >= 0.21f && Out.vShade.r < 0.41f) && (Out.vShade.g >= 0.21f && Out.vShade.g < 0.41f) && (Out.vShade.b >= 0.21f && Out.vShade.b < 0.41f))
+					Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
+				else if ((Out.vShade.r >= 0.41f && Out.vShade.r <= 1.f) && (Out.vShade.g >= 0.41f && Out.vShade.g <= 1.f) && (Out.vShade.b >= 0.41f && Out.vShade.b <= 1.f))
+					Out.vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
+
+
+
 	Out.vShade.a = 1.f;
 
 	vector      vReflect = reflect(normalize(g_vLightDir), vNormal);
