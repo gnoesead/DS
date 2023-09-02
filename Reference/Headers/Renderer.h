@@ -91,8 +91,8 @@ private:
 	HRESULT Render_CombineBlur();
 	HRESULT Render_Bloom();
 	HRESULT Render_NonBlend();
-	HRESULT Render_NonLight();
-	HRESULT Render_Blend();
+	HRESULT Render_EffectBloom();
+	HRESULT Render_EffectNoBloom();
 	HRESULT Render_Effect(); // Effect
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();
@@ -121,8 +121,8 @@ private:
 	D3D11_VIEWPORT			m_VP; // Shadow
 
 	_float					m_fSSAOBias = { 0.0003f };
-	_float					m_fSSAORadius = { 0.000005f };
-	//_float					m_fSSAORadius = { 0.0005f };
+	//_float					m_fSSAORadius = { 0.000005f };
+	_float					m_fSSAORadius = { 0.005f };
 public:
 	static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual CComponent* Clone(void* pArg) override;

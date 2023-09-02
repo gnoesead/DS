@@ -306,9 +306,9 @@ protected:
 
 protected:
 	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
+	_float	m_fOutlineThickness = 1.5f;
 	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
+	_float	m_fOutlineFaceThickness = 0.6f;
 
 protected:
 	// 맵 이동 변수(안원)
