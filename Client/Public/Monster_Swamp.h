@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Monster.h"
+#include "Swamp.h"
 
 BEGIN(Engine)
 
@@ -14,12 +15,12 @@ class CMonster_Swamp final : public CMonster
 public:
 	enum STATE { STATE_IDLE, STATE_ATTACK, STATE_HIT, STATE_DOWN, STATE_END };
 
-	enum PATTERN { 
+	enum PATTERN {
 		PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
 		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
 		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7, PATTERN_RAGE_PIOHYO = 8,
 		PATTERN_STEP = 9, PATTERN_RAGE_DUDUGE = 10, PATTERN_RAGE_DUDUGE_ATK = 11,
-		PATTERN_END 
+		PATTERN_END
 	};
 
 	enum ANIM {
@@ -32,7 +33,7 @@ public:
 		ANIM_ATK_CROSS = 10,
 		ANIM_ATK_COMBO = 11, //11~14, screw8
 		ANIM_ATK_SWAMP_SWIM = 15, // 15~17
-		ANIM_ATK_SHOT = 18, 
+		ANIM_ATK_SHOT = 18,
 		ANIM_ATK_JUMP_TO_SWAMP = 19, //19,21
 		ANIM_ATK_SHORYU_TO_SWAMP_0 = 22, // to jump
 		ANIM_ATK_SHORYU_TO_IDLE = 23,
@@ -48,7 +49,7 @@ public:
 		ANIM_IDLE = 35,
 		ANIM_SWAMP_IDLE = 36,
 		ANIM_SWAMP_IDLE_IN = 37,
-		
+
 		ANIM_RUN = 40, ANIM_RUN_END = 41,
 		ANIM_STEP_B = 42, ANIM_STEP_F = 43, ANIM_STEP_L = 46, ANIM_STEP_R = 50,
 
@@ -56,16 +57,16 @@ public:
 		ANIM_CROUCH = 45,
 		ANIM_STEP_SWAMPOUT = 47,
 		ANIM_STEP_SWAMPOUT_AIR = 48,
-		
+
 		ANIM_TURN_L_180 = 51, ANIM_TURN_L_90 = 52, ANIM_TURN_R_180 = 53, ANIM_TURN_R_90 = 54,
 		ANIM_TURN_L_SWAMP_180 = 55, ANIM_TURN_L_SWAMP_90 = 56, ANIM_TURN_R_SWAMP_180 = 57, ANIM_TURN_R_SWAMP_90 = 58,
-		
+
 		ANIM_WALK_B = 59, ANIM_WALK_B_END = 61,
 		ANIM_WALK_F = 62, ANIM_WALK_F_END = 64,
 		ANIM_WALK_L = 65, ANIM_WALK_L_END = 67,
 		ANIM_WALK_R = 68, ANIM_WALK_R_END = 70,
 
-		ANIM_DEATH = 71, 
+		ANIM_DEATH = 71,
 		ANIM_DEATH_IDLE = 72,
 		ANIM_DEATH_GETUP = 73,
 
@@ -74,7 +75,7 @@ public:
 		ANIM_DMG_BLOW = 85, // 85~87
 		ANIM_DMG_BLOW_GREAT = 88, //88,89
 		ANIM_DMG_BOUND = 90, // 이후 fall로 연계
-		
+
 		ANIM_DOWN_GETUP = 92, //92~94
 		ANIM_DOWN_IDLE = 95,
 		ANIM_DOWN_GETUP_MOVE = 96, // 96~97
@@ -144,6 +145,9 @@ private: //애니메이션 제어용 함수
 private:
 	void	Swamp_Create(_int iNumSwamp, _int iType);
 
+private:
+	void	Create_MySwampEffect();
+
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -151,6 +155,8 @@ private:
 	_bool	m_isTeleporting = { false };
 	_double m_dDelay_Teleporting = { 0.0 };
 	_bool	m_isFirst_Teleporting = { true };
+
+	_int	m_iDudugeIndex = { 0 };
 
 	_bool	m_isFirst_BattleOn = { true };
 
@@ -164,17 +170,17 @@ private: //애니메이션 제어용 변수들
 	_int	m_iIndex_Swamping = { 0 };
 	_int	m_iIndex_SwampShot = { 0 };
 	_int	m_iIndex_Rage = { 0 };
-	
+
 
 	//walk
 	_bool	m_isFirst_Walk_0 = { true };
 	_bool	m_isFirst_Walk_1 = { true };
 	_double	m_dDelay_Walk = { 0.0 };
 	_bool	m_isWalk_Back = { false };
-	
+
 	_bool	m_isFirst_Walk_Side = { true };
 	_bool	m_isWalk_Left = { false };
-	
+
 private:
 	//attack pattern
 	_bool	m_isFrist_Atk_Pattern = { true };
@@ -204,13 +210,13 @@ private:
 	//Hit_DMg_Combo
 	_double		m_dDelay_ComboChain = { 0.0 };
 	_int		m_iSmallHit_Index = { 0 };
-	
+
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
 
 	//Death
 	_bool		m_isSwamp_Deathing = { false };
-	
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
@@ -223,6 +229,9 @@ private:
 	_float	m_fOutlineThickness = 0.9f;
 	// Outline Face
 	_float	m_fOutlineFaceThickness = 0.3f;
+
+private:
+	CSwamp* m_pMySwamp = { nullptr };
 
 
 private:

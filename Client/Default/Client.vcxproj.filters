@@ -331,6 +331,12 @@
     <Filter Include="02. GameObjects\Character\NPC\NPC_ChildM">
       <UniqueIdentifier>{166c0673-b791-4883-a767-e5019c73952a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect">
+      <UniqueIdentifier>{f0385af9-dd1c-418c-9438-f8b82155a5b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect">
+      <UniqueIdentifier>{2515c59b-7822-49cd-bebb-134c3bdcd5b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -624,6 +630,12 @@
     <ClInclude Include="..\Public\NPC_ChildM.h">
       <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Swamp.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SwampWaterEffect.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -907,6 +919,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\NPC_ChildM.cpp">
       <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Swamp.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SwampWaterEffect.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
