@@ -422,14 +422,50 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0
 				CEffectPlayer::Get_Instance()->Play("Battle_ATK_SuperArmor_2", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.dSpeed = 0.75;
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Fist", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.fScale = 1.4f;
+				EffectWorldDesc.dSpeed = 1.5;
+				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index)
+			if (m_bMove == false)
+			{
+				if (1 == m_iEvent_Index)
+				{//0.1
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.fScale = 1.2f;
+					EffectWorldDesc.dSpeed = 1.3;
+					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
+			if (2 == m_iEvent_Index)
 			{//0.17
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BLOW, vMonsterDir, m_fBlowDmg);
 			}
+			if (m_bMove == false)
+			{
+				if (3 == m_iEvent_Index)
+				{//0.2
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.fScale = 1.1f;
+					EffectWorldDesc.dSpeed = 1.2;
+					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
 
+			if (m_bMove == false)
+			{
+				if (4 == m_iEvent_Index)
+				{//0.3
+					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom);
+				}
+			}
 		}
 #pragma endregion ´ë½ÃÆÝÄ¡ ³¡
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
@@ -745,6 +781,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.8f;
+
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			if (m_bSuperArmor == false)
@@ -765,6 +804,10 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					Jumping(0.2f, 0.030f);
 				/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
+
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+
 			}
 			else
 			{
@@ -785,8 +828,13 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -800,8 +848,10 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom , &EffectWorldDesc);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -818,8 +868,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}

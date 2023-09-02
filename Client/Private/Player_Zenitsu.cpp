@@ -1359,6 +1359,27 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 
+#pragma region GuardHit
+	if (m_isGuardHit)
+	{
+		m_isGuardHit = false;
+
+		m_pTransformCom->Set_Look(reverseAtkDir);
+
+		if (m_iGuardHit_Index == 0)
+		{
+			m_iGuardHit_Index++;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_SMALL);
+		}
+		else if (m_iGuardHit_Index == 1)
+		{
+			m_iGuardHit_Index = 0;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_BIG);
+		}
+	}
+#pragma endregion
+
+
 #pragma region Dmg_Small
 	if (m_Moveset.m_Down_Dmg_Small || m_Moveset.m_Down_Dmg_ConnectSmall)
 	{
@@ -1755,6 +1776,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		|| ANIM_BATTLE_GUARD_HIT_BIG == iCurAnimIndex || ANIM_BATTLE_GUARD_HIT_SMALL == iCurAnimIndex || ANIM_BATTLE_GUARD_PUSH == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isHitMotion = false;
 	}
 	//대시 시 제한
 	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 46 == iCurAnimIndex /* || 47 == iCurAnimIndex*/)

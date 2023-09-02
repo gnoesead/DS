@@ -276,6 +276,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
+	/*
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
 	    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
 	{
@@ -284,6 +285,13 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	}
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+		return E_FAIL;
+	}*/
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+		TEXT("Prototype_GameObject_Player_Rengoku"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
@@ -1647,6 +1655,15 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Fist.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Fist");
+		return E_FAIL;
+	} if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Wind");
 		return E_FAIL;
 	}
 

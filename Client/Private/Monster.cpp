@@ -46,8 +46,6 @@ void CMonster::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-
-
 }
 
 void CMonster::LateTick(_double dTimeDelta)
@@ -60,6 +58,7 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
+
 	return S_OK;
 }
 
