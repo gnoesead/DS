@@ -479,7 +479,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Moster(const _tchar* pLayerTag)
 		}
 	}*/
 	
-	
 	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 140.f, 1.f);
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))

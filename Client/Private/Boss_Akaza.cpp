@@ -454,7 +454,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				{//0.2
 					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 					EffectWorldDesc.fScale = 1.1f;
-					EffectWorldDesc.fScale = 1.1f;
 					EffectWorldDesc.dSpeed = 1.2;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
 				}
