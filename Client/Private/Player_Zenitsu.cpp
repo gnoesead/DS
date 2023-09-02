@@ -320,7 +320,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_0", m_pTransformCom , &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -335,7 +335,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
@@ -350,7 +350,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			else if (1 == m_iEvent_Index)
@@ -363,7 +363,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
 			}
 			else if (2 == m_iEvent_Index)
@@ -374,7 +374,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -402,20 +402,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_3_Wind", m_pTransformCom, &EffectWorldDesc2);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.2f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f);
 			}
 			else if (1 == m_iEvent_Index) {
 
-				/*CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.fScale = 1.8f;
-				EffectWorldDesc.vPosition.x = 1.3f;
-				EffectWorldDesc.vPosition.y = 0.33f;
 				
-				if (m_Moveset.m_iAwaken == 0)
-					CEffectPlayer::Get_Instance()->Play("Zen_3_Wind", m_pTransformCom, &EffectWorldDesc);
-				else
-					CEffectPlayer::Get_Instance()->Play("Zen_3_Wind", m_pTransformCom, &EffectWorldDesc);*/
 
 			}
 
@@ -478,6 +470,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
@@ -492,17 +485,53 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATK_AIRCOMBO == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			// Small_1
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += -0.3f;
+				EffectWorldDesc.vPosition.z += -0.3f;
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f);
 			}
+
+			
+
 		}
 		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+
+			// Small_2
 			if (0 == m_iEvent_Index)
 			{
+				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.z += -0.3f;
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+
+			}
+			// Big
+			if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.0f);
