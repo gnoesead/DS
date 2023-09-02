@@ -332,7 +332,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
