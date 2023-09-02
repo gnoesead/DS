@@ -38,6 +38,10 @@ protected: // Calculate
 	_bool Check_Distance(_float fDistance);
 	_bool Check_Distance_FixY(_float fDistance);
 	_bool Check_Player_Y();
+	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
+		return dTime < dTimeAcc&& dTimeAcc <= dTime + dTimeDelta;
+	}
+
 	_vector Calculate_PlayerPos();
 	_float Calculate_Distance();
 	_vector Calculate_Dir();
