@@ -1364,6 +1364,27 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 
+#pragma region GuardHit
+	if (m_isGuardHit)
+	{
+		m_isGuardHit = false;
+
+		m_pTransformCom->Set_Look(reverseAtkDir);
+
+		if (m_iGuardHit_Index == 0)
+		{
+			m_iGuardHit_Index++;
+			m_pModelCom->Set_Animation(ANIM_GUARD_HIT_SMALL);
+		}
+		else if (m_iGuardHit_Index == 1)
+		{
+			m_iGuardHit_Index = 0;
+			m_pModelCom->Set_Animation(ANIM_GUARD_HIT_BIG);
+		}
+	}
+#pragma endregion
+
+
 #pragma region Dmg_Small
 	if (m_Moveset.m_Down_Dmg_Small || m_Moveset.m_Down_Dmg_ConnectSmall)
 	{
@@ -1520,8 +1541,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_DMG_FALL, 0.4f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 71, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_DMG_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 71, 0.2f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(71, 72);
 #pragma endregion
@@ -1670,6 +1691,7 @@ void CPlayer_Rengoku::Moving_Restrict()
 		|| ANIM_GUARD_HIT_BIG == iCurAnimIndex || ANIM_GUARD_HIT_SMALL == iCurAnimIndex || ANIM_GUARD_PUSH == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isHitMotion = false;
 	}
 	//대시 시 제한
 	else if (ANIM_DASH_RUN == iCurAnimIndex || 41 == iCurAnimIndex /* || 42 == iCurAnimIndex */ )

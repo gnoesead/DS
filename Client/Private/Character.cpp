@@ -317,14 +317,18 @@ void CCharacter::Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _floa
 	}
 }
 
-void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir)
+void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir, _bool	bIsNaviOff)
 {
 	//서서히 느려지는 Transform 이동
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		if(bIsNaviOff == false)
+			m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
+		else
+			m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir));
+
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
