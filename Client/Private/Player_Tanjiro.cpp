@@ -1428,6 +1428,27 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 
+#pragma region GuardHit
+	if (m_isGuardHit)
+	{
+		m_isGuardHit = false;
+
+		m_pTransformCom->Set_Look(reverseAtkDir);
+		
+		if (m_iGuardHit_Index == 0)
+		{
+			m_iGuardHit_Index++;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_SMALL);
+		}
+		else if (m_iGuardHit_Index == 1)
+		{
+			m_iGuardHit_Index = 0;
+			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_BIG);
+		}
+	}
+#pragma endregion
+
+
 #pragma region Dmg_Small
 	if (m_Moveset.m_Down_Dmg_Small || m_Moveset.m_Down_Dmg_ConnectSmall)
 	{
@@ -1584,8 +1605,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.4f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 125, 0.4f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.3f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 125, 0.3f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(125, 126);
 #pragma endregion
@@ -2044,6 +2065,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| ANIM_BATTLE_GUARD_HIT_BIG == iCurAnimIndex || ANIM_BATTLE_GUARD_HIT_SMALL == iCurAnimIndex || ANIM_BATTLE_GUARD_PUSH == iCurAnimIndex)
 	{
 		m_Moveset.m_isRestrict_Move = true;
+		m_Moveset.m_isHitMotion = false;
 	}
 	//대시 시 제한
 	else if (ANIM_BATTLE_DASH == iCurAnimIndex || 80 == iCurAnimIndex /* || 81 == iCurAnimIndex */ )

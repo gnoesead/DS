@@ -17,6 +17,8 @@
 
 #include "Swamp.h"
 
+#include "Fade_Manager.h"
+
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -87,23 +89,16 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
+	
 
-	//Cheat
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	if (CFadeManager::GetInstance()->Get_Is_Village_Battle_Start())
 	{
-		CMonsterManager::GetInstance()->Get_BattleOn();
-
-		if (CMonsterManager::GetInstance()->Get_BattleOn())
-			CMonsterManager::GetInstance()->Set_BattleOn(false);
-		else
+		if (m_isFirst_BattleOn)
+		{
+			m_isFirst_BattleOn = false;
 			CMonsterManager::GetInstance()->Set_BattleOn(true);
-	}
-	Safe_Release(pGameInstance);
+		}
 
-	if (CMonsterManager::GetInstance()->Get_BattleOn())
-	{
 		Trigger();
 		Animation_Control(dTimeDelta);
 	}
@@ -546,7 +541,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_eCurPattern = PATTERN_RAGE_DUDUGE;
 	}
-	/*
+	
 	//레이지 모드
 	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
@@ -870,7 +865,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 				}
 			}
 		}
-	}*/
+	}
 
 	Safe_Release(pGameInstance);
 }
@@ -1822,6 +1817,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_DEATH);
 				m_isDeath_Motion = true;
+
+				CMonsterManager::GetInstance()->Set_BattleOn(false);
 			}
 		}
 	}

@@ -158,6 +158,8 @@ private:
 
 	_int	m_iDudugeIndex = { 0 };
 
+	_bool	m_isFirst_BattleOn = { true };
+
 private: //애니메이션 제어용 변수들
 	STATE	m_eCurState = { STATE_IDLE };
 	PATTERN	m_eCurPattern = { PATTERN_END };
