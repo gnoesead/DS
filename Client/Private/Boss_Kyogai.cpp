@@ -303,7 +303,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-
+			Trigger_AtkPangPang();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
@@ -394,7 +394,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATKCMB3 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			switch (m_eCurPhase)
-			{			
+			{
 			case CBoss_Kyogai::PHASE_1:
 			{
 				if (0 == m_iEvent_Index)	// 0.0
@@ -417,7 +417,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 				}
 			}
-				break;
+			break;
 			case CBoss_Kyogai::PHASE_2:
 			{
 				if (0 == m_iEvent_Index)	// 0.0
@@ -446,15 +446,25 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					vVerticalDir = Rotation_Dir(vVerticalDir, 40.f);
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), 4.0,
-						CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET , "Kyogai_BladeAtk");
+						CAtkCollider::TYPE_SMALL, vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET, "Kyogai_BladeAtk");
+					Create_AlertRect(BLADE_ONE_RANDOM);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), 4.0,
+						CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET, "Kyogai_BladeAtk");
+					Create_AlertRect(BLADE_ONE_RANDOM);
+
+					vVerticalDir = Rotation_Dir(vVerticalDir, 40.f);
+
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), 4.0,
+						CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET, "Kyogai_BladeAtk");
 					Create_AlertRect(BLADE_ONE_RANDOM);
 				}
 			}
-				break;
+			break;
 			default:
 				break;
 			}
-			
+
 		}
 
 		if (ANIM_ATKCMB_02LOOP == m_pModelCom->Get_iCurrentAnimIndex())
@@ -468,21 +478,21 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom, &EffectWorldDesc);
 
-				dLongLifeTime = 3.0;
+				dLongLifeTime = 4.0;
 				if (m_iLoopCount == 0)
 				{
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.5f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-					///*Create_AlertRect(BLADE_FIVE_FRONT);
-					//Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);*/
-
+					Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir, 8.5f);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);
+					
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.5f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-					/*Create_AlertRect(BLADE_FIVE_FRONT);
-					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);*/
+					Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir, 8.5f);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);
 				}
 				if (m_iLoopCount == 1)
 				{
@@ -490,21 +500,24 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-					/*Create_AlertRect(BLADE_FIVE_FRONT);
-					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+					Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					/*Create_AlertRect(BLADE_FIVE_FRONT);
-					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
+					Create_AlertRect(BLADE_FIVE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 				}
 				if (m_iLoopCount == 2)
 				{
 					vMonsterDir = Rotation_Dir(vMonsterDir, 20.f, 0.f);
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
+					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 				if (m_iLoopCount == 3)
@@ -512,7 +525,10 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					vMonsterDir = Rotation_Dir(vMonsterDir, 60.f, 0.f);
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
+					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 
@@ -533,43 +549,43 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.5f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					/*Create_AlertRect(BLADE_FIVE_FRONT);
-					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);*/
+					Create_AlertRect(BLADE_FIVE_RANDOM, vHorizonDir, 8.5f);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);
 
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.5f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					/*Create_AlertRect(BLADE_FIVE_FRONT);
-					Create_BladeEffect(BLADE_FIVE_FRONT, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);*/
+					Create_AlertRect(BLADE_FIVE_RANDOM, vHorizonDir, -8.5f);
+					Create_BladeEffect(BLADE_FIVE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, -8.5f);
 				}
 				if (m_iLoopCount == 1)
 				{
-					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
-
+					
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
+					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 				if (m_iLoopCount == 2)
-				{
-					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(6.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				{					
 					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
+					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
+					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
 				}
 				if (m_iLoopCount == 3)
-				{
-					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(12.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
+				{					
 					vMonsterDir = Rotation_Dir(vMonsterDir, 80.f, 0.f);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
+					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 			}
@@ -607,7 +623,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
-					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+					CAtkCollider::TYPE_BOUND, vMonsterDir, m_fBigDmg);
 
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
 			}
@@ -635,7 +651,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), dLifeTime,
-					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
+					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 
@@ -1168,6 +1184,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_ATKSK:
 		Update_AtkSk(dTimeDelta);
 		break;
+	case CBoss_Kyogai::STATE_ATKPANGPANG:
+		Update_AtkPangPang(dTimeDelta);
+		break;
 	case CBoss_Kyogai::STATE_HIT_SMALL:
 		Update_Hit_Small(dTimeDelta);
 		break;
@@ -1284,10 +1303,9 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bFirstAwake == false)
 	{
 		m_bFirstAwake = true;
-		//m_bAwake = true;
 		m_bTrigger = false;
-		m_iTriggerCnt = 1;
-		m_dAwakeTime = 0.0;
+		m_iTriggerCnt = 9;
+		
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
@@ -1317,7 +1335,31 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			case 1:
 				Trigger_Interact();
 				break;
-
+			case 2:
+				Trigger_AtkStep();
+				break;
+			case 3:
+				Trigger_JumpStep();
+				break;
+			case 4:
+				Trigger_AtkSk();
+				break;
+			case 5:
+				Trigger_AtkPunch();
+				break;
+			case 6:
+				Trigger_StompKick();
+				break;
+			case 7:
+				Trigger_AtkCmb2();
+				break;
+			case 8:
+				Trigger_LinkerCmb();
+				break;
+			case 9:
+				Trigger_AtkSkCmb();
+				break;
+				
 
 			}
 		}
@@ -1368,7 +1410,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 	{
 		_float fDistance = Calculate_Distance();
 		m_dTriggerTime += dTimeDelta;
-		if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
+		if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
 			m_iIdleCnt++;
 
 		if (m_iIdleCnt == 1)
@@ -1427,7 +1469,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		if (m_bPatternStart == false)
 		{
 			m_dTriggerTime += dTimeDelta;
-			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1450,70 +1492,57 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.30, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
 			{
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
-				m_iRandomPatternNum = Random::Generate_Int(1, 16);
 
-				if (fDistance <= 7.f)
+				m_iRandomPatternNum = Random::Generate_Int(2, 8);
+
+
+				if (fDistance > 7.f) //멀 때
 				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 12)
-					{
-						m_iTriggerCnt = 8;
-						m_bTrigger = false;
-					}
-					if (12 <= m_iRandomPatternNum && m_iRandomPatternNum <= 16)
-					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
-					}
+					m_iTriggerCnt = 3;
+					m_bTrigger = false;
+
 				}
-				if (fDistance > 7.f)
+				if (fDistance <= 7.f) // 가까울 때
 				{
-					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 3)
-					{
-						m_iTriggerCnt = 1;
-						m_bTrigger = false;
-					}
-					if (3 <= m_iRandomPatternNum && m_iRandomPatternNum < 5)
+					if (m_iRandomPatternNum == 2)
 					{
 						m_iTriggerCnt = 2;
 						m_bTrigger = false;
 					}
-					if (5 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
-					{
-						m_iTriggerCnt = 3;
-						m_bTrigger = false;
-					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 9)
+					if (m_iRandomPatternNum == 3)
 					{
 						m_iTriggerCnt = 4;
 						m_bTrigger = false;
 					}
-					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum < 11)
+					if (m_iRandomPatternNum == 4)
 					{
 						m_iTriggerCnt = 5;
 						m_bTrigger = false;
 					}
-					if (11 <= m_iRandomPatternNum && m_iRandomPatternNum < 13)
+					if (m_iRandomPatternNum == 5)
 					{
 						m_iTriggerCnt = 6;
 						m_bTrigger = false;
 					}
-					if (13 <= m_iRandomPatternNum && m_iRandomPatternNum < 15)
+					if (m_iRandomPatternNum == 6)
 					{
 						m_iTriggerCnt = 7;
 						m_bTrigger = false;
 					}
-					if (15 <= m_iRandomPatternNum && m_iRandomPatternNum <= 16)
+					if (m_iRandomPatternNum == 7)
 					{
 						m_iTriggerCnt = 8;
 						m_bTrigger = false;
 					}
+
+
 				}
 			}
 		}
@@ -1691,6 +1720,14 @@ void CBoss_Kyogai::Trigger_AtkSk()
 	m_eCurstate = STATE_ATKSK;
 	m_bAnimFinish = false;
 	m_iLoopCount = 0;
+}
+
+void CBoss_Kyogai::Trigger_AtkPangPang()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_ATKPANGPANG;
+	m_bAnimFinish = false;
+	m_bSuperArmor = true;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Small()
@@ -2025,11 +2062,26 @@ void CBoss_Kyogai::Update_StompKick(_double dTimeDelta)
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_STOMPKICK;
 	}
-	if (m_pModelCom->Get_AnimFinish(ANIM_STOMPKICK))
+
+	if (Check_Player_Y() == true)
 	{
-		m_pModelCom->Set_AnimisFinish(ANIM_STOMPKICK);
-		m_eCurAnimIndex = ANIM_IDLE;
-		Trigger_Interact();
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_STOMPKICK, 0.87, dTimeDelta))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_STOMPKICK);
+			m_eCurAnimIndex = ANIM_IDLE;
+
+			Trigger_AtkPangPang();
+		}
+	}
+	else
+	{
+		if (m_pModelCom->Get_AnimFinish(ANIM_STOMPKICK))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_STOMPKICK);
+			m_eCurAnimIndex = ANIM_IDLE;
+
+			Trigger_Interact();
+		}
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_STOMPKICK, 0.380, dTimeDelta))
 	{
@@ -2193,6 +2245,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 				m_eCurAnimIndex = ANIM_ATKSK_RF;
 				m_bTurn = true;
 				m_bTurnRF = true;
+				m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 			}
 		}
 		else
@@ -2296,21 +2349,42 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		Trigger_AtkSk();
 	}
 
-	if (0.5 < m_dTurnTime && m_dTurnTime <= 0.5 + dTimeDelta) // 맨처음
+	if (Event_Time(dTimeDelta, 0.5, m_dTurnTime)) // 맨처음
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnRB = true;
-	if (6.0 < m_dTurnTime && m_dTurnTime <= 6.0 + dTimeDelta) // 첫방
+	}
+	if (Event_Time(dTimeDelta, 6.0, m_dTurnTime)) // 첫방
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnRB = true;
-	if (11.5 < m_dTurnTime && m_dTurnTime <= 11.5 + dTimeDelta)
+	}
+	if (Event_Time(dTimeDelta, 11.5, m_dTurnTime))
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnRF = true;
-	if (24.0 < m_dTurnTime && m_dTurnTime <= 24.0 + dTimeDelta)
+	}
+	if (Event_Time(dTimeDelta, 24.0, m_dTurnTime))
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnLF = true;
-	if (29.5 < m_dTurnTime && m_dTurnTime <= 29.5 + dTimeDelta)
+	}
+	if (Event_Time(dTimeDelta, 29.5, m_dTurnTime))
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnRB = true;
-	if (35.0 < m_dTurnTime && m_dTurnTime <= 35.0 + dTimeDelta)
+	}
+	if (Event_Time(dTimeDelta, 35.0, m_dTurnTime))
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnRF = true;
-	if (40.5 < m_dTurnTime && m_dTurnTime <= 40.5 + dTimeDelta)
+	}
+	if (Event_Time(dTimeDelta, 40.5, m_dTurnTime))
+	{
+		m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		m_bTurnLF = true;
-	if (53.0 < m_dTurnTime && m_dTurnTime <= 53.0 + dTimeDelta) // 맨 마지막
+	}
+	if (Event_Time(dTimeDelta, 53.0, m_dTurnTime)) // 맨 마지막
 		m_bTurnRB = true;
 
 	_vector vMonsterLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -2348,6 +2422,22 @@ void CBoss_Kyogai::Update_AtkSk(_double dTimeDelta)
 			Trigger_Interact();
 		}
 
+	}
+}
+
+void CBoss_Kyogai::Update_AtkPangPang(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_ATKCMBW05;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMBW05))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKCMBW05);
+		m_eCurAnimIndex = ANIM_IDLE;
+
+		Trigger_Interact();
 	}
 }
 
@@ -2453,97 +2543,100 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir, _float 
 
 	CAlertRect::EFFECTDESC EffectDesc;
 	EffectDesc.bLiarColor = bLiarColor;
-
+	
 	CRoomSmoke::EFFECTDESC SmokeEffectDesc;
 	SmokeEffectDesc.eType = CRoomSmoke::TYPE_PART;
 
-	switch (eBladeType)
+	for (size_t i = 0; i < 2; i++)
 	{
-	case BLADE_ONE_RANDOM:
-	{
-		EffectDesc.vLook = pAtkCollider->Get_Dir();
 
-		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
-
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
-
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-	}
-	break;
-
-	case BLADE_THREE_RANDOM:
-	case BLADE_THREE_FRONT:
-	{
-		if (eBladeType == BLADE_THREE_RANDOM)
+		switch (eBladeType)
+		{
+		case BLADE_ONE_RANDOM:
+		{
 			EffectDesc.vLook = pAtkCollider->Get_Dir();
-		else if (BLADE_THREE_FRONT)
-			EffectDesc.vLook = vDir;
 
-		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
+			_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
 
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
 
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-		SmokeEffectDesc.vPos = EffectDesc.vPos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-		SmokeEffectDesc.vPos = EffectDesc.vPos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
-	}
-	break;
-	case BLADE_FIVE_RANDOM:
-	case BLADE_FIVE_FRONT:
-	{
-		if (eBladeType == BLADE_FIVE_RANDOM)
-			EffectDesc.vLook = pAtkCollider->Get_Dir();
-		else if (BLADE_FIVE_FRONT)
-			EffectDesc.vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
-		_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
-
-		EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 1.6f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
-
-		EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 1.6f) + vNormalVector * fMovePos;
-		pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false); }
-	break;
-	default:
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		}
 		break;
-	}
 
+		case BLADE_THREE_RANDOM:
+		case BLADE_THREE_FRONT:
+		{
+			if (eBladeType == BLADE_THREE_RANDOM)
+				EffectDesc.vLook = pAtkCollider->Get_Dir();
+			else if (BLADE_THREE_FRONT)
+				EffectDesc.vLook = vDir;
+
+			_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
+
+			EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+			SmokeEffectDesc.vPos = EffectDesc.vPos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+			SmokeEffectDesc.vPos = EffectDesc.vPos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_RoomSmoke"), &SmokeEffectDesc, false);
+		}
+		break;
+		case BLADE_FIVE_RANDOM:
+		case BLADE_FIVE_FRONT:
+		{
+			if (eBladeType == BLADE_FIVE_RANDOM)
+				EffectDesc.vLook = pAtkCollider->Get_Dir();
+			else if (BLADE_FIVE_FRONT)
+				EffectDesc.vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+			_vector vNormalVector = XMVector3Normalize(XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), EffectDesc.vLook));
+
+			EffectDesc.vPos = dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 0.8f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) + vNormalVector * 1.6f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 0.8f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false);
+
+			EffectDesc.vPos = (dynamic_cast<CTransform*>(pAtkCollider->Get_Component(TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION) - vNormalVector * 1.6f) + vNormalVector * fMovePos;
+			pGameInstance->Add_GameObject(iCurLevel, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertRect"), &EffectDesc, false); }
+		break;
+		default:
+			break;
+		}
+	}
 
 	Safe_Release(pGameInstance);
 }
@@ -2640,8 +2733,6 @@ void CBoss_Kyogai::Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _doub
 		break;
 	}
 
-
-
 }
 
 void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
@@ -2651,12 +2742,13 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 
 	_uint iCurLevel = pGameInstance->Get_CurLevelIdx();
 	CRotationMapObject* pRotationMapObject = dynamic_cast<CRotationMapObject*>(pGameInstance->Get_GameObject(iCurLevel, TEXT("Layer_MapObject"), 101));
-	if (true == m_bTurnRF || true == m_bTurnLF || true == m_bTurnRB || true == m_bTurnLB)
-	{
-		m_dTimeAcc += dTimeDelta;
-	}
 
-	if (2.0 < m_dTimeAcc && m_dTimeAcc <= 2.0 + dTimeDelta)
+	if (true == m_bTurnRF || true == m_bTurnLF || true == m_bTurnRB || true == m_bTurnLB)
+		m_dTimeAcc += dTimeDelta;
+
+
+
+	if (Event_Time(dTimeDelta, 2.0, m_dTimeAcc))
 	{
 		for (_uint i = 0; i < 70; ++i)
 		{
@@ -2671,24 +2763,28 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 		m_dTimeAcc = 0.0;
 		m_bTurnRF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_PLUS);
+		
 	}
 	if (true == m_bTurnLF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_MINUS);
+		
 	}
 	if (true == m_bTurnRB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_PLUS);
+		
 	}
 	if (true == m_bTurnLB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_MINUS);
+		
 	}
 
 	Safe_Release(pGameInstance);
