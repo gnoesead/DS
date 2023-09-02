@@ -182,7 +182,7 @@ PS_OUT  PS_DIFFUSE(PS_IN In)
 	Out.vDiffuse = vMtrlDiffuse;
 
 	Out.vDiffuse.a *= g_fAlpha;
-
+	 
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
 
@@ -1202,6 +1202,15 @@ PS_OUT PS_DIFFUSESPRITE(PS_IN In)
 	In.vTexUV.x *= g_vFlip.x;
 	In.vTexUV.y *= g_vFlip.y;
 
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
 	float UVX = In.vTexUV.x;
 	float UVY = In.vTexUV.y;
 
@@ -1263,6 +1272,15 @@ PS_OUT PS_MASKCOLORSPRITE(PS_IN In)
 
 	In.vTexUV.x *= g_vFlip.x;
 	In.vTexUV.y *= g_vFlip.y;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
 
 	float UVX = In.vTexUV.x;
 	float UVY = In.vTexUV.y;
@@ -1326,6 +1344,15 @@ PS_OUT PS_MASKRAMPSPRITE(PS_IN In)
 	In.vTexUV.x *= g_vFlip.x;
 	In.vTexUV.y *= g_vFlip.y;
 
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
 	float UVX = In.vTexUV.x;
 	float UVY = In.vTexUV.y;
 
@@ -1384,6 +1411,181 @@ PS_OUT PS_MASKRAMPSPRITE(PS_IN In)
 
 	Out.vDiffuse = vRamp;
 	Out.vDiffuse.a = vMask.r * g_fAlpha;
+
+	return Out;
+}
+
+
+PS_OUT PS_MASKRAMPSPRITE_DISSOLVE(PS_IN In)
+{
+	PS_OUT Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
+		g_vCurTile.y + UVY * g_vTileSize.y);
+
+	vector vMask = g_MaskTexture.Sample(LinearSampler, spriteUV);
+	vector vRamp;
+
+	if (g_vGradientOffset.x <= vMask.r && g_vGradientTilling.x >= vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r, 0.f));
+	else if (g_vGradientTilling.x < vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientTilling.x, 0.f));
+	else if (g_vGradientOffset.x > vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientOffset.x, 0.f));
+
+	Out.vDiffuse = vRamp;
+	Out.vDiffuse.a = vMask.r * g_fAlpha;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
+
+	return Out;
+}
+
+
+PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
+		g_vCurTile.y + UVY * g_vTileSize.y);
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
+
+	if (vMtrlDiffuse.r < 0.1)
+		discard;
+
+	vMtrlDiffuse.a = vMtrlDiffuse.r;
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	Out.vDiffuse.a *= g_fAlpha;
+
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
 
 	return Out;
 }
@@ -1628,9 +1830,9 @@ technique11 DefaultTechnique
 
 	pass DiffuseSprite		// 18
 	{
-		SetRasterizerState(RS_CULL_NONE);
+		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable, 0);
+		SetDepthStencilState(DS_Default, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -1641,9 +1843,9 @@ technique11 DefaultTechnique
 
 	pass MaskColorSprite		// 19
 	{
-		SetRasterizerState(RS_CULL_NONE);
+		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable, 0);
+		SetDepthStencilState(DS_Default, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -1654,6 +1856,32 @@ technique11 DefaultTechnique
 
 	pass MaskRampSprite		// 20
 	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE();
+	}
+
+	pass DiffuseCalcRedDissolveSpriteNoZWrite		// 21
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE();
+	}
+
+	pass MaskRampSpriteDissolve		// 22
+	{
 		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable, 0);
@@ -1662,6 +1890,6 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		HullShader = NULL;
 		DomainShader = NULL;
-		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE();
+		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE_DISSOLVE();
 	}
 }

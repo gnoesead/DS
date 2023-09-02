@@ -253,7 +253,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 				if (OPT_NO_ZWRITE != m_eEffectDesc.eTextureShaderOption[TEX_MASK])
 					m_iPassIndex = 15;
 				else
+				{
 					m_iPassIndex = 16;
+
+					if (m_eEffectDesc.isTextureSheetAnimation)
+						m_iPassIndex = 21;
+				}
 			}
 		}
 
@@ -286,7 +291,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 		if (nullptr != m_pTextures[TEX_NOISE])
 		{
 			if (nullptr != m_pTextures[TEX_RAMP])
-				m_iPassIndex = 13;
+			{
+				if (m_eEffectDesc.isTextureSheetAnimation)
+					m_iPassIndex = 22;
+				else
+					m_iPassIndex = 13;
+			}
 			else
 				m_iPassIndex = 7;
 		}

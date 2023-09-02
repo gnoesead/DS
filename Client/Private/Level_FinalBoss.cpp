@@ -1649,6 +1649,15 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Fist.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Fist");
+		return E_FAIL;
+	} if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Wind");
+		return E_FAIL;
+	}
 
 	return 	S_OK;
 }
