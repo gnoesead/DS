@@ -78,7 +78,10 @@ HRESULT CNPC_ChildF::Initialize(void* pArg)
 
 void CNPC_ChildF::Tick(_double dTimeDelta)
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	Find_Section();
+
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		__super::Tick(dTimeDelta);
 
@@ -103,7 +106,8 @@ void CNPC_ChildF::Tick(_double dTimeDelta)
 
 void CNPC_ChildF::LateTick(_double dTimeDelta)
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		__super::LateTick(dTimeDelta);
 
@@ -118,7 +122,8 @@ void CNPC_ChildF::LateTick(_double dTimeDelta)
 
 HRESULT CNPC_ChildF::Render()
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
