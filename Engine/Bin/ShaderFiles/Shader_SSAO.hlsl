@@ -137,28 +137,36 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 float m_TexW = 1280.f;
 float m_TexH = 720.f;
 
-static const float Weight[13] =
+//static const float Weight[13] =
+//{
+//	/*0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
+//	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561*/
+//	 0.002216,
+//	0.008764,
+//	0.026995,
+//	0.064759,
+//	0.120985,
+//	0.176033,
+//	0.199471,
+//	0.176033,
+//	0.120985,
+//	0.064759,
+//	0.026995,
+//	0.008764,
+//	0.002216,
+//	//0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462, 2, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122
+//
+//
+//};
+static const float Weight[25] =
 {
-	/*0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231,
-	1, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561*/
-	 0.002216,
-	0.008764,
-	0.026995,
-	0.064759,
-	0.120985,
-	0.176033,
-	0.199471,
-	0.176033,
-	0.120985,
-	0.064759,
-	0.026995,
-	0.008764,
-	0.002216,
-	//0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462, 2, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122
-
-
+	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
+	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706, 0.1122,
+	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
+	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706
 };
-static const float Total = /*6.2108*/ 1.00000012 /*12.4216*/;
+static const float Total = /*6.2108*//* 1.00000012*/ /*12.4216*/22.799;
+
 //static const float Total = 2.636;
 //static const float FinalWeight[7] =
 //{
@@ -188,13 +196,14 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	float	tu = 1.f / m_TexW;
 
-	for (int i = -6; i < 6; ++i)
+	for (int i = -12; i < 12; ++i)
 	{
 		uv = t + float2(tu * i, 0);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
 	Out.vColor /= Total;
+
 
 
 	if (Out.vColor.a == 0.f)
@@ -218,15 +227,13 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	float tv = 1.f / (m_TexH / 2.f);
 
-	for (int i = -6; i < 6; ++i)
+	for (int i = -12; i < 12; ++i)
 	{
 		uv = t + float2(0, tv * i);
-		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
+		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-
 	Out.vColor /= Total;
-
 
 	if (Out.vColor.a == 0.f)
 		discard;
