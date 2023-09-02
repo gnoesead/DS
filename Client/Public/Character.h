@@ -36,6 +36,7 @@ public:
 		_uint           Dialog_Type = { 99 };
 		_bool           Interaction = { false };
 
+		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:inside
 
 		_float4			WalkSpot[3];
 	}NPCDESC;
@@ -117,7 +118,7 @@ protected:
 	void	Go_Backward_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Left_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
 	void	Go_Right_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease);
-	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir);
+	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir, _bool	bIsNaviOff = false);
 
 	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn = false);
 	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed , _bool bIsJumpOn = false);

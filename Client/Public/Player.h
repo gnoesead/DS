@@ -152,7 +152,8 @@ public:
 	_bool	Get_LockOn_MonPos();
 	_float	Get_Distance_To_LockOnPos();
 	_vector Get_Dir_To_LockOnPos();
-	
+	_int	Get_Section() { return m_iSection; }
+	_int	Get_Section_Sub() { return m_iSection_Sub; }
 
 	//히트 관련 시그널 트리거
 	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
@@ -191,6 +192,10 @@ protected:
 
 	_double		m_dDelay_Swapping_Pos = { 0.0 };
 
+	_int	m_iSection = { 1 }; // 1:FirstStreet, 2:SecondStreet, 3:ThirdStreet ,4:Inside
+	_int	m_iSection_Sub = { 2 };
+	_bool	m_isSection_RoofOn = { false };
+	
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 
@@ -218,6 +223,10 @@ protected: // 애니메이션 제어용 변수들
 
 	//히트모션 인덱스 스몰
 	_int m_iSmallHit_Index = { 0 };
+
+	//가드 히트모션
+	_bool	m_isGuardHit = { false };
+	_int	m_iGuardHit_Index = { 0 };
 
 	//hit swamp
 	_bool m_isSwampHit = { false };

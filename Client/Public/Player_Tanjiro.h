@@ -101,6 +101,7 @@ private:
 	
 
 
+
 private: //애니메이션 제어용 변수들
 	//Move
 	_float	m_fMove_Speed = { 20.0f  }; 

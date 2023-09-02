@@ -1405,6 +1405,36 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect4.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : SmellBundle");
@@ -1420,6 +1450,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 
 
 #pragma region ZENITSU
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_0");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_1");
@@ -1456,7 +1492,23 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_2");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	return 	S_OK;

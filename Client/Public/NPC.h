@@ -47,6 +47,8 @@ protected: //애니메이션 제어용 함수들
 
 	_float	Calculate_To_Spot();
 
+	void	Find_Section();
+
 protected: // 애니메이션 제어용 변수들
 	CTransform* m_pPlayerTransformCom = { nullptr };
 
@@ -57,6 +59,9 @@ protected:
 	_uint	m_iMeshNum = { 0 };
 
 	
+	_int	m_iPlayer_Section = { 0 };
+	_int	m_iPlayer_Section_Sub = { 0 };
+
 protected:
 	// Outline Default
 	_float	m_fOutlineThickness = 0.9f;

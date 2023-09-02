@@ -504,11 +504,19 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
 HRESULT CLevel_Logo::Ready_Layer_Effect()
 {
 #pragma region COMMON
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Spark.bin"), true, 60)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Spark.bin"), true, 30)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Spark");
 		return E_FAIL;
 	}
+
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_Up.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_Up");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region RENGOKU

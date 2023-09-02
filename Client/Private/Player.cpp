@@ -272,17 +272,25 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 	if (m_Moveset.m_isDownMotion == false)
 	{
+		CEffectPlayer::EFFECTWORLDDESC Effect3WorldDesc;
+		Effect3WorldDesc.vPosition.y += 0.8f;
+
  		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
-
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_Small = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_Small = true;
+			}
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
@@ -290,12 +298,18 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom , &Effect3WorldDesc);
 
-
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_ConnectSmall = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_ConnectSmall = true;
+			}
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
@@ -303,12 +317,18 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
 
-
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_Big = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_Big = true;
+			}
 		}
 
 
@@ -317,12 +337,18 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 
-
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_Blow = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_Blow = true;
+			}
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
@@ -330,12 +356,18 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 
-
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_BigBlow = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_BigBlow = true;
+			}
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
@@ -343,12 +375,20 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
 
 
-			m_StatusDesc.iHitCombo++;
 			m_dDelay_ComboReset_2 = 0.0;
 
-			m_Moveset.m_Down_Dmg_Upper = true;
+			if (m_Moveset.m_State_Battle_Guard)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_Upper = true;
+			}
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Swamp())
@@ -1031,6 +1071,31 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 			m_Moveset.m_Down_ADV_Jump_To_Object = true;
 
 			m_eNextNavi = eNextNavi;
+
+			if (eNextNavi == NAVI_VILLAGE_INSIDEWALL1)
+			{
+				m_iSection = 4;
+				m_iSection_Sub = 4;
+			}
+			else if (eNextNavi == NAVI_VILLAGE_MAINROAD1)
+			{
+				if (m_isSection_RoofOn)
+				{
+					m_iSection = 3;
+					m_iSection_Sub = 3;
+				}
+				else
+				{
+					m_iSection = 2;
+					m_iSection_Sub = 1;
+				}
+			}
+			else if (eNextNavi == NAVI_VILLAGE_ROOF)
+			{
+				m_iSection = 2;
+				m_iSection_Sub = 3;
+				m_isSection_RoofOn = true;
+			}
 		}
 	}
 	else
@@ -1180,6 +1245,12 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A])
 		{
 			vInteractionPos = { 600.f, 4.5f, 317.f, 1.f };
+
+			if (NAVI_VILLAGE_MAINROAD1 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F3))
+			{
+				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
+				m_dChangePositionAccTime = 0.0;
+			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
