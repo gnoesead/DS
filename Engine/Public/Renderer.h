@@ -121,8 +121,8 @@ private:
 	D3D11_VIEWPORT			m_VP; // Shadow
 
 	_float					m_fSSAOBias = { 0.0003f };
-	_float					m_fSSAORadius = { 0.000005f };
-	//_float					m_fSSAORadius = { 0.0005f };
+	//_float					m_fSSAORadius = { 0.000005f };
+	_float					m_fSSAORadius = { 0.005f };
 public:
 	static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual CComponent* Clone(void* pArg) override;

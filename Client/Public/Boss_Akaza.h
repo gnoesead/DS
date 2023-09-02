@@ -290,9 +290,7 @@ private: //패턴 함수들
 
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
-	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
-		return dTime < dTimeAcc && dTimeAcc <= dTime + dTimeDelta;
-	}
+	
 
 
 #pragma endregion
