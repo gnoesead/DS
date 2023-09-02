@@ -663,7 +663,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_isNavi_Y_Off = true;
 
-			m_fLand_Y = 1.1f;
+			m_fLand_Y = -1.0f;
 
 			m_isSpiderBlow_Outer = true;
 		}
