@@ -320,7 +320,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_0", m_pTransformCom , &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.5f), 0.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 0.1f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 		}
@@ -861,11 +861,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	{
 		// 공격 모션별 전진이동 제어 (Timedelta, 애니메이션인덱스,  초기화속도,  감속도)
 		Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_COMBO, 5.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 4, 2.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.12f * m_fScaleChange);
-		Go_Straight_Deceleration(dTimeDelta, 5, 2.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.10f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 4, 2.7f * m_fScaleChange * m_fAtk_Move_Ratio, 0.10f * m_fScaleChange);
+		Go_Straight_Deceleration(dTimeDelta, 5, 2.4f * m_fScaleChange * m_fAtk_Move_Ratio, 0.10f * m_fScaleChange);
 
 		//분기
-		Go_Straight_Deceleration(dTimeDelta, 7, 2.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange); // Normal
+		Go_Straight_Deceleration(dTimeDelta, 7, 2.7f * m_fScaleChange * m_fAtk_Move_Ratio, 0.07f * m_fScaleChange); // Normal
 	}
 	Ground_Animation_Play(9, 10);
 
