@@ -91,8 +91,8 @@ private:
 	HRESULT Render_CombineBlur();
 	HRESULT Render_Bloom();
 	HRESULT Render_NonBlend();
-	HRESULT Render_NonLight();
-	HRESULT Render_Blend();
+	HRESULT Render_EffectBloom();
+	HRESULT Render_EffectNoBloom();
 	HRESULT Render_Effect(); // Effect
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();

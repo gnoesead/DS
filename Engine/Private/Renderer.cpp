@@ -481,13 +481,13 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_RadialBlur");
 		return E_FAIL;
 	}
-	if (FAILED(Render_NonLight()))
+	if (FAILED(Render_EffectBloom()))
 	{
 		MSG_BOX("Failed to Render_NonLights");
 		return E_FAIL;
 	}
 
-	if (FAILED(Render_Blend()))
+	if (FAILED(Render_EffectNoBloom()))
 	{
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
@@ -1164,7 +1164,7 @@ HRESULT CRenderer::Render_NonBlend()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_NonLight()
+HRESULT CRenderer::Render_EffectBloom()
 {
 	/*m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
 		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
@@ -1357,8 +1357,12 @@ HRESULT CRenderer::Render_NonLight()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_Blend()
+HRESULT CRenderer::Render_EffectNoBloom()
 {
+	m_RenderObjects[RENDER_EFFECT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
+		});
+
 	for (auto& pGameObject : m_RenderObjects[RENDER_BLEND])
 	{
 		if (nullptr != pGameObject)
