@@ -152,6 +152,8 @@ private:
 	_double m_dDelay_Teleporting = { 0.0 };
 	_bool	m_isFirst_Teleporting = { true };
 
+	_bool	m_isFirst_BattleOn = { true };
+
 private: //애니메이션 제어용 변수들
 	STATE	m_eCurState = { STATE_IDLE };
 	PATTERN	m_eCurPattern = { PATTERN_END };

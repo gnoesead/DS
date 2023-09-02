@@ -8,6 +8,7 @@
 #include "AtkCollManager.h"
 
 #include "MonsterManager.h"
+#include "Fade_Manager.h"
 
 CNPC_ChildF::CNPC_ChildF(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CNPC(pDevice, pContext)
@@ -78,41 +79,45 @@ HRESULT CNPC_ChildF::Initialize(void* pArg)
 
 void CNPC_ChildF::Tick(_double dTimeDelta)
 {
-	Find_Section();
-
-	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
-	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
-		__super::Tick(dTimeDelta);
+		Find_Section();
 
-		if (true == m_isDead)
-			return;
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+		{
+			__super::Tick(dTimeDelta);
 
-		Animation_Control(dTimeDelta);
+			if (true == m_isDead)
+				return;
 
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
+			Animation_Control(dTimeDelta);
 
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
+			//애니메이션 처리
+			m_pModelCom->Play_Animation(dTimeDelta);
+			RootAnimation(dTimeDelta);
 
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
+			//이벤트 콜
+			EventCall_Control(dTimeDelta);
+
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+				return;
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+				return;
+		}
 	}
 }
 
 void CNPC_ChildF::LateTick(_double dTimeDelta)
 {
-	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
-	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
-		__super::LateTick(dTimeDelta);
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+		{
+			__super::LateTick(dTimeDelta);
 
-		Gravity(dTimeDelta);
+			Gravity(dTimeDelta);
 
+		}
 	}
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -122,49 +127,50 @@ void CNPC_ChildF::LateTick(_double dTimeDelta)
 
 HRESULT CNPC_ChildF::Render()
 {
-	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
-	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
-		if (FAILED(__super::Render()))
-			return E_FAIL;
-
-		if (FAILED(SetUp_ShaderResources()))
-			return E_FAIL;
-
-
-
-		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-		//Outline Render
-		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+			if (FAILED(__super::Render()))
 				return E_FAIL;
 
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+			if (FAILED(SetUp_ShaderResources()))
 				return E_FAIL;
 
-			if (m_iMeshNum == 2)
-				m_pShaderCom->Begin(2);
-			else
-				m_pShaderCom->Begin(1);
 
-			m_pModelCom->Render(m_iMeshNum);
-		}
-		// Default Render
-		for (_uint i = 0; i < iNumMeshes; i++)
-		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-				return E_FAIL;
 
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-				return E_FAIL;
+			_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+			//Outline Render
+			for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
 
-			m_pShaderCom->Begin(0);
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
 
-			m_pModelCom->Render(i);
+				if (m_iMeshNum == 2)
+					m_pShaderCom->Begin(2);
+				else
+					m_pShaderCom->Begin(1);
+
+				m_pModelCom->Render(m_iMeshNum);
+			}
+			// Default Render
+			for (_uint i = 0; i < iNumMeshes; i++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
+
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
+
+				m_pShaderCom->Begin(0);
+
+				m_pModelCom->Render(i);
+			}
 		}
 	}
-
 	return S_OK;
 }
 
