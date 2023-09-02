@@ -73,6 +73,9 @@
 #include "AlertRect.h"
 #include "SmellBundle.h"
 
+#include "Swamp.h"
+#include "SwampWaterEffect.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{pContext}
@@ -1040,6 +1043,22 @@ HRESULT CLoader::LoadingForVillage()
 
 #pragma region EffectTexture
 
+	/* Prototype_Component_Texture_Swamp*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Texture_Swamp"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Swamp/Swamp%d.dds"), 14))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_Swamp");
+		return E_FAIL;
+	}
+
+	/* Prototype_Component_Texture_SwampWater*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Texture_SwampWater"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Swamp/Water/Spr_Effect_Docheol_FloorFireRayUp_%d.dds"), 20))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_SwampWater");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region UITexture
@@ -1088,6 +1107,17 @@ HRESULT CLoader::LoadingForVillage()
 #pragma region GAMEOBJECTS
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+
+	/* Prototype_GameObject_Swamp */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp"),
+		CSwamp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_SwampWaterEffect */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SwampWaterEffect"),
+		CSwampWaterEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region Object
 	
 #pragma endregion

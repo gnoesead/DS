@@ -263,8 +263,10 @@
     <ClInclude Include="..\Public\StaticMapObject.h" />
     <ClInclude Include="..\Public\Story_Board.h" />
     <ClInclude Include="..\Public\Story_Manager.h" />
+    <ClInclude Include="..\Public\Swamp.h" />
     <ClInclude Include="..\Public\SwampManager.h" />
     <ClInclude Include="..\Public\SwampShot.h" />
+    <ClInclude Include="..\Public\SwampWaterEffect.h" />
     <ClInclude Include="..\Public\Sword.h" />
     <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
@@ -364,8 +366,10 @@
     <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\Story_Board.cpp" />
     <ClCompile Include="..\Private\Story_Manager.cpp" />
+    <ClCompile Include="..\Private\Swamp.cpp" />
     <ClCompile Include="..\Private\SwampManager.cpp" />
     <ClCompile Include="..\Private\SwampShot.cpp" />
+    <ClCompile Include="..\Private\SwampWaterEffect.cpp" />
     <ClCompile Include="..\Private\Sword.cpp" />
     <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
