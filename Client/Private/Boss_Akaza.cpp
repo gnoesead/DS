@@ -346,7 +346,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		_double dLongLifeTime = 1.0;
 		_double dSpeed = 5.0;
 #pragma region AWAKE_ComboPunch
- 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
 
@@ -622,7 +622,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
- 			if (0 <= m_iEvent_Index && 10 >= m_iEvent_Index)
+			if (0 <= m_iEvent_Index && 10 >= m_iEvent_Index)
 			{
 				if (0 == m_iEvent_Index || 2 == m_iEvent_Index ||
 					5 == m_iEvent_Index || 10 == m_iEvent_Index)
@@ -643,7 +643,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 			}
-			
+
 
 
 			if (11 == m_iEvent_Index)
@@ -651,7 +651,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg);
-			 
+
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.x = -1.f;
 				EffectWorldDesc.fScale = 1.5f;
@@ -886,7 +886,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
-			
+
 			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
 			pPlayer->Set_Hit_Success(true);
@@ -1445,7 +1445,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			}
 		}
 	}
-	
+
 }
 
 void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
@@ -2348,15 +2348,21 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_COMBO_DOWN;
 	}
 
+	if (Check_Player_Y() == true)
+	{
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_COMBO_DOWN, 0.70, dTimeDelta))
+		{
+			m_eCurAnimIndex = ANIM_IDLE;
 
+			Trigger_DashPunch();
+
+		}
+	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_DOWN) == true)
 	{
 		m_eCurAnimIndex = ANIM_IDLE;
 
-		if (Check_Player_Y() == true)
-			Trigger_Awake_ComboPunch();
-		else
-			Trigger_Interact();
+		Trigger_Interact();
 	}
 
 	if (Check_Distance(2.f) == true)
@@ -2493,7 +2499,7 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 		if (m_pModelCom->Get_AnimFinish(ANIM_COMBO_PIST))
 		{
 			m_pModelCom->Set_AnimisFinish(ANIM_COMBO_PIST);
-			
+
 			if (m_eCurPhase == PHASE_1)
 			{
 				m_iRandomPatternNum++;
@@ -2689,9 +2695,9 @@ void CBoss_Akaza::Update_Dash_ComboPunch(_double dTimeDelta)
 
 
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO1, 2.f, 0.0, 0.3);
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO2, 1.5f, 0.0, 0.5);
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO3, 1.5f, 0.0, 0.5);
-	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO_PIST, 2.5f, 0.0, 0.2);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO2, 1.2f, 0.0, 0.5);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO3, 1.2f, 0.0, 0.5);
+	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_COMBO_PIST, 2.f, 0.0, 0.2);
 
 }
 
