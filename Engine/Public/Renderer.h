@@ -109,7 +109,7 @@ private:
 private:
 	HRESULT Render_Lights();
 	HRESULT Render_Deferred();
-	HRESULT Render_Deferred2();
+	
 		
 private:
 	_bool					m_bSSAOBlur = { false };
