@@ -9,6 +9,8 @@
 
 #include "MonsterManager.h"
 
+#include "Player.h"
+
 CNPC_Female::CNPC_Female(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CNPC(pDevice, pContext)
 {
@@ -77,7 +79,10 @@ HRESULT CNPC_Female::Initialize(void* pArg)
 
 void CNPC_Female::Tick(_double dTimeDelta)
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	Find_Section();
+
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		__super::Tick(dTimeDelta);
 
@@ -102,7 +107,8 @@ void CNPC_Female::Tick(_double dTimeDelta)
 
 void CNPC_Female::LateTick(_double dTimeDelta)
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		__super::LateTick(dTimeDelta);
 
@@ -117,7 +123,8 @@ void CNPC_Female::LateTick(_double dTimeDelta)
 
 HRESULT CNPC_Female::Render()
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	//if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
