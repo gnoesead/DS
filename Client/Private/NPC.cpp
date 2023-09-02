@@ -114,6 +114,7 @@ void CNPC::LateTick(_double dTimeDelta)
 		m_pInteraction_Back->LateTick(dTimeDelta);
 	}
 
+	
 }
 
 HRESULT CNPC::Render()
@@ -370,6 +371,20 @@ _float CNPC::Calculate_To_Spot()
 	}
 
 	return fDistance;
+}
+
+void CNPC::Find_Section()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+	m_iPlayer_Section = pPlayer->Get_Section();
+	m_iPlayer_Section_Sub = pPlayer->Get_Section_Sub();
+
+	Safe_Release(pGameInstance);
+
 }
 
 HRESULT CNPC::Add_Components()

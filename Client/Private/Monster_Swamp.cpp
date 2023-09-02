@@ -15,6 +15,8 @@
 #include "SwampManager.h"
 #include "SwampShot.h"
 
+#include "Swamp.h"
+
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -35,7 +37,7 @@ HRESULT CMonster_Swamp::Initialize_Prototype()
 
 HRESULT CMonster_Swamp::Initialize(void* pArg)
 {
-	
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -44,7 +46,7 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 
 	if (FAILED(Add_Components_Model()))
 		return E_FAIL;
-	
+
 	if (FAILED(Read_Animation_Control_File("SwampHorn3.bin")))
 	{
 		MSG_BOX("Failed to AnimData Read : SwampHorn3");
@@ -67,11 +69,14 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 	m_ScrewPos[7] = { 420.01f, 3.35f, 325.34f, 1.0f };
 	m_ScrewPos[8] = { 426.0f, 3.35f, 301.7f, 1.0f };
 	m_ScrewPos[9] = { 423.14f, 3.35f, 294.6f, 1.0f };
-	
+
 	if (m_CharacterDesc.SwampHorn == 1)
 	{
 		m_iIndex_Swamping = 2;
 	}
+
+	// 늪 세팅
+	Create_MySwampEffect();
 
 	return S_OK;
 }
@@ -102,15 +107,15 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 		Trigger();
 		Animation_Control(dTimeDelta);
 	}
-	 
-	
+
+
 	//애니메이션 처리
 	m_pModelCom->Play_Animation(dTimeDelta);
 	RootAnimation(dTimeDelta);
 
-		//이벤트 콜
+	//이벤트 콜
 	EventCall_Control(dTimeDelta);
-	
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -136,8 +141,6 @@ HRESULT CMonster_Swamp::Render()
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
-
-
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 	//Outline Render
@@ -251,8 +254,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 
 		if (7 == m_pModelCom->Get_iCurrentAnimIndex()) //screw
 		{
-			if (0 == m_iEvent_Index)
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (0 == m_iEvent_Index)	// 0초
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
 			if (1 == m_iEvent_Index)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
 			if (2 == m_iEvent_Index)
@@ -268,12 +271,29 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (7 == m_iEvent_Index)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
 			if (8 == m_iEvent_Index)
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+			if (9 == m_iEvent_Index)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.8, CAtkCollider::TYPE_BIGBLOW, AtkDir, 10.0f);
 		}
 
-		if (ANIM_ATK_CROSS == m_pModelCom->Get_iCurrentAnimIndex()) 
+		if (8 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0
+			{
+				Create_MySwampEffect();	// 기존 늪 버리고 새늪으로
+			}
+		}
+
+		if (ANIM_ATK_CROSS == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_10", m_pTransformCom, &EffectWorldDesc);
+			}
+			if (1 == m_iEvent_Index)	// 0.38
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
@@ -283,7 +303,14 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0초
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_11", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
@@ -291,7 +318,14 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 		}
 		else if (12 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.0
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_12", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (1 == m_iEvent_Index) // 0.3
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
@@ -299,17 +333,40 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 		}
 		else if (13 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_13", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 8.0f);
 			}
 		}
 
+		if (ANIM_ATK_SWAMP_SWIM == m_pModelCom->Get_iCurrentAnimIndex())	// 노천탕 만들기
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_BIG);
+			}
+		}
+
+
 
 		if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.0
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_SHORYU);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_22", m_pTransformCom);
+			}
+
+			if (1 == m_iEvent_Index)	// 0.41
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
 					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
@@ -323,12 +380,28 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
 			}
 		}
-		else if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
+
+		if (ANIM_STEP_SWAMPIN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0.4
 			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
-					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_STEPIN);
+			}
+		}
+
+		if (ANIM_STEP_SWAMPOUT == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.22
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_STEPOUT);
+			}
+		}
+
+		if (ANIM_ATK_SHORYU_TO_IDLE == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.45
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_SHORYU);
 			}
 		}
 
@@ -407,11 +480,73 @@ void CMonster_Swamp::Animation_Control(_double dTimeDelta)
 
 void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
-	
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_COMBO;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_SHORYU;
+	}
+
+	/*PATTERN_JUMPSTOMP = 0, PATTERN_SWAMP_SCREW = 1, PATTERN_SWAMP_IN = 2,
+		PATTERN_COMBO = 3, PATTERN_SHORYU = 4, PATTERN_TELESHORYU = 5,
+		PATTERN_SHOTSWAMP = 6, PATTERN_BIGSWAMP = 7, PATTERN_RAGE_PIOHYO = 8,
+		PATTERN_STEP = 9, PATTERN_RAGE_DUDUGE = 10, PATTERN_RAGE_DUDUGE_ATK = 11,*/
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_TELESHORYU;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_SWAMP_IN;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_JUMPSTOMP;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_SWAMP_SCREW;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_SHOTSWAMP;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD2))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_BIGSWAMP;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3))
+	{
+		m_eCurState = STATE_ATTACK;
+		m_eCurPattern = PATTERN_RAGE_DUDUGE;
+	}
+	/*
 	//레이지 모드
 	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
@@ -492,7 +627,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 					}
 				}
 			}
-			
+
 		}
 
 	}
@@ -735,7 +870,9 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 				}
 			}
 		}
-	}
+	}*/
+
+	Safe_Release(pGameInstance);
 }
 
 
@@ -751,7 +888,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 
 		m_isNonHitState = true;
 	}
-	else if ( iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0  ||iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_1)
+	else if (iCurAnim == ANIM_SWAMP_IDLE_IN || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_0 || iCurAnim == ANIM_ATK_SHORYU_TO_SWAMP_1)
 	{
 		m_isNavi_Y_Off = true;
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.4f;
@@ -776,7 +913,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 		m_isNavi_Y_Off = true;
 		m_isSwamping = true;
 
-		if (m_fLand_Y < m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f )
+		if (m_fLand_Y < m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f)
 		{
 			m_fLand_Y += 0.02f;
 		}
@@ -801,7 +938,7 @@ void CMonster_Swamp::Navigation_Y_Control(_double dTimeDelta)
 }
 
 void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackIndex)
-{	
+{
 	switch (AttackIndex)
 	{
 	case 0: //PATTERN_JUMPSTOMP
@@ -832,7 +969,7 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		Animation_Control_Piohyo(dTimeDelta);
 		break;
 	case 9: //Step
-		Animation_Control_Step( dTimeDelta);
+		Animation_Control_Step(dTimeDelta);
 		break;
 	case 10: //Rage_DUDUGE
 		Animation_Control_Rage_Duduge(dTimeDelta);
@@ -847,8 +984,8 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE)
 	{
 		m_eCurState = STATE_IDLE;
-		
-		
+
+
 
 		m_isAtkFinish = true;
 
@@ -1020,13 +1157,13 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 	{
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
-		if ( 1.f < Calculate_Distance_From_Pos(PlayerPos) )
+		if (1.f < Calculate_Distance_From_Pos(PlayerPos))
 		{
 			_float4 Dir;
 			XMStoreFloat4(&Dir, Calculate_Dir_FixY());
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 2.0f, Dir);
 		}
-		else 
+		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_SWAMP_0);
 			Jumping(1.1f, 0.03f);
@@ -1060,24 +1197,23 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 		Jumping(0.01f, 0.01f);
 		m_dDelay_Atk = 0.0;
 
-		m_isTeleporting = true;
 		m_dDelay_Teleporting = 0.0;
 		m_isFirst_Teleporting = true;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_SWAMP_IN && m_isFirst_Teleporting)
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (iCurAnim == ANIM_SWAMP_IN && m_isFirst_Teleporting && MyPos.y <= m_fLand_Y)
 	{
 		m_isFirst_Teleporting = false;
 
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
-		
-		_float4 MyPos;
-		XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 		_vector Dir = -Calculate_Dir_FixY();
-		
+
 		PlayerPos.y = MyPos.y;
 
 		_vector vPlayerPos = XMLoadFloat4(&PlayerPos);
@@ -1085,6 +1221,7 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 		vPlayerPos = vPlayerPos + Dir * 1.7f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+		m_isTeleporting = true;
 	}
 
 	if (m_isTeleporting && iCurAnim == ANIM_SWAMP_IN)
@@ -1122,7 +1259,7 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_SWAMP_IDLE_IN);
 		Jumping(0.01f, 0.01f);
-		
+
 		if (m_CharacterDesc.SwampHorn == 1)
 			m_iScrewPosIndex = rand() % 10;
 		if (m_CharacterDesc.SwampHorn == 2)
@@ -1165,7 +1302,7 @@ void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if(iCurAnim == ANIM_SWAMP_IDLE)
+	if (iCurAnim == ANIM_SWAMP_IDLE)
 		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 2.0f;
 }
 
@@ -1189,18 +1326,19 @@ void CMonster_Swamp::Animation_Control_Rage_Duduge(_double dTimeDelta)
 		Jumping(0.01f, 0.01f);
 		m_pModelCom->Set_EarlyEnd(ANIM_SWAMP_IDLE_IN, true, 0.1f);
 		m_dDelay_Rage_Duduge = 0.0;
+
+		m_iDudugeIndex = rand() % 10;
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	
+
 	m_dDelay_Rage_Duduge += dTimeDelta;
 
 	if (iCurAnim == ANIM_SWAMP_IN && m_dDelay_Rage_Duduge > 0.25f)
 	{
 		m_dDelay_Rage_Duduge = 0.0;
 
-		_int index = rand() % 10;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ScrewPos[index]));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ScrewPos[m_iDudugeIndex]));
 		m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
 	}
 	_float4 Dir;
@@ -1222,7 +1360,7 @@ void CMonster_Swamp::Animation_Control_Rage_Duduge_Atk(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_SWAMP_IN )
+	if (iCurAnim == ANIM_SWAMP_IN)
 	{
 		if (m_isDuduge_Atk)
 		{
@@ -1308,14 +1446,14 @@ void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)
 			m_isWalk_Back = true;
 		}
 	}
-	else if (4.0f <= fDistance && fDistance < 10.0f )
+	else if (4.0f <= fDistance && fDistance < 10.0f)
 	{
 		if (m_isFirst_Walk_1 && m_dDelay_Walk > 1.0f)
 		{
 			m_isFirst_Walk_0 = true;
 			m_isFirst_Walk_1 = false;
 
-			if(m_isWalk_Back)
+			if (m_isWalk_Back)
 				m_pModelCom->Set_Animation(ANIM_WALK_B_END);
 			else
 				m_pModelCom->Set_Animation(ANIM_WALK_F_END);
@@ -1341,7 +1479,7 @@ void CMonster_Swamp::Animation_Control_Walk(_double dTimeDelta)
 			}
 		}
 	}
-	else if (10.0f <= fDistance )
+	else if (10.0f <= fDistance)
 	{
 		if (m_isFirst_Walk_0 && m_dDelay_Walk > 1.0f)
 		{
@@ -1400,16 +1538,16 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	
+
 	AtkDir.y = 0.0f;
-	XMStoreFloat4(&AtkDir, XMVector4Normalize( XMLoadFloat4(&AtkDir)));
+	XMStoreFloat4(&AtkDir, XMVector4Normalize(XMLoadFloat4(&AtkDir)));
 
 	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
 
 #pragma region Hit_Small
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 	{
-		if(m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
@@ -1463,10 +1601,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_R, 0.8f, 0.04f, AtkDir);
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_U, 0.8f, 0.04f, AtkDir);
 	}
-	
-	
+
+
 #pragma endregion
-	
+
 
 #pragma region Hit_Big
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
@@ -1681,10 +1819,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_IDLE;
-		
+
 	}
-	
-	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END) 
+
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END)
 	{
 		m_dDelay_ComboChain = 0.0;
 
@@ -1692,7 +1830,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_eCurState = STATE_DOWN;
 	}
-	
+
 	Safe_Release(pGameInstance);
 }
 
@@ -1700,7 +1838,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	
+
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
 	{
 		m_isDeath_Motion = true;
@@ -1714,7 +1852,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 		{
 			m_dDelay_Down = 0.0;
 
-			if(iCurAnim == ANIM_DEATH_IDLE)
+			if (iCurAnim == ANIM_DEATH_IDLE)
 				m_pModelCom->Set_Animation(ANIM_DEATH_GETUP);
 			else
 				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
@@ -1738,7 +1876,7 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 	ShotDesc.iType = iType; // 0:싱글, 1:쿼드, 2:큰장판, 3:스왐핑
 
 	if (iType == 0)
-	{	
+	{
 		_vector Pos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_vector Dir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		Pos = Pos + Dir * 1.65f;
@@ -1820,6 +1958,34 @@ void CMonster_Swamp::Swamp_Create(_int iNumSwamp, _int iType)
 	Safe_Release(pGameInstance);
 }
 
+void CMonster_Swamp::Create_MySwampEffect()
+{
+	// 늪 세팅
+	CSwamp::EFFECTDESC EffectDesc;
+	EffectDesc.pOwner = this;
+	EffectDesc.pTransform = m_pTransformCom;
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iCurLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (FAILED(pGameInstance->Add_GameObject(iCurLevelIdx, TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_Swamp"), &EffectDesc)))
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	m_pMySwamp = dynamic_cast<CSwamp*>(pGameInstance->Get_GameObject(iCurLevelIdx, TEXT("Layer_Swamp"), (_uint)pGameInstance->Get_GameObject_ListSize(iCurLevelIdx, TEXT("Layer_Swamp")) - 1));
+	if (nullptr == m_pMySwamp)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
 HRESULT CMonster_Swamp::Add_Components()
 {
 	/* for.Com_Shader */
@@ -1865,7 +2031,7 @@ HRESULT CMonster_Swamp::Add_Components()
 		return E_FAIL;
 	}
 
-	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f , 1.0f , 1.0f );
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f, 1.0f, 1.0f);
 	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 	// for.Com_Sphere 
@@ -1885,7 +2051,7 @@ HRESULT CMonster_Swamp::Add_Components()
 		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
 		return E_FAIL;
 	}
-	
+
 	/* for.Com_Navigation_Village_Battle*/
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
 		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
@@ -1954,7 +2120,7 @@ HRESULT CMonster_Swamp::SetUp_ShaderResources()
 		return E_FAIL;
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
+	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix))) 
 		return E_FAIL;
 
 
@@ -2000,6 +2166,6 @@ CGameObject* CMonster_Swamp::Clone(void* pArg)
 
 void CMonster_Swamp::Free()
 {
-	
+
 	__super::Free();
 }
