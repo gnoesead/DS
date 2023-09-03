@@ -1558,6 +1558,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_Air_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_Air_2");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return 	S_OK;
