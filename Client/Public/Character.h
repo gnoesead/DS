@@ -38,7 +38,7 @@ public:
 
 		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:inside
 
-		_float4			WalkSpot[3];
+		_float4			WalkSpot[4];
 	}NPCDESC;
 
 	typedef struct tagCharacterDesc
