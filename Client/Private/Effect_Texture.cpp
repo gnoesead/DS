@@ -190,6 +190,8 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
 			return E_FAIL;
 
+		_float3 vAxis = _float3(0.f, 1.f, 0.f);
+
 		if (0 != m_eEffectDesc.vStartRotationMin.x)
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -198,13 +200,13 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 			_float4 vCameraPos = pGameInstance->Get_CameraPosition();
 
 			Safe_Release(pGameInstance);
-			
+
 			_float3 vAxis = _float3(0.f, 1.f, 0.f);
 			vAxis = Convert::ToFloat3(XMVector3TransformNormal(Convert::ToVector(vAxis), XMMatrixRotationAxis(Convert::ToVector(vCameraPos) - m_pTransformCom->Get_State(CTransform::STATE_POSITION), XMConvertToRadians(m_eEffectDesc.vStartRotationMin.x))));
-
-			if (FAILED(m_pShaderCom->SetUp_RawValue("g_vAxis", (void*)&vAxis, sizeof(_float3))))
-				return E_FAIL;
 		}
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_vAxis", (void*)&vAxis, sizeof(_float3))))
+			return E_FAIL;
 	}
 
 	if (m_eEffectDesc.isTextureSheetAnimation)
