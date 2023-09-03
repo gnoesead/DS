@@ -147,7 +147,10 @@ private:
 
 private:
 	void	Create_MySwampEffect();
-
+	void	Create_SwampWaterEffect(_double dTimeDelta);
+	void	Create_WaterParticleEffect(_uint iNum);
+	void	Create_LandSwampEffect();
+	void	Create_SwampAlertRect();
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -234,6 +237,19 @@ private:
 	CSwamp* m_pMySwamp = { nullptr };
 
 	_bool	m_bMakeNewSwamp = { false };
+
+	_bool	m_bMakeWaterEffect = { false };
+	_double m_dWaterEffectAccTime = { 1.0 };
+	_double m_dRemainSwampEffectAccTime = { 1.0 };
+
+	_bool	m_bMakeSwampAlertRect = { false };
+
+	// Rect πÊ«‚ º≥¡§
+	_double	m_dSetDirAccTime = { 0.0 };
+	_bool	m_bSetDir = { false };
+
+	// ¬¯¡ˆ ¿Ã∆Â∆Æ
+	_bool	m_bLandEffect[3] = { false };
 
 
 private:
