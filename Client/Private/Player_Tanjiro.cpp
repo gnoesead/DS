@@ -1655,6 +1655,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		m_Moveset.m_Down_Dmg_Web = false;
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		m_isConnectHitting = true;
 
 		if (m_iSmallHit_Index == 0)
 		{

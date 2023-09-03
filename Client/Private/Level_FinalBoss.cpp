@@ -117,6 +117,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
 	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
+
+	
+
 	return S_OK;
 }
 
