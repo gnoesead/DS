@@ -203,13 +203,16 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	else {
 		m_Is_Battle = false;
 
-
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
-			m_Is_Battle = true;
-			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
-		}
-
 	}
+
+// 기차맵 특수처리
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+		m_Is_Battle = true;
+
+		m_vBattleTargetPos = { 204.81f,7.3f,414.47f,1.f };
+	}
+
+
 
 //  LockOn
 	if (m_Is_Battle == true) {
@@ -278,6 +281,18 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		if (PlayerIndex == 0 && m_bIs_Combo_On == true && m_bIs_Side_Off == false) {
 			m_Hekireki_Dir = 1.f;
+		}
+
+		// 기차맵 특수처리
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			m_Is_Battle = true;
+
+			m_bIs_Side_Off = true;
+
+			m_vCameraAngle = 0.f;
+		}
+		else {
+			m_vCameraAngle = 10.f;
 		}
 
 	}
