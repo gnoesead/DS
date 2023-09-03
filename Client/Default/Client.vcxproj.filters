@@ -346,6 +346,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect">
       <UniqueIdentifier>{5732d849-a0af-462d-be70-91ef3b013ca8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Zako\StealthMode">
+      <UniqueIdentifier>{7d843af3-187d-4527-8f4c-8f46cd002242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -654,6 +657,9 @@
     <ClInclude Include="..\Public\Swamp_SmokeEffect.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_StealthZako.h">
+      <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -952,6 +958,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Swamp_SmokeEffect.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_StealthZako.cpp">
+      <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

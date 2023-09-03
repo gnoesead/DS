@@ -14,6 +14,7 @@
 #include "Boss_Kyogai.h"
 #include "Monster_Spider.h"
 #include "Monster_Zako.h"
+#include "Monster_StealthZako.h"
 #include "Monster_Swamp.h"
 #include "SwampShot.h"
 
@@ -747,6 +748,14 @@ HRESULT CLoader::LoadingForLobby()
 		CMonster_Zako::Create(m_pDevice, m_pContext))))
 	{
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Zako_0");
+		return E_FAIL;
+	}
+
+	/* Prototype_GameObject_Monster_StealthZako */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_StealthZako"),
+		CMonster_StealthZako::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_StealthZako");
 		return E_FAIL;
 	}
 

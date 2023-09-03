@@ -352,6 +352,21 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	}*/
 
 
+	//잠입용 몬스터
+	CharacterDesc.WorldInfo.vPosition = _float4(15.5f, 0.05f, 27.94f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 16.1f, 0.05f, 25.31f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 16.25f, 0.05f, 9.04f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 19.95f, 0.05f, 9.16f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 19.8f, 0.05f, 25.66f, 1.f };
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
