@@ -25,6 +25,7 @@ _bool CMonsterManager::Can_Attack()
 
 }
 
+
 void CMonsterManager::Free()
 {
 	

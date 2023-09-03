@@ -399,6 +399,15 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_Moveset.m_Down_Dmg_Swamp = true;
 		}
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Web())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
+			m_Moveset.m_Down_Dmg_Web = true;
+		}
 	}
 	else
 	{
@@ -409,6 +418,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
 	}
 }
 

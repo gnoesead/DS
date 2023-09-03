@@ -95,23 +95,16 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
-	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
-		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-		EffectWorldDesc.vPosition.y = 1.f;
-		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
-			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET,
-			"SpiderWeb", &EffectWorldDesc);
+		if (m_isWebGimmick_On)
+			m_isWebGimmick_On = false;
+		else
+			m_isWebGimmick_On = true;
 	}
-	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
+	if (m_isWebGimmick_On)
 	{
-		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-		EffectWorldDesc.vPosition.y = 1.f;
-		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag, EffectDesc
-		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
-			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, 
-			"SpiderWeb_2", &EffectWorldDesc);
+		Web_Gimmick(dTimeDelta);
 	}
 	Safe_Release(pGameInstance); 
 
@@ -1653,7 +1646,38 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		}
 		
 	}
+#pragma endregion
 
+
+#pragma region Dmg_Web
+	if (m_Moveset.m_Down_Dmg_Web)
+	{
+		m_Moveset.m_Down_Dmg_Web = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		m_isConnectHitting = true;
+
+		if (m_iSmallHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(139);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(140);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 2)
+		{
+			m_pModelCom->Set_Animation(141);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 3)
+		{
+			m_pModelCom->Set_Animation(142);
+			m_iSmallHit_Index = 0;
+		}
+	}
 #pragma endregion
 
 
@@ -2150,6 +2174,112 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_pSword->Set_SwordIn(false);
 		m_pSword->Set_SwordIn(false);
 	}
+}
+
+void CPlayer_Tanjiro::Web_Gimmick(_double dTimeDelta)
+{
+	m_dDelay_WebGimmick_0 += dTimeDelta;
+	m_dDelay_WebGimmick_1 += dTimeDelta;
+
+	if (m_dDelay_WebGimmick_0 > 1.5f)
+	{
+		m_dDelay_WebGimmick_0 = 0.0;
+
+		Make_Web(0);
+	}
+	if (m_dDelay_WebGimmick_1 > 2.5f)
+	{
+		m_dDelay_WebGimmick_1 = 0.0;
+
+		Make_Web(0);
+	}
+
+
+
+	m_dDelay_WebGimmick_Full += dTimeDelta;
+	if (m_dDelay_WebGimmick_Full > 3.0f)
+	{
+		m_dDelay_WebGimmick_Full = 0.0;
+
+		Make_Web(1);
+	}
+}
+
+void CPlayer_Tanjiro::Make_Web(_int type)
+{
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	EffectWorldDesc.vPosition.y = 1.f;
+
+	if (type == 0)// 랜덤 오기
+	{
+		if (m_iWebEffect_Type == 0)
+		{
+			m_iWebEffect_Type = 1;
+			//tag, size3, Pos3(left, up, front), duration, // atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, // EffTag
+			Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+				CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB,
+				"SpiderWeb", &EffectWorldDesc);
+		}
+		else if (m_iWebEffect_Type == 1)
+		{
+			m_iWebEffect_Type = 0;
+			//tag, size3, Pos3(left, up, front), duration, // atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, // EffTag
+			Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+				CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB,
+				"SpiderWeb_2", &EffectWorldDesc);
+		}
+	}
+	else if (type == 1) // 점프용
+	{
+		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag, EffectDesc
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 10,
+			CAtkCollider::TYPE_WEB, _vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET_WEB_FULL,
+			"SpiderWeb_2", &EffectWorldDesc);
+
+	}
+	
 }
 
 HRESULT CPlayer_Tanjiro::Add_Components()

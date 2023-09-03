@@ -90,7 +90,8 @@ private: //애니메이션 제어용 함수들
 
 	void	Moving_Restrict();
 
-
+	void	Web_Gimmick(_double dTimeDelta);
+	void	Make_Web( _int type );
 
 private:
 	CSword* m_pSword = { nullptr };
@@ -127,7 +128,15 @@ private: //애니메이션 제어용 변수들
 	
 	_float4		m_vTanjrioToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
 	
+private:
+	//웹 기믹 시작
+	_bool	m_isWebGimmick_On = { false };
+	_double m_dDelay_WebGimmick_0 = { 0.0 };
+	_double	m_dDelay_WebGimmick_1 = { 0.0 };
 
+	_double m_dDelay_WebGimmick_Full = { 0.0 };
+
+	_int	m_iWebEffect_Type = { 0 };
 
 private:
 	/* 임시 코드 */
