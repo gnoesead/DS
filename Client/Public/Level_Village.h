@@ -46,6 +46,8 @@ private:
 
 private:
 	HRESULT	Ready_Layer_Effect();
+
+	//HRESULT LoadEffects(const _tchar* pPath, _bool isParticle = false, _int iCnt = 1);
 	HRESULT LoadEffects(const _tchar* pPath);
 public:
 	static			CLevel_Village* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

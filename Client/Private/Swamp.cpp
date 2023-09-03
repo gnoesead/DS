@@ -3,6 +3,9 @@
 
 #include "GameInstance.h"
 #include "SwampWaterEffect.h"
+#include "EffectPlayer.h"
+#include "WaterParticleEffect.h"
+#include "Swamp_SmokeEffect.h"
 
 static _uint g_iNum = 0;
 
@@ -56,7 +59,40 @@ HRESULT CSwamp::Initialize(void* pArg)
 	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
 
 	m_iNum = g_iNum;
+
+	if (TYPE_REMAIN == m_EffectDesc.eType)
+	{
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.3f + 0.001f * m_iNum);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		m_eCurPattern = PATTERN_DISAPPEAR;
+		m_fSize = 2.8f;
+		m_eCurState = STATE_WAIT;
+	}
+
+	else if (TYPE_LAND == m_EffectDesc.eType)
+	{
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.3f + 0.001f * m_iNum);
+		_vector vLook = m_EffectDesc.pTransform->Get_State(CTransform::STATE_LOOK);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vLook * 1.4f);
+		m_eCurPattern = PATTERN_LAND;
+		m_fSize = 0.1f;
+		m_eCurState = STATE_INCREASING;
+	}
+	else if (TYPE_TRAP == m_EffectDesc.eType)
+	{
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.3f + 0.001f * m_iNum);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+		m_eCurPattern = PATTERN_INCREASE_TRAP;
+		m_fSize = 0.01f;
+		m_eCurState = STATE_INCREASING;
+	}
 	++g_iNum;
+
+	if (g_iNum > 20)
+		g_iNum = 0;
 
 	return S_OK;
 }
@@ -65,9 +101,28 @@ void CSwamp::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (m_EffectDesc.eType == TYPE_TRAP)
+	{
+		m_fAccTime += (_float)TimeDelta;
+		
+		m_fRatio += m_fRatioSpeed * (_float)TimeDelta;
+
+		if (m_fRatio > 1.5f)
+		{
+			m_fRatio = 1.5f;
+			m_fRatioSpeed = -1.f;
+		}
+
+		if (m_fRatio < 0.3f)
+		{
+			m_fRatio = 0.3f;
+			m_fRatioSpeed = 1.f;
+		}
+	}
+
+
+
 	Pattern_Setting(TimeDelta);
-
-
 
 	State_Setting(TimeDelta);
 
@@ -97,7 +152,10 @@ HRESULT CSwamp::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(20);
+	if(m_EffectDesc.eType != TYPE_TRAP)
+		m_pShaderCom->Begin(20);
+	else
+		m_pShaderCom->Begin(23);
 
 	m_pVIBufferCom->Render();
 
@@ -131,6 +189,11 @@ HRESULT CSwamp::Add_Components()
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
+	/* For.Com_NoiseTexture */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Useful_Water008"),
+		TEXT("Com_NoiseTexture"), (CComponent**)&m_pNoiseTextureCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -156,6 +219,20 @@ HRESULT CSwamp::SetUp_ShaderResources()
  	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
+	if (FAILED(m_pNoiseTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture_Mask", 0)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Time_X", &m_fAccTime, sizeof _float)))
+		return E_FAIL;
+
+	if (m_fRatio > 1.5f)
+		m_fRatio = 1.f;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fRatio", &m_fRatio, sizeof _float)))
+		return E_FAIL;
+
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -163,9 +240,9 @@ HRESULT CSwamp::SetUp_ShaderResources()
 
 void CSwamp::Position_Setting()
 {
-	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) ,3.4f + 0.001f * m_iNum);
+	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) ,3.3f + 0.001f * m_iNum);
 
-	if(STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
+	if( STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 }
@@ -178,6 +255,33 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		m_eCurState = STATE_WAIT;
 		m_bWaterEffect = false;
 		break;
+	case PATTERN_INCREASE_TRAP:
+		m_eCurState = STATE_INCREASING;
+		m_fScaleSpeed = 4.f;
+
+		if (m_fSize > 2.5f)
+		{
+			m_eCurPattern = PATTERN_NONE;
+			m_fSize = 2.5;
+		}
+		break;
+	case PATTERN_LAND:
+		m_eCurState = STATE_INCREASING;
+		m_bWaterEffect = false;
+		m_fScaleSpeed = 8.f;
+		if (!m_bWaterEffect && m_fSize > 1.0f)
+		{
+			Create_WatterParticleEffect(5);
+			m_bWaterEffect = true;
+		}
+
+		if (m_fSize > 1.5f)
+		{
+			m_fSize = 1.5f;
+			m_eCurPattern = PATTERN_THROWAWAY_NOWATEREEFCT;
+		}
+
+		break;
 	case PATTERN_STEPIN:
 		m_eCurState = STATE_INCREASING;
 		m_fScaleSpeed = 8.f;
@@ -188,9 +292,9 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_bWaterEffect = true;
 		}
 
-		if (m_fSize > 3.f)
+		if (m_fSize > 3.5f)
 		{
-			m_fSize = 3.f;
+			m_fSize = 3.5f;
 			m_eCurState = STATE_WAIT;
 			m_eCurPattern = PATTERN_NONE;
 			m_bWaterEffect = false;
@@ -199,7 +303,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		break;
 	case PATTERN_STEPOUT:
 		m_eCurState = STATE_DECREASING;
-		m_fScaleSpeed = 3.f;
+		m_fScaleSpeed = 3.5f;
 
 		if (!m_bWaterEffect)
 		{
@@ -261,6 +365,15 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_isDead = true;
 		}
 		break;
+	case PATTERN_THROWAWAY_NOWATEREEFCT:
+		m_eCurState = STATE_DECREASING;
+		m_fScaleSpeed = 2.f;
+
+		if (m_fSize < 0.001f)
+		{
+			m_isDead = true;
+		}
+		break;
 	case PATTERN_BIG:
 		m_eCurState = STATE_INCREASING;
 		m_fScaleSpeed = 8.f;
@@ -277,16 +390,64 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 				m_eCurPattern = PATTERN_TOSMALL;
 			}
 		}
+
+		m_dMakeSmokeEffectAccTime += TimeDelta;
+
+		if (m_dMakeSmokeEffectAccTime > 0.2)
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			CSwamp_SmokeEffect::EFFECTDESC EffectDesc;
+			EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			_uint iNum = Random::Generate_Int(3, 5);
+
+			for (_uint i = 0; i < iNum; ++i)
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp_SmokeEffect"), &EffectDesc);
+
+			m_dMakeSmokeEffectAccTime = 0.0;
+
+			Safe_Release(pGameInstance);
+		}
+
+
 		break;
 	case PATTERN_TOSMALL:
 		m_eCurState = STATE_DECREASING;
 		m_fScaleSpeed = 15.f;
 
-		if (m_fSize < 3.f)
+		if (m_fSize < 3.5f)
 		{
-			m_fSize = 3.f;
+			m_fSize = 3.5f;
 			m_eCurState = STATE_WAIT;
 			m_eCurPattern = PATTERN_NONE;
+		}
+		break;
+	case PATTERN_TELEPORT:
+		m_eCurState = STATE_INCREASING;
+		m_fScaleSpeed = 8.f;
+
+		if (m_fSize > 3.5f)
+		{
+			m_fSize = 3.5f;
+
+			Create_WatterEffect();
+			m_bWaterEffect = true;
+			m_eCurPattern = PATTERN_SHORYU;
+		}
+		break;
+	case PATTERN_DISAPPEAR:
+		m_dBigAccTime += TimeDelta;
+
+		if(m_dBigAccTime > 0.2)
+			m_eCurState = STATE_DECREASING;
+
+		m_fScaleSpeed = 3.f;
+
+		if (m_fSize < 0.001f)
+		{
+			m_isDead = true;
 		}
 		break;
 	default:
@@ -320,25 +481,46 @@ void CSwamp::Create_WatterEffect()
 
 	CSwampWaterEffect::EFFECTDESC EffectDesc;
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, 0.8f, 0.f, 0.f);
-	EffectDesc.vScale = _float3(3.f, 7.f, 1.f);
+	EffectDesc.vScale = _float3(3.f, 8.5f, 1.f);
 	EffectDesc.dDelay = 0.0;
 
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);
 
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.1f, 0.8f, 0.00f, 0.f);
-	EffectDesc.vScale = _float3(-1.5f, 4.f, 1.f);
+	EffectDesc.vScale = _float3(-2.0f, 4.0f, 1.f);
 	EffectDesc.dDelay = 0.12;
 
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);
 
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(-0.1f, 0.8f, -0.0f, 0.f);
-	EffectDesc.vScale = _float3(-2.f, 3.f, 1.f);
+	EffectDesc.vScale = _float3(-4.f, 6.f, 1.f);
 	EffectDesc.dDelay = 0.17;
 
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);
 
+	CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+	EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+	
 	Safe_Release(pGameInstance);
 }
+
+void CSwamp::Create_WatterParticleEffect(_uint iNum)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+	EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , -1.3f , 0.f , 0.f);
+	for (_uint i = 0; i < iNum; ++i)
+		pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+	Safe_Release(pGameInstance);
+}
+
+
 
 CSwamp* CSwamp::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -374,4 +556,5 @@ void CSwamp::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pNoiseTextureCom);
 }

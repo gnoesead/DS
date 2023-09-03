@@ -11,6 +11,8 @@
 #include "PlayerManager.h"
 
 #include "SwampManager.h"
+#include "Swamp.h"
+#include "WaterParticleEffect.h"
 
 CSwampShot::CSwampShot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -65,6 +67,9 @@ HRESULT CSwampShot::Initialize(void* pArg)
 		m_DuDudgePos[9] = { 423.14f, 3.35f, 294.6f, 1.0f };
 	}
 
+	if(m_ShotDesc.iType != 2)
+		Create_MySwampEffect();
+
 	return S_OK;
 }
 
@@ -95,7 +100,10 @@ void CSwampShot::Tick(_double dTimeDelta)
 	else
 	{
 		if (m_dDelay_All > 10.0)
+		{
 			m_isDead = true;
+			m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY_NOWATEREEFCT);
+		}
 	}
 
 	if (true == m_isDead)
@@ -193,6 +201,8 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 		m_pTransformCom->LerpVector(Calculate_Dir_From_Pos(PlayerPos), 0.0001f);
 		m_pTransformCom->Go_Dir(dTimeDelta, Calculate_Dir_From_Pos(PlayerPos));
 
+		Create_SwampWaterEffect(dTimeDelta);
+
 		Safe_Release(pGameInstance);
 	}
 }
@@ -276,6 +286,66 @@ _float CSwampShot::Calculate_Distance_From_Pos(_float4 Pos)
 	_float fDistance = Convert::GetLength(vTarget - vMyPos);
 
 	return fDistance;
+}
+
+void CSwampShot::Create_SwampWaterEffect(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	m_dWaterEffectAccTime += dTimeDelta;
+	m_dRemainSwampEffectAccTime += dTimeDelta;
+
+	/*if (m_dWaterEffectAccTime > 0.12)
+	{
+		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , -1.f , 0.f , 0.f);
+		for (_uint i = 0; i < 8; ++i)
+			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+		m_dWaterEffectAccTime = 0.0;
+	}*/
+
+	if (m_dRemainSwampEffectAccTime > 0.11)
+	{
+		CSwamp::EFFECTDESC EffectSwampDesc;
+		EffectSwampDesc.eType = CSwamp::TYPE_REMAIN;
+		EffectSwampDesc.pTransform = m_pTransformCom;
+		pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp"), &EffectSwampDesc);
+
+		m_dRemainSwampEffectAccTime = 0.0;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void CSwampShot::Create_MySwampEffect()
+{
+	// ´Ë ¼¼ÆÃ
+	CSwamp::EFFECTDESC EffectDesc;
+	EffectDesc.pOwner = this;
+	EffectDesc.pTransform = m_pTransformCom;
+	EffectDesc.eType = CSwamp::TYPE_TRAP;
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iCurLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (FAILED(pGameInstance->Add_GameObject(iCurLevelIdx, TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_Swamp"), &EffectDesc)))
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	m_pMySwamp = dynamic_cast<CSwamp*>(pGameInstance->Get_GameObject(iCurLevelIdx, TEXT("Layer_Swamp"), (_uint)pGameInstance->Get_GameObject_ListSize(iCurLevelIdx, TEXT("Layer_Swamp")) - 1));
+	if (nullptr == m_pMySwamp)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CSwampShot::Add_Components()
