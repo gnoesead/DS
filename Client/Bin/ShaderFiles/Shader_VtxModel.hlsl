@@ -273,13 +273,9 @@ PS_OUT  PS_ALPHA_REAL(PS_IN In)
 		Out.vDiffuse.b = Out.vDiffuse.r;
 		Out.vDiffuse.r = 0.f;
 	}
-	Out.vDiffuse.a *= g_fAlpha;
 
-
-
-
-
-
+		Out.vDiffuse.a *= g_fAlpha;
+	
 	return Out;
 }
 
@@ -313,8 +309,27 @@ PS_OUT  PS_FOG(PS_IN In)
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV * g_fUVRatio);
 	vDiffuse.a = vDiffuse.r * 0.04f;
 	vDiffuse.b *= 3.f;
-
+		
 	Out.vDiffuse = vDiffuse;
+
+	return Out;
+}
+
+PS_OUT  PS_REDRECT(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
+
+	if (Out.vDiffuse.a < 0.1f)
+		discard;
+
+	if (Out.vDiffuse.g > 0.5f && Out.vDiffuse.b > 0.5f)
+		discard;
+
+	Out.vDiffuse.a *= g_fAlpha * 0.7f;
 
 	return Out;
 }
@@ -455,6 +470,18 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_ALPHA_REAL();
+	}
+
+	pass RedRect // 11
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_REDRECT();
 	}
 };
 
