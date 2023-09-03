@@ -327,7 +327,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 {
 	m_pModelCom->Set_Animation(ANIM_RUN);
 
-	if (Calculate_Distance() < 10.0f)
+	if (Calculate_Distance() < 20.0f)
 		m_isSpider_Start = true;
 
 	if (m_isSpider_Start)
@@ -409,7 +409,20 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 		}
 	}
 
-	
+
+	//플레이어 뒤일때,
+	_float4 PlayerPos;
+	XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	if (PlayerPos.z > MyPos.z + 10.0f)
+	{
+		m_isDeath_Motion = true;
+		m_eCurState = STATE_DOWN;
+		m_pModelCom->Set_Animation(ANIM_DOWN);
+	}
+
+	//공격
 	if (m_dCoolTime_Attack > m_fAttack)
 	{
 		m_dCoolTime_Attack = 0.0;
@@ -418,10 +431,8 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 		{
 			m_eCurState = STATE_ATTACK;
 			m_isFirst_Attack = true;
-		}
-		
+		}	
 	}
-
 }
 
 void CMonster_Spider::Animation_Control_Attack(_double dTimeDelta)
@@ -822,7 +833,7 @@ void CMonster_Spider::RePos()
 	//left
 	if (0 == (rand() % 2))
 	{
-		PlayerPos.z += Random::Generate_Float(-5.0f, 5.0f);
+		PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
 
 		_float4 MyNewPos = { 201.3f, 6.9f, PlayerPos.z, 1.f };
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
@@ -830,12 +841,13 @@ void CMonster_Spider::RePos()
 	//right
 	else
 	{
-		PlayerPos.z += Random::Generate_Float(-5.0f, 5.0f);
+		PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
 
 		_float4 MyNewPos = { 209.2f, 6.9f, PlayerPos.z, 1.f };
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
 	}
 }
+
 
 HRESULT CMonster_Spider::Add_Components()
 {

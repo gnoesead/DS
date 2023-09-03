@@ -6,6 +6,7 @@
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
 
+
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
 {
@@ -77,6 +78,12 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 		break;
 	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
 		Setting_KyogaiLiarBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB:
+		Setting_WebBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB_FULL:
+		Setting_WebBullet_Full();
 		break;
 	}
 
@@ -156,6 +163,12 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
 		Setting_KyogaiLiarBullet();
 		break;
+	case CAtkCollider::TYPE_BULLET_WEB:
+		Setting_WebBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB_FULL:
+		Setting_WebBullet_Full();
+		break;
 	}
 
 	if (true == m_AtkCollDesc.bBullet)
@@ -197,6 +210,12 @@ void CAtkCollider::Tick(_double dTimeDelta)
 		break;
 	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
 		Tick_KyogaiLiarBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB:
+		Tick_WebBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB_FULL:
+		Tick_WebBullet(dTimeDelta);
 		break;
 	}
 
@@ -353,6 +372,17 @@ void CAtkCollider::Tick_KyogaiLiarBullet(_double dTimeDelta)
 	}
 }
 
+void CAtkCollider::Tick_WebBullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, _vector{0.0f, 0.0f, -1.0f, 0.0f});
+	}
+}
+
 
 void CAtkCollider::Setting_BaseBullet()
 {
@@ -460,6 +490,40 @@ void CAtkCollider::Setting_KyogaiLiarBullet()
 	m_vDir = XMVector3Normalize(m_vDir);
 }
 
+void CAtkCollider::Setting_WebBullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_float4 PlayerPos;
+	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	_vector vOriginPos = { Random::Generate_Float(201.37f, 208.8f), 7.4f, PlayerPos.z + 35.0f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+}
+
+void CAtkCollider::Setting_WebBullet_Full()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_float4 PlayerPos;
+	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	_int index = CAtkCollManager::GetInstance()->Get_WebFull_Index();
+	_float fX = 0.0f;
+	
+	fX = 201.5f + (_float)index * 0.5f;
+	
+	_vector vOriginPos = { fX, 7.4f, PlayerPos.z + 35.0f, 1.f };
+
+	if (index <= 13)
+		index++;
+	else
+		index = 0;
+	CAtkCollManager::GetInstance()->Set_WebFull_Index(index);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+}
 
 void CAtkCollider::Setting_AtkCollDesc()
 {
@@ -475,6 +539,7 @@ void CAtkCollider::Setting_AtkCollDesc()
 	m_pColliderCom->Set_Hit_CutScene(false);
 	m_pColliderCom->Set_Hit_Hekireki(false);
 	m_pColliderCom->Set_Hit_Swamp(false);
+	m_pColliderCom->Set_Hit_Web(false);
 
 	//값 넣어주기
 	if (TYPE_SMALL == m_AtkCollDesc.eAtkType)
@@ -499,6 +564,8 @@ void CAtkCollider::Setting_AtkCollDesc()
 		m_pColliderCom->Set_Hit_Hekireki(true);
 	else if (TYPE_SWAMP == m_AtkCollDesc.eAtkType)
 		m_pColliderCom->Set_Hit_Swamp(true);
+	else if (TYPE_WEB == m_AtkCollDesc.eAtkType)
+		m_pColliderCom->Set_Hit_Web(true);
 
 	m_pColliderCom->Set_AtkDir(m_AtkCollDesc.AtkDir);
 	m_pColliderCom->Set_fDamage(m_AtkCollDesc.fDamage);
