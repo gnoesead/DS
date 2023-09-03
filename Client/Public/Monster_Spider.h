@@ -58,11 +58,22 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Hit(_double dTimeDelta);
 	void	Animation_Control_Down(_double dTimeDelta);
 
+	void	First_Initiate();
+	void	RePos();
+
 private:
 	_float	m_fScale = { 1.f };
 
 	_float	m_fAttack = { 0.0f };
 
+	_float	m_fDeadTime = { 0.0f };
+	_bool	m_isSpiderDead = { false };
+
+
+
+	_bool	m_isSpiderBlow = { false };
+	_bool	m_isSpiderBlow_Outer = { false };
+	_bool	m_isSpiderFirst_Dead = { true };
 
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };

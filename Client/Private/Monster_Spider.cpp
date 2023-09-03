@@ -48,37 +48,7 @@ HRESULT CMonster_Spider::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_fScale = (rand() % 14 + 8) * 0.1f;
-	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
-
-	m_fAttack = (rand() % 100 + 50) * 0.1f;
-
-	m_eCurNavi = CLandObject::NAVI_TRAIN;
-
-	m_isNavi_Y_Off = true;
-
-	_float4 Pos;
-	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	
-	if (Pos.x < 204.0f) // Left
-	{
-		_float4 UpDir;
-		XMStoreFloat4(&UpDir, XMVector4Normalize(_vector{ 0.001f, 0.999f, 0.0f, 0.0f }));
-		m_pTransformCom->Set_Look(UpDir);
-		m_isLeft = true;
-	}
-	else //Right
-	{
-		_float4 UpDir;
-		XMStoreFloat4(&UpDir, XMVector4Normalize(_vector{ -0.001f, 0.999f, 0.0f, 0.0f }));
-		m_pTransformCom->Set_Look(UpDir);
-		m_isLeft = false;
-	}
-
-	m_fCrawlingSpeed = ((rand() % 100) + 50 ) * 0.01f;
-
-	m_StatusDesc.fHp = 50.0f;
-	m_StatusDesc.fHp_Max = 50.0f;
+	First_Initiate();
 
 	return S_OK;
 }
@@ -89,11 +59,18 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 
 	MonsterManaging();
 
-
 	if (true == m_isDead)
 		return;
 
-	
+	if (m_isSpiderDead)
+	{
+		m_isSpiderDead = false;
+
+		m_StatusDesc.fHp = m_StatusDesc.fHp_Max;
+
+		RePos();
+		First_Initiate();
+	}
 
 	Trigger();
 	Animation_Control(dTimeDelta);
@@ -318,9 +295,12 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 	if (m_isDeath_Motion)
 	{
 		m_dDelay_Die += dTimeDelta;
-		if (m_dDelay_Die > 10.0f)
-			m_isDead = true;
-
+		if (m_dDelay_Die > m_fDeadTime)
+		{
+			m_isSpiderDead = true;
+			m_dDelay_Die = 0.0;
+			m_isDeath_Motion = false;
+		}
 		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
 	}
 	else
@@ -556,8 +536,14 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		
 		if (m_StatusDesc.fHp <= 0.0f)
 		{
-			m_pModelCom->Set_Animation(17);
+			m_pModelCom->Set_Animation(16);
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+
+			if (m_isSpiderFirst_Dead)
+			{
+				m_isSpiderFirst_Dead = false;
+				Jumping(0.45f, 0.04f);
+			}
 		}
 		else
 		{
@@ -590,12 +576,16 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		if (m_StatusDesc.fHp <= 0.0f)
 		{
-			m_pModelCom->Set_Animation(17);
+			m_pModelCom->Set_Animation(16);
+			Jumping(0.45f, 0.04f);
+			
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
 		else
 		{
-			m_pModelCom->Set_Animation(17);
+			m_pModelCom->Set_Animation(16);
+			Jumping(0.45f, 0.04f);
+			
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
 
@@ -616,8 +606,10 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		m_isUpperHit = true;
 
-		m_pModelCom->Set_Animation(17);
+		m_pModelCom->Set_Animation(16);
 		Jumping(1.65f, 0.04f);
+
+		m_isSpiderBlow = true;
 	}
 #pragma endregion
 
@@ -633,29 +625,54 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		pPlayer->Set_Hit_Success(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage() * 2.0f;
 
-		m_pModelCom->Set_Animation(17);
+		m_pModelCom->Set_Animation(16);
+		Jumping(0.45f, 0.04f);
+
 		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+
+		m_isSpiderBlow = true;
 	}
 	
 	_float4 Dir_To_Monster;
 	XMStoreFloat4(&Dir_To_Monster, -Calculate_Dir());
 
+
+	Ground_Animation_Play(17, 18);
 	if (m_isUpperHit)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 0.5f, Dir_To_Monster);
+		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 0.5f, Dir_To_Monster, true);
 		//m_pModelCom->Set_EarlyEnd(ANIM_BLOW, true);
-		Go_Dir_Constant(dTimeDelta, 17, 0.5f, Dir_To_Monster);
-		Go_Dir_Deceleration(dTimeDelta, 18, 0.5f, 0.05f, Dir_To_Monster);
+		Go_Dir_Constant(dTimeDelta, 17, 0.5f, Dir_To_Monster, true);
+		Go_Dir_Deceleration(dTimeDelta, 18, 0.5f, 0.05f, Dir_To_Monster, true);
 	}
 	else
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, Dir_To_Monster);
+		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, Dir_To_Monster, true);
 		//m_pModelCom->Set_EarlyEnd(ANIM_BLOW, true);
-		Go_Dir_Constant(dTimeDelta, 17, 1.5f, Dir_To_Monster);
-		Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, Dir_To_Monster);
+		Go_Dir_Constant(dTimeDelta, 17, 1.5f, Dir_To_Monster, true);
+		Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, Dir_To_Monster, true);
 	}
 
-	
+	//공중에 떠있을때,
+	if (iCurAnim == 17)
+	{
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		if (Pos.x < 201.0f || 209.5f < Pos.x)
+		{
+			m_isNavi_Y_Off = true;
+
+			m_fLand_Y = 1.0f;
+
+			m_isSpiderBlow_Outer = true;
+		}
+	}
+	if (m_isSpiderBlow_Outer && iCurAnim == 18)
+	{
+		m_isDeath_Motion = true;
+		m_isSpiderBlow_Outer = false;
+	}
 
 	
 	if (iCurAnim == ANIM_IDLE)
@@ -663,15 +680,17 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		m_eCurState = STATE_IDLE;
 	}
 
-
-	m_dDelay_ComboChain -= dTimeDelta;
-	if (m_dDelay_ComboChain <= 0.0f)
+	if (iCurAnim != 16 && iCurAnim != 17 && iCurAnim != 18)
 	{
-		m_dDelay_ComboChain = 0.0;
+		m_dDelay_ComboChain -= dTimeDelta;
+		if (m_dDelay_ComboChain <= 0.0f)
+		{
+			m_dDelay_ComboChain = 0.0;
 
-		m_isFirst_Anim = true;
+			m_isFirst_Anim = true;
 
-		m_eCurState = STATE_IDLE;
+			m_eCurState = STATE_IDLE;
+		}
 	}
 
 	if (iCurAnim == ANIM_DOWN  ) 
@@ -698,7 +717,7 @@ void CMonster_Spider::Animation_Control_Down(_double dTimeDelta)
 		if (m_StatusDesc.fHp > 0.0f)
 		{
 			m_dDelay_Down += dTimeDelta;
-			if (m_dDelay_Down > 4.0f)
+			if (m_dDelay_Down > 5.0f)
 			{
 				m_dDelay_Down = 0.0f;
 				m_pModelCom->Set_Animation(ANIM_RETURN);
@@ -719,6 +738,103 @@ void CMonster_Spider::Animation_Control_Down(_double dTimeDelta)
 	}
 
 
+}
+
+void CMonster_Spider::First_Initiate()
+{
+#pragma region Byunsu
+	m_eCurState =  STATE_IDLE ;
+
+	m_isSpider_Start =  false ;
+
+	m_isSpiderFirst_Dead = true;
+
+	m_fCrawlingSpeed =  1.0f ;
+	m_isCrawlingOn =  true ;
+	m_fCrawling_Y =  0.0f ;
+	m_dDelay_Crawling =  0.0 ;
+	m_isLeft = false ;
+
+	m_isUpperHit =  false ;
+
+	m_dDelay_Spider =  0.0 ;
+	m_isFirst_Spider_1 =  true ;
+	m_isFirst_Spider_0 =  true ;
+
+	m_vPos = { 140.f, 0.f,120.f,1.f };
+
+	m_dDelay_ComboChain =  0.0 ;
+
+	m_dCoolTime_Attack =  0.0 ;
+	m_isFirst_Attack =  true ;
+	m_dDelay_Attack =  0.0;
+
+	m_Hit_AtkDir = { 0.0f, 0.0f, 0.0f ,0.0f };
+
+	m_isFirst_AttackOn =  true;
+	m_isFirst_AttackOff = false;
+
+#pragma endregion
+
+
+	m_fScale = (rand() % 14 + 8) * 0.1f;
+	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
+
+	m_fAttack = (rand() % 100 + 50) * 0.1f;
+
+	m_fDeadTime = Random::Generate_Float(3.0f, 7.0f);
+
+	m_eCurNavi = CLandObject::NAVI_TRAIN;
+
+	m_isNavi_Y_Off = true;
+
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	if (Pos.x < 204.0f) // Left
+	{
+		_float4 UpDir;
+		XMStoreFloat4(&UpDir, XMVector4Normalize(_vector{ 0.001f, 0.999f, 0.0f, 0.0f }));
+		m_pTransformCom->Set_Look(UpDir);
+		m_isLeft = true;
+	}
+	else //Right
+	{
+		_float4 UpDir;
+		XMStoreFloat4(&UpDir, XMVector4Normalize(_vector{ -0.001f, 0.999f, 0.0f, 0.0f }));
+		m_pTransformCom->Set_Look(UpDir);
+		m_isLeft = false;
+	}
+
+	m_fCrawlingSpeed = ((rand() % 100) + 50) * 0.01f;
+
+	m_StatusDesc.fHp = 25.0f;
+	m_StatusDesc.fHp_Max = 25.0f;
+
+	m_pColliderCom[COLL_SPHERE]->Set_Death(false);
+}
+
+void CMonster_Spider::RePos()
+{
+	_float4	PlayerPos;
+	XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
+	
+	//left
+	if (0 == (rand() % 2))
+	{
+		PlayerPos.z += Random::Generate_Float(-5.0f, 5.0f);
+
+		_float4 MyNewPos = { 201.3f, 6.9f, PlayerPos.z, 1.f };
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+	}
+	//right
+	else
+	{
+		PlayerPos.z += Random::Generate_Float(-5.0f, 5.0f);
+
+		_float4 MyNewPos = { 209.2f, 6.9f, PlayerPos.z, 1.f };
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+	}
 }
 
 HRESULT CMonster_Spider::Add_Components()
