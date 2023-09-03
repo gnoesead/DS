@@ -46,6 +46,7 @@ public:
 	_bool	Get_Hit_CutScene() { return m_isHit_CutScene; }
 	_bool	Get_Hit_Hekireki() { return m_isHit_Hekireki; }
 	_bool	Get_Hit_Swamp() { return m_isHit_Swamp; }
+	_bool	Get_Hit_Web() { return m_isHit_Web; }
 
 	_float4		Get_AtkDir() { return m_AtkDir; }
 	_float	Get_fDamage() { return m_fDamage; }
@@ -70,6 +71,7 @@ public:
 	void	Set_Hit_CutScene(_bool Hit) { m_isHit_CutScene = Hit; }
 	void	Set_Hit_Hekireki(_bool Hit) { m_isHit_Hekireki = Hit; }
 	void	Set_Hit_Swamp(_bool Hit) { m_isHit_Swamp = Hit; }
+	void	Set_Hit_Web(_bool Hit) { m_isHit_Web = Hit; }
 
 
 	void	Set_AtkDir(_float4 Dir) { m_AtkDir = Dir; }
@@ -121,6 +123,7 @@ private:
 	_bool		m_isHit_CutScene = { false };
 	_bool		m_isHit_Hekireki = { false };
 	_bool		m_isHit_Swamp = { false };
+	_bool		m_isHit_Web = { false };
 
 	_bool		m_isCanHit = { true };
 
