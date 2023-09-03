@@ -79,75 +79,29 @@ public:
 
 
 private: //애니메이션 제어용 함수
-
 	void	EventCall_Control(_double dTimeDelta);
-
-	void	Trigger();
+	void	Calculate_SpotIndex();
 
 	void	Animation_Control(_double dTimeDelta);
-	void	Animation_Control_Idle(_double dTimeDelta);
 
-	// 어택패턴 컨트롤러
-	void	Idle_ATK_Pattern_Controler(_double dTimeDelta);
-
-	void	Animation_Control_Attack(_double dTimeDelta, _int AttackIndex);
-	void	Animation_Control_Attack_Claws(_double dTimeDelta);
-	void	Animation_Control_Attack_Tackle(_double dTimeDelta);
-	void	Animation_Control_Attack_Spinkick(_double dTimeDelta);
-	void	Animation_Control_Attack_Jumpkick(_double dTimeDelta);
-	void	Animation_Control_Attack_ButterFly(_double dTimeDelta);
-	void	Animation_Control_Attack_Cross(_double dTimeDelta);
-	void	Animation_Control_Attack_SpinMove(_double dTimeDelta);
-
-	void	Animation_Control_Hit(_double dTimeDelta);
-	void	Animation_Control_Down(_double dTimeDelta);
 
 private:
 	_float	m_fScale = { 0.8f };
 
+
+	_int	m_iSpot_Index = { 0 };
+
+	_double m_dDelay_SpotWalk = { 0.0 };
+	_float	m_fTime_Stay = { 3.0f };
+
+	_bool	m_isGo = { false };
+	_bool	m_isFirst_Go = { true };
 
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };
 	
 
-
-	//Moving
-	_bool	m_isFirst_Move_0 = { true };
-	_bool	m_isFirst_Move_1 = { true };
-	_double		m_dDelay_Move = { 0.0 };
-
-	_double		m_dCoolTime_SideMove = { 0.0 };
-	_bool		m_isSideMoveOn = { false };
-	_bool		m_isSideMove_Left = { false };
-	_bool		m_isFirst_SideMove = { true };
-
-	//Attack
-	_double m_dCoolTime_AtkPattern = { 0.0 };
-	_bool	m_isFirst_AtkPattern = { true };
-	_int	m_iAtkPattern_Index = { 9 };
-
-
-	//Pattern 0 : ANIM_ATK_CLAWS
-	_bool	m_isFirst_ATK_0 = { true };
-	_bool	m_isFirst_ATK_1 = { true };
-
-	_bool		m_isTime_ATK_0 = { false };
-	_double		m_dTime_ATK_0 = { 0.0 };
-
-	//Attackfinish
-	_int	m_iAttackIndex = { 0 };
-	_bool	m_isAtkFinish = { false };
-	_bool	m_isCoolTime_On = { true };
-
-
-	//Hit_DMg_Combo
-	_double		m_dDelay_ComboChain = { 0.0 };
-	_int		m_iSmallHit_Index = { 0 };
-	
-
-	//Down
-	_double		m_dDelay_Down = { 0.0 };
 	
 private:
 	/* 임시 코드 */
