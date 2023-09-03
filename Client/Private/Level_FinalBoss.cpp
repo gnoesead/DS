@@ -117,6 +117,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
 	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
+
+	
+
 	return S_OK;
 }
 
@@ -1655,6 +1658,15 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Battle_ATK_SuperArmor_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Battle_ATK_SuperArmor_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Fist.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Fist");
+		return E_FAIL;
+	} if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_SuperArmor_2_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_SuperArmor_2_Wind");
 		return E_FAIL;
 	}
 

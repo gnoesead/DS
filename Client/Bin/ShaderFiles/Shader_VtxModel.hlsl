@@ -108,7 +108,7 @@ PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 	PS_OUT	Out = (PS_OUT)0;
 
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV);
-	
+
 	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, _In.vTexUV);
 
 	vector  vEmissive = g_EmissiveTexture.Sample(LinearSampler, _In.vTexUV);
@@ -229,14 +229,14 @@ PS_OUT  PS_SMELL(PS_IN In)
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
 	Out.vDiffuse = vMtrlDiffuse;
-	
+
 	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
 	Out.vDiffuse.r *= 5.5f;
 	Out.vDiffuse.g = 0.f;
 	Out.vDiffuse.b = 0.f;
-	
-	
-		
+
+
+
 	if (Out.vDiffuse.a < 0.3f)
 		discard;
 
@@ -265,9 +265,8 @@ PS_OUT  PS_ALPHA_REAL(PS_IN In)
 	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
 	if (g_bLiarColor == false)
-	{
 		Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
-	}
+
 	else
 	{
 		Out.vDiffuse = vMtrlDiffuse * g_fDiffuseRatio;
@@ -464,7 +463,7 @@ technique11 DefaultTechnique
 	pass Alpha_Real // 10
 	{
 		SetRasterizerState(RS_Default);
-		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_AlphaBlendingOne, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 		VertexShader = compile vs_5_0 VS_Main();
 		GeometryShader = NULL;

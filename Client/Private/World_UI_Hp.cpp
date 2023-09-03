@@ -201,42 +201,57 @@ void CWorld_UI_Hp::LateTick(_double TimeDelta)
 	Set_Personal_Pos();
 	
 
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+		m_Is_Render = false;
+	}
+
+	Safe_Release(pGameInstance);*/
+
+
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_WORLD_UI, this)))
 		return;
 }
 
 HRESULT CWorld_UI_Hp::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
 
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
+	if (m_Is_Render == true) {
 
-	if (m_Is_Reverse == false) {
-		if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
-			m_pShaderCom->Begin(4);
-		else {
-			m_pShaderCom->Begin(1);
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+
+		if (FAILED(SetUp_ShaderResources()))
+			return E_FAIL;
+
+		if (m_Is_Reverse == false) {
+			if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
+				m_pShaderCom->Begin(4);
+			else {
+				m_pShaderCom->Begin(1);
+			}
 		}
-	}
-	else {
-		if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
-			m_pShaderCom->Begin(5);
 		else {
-			m_pShaderCom->Begin(2);
+			if (m_UI_Desc.m_Type == 1 || m_UI_Desc.m_Type == 2)
+				m_pShaderCom->Begin(5);
+			else {
+				m_pShaderCom->Begin(2);
+			}
 		}
+
+
+		if (m_Is_CutScene == false) {
+
+			m_pVIBufferCom->Render();
+
+		}
+
+
 	}
 
-	
-	if (m_Is_CutScene == false) {
-
-		m_pVIBufferCom->Render();
-
-	}
-	
-	
-	
 	return S_OK;
 }
 
