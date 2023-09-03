@@ -337,6 +337,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect">
       <UniqueIdentifier>{2515c59b-7822-49cd-bebb-134c3bdcd5b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Zako\StealthMode">
+      <UniqueIdentifier>{7d843af3-187d-4527-8f4c-8f46cd002242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -636,6 +639,9 @@
     <ClInclude Include="..\Public\SwampWaterEffect.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_StealthZako.h">
+      <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -925,6 +931,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SwampWaterEffect.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_StealthZako.cpp">
+      <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

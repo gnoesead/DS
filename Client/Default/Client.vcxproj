@@ -230,6 +230,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\MonsterManager.h" />
     <ClInclude Include="..\Public\Monster_Spider.h" />
+    <ClInclude Include="..\Public\Monster_StealthZako.h" />
     <ClInclude Include="..\Public\Monster_Swamp.h" />
     <ClInclude Include="..\Public\Monster_Test.h" />
     <ClInclude Include="..\Public\Monster_Zako.h" />
@@ -333,6 +334,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\MonsterManager.cpp" />
     <ClCompile Include="..\Private\Monster_Spider.cpp" />
+    <ClCompile Include="..\Private\Monster_StealthZako.cpp" />
     <ClCompile Include="..\Private\Monster_Swamp.cpp" />
     <ClCompile Include="..\Private\Monster_Test.cpp" />
     <ClCompile Include="..\Private\Monster_Zako.cpp" />
