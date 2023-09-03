@@ -366,6 +366,56 @@ PS_OUT  PS_MASKRAMPSPRITE(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_MASKCOLORDISSOLVE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vMask = g_MaskTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = g_vColor;
+
+	Out.vColor.a = vMask.r;
+	Out.vColor.a *= In.vAdditional.y;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT  PS_MASKRAMPALPHA(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vMask = g_MaskTexture.Sample(LinearSampler, In.vTexUV);
+
+	vector vRamp;
+
+	if (g_vGradientOffset.x <= vMask.r && g_vGradientTilling.x >= vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r, 0.f));
+	else if (g_vGradientTilling.x < vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientTilling.x, 0.f));
+	else if (g_vGradientOffset.x > vMask.r)
+		vRamp = g_RampTexture.Sample(LinearSampler, float2(g_vGradientOffset.x, 0.f));
+
+	Out.vColor = vRamp;
+
+	Out.vColor.a = vMask.r;
+	Out.vColor.a *= In.vAdditional.y;
+
+	if (Out.vColor.a < 0.01f)
+		discard;
+
+	return Out;
+}
+
+
 technique11 DefaultTechnique
 {		
 	pass General		// 0
@@ -450,5 +500,29 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE();
+	}
+
+	pass MaskColorDissolve		// 7
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKCOLORDISSOLVE();
+	}
+
+	pass MaskRampNoZWriteAlpha		// 8
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKRAMPALPHA();
 	}
 }

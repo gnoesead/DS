@@ -18,8 +18,9 @@ BEGIN(Client)
 class CAtkCollider final : public CGameObject
 {
 public:
-	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_EFFECT, TYPE_END };
-	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAI_BULLET, TYPE_KYOGAI_DELAY_BULLET, TYPE_KYOGAI_VERTICAL_BULLET, TYPE_KYOGAI_HORIZON_BULLET, TYPE_KYOGAI_LIAR_BULLET, TYPE_BULLET_END };
+	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_WEB, TYPE_EFFECT, TYPE_END };
+	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAI_BULLET, TYPE_KYOGAI_DELAY_BULLET, TYPE_KYOGAI_VERTICAL_BULLET, TYPE_KYOGAI_HORIZON_BULLET, TYPE_KYOGAI_LIAR_BULLET,
+		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
 	{
@@ -79,6 +80,8 @@ private:
 	void	Tick_KyogaiVerticalBullet(_double dTimeDelta);
 	void	Tick_KyogaiHorizonBullet(_double dTimeDelta);
 	void	Tick_KyogaiLiarBullet(_double dTimeDelta);
+	void	Tick_WebBullet(_double dTimeDelta);
+
 
 	void	Setting_BaseBullet();
 	void	Setting_KyogaiBullet();
@@ -86,6 +89,8 @@ private:
 	void	Setting_KyogaiVerticalBullet();
 	void	Setting_KyogaiHorizonBullet();
 	void	Setting_KyogaiLiarBullet();
+	void	Setting_WebBullet();
+	void	Setting_WebBullet_Full();
 
 private:
 	CTransform* m_pTransformCom = { nullptr };
@@ -104,6 +109,7 @@ private:
 
 	_vector			m_vDir = { 0.f,0.f,0.f,0.f };
 
+	_int	m_iWebFull_Index = { 0 };
 
 
 #ifdef _DEBUG

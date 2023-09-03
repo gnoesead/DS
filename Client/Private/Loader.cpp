@@ -75,6 +75,9 @@
 
 #include "Swamp.h"
 #include "SwampWaterEffect.h"
+#include "Swamp_AlertRect.h"
+#include "WaterParticleEffect.h"
+#include "Swamp_SmokeEffect.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -1059,6 +1062,7 @@ HRESULT CLoader::LoadingForVillage()
 		return E_FAIL;
 	}
 
+
 #pragma endregion
 
 #pragma region UITexture
@@ -1116,6 +1120,21 @@ HRESULT CLoader::LoadingForVillage()
 	/* Prototype_GameObject_SwampWaterEffect */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SwampWaterEffect"),
 		CSwampWaterEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_SwampAlertRect */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp_AlertRect"),
+		CSwamp_AlertRect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_WaterParticleEffect */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_WaterParticleEffect"),
+		CWaterParticleEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Swamp_SmokeEffect */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp_SmokeEffect"),
+		CSwamp_SmokeEffect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region Object
@@ -1845,6 +1864,11 @@ HRESULT CLoader::Load_MapObjectModel_AllStage(CGameInstance* pGameInstance)
 	/* For.Prototype_Component_Model_AlertRect*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_AlertRect"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/AlertRect.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Swamp_AlertRect*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Swamp_AlertRect"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Swamp_AlertRect.bin", PivotMatrix))))
 		return E_FAIL;
 
 	return S_OK;

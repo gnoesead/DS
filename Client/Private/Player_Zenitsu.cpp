@@ -1589,6 +1589,36 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 #pragma endregion
 
 
+#pragma region Dmg_Web
+	if (m_Moveset.m_Down_Dmg_Web)
+	{
+		m_Moveset.m_Down_Dmg_Web = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		m_isConnectHitting = true;
+
+		if (m_iSmallHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(138);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(139);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 2)
+		{
+			m_pModelCom->Set_Animation(140);
+			m_iSmallHit_Index++;
+		}
+		else if (m_iSmallHit_Index == 3)
+		{
+			m_pModelCom->Set_Animation(141);
+			m_iSmallHit_Index = 0;
+		}
+	}
+#pragma endregion
 
 	if (m_Moveset.m_Down_GetUp)
 	{
