@@ -254,6 +254,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
 
 
+
 // Combo_On
 	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
 		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
@@ -373,6 +374,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				}
 				// Origin
 				else {
+
 					m_fDistance = { 6.f + m_Zoom };
 					m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
@@ -543,6 +545,7 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 
 	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	
 	if (m_bIs_Dist_Update) {
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false) {
@@ -562,13 +565,13 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 		}
 		else {
 			m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 2.f, 0.f, 0.f };
+			m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
 
-			m_fDistance = 8.f + m_Zoom;
+			m_fDistance = 7.f + m_Zoom;
 
 			Turn_Camera(dTimeDelta);
 
-			m_vDist = { XMVectorGetX(m_vDist), 0.6f ,XMVectorGetZ(m_vDist), 0.f };
+			m_vDist = { XMVectorGetX(m_vDist), 0.3f ,XMVectorGetZ(m_vDist), 0.f };
 
 			m_vDist = XMVector3Normalize(m_vDist);
 
@@ -587,13 +590,18 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 
 	if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		NewLook = m_vBattleCenter + m_vLookOffSet - CamPos;
-	else
-		NewLook = m_vTargetPos + m_vLookOffSet - CamPos;
+	else {
+
+		_vector Dist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), 0.f };
+
+		NewLook = m_vTargetPos + m_vLookOffSet - 100.f * Dist - CamPos;
+	}
+		
 
 	if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		NewLook = { XMVectorGetX(NewLook), XMVectorGetY(NewLook) * 0.f ,XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 	else
-		NewLook = { XMVectorGetX(NewLook), XMVectorGetY(NewLook) , XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
+		NewLook = { XMVectorGetX(NewLook), -40.f , XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
 
 	NewLook = XMVector3Normalize(NewLook);
 
