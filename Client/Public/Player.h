@@ -197,7 +197,8 @@ protected:
 	_int	m_iSection_Sub = { 2 };
 	_bool	m_isSection_RoofOn = { false };
 
-	
+	_bool	m_isSuperArmor = { false };
+
 	//Level∆«∏Ì
 	_uint m_iLevelCur = { 0 };
 

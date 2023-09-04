@@ -730,13 +730,13 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
-		m_Moveset.m_Down_Skill_Normal = true;
+	//if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
+	//	m_Moveset.m_Down_Skill_Normal = true;
 
 	m_dDelay_CanSkill += dTimeDelta;
 	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_I))
+		if (pGameInstance->Get_DIKeyDown(DIK_I) && m_isCan_Air_Hekireki == false)
 		{
 			if (pGameInstance->Get_DIKeyState(DIK_O))
 			{

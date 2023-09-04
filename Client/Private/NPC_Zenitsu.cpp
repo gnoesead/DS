@@ -237,7 +237,7 @@ void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 	{
 		m_dDelay_GoOn = 0.0;
 
-		if (Calculate_Distance() > 3.5f)
+		if (Calculate_Distance() > 1.5f)
 		{
 			if (m_isGoOn == false)
 			{
@@ -273,9 +273,9 @@ void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 		}
 	}
 
-	Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, 0.2f);
-	Go_Straight_Constant(dTimeDelta, 147, 0.2f);
-	Go_Straight_Deceleration(dTimeDelta, 148, 0.2f, 0.04f);
+	Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, 0.3f);
+	Go_Straight_Constant(dTimeDelta, 147, 0.3f);
+	Go_Straight_Deceleration(dTimeDelta, 148, 0.3f, 0.05f);
 }
 
 
