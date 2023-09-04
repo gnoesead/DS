@@ -550,8 +550,8 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 			Animation_Control_Hit(dTimeDelta);
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
-		else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
+		/*else if (m_eCurState == STATE_ATTACK)
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);*/
 	}
 }
 

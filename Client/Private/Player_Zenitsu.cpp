@@ -332,7 +332,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -346,7 +346,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -359,7 +359,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -371,7 +371,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_3", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -388,7 +388,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_3_Slash", m_pTransformCom , &EffectWorldDesc);
 
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc2;
@@ -495,7 +495,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_0", m_pTransformCom , &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
@@ -518,7 +518,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
 
 			}
 			// Big
@@ -530,7 +530,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_2", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
