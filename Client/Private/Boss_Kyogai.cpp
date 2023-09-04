@@ -2582,7 +2582,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 		if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
 		{
 			if (m_bAnimFinish2 == false)
-			{
+			{   
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB_01READY;
 			}
