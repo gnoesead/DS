@@ -738,38 +738,56 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			ANIM_BATTLE_STEP_B = 95, ANIM_BATTLE_STEP_F = 96, ANIM_BATTLE_STEP_L = 97, ANIM_BATTLE_STEP_R = 99,*/
 		if (95 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (96 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (97 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (98 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (99 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (100 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			if (!m_isJumpOn)
+			{
+				if (0 == m_iEvent_Index)	// 0.0
+					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
 		}
 
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
@@ -2171,6 +2189,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	{
 		m_Moveset.m_isHitMotion = true;
 		
+		m_Moveset.m_State_Battle_Guard = false;
+
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
 		{

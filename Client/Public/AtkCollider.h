@@ -93,6 +93,10 @@ private:
 	void	Setting_WebBullet_Full();
 
 private:
+	void	Check_OutLine();
+	void	Reset_Dead();
+
+private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };

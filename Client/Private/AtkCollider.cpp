@@ -5,6 +5,7 @@
 #include "Camera_Manager.h"
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
+#include "GroundSmoke.h"
 
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -230,6 +231,7 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
 		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType != CAtkCollider::TYPE_EFFECT)
@@ -239,81 +241,23 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 			_float vPosZ = XMVectorGetZ(vPos);
 			if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
 			{
-				Safe_Release(m_AtkCollDesc.pParentTransform);
-				m_AtkCollDesc.pParentTransform = nullptr;
-				CAtkCollManager::GetInstance()->Collect_Collider(this);
-				m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
-
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
-
-				m_AtkObj.clear();
-				m_dTimeAcc = 0.0;
-				m_dStopAcc = 0.0;
-				m_iCollCount = 0;
-
-				Set_Dead();
+				Reset_Dead();
+				
 			}
 		}
+		/*if(m_pColliderCom->Get_Coll() == true)
+			Reset_Dead();*/
 	}
+	
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
-	{
-		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType != CAtkCollider::TYPE_EFFECT)
-		{
-			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float vPosX = XMVectorGetX(vPos);
-			_float vPosZ = XMVectorGetZ(vPos);
-			if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
-			{
-				Safe_Release(m_AtkCollDesc.pParentTransform);
-				m_AtkCollDesc.pParentTransform = nullptr;
-				CAtkCollManager::GetInstance()->Collect_Collider(this);
-				m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+		Check_OutLine();
 
-				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
 
-				m_AtkObj.clear();
-				m_dTimeAcc = 0.0;
-				m_dStopAcc = 0.0;
-				m_iCollCount = 0;
-
-				Set_Dead();
-			}
-		}
-	}
-	if (m_bLineOut == true)
-	{
-		if (m_dTimeAcc > 0.5)
-		{
-			Safe_Release(m_AtkCollDesc.pParentTransform);
-			m_AtkCollDesc.pParentTransform = nullptr;
-			CAtkCollManager::GetInstance()->Collect_Collider(this);
-			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
-
-			
-			m_AtkObj.clear();
-			m_dTimeAcc = 0.0;
-			m_dStopAcc = 0.0;
-			m_iCollCount = 0;
-
-			Set_Dead();
-		}
-	}
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
-	{
-		Safe_Release(m_AtkCollDesc.pParentTransform);
-		m_AtkCollDesc.pParentTransform = nullptr;
-		CAtkCollManager::GetInstance()->Collect_Collider(this);
-		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+		Reset_Dead();
 
-		m_AtkObj.clear();
-		m_dTimeAcc = 0.0;
-		m_dStopAcc = 0.0;
-		m_iCollCount = 0;
-		
-
-		Set_Dead();
-	}
-
+	Safe_Release(pGameInstance);
 #ifdef _DEBUG
 	if (FAILED(m_pRendererCom->Add_DebugGroup(m_pColliderCom)))
 		return;
@@ -366,19 +310,9 @@ void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
 
 		if (m_dTimeAcc > 0.5)
 		{
-			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float vPosX = XMVectorGetX(vPos);
-			_float vPosZ = XMVectorGetZ(vPos);
-			if (((138.f < vPosX) || (vPosX < 106.f)) || ((141.f < vPosZ) || (vPosZ < 109.f)))
-			{
-				m_dTimeAcc = 0.0;
-				m_bLineOut = true;
-			}
-
-			if(false == m_bLineOut)
 			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
 		}
-		
+
 	}
 }
 
@@ -390,6 +324,7 @@ void CAtkCollider::Tick_KyogaiDelayBullet(_double dTimeDelta)
 
 		if (m_dTimeAcc > 0.5)
 			m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, XMLoadFloat4(&m_AtkCollDesc.AtkDir));
+
 	}
 
 }
@@ -439,9 +374,9 @@ void CAtkCollider::Tick_KyogaiLiarBullet(_double dTimeDelta)
 					m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), Random::Generate_Float(0.f, 360.f));
 				}
 			}
-			
-			if(false == m_bStop)
-			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+
+			if (false == m_bStop)
+				m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
 		}
 
 		if (1.5 < m_dTimeAcc && m_dTimeAcc <= 1.5 + dTimeDelta)
@@ -459,7 +394,7 @@ void CAtkCollider::Tick_WebBullet(_double dTimeDelta)
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
 		if (m_dTimeAcc > 0.5)
-			m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, _vector{0.0f, 0.0f, -1.0f, 0.0f});
+			m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, _vector{ 0.0f, 0.0f, -1.0f, 0.0f });
 	}
 }
 
@@ -591,9 +526,9 @@ void CAtkCollider::Setting_WebBullet_Full()
 
 	_int index = CAtkCollManager::GetInstance()->Get_WebFull_Index();
 	_float fX = 0.0f;
-	
+
 	fX = 201.5f + (_float)index * 0.5f;
-	
+
 	_vector vOriginPos = { fX, 7.4f, PlayerPos.z + 35.0f, 1.f };
 
 	if (index <= 13)
@@ -603,6 +538,64 @@ void CAtkCollider::Setting_WebBullet_Full()
 	CAtkCollManager::GetInstance()->Set_WebFull_Index(index);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
+}
+
+void CAtkCollider::Check_OutLine()
+{
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float vMovePosX = m_AtkCollDesc.ColliderDesc.vPosition.x;
+
+	_float vPosX = XMVectorGetX(vPos);
+	_float vPosZ = XMVectorGetZ(vPos);
+
+	vPos = XMVectorSetX(vPos, vPosX + vMovePosX);
+
+	if (m_dTimeAcc > 0.9)
+	{
+		if (((144.f < vPosX) || (vPosX < 108.f)) || ((141.f < vPosZ) || (vPosZ < 106.f)))
+		{
+			if (m_bLineOut == false)
+			{
+				m_bLineOut = true;
+				// ÀÌÆåÆ® »ý¼º
+
+				/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+				CGroundSmoke::EFFECTDESC EffectDesc;
+				EffectDesc.vPos = vPos;
+
+				EffectDesc.vStartPosX = { -0.0f,0.0f }; EffectDesc.vStartPosY = { -0.00f,0.15f }; EffectDesc.vStartPosZ = { -0.0f,0.0f };
+				EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
+				EffectDesc.vSizeX = { 7.9f , 8.0f }; EffectDesc.vSizeY = { 7.9f , 8.0f };
+				EffectDesc.vSpeedX = { -0.0f , 0.0f }; EffectDesc.vSpeedY = { 0.05f , 0.1f }; EffectDesc.vSpeedZ = { -0.f , 0.f };
+				EffectDesc.vSizeSpeedX = { 1.0f , 1.6f }; EffectDesc.vSizeSpeedY = { 1.0f , 1.6f };
+
+				for (_uint i = 0; i < 10; ++i)
+					pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);*/
+
+			}
+		}
+
+	}
+
+}
+
+void CAtkCollider::Reset_Dead()
+{
+	Safe_Release(m_AtkCollDesc.pParentTransform);
+	m_AtkCollDesc.pParentTransform = nullptr;
+	CAtkCollManager::GetInstance()->Collect_Collider(this);
+	m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+	m_bLineOut = false;
+
+	m_AtkObj.clear();
+	m_dTimeAcc = 0.0;
+	m_dStopAcc = 0.0;
+	m_iCollCount = 0;
+
+	Set_Dead();
 }
 
 void CAtkCollider::Setting_AtkCollDesc()

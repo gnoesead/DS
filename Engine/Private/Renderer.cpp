@@ -153,17 +153,17 @@ HRESULT CRenderer::Initialize_Prototype()
 	/* For.Target_EffectBlurX */
 	_float4 vColor_EffectBlurX = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurX")
-		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
 		return E_FAIL;
 	/* For.Target_EffectBlurY */
 	_float4 vColor_EffectBlurY = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurY")
-		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
 		return E_FAIL;
 	/* For.Target_EffectCombineBlur */
 	_float4 vColor_EffectCombineBlur = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectCombineBlur")
-		, (_uint)Viewport.Width * 0.5f, (_uint)Viewport.Height * 0.5f, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
 		return E_FAIL;
 	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
@@ -1182,7 +1182,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	m_RenderObjects[RENDER_NONLIGHT].clear();*/
 
 
-	m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+	m_RenderObjects[RENDER_EffectBloom].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
 		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
 		});
 
@@ -1190,7 +1190,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		return E_FAIL;
 
 	
-	for (auto& pGameObject : m_RenderObjects[RENDER_NONLIGHT])
+	for (auto& pGameObject : m_RenderObjects[RENDER_EffectBloom])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render();
@@ -1198,7 +1198,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		Safe_Release(pGameObject);
 	}
 
-	m_RenderObjects[RENDER_NONLIGHT].clear();
+	m_RenderObjects[RENDER_EffectBloom].clear();
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
@@ -1254,17 +1254,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	// 추출한 것을 블러처리
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectBlurX"))))
 		return E_FAIL;
-
-	D3D11_VIEWPORT VP;
-	ZeroMemory(&VP, sizeof(D3D11_VIEWPORT));
-	VP.TopLeftX = 0.0f;
-	VP.TopLeftY = 0.0f;
-	VP.Width = 1280.f * 0.5f;
-	VP.Height = 720.f * 0.5f;
-	VP.MinDepth = 0.0f;
-	VP.MaxDepth = 0.0f;
-
-	m_pContext->RSSetViewports(1, &VP);
+		
 
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1340,8 +1330,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
-	m_pContext->RSSetViewports(1, &m_VP);
-
+	
 	// 블룸적용
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1375,7 +1364,7 @@ HRESULT CRenderer::Render_EffectNoBloom()
 		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
 		});
 
-	for (auto& pGameObject : m_RenderObjects[RENDER_BLEND])
+	for (auto& pGameObject : m_RenderObjects[RENDER_EffectNoBloom])
 	{
 		if (nullptr != pGameObject)
 			pGameObject->Render();
@@ -1384,7 +1373,7 @@ HRESULT CRenderer::Render_EffectNoBloom()
 
 	}
 
-	m_RenderObjects[RENDER_BLEND].clear();
+	m_RenderObjects[RENDER_EffectNoBloom].clear();
 
 	return S_OK;
 }

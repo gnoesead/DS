@@ -70,6 +70,8 @@ HRESULT CSkill_Name::Initialize(void * pArg)
 	m_szTanjiro_Skill.push_back(L"제6형 비틀린 소용돌이");
 
 	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬 극의");
+	m_szZenitsu_Skill.push_back(L"공전");
+
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));

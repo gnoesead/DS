@@ -1602,6 +1602,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 		|| ANIM_DMG_SMALL_AIR_R == iCurAnimIndex || ANIM_DMG_SMALL_AIR_U == iCurAnimIndex )
 	{
 		m_Moveset.m_isHitMotion = true;
+
+		m_Moveset.m_State_Battle_Guard = false;
 		
 		//다운상태
 		if (ANIM_DOWN_IDLE == iCurAnimIndex)

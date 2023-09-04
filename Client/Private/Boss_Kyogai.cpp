@@ -72,6 +72,21 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 
 void CBoss_Kyogai::Tick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -100,6 +115,21 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 void CBoss_Kyogai::LateTick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::LateTick(dTimeDelta);
 	Update_AnimIndex(m_eCurAnimIndex);
 	if (m_bTurn == false)
@@ -2228,6 +2258,8 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_END);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_AtkSk();
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+
 	}
 
 	if (Event_Time(dTimeDelta, 0.5, m_dTurnTime)) // 맨처음
@@ -2463,9 +2495,11 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB1;
+				
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
 			{
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 				m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB1);
 				m_eCurAnimIndex = ANIM_ATKCMB2;
 			}
@@ -2493,9 +2527,10 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
-				{
+				{					
 					m_bTurn = false;
 					m_dTurnTime = 0.0;
 					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
@@ -2572,7 +2607,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_01READY))
 			{
-
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 				m_eCurAnimIndex = ANIM_ATKCMB_02LOOP;
 			}
 			if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMB_02LOOP, 0.95, dTimeDelta))
@@ -2614,6 +2649,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{
@@ -2959,6 +2995,7 @@ void CBoss_Kyogai::Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector v
 	////////////////////////////////////////칼날 1개////////////////////////////////////////////////////
 	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta)
 	{
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 		//vMonsterDir = Rotation_Dir(vMonsterDir, 30.f, 0.f);
 		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
 			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);

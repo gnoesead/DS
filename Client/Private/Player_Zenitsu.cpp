@@ -591,6 +591,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
@@ -605,6 +608,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f);
 			}
@@ -1025,7 +1031,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		if (m_isFirst_Hekireki_AirEnd)
 		{
 			m_isFirst_Hekireki_AirEnd = false;
-			Set_FallingStatus(0.0f, 0.03f);
+			Set_FallingStatus(0.0f, 0.07f);
 		}
 	}
 
@@ -1106,9 +1112,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			else
 			{
 				if(m_isAir_Hekireki)
-					m_pTransformCom->Go_Straight(dTimeDelta * 19.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 18.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * 15.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 18.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			}
 		}
 	}
@@ -1135,7 +1141,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		Use_Mp_Skill();
 	}
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 0.f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 	Safe_Release(pGameInstance);
 }
@@ -1719,6 +1725,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		|| ANIM_DMG_AIR_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_CONNECT_1 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
+
+		m_Moveset.m_State_Battle_Guard = false;
 
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
