@@ -50,7 +50,9 @@ public:
 		ANIM_DOWN = 136,
 		ANIM_DOWN_GETUP_MOVE = 137, // 137~138, 82
 		ANIM_DOWN_GETUP = 134, //134~135, 61, 82
-		
+		ANIM_ADV_STEALTH_IDLE = 143,
+		ANIM_ADV_STEALTH_WALK = 144, //144~146
+		ANIM_END = 147
 	};
 
 private:
@@ -104,7 +106,8 @@ private:
 	_float m_fScaleChange = { 0.8f };
 	
 
-
+	//잠입모드 변경
+	_bool	m_isStealthMode = { false };
 
 private: //애니메이션 제어용 변수들
 	//Move

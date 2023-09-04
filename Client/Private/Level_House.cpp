@@ -85,11 +85,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -333,7 +333,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	/*CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -349,8 +349,23 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}*/
+	}
 
+
+	//잠입용 몬스터
+	CharacterDesc.WorldInfo.vPosition = _float4(15.5f, 0.05f, 27.94f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 16.1f, 0.05f, 25.31f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 16.25f, 0.05f, 9.04f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 19.95f, 0.05f, 9.16f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 19.8f, 0.05f, 25.66f, 1.f };
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 
@@ -1906,11 +1921,18 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Slam");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown_V2.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown_V2");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_1.bin"))))

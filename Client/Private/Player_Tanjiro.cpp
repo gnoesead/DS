@@ -107,15 +107,16 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		Web_Gimmick(dTimeDelta);
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
 	{
-		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-		EffectWorldDesc.vPosition.y = 1.f;
-		//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag, EffectDesc
-		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 4,
-			CAtkCollider::TYPE_EFFECT, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 0, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET,
-			"SpiderWeb_2", &EffectWorldDesc);
+		if (m_isStealthMode)
+			m_isStealthMode = false;
+		else
+			m_isStealthMode = true;
 	}
+	Safe_Release(pGameInstance); 
+
+
 
 	if (true == m_isDead)
 		return;
@@ -662,12 +663,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
-			else if (1 == m_iEvent_Index)	// 0.28
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
-			else if (2 == m_iEvent_Index)	// 0.7
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//if (0 == m_iEvent_Index)	// 0.0
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//else if (1 == m_iEvent_Index)	// 0.28
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//else if (2 == m_iEvent_Index)	// 0.7
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 		}
 
 		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
@@ -1886,12 +1887,21 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_Moveset.m_Down_Battle_Run = true;
 		}
 
+		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_IDLE, 0.001f);
+		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_WALK, 0.001f);
+		m_pModelCom->Set_LinearDuration(145, 0.001f);
+		m_pModelCom->Set_LinearDuration(146, 0.001f);
+
 
 		//무빙키입력들
 		if (m_Moveset.m_Down_Battle_Run)
 		{
 			m_Moveset.m_Down_Battle_Run = false;
-			m_pModelCom->Set_Animation(ANIM_ADV_RUN);
+
+			if (m_isStealthMode)
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);
+			else
+				m_pModelCom->Set_Animation(ANIM_ADV_RUN);
 		}
 
 		if (m_Moveset.m_State_Battle_Run)
@@ -1902,9 +1912,19 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.17f);
 
 			if (m_isCanNavi)
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+			{
+				if(m_isStealthMode)
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f, m_pNavigationCom[m_eCurNavi]);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+			}
 			else
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+			{
+				if (m_isStealthMode)
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f);
+				else
+					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+			}
 			//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 			
 			/*
@@ -1922,9 +1942,11 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_Up_Battle_Run)
 		{
 			m_Moveset.m_Up_Battle_Run = false;
-			m_pModelCom->Set_Animation(ANIM_ADV_IDLE);
+			m_pModelCom->Set_Animation(146);
 		}
 		Go_Straight_Deceleration(dTimeDelta, ANIM_ADV_RUN_END, m_fMove_Speed * m_fScaleChange * 0.7f, 0.18f);
+		Go_Straight_Deceleration(dTimeDelta, 146, m_fMove_Speed * m_fScaleChange * 0.35f, 0.18f);
+
 	}
 }
 
@@ -2298,7 +2320,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_DoubleStep = true;
 	}
 	//어드벤처 모드 런, 기본
-	else if (ANIM_ADV_IDLE == iCurAnimIndex || ANIM_ADV_RUN == iCurAnimIndex || ANIM_ADV_RUN_END == iCurAnimIndex)
+	else if (ANIM_ADV_IDLE == iCurAnimIndex || ANIM_ADV_RUN == iCurAnimIndex || ANIM_ADV_RUN_END == iCurAnimIndex
+		|| ANIM_ADV_STEALTH_IDLE == iCurAnimIndex || ANIM_ADV_STEALTH_WALK == iCurAnimIndex || 145 == iCurAnimIndex || 146 == iCurAnimIndex)
 	{
 		m_pSword->Set_SwordIn(true);
 		m_pSword->Set_SwordIn(true);
