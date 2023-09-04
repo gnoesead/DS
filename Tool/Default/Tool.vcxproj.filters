@@ -76,9 +76,6 @@
     <Filter Include="01. Levels\05. FinalBoss">
       <UniqueIdentifier>{a0e213d4-7b96-40d3-b738-e2f3ef3126ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\01.Tool">
-      <UniqueIdentifier>{fbea4d1e-796c-4d41-b7c4-2b1f35c8aeab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Levels\99.Loading">
       <UniqueIdentifier>{ae32f236-6c55-4660-ad48-972c0f28862c}</UniqueIdentifier>
     </Filter>
@@ -96,6 +93,9 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Sword">
       <UniqueIdentifier>{720774fd-7fbe-4417-b016-9a23ba863cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\01. Tool">
+      <UniqueIdentifier>{fbea4d1e-796c-4d41-b7c4-2b1f35c8aeab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,7 +127,7 @@
       <Filter>01. Levels\99.Loading\Loader</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Tool.h">
-      <Filter>01. Levels\01.Tool</Filter>
+      <Filter>01. Levels\01. Tool</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Tool.h">
       <Filter>02. GameObjects\Camera\Tool</Filter>
@@ -234,7 +234,7 @@
       <Filter>01. Levels\99.Loading\Loader</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Tool.cpp">
-      <Filter>01. Levels\01.Tool</Filter>
+      <Filter>01. Levels\01. Tool</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Tool.cpp">
       <Filter>02. GameObjects\Camera\Tool</Filter>
