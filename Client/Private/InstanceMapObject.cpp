@@ -2,6 +2,7 @@
 #include "..\Public\InstanceMapObject.h"
 
 #include "GameInstance.h"
+#include "Player.h"
 
 CInstanceMapObject::CInstanceMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMapObject(pDevice, pContext)
@@ -44,6 +45,30 @@ HRESULT CInstanceMapObject::Initialize(void* pArg)
 
 void CInstanceMapObject::Tick(_double TimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+		{
+			if (m_MapObject_Info.iRenderGroup == 0)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
+		else
+		{
+			if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
+	}
+	
 	__super::Tick(TimeDelta);
 
 	if (m_MapObject_Info.iInstanceType == INSTANCE_GRASS)
@@ -63,9 +88,6 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 		}*/
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
 	if(LEVEL_TRAIN == pGameInstance->Get_CurLevelIdx())
 		Scroll(TimeDelta);
 	
@@ -76,15 +98,39 @@ void CInstanceMapObject::Tick(_double TimeDelta)
 
 void CInstanceMapObject::LateTick(_double TimeDelta)
 {
-	__super::LateTick(TimeDelta);
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+		{
+			if (m_MapObject_Info.iRenderGroup == 0)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
+		else
+		{
+			if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
+	}
+
+	__super::LateTick(TimeDelta);
 
 	if (m_MapObject_Info.iArrangementType != ARRANGEMENT_RECT || pGameInstance->isIn_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 60.f))
 	{
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+		{
+			Safe_Release(pGameInstance);
 			return;
+		}
 	}
 
 	Safe_Release(pGameInstance);
