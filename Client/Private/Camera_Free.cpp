@@ -353,10 +353,13 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				m_fDistance = { 3.f + m_Zoom };
 				m_vOffSet = { 0.f, 1.f, 0.f, 0.f };
 				m_vLookOffSet = { 0.f, 0.2f, 0.f, 0.f };
-				m_fLookDamping = { 6.f };
+				m_fLookDamping = { 5.f };
 				m_fDamping = { 7.f };
 
-				NewAdventureCamera(dTimeDelta);
+				//NewAdventureCamera(dTimeDelta);
+
+				SuperNewAdventureCamera(dTimeDelta);
+
 			}
 			// Battle
 			else if (m_Is_Battle == true) {
@@ -532,6 +535,50 @@ void CCamera_Free::NewAdventureCamera(_double dTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDest);
 	
+
+	Safe_Release(pGameInstance);
+}
+
+void CCamera_Free::SuperNewAdventureCamera(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_vector vUp = XMVector3Normalize({ 0.f,1.f,0.f });
+
+	_vector vCamPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	New_Turn_Camera(dTimeDelta);
+
+	m_vDist = { XMVectorGetX(m_vDist), 0.3f ,XMVectorGetZ(m_vDist), 0.f };
+
+	m_vDist = XMVector3Normalize(m_vDist);
+
+	_vector vDest = m_vTargetPos + m_vOffSet + (m_vDist * m_fDistance);
+
+	_float t = (_float)dTimeDelta * m_fDamping;
+
+	_vector CamPos = XMVectorLerp(vCamPosition, vDest, t);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, CamPos);
+
+	_vector NewLook = {};
+
+	_vector Dist = { XMVectorGetX(m_vDist), 0.f ,XMVectorGetZ(m_vDist), 0.f };
+
+
+	_vector Look = m_vTargetPos + m_vLookOffSet - 100.f * Dist;
+
+	NewLook = m_vTargetPos + m_vLookOffSet - 100.f * Dist - CamPos;
+
+
+	NewLook = { XMVectorGetX(NewLook), -20.f , XMVectorGetZ(NewLook), XMVectorGetW(NewLook) };
+
+	NewLook = XMVector3Normalize(NewLook);
+
+	_float New_t = (_float)dTimeDelta * m_fLookDamping;
+	m_pTransformCom->LerpVector(NewLook, New_t);
+
 
 	Safe_Release(pGameInstance);
 }
