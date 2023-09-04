@@ -62,8 +62,13 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);
 
+	//levelÆÇ¸í
+	m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+
 	Safe_Release(pGameInstance);
 
+
+	
 	return S_OK;
 }
 
@@ -119,6 +124,8 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
+
+	
 
 #ifdef _DEBUG
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

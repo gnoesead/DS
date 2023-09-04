@@ -1258,8 +1258,6 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_dDelay_Teleporting = 0.0;
 		m_isFirst_Teleporting = true;
-
-		
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 

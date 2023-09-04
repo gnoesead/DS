@@ -1627,12 +1627,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Medium");
 		return E_FAIL;
-	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_XYZ_Small.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Small");
-		return E_FAIL;
-	}
+	}	
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
 	{

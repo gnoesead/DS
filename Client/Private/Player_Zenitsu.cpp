@@ -332,7 +332,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_1", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -346,7 +346,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -359,7 +359,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -371,7 +371,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_3", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -388,7 +388,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_3_Slash", m_pTransformCom , &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_3_Slash", m_pTransformCom , &EffectWorldDesc);
 
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc2;
@@ -495,7 +495,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_0", m_pTransformCom , &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_0", m_pTransformCom , &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
@@ -518,7 +518,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
 
 			}
 			// Big
@@ -530,7 +530,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
 				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_2", m_pTransformCom, &EffectWorldDesc);
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_2", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
@@ -741,7 +741,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		//콤보 첫 애니메이션 설정
@@ -778,7 +778,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
@@ -808,7 +808,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 			//첫 애니메이션 설정
@@ -926,7 +926,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
@@ -939,7 +939,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(21);
@@ -1062,7 +1062,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
-					if (Get_LockOn_MonPos())
+					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					{
 						m_LockOnPos.y -= 0.7f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
@@ -1077,7 +1077,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
-					if (Get_LockOn_MonPos())
+					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 				}
 				
@@ -1127,7 +1127,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 
@@ -1150,7 +1150,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
@@ -1209,7 +1209,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		_float4 PlayerPos;
@@ -1363,7 +1363,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 		}

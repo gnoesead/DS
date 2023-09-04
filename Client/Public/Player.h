@@ -198,7 +198,9 @@ protected:
 	_bool	m_isSection_RoofOn = { false };
 
 	
-	
+	//Level∆«∏Ì
+	_uint m_iLevelCur = { 0 };
+
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 

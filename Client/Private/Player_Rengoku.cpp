@@ -550,7 +550,7 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.8f), 1.1,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.8f), 0.3,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 8.0f);
 			}
 		}
@@ -947,6 +947,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(12);
+		m_isReset_Atk_MoveControl = true;
+		m_dDelay_Charge_Move = 0.0;
 	}
 	else if (m_Moveset.m_Up_Battle_Charge )
 	{
@@ -954,7 +956,15 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_IDLE);
 	}
-	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.01f * m_fScaleChange);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 12)
+	{
+		m_dDelay_Charge_Move += dTimeDelta;
+		if (m_dDelay_Charge_Move > 0.1f)
+		{
+			Go_Straight_Deceleration(dTimeDelta, 12, 3.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.035f * m_fScaleChange);
+		}
+	}
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
@@ -1367,7 +1377,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Special(_double dTimeDelta)
 void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 {
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	_vector vAtkDir = XMLoadFloat4(&AtkDir);
+	AtkDir.y = 0.0f;
+	_vector vAtkDir = XMVector4Normalize(XMLoadFloat4(&AtkDir));
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
