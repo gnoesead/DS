@@ -213,7 +213,7 @@ private: //패턴 함수들
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
-	void Update_AtkSkCmb(_double dTimeDelta);
+	void Update_AtkSkCmb(_double dTimeDelta);	
 	void Update_Awake_AtkskCmb(_double dTimeDelta);	//와다다다 패턴임
 	void Update_AtkSk(_double dTimeDelta);
 	void Update_AtkPangPang(_double dTimeDelta);
@@ -231,6 +231,9 @@ private: //패턴 함수들
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 
 	void Update_Awake_RoomChange(_double dTimeDelta);
+
+	void Update_RoomChange(_double dTimeDelta);
+	void Update_RoomChange_2(_double dTimeDelta);
 
 private:
 	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT , BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
@@ -263,7 +266,8 @@ private: // _bool
 	_bool	m_bTurnLF = { false };
 	_bool	m_bTurnRB = { false };
 	_bool	m_bTurnLB = { false };
-		
+
+	_bool	m_bLoop = { true };
 
 private: // time
 	_double m_dTimeAcc = { 0.0 };
@@ -280,12 +284,9 @@ private:
 	_vector m_vPos = { 0.f, 0.f, 0.f, 0.f };
 	_vector m_vDir = { 0.f, 0.f, 0.f, 0.f };
 	_vector	m_vRotDir = { 0.f, 0.f, 0.f, 0.f };
-private:
-	
+private:	
 	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };
-	
-
 	
 private:
 	PHASE   m_eCurPhase = BEGIN;
