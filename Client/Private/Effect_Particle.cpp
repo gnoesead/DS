@@ -212,6 +212,9 @@ void CEffect_Particle::Check_PassIndex(void)
 		{
 			m_iPassIndex = 5;
 
+			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+				m_iPassIndex = 8;
+
 			if (m_eEffectDesc.isTextureSheetAnimation)
 				m_iPassIndex = 6;
 		}

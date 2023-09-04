@@ -92,6 +92,16 @@ void CPlayer_Battle_Frame::Tick(_double TimeDelta)
 		m_UI_Desc.m_C_Num = 4;
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
+
+		m_UI_Desc.m_C_Num = 4;
+	}
+
+
+	Safe_Release(pGameInstance);
 
 	if (m_UI_Desc.m_C_Num == 0) {
 		if (m_UI_Desc.m_Type == 1) {
@@ -109,6 +119,15 @@ void CPlayer_Battle_Frame::Tick(_double TimeDelta)
 		else if (m_UI_Desc.m_Type == 2) {
 			m_Size_Param = 0.28f;
 			m_fX = 217;
+		}
+	}
+	if (m_UI_Desc.m_C_Num == 4) {
+		if (m_UI_Desc.m_Type == 1) {
+
+		}
+		else if (m_UI_Desc.m_Type == 2) {
+			m_Size_Param = 0.249946f;
+			m_fX = 215;
 		}
 	}
 	

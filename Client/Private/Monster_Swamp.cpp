@@ -18,6 +18,8 @@
 #include "Swamp.h"
 
 #include "Fade_Manager.h"
+#include "WaterParticleEffect.h"
+#include "Swamp_AlertRect.h"
 
 CMonster_Swamp::CMonster_Swamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -252,23 +254,65 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0초
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
 			if (1 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (2 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (3 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (4 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (5 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (6 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (7 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (8 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);
+				Create_WaterParticleEffect(4);
+			}
 			if (9 == m_iEvent_Index)
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.8, CAtkCollider::TYPE_BIGBLOW, AtkDir, 10.0f);
+			{
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 2.0f), 0.8, CAtkCollider::TYPE_BIGBLOW, AtkDir, 4.0f);
+				Create_WaterParticleEffect(4);
+			}
+
+			if (10 == m_iEvent_Index)
+			{
+				Create_WaterParticleEffect(4);
+			}
+
+			if (11 == m_iEvent_Index)
+			{
+				Create_WaterParticleEffect(4);
+			}
+
+			if (12 == m_iEvent_Index)
+			{
+				Create_WaterParticleEffect(4);
+			}
 		}
 
 		if (8 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -303,6 +347,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_11", m_pTransformCom , &EffectWorldDesc);
+
 			}
 
 			if (1 == m_iEvent_Index)
@@ -350,7 +395,13 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-
+		if (ANIM_ATK_SHOT == m_pModelCom->Get_iCurrentAnimIndex())	// 18 (늪 함정 만들기)
+		{
+			if (0 == m_iEvent_Index)	// 0.2
+			{
+				Create_LandSwampEffect();
+			}
+		}
 
 		if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -1103,6 +1154,9 @@ void CMonster_Swamp::Animation_Control_ShotSwamp(_double dTimeDelta)
 
 void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	if (m_isFrist_Atk_Pattern)
 	{
 		m_isFrist_Atk_Pattern = false;
@@ -1126,6 +1180,8 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
 		{
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
+
+			Create_SwampWaterEffect(dTimeDelta);
 		}
 		else
 		{
@@ -1134,11 +1190,14 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 			Swamp_Create(1, 2);
 		}
 	}
-
+	Safe_Release(pGameInstance);
 }
 
 void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	if (m_isFrist_Atk_Pattern)
 	{
 		m_isFrist_Atk_Pattern = false;
@@ -1157,6 +1216,8 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			_float4 Dir;
 			XMStoreFloat4(&Dir, Calculate_Dir_FixY());
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 2.0f, Dir);
+
+			Create_SwampWaterEffect(dTimeDelta);
 		}
 		else
 		{
@@ -1180,6 +1241,9 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 		}
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_CROSS, 4.0f, 0.25f);
+
+	Safe_Release(pGameInstance);
+
 }
 
 void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
@@ -1194,6 +1258,8 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_dDelay_Teleporting = 0.0;
 		m_isFirst_Teleporting = true;
+
+		
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1217,6 +1283,10 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 		m_isTeleporting = true;
+
+		m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY_NOWATEREEFCT);
+
+		Create_MySwampEffect();
 	}
 
 	if (m_isTeleporting && iCurAnim == ANIM_SWAMP_IN)
@@ -1225,11 +1295,23 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.9f);
 
+		if (!m_bMakeNewSwamp)
+		{
+			if (m_dDelay_Teleporting > 0.1f)
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_TELEPORT);
+
+				m_bMakeNewSwamp = true;
+			}
+		}
+
 		if (m_dDelay_Teleporting > 0.6f)
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SHORYU_TO_IDLE);
 			m_isTeleporting = false;
 			m_dDelay_Teleporting = 0.0;
+
+			m_bMakeNewSwamp = false;
 		}
 	}
 
@@ -1241,9 +1323,10 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 			m_isFirst_Atk_0 = false;
 
 			Jumping(4.2f, 0.65f);
+
+	
 		}
 	}
-
 }
 
 void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
@@ -1271,20 +1354,82 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
 		{
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
+
+			Create_SwampWaterEffect(dTimeDelta);
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SCREW);
-			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 		}
 	}
 	Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
 	Go_Dir_Deceleration(dTimeDelta, 8, 2.6f, 0.15f, m_SaveDir);
 
+	
+
 	if (iCurAnim == ANIM_ATK_SWAMP_SCREW)
+	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+
+		Create_SwampAlertRect();
+
+		if (!m_bSetDir)
+		{
+			m_dSetDirAccTime += dTimeDelta;
+
+			if (m_dSetDirAccTime > 0.8)
+			{
+				XMStoreFloat4(&m_SaveDir, Calculate_Dir());
+				m_bSetDir = true;
+				m_dSetDirAccTime = 0.0;
+				m_bLandEffect[0] = false;
+				m_bLandEffect[1] = false;
+				m_bLandEffect[2] = false;
+			}
+		}
+	}
 	else if (iCurAnim == 8)
+	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
+
+		m_dSetDirAccTime += dTimeDelta;
+
+		if (m_dSetDirAccTime > 0.00)
+		{
+			if (!m_bLandEffect[0])
+			{
+				Create_LandSwampEffect();
+
+				m_bLandEffect[0] = true;
+			}
+		}
+
+		/*if (m_dSetDirAccTime > 0.04)
+		{
+			if (!m_bLandEffect[1])
+			{
+				Create_LandSwampEffect();
+
+				m_bLandEffect[1] = true;
+			}
+		}*/
+
+		if (m_dSetDirAccTime > 0.07)
+		{
+			if (!m_bLandEffect[2])
+			{
+				Create_LandSwampEffect();
+
+				m_bLandEffect[2] = true;
+
+				m_dSetDirAccTime = 0.0;
+			}
+		}
+		
+		m_bMakeSwampAlertRect = false;
+
+		m_bSetDir = false;
+	}
 }
 
 void CMonster_Swamp::Animation_Control_Swamp_In(_double dTimeDelta)
@@ -1981,6 +2126,84 @@ void CMonster_Swamp::Create_MySwampEffect()
 	}
 
 	Safe_Release(pGameInstance);
+}
+
+void CMonster_Swamp::Create_SwampWaterEffect(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	m_dWaterEffectAccTime += dTimeDelta;
+	m_dRemainSwampEffectAccTime += dTimeDelta;
+
+	if (m_dWaterEffectAccTime > 0.09)
+	{
+		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		for (_uint i = 0; i < 8; ++i)
+			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+		m_dWaterEffectAccTime = 0.0;
+	}
+
+	if (m_dRemainSwampEffectAccTime > 0.11)
+	{
+		CSwamp::EFFECTDESC EffectSwampDesc;
+		EffectSwampDesc.eType = CSwamp::TYPE_REMAIN;
+		EffectSwampDesc.pTransform = m_pTransformCom;
+		pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp"), &EffectSwampDesc);
+
+		m_dRemainSwampEffectAccTime = 0.0;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void CMonster_Swamp::Create_WaterParticleEffect(_uint iNum)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+	EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , 1.1f, 0.f , 0.f);
+	EffectParticleDesc.eType = CWaterParticleEffect::TYPE_SCREW;
+
+	for (_uint i = 0; i < iNum; ++i)
+		pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+	Safe_Release(pGameInstance);
+}
+
+void CMonster_Swamp::Create_LandSwampEffect()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CSwamp::EFFECTDESC EffectSwampDesc;
+	EffectSwampDesc.eType = CSwamp::TYPE_LAND;
+	EffectSwampDesc.pTransform = m_pTransformCom;
+	pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp"), &EffectSwampDesc);
+
+	Safe_Release(pGameInstance);
+}
+
+void CMonster_Swamp::Create_SwampAlertRect()
+{
+	if (!m_bMakeSwampAlertRect)
+	{
+		CSwamp_AlertRect::EFFECTDESC EffectDesc;
+		EffectDesc.pOwnerTransform = m_pTransformCom;
+		EffectDesc.vDir = m_SaveDir;
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp_AlertRect"), &EffectDesc);
+
+		Safe_Release(pGameInstance);
+
+		m_bMakeSwampAlertRect = true;
+	}
 }
 
 HRESULT CMonster_Swamp::Add_Components()

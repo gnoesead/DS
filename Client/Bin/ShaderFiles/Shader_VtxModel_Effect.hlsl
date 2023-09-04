@@ -1869,7 +1869,7 @@ technique11 DefaultTechnique
 
 	pass DiffuseCalcRedDissolveSpriteNoZWrite		// 21
 	{
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable, 0);
 
@@ -1891,5 +1891,18 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKRAMPSPRITE_DISSOLVE();
+	}
+
+	pass MaskColorDissolveNoZWrite		// 23
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKCOLORDISSOLVE();
 	}
 }

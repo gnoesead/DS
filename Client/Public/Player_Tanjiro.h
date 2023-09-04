@@ -50,7 +50,9 @@ public:
 		ANIM_DOWN = 136,
 		ANIM_DOWN_GETUP_MOVE = 137, // 137~138, 82
 		ANIM_DOWN_GETUP = 134, //134~135, 61, 82
-		
+		ANIM_ADV_STEALTH_IDLE = 143,
+		ANIM_ADV_STEALTH_WALK = 144, //144~146
+		ANIM_END = 147
 	};
 
 private:
@@ -90,7 +92,8 @@ private: //애니메이션 제어용 함수들
 
 	void	Moving_Restrict();
 
-
+	void	Web_Gimmick(_double dTimeDelta);
+	void	Make_Web( _int type );
 
 private:
 	CSword* m_pSword = { nullptr };
@@ -100,7 +103,8 @@ private:
 	_float m_fScaleChange = { 0.8f };
 	
 
-
+	//잠입모드 변경
+	_bool	m_isStealthMode = { false };
 
 private: //애니메이션 제어용 변수들
 	//Move
@@ -127,7 +131,15 @@ private: //애니메이션 제어용 변수들
 	
 	_float4		m_vTanjrioToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
 	
+private:
+	//웹 기믹 시작
+	_bool	m_isWebGimmick_On = { false };
+	_double m_dDelay_WebGimmick_0 = { 0.0 };
+	_double	m_dDelay_WebGimmick_1 = { 0.0 };
 
+	_double m_dDelay_WebGimmick_Full = { 0.0 };
+
+	_int	m_iWebEffect_Type = { 0 };
 
 private:
 	/* 임시 코드 */

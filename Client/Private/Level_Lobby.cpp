@@ -1396,6 +1396,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Normal");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region COMMON
@@ -1450,6 +1462,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 
 
 #pragma region ZENITSU
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_0");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_1");
@@ -1486,7 +1504,23 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_2");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	return 	S_OK;

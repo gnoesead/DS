@@ -298,7 +298,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 					m_iPassIndex = 13;
 			}
 			else
+			{
 				m_iPassIndex = 7;
+
+				if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+					m_iPassIndex = 23;
+			}
 		}
 
 		if (nullptr != m_pTextures[TEX_DISTORTION])

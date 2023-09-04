@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Monster.h"
+#include "Swamp.h"
 
 BEGIN(Engine)
 
@@ -42,7 +43,11 @@ public:
 
 	_vector	Calculate_Dir_From_Pos(_float4 Pos);
 	_float	Calculate_Distance_From_Pos(_float4 Pos);
-	
+
+	void Create_SwampWaterEffect(_double dTimeDelta);
+
+private:
+	void		Create_MySwampEffect();
 
 private:
 	CTransform* m_pTransformCom = { nullptr };
@@ -55,6 +60,13 @@ private:
 	_double		m_dDelay_All = { 0.0 };
 
 	_float4	 m_DuDudgePos[10];
+
+private:
+	_double m_dWaterEffectAccTime = { 0.0 };
+	_double m_dRemainSwampEffectAccTime = { 0.0 };
+
+private:
+	CSwamp*			m_pMySwamp = { nullptr };
 
 private:
 	PrimitiveBatch<DirectX::VertexPositionColor>* m_pPrimitiveBatch = { nullptr };

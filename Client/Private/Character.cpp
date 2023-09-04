@@ -645,6 +645,10 @@ void CCharacter::Check_HitType()
 			{
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(true);
 			}
+			else if (pHitColl->Get_Collider()->Get_Hit_Web())
+			{
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(true);
+			}
 
 			pHitColl->Add_AtkObejct(this);
 		}
