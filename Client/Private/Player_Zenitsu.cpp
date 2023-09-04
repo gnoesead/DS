@@ -588,6 +588,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.4f;
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom , &EffectWorldDesc);
 
@@ -615,6 +616,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
@@ -769,7 +772,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		//콤보 첫 애니메이션 설정
@@ -806,7 +809,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
@@ -836,7 +839,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 			//첫 애니메이션 설정
@@ -954,7 +957,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
@@ -967,7 +970,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(21);
@@ -988,6 +991,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
+	
+	/*
 	//벽력일섬 콤보용
 	m_dDelay_Hekireki_AnotherCan += dTimeDelta;
 	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_END || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
@@ -1000,7 +1005,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_Moveset.m_Down_Skill_Normal = true;
 			Safe_Release(pGameInstance);
 		}
-	}
+	}*/
 	//마나제한
 	if (m_Moveset.m_iAwaken < 2)
 	{
@@ -1059,6 +1064,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 	
 	
+	m_dDelay_Hekireki_AnotherCan += dTimeDelta;
+	if (m_dDelay_Hekireki_AnotherCan < 0.8f)
+	{
+		m_Moveset.m_Down_Skill_Normal = false;
+		m_Moveset.m_Down_Skill_Move = false;
+	}
 
 	if (CurAnim != ANIM_ATK_SKILL_HEKIREKI && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR /* && CurAnim != ANIM_ATK_SKILL_HEKIREKI_END && CurAnim != ANIM_ATK_SKILL_HEKIREKI_AIR_END*/)
 	{
@@ -1090,7 +1101,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
-					if (Get_LockOn_MonPos())
+					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					{
 						m_LockOnPos.y -= 0.7f;
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
@@ -1105,7 +1116,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
 				{
-					if (Get_LockOn_MonPos())
+					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 				}
 				
@@ -1139,6 +1150,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 					m_pTransformCom->Go_Straight(dTimeDelta * 18.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			}
 		}
+
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		if (PlayerPos.y <= m_fLand_Y)
+		{
+			PlayerPos.y = m_fLand_Y;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&PlayerPos));
+		}
 	}
 	else
 	{
@@ -1155,7 +1175,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 
@@ -1178,7 +1198,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
@@ -1237,7 +1257,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
-			if (Get_LockOn_MonPos())
+			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		_float4 PlayerPos;
@@ -1306,12 +1326,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, false, 0.4f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
 
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.4f);
 				}
 			}
 			else if (m_isRight)
@@ -1321,12 +1344,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, false, 0.4f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
 
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.4f);
 				}
 			}
 		}
@@ -1385,7 +1411,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 			{
-				if (Get_LockOn_MonPos())
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 			}
 		}
@@ -1433,6 +1459,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 #pragma region GuardHit
 	if (m_isGuardHit)
@@ -1469,36 +1496,178 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isConnectHitting = true;
 		}
 
-		//m_pTransformCom->Set_Look(reverseAtkDir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isJumpOn)
+		if (m_isSkilling == false)
 		{
-			Jumping(0.12f, 0.030f);
+			//m_pTransformCom->Set_Look(reverseAtkDir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				Jumping(0.12f, 0.030f);
 
-			if (m_iSmallHit_Index == 0)
-			{
-				m_pModelCom->Set_Animation(ANIM_FALL);
-				m_iSmallHit_Index++;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(ANIM_FALL);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_0);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(ANIM_FALL);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_1);
+					m_iSmallHit_Index = 0;
+				}
 			}
-			else if (m_iSmallHit_Index == 1)
+			else
 			{
-				m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_0);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 2)
-			{
-				m_pModelCom->Set_Animation(ANIM_FALL);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 3)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_AIR_CONNECT_1);
-				m_iSmallHit_Index = 0;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(138);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(139);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(140);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(141);
+					m_iSmallHit_Index = 0;
+				}
 			}
 		}
-		else
+	}
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Deceleration(dTimeDelta, 138, 1.5f * m_fDmg_Move_Ratio, 0.01f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
+	}
+#pragma endregion
+
+
+
+#pragma region Dmg_Big
+	if (m_Moveset.m_Down_Dmg_Big)
+	{
+		m_Moveset.m_Down_Dmg_Big = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			}
+			else
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+			}
+		}
+	}
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f, AtkDir);
+
+#pragma endregion
+
+
+
+#pragma region Dmg_Blow
+	if (m_Moveset.m_Down_Dmg_Blow)
+	{
+		m_Moveset.m_Down_Dmg_Blow = false;
+
+		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			m_pTransformCom->Set_Look(reverseAtkDir);
+			Jumping(1.2f, 0.05f);
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+		}
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
+	Ground_Animation_Play(85, 86);
+
+#pragma endregion
+
+
+
+#pragma region Dmg_BigBlow
+	if (m_Moveset.m_Down_Dmg_BigBlow)
+	{
+		m_Moveset.m_Down_Dmg_BigBlow = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			Jumping(1.2f, 0.05f);
+			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+		}
+	}
+	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, 111, 3.0f * m_fDmg_Move_Ratio, 0.1f, AtkDir);
+	Ground_Animation_Play(110, 111);
+
+#pragma endregion
+
+
+#pragma region Dmg_Upper
+	if (m_Moveset.m_Down_Dmg_Upper)
+	{
+		m_Moveset.m_Down_Dmg_Upper = false;
+		m_isConnectHitting = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			Jumping(1.85f, 0.03f);
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		}
+	}
+	if (m_isConnectHitting == false)
+	{
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.35f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 100, 0.35f * m_fDmg_Move_Ratio, AtkDir);
+	}
+	Ground_Animation_Play(100, 101);
+#pragma endregion
+
+
+#pragma region Dmg_Web
+	if (m_Moveset.m_Down_Dmg_Web)
+	{
+		m_Moveset.m_Down_Dmg_Web = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+		m_isConnectHitting = true;
+		
+		if (m_isSkilling == false)
 		{
 			if (m_iSmallHit_Index == 0)
 			{
@@ -1520,130 +1689,6 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				m_pModelCom->Set_Animation(141);
 				m_iSmallHit_Index = 0;
 			}
-		}
-	}
-	if (m_isConnectHitting == false)
-	{
-		Go_Dir_Deceleration(dTimeDelta, 138, 1.5f * m_fDmg_Move_Ratio, 0.01f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 139, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 140, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 141, 1.0f * m_fDmg_Move_Ratio, 0.015f, AtkDir);
-	}
-#pragma endregion
-
-
-
-#pragma region Dmg_Big
-	if (m_Moveset.m_Down_Dmg_Big)
-	{
-		m_Moveset.m_Down_Dmg_Big = false;
-
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
-		if (m_isJumpOn)
-		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		}
-		else
-		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
-		}
-	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f, AtkDir);
-
-#pragma endregion
-
-
-
-#pragma region Dmg_Blow
-	if (m_Moveset.m_Down_Dmg_Blow)
-	{
-		m_Moveset.m_Down_Dmg_Blow = false;
-
-		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
-		Jumping(1.2f, 0.05f);
-	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
-	Ground_Animation_Play(85, 86);
-
-#pragma endregion
-
-
-
-#pragma region Dmg_BigBlow
-	if (m_Moveset.m_Down_Dmg_BigBlow)
-	{
-		m_Moveset.m_Down_Dmg_BigBlow = false;
-
-		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
-		Jumping(1.2f, 0.05f);
-	}
-	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
-	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
-	Go_Dir_Deceleration(dTimeDelta, 111, 3.0f * m_fDmg_Move_Ratio, 0.1f, AtkDir);
-	Ground_Animation_Play(110, 111);
-
-#pragma endregion
-
-
-#pragma region Dmg_Upper
-	if (m_Moveset.m_Down_Dmg_Upper)
-	{
-		m_Moveset.m_Down_Dmg_Upper = false;
-		m_isConnectHitting = false;
-
-		m_pModelCom->Set_Animation(ANIM_FALL);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-
-		Jumping(1.85f, 0.03f);
-	}
-	if (m_isConnectHitting == false)
-	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.35f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 100, 0.35f * m_fDmg_Move_Ratio, AtkDir);
-	}
-	Ground_Animation_Play(100, 101);
-#pragma endregion
-
-
-#pragma region Dmg_Web
-	if (m_Moveset.m_Down_Dmg_Web)
-	{
-		m_Moveset.m_Down_Dmg_Web = false;
-
-		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-		m_isConnectHitting = true;
-
-		if (m_iSmallHit_Index == 0)
-		{
-			m_pModelCom->Set_Animation(138);
-			m_iSmallHit_Index++;
-		}
-		else if (m_iSmallHit_Index == 1)
-		{
-			m_pModelCom->Set_Animation(139);
-			m_iSmallHit_Index++;
-		}
-		else if (m_iSmallHit_Index == 2)
-		{
-			m_pModelCom->Set_Animation(140);
-			m_iSmallHit_Index++;
-		}
-		else if (m_iSmallHit_Index == 3)
-		{
-			m_pModelCom->Set_Animation(141);
-			m_iSmallHit_Index = 0;
 		}
 	}
 #pragma endregion
@@ -1748,6 +1793,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	{
 		m_Moveset.m_isHitMotion = true;
 
+		m_isAir_Hekireki = false;
+
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
 		{
@@ -1818,6 +1865,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
+
+		m_isSkilling = true;
 
 		if (ANIM_ATK_SKILL_GUARD != iCurAnimIndex)
 		{
@@ -1943,6 +1992,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 
 		m_pSword->Set_SwordIn(true);
 		m_pSwordHome->Set_SwordIn(true);
+
+		m_isSkilling = false;
 	}
 }
 
@@ -2047,8 +2098,8 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 		return E_FAIL;
 
 	// 슈퍼아머 상태 넣어주셈
-	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
-		return E_FAIL;*/
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
+		return E_FAIL;
 
 
 	Safe_Release(pGameInstance);

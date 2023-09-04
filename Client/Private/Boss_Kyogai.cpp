@@ -72,6 +72,21 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 
 void CBoss_Kyogai::Tick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -100,6 +115,21 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 void CBoss_Kyogai::LateTick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::LateTick(dTimeDelta);
 	Update_AnimIndex(m_eCurAnimIndex);
 	if (m_bTurn == false)
