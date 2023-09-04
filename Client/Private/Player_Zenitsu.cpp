@@ -1278,12 +1278,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, false, 0.4f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
 
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.4f);
 				}
 			}
 			else if (m_isRight)
@@ -1293,12 +1296,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, false, 0.4f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
 
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.4f);
 				}
 			}
 		}

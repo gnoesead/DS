@@ -349,6 +349,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Zako\StealthMode">
       <UniqueIdentifier>{7d843af3-187d-4527-8f4c-8f46cd002242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\NPC\NPC_Zenitsu">
+      <UniqueIdentifier>{fe8c0157-0581-4e1f-b3cc-6c3b8a5b3e6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -660,6 +663,9 @@
     <ClInclude Include="..\Public\Monster_StealthZako.h">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\NPC_Zenitsu.h">
+      <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -961,6 +967,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster_StealthZako.cpp">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NPC_Zenitsu.cpp">
+      <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

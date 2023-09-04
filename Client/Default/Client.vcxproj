@@ -239,6 +239,7 @@
     <ClInclude Include="..\Public\NPC_ChildF.h" />
     <ClInclude Include="..\Public\NPC_ChildM.h" />
     <ClInclude Include="..\Public\NPC_Female.h" />
+    <ClInclude Include="..\Public\NPC_Zenitsu.h" />
     <ClInclude Include="..\Public\Option.h" />
     <ClInclude Include="..\Public\OptionManager.h" />
     <ClInclude Include="..\Public\Paper.h" />
@@ -346,6 +347,7 @@
     <ClCompile Include="..\Private\NPC_ChildF.cpp" />
     <ClCompile Include="..\Private\NPC_ChildM.cpp" />
     <ClCompile Include="..\Private\NPC_Female.cpp" />
+    <ClCompile Include="..\Private\NPC_Zenitsu.cpp" />
     <ClCompile Include="..\Private\Option.cpp" />
     <ClCompile Include="..\Private\OptionManager.cpp" />
     <ClCompile Include="..\Private\Paper.cpp" />

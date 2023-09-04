@@ -196,6 +196,8 @@ protected:
 	_int	m_iSection = { 1 }; // 1:FirstStreet, 2:SecondStreet, 3:ThirdStreet ,4:Inside
 	_int	m_iSection_Sub = { 2 };
 	_bool	m_isSection_RoofOn = { false };
+
+	
 	
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };

@@ -1295,12 +1295,14 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_L);
 
-					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true);
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, false, 0.35f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.35f);
 					//Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
 				}
 			}
@@ -1312,17 +1314,21 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Doing(true);
 					m_pModelCom->Set_Animation(ANIM_BATTLE_STEP_R);
 					
-					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true);
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, false, 0.35f);
 				}
 				//아닐경우, 다음 콤보로 진행
 				else
 				{
 					m_pModelCom->Set_Combo_Trigger(true);
+
+					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.35f);
 					//Jumping(1.0f * m_fScaleChange, 0.06f * m_fScaleChange);
 				}
 			}
 		}
 	}
+	
+
 	_vector vDir = XMLoadFloat4(&m_Moveset.m_Input_Dir);
 	_float4 fDir;
 	XMStoreFloat4(&fDir, -vDir);
@@ -1732,11 +1738,15 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_Moveset.m_Down_Battle_Run = true;
 		}
 
-		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_IDLE, 0.001f);
-		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_WALK, 0.001f);
-		m_pModelCom->Set_LinearDuration(145, 0.001f);
-		m_pModelCom->Set_LinearDuration(146, 0.001f);
+		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_IDLE, 0.1f);
+		m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_WALK, 0.1f);
+		m_pModelCom->Set_LinearDuration(145, 0.0001f);
+		m_pModelCom->Set_LinearDuration(146, 0.15f);
 
+		m_pModelCom->Set_EarlyEnd(ANIM_ADV_STEALTH_IDLE, false, 0.9999f);
+		m_pModelCom->Set_EarlyEnd(ANIM_ADV_STEALTH_WALK, false, 0.9999f);
+		m_pModelCom->Set_EarlyEnd(145, false, 0.9999f);
+		m_pModelCom->Set_EarlyEnd(146, false, 0.9999f);
 
 		//무빙키입력들
 		if (m_Moveset.m_Down_Battle_Run)
@@ -1755,6 +1765,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_fMove_Speed = 2.0f;
 			
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.17f);
+			
 
 			if (m_isCanNavi)
 			{
@@ -1787,7 +1798,11 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		if (m_Moveset.m_Up_Battle_Run)
 		{
 			m_Moveset.m_Up_Battle_Run = false;
-			m_pModelCom->Set_Animation(146);
+
+			if (m_isStealthMode)
+				m_pModelCom->Set_Animation(146);
+			else
+				m_pModelCom->Set_Animation(ANIM_ADV_RUN_END);
 		}
 		Go_Straight_Deceleration(dTimeDelta, ANIM_ADV_RUN_END, m_fMove_Speed * m_fScaleChange * 0.7f, 0.18f);
 		Go_Straight_Deceleration(dTimeDelta, 146, m_fMove_Speed * m_fScaleChange * 0.35f, 0.18f);

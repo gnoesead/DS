@@ -8,6 +8,7 @@
 #include "Player_Tanjiro.h"
 #include "Player_Zenitsu.h"
 #include "Player_Rengoku.h"
+#include "NPC_Zenitsu.h"
 
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
@@ -671,7 +672,13 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
-
+	/* Prototype_GameObject_NPC_Zenitsu */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Zenitsu"),
+		CNPC_Zenitsu::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_Zenitsu");
+		return E_FAIL;
+	}
 
 	/* Prototype_GameObject_NPC_Female */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Female"),

@@ -245,7 +245,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 5.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 7.2f);
 			}
 		}
 
@@ -537,7 +537,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
 		m_eCurState = STATE_ATTACK;
-		m_eCurPattern = PATTERN_COMBO;
+		m_eCurPattern = PATTERN_JUMPSTOMP;
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
@@ -1065,8 +1065,8 @@ void CMonster_Swamp::Animation_Control_JumpStomp(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_ATK_JUMPSTOMP);
 		}
-		Go_Straight_Constant(dTimeDelta, 4, 1.8f);
-		Go_Straight_Deceleration(dTimeDelta, 5, 1.8f, 0.35f);
+		Go_Straight_Constant(dTimeDelta, 4, 1.1f);
+		Go_Straight_Deceleration(dTimeDelta, 5, 1.1f, 0.35f);
 	}
 }
 
@@ -1369,7 +1369,7 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_ATK_SWAMP_SCREW)
 	{
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.9f);
 
 		Create_SwampAlertRect();
 

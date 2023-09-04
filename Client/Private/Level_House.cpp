@@ -308,6 +308,15 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
 		return E_FAIL;
 	}
+	
+	//NPC_Zenitsu
+	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_NPC_Zenitsu"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+		return E_FAIL;
+	}
 
     Safe_Release(pGameInstance);
 
