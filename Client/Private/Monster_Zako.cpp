@@ -363,7 +363,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			//}
 			if (1 == m_iEvent_Index)
 			{//0.65
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown_V2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown", m_pTransformCom);
 			}
 		}
 		if (13 == m_pModelCom->Get_iCurrentAnimIndex()) // ±æ°Ô
@@ -373,6 +373,13 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
 			}
+		}
+		if (14 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
+			}			
 		}
 
 		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -458,6 +465,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0.45
+
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin_Wind", m_pTransformCom);
 			}
@@ -676,7 +684,7 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_JUMPKICK;
+		m_eCurPattern = PATTERN_CLAWS;
 	}
 	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5))
 	{
@@ -685,7 +693,7 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_BUTTERFLY;
+		m_eCurPattern = PATTERN_TACKLE;
 	}
 	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
 	{
@@ -694,7 +702,7 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_SPINMOVE;
+		m_eCurPattern = PATTERN_SPINKICK;
 	}
 	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
@@ -712,7 +720,7 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_SPINKICK;
+		m_eCurPattern = PATTERN_BUTTERFLY;
 	}
 	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
@@ -722,6 +730,24 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		m_isFirst_AtkPattern = true;
 
 		m_eCurPattern = PATTERN_CLAWCROSS;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPADSLASH))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_SPINMOVE;
+	}
+	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPADSTAR))
+	{
+		m_iAttackIndex = 10;
+
+		m_eCurState = STATE_ATTACK;
+		m_isFirst_AtkPattern = true;
+
+		m_eCurPattern = PATTERN_MOVE;
 	}
 	Safe_Release(pGameInstance);
 #pragma endregion

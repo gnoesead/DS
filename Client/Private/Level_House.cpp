@@ -333,7 +333,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	/*CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -349,7 +349,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}*/
+	}
 
 
 	//잠입용 몬스터
@@ -1921,11 +1921,18 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Slam");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown_V2.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_KickDown.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown_V2");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_KickDown");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_1_1.bin"))))
