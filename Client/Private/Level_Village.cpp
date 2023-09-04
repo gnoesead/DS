@@ -2556,6 +2556,12 @@ HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_Village::Ready_Layer_Effect()
 {
+    if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Atk_5.bin"))))
+    {
+        MSG_BOX("Failed to Load Effect : Swamp_Atk_5");
+        return E_FAIL;
+    }
+
     if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Atk_10.bin"))))
     {
         MSG_BOX("Failed to Load Effect : Swamp_Atk_10");

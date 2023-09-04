@@ -15,8 +15,8 @@
 #include "Camera_Manager.h"
 #include "OptionManager.h"
 #include "Camera_Free.h"
-
-
+#include "GroundSmoke.h"
+#include "WaterParticleEffect.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -115,6 +115,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			m_isStealthMode = true;
 	}
 	Safe_Release(pGameInstance); 
+
+
 
 	if (true == m_isDead)
 		return;
@@ -648,6 +650,157 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}
 
+		}
+
+#pragma endregion
+
+#pragma region Move & Hitted
+		if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지(탐험)
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		}
+
+		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기
+		{
+			//if (0 == m_iEvent_Index)	// 0.0
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//else if (1 == m_iEvent_Index)	// 0.28
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//else if (2 == m_iEvent_Index)	// 0.7
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
+		{
+			if(0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (1 == m_iEvent_Index)	// 0.05
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (2 == m_iEvent_Index)	// 0.10
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (3 == m_iEvent_Index)	// 0.15
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (4 == m_iEvent_Index)	// 0.20
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (5 == m_iEvent_Index)	// 0.25
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (6 == m_iEvent_Index)	// 0.30
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
+		{
+			if (0 == m_iEvent_Index)	// 0.02
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		}
+
+		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
+		{
+			if (0 == m_iEvent_Index)	// 0.02
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		}
+
+		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (1 == m_iEvent_Index)	// 0.12
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (2 == m_iEvent_Index)	// 0.24
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (3 == m_iEvent_Index)	// 0.36
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (4 == m_iEvent_Index)	// 0.48
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (5 == m_iEvent_Index)	// 0.60
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (6 == m_iEvent_Index)	// 0.72
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+		/*ANIM_BATTLE_STEP_AB = 91, ANIM_BATTLE_STEP_AF = 92, ANIM_BATTLE_STEP_AL = 93, ANIM_BATTLE_STEP_AR = 94,
+			ANIM_BATTLE_STEP_B = 95, ANIM_BATTLE_STEP_F = 96, ANIM_BATTLE_STEP_L = 97, ANIM_BATTLE_STEP_R = 99,*/
+		if (95 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (96 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (97 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (98 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (99 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (100 == m_pModelCom->Get_iCurrentAnimIndex())	// Step
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+		}
+
+		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if(1 == m_iEvent_Index)	// 0.58
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+		}
+
+		if (128 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 떼구르르 구름
+		{
+			if (0 == m_iEvent_Index)	// 0.2
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (1 == m_iEvent_Index)	// 0.5
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (2 == m_iEvent_Index)	// 0.93
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (3 == m_iEvent_Index)	// 1.1
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (4 == m_iEvent_Index)	// 1.31
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (5 == m_iEvent_Index)	// 1.6
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+		}
+
+		if (133 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin되면서 떨어짐
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			
 		}
 
 #pragma endregion
@@ -1653,6 +1806,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			}
 		}
 		
+		Create_SwampWaterParticleEffect(dTimeDelta);
+
 	}
 #pragma endregion
 
@@ -2310,6 +2465,26 @@ void CPlayer_Tanjiro::Make_Web(_int type)
 
 	}
 	
+}
+
+void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	m_dWaterEffectAccTime += dTimeDelta;
+
+	if (m_dWaterEffectAccTime > 0.1)
+	{
+		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
+		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , 0.f , 0.f , 0.f);
+		for (_uint i = 0; i < 5; ++i)
+			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+
+		m_dWaterEffectAccTime = 0.0;
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer_Tanjiro::Add_Components()

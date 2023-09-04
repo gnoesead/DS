@@ -102,7 +102,9 @@ void CSwampShot::Tick(_double dTimeDelta)
 		if (m_dDelay_All > 10.0)
 		{
 			m_isDead = true;
-			m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY_NOWATEREEFCT);
+
+			if(nullptr != m_pMySwamp)
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY_NOWATEREEFCT);
 		}
 	}
 
@@ -186,6 +188,8 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 	else if (1.5f <= m_dDelay_All && m_dDelay_All < 2.0f)
 	{
 		m_pTransformCom->Go_Dir(dTimeDelta, -Calculate_Dir_From_Pos(m_ShotDesc.MonsterPos));
+
+		Create_SwampWaterEffect(dTimeDelta);
 	}
 	else if (2.0f <= m_dDelay_All && m_dDelay_All < 4.5f)
 	{
