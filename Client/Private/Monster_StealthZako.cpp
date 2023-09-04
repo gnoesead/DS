@@ -296,6 +296,14 @@ void CMonster_StealthZako::Calculate_SpotIndex()
 
 void CMonster_StealthZako::Animation_Control(_double dTimeDelta)
 {
+	if(m_isQuestioning == false && m_isFinding == false)
+		Animation_Control_Move(dTimeDelta);
+
+	Animation_Control_Search(dTimeDelta);
+}
+
+void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
+{
 	//¼øÂû
 	Calculate_SpotIndex();
 
@@ -338,6 +346,51 @@ void CMonster_StealthZako::Animation_Control(_double dTimeDelta)
 		}
 	}
 
+}
+
+void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
+{
+	if (!m_isQuestioning && !m_isFinding)
+	{
+		if (Calculate_Distance() < 6.0f)
+		{
+			_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
+
+			if (fAngle < 45.0f)
+			{
+				//Find
+				m_isQuestioning = true;
+				m_pModelCom->Set_Animation(70);
+			}
+		}
+	}
+
+
+	if (m_isQuestioning)
+	{
+		m_dDelay_Questioning += dTimeDelta;
+		if (m_dDelay_Questioning > 5.0f)
+		{
+			m_dDelay_Questioning = 0.0;
+			m_isQuestioning = false;
+			m_isFinding = true;
+		}
+
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.01f);
+	}
+
+	if (m_isFinding)
+	{
+		if (m_isFirst_Finding)
+		{
+			m_isFirst_Finding = false;
+
+			m_pModelCom->Set_Animation(ANIM_RUN);
+		}
+
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.2f);
+	}
 }
 
 HRESULT CMonster_StealthZako::Add_Components()

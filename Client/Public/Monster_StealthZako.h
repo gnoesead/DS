@@ -83,7 +83,8 @@ private: //애니메이션 제어용 함수
 	void	Calculate_SpotIndex();
 
 	void	Animation_Control(_double dTimeDelta);
-
+	void	Animation_Control_Move(_double dTimeDelta);
+	void	Animation_Control_Search(_double dTimeDelta);
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -96,6 +97,16 @@ private:
 
 	_bool	m_isGo = { false };
 	_bool	m_isFirst_Go = { true };
+
+private:
+	_bool	m_isQuestioning = { false };
+	_double m_dDelay_Questioning = { 0.0 };
+
+
+	_bool	m_isFinding = { false };
+	_bool	m_isFirst_Finding = { true };
+
+
 
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };

@@ -222,6 +222,28 @@ _vector CMonster::Calculate_Dir_Cross()
 
 	return vCross;
 }
+/*
+static _bool   AngleCheck(_fvector vSourDir, _fvector vSourPos, _fvector vDestPos, _float fMaxAngle)
+{
+	_vector vDestDir = XMVector3Normalize(XMVectorSetY(vDestPos - vSourPos, 0.f));
+
+	_float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vSourDir, vDestDir))));
+
+	if (fAngle < fMaxAngle)
+		return true;
+	else
+		return false;
+}*/
+
+_float CMonster::Calculate_Angle(_fvector vSourDir, _fvector vDestDir)
+{
+	_vector vSoDir = XMVector4Normalize(vSourDir);
+	_vector vDeDir = XMVector4Normalize(vDestDir);
+
+	_float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vSoDir, vDeDir))));
+
+	return fAngle;
+}
 
 _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
 {
