@@ -235,9 +235,6 @@
     <Filter Include="01. Levels\06. FinalBoss">
       <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\01.Lobby">
-      <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
       <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
     </Filter>
@@ -348,6 +345,9 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Zako\StealthMode">
       <UniqueIdentifier>{7d843af3-187d-4527-8f4c-8f46cd002242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\01. Lobby">
+      <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -541,7 +541,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Lobby.h">
-      <Filter>01. Levels\01.Lobby</Filter>
+      <Filter>01. Levels\01. Lobby</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Pause.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
@@ -843,7 +843,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Level_Lobby.cpp">
-      <Filter>01. Levels\01.Lobby</Filter>
+      <Filter>01. Levels\01. Lobby</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Pause.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Pause</Filter>
