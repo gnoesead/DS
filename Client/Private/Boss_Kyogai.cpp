@@ -149,18 +149,6 @@ HRESULT CBoss_Kyogai::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_tchar	m_szFPS[MAX_PATH] = TEXT("");
-	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	//wsprintf(m_szFPS, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-#endif // DEBUG
 
 	return S_OK;
 }
@@ -291,7 +279,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			Trigger_Awake_AtkskCmb();
+			
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -2422,10 +2410,6 @@ void CBoss_Kyogai::Update_Hit_BigGetUp(_double dTimeDelta)
 {
 }
 
-void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
-{
-}
-
 void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 {
 	if (m_bTurn == false)
@@ -2964,6 +2948,7 @@ void CBoss_Kyogai::TurnRoom()
 		m_fPreAngleX = pRotationMapObject->Get_RotAngle().x;
 		m_fPreAngleZ = pRotationMapObject->Get_RotAngle().z;
 	}
+
 	Safe_Release(pGameInstance);
 }
 
