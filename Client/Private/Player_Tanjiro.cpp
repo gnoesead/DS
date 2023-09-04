@@ -660,6 +660,22 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
 		}
 
+		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (1 == m_iEvent_Index)	// 0.28
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			else if (2 == m_iEvent_Index)	// 0.7
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
 		{
 			if(0 == m_iEvent_Index)	// 0.0
