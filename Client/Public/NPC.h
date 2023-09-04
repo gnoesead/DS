@@ -44,6 +44,7 @@ protected: //애니메이션 제어용 함수들
 	_vector Calculate_Dir();
 	_vector Calculate_Dir_FixY();
 	_vector Calculate_Dir_Cross();
+	_float4 Calculate_PlayerPos();
 
 	_float	Calculate_To_Spot();
 

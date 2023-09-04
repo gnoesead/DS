@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "..\Public\Monster_StealthZako.h"
+#include "..\Public\NPC_Zenitsu.h"
 
 #include "GameInstance.h"
 #include "SoundMgr.h"
@@ -10,20 +10,19 @@
 #include "MonsterManager.h"
 
 #include "Player.h"
-#include "PlayerManager.h"
-#include "World_UI_Hp.h"
+#include "Fade_Manager.h"
 
-CMonster_StealthZako::CMonster_StealthZako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMonster(pDevice, pContext)
+CNPC_Zenitsu::CNPC_Zenitsu(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CNPC(pDevice, pContext)
 {
 }
 
-CMonster_StealthZako::CMonster_StealthZako(const CMonster_StealthZako& rhs)
-	: CMonster(rhs)
+CNPC_Zenitsu::CNPC_Zenitsu(const CNPC_Zenitsu& rhs)
+	: CNPC(rhs)
 {
 }
 
-HRESULT CMonster_StealthZako::Initialize_Prototype()
+HRESULT CNPC_Zenitsu::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -31,7 +30,7 @@ HRESULT CMonster_StealthZako::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CMonster_StealthZako::Initialize(void* pArg)
+HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 {
 
 	if (FAILED(Add_Components()))
@@ -40,83 +39,36 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_IDLE);
 
-	m_pModelCom->Set_Animation(ANIM_IDLE);
-
-	if (FAILED(Read_Animation_Control_File("Zako_0.bin")))
+	if (FAILED(Read_Animation_Control_File("Zenitsu.bin")))
 	{
-		MSG_BOX("Failed to AnimData Read : Zako_0");
+		MSG_BOX("Failed to AnimData Read : Zenitsu");
 		return E_FAIL;
 	}
 
-	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
-	/*
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	Get_PlayerComponent();
 
-	// Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_fLand_Y = Pos.y;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 0;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
+	m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_IDLE, 0.1f);
+	m_pModelCom->Set_LinearDuration(ANIM_ADV_STEALTH_WALK, 0.1f);
+	m_pModelCom->Set_LinearDuration(147, 0.0001f);
+	m_pModelCom->Set_LinearDuration(148, 0.15f);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 1;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 2;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 3;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
-
-
-	Safe_Release(pGameInstance);
-	*/
+	m_pModelCom->Set_EarlyEnd(ANIM_ADV_STEALTH_IDLE, false, 0.9999f);
+	m_pModelCom->Set_EarlyEnd(ANIM_ADV_STEALTH_WALK, false, 0.9999f);
+	m_pModelCom->Set_EarlyEnd(147, false, 0.9999f);
+	m_pModelCom->Set_EarlyEnd(148, false, 0.9999f);
 
 	return S_OK;
 }
 
-void CMonster_StealthZako::Tick(_double dTimeDelta)
-{
+void CNPC_Zenitsu::Tick(_double dTimeDelta)
+{	
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -125,7 +77,7 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 	Animation_Control(dTimeDelta);
 
 	//애니메이션 처리
- 	m_pModelCom->Play_Animation(dTimeDelta);
+	m_pModelCom->Play_Animation(dTimeDelta);
 	RootAnimation(dTimeDelta);
 
 	//이벤트 콜
@@ -137,27 +89,28 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 		return;
 }
 
-void CMonster_StealthZako::LateTick(_double dTimeDelta)
+void CNPC_Zenitsu::LateTick(_double dTimeDelta)
 {
-	__super::LateTick(dTimeDelta);
+	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+	{
+		__super::LateTick(dTimeDelta);
 
-	Gravity(dTimeDelta);
-
+		Gravity(dTimeDelta);
+	}
+	
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
 #endif
 }
 
-HRESULT CMonster_StealthZako::Render()
+HRESULT CNPC_Zenitsu::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
-
-
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 	//Outline Render
@@ -189,12 +142,11 @@ HRESULT CMonster_StealthZako::Render()
 
 		m_pModelCom->Render(i);
 	}
-
-
+	
 	return S_OK;
 }
 
-HRESULT CMonster_StealthZako::Render_ShadowDepth()
+HRESULT CNPC_Zenitsu::Render_ShadowDepth()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -247,7 +199,8 @@ HRESULT CMonster_StealthZako::Render_ShadowDepth()
 	return S_OK;
 }
 
-void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
+
+void CNPC_Zenitsu::EventCall_Control(_double dTimeDelta)
 {
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
 	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
@@ -255,98 +208,84 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
-	_vector AtkDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
 	if (EventCallProcess())
 	{
-		/*
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+#pragma region Animation_0
+		/*if (ANIM_ATK_COMBO == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{//0.3
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+			{
+				_tchar szTest[MAX_PATH] = TEXT("TestSound.wav");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_SLASH);
+				CSoundMgr::Get_Instance()->PlaySound(szTest, CSoundMgr::PLAYER_SLASH, 0.9f);
 			}
-			if (1 == m_iEvent_Index)
-			{//0.39
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
-			}
+
+			CEffectPlayer::Get_Instance()->Play("hjd", m_pTransformCom);
 		}*/
+		
+#pragma endregion
 		m_iEvent_Index++;
 	}
 }
 
-void CMonster_StealthZako::Calculate_SpotIndex()
+void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 {
-	_vector vMonPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vSpotPos = XMLoadFloat4(&m_CharacterDesc.NPCDesc.WalkSpot[(m_iSpot_Index)]);
-	_vector vDir = XMVector3Normalize(vSpotPos - vMonPos);
-	_float fDistance = Convert::GetLength(vSpotPos - vMonPos);
+	//Set_Height();
 
-	m_pTransformCom->LerpVector(vDir, 0.05f);
-
-	if (fDistance < 0.15f)
+	m_dDelay_GoOn += dTimeDelta;
+	if (m_dDelay_GoOn > 0.8f)
 	{
-		if (m_iSpot_Index == 3)
-			m_iSpot_Index = 0;
-		else
-			m_iSpot_Index++;
-	}
-}
+		m_dDelay_GoOn = 0.0;
 
-void CMonster_StealthZako::Animation_Control(_double dTimeDelta)
-{
-	//순찰
-	Calculate_SpotIndex();
-
-	m_dDelay_SpotWalk += dTimeDelta;
-	if (m_dDelay_SpotWalk > m_fTime_Stay)
-	{
-		m_dDelay_SpotWalk = 0.0;
-		m_isFirst_Go = true;
-
-		if (m_isGo)
+		if (Calculate_Distance() > 2.0f)
 		{
-			m_isGo = false;
-			m_fTime_Stay = Random::Generate_Float(4.0f, 7.0f);
+			if (m_isGoOn == false)
+			{
+				m_isGoOn = true;
+				m_isFirst_GoOn = true;
+			}
 		}
 		else
 		{
-			m_isGo = true;
-			m_fTime_Stay = Random::Generate_Float(10.0f, 16.0f);
+			m_isGoOn = false;
 		}
 	}
+	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.04f);
 
-	if (m_isGo)
+
+	if (m_isGoOn)
 	{
-		if (m_isFirst_Go)
+		if (m_isFirst_GoOn)
 		{
-			m_isFirst_Go = false;
+			m_isFirst_GoOn = false;
 
-			m_pModelCom->Set_Animation(ANIM_WALK_FRONT);
+			m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);
+			m_isFirst_GoStop = true;
 		}
-		Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.2f, true);
-		Go_Straight_Constant(dTimeDelta, 69, 0.2f, true);
 	}
 	else
 	{
-		if (m_isFirst_Go)
+		if (m_isFirst_GoStop)
 		{
-			m_isFirst_Go = false;
+			m_isFirst_GoStop = false;
 
-			m_pModelCom->Set_Animation(70);
+			m_pModelCom->Set_Animation(148);
 		}
 	}
 
+	Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, 0.3f);
+	Go_Straight_Constant(dTimeDelta, 147, 0.3f);
+	Go_Straight_Deceleration(dTimeDelta, 148, 0.3f, 0.05f);
 }
 
-HRESULT CMonster_StealthZako::Add_Components()
+
+HRESULT CNPC_Zenitsu::Add_Components()
 {
 	/* for.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Zako_0"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Zenitsu"),
 		TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 	{
-		MSG_BOX("Failed to Add_Com_Model : CMonster_StealthZako_0");
+		MSG_BOX("Failed to Add_Com_Model : CNPC_Zenitsu");
 		return E_FAIL;
 	}
 
@@ -356,10 +295,9 @@ HRESULT CMonster_StealthZako::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 	{
-		MSG_BOX("Failed to Add_Com_Shader : CMonster_StealthZako");
+		MSG_BOX("Failed to Add_Com_Shader : CNPC_Zenitsu");
 		return E_FAIL;
 	}
-
 
 	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -367,7 +305,7 @@ HRESULT CMonster_StealthZako::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Transform"),
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom, &m_CharacterDesc.TransformDesc)))
 	{
-		MSG_BOX("Failed to Add_Com_Transform : CMonster_StealthZako");
+		MSG_BOX("Failed to Add_Com_Transform : CNPC_Zenitsu");
 		return E_FAIL;
 	}
 
@@ -378,7 +316,7 @@ HRESULT CMonster_StealthZako::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_AABB"), (CComponent**)&m_pColliderCom[COLL_AABB], &m_CharacterDesc.ColliderDesc[COLL_AABB])))
 	{
-		MSG_BOX("Failed to Add_Com_AABB : CMonster_StealthZako");
+		MSG_BOX("Failed to Add_Com_AABB : CNPC_Zenitsu");
 		return E_FAIL;
 	}
 
@@ -391,51 +329,27 @@ HRESULT CMonster_StealthZako::Add_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_OBB"), (CComponent**)&m_pColliderCom[COLL_OBB], &m_CharacterDesc.ColliderDesc[COLL_OBB])))
 	{
-		MSG_BOX("Failed to Add_Com_OBB : CMonster_StealthZako");
+		MSG_BOX("Failed to Add_Com_OBB : CNPC_Zenitsu");
 		return E_FAIL;
 	}
 
-	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f , 1.0f , 1.0f );
+
+
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(0.7f, 0.7f, 0.7f);
 	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 	// for.Com_Sphere 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Sphere"), (CComponent**)&m_pColliderCom[COLL_SPHERE], &m_CharacterDesc.ColliderDesc[COLL_SPHERE])))
 	{
-		MSG_BOX("Failed to Add_Com_Sphere : CMonster_StealthZako");
-		return E_FAIL;
-	}
-
-	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;
-
-	/* for.Com_Navigation_Acaza*/
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Acaza"),
-		TEXT("Com_Navigation_Acaza"), (CComponent**)&m_pNavigationCom[NAVI_ACAZA], &m_CharacterDesc.NaviDesc)))
-	{
-		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
-		return E_FAIL;
-	}
-	
-	/* for.Com_Navigation_Village_Battle*/
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
-		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
-	{
-		MSG_BOX("Failed to Add_Com_Navigation_Village_Battle: CPlayer");
-		return E_FAIL;
-	}
-
-	/* for.Com_Navigation_House_2_0*/
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_House_2_0"),
-		TEXT("Com_Navigation_House_2_0"), (CComponent**)&m_pNavigationCom[NAVI_HOUSE_2_0], &m_CharacterDesc.NaviDesc)))
-	{
-		MSG_BOX("Failed to Add_Com_Navigation_House_2_0: CPlayer");
+		MSG_BOX("Failed to Add_Com_Sphere : CNPC_Zenitsu");
 		return E_FAIL;
 	}
 
 	return S_OK;
 }
 
-HRESULT CMonster_StealthZako::SetUp_ShaderResources()
+HRESULT CNPC_Zenitsu::SetUp_ShaderResources()
 {
 	if (nullptr == m_pShaderCom)
 		return E_FAIL;
@@ -469,33 +383,33 @@ HRESULT CMonster_StealthZako::SetUp_ShaderResources()
 	return S_OK;
 }
 
-CMonster_StealthZako* CMonster_StealthZako::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CNPC_Zenitsu* CNPC_Zenitsu::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CMonster_StealthZako* pInstance = new CMonster_StealthZako(pDevice, pContext);
+	CNPC_Zenitsu* pInstance = new CNPC_Zenitsu(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX("Failed to Created : CMonster_StealthZako");
+		MSG_BOX("Failed to Created : CNPC_Zenitsu");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CMonster_StealthZako::Clone(void* pArg)
+CGameObject* CNPC_Zenitsu::Clone(void* pArg)
 {
-	CMonster_StealthZako* pInstance = new CMonster_StealthZako(*this);
+	CNPC_Zenitsu* pInstance = new CNPC_Zenitsu(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX("Failed to Cloned : CMonster_StealthZako");
+		MSG_BOX("Failed to Cloned : CNPC_Zenitsu");
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CMonster_StealthZako::Free()
+void CNPC_Zenitsu::Free()
 {
 	
 	__super::Free();

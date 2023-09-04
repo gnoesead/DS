@@ -91,6 +91,12 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}*/
 
+	if (FAILED(Ready_Layer_StealthObj(TEXT("Layer_StealthObj"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
+		return E_FAIL;
+	}
+
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Boss : CLevel_House");
@@ -352,8 +358,35 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	}*/
 
 
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCharacter::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
+
+
+	//NPC_Zenitsu
+	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_NPC_Zenitsu"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+		return E_FAIL;
+	}
+
+
 	//잠입용 몬스터
-	/*CharacterDesc.WorldInfo.vPosition = _float4(15.5f, 0.05f, 27.94f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(15.5f, 0.05f, 27.94f, 1.f);
 
 	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 16.1f, 0.05f, 25.31f, 1.f };
 	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 16.25f, 0.05f, 9.04f, 1.f };
@@ -365,7 +398,9 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
 		return E_FAIL;
-	}*/
+	}
+
+	
 
 	Safe_Release(pGameInstance);
 
