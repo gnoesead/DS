@@ -353,8 +353,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				m_fDistance = { 3.f + m_Zoom };
 				m_vOffSet = { 0.f, 1.f, 0.f, 0.f };
 				m_vLookOffSet = { 0.f, 0.2f, 0.f, 0.f };
-				m_fLookDamping = { 5.f };
-				m_fDamping = { 7.f };
+				m_fLookDamping = { 7.f };
+				m_fDamping = { 6.3f };
 
 				//NewAdventureCamera(dTimeDelta);
 
@@ -977,7 +977,7 @@ void CCamera_Free::New_Turn_Camera(_double TimeDelta)
 
 	m_vDist = XMVector3Normalize(m_vDist);
 	
-	_float angle = acos(XMVectorGetX(XMVector3Dot(vUp, m_vDist)));
+	/*_float angle = acos(XMVectorGetX(XMVector3Dot(vUp, m_vDist)));
 
 	if (fabs(MouseMove = pGameInstance->Get_DIMouseMove(CInput_Device::DIMS_Y)))
 	{
@@ -1000,7 +1000,7 @@ void CCamera_Free::New_Turn_Camera(_double TimeDelta)
 			}
 		}
 
-	}
+	}*/
 
 	Safe_Release(pGameInstance);
 }
