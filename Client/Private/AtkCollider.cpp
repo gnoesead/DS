@@ -280,7 +280,24 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 			}
 		}
 	}
+	if (m_bLineOut == true)
+	{
+		if (m_dTimeAcc > 0.5)
+		{
+			Safe_Release(m_AtkCollDesc.pParentTransform);
+			m_AtkCollDesc.pParentTransform = nullptr;
+			CAtkCollManager::GetInstance()->Collect_Collider(this);
+			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
+			
+			m_AtkObj.clear();
+			m_dTimeAcc = 0.0;
+			m_dStopAcc = 0.0;
+			m_iCollCount = 0;
+
+			Set_Dead();
+		}
+	}
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
 		Safe_Release(m_AtkCollDesc.pParentTransform);
@@ -348,8 +365,20 @@ void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
 		if (m_dTimeAcc > 0.5)
+		{
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float vPosX = XMVectorGetX(vPos);
+			_float vPosZ = XMVectorGetZ(vPos);
+			if (((138.f < vPosX) || (vPosX < 106.f)) || ((141.f < vPosZ) || (vPosZ < 109.f)))
+			{
+				m_dTimeAcc = 0.0;
+				m_bLineOut = true;
+			}
+
+			if(false == m_bLineOut)
 			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
-		//m_pTransformCom->Go_Dir(dTimeDelta * m_AtkCollDesc.Speed, m_vDir);
+		}
+		
 	}
 }
 
