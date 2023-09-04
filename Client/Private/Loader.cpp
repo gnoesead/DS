@@ -80,6 +80,8 @@
 #include "Swamp_AlertRect.h"
 #include "WaterParticleEffect.h"
 #include "Swamp_SmokeEffect.h"
+#include "GroundSmoke.h"
+#include "StoneParticle.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -803,6 +805,16 @@ HRESULT CLoader::LoadingForLobby()
 	/* For.Prototype_GameObject_SmellBundle*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmellBundle"),
 		CSmellBundle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_GroundSmoke*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GroundSmoke"),
+		CGroundSmoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_StoneParticle*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StoneParticle"),
+		CStoneParticle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

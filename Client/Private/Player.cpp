@@ -537,7 +537,6 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
 	
 	//무브키를 누르고 있는 상태
 	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)

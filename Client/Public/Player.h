@@ -329,7 +329,6 @@ protected:
 	_bool	m_bChangePositionFinish[CHANGE_POSITON_END] = { false };
 
 	_double	m_dChangePositionAccTime = { 0.0 };
-	
 
 protected:
 	HRESULT Add_Components();

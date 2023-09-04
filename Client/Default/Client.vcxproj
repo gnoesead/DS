@@ -209,6 +209,8 @@
     <ClInclude Include="..\Public\Fade.h" />
     <ClInclude Include="..\Public\Fade_Manager.h" />
     <ClInclude Include="..\Public\FIcon.h" />
+    <ClInclude Include="..\Public\StoneParticle.h" />
+    <ClInclude Include="..\Public\GroundSmoke.h" />
     <ClInclude Include="..\Public\InstanceMapObject.h" />
     <ClInclude Include="..\Public\Interaction.h" />
     <ClInclude Include="..\Public\Level_FinalBoss.h" />
@@ -317,6 +319,8 @@
     <ClCompile Include="..\Private\Fade.cpp" />
     <ClCompile Include="..\Private\Fade_Manager.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
+    <ClCompile Include="..\Private\StoneParticle.cpp" />
+    <ClCompile Include="..\Private\GroundSmoke.cpp" />
     <ClCompile Include="..\Private\InstanceMapObject.cpp" />
     <ClCompile Include="..\Private\Interaction.cpp" />
     <ClCompile Include="..\Private\Level_FinalBoss.cpp" />
