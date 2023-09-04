@@ -1521,6 +1521,55 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zen_Air_2");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_2_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_2_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_2_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_2_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_2_3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_2_3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_3_Slash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_3_Slash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_Air_0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_Air_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Power_Air_2");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region DS_SHAREEFFECT
