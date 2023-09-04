@@ -42,6 +42,79 @@ void CStaticMapObject::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_BigMountain")))
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+			{
+				if (m_MapObject_Info.iRenderGroup == 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else
+			{
+				if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		if (m_MapObject_Info.iRenderGroup <= 4)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			_uint iNavi = pPlayer->Get_CurNaviMesh();
+
+			if (iNavi == CLandObject::NAVI_HOUSE_0_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_1_0 || iNavi == CLandObject::NAVI_HOUSE_1_1)
+			{
+				if (m_MapObject_Info.iRenderGroup != 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_2_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 2)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_3_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 3)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_4_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 4)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+
 	m_bBlocked = false;
 
 	__super::Tick(TimeDelta);
@@ -76,6 +149,82 @@ void CStaticMapObject::Tick(_double TimeDelta)
 
 void CStaticMapObject::LateTick(_double TimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_BigMountain")))
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+			{
+				if (m_MapObject_Info.iRenderGroup == 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else
+			{
+				if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		if (m_MapObject_Info.iRenderGroup <= 3)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			_uint iNavi = pPlayer->Get_CurNaviMesh();
+
+			if (iNavi == CLandObject::NAVI_HOUSE_0_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_1_0 || iNavi == CLandObject::NAVI_HOUSE_1_1)
+			{
+				if (m_MapObject_Info.iRenderGroup != 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_2_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 2)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_3_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 3)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_4_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 4)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+
 	__super::LateTick(TimeDelta);
 
 	if ((m_MapObject_Info.iSceneType == SCENE_VILLAGE) && ((m_MapObject_Info.iRenderGroup == 1) || (m_MapObject_Info.iRenderGroup == 2)))
@@ -96,9 +245,6 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 			m_fAlpha = 1.f;
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
 	if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_01a")) ||
 		_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_02a")) ||
 		_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_04a")) ||
@@ -108,17 +254,26 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 		if (m_bBlocked)
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7 || m_MapObject_Info.iRenderGroup == 8 || m_MapObject_Info.iRenderGroup == 9)
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 	}
 

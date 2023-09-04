@@ -1418,56 +1418,59 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isConnectHitting = true;
 		}
 
-		//m_pTransformCom->Set_Look(reverseAtkDir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isJumpOn)
+		if (m_isSkilling == false)
 		{
-			Jumping(0.12f, 0.030f);
+			//m_pTransformCom->Set_Look(reverseAtkDir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				Jumping(0.12f, 0.030f);
 
-			if (m_iSmallHit_Index == 0)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_B);
-				m_iSmallHit_Index++;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_B);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_L);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_F);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_R);
+					m_iSmallHit_Index = 0;
+				}
 			}
-			else if (m_iSmallHit_Index == 1)
+			else
 			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_L);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 2)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_F);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 3)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_R);
-				m_iSmallHit_Index = 0;
-			}
-		}
-		else
-		{
-			if (m_iSmallHit_Index == 0)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 1)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 2)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 3)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
-				m_iSmallHit_Index = 0;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
+					m_iSmallHit_Index = 0;
+				}
 			}
 		}
 	}
@@ -1488,16 +1491,19 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_Big = false;
 
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isJumpOn)
+		if (m_isSkilling == false)
 		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		}
-		else
-		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			}
+			else
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+			}
 		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f,  AtkDir);
@@ -1510,12 +1516,16 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_Blow = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.2f, 0.05f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Jumping(1.2f, 0.05f);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 49, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -1529,11 +1539,15 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_BigBlow = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.2f, 0.05f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+
+			Jumping(1.2f, 0.05f);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 78, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -1550,12 +1564,16 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_isConnectHitting = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.7f, 0.03f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Jumping(1.7f, 0.03f);
+		}
 	}
 
 	if (m_isConnectHitting == false)
@@ -1668,6 +1686,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
+
+		m_isSkilling = true;
 	} 
 	//잡기 공격 시 제한
 	/*else if (ANIM_ATK_THROW == iCurAnimIndex)
@@ -1767,6 +1787,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 
 		m_pSword->Set_SwordIn(false);
 		m_pSword->Set_SwordIn(false);
+
+		m_isSkilling = false;
 	}
 }
 
@@ -1867,8 +1889,8 @@ HRESULT CPlayer_Rengoku::SetUp_ShaderResources()
 		return E_FAIL;
 
 	// 슈퍼아머 상태 넣어주셈
-	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
-		return E_FAIL;*/
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
+		return E_FAIL;
 
 
 

@@ -591,6 +591,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
@@ -605,6 +608,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f);
 			}
@@ -1027,7 +1033,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		if (m_isFirst_Hekireki_AirEnd)
 		{
 			m_isFirst_Hekireki_AirEnd = false;
-			Set_FallingStatus(0.0f, 0.03f);
+			Set_FallingStatus(0.0f, 0.07f);
 		}
 	}
 
@@ -1114,9 +1120,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			else
 			{
 				if(m_isAir_Hekireki)
-					m_pTransformCom->Go_Straight(dTimeDelta * 19.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 18.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * 15.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					m_pTransformCom->Go_Straight(dTimeDelta * 18.f * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
 			}
 		}
 
@@ -1152,7 +1158,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		Use_Mp_Skill();
 	}
-	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 4.f * m_fScaleChange, 0.18f * m_fScaleChange);
+	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 0.f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 	Safe_Release(pGameInstance);
 }
@@ -1467,7 +1473,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isSuperArmor == false)
+		if (m_isSkilling == false)
 		{
 			//m_pTransformCom->Set_Look(reverseAtkDir);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
@@ -1539,7 +1545,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isSuperArmor == false)
+		if (m_isSkilling == false)
 		{
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			if (m_isJumpOn)
@@ -1566,7 +1572,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isSuperArmor == false)
+		if (m_isSkilling == false)
 		{
 			m_pTransformCom->Set_Look(reverseAtkDir);
 			Jumping(1.2f, 0.05f);
@@ -1588,7 +1594,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isSuperArmor == false)
+		if (m_isSkilling == false)
 		{
 			Jumping(1.2f, 0.05f);
 			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
@@ -1612,7 +1618,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isSuperArmor == false)
+		if (m_isSkilling == false)
 		{
 			Jumping(1.85f, 0.03f);
 			m_pModelCom->Set_Animation(ANIM_FALL);
@@ -1635,8 +1641,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		m_isConnectHitting = true;
-
-		if (m_isSuperArmor == false)
+		
+		if (m_isSkilling == false)
 		{
 			if (m_iSmallHit_Index == 0)
 			{
@@ -1835,6 +1841,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
+		m_isSkilling = true;
+
 		if (ANIM_ATK_SKILL_GUARD != iCurAnimIndex)
 		{
 			m_pSword->Set_SwordIn(false);
@@ -1848,8 +1856,6 @@ void CPlayer_Zenitsu::Moving_Restrict()
 			m_pSwordHome->Set_SwordIn(true);
 
 			m_isHekireki = true;
-
-			m_isSuperArmor = true;
 		}
 	}
 	//잡기 공격 시 제한
@@ -1962,7 +1968,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_pSword->Set_SwordIn(true);
 		m_pSwordHome->Set_SwordIn(true);
 
-		m_isSuperArmor = false;
+		m_isSkilling = false;
 	}
 }
 
@@ -2067,8 +2073,8 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 		return E_FAIL;
 
 	// 슈퍼아머 상태 넣어주셈
-	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
-		return E_FAIL;*/
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
+		return E_FAIL;
 
 
 	Safe_Release(pGameInstance);

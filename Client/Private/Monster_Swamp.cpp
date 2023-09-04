@@ -88,6 +88,21 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 
 void CMonster_Swamp::Tick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_VILLAGE_BATTLE)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -122,6 +137,21 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 
 void CMonster_Swamp::LateTick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_VILLAGE_BATTLE)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::LateTick(dTimeDelta);
 
 	Gravity(dTimeDelta);

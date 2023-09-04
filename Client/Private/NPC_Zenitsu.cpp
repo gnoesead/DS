@@ -233,11 +233,11 @@ void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 	//Set_Height();
 
 	m_dDelay_GoOn += dTimeDelta;
-	if (m_dDelay_GoOn > 1.0f)
+	if (m_dDelay_GoOn > 0.8f)
 	{
 		m_dDelay_GoOn = 0.0;
 
-		if (Calculate_Distance() > 1.5f)
+		if (Calculate_Distance() > 2.0f)
 		{
 			if (m_isGoOn == false)
 			{
