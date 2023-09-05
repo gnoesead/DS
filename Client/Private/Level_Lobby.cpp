@@ -1486,18 +1486,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect1.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect1");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect2.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect2");
-		return E_FAIL;
-	}
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect3.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Effect3");
@@ -1505,6 +1493,24 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect4.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect5.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect6.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect7.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Effect4");
 		return E_FAIL;
@@ -1641,6 +1647,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Elc.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Heki_Elc");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Head.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Head");
 		return E_FAIL;
 	}
 

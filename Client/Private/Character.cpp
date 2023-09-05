@@ -5,6 +5,7 @@
 
 #include "AtkCollManager.h"
 #include "Fade_Manager.h"
+#include "SmeshStone.h"
 
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -849,7 +850,7 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
 		EffectDesc.vSizeX = { 0.9f , 1.4f }; EffectDesc.vSizeY = { 0.8f , 1.1f };
 		EffectDesc.vSpeedX = { -2.0f , 2.0f }; EffectDesc.vSpeedY = { 0.05f , 0.1f };EffectDesc.vSpeedZ = { -3.f , 3.f };
-		EffectDesc.vSizeSpeedX = { 1.0f , 1.6f }; EffectDesc.vSizeSpeedY = { 1.0f , 1.6f };
+		EffectDesc.vSizeSpeedX = { 0.8f , 1.3f }; EffectDesc.vSizeSpeedY = { 0.8f , 1.3f };
 
 		for (_uint i = 0; i < 10; ++i)
 			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
@@ -889,17 +890,17 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 	
 		EffectDesc.vStartPosX = { -0.5f,0.5f };
 		EffectDesc.vStartPosY = { -0.05f,0.15f };
-		EffectDesc.vStartPosZ = { 0.f,0.5f };
+		EffectDesc.vStartPosZ = { -0.5f,0.5f };
 		EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
 		EffectDesc.vSizeX = { 0.9f , 1.4f };
 		EffectDesc.vSizeY = { 0.8f , 1.1f };
 		EffectDesc.vSpeedX = { -3.0f , 3.0f };
 		EffectDesc.vSpeedY = { 0.05f , 0.1f };
 		EffectDesc.vSpeedZ = { -3.0f , 3.f };
-		EffectDesc.vSizeSpeedX = { 1.0f , 1.4f };
-		EffectDesc.vSizeSpeedY = { 1.0f , 1.4f };
+		EffectDesc.vSizeSpeedX = { 1.5f , 1.9f };
+		EffectDesc.vSizeSpeedY = { 1.5f , 1.9f };
 
-		for (_uint i = 0; i < 10; ++i)
+		for (_uint i = 0; i < 15; ++i)
 			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
 		break;
 	case CGroundSmoke::SMOKE_RUN:
@@ -944,6 +945,60 @@ void CCharacter::Create_StoneParticle(_fvector vOffsetPos)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_StoneParticle"), &EffectDesc);
 
 	Safe_Release(pGameInstance);
+}
+
+void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	CSmeshStone::EFFECTDESC EffectDesc;
+	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+
+	pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_SmeshStone"), &EffectDesc);
+
+	Safe_Release(pGameInstance);
+}
+
+void CCharacter::Play_HitEffect()
+{
+	_uint iRanNum = Random::Generate_Int(0, 5);
+
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+	switch (iRanNum)
+	{
+	case 0:
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+		break;
+	case 1:
+	{
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+		break; 
+	}
+	case 2:
+	{
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+	case 3:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom);
+		break;
+	case 4:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect6", m_pTransformCom);
+		break;
+	case 5:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
+		break;
+	}
 }
 
 HRESULT CCharacter::Add_Components()

@@ -672,9 +672,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
-				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
-
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+			}
+
+			if (2 == m_iEvent_Index) // 1.73
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 			}
 
 

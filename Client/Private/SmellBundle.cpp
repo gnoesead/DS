@@ -45,9 +45,7 @@ HRESULT CSmellBundle::Initialize(void* pArg)
 	EffectWorldDesc.vPosition.y += 0.6f;	
 	EffectWorldDesc.fScale = 0.9f * m_EffectDesc.fScale;
 
-	if(TYPE_NORMAL == m_EffectDesc.eType)
-		CEffectPlayer::Get_Instance()->Play("SmellBundle", m_pTransformCom, &EffectWorldDesc);
-	else if (TYPE_DISAPEEAR == m_EffectDesc.eType)
+	if (TYPE_DISAPEEAR == m_EffectDesc.eType)
 		CEffectPlayer::Get_Instance()->Play("SmellBundle_Disappear", m_pTransformCom, &EffectWorldDesc);
 	
 	
@@ -71,6 +69,8 @@ void CSmellBundle::Tick(_double TimeDelta)
 
 	if (TYPE_NORMAL == m_EffectDesc.eType)
 		PlayerCheck(TimeDelta);
+
+
 }
 
 void CSmellBundle::LateTick(_double TimeDelta)
@@ -94,6 +94,11 @@ HRESULT CSmellBundle::Add_Components()
 		TEXT("Com_Transform"), (CComponent**)&m_pTransformCom)))
 		return E_FAIL;
 
+	/* For.Com_Renderer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Renderer"),
+		TEXT("Com_Renderer"), (CComponent**)&m_pRendererCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -105,20 +110,37 @@ void CSmellBundle::PlayerCheck(_double TimeDelta)
 	_vector vPlayerPos = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")))->Get_State(CTransform::STATE_POSITION);
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (Compute::DistCheck(vPlayerPos, vMyPos, 2.f) && pGameInstance->Get_DIKeyDown(DIK_F))
+	if (!m_bMakeBundle)
 	{
-		EFFECTDESC EffectDesc;
-		EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		EffectDesc.eType = TYPE_DISAPEEAR;
+		if (m_pRendererCom->Get_GrayScale() && Compute::DistCheck(vPlayerPos, vMyPos, 20.f))
+		{
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.6f;
+			EffectWorldDesc.fScale = 0.9f * m_EffectDesc.fScale;
 
-		if (FAILED(pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_SmellBundle"),
-			TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
-			return;
+			CEffectPlayer::Get_Instance()->Play("SmellBundle", m_pTransformCom, &EffectWorldDesc);
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -300.f, 0.f, 1.f));
-
-		g_bSmellReset = true;
+			m_bMakeBundle = true;
+		}
 	}
+	else
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_F) && Compute::DistCheck(vPlayerPos, vMyPos, 2.f))
+		{
+			EFFECTDESC EffectDesc;
+			EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			EffectDesc.eType = TYPE_DISAPEEAR;
+
+			if (FAILED(pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_SmellBundle"),
+				TEXT("Prototype_GameObject_SmellBundle"), &EffectDesc)))
+				return;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.f, -300.f, 0.f, 1.f));
+
+			g_bSmellReset = true;
+		}
+	}
+	
 
 	Safe_Release(pGameInstance);
 }
@@ -153,4 +175,5 @@ void CSmellBundle::Free()
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pRendererCom);
 }
