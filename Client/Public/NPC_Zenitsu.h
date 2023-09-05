@@ -69,6 +69,8 @@ private: //애니메이션 제어용 함수
 	void	EventCall_Control(_double dTimeDelta);
 
 	void	Animation_Control(_double dTimeDelta);
+	void	Animation_Control_Village(_double dTimeDelta);
+	void	Animation_Control_House(_double dTimeDelta);
 
 
 private: //애니메이션 제어용 변수들
@@ -82,6 +84,15 @@ private:
 	_double	m_dDelay_GoOn = { 0.0 };
 	_bool	m_isFirst_GoOn = { true };
 	_bool	m_isFirst_GoStop = { true };
+
+
+	//잠입모드 발각시
+	_bool	m_isPlayerBack = true;
+	_double m_dDelay_PlayerBack = 0.0;
+
+	//위치 지정
+	_float4 m_ResetPos[4];
+	_int	m_iResetIndex = {0}; // 3이 자코방 앞
 
 private:
 	/* 임시 코드 */

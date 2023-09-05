@@ -1669,6 +1669,7 @@ void CPlayer_Rengoku::Moving_Restrict()
 		m_Moveset.m_isHitMotion = true;
 
 		m_Moveset.m_State_Battle_Guard = false;
+		m_isAirDashing = false;
 		
 		//다운상태
 		if (ANIM_DOWN_IDLE == iCurAnimIndex)
