@@ -465,12 +465,16 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma region Air_Attack, charge_attack
 		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			// 검기 발사 , 원통 이펙트
 		}
 		if (2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
@@ -478,6 +482,11 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
@@ -542,12 +551,24 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATK_CHARGE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			// 기모으기
 		}
 		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				// 검기발사
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.z += 1.5f;
+				EffectWorldDesc.vPosition.y += 1.4f;
+
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
@@ -559,11 +580,10 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma region Dash_Tackle
 		if (ANIM_BATTLE_DASH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
-			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
-			}
+
+			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
+				CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+
 		}
 
 #pragma endregion
