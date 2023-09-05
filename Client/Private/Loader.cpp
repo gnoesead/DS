@@ -80,6 +80,9 @@
 #include "WaterParticleEffect.h"
 #include "Swamp_SmokeEffect.h"
 
+#include "VIBuffer_Custom_Instance.h"
+#include "CustomParticle.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{pContext}
@@ -319,9 +322,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma endregion
 
 #pragma region EffectTexture
-
-
-
+	/* Prototype_Component_Shader_VtxNorTex */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE_DECL::Elements, VTXPOINTINSTANCE_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxPointInstance");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region UITexture
@@ -334,7 +341,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma region Model
 
 #pragma region Buffer
-
+	/* Prototype_Component_VIBuffer_50_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_50_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 50))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_50_Particle");
+		return E_FAIL;
+	}
 #pragma endregion
 	_matrix		PivotMatrix = XMMatrixIdentity();
 #pragma region Effect
@@ -623,6 +636,14 @@ HRESULT CLoader::LoadingForLobby()
 #pragma region GAMEOBJECTS
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+
+	/* Prototype_GameObject_AtkCollider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CustomParticle"),
+		CCustomParticle::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_AtkCollider");
+		return E_FAIL;
+	}
 
 	/* Prototype_GameObject_AtkCollider */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AtkCollider"),

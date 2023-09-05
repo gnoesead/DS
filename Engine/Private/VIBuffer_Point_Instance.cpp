@@ -84,10 +84,6 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 	if (nullptr == pArg)
 		return E_FAIL;
 
-	random_device rd;
-	mt19937 engine(rd());
-	uniform_real_distribution<_float> Distribution(-1.f, 1.f);
-
 	INSTANCEDESC	InstanceDesc = *(INSTANCEDESC*)pArg;
 	m_InstanceDesc = InstanceDesc;
 
@@ -95,9 +91,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
-		_float fRand = Distribution(engine);
-
-		fRand = ((fRand + 1.f) / 0.5f) + 0.01f;
+		_float fRand = Random::Generate_Float(0.01f, 1.f);
 
 		m_pSpeed[i] = (fRand * (m_InstanceDesc.fMaxSpeed - m_InstanceDesc.fMinSpeed)) + m_InstanceDesc.fMinSpeed;
 	}
@@ -106,24 +100,19 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
-		_float fRand = Distribution(engine);
-
-		fRand = ((fRand + 1.f) / 0.5f) + 0.01f;
+		_float fRand = Random::Generate_Float(0.01f, 1.f);
 
 		m_pScale[i] = (fRand * (m_InstanceDesc.fMaxScale - m_InstanceDesc.fMinScale)) + m_InstanceDesc.fMinScale;
 	}
 
 	m_pAngle = new _float[m_iNumInstance];
+	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
-		for (_uint i = 0; i < m_iNumInstance; ++i)
-		{
-			_float fRand = Distribution(engine);
+		_float fRand = Random::Generate_Float(0.f, 1.f);
 
-			fRand = ((fRand + 1.f) / 0.5f);
-
-			m_pAngle[i] = (fRand * 360.f);
-		}
+		m_pAngle[i] = (fRand * 360.f);
 	}
+	
 
 #pragma region INSTANCEBUFFER	
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -144,9 +133,9 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 		pInstanceVertices[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
 		pInstanceVertices[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
 
-		pInstanceVertices[i].vTranslation = _float4(Distribution(engine) * InstanceDesc.vRange.x,
-													Distribution(engine) * InstanceDesc.vRange.y,
-													Distribution(engine) * InstanceDesc.vRange.z, 1.f);
+		pInstanceVertices[i].vTranslation = _float4(Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.x,
+													Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.y,
+													Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.z, 1.f);
 		pInstanceVertices[i].vColor = _float4(1.0f, 1.f, (_float)(rand() % 2), 0.f);
 		pInstanceVertices[i].vPSize = _float2(m_pScale[i], m_pScale[i]);
 		pInstanceVertices[i].fAngle = m_pAngle[i];

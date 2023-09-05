@@ -2251,6 +2251,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 				{
 					if (m_bAwake == true)
 					{
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
@@ -2258,8 +2260,11 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					}
 					else
 					{
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
+						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom, &EffectWorldDesc);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom, &EffectWorldDesc);
+						
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}

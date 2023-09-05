@@ -24,6 +24,7 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
+#include "ParticleManager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -936,6 +937,8 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CSoundMgr::Get_Instance()->StopAll();
+
+	CParticleManager::GetInstance()->DestroyInstance();
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
 	CMonsterManager::GetInstance()->DestroyInstance();

@@ -349,6 +349,15 @@
     <Filter Include="01. Levels\01. Lobby">
       <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Component\VIBuffer">
+      <UniqueIdentifier>{c4dd76a7-9728-4ef9-bf3c-61d79e4def09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Effect\CustomParticle">
+      <UniqueIdentifier>{5ed810cd-13fd-4aa2-87f6-e2b6d533087c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Effect\CustomParticle\Manager">
+      <UniqueIdentifier>{fe195ec4-dd95-48e8-bcdf-87dd191709e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -660,6 +669,15 @@
     <ClInclude Include="..\Public\Monster_StealthZako.h">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h">
+      <Filter>03. Component\VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CustomParticle.h">
+      <Filter>02. GameObjects\Effect\CustomParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ParticleManager.h">
+      <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -962,6 +980,15 @@
     <ClCompile Include="..\Private\Monster_StealthZako.cpp">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp">
+      <Filter>03. Component\VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CustomParticle.cpp">
+      <Filter>02. GameObjects\Effect\CustomParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ParticleManager.cpp">
+      <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1002,6 +1029,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Effect.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

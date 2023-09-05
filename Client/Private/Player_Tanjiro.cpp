@@ -16,7 +16,7 @@
 #include "OptionManager.h"
 #include "Camera_Free.h"
 
-
+#include "ParticleManager.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -91,6 +91,14 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		//PoolTag, ShaderPass, Pos, SpriteSpeed, SpriteXY, LifeTime, TextureTag, BufferTag
+		CParticleManager::GetInstance()->PlayParticle("Test", 0, vPos, 1.0, _int2(4, 2), 1.f
+			, TEXT("Prototype_Component_Texture_T_e_cmn_Shock002"), TEXT("Prototype_Component_VIBuffer_50_Particle"));
+	}
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
