@@ -125,7 +125,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 
 #ifdef _DEBUG
-	Key_Input(dTimeDelta);
+	//Key_Input(dTimeDelta);
 
 	m_TimeAcc += dTimeDelta;
 #endif
@@ -155,7 +155,7 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
 	
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
