@@ -287,7 +287,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -305,7 +305,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom , &Effect3WorldDesc);
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -324,7 +324,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -344,7 +344,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -363,7 +363,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -382,7 +382,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
 
