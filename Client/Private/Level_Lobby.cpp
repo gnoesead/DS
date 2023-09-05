@@ -1523,6 +1523,8 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+
+
 #pragma region ZENITSU
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
 	{
@@ -1650,7 +1652,16 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Delay_Elc.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Delay_Elc");
+		return E_FAIL;
+	}
+
 #pragma endregion
+
+
+
 
 #pragma region DS_SHAREEFFECT
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_XYZ_Small.bin"))))

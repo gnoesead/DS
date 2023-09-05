@@ -607,7 +607,14 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
 
