@@ -1263,10 +1263,10 @@ HRESULT CRenderer::Render_EffectBloom()
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_BlurTexture")))
         return E_FAIL;
 
-    if (FAILED(m_pEffectShader->Begin(2)))
-        return E_FAIL;
-   /* if (FAILED(m_pEffectShader->Begin(5)))
+    /*if (FAILED(m_pEffectShader->Begin(2)))
         return E_FAIL;*/
+    if (FAILED(m_pEffectShader->Begin(5)))
+        return E_FAIL;
 
     /*if (FAILED(m_pEffectShader->Begin(10)))
        return E_FAIL;*/
@@ -1292,11 +1292,11 @@ HRESULT CRenderer::Render_EffectBloom()
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_DiffuseBlurX"), m_pEffectShader, "g_BlurTexture")))
         return E_FAIL;
 
-    if (FAILED(m_pEffectShader->Begin(3)))
-        return E_FAIL;
-
-   /* if (FAILED(m_pEffectShader->Begin(6)))
+    /*if (FAILED(m_pEffectShader->Begin(3)))
         return E_FAIL;*/
+
+    if (FAILED(m_pEffectShader->Begin(6)))
+        return E_FAIL;
     
 
     if (FAILED(m_pVIBuffer->Render()))
