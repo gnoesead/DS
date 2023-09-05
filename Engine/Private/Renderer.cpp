@@ -140,35 +140,35 @@ HRESULT CRenderer::Initialize_Prototype()
         , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_HDRTexture)))
         return E_FAIL;
 
-    /* For.Target_EffectDiffuse */
-    _float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
-        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
-        return E_FAIL;
-    /* For.Target_EffectBloom */
-    _float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 1.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBloom")
-        , (_uint)(Viewport.Width), (_uint)(Viewport.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBloom)))
-        return E_FAIL;
-    /* For.Target_EffectBlurX */
-    _float4 vColor_EffectBlurX = { 0.f, 0.f, 0.f, 1.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurX")
-        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
-        return E_FAIL;
-    /* For.Target_EffectBlurY */
-    _float4 vColor_EffectBlurY = { 0.f, 0.f, 0.f, 1.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurY")
-        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
-        return E_FAIL;
-    /* For.Target_EffectCombineBlur */
-    _float4 vColor_EffectCombineBlur = { 0.f, 0.f, 0.f, 1.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectCombineBlur")
-        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
-        return E_FAIL;
-    _float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
-    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
-        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectColor)))
-        return E_FAIL;
+	/* For.Target_EffectDiffuse */
+	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
+		return E_FAIL;
+	/* For.Target_EffectBloom */
+	_float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBloom")
+		, (_uint)(Viewport.Width), (_uint)(Viewport.Height), DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBloom)))
+		return E_FAIL;
+	/* For.Target_EffectBlurX */
+	_float4 vColor_EffectBlurX = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurX")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurX)))
+		return E_FAIL;
+	/* For.Target_EffectBlurY */
+	_float4 vColor_EffectBlurY = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBlurY")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectBlurY)))
+		return E_FAIL;
+	/* For.Target_EffectCombineBlur */
+	_float4 vColor_EffectCombineBlur = { 0.f, 0.f, 0.f, 1.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectCombineBlur")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
+		return E_FAIL;
+	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
+	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
+		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectColor)))
+		return E_FAIL;
 
     _float4 vColor_RadialColor = { 0.f, 0.f, 0.f, 0.f };
     if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_RadialBlur")
@@ -1182,23 +1182,23 @@ HRESULT CRenderer::Render_EffectBloom()
     m_RenderObjects[RENDER_NONLIGHT].clear();*/
 
 
-    m_RenderObjects[RENDER_NONLIGHT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
-        return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
-        });
+	m_RenderObjects[RENDER_EffectBloom].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+		return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
+		});
 
     if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
         return E_FAIL;
 
-
-    for (auto& pGameObject : m_RenderObjects[RENDER_NONLIGHT])
-    {
-        if (nullptr != pGameObject)
-            pGameObject->Render();
+	
+	for (auto& pGameObject : m_RenderObjects[RENDER_EffectBloom])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
 
         Safe_Release(pGameObject);
     }
 
-    m_RenderObjects[RENDER_NONLIGHT].clear();
+	m_RenderObjects[RENDER_EffectBloom].clear();
 
     if (FAILED(m_pTarget_Manager->End_MRT()))
         return E_FAIL;
@@ -1251,17 +1251,17 @@ HRESULT CRenderer::Render_EffectBloom()
     if (FAILED(m_pTarget_Manager->End_MRT()))
         return E_FAIL;
 
-    // 추출한 것을 블러처리
-    if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectBlurX"))))
-        return E_FAIL;
+	// 추출한 것을 블러처리
+	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectBlurX"))))
+		return E_FAIL;
+		
 
-
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-        return E_FAIL;
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-        return E_FAIL;
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-        return E_FAIL;
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
 
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BlurTexture")))
         return E_FAIL;
@@ -1326,18 +1326,18 @@ HRESULT CRenderer::Render_EffectBloom()
     if (FAILED(m_pEffectShader->Begin(4)))
         return E_FAIL;
 
-    if (FAILED(m_pVIBuffer->Render()))
-        return E_FAIL;
-    if (FAILED(m_pTarget_Manager->End_MRT()))
-        return E_FAIL;
-
-    // 블룸적용
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-        return E_FAIL;
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-        return E_FAIL;
-    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-        return E_FAIL;
+	if (FAILED(m_pVIBuffer->Render()))
+		return E_FAIL;
+	if (FAILED(m_pTarget_Manager->End_MRT()))
+		return E_FAIL;
+	
+	// 블룸적용
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
 
     //if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurY"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
     //   return E_FAIL;
@@ -1364,16 +1364,16 @@ HRESULT CRenderer::Render_EffectNoBloom()
         return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
         });
 
-    for (auto& pGameObject : m_RenderObjects[RENDER_BLEND])
-    {
-        if (nullptr != pGameObject)
-            pGameObject->Render();
+	for (auto& pGameObject : m_RenderObjects[RENDER_EffectNoBloom])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
 
         Safe_Release(pGameObject);
 
     }
 
-    m_RenderObjects[RENDER_BLEND].clear();
+	m_RenderObjects[RENDER_EffectNoBloom].clear();
 
     return S_OK;
 }

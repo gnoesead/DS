@@ -317,7 +317,6 @@ void CMonster_StealthZako::Animation_Control(_double dTimeDelta)
 		}
 	}
 
-
 	if (m_isGo)
 	{
 		if (m_isFirst_Go)
