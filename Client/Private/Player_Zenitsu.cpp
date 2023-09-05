@@ -579,7 +579,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
@@ -590,7 +590,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom , &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom , &EffectWorldDesc);
 
 			}
 		}
@@ -607,7 +607,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
@@ -619,7 +619,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y += 0.4f;
 
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
 			}
 		}

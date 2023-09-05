@@ -63,7 +63,10 @@ HRESULT CFade::Initialize(void * pArg)
 	else if (m_UI_Desc.m_Type == 3) {
 		m_Alpha = 1.f;
 	}
-
+	// Out/In_Basic
+	else if (m_UI_Desc.m_Type == 4) {
+		m_Alpha = 0.f;
+	}
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -108,6 +111,11 @@ void CFade::Tick(_double TimeDelta)
 			}
 		}
 
+	}
+	// Out/In_Basic
+	else if (m_UI_Desc.m_Type == 4) {
+		if (m_Is_OutIn_Basic == true)
+			Fade_OutIn_Basic(TimeDelta);
 	}
 
 	Set_UI();
@@ -196,6 +204,14 @@ HRESULT CFade::Add_Components()
 			return E_FAIL;
 
 	}
+	else if (m_UI_Desc.m_Type == 4) {
+
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Loading_Black"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
 
 	return S_OK;
 }
@@ -240,6 +256,19 @@ HRESULT CFade::SetUp_ShaderResources()
 				return E_FAIL;
 		}
 		
+
+	}
+	else if (m_UI_Desc.m_Type == 4) {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 1)))
+				return E_FAIL;
+		}
+		else {
+			if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		}
+
 
 	}
 
@@ -292,6 +321,11 @@ void CFade::Get_Info(_double TimeDelta)
 		m_Is_Ink_On = CFadeManager::GetInstance()->Get_Ink_In();
 		m_Is_Ink_On_Done = CFadeManager::GetInstance()->Get_Ink_In_Done();
 	}
+	// Out/In_Basic
+	else if (m_UI_Desc.m_Type == 4) {
+		m_Is_OutIn_Basic = CFadeManager::GetInstance()->Get_Fade_OutIn_Basic();
+		m_Is_OutIn_Basic_Done = CFadeManager::GetInstance()->Get_Fade_OutIn_Basic_Done();
+	}
 }
 
 void CFade::Fade_In(_double TimeDelta)
@@ -334,9 +368,10 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_Alpha_Dir *= -1.f;
 		m_InOut_Speed = 1.f;
 		m_Delay_On = true;
+
 		_bool Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 		CFadeManager::GetInstance()->Set_Is_Battle(!Is_Battle);
-
+		
 		if (CFadeManager::GetInstance()->Get_Fade_Color() == false) {
 
 			if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On() == false) {
@@ -357,22 +392,27 @@ void CFade::Fade_OutIn(_double TimeDelta)
 		m_InOut_Speed = 1.f;
 		CFadeManager::GetInstance()->Set_Fade_OutIn(false);
 		CFadeManager::GetInstance()->Set_Fade_OutIn_Done(true);
-		CFadeManager::GetInstance()->Set_Fade_Color(false);
+		
+		if (CFadeManager::GetInstance()->Get_Fade_Color() == true) {
 
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
 
-		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_VILLAGE) {
-			CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(true);
-		}
-		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Monster_Encounter() == true) {
-			CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(true);
-		}
-		if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Boss_Encounter() == true) {
-			CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
-		}
+			if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_VILLAGE) {
+				CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(true);
+			}
+			if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Monster_Encounter() == true) {
+				CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(true);
+			}
+			if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_HOUSE && CFadeManager::GetInstance()->Get_Is_House_Boss_Encounter() == true) {
+				CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
+			}
 
-		Safe_Release(pGameInstance);
+			Safe_Release(pGameInstance);
+
+			CFadeManager::GetInstance()->Set_Fade_Color(false);
+
+		}
 	}
 
 
@@ -391,7 +431,41 @@ void CFade::Fade_OutIn(_double TimeDelta)
 
 }
 
+void CFade::Fade_OutIn_Basic(_double TimeDelta)
+{
+	m_Alpha += (_float)TimeDelta * 1.5f * m_Alpha_Dir * m_InOut_Basic_Speed;
 
+	if (m_Alpha >= 1.f)
+	{
+		m_Alpha = 1.f;
+		m_Alpha_Dir *= -1.f;
+		m_InOut_Basic_Speed = 1.f;
+		m_Delay_Basic_On = true;
+		
+	}
+
+	if (m_Alpha <= 0.f)
+	{
+		m_Alpha = 0.f;
+		m_Alpha_Dir *= -1.f;
+		m_InOut_Basic_Speed = 1.f;
+		CFadeManager::GetInstance()->Set_Fade_OutIn_Basic(false);
+		CFadeManager::GetInstance()->Set_Fade_OutIn_Basic_Done(true);
+	
+	}
+
+
+	if (m_Delay_Basic_On) {
+		m_Delay_Basic_TimeAcc += (_float)TimeDelta;
+
+		m_Alpha = 0.999f;
+
+		if (m_Delay_Basic_TimeAcc > CFadeManager::GetInstance()->Get_Delay_Time_Basic()) {
+			m_Delay_Basic_TimeAcc = 0.f;
+			m_Delay_Basic_On = false;
+		}
+	}
+}
 
 
 
