@@ -107,8 +107,8 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_StatusDesc.fHp_Max = 10.f;
-	m_StatusDesc.fHp = 10.f;
+	m_StatusDesc.fHp_Max = 70.f;
+	m_StatusDesc.fHp = 70.f;
 
 
 	Safe_Release(pGameInstance);

@@ -68,7 +68,7 @@ HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 	m_ResetPos[1] = { 77.18f, 0.05f, 6.75f, 1.f }; // 처음 이동
 	m_ResetPos[2] = { 74.1f, 0.05f, 66.63f, 1.f }; // 둘째 이동
 	m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
-	m_ResetPos[4]; // 
+	
 
 	return S_OK;
 }

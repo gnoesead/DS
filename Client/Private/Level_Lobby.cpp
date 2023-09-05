@@ -1644,6 +1644,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Head.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Head");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region DS_SHAREEFFECT

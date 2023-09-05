@@ -9,6 +9,7 @@
 #include "PlayerManager.h"
 
 #include "Camera_Manager.h"
+#include "Camera_Free.h"
 #include "Battle_UI_Manager.h"
 
 
@@ -310,8 +311,6 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				//EffectWorldDesc.fScale = 1.8f;
 				EffectWorldDesc.vPosition.y = 0.42f;
@@ -575,11 +574,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
@@ -587,10 +587,21 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index) {
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom , &EffectWorldDesc);
+
+			}
+			else if (2 == m_iEvent_Index) {
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.z += -0.3f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom , &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
 			}
 		}
@@ -604,10 +615,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
@@ -615,11 +628,21 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index) {
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom, &EffectWorldDesc);
+
+			}
+			else if (2 == m_iEvent_Index) {
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.z += -0.3f;
 
-
-				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
 			}
 		}
@@ -1020,6 +1043,15 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	
 	if (m_isHit_Hekireki)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+	
+		pCamera->Change_Hekireki_Dir();
+
+		Safe_Release(pGameInstance);
+
 		m_isHit_Hekireki = false;
 		m_isHekireki_Hitting = true;
 	}

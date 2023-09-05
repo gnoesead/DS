@@ -91,7 +91,7 @@ private:
 	_double m_dDelay_PlayerBack = 0.0;
 
 	//위치 지정
-	_float4 m_ResetPos[6];
+	_float4 m_ResetPos[4];
 	_int	m_iResetIndex = {0}; // 3이 자코방 앞
 
 private:
