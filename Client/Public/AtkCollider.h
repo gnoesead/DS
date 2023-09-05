@@ -93,6 +93,10 @@ private:
 	void	Setting_WebBullet_Full();
 
 private:
+	void	Check_OutLine();
+	void	Reset_Dead();
+
+private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
@@ -102,9 +106,11 @@ private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
 	_double			m_dStopAcc = { 0.0 };
+	
 
 	_uint			m_iCollCount = { 0 };
 	_bool			m_bStop = { false };
+	_bool			m_bLineOut = { false };
 
 
 	_vector			m_vDir = { 0.f,0.f,0.f,0.f };

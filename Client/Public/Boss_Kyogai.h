@@ -123,6 +123,12 @@ public:
 		////////////////// 엔드모션 ///////////////////
 		ANIM_HEAL,
 		ANIM_DEATH_GETUP = 69, // 죽음에서 살아나기
+
+		ANIM_GUARD_01 = 32,
+		ANIM_GUARD_02 = 33,
+		ANIM_GUARD_03 = 34,
+		ANIM_GUARD_HIT_SMALL = 35,
+		ANIM_GUARD_HIT_BIG = 36,
 		
 		////////////////// 컷신모션 ///////////////////
 		ANIM_AWAKE = 0 // 개방신
@@ -229,8 +235,6 @@ private: //패턴 함수들
 	void Update_Hit_GetUp(_double dTimeDelta);
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
-
-	void Update_Awake_RoomChange(_double dTimeDelta);
 
 	void Update_RoomChange(_double dTimeDelta);
 	void Update_RoomChange_2(_double dTimeDelta);
