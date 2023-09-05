@@ -125,7 +125,7 @@ HRESULT CCustomParticle::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(m_CustomPartDesc.bShaderPass);
+	m_pShaderCom->Begin(m_CustomPartDesc.eShaderPass);
 
 	m_pVIBufferCom->Render();
 
@@ -180,13 +180,16 @@ HRESULT CCustomParticle::Add_Components()
 		return E_FAIL;
 	}
 
-	///* for.Com_RampTexture */
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp"),
-	//	TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
-	//{
-	//	MSG_BOX("Failed to Add_Com_RampTexture : CCustomParticle");
-	//	return E_FAIL;
-	//}
+	if (true == m_CustomPartDesc.bUseRamp)
+	{
+		/* for.Com_RampTexture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, m_CustomPartDesc.szRampTextureTag,
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+		{
+			MSG_BOX("Failed to Add_Com_RampTexture : CCustomParticle");
+			return E_FAIL;
+		}
+	}
 
 	return S_OK;
 }
@@ -221,8 +224,11 @@ HRESULT CCustomParticle::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof(_float))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture")))
-		return E_FAIL;*/
+	if (true == m_CustomPartDesc.bUseRamp)
+	{
+		if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture")))
+			return E_FAIL;
+	}
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTexCoord", &m_vTexCoord, sizeof(_float2))))
 		return E_FAIL;
@@ -261,10 +267,11 @@ CGameObject* CCustomParticle::Clone(void* pArg)
 void CCustomParticle::Free()
 {
 	__super::Free();
+	if (true == m_CustomPartDesc.bUseRamp)
+		Safe_Release(m_pRampTextureCom);
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTextureCom);
-	//Safe_Release(m_pRampTextureCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTransformCom);

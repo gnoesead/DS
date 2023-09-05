@@ -15,15 +15,20 @@ BEGIN(Client)
 class CCustomParticle final : public CGameObject
 {
 public:
+	enum CUSTOM_PARTICLE_PASS {
+		PASS_NORMAL, PASS_RAMP, PASS_SPRITE, PASS_SPRITE_RAMP, PASS_END
+	};
 	typedef struct tagCustomParticleDesc
 	{
-		_ubyte		bShaderPass = { 0 };
+		CUSTOM_PARTICLE_PASS		eShaderPass = { PASS_NORMAL };
 		_float3		vPosition = { 0.f, 0.f, 0.f };
 		_double		dSpriteSpeed = { 1.0 };
 		_int2		vSpriteCount = { 1, 1 };
 		_float		fLifeTime = { 1.f };
+		_bool		bUseRamp = { false };
 		_tchar		szTextureTag[MAX_PATH] = { TEXT("") };
 		_tchar		szBufferTag[MAX_PATH] = { TEXT("") };
+		_tchar		szRampTextureTag[MAX_PATH] = { TEXT("") };
 		char		szPoolTag[MAX_PATH] = { ("") };
 		CVIBuffer_CustomParticle::VIB_CUSTOMPARTDESC VIB_CustomPartDesc;
 	}CUSTOMPARTDESC;
@@ -53,7 +58,7 @@ private:
 private:
 	CShader*					m_pShaderCom = { nullptr };
 	CTexture*					m_pTextureCom = { nullptr };
-	//CTexture*					m_pRampTextureCom = { nullptr };
+	CTexture*					m_pRampTextureCom = { nullptr };
 	CRenderer*					m_pRendererCom = { nullptr };
 	CTransform*					m_pTransformCom = { nullptr };
 	CVIBuffer_CustomParticle*	m_pVIBufferCom = { nullptr };

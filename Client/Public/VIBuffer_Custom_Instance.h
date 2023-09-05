@@ -10,11 +10,15 @@ BEGIN(Client)
 class CVIBuffer_CustomParticle final : public CVIBuffer_Point_Instance
 {
 public:
+	enum CHANGE_OPTION { 
+		CHANGE_SIZE, CHANGE_DIR, CHANGE_SIZE_DIR, CHANGE_END 
+	};
+
 	typedef struct tagVIB_CustomParticleDesc
 	{
-		_ubyte	bChangeOption = { 1 };
-		_float	fSize = { 1.f };
-		_int3	vDirOption = { 1, 1, 1 };
+		CHANGE_OPTION	eChangeOption = { CHANGE_SIZE };
+		_float	fTickPerSize = { 1.f };
+		_float3	vTickPerDir = { 1.f, 1.f, 1.f };
 		CVIBuffer_Point_Instance::INSTANCEDESC		InstanceDesc;
 	}VIB_CUSTOMPARTDESC;
 private:

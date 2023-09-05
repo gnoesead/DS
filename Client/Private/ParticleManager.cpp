@@ -9,32 +9,6 @@ CParticleManager::CParticleManager()
 {
 }
 
-void CParticleManager::PlayParticle(const char* pPoolTag, _ubyte bShaderPass, _float3 vPos, _double dSpriteSpeed, _int2 vSpriteCount, _float fLifeTime, const _tchar* pTextureTag, const _tchar* pBufferTag)
-{
-	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
-	CustomPartDesc.bShaderPass = bShaderPass;
-	CustomPartDesc.vPosition = vPos;
-	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
-	CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.fLifeTime = fLifeTime;
-	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
-	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
-	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
-
-	CustomPartDesc.VIB_CustomPartDesc.bChangeOption = 2;
-	CustomPartDesc.VIB_CustomPartDesc.fSize = -1.f;
-	CustomPartDesc.VIB_CustomPartDesc.vDirOption = {1, 1, 1};
-
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = { 1.f, 1.f, 1.f };
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = 0.3f;
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = 0.5f;
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = 0.3f;
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = 1.f;
-
-
-	Reuse_Particle(pPoolTag, &CustomPartDesc);
-}
-
 void CParticleManager::Create_Particle(const char* pPoolTag, CCustomParticle::CUSTOMPARTDESC* pCustomPartDesc, CGameInstance* pGameInstance)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
@@ -108,6 +82,111 @@ void CParticleManager::Reuse_Particle(const char* pPoolTag, CCustomParticle::CUS
 	}
 
 	Safe_Release(pGameInstance);
+}
+
+void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
+	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
+	_float3 vRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+{
+	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
+
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
+
+	CustomPartDesc.eShaderPass = eShaderPass;
+	CustomPartDesc.vPosition = vPos;
+	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.fLifeTime = fLifeTime;
+	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
+	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
+	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
+
+	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = fTickPerSize;
+	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = { 1.f, 1.f, 1.f };
+	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_SIZE;
+
+	if (nullptr != pRampTag)
+	{
+		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
+		CustomPartDesc.bUseRamp = true;
+	}
+
+	Reuse_Particle(pPoolTag, &CustomPartDesc);
+}
+
+void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
+	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
+	_float3 vRange, _float3 vTickPerDir, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+{
+	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
+
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
+
+	CustomPartDesc.eShaderPass = eShaderPass;
+	CustomPartDesc.vPosition = vPos;
+	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.fLifeTime = fLifeTime;
+	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
+	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
+	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
+
+	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = 1.f;
+	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = vTickPerDir;
+	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_DIR;
+
+	if (nullptr != pRampTag)
+	{
+		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
+		CustomPartDesc.bUseRamp = true;
+	}
+
+	Reuse_Particle(pPoolTag, &CustomPartDesc);
+}
+
+void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
+	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
+	_float3 vRange, _float fTickPerSize, _float3 vTickPerDir, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+{
+	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
+
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
+
+	CustomPartDesc.eShaderPass = eShaderPass;
+	CustomPartDesc.vPosition = vPos;
+	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.fLifeTime = fLifeTime;
+	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
+	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
+	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
+
+	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = fTickPerSize;
+	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = vTickPerDir;
+	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_SIZE_DIR;
+
+	if (nullptr != pRampTag)
+	{
+		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
+		CustomPartDesc.bUseRamp = true;
+	}
+
+	Reuse_Particle(pPoolTag, &CustomPartDesc);
 }
 
 list<CGameObject*>* CParticleManager::Find_ParticleList(const char* pPoolTag)

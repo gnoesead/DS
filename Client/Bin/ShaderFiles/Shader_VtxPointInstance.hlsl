@@ -126,7 +126,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, _In.vTexCoord);
 	
 	Out.vColor.xyz = saturate(vMtrlEffect.xyz + 0.3f);
-	Out.vColor.w = vMtrlEffect.w * g_fAlpha;
+	Out.vColor.w = vMtrlEffect.r * g_fAlpha;
 
 	if (Out.vColor.a <= 0.1f)
 		discard;
@@ -137,13 +137,16 @@ PS_OUT  PS_Main(PS_IN _In)
 PS_OUT  PS_Ramp(PS_IN _In)
 {
 	PS_OUT	Out = (PS_OUT)0;
-
-	//float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
-
-	vector vMtrlEffect = g_Texture.Sample(LinearSampler, _In.vTexCoord);
 	
-	Out.vColor.xyz = saturate(vMtrlEffect.xyz + 0.3f);
-	Out.vColor.w = vMtrlEffect.w * g_fAlpha;
+	vector vMtrlEffect = g_Texture.Sample(LinearSampler, _In.vTexCoord);
+	float fRamp = vMtrlEffect.r;
+	if (0.98 <= fRamp)
+		fRamp = 0.98;
+	float2 vGradientUV = float2(fRamp, _In.vTexCoord.y);
+	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
+
+	Out.vColor.xyz = saturate(vMtrlRamp.xyz + 0.3f);
+	Out.vColor.w = vMtrlEffect.r * g_fAlpha;
 
 	if (Out.vColor.a <= 0.1f)
 		discard;
@@ -160,7 +163,7 @@ PS_OUT  PS_Sprite(PS_IN _In)
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, vTexUV);
 
 	Out.vColor.xyz = saturate(vMtrlEffect.xyz + 0.3f);
-	Out.vColor.w = vMtrlEffect.w * g_fAlpha;
+	Out.vColor.w = vMtrlEffect.r * g_fAlpha;
 
 	if (Out.vColor.a <= 0.1f)
 		discard;
@@ -174,13 +177,15 @@ PS_OUT  PS_Sprite_Ramp(PS_IN _In)
 
 	float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
 
-	vector vMtrlEffect = g_Texture.Sample(LinearSampler, _In.vTexCoord);
+	vector vMtrlEffect = g_Texture.Sample(LinearSampler, vTexUV);
 	float fRamp = vMtrlEffect.r;
+	if (0.98 <= fRamp)
+		fRamp = 0.98;
 	float2 vGradientUV = float2(fRamp, _In.vTexCoord.y);
 	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
 
 	Out.vColor.xyz = saturate(vMtrlRamp.xyz + 0.3f);
-	Out.vColor.w = vMtrlEffect.w * g_fAlpha;
+	Out.vColor.w = vMtrlEffect.r * g_fAlpha;
 
 	if (Out.vColor.a <= 0.1f)
 		discard;

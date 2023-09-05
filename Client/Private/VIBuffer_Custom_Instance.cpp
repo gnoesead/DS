@@ -82,15 +82,15 @@ HRESULT CVIBuffer_CustomParticle::Initialize(void* pArg)
 
 void CVIBuffer_CustomParticle::Tick(_double dTimeDelta)
 {
-	switch (m_CustomPartDesc.bChangeOption)
+	switch (m_CustomPartDesc.eChangeOption)
 	{
-	case 0:
+	case CHANGE_SIZE:
 		Change_Size(dTimeDelta);
 		break;
-	case 1:
+	case CHANGE_DIR:
 		Change_Dir(dTimeDelta);
 		break;
-	case 2:
+	case CHANGE_SIZE_DIR:
 		Change_Size_Dir(dTimeDelta);
 		break;
 	}
@@ -104,8 +104,8 @@ void CVIBuffer_CustomParticle::Change_Size(_double dTimeDelta)
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fTickPerSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fTickPerSize;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -127,9 +127,9 @@ void CVIBuffer_CustomParticle::Change_Dir(_double dTimeDelta)
 
 		_float3 vDir_float = Convert::ToFloat3(vDir);
 
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.x);
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.y);
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.z);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -143,8 +143,8 @@ void CVIBuffer_CustomParticle::Change_Size_Dir(_double dTimeDelta)
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fTickPerSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fTickPerSize;
 
 		_vector vDir = Convert::ToVector(((VTXINSTANCE*)SubResource.pData)[i].vTranslation);
 
@@ -154,9 +154,9 @@ void CVIBuffer_CustomParticle::Change_Size_Dir(_double dTimeDelta)
 
 		_float3 vDir_float = Convert::ToFloat3(vDir);
 
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.x);
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.y);
-		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vDirOption.z);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
+		((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
