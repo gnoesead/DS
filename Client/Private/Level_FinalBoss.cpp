@@ -110,6 +110,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+	
+	CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
 	m_Battle_MaxTime = { 5.5f };
