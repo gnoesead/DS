@@ -33,6 +33,15 @@ private:
 
 	list<_tchar*>			m_ProtoTag;
 
+	/*///////////////////////////////////////////////*/
+private:
+	_tchar					m_szFPS[MAX_PATH] = TEXT("");
+	_uint					m_iRenderCnt = { 0 };
+	_double					m_TimeAcc = { 0.0 };
+
+
+	_bool					m_isRenderFPS = { true };
+	/*///////////////////////////////////////////////*/
 #ifdef _DEBUG
 private:
 	void Key_Input(_double dTimeDelta);
