@@ -84,6 +84,8 @@ public:
 		m_bStop = bStop;
 	}
 	void Set_Parent(class CTransform* pTransformCom, CParticleSystem* pParticleSystem) {
+		// Ãß°¡
+		Safe_AddRef(pTransformCom); Safe_AddRef(pParticleSystem);
 		m_pParentTransform = pTransformCom; m_pParent = pParticleSystem;
 	}
 	void Set_PartsParent(class CTransform* pTransformCom);
@@ -91,6 +93,7 @@ public:
 		m_bCollect = bCollect;
 	}
 	void Set_Effect(CEffect* pEffect) {
+		Safe_AddRef(pEffect);
 		m_pEffect = pEffect;
 	}
 	void Set_ParentMatrix(_float4x4 WorldMatrix) {
