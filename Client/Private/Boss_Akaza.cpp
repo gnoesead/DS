@@ -510,7 +510,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_AIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-
+			dLongLifeTime = 5.0;
 			if (0 == m_iEvent_Index) // 0.2
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;

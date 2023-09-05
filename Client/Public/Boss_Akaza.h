@@ -29,10 +29,10 @@ public:
 		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN,
 		STATE_CINEMATIC,
 
-		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW ,
+		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
 		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
-		
+
 
 	};
 
@@ -145,6 +145,13 @@ public:
 		ANIM_HIT_GETUP = 126, // 처 누워있음
 		ANIM_HIT_GETUP2 = 127,
 
+		ANIM_GUARD_0 = 53,
+		ANIM_GUARD_1 = 54,
+		ANIM_GUARD_2 = 55,
+
+		ANIM_GUARD_HIT_SMALL = 57,
+		ANIM_GUARD_HIT_BIG = 56,
+
 
 		////////////////// 엔드모션 ///////////////////
 
@@ -246,7 +253,7 @@ public:
 	void Trigger_Hit_GetUp();
 	void Trigger_Hit_RollGetUp();
 	void Trigger_Hit_BigGetUp();
-	
+
 #pragma endregion
 
 #pragma region Pattern
@@ -288,14 +295,15 @@ private: //패턴 함수들
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 
+
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
-	
+
 
 
 #pragma endregion
 private: // _bool
-	_bool	m_bStart = { false };		
+	_bool	m_bStart = { false };
 	_bool	m_bDashPunch = { false };
 	_bool	m_bCharge = { false };
 	_bool	m_bStep_B = { false };
@@ -303,15 +311,15 @@ private: // _bool
 	_bool	m_bDashOn = { false };
 	_bool	m_bJump = { false };
 	_bool	m_bTrigger = { false };
-			
+
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dTimeAcc = { 0.0 };
-	
+
 private:
-	
-	
+
+
 
 private:
 	PHASE   m_eCurPhase = PHASE_1;

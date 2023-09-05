@@ -85,11 +85,11 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Layer_StealthObj(TEXT("Layer_StealthObj"))))
 	{
@@ -331,6 +331,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -339,7 +340,8 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	/*CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -349,13 +351,14 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	}
 
 	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
-	}*/
+	}
 
 
 	Safe_Release(pGameInstance);
@@ -393,6 +396,9 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 19.95f, 0.05f, 9.16f, 1.f };
 	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 19.8f, 0.05f, 25.66f, 1.f };
 
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+	
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
 	{

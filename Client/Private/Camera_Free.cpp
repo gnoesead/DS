@@ -49,7 +49,7 @@ void CCamera_Free::Tick(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
+	
 	if (m_bIs_Pos_Set == false) {
 		m_bIs_Pos_Set = true;
 

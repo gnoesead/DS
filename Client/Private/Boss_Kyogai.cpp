@@ -179,18 +179,6 @@ HRESULT CBoss_Kyogai::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_tchar	m_szFPS[MAX_PATH] = TEXT("");
-	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	//wsprintf(m_szFPS, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-#endif // DEBUG
 
 	return S_OK;
 }
@@ -321,7 +309,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			Trigger_Awake_AtkskCmb();
+			
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -2270,6 +2258,8 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_END);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_AtkSk();
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+
 	}
 
 	if (Event_Time(dTimeDelta, 0.5, m_dTurnTime)) // 맨처음
@@ -2452,10 +2442,6 @@ void CBoss_Kyogai::Update_Hit_BigGetUp(_double dTimeDelta)
 {
 }
 
-void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
-{
-}
-
 void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 {
 	if (m_bTurn == false)
@@ -2509,9 +2495,11 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB1;
+				
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
 			{
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 				m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB1);
 				m_eCurAnimIndex = ANIM_ATKCMB2;
 			}
@@ -2539,9 +2527,10 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
-				{
+				{					
 					m_bTurn = false;
 					m_dTurnTime = 0.0;
 					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
@@ -2618,7 +2607,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_01READY))
 			{
-
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 				m_eCurAnimIndex = ANIM_ATKCMB_02LOOP;
 			}
 			if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMB_02LOOP, 0.95, dTimeDelta))
@@ -2660,6 +2649,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{
@@ -2994,6 +2984,7 @@ void CBoss_Kyogai::TurnRoom()
 		m_fPreAngleX = pRotationMapObject->Get_RotAngle().x;
 		m_fPreAngleZ = pRotationMapObject->Get_RotAngle().z;
 	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -3004,6 +2995,7 @@ void CBoss_Kyogai::Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector v
 	////////////////////////////////////////칼날 1개////////////////////////////////////////////////////
 	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta)
 	{
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 		//vMonsterDir = Rotation_Dir(vMonsterDir, 30.f, 0.f);
 		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
 			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);

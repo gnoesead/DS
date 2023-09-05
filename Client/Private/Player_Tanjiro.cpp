@@ -11,6 +11,7 @@
 #include "Battle_UI_Manager.h"
 
 #include "PlayerManager.h"
+#include "MonsterManager.h"
 
 #include "Camera_Manager.h"
 #include "OptionManager.h"
@@ -1614,7 +1615,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 
-
 #pragma region GuardHit
 	if (m_isGuardHit)
 	{
@@ -2007,6 +2007,59 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		Go_Straight_Deceleration(dTimeDelta, ANIM_ADV_RUN_END, m_fMove_Speed * m_fScaleChange * 0.7f, 0.18f);
 		Go_Straight_Deceleration(dTimeDelta, 146, m_fMove_Speed * m_fScaleChange * 0.35f, 0.18f);
 
+
+		//잠입모드 공격시
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		if (pGameInstance->Get_DIKeyDown(DIK_J))
+		{
+			m_pModelCom->Set_Animation(ANIM_ATK_COMBO);
+			m_pSword->Set_SwordIn(false);
+			CMonsterManager::GetInstance()->Set_StealthAttack(true);
+
+			_float4 Dir;
+			XMStoreFloat4(&Dir, XMVector4Normalize( m_pTransformCom->Get_State(CTransform::STATE_LOOK)) );
+			CMonsterManager::GetInstance()->Set_DirStealthAtk(Dir);
+		}
+
+		if (CMonsterManager::GetInstance()->Get_StealthEnd_BattleStart())
+		{
+			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart(false);
+
+			m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
+			m_dChangePositionAccTime = 0.0;
+		}
+
+		Safe_Release(pGameInstance);
+	}
+
+
+	//잠입모드 발각시
+	if (CMonsterManager::GetInstance()->Get_PlayerBack())
+	{
+		CMonsterManager::GetInstance()->Set_PlayerBack(false);
+
+		m_isPlayerBack_Tanjiro = true;
+		m_dDelay_PlayerBack_Tanjiro = 0.0;
+
+		m_Moveset.m_isRestrict_Adventure = true;
+		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+	}
+	_float4 AtkDir = CMonsterManager::GetInstance()->Get_DirStealthAtk();
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.3f, 0.03f, AtkDir);
+	
+
+	if (m_isPlayerBack_Tanjiro)
+	{
+		m_dDelay_PlayerBack_Tanjiro += dTimeDelta;
+		if (m_dDelay_PlayerBack_Tanjiro > 2.5)
+		{
+			m_isPlayerBack_Tanjiro = false;
+			m_dDelay_PlayerBack_Tanjiro = 0.0;
+
+			m_Moveset.m_isRestrict_Adventure = false;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 8.f, 0.f, 10.f, 1.f });
+		}
 	}
 }
 
@@ -2233,6 +2286,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 
 		m_isAirDashing = false;
 		
+		m_Moveset.m_State_Battle_Guard = false;
+
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
 		{

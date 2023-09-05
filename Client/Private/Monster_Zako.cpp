@@ -13,6 +13,8 @@
 #include "PlayerManager.h"
 #include "World_UI_Hp.h"
 
+#include "Fade_Manager.h"
+
 CMonster_Zako::CMonster_Zako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -105,12 +107,18 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
+	m_StatusDesc.fHp_Max = 10.f;
+	m_StatusDesc.fHp = 10.f;
 
 
 	Safe_Release(pGameInstance);
 
+	if(m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
+		m_iAttackIndex = 0; // 2,5
+	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_TALK)
+		m_iAttackIndex = 2; // 2,5
+	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_WALKTALK)
+		m_iAttackIndex = 5; // 2,5
 
 	return S_OK;
 }
@@ -122,8 +130,17 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Trigger();
-	Animation_Control(dTimeDelta);
+	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start())
+	{
+		if (m_isFirst_BattleOn)
+		{
+			m_isFirst_BattleOn = false;
+			CMonsterManager::GetInstance()->Set_BattleOn(true);
+		}
+
+		Trigger();
+		Animation_Control(dTimeDelta);
+	}
 
 	//局聪皋捞记 贸府
  	m_pModelCom->Play_Animation(dTimeDelta);
@@ -1437,6 +1454,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	if (m_StatusDesc.fHp <= 0.0f)
 	{
 		m_pModelCom->Set_Animation(ANIM_DEATH);
+
+		if (m_isFirst_Death_For_Stealth)
+		{
+			m_isFirst_Death_For_Stealth = false;
+
+			CMonsterManager::GetInstance()->Plus_ThreeCnt();
+		}
 	}
 #pragma endregion
 

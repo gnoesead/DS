@@ -122,9 +122,15 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
-	if (true == m_isDead)
+	if (m_isDead)
 		return;
 
+	if (m_isDeath_Stealth)
+	{
+		m_dDelay_Dead_Stealth += dTimeDelta;
+		if(m_dDelay_Dead_Stealth > 5.f)
+			return;
+	}
 	Animation_Control(dTimeDelta);
 
 	//애니메이션 처리
@@ -299,7 +305,7 @@ void CMonster_StealthZako::Calculate_SpotIndex()
 
 void CMonster_StealthZako::Animation_Control(_double dTimeDelta)
 {
-	if(m_isQuestioning == false && m_isFinding == false)
+	if(!m_isQuestioning && !m_isFinding && !m_isAttacking && !m_isPlayerBack)
 		Animation_Control_Move(dTimeDelta);
 
 	Animation_Control_Search(dTimeDelta);
@@ -353,7 +359,7 @@ void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
 
 void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 {
-	if (!m_isQuestioning && !m_isFinding)
+	if (!m_isQuestioning && !m_isFinding && !m_isAttacking && !m_isPlayerBack)
 	{
 		if (Calculate_Distance() < 6.0f)
 		{
@@ -401,7 +407,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isFinding = true;
 		}
 
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.01f);
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 	}
 
 	if (m_isFinding)
@@ -416,9 +422,105 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
 			m_pModelCom->Set_Animation(ANIM_RUN);
 		
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
-		Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.2f);
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
+
+		if(Calculate_Distance() > 1.f)
+			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.6f, true);
+		else
+		{
+			m_isFinding = false;
+			m_isAttacking = true;
+
+			m_isFirst_Finding = true;
+			m_isFirst_Attacking = true;
+		}
 	}
+
+	if (m_isAttacking)
+	{
+		if (m_isFirst_Attacking)
+		{
+			m_isFirst_Attacking = false;
+
+			m_pModelCom->Set_Animation(ANIM_ATK_CLAWS);
+		}
+
+		m_dDelay_Attacking += dTimeDelta;
+		if (m_dDelay_Attacking > 0.3f)
+		{
+			m_dDelay_Attacking = 0.0;
+
+			m_isAttacking = false;
+
+			m_isPlayerBack = true;
+			m_dDelay_PlayerBack = 0.0;
+			CMonsterManager::GetInstance()->Set_PlayerBack(true);
+			CMonsterManager::GetInstance()->Set_ZenitsuBack(true);
+			_float4 Dir;
+			XMStoreFloat4(&Dir, Calculate_Dir());
+			CMonsterManager::GetInstance()->Set_DirStealthAtk(Dir);
+		}
+	}
+
+	if (m_isPlayerBack)
+	{
+		m_dDelay_PlayerBack += dTimeDelta;
+		if (m_dDelay_PlayerBack > 2.5f)
+		{
+			m_dDelay_PlayerBack = 0.0;
+			m_isPlayerBack = false;
+
+			//_vector{15.5f, 0.05f, 27.94f, 1.0f}
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_WorldInfo.vPosition));
+			m_isGo = false;
+			m_dDelay_SpotWalk = 0.0;
+			m_fTime_Stay = 1.5f;
+		}
+	}
+
+	//히트시
+	if (m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST) //배틀 몹
+	{
+		if (CMonsterManager::GetInstance()->Get_StealthAttack())
+		{
+			CMonsterManager::GetInstance()->Set_StealthAttack(false);
+
+			if (Calculate_Distance() < 1.4f)
+			{
+				m_isBattleStart_Stealth = true;
+				m_dDelay_BattleStart_Stealth = 0.0;
+				m_pModelCom->Set_Animation(ANIM_DMG_BIG_BACK);
+			}
+		}
+	}
+	else
+	{
+		if (CMonsterManager::GetInstance()->Get_StealthAttack())
+		{
+			CMonsterManager::GetInstance()->Set_StealthAttack(false);
+		}
+	}
+	_float4 HitDir = CMonsterManager::GetInstance()->Get_DirStealthAtk();
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_BACK, 1.3f, 0.09f, HitDir, true);
+
+	//배틀 스타트
+	if (m_isBattleStart_Stealth)
+	{
+		m_dDelay_BattleStart_Stealth += dTimeDelta;
+		if (m_dDelay_BattleStart_Stealth > 0.5f)
+		{
+			m_dDelay_BattleStart_Stealth = 0.0;
+			m_isBattleStart_Stealth = false;
+
+			m_isDeath_Stealth = true;
+
+			//배틀스타트
+			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart(true);
+			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart_Fade(true);
+		}
+
+	}
+
 }
 
 HRESULT CMonster_StealthZako::Add_Components()
