@@ -592,7 +592,6 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 			m_Moveset.m_isPressing_While_Restrict = false;
 	}
 	
-
 	Safe_Release(pGameInstance);
 }
 

@@ -2602,6 +2602,12 @@ HRESULT CLevel_Village::Ready_Layer_Effect()
         return E_FAIL;
     }
 
+    if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Stone.bin"))))
+    {
+        MSG_BOX("Failed to Load Effect : Swamp_Stone");
+        return E_FAIL;
+    }
+
   
 
     return S_OK;

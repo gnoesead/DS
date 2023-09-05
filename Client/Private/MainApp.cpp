@@ -127,7 +127,7 @@ void CMainApp::Tick(_double dTimeDelta)
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
 
-	m_TimeAcc += dTimeDelta;
+	
 #endif
 }
  
@@ -154,23 +154,7 @@ HRESULT CMainApp::Render()
 
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
-	//=================================================
-	++m_iRenderCnt;
-
-	if (m_TimeAcc >= 1.0)
-	{
-		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iRenderCnt);
-		m_iRenderCnt = 0;
-		m_TimeAcc = 0.0;
-	}
-
-	if (m_isRenderFPS = true)
-	{
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
-			return E_FAIL;
-	}
-	//=================================================
-	#ifdef _DEBUG
+	
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
@@ -185,6 +169,7 @@ HRESULT CMainApp::Render()
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 	}
+	#ifdef _DEBUG
 
 	if (m_isRenderDebugInfo) {
 
