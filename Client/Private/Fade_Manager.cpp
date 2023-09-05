@@ -73,6 +73,14 @@ void CFadeManager::Set_Fade_OutIn(_bool Fade, _float Time)
 		m_Delay_Time = Time;
 }
 
+void CFadeManager::Set_Fade_OutIn_Basic(_bool Fade, _float Time)
+{
+	m_Is_Fade_OutIn_Basic = Fade;
+
+	if (Time != 0.f)
+		m_Delay_Time_Basic = Time;
+}
+
 void CFadeManager::Set_Ink_In(_bool Fade)
 {
 	m_Is_Ink_In = Fade;
@@ -92,6 +100,11 @@ _bool CFadeManager::Get_Fade_Out()
 _bool CFadeManager::Get_Fade_OutIn()
 {
 	return m_Is_Fade_OutIn;
+}
+
+_bool CFadeManager::Get_Fade_OutIn_Basic()
+{
+	return m_Is_Fade_OutIn_Basic;
 }
 
 _bool CFadeManager::Get_Ink_In()
@@ -115,6 +128,11 @@ void CFadeManager::Set_Fade_OutIn_Done(_bool Fade)
 	
 }
 
+void CFadeManager::Set_Fade_OutIn_Basic_Done(_bool Fade)
+{
+	m_Is_Fade_OutIn_Basic_Done = Fade;
+}
+
 void CFadeManager::Set_Ink_In_Done(_bool Fade)
 {
 	m_Is_Ink_In_Done = Fade;
@@ -135,6 +153,11 @@ _bool CFadeManager::Get_Fade_OutIn_Done()
 	return m_Is_Fade_OutIn_Done;
 }
 
+_bool CFadeManager::Get_Fade_OutIn_Basic_Done()
+{
+	return m_Is_Fade_OutIn_Basic_Done;
+}
+
 _bool CFadeManager::Get_Ink_In_Done()
 {
 	return m_Is_Ink_In_Done;
@@ -153,6 +176,11 @@ void CFadeManager::Set_Is_Battle(_bool is)
 _float CFadeManager::Get_Delay_Time()
 {
 	return m_Delay_Time;
+}
+
+_float CFadeManager::Get_Delay_Time_Basic()
+{
+	return m_Delay_Time_Basic;
 }
 
 _bool CFadeManager::Get_Is_House_Boss_On()

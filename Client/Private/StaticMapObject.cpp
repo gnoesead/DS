@@ -5,6 +5,7 @@
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Camera_Manager.h"
+#include "MonsterManager.h"
 
 CStaticMapObject::CStaticMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMapObject(pDevice, pContext)
@@ -501,6 +502,9 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
 		pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
 
+		//젠이츠npc에 보내주기
+		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+
 		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
 		break; }
 		case INTERACTION_ROOMCHANGE1:
@@ -508,11 +512,17 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
 			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
 
+			//젠이츠npc에 보내주기
+			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+
 			break;
 		case INTERACTION_ROOMCHANGE2:
 		vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
 			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
+
+			//젠이츠npc에 보내주기
+			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
 
 			break;
 		}

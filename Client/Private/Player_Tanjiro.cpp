@@ -11,6 +11,8 @@
 #include "Battle_UI_Manager.h"
 
 #include "PlayerManager.h"
+#include "Fade_Manager.h"
+
 #include "MonsterManager.h"
 
 #include "Camera_Manager.h"
@@ -92,6 +94,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();

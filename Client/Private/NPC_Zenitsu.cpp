@@ -280,7 +280,7 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 	{
 		m_dDelay_GoOn = 0.0;
 
-		if (Calculate_Distance() > 2.0f)
+		if (Calculate_Distance() > 2.5f)
 		{
 			if (m_isGoOn == false)
 			{
@@ -316,10 +316,9 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 		}
 	}
 
-	Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, 0.3f);
-	Go_Straight_Constant(dTimeDelta, 147, 0.3f);
-	Go_Straight_Deceleration(dTimeDelta, 148, 0.3f, 0.05f);
-
+	Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, 0.45f);
+	Go_Straight_Constant(dTimeDelta, 147, 0.45f);
+	Go_Straight_Deceleration(dTimeDelta, 148, 0.45f, 0.07f);
 
 
 	//잠입모드 발각 시
@@ -342,6 +341,15 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 		}
 	}
 
+
+	//텔레포트 이동시
+	if (CMonsterManager::GetInstance()->Get_Zenitsu_IndexPlus())
+	{
+		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(false);
+
+		m_iResetIndex++;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
+	}
 
 }
 

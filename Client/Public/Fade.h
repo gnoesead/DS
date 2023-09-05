@@ -47,16 +47,20 @@ public:
 	void Fade_In(_double TimeDelta);
 	void Fade_Out(_double TimeDelta);
 	void Fade_OutIn(_double TimeDelta);
+	void Fade_OutIn_Basic(_double TimeDelta);
+
 
 private:
 	_bool m_Is_In = { false };
 	_bool m_Is_Out = { false };
 	_bool m_Is_OutIn = { false };
+	_bool m_Is_OutIn_Basic = { false };
 	_bool m_Is_Ink_On = { false };
 
 	_bool m_Is_In_Done = { false };
 	_bool m_Is_Out_Done = { false };
 	_bool m_Is_OutIn_Done = { false };
+	_bool m_Is_OutIn_Basic_Done = { false };
 	_bool m_Is_Ink_On_Done = { false };
 
 	_float m_TimeAcc = { 0.f };
@@ -65,6 +69,15 @@ private:
 	_float m_Delay_TimeAcc = { 0.f };
 	_bool  m_Delay_On = { false };
 	_float m_Delay_Time = { 1.f };
+
+
+private:
+	_float m_InOut_Basic_Speed = { 1.f };
+	_float m_Delay_Basic_TimeAcc = { 0.f };
+	_bool  m_Delay_Basic_On = { false };
+	_float m_Delay_Basic_Time = { 1.f };
+
+
 
 
 	_float m_Ink_Sprite = { 0.f };
