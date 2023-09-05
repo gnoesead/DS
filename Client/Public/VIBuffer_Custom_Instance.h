@@ -13,7 +13,7 @@ public:
 	typedef struct tagVIB_CustomParticleDesc
 	{
 		_ubyte	bChangeOption = { 1 };
-		_int	iSizeOption = { 1 };
+		_float	fSize = { 1.f };
 		_int3	vDirOption = { 1, 1, 1 };
 		CVIBuffer_Point_Instance::INSTANCEDESC		InstanceDesc;
 	}VIB_CUSTOMPARTDESC;

@@ -22,6 +22,8 @@ void CCustomParticle::Reset_Particle(CUSTOMPARTDESC* pCustomPartDesc)
 	m_CustomPartDesc = *pCustomPartDesc;
 	m_dCycle = _double(m_CustomPartDesc.fLifeTime / (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y));
 
+	m_pVIBufferCom->Reset_Particle(&m_CustomPartDesc.VIB_CustomPartDesc);
+
 	Set_Dead(false);
 	m_dTimeAcc = 0.0;
 }
@@ -48,7 +50,7 @@ HRESULT CCustomParticle::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fAlpha = 1.f;
+	m_fAlpha = 0.f;
 
 	return S_OK;
 }
@@ -60,7 +62,7 @@ void CCustomParticle::Tick(_double dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	/*if (10.0 > m_dTimeAcc)
+	if (m_CustomPartDesc.fLifeTime * 0.7f > m_dTimeAcc)
 	{
 		m_fAlpha += (_float)dTimeDelta * 1.5f;
 
@@ -73,7 +75,7 @@ void CCustomParticle::Tick(_double dTimeDelta)
 
 		if (0.f > m_fAlpha)
 			m_fAlpha = 0.f;
-	}*/
+	}
 
 	//m_fScale += (_float)dTimeDelta * 0.7f;
 

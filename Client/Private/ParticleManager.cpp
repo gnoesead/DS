@@ -21,13 +21,13 @@ void CParticleManager::PlayParticle(const char* pPoolTag, _ubyte bShaderPass, _f
 	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
 	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
 
-	CustomPartDesc.VIB_CustomPartDesc.bChangeOption = 0;
-	CustomPartDesc.VIB_CustomPartDesc.iSizeOption = 1;
+	CustomPartDesc.VIB_CustomPartDesc.bChangeOption = 2;
+	CustomPartDesc.VIB_CustomPartDesc.fSize = -1.f;
 	CustomPartDesc.VIB_CustomPartDesc.vDirOption = {1, 1, 1};
 
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = { 2.f, 2.f, 2.f };
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = { 1.f, 1.f, 1.f };
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = 0.3f;
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = 1.f;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = 0.5f;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = 0.3f;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = 1.f;
 

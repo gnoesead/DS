@@ -104,8 +104,8 @@ void CVIBuffer_CustomParticle::Change_Size(_double dTimeDelta)
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x +=  m_pSpeed[i] * (_float)dTimeDelta * 0.1f * _float(m_CustomPartDesc.iSizeOption);
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y +=  m_pSpeed[i] * (_float)dTimeDelta * 0.1f * _float(m_CustomPartDesc.iSizeOption);
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y +=  m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -143,8 +143,8 @@ void CVIBuffer_CustomParticle::Change_Size_Dir(_double dTimeDelta)
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x += m_pSpeed[i] * (_float)dTimeDelta * 0.1f * _float(m_CustomPartDesc.iSizeOption);
-		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y += m_pSpeed[i] * (_float)dTimeDelta * 0.1f * _float(m_CustomPartDesc.iSizeOption);
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
+		((VTXINSTANCE*)SubResource.pData)[i].vPSize.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.fSize;
 
 		_vector vDir = Convert::ToVector(((VTXINSTANCE*)SubResource.pData)[i].vTranslation);
 

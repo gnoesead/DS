@@ -96,7 +96,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 		//PoolTag, ShaderPass, Pos, SpriteSpeed, SpriteXY, LifeTime, TextureTag, BufferTag
-		CParticleManager::GetInstance()->PlayParticle("Test", 0, vPos, 1.0, _int2(4, 2), 1.f
+		CParticleManager::GetInstance()->PlayParticle("Test", 2, vPos, 20.0, _int2(4, 2), 5.f
 			, TEXT("Prototype_Component_Texture_T_e_cmn_Shock002"), TEXT("Prototype_Component_VIBuffer_50_Particle"));
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
