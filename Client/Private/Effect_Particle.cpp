@@ -250,7 +250,7 @@ CGameObject* CEffect_Particle::Clone(void* pArg)
 		MSG_BOX("Failed to Clone : CEffect_Particle");
 		Safe_Release(pInstance);
 	}
-
+	
 	return pInstance;
 }
 

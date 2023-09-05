@@ -47,11 +47,15 @@ private:
 
 private:
 	CTransform* m_pTransformCom = { nullptr };
+	CRenderer* m_pRendererCom = { nullptr };
 
 private:
 	EFFECTDESC			m_EffectDesc;
 
 	_double				m_TimeAcc = { 0.0 };
+
+	_bool				m_bMakeBundle = { false };
+
 	
 public:
 	static CSmellBundle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
