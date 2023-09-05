@@ -111,6 +111,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 	
+	CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
+	CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
+
 	CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);

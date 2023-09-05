@@ -308,14 +308,11 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_5", m_pTransformCom, &EffectWorldDesc);
 			}
 
-			if (1 == m_iEvent_Index)
+			else if (1 == m_iEvent_Index) // 0.17
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 7.2f);
-			}
 
-			if (2 == m_iEvent_Index) // 0.17
-			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
 			}
 		}
@@ -482,6 +479,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD , vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN, vPlusPos);
 				Create_StoneParticle(vPlusPos);
+				Create_SmeshStone(vPlusPos);
+				Camera_Shake();
 			}
 		}
 
@@ -1847,11 +1846,23 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
+
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.5f;
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom , &EffectWorldDesc);
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			m_isConnectHitting = true;
+
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+
 		}
 
 		m_dDelay_ComboChain = 1.0;
@@ -1922,6 +1933,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			m_dDelay_ComboChain = 1.7;
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.6f, 0.05f, AtkDir);
 #pragma endregion
@@ -1940,6 +1955,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 		Jumping(1.75f, 0.03f);
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 
 	//어퍼시 수직상승 여부
@@ -1979,6 +1998,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 91, 0.3f, AtkDir);
@@ -1993,6 +2016,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 			Jumping(1.85f, 0.05f);
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 #pragma endregion
 
@@ -2010,6 +2037,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		Jumping(1.1f, 0.05f);
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 86, 2.5f, AtkDir);
@@ -2059,6 +2090,10 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			Jumping(0.75f, 0.030f);
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 	}
 #pragma endregion
 

@@ -358,6 +358,9 @@
     <Filter Include="02. GameObjects\Character\NPC\NPC_Zenitsu">
       <UniqueIdentifier>{fe8c0157-0581-4e1f-b3cc-6c3b8a5b3e6c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\SmeshStone">
+      <UniqueIdentifier>{08d41dee-392b-4f21-82b2-b9babe1a32b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -678,6 +681,9 @@
     <ClInclude Include="..\Public\NPC_Zenitsu.h">
       <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SmeshStone.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -988,6 +994,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\NPC_Zenitsu.cpp">
       <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SmeshStone.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
