@@ -111,6 +111,8 @@ private:
 
 	//잠입모드 변경
 	_bool	m_isStealthMode = { false };
+	_bool	m_isPlayerBack_Tanjiro = { false };
+	_double m_dDelay_PlayerBack_Tanjiro = { 0.0 };
 
 private: //애니메이션 제어용 변수들
 	//Move
