@@ -171,6 +171,9 @@ protected: // 카메라 쉐이크
 protected:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_StoneParticle(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+
+	void Play_HitEffect();
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;

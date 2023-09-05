@@ -81,6 +81,7 @@
 #include "Swamp_SmokeEffect.h"
 #include "GroundSmoke.h"
 #include "StoneParticle.h"
+#include "SmeshStone.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -1157,6 +1158,12 @@ HRESULT CLoader::LoadingForVillage()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp_SmokeEffect"),
 		CSwamp_SmokeEffect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* Prototype_GameObject_SmeshStone */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmeshStone"),
+		CSmeshStone::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 #pragma region Object
 	

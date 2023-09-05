@@ -114,9 +114,15 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		else
 			m_isStealthMode = true;
 	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_N))
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+
+	}
+
 	Safe_Release(pGameInstance); 
-
-
 
 	if (true == m_isDead)
 		return;

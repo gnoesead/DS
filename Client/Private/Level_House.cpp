@@ -1996,12 +1996,6 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
-		return E_FAIL;
-	}
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Atk_Push.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Atk_Push");

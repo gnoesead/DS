@@ -517,6 +517,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle0.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle0");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region RENGOKU
@@ -528,7 +534,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region KYOGAI
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 4)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;

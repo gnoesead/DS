@@ -355,6 +355,9 @@
     <Filter Include="02. GameObjects\Environment\StoneParticle">
       <UniqueIdentifier>{094cf555-e02f-4832-8733-1a3b433cbe42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\SmeshStone">
+      <UniqueIdentifier>{08d41dee-392b-4f21-82b2-b9babe1a32b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -672,6 +675,9 @@
     <ClInclude Include="..\Public\StoneParticle.h">
       <Filter>02. GameObjects\Environment\StoneParticle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SmeshStone.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -979,6 +985,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StoneParticle.cpp">
       <Filter>02. GameObjects\Environment\StoneParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SmeshStone.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
