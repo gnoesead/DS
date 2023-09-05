@@ -249,13 +249,15 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-/*				if (m_Moveset.m_iAwaken == 0)	*/				
+				if (m_Moveset.m_iAwaken == 0)			
 					CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo1", m_pTransformCom);
-				//else
-				//	CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Rengoku_SurgeCombo1", m_pTransformCom);
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
+				//CEffectPlayer::Get_Instance()->Play("Rengoku_SurgeCombo1", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -280,6 +282,9 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo2_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo2_DecalParticle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.f);
 			}
@@ -297,6 +302,9 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo3_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo3_DecalParticle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.f);
 			}
@@ -309,11 +317,17 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Down_Decal1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Down_Decal1Particle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Down_Decal2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Down_Decal2Particle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.5f);
 			}
@@ -343,6 +357,9 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Up_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo4_Up_DecalParticle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 2.2f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
 			}
@@ -502,10 +519,14 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo_Air1", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
+			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.8f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
-			else if (1 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.3f, 2.3f, 2.3f), _float3(0.f, 1.0f, 1.8f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.5f);
@@ -514,6 +535,10 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		else if (9 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo_Air2", m_pTransformCom);
+			}
+			else if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.6f, 2.6f, 2.6f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.5f);
@@ -526,6 +551,13 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 1.0f, 1.7f), 1.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+			}
+		}
+		else if (25 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Rengoku_BasicCombo_Air3", m_pTransformCom);
 			}
 		}
 #pragma endregion
@@ -550,7 +582,11 @@ void CPlayer_Rengoku::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.8f), 1.1,
+				CEffectPlayer::Get_Instance()->Play("Rengoku_Tilt", m_pTransformCom);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.8f), 0.3,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 8.0f);
 			}
 		}
@@ -947,6 +983,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
 		m_pModelCom->Set_Animation(12);
+		m_isReset_Atk_MoveControl = true;
+		m_dDelay_Charge_Move = 0.0;
 	}
 	else if (m_Moveset.m_Up_Battle_Charge )
 	{
@@ -954,7 +992,15 @@ void CPlayer_Rengoku::Animation_Control_Battle_Charge(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_IDLE);
 	}
-	Go_Straight_Deceleration(dTimeDelta, 12, 3.0f * m_fScaleChange * m_fAtk_Move_Ratio, 0.01f * m_fScaleChange);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 12)
+	{
+		m_dDelay_Charge_Move += dTimeDelta;
+		if (m_dDelay_Charge_Move > 0.1f)
+		{
+			Go_Straight_Deceleration(dTimeDelta, 12, 3.3f * m_fScaleChange * m_fAtk_Move_Ratio, 0.035f * m_fScaleChange);
+		}
+	}
 }
 
 void CPlayer_Rengoku::Animation_Control_Battle_Skill(_double dTimeDelta)
@@ -1367,7 +1413,8 @@ void CPlayer_Rengoku::Animation_Control_Battle_Special(_double dTimeDelta)
 void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 {
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	_vector vAtkDir = XMLoadFloat4(&AtkDir);
+	AtkDir.y = 0.0f;
+	_vector vAtkDir = XMVector4Normalize(XMLoadFloat4(&AtkDir));
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
@@ -1407,56 +1454,59 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isConnectHitting = true;
 		}
 
-		//m_pTransformCom->Set_Look(reverseAtkDir);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isJumpOn)
+		if (m_isSkilling == false)
 		{
-			Jumping(0.12f, 0.030f);
+			//m_pTransformCom->Set_Look(reverseAtkDir);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				Jumping(0.12f, 0.030f);
 
-			if (m_iSmallHit_Index == 0)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_B);
-				m_iSmallHit_Index++;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_B);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_L);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_F);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_R);
+					m_iSmallHit_Index = 0;
+				}
 			}
-			else if (m_iSmallHit_Index == 1)
+			else
 			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_L);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 2)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_F);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 3)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_AIR_R);
-				m_iSmallHit_Index = 0;
-			}
-		}
-		else
-		{
-			if (m_iSmallHit_Index == 0)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 1)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 2)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
-				m_iSmallHit_Index++;
-			}
-			else if (m_iSmallHit_Index == 3)
-			{
-				m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
-				m_iSmallHit_Index = 0;
+				if (m_iSmallHit_Index == 0)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_F);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 1)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_L);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 2)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_U);
+					m_iSmallHit_Index++;
+				}
+				else if (m_iSmallHit_Index == 3)
+				{
+					m_pModelCom->Set_Animation(ANIM_DMG_SMALL_R);
+					m_iSmallHit_Index = 0;
+				}
 			}
 		}
 	}
@@ -1477,16 +1527,19 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_Big = false;
 
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		if (m_isJumpOn)
+		if (m_isSkilling == false)
 		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		}
-		else
-		{
-			m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			if (m_isJumpOn)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			}
+			else
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+			}
 		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f,  AtkDir);
@@ -1499,12 +1552,16 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_Blow = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.2f, 0.05f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Jumping(1.2f, 0.05f);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 49, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -1518,11 +1575,15 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Dmg_BigBlow = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
-		m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.2f, 0.05f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+
+			Jumping(1.2f, 0.05f);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 78, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -1539,12 +1600,16 @@ void CPlayer_Rengoku::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		m_isConnectHitting = false;
 
-		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
-		//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
-		m_pTransformCom->Set_Look(reverseAtkDir);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		Jumping(1.7f, 0.03f);
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Jumping(1.7f, 0.03f);
+		}
 	}
 
 	if (m_isConnectHitting == false)
@@ -1602,6 +1667,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 		|| ANIM_DMG_SMALL_AIR_R == iCurAnimIndex || ANIM_DMG_SMALL_AIR_U == iCurAnimIndex )
 	{
 		m_Moveset.m_isHitMotion = true;
+
+		m_Moveset.m_State_Battle_Guard = false;
 		
 		//다운상태
 		if (ANIM_DOWN_IDLE == iCurAnimIndex)
@@ -1657,6 +1724,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
+
+		m_isSkilling = true;
 	} 
 	//잡기 공격 시 제한
 	/*else if (ANIM_ATK_THROW == iCurAnimIndex)
@@ -1756,6 +1825,8 @@ void CPlayer_Rengoku::Moving_Restrict()
 
 		m_pSword->Set_SwordIn(false);
 		m_pSword->Set_SwordIn(false);
+
+		m_isSkilling = false;
 	}
 }
 
@@ -1856,8 +1927,8 @@ HRESULT CPlayer_Rengoku::SetUp_ShaderResources()
 		return E_FAIL;
 
 	// 슈퍼아머 상태 넣어주셈
-	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bAwake, sizeof(_bool))))
-		return E_FAIL;*/
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
+		return E_FAIL;
 
 
 

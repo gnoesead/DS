@@ -164,7 +164,7 @@ namespace Engine
 		XMFLOAT4		vAdditional2;				// SizeY(Spark)Acc, StartSpeed, GravityModifier, CurGravityIndex
 		XMFLOAT4		vLinearSpeed;				// x, y, z, CurSpeedIndex
 		XMFLOAT4		vFrame;						// FrameTimeAcc, StartFrame, FrameSpeed, CurFrameIndex
-		XMFLOAT4		vAdditional3;				// CurFrame, CurSizeIndexY
+		XMFLOAT4		vAdditional3;				// CurFrame, CurSizeIndexY,  LifetimeRatio
 	}VTXINSTANCEEFFECT;
 
 	typedef struct tagVertex_ModelInstance

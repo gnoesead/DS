@@ -414,12 +414,12 @@ void CEffect::LateTick(_double dTimeDelta)
 		{
 			if (NON_LIGHT == m_eEffectDesc.eRenderGroupOption)
 			{
-				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONLIGHT, this)))
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectBloom, this)))
 					return;
 			}
 			else if (BLEND == m_eEffectDesc.eRenderGroupOption)
 			{
-				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+				if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
 					return;
 			}
 		}

@@ -332,6 +332,11 @@ _vector CNPC::Calculate_Dir_Cross()
 	return vCross;
 }
 
+_float4 CNPC::Calculate_PlayerPos()
+{
+	return _float4();
+}
+
 _float CNPC::Calculate_To_Spot()
 {
 	_vector vNPCPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

@@ -531,6 +531,36 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1_DecalParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo2_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal1Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal1Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal2Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal2Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up_DecalParticle");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region KYOGAI

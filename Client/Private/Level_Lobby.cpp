@@ -1385,9 +1385,21 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo2_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2_Decal");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3_Decal");
 		return E_FAIL;
 	}
 
@@ -1403,9 +1415,60 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal2");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up_Decal");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo_Air1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo_Air1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo_Air2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo_Air2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo_Air3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo_Air3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_Tilt.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_Tilt");
+		return E_FAIL;
+	}
+#pragma endregion
+
+
+#pragma region RENGOKU_SURGECOMBO
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_SurgeCombo1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_SurgeCombo1");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -1465,7 +1528,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 #pragma endregion
-
 
 #pragma region ZENITSU
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
@@ -1573,6 +1635,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Power_Air_2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Power_Air_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Light.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Light");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Elc.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Elc");
 		return E_FAIL;
 	}
 
