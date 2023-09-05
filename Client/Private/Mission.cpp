@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "MissionManager.h"
 #include "Fade_Manager.h"
+#include "MonsterManager.h"
 
 CMission::CMission(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -342,7 +343,15 @@ void CMission::LateTick(_double TimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 		CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 	}
+	if (CMonsterManager::GetInstance()->Get_StealthEnd_BattleStart_Fade())
+	{
+		CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart_Fade(false);
 
+		m_Is_Mon_Encounter = true;
+		CFadeManager::GetInstance()->Set_Fade_Color(true);
+		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+		CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
+	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
 

@@ -53,6 +53,8 @@ public:
 	_bool       Get_Lock_On_Is_Boss() { return  m_Lock_On_Is_Boss; }
 	_bool       Get_Lock_On_UI_Render() { return   m_Lock_On_UI_Render; }
 
+	void        Change_Hekireki_Dir();
+
 private:
 	void FreeCamera(_double dTimeDelta);
 	void AdventureCamera(_double dTimeDelta);

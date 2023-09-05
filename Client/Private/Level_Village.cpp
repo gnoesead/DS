@@ -148,6 +148,9 @@ HRESULT CLevel_Village::Initialize()
     CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
     CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
 
+    CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
+    CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
+
     CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
     CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
     CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);

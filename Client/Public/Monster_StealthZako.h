@@ -83,19 +83,48 @@ private: //애니메이션 제어용 함수
 	void	Calculate_SpotIndex();
 
 	void	Animation_Control(_double dTimeDelta);
-
+	void	Animation_Control_Move(_double dTimeDelta);
+	void	Animation_Control_Search(_double dTimeDelta);
 
 private:
 	_float	m_fScale = { 0.8f };
 
 
 	_int	m_iSpot_Index = { 0 };
+	
 
 	_double m_dDelay_SpotWalk = { 0.0 };
 	_float	m_fTime_Stay = { 3.0f };
 
 	_bool	m_isGo = { false };
 	_bool	m_isFirst_Go = { true };
+
+
+private:
+	_bool	m_isQuestioning = { false };
+	_bool	m_isFirst_Questioning = { true };
+	_double m_dDelay_Questioning = { 0.0 };
+
+
+	_bool	m_isFinding = { false };
+	_bool	m_isFirst_Finding = { true };
+
+
+	_bool	m_isAttacking = { false };
+	_bool	m_isFirst_Attacking = { true };
+	_double m_dDelay_Attacking = { 0.0 };
+
+
+	_bool	m_isPlayerBack = { false };
+	_double m_dDelay_PlayerBack = { 0.0 };
+
+
+	_bool	m_isBattleStart_Stealth = { false };
+	_double m_dDelay_BattleStart_Stealth = { 0.0 };
+
+	_bool	m_isDeath_Stealth = { false };
+	_double m_dDelay_Dead_Stealth = { 0.0 };
+	
 
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
