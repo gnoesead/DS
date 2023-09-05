@@ -107,13 +107,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 //  Dist_Update
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) {
-
-		if (pGameInstance->Get_DIKeyDown(DIK_I)) {
-			CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
-			if (m_bIs_Side_Off == false && m_bIs_Combo_On == true)
-				m_Hekireki_Dir *= -1;
-		}
-
 		m_bIs_Dist_Update = CCameraManager::GetInstance()->Get_Is_Dist_Update();
 	}
 	else {
@@ -408,6 +401,12 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 HRESULT CCamera_Free::Render()
 {
 	return S_OK;
+}
+
+void CCamera_Free::Change_Hekireki_Dir()
+{
+	if (m_bIs_Side_Off == false && m_bIs_Combo_On == true)
+		m_Hekireki_Dir *= -1;
 }
 
 void CCamera_Free::FreeCamera(_double dTimeDelta)
