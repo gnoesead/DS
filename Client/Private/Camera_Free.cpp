@@ -9,6 +9,8 @@
 #include "Camera_Manager.h"
 
 #include "PlayerManager.h"
+#include "Fade_Manager.h"
+
 
 CCamera_Free::CCamera_Free(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCamera(pDevice, pContext)
@@ -197,6 +199,35 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		m_Is_Battle = false;
 
 	}
+
+
+// 하우스만 특수처리
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+		
+		if (CFadeManager::GetInstance()->Get_Is_House_Boss_Encounter() == true) {
+
+			if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")) != nullptr) {
+
+				CCharacter* pBoss = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Boss")));
+
+				CTransform* m_pBattleTargetTransformCom = pBoss->Get_TransformCom();
+
+				m_vBattleTargetPos = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+				m_vBattleTargetPos_Offer = m_pBattleTargetTransformCom->Get_State(CTransform::STATE_POSITION);
+
+				m_Lock_On_Is_Boss = true;
+
+				m_vCutInBattleTargetPos = m_vBattleTargetPos + 5.f * m_pBattleTargetTransformCom->Get_State(CTransform::STATE_LOOK);
+			}
+			else {
+				m_Is_Battle = false;
+
+			}
+
+		}
+	}
+
+
 
 // 기차맵 특수처리
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
