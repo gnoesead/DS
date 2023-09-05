@@ -36,6 +36,7 @@ private:
 #ifdef _DEBUG
 private:
 	void Key_Input(_double dTimeDelta);
+#endif
 
 private:
 	_tchar					m_szFPS[MAX_PATH] = TEXT("");
@@ -45,7 +46,6 @@ private:
 
 	_bool					m_isRenderFPS = { true };
 	_bool                   m_isRenderDebugInfo = { false };
-#endif
 
 private:
 	HRESULT	Ready_Prototype_Component_For_Static();
