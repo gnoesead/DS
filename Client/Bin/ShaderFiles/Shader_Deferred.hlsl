@@ -526,7 +526,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.99f)
+	if (fBrightness > 0.90f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -605,11 +605,11 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	{
 		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 12;
+		float f = 1.0 / 3;
 
-		for (int i = 0; i < 12; i++)
+		for (int i = 0; i < 3; i++)
 		{
-			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
+			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.007 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
 		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)

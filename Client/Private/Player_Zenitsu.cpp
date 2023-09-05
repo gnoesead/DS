@@ -2061,6 +2061,9 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
+	_float4	vCamPosition = pGameInstance->Get_CameraPosition();
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
+		return E_FAIL;
 
 	// OutlineThickness
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))

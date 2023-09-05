@@ -95,6 +95,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
+	if (pGameInstance->Get_DIKeyDown(DIK_C))
+	{
+		//m_pRendererCom->Set_RadialBlur();
+		m_pRendererCom->Set_RadialBlur();
+	}
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
 		if (m_isWebGimmick_On)
