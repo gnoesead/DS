@@ -196,7 +196,14 @@ protected:
 	_int	m_iSection = { 1 }; // 1:FirstStreet, 2:SecondStreet, 3:ThirdStreet ,4:Inside
 	_int	m_iSection_Sub = { 2 };
 	_bool	m_isSection_RoofOn = { false };
-	
+
+
+	//Level판명
+	_uint m_iLevelCur = { 0 };
+
+	//스킬상태
+	_bool	m_isSkilling = { false };
+
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 
@@ -325,7 +332,6 @@ protected:
 	_bool	m_bChangePositionFinish[CHANGE_POSITON_END] = { false };
 
 	_double	m_dChangePositionAccTime = { 0.0 };
-	
 
 protected:
 	HRESULT Add_Components();

@@ -115,6 +115,8 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isSkill_Guard = { false };
 	_double m_dDelay_Skill_Guard = { 0.0 };
 
+	//charge move
+	_double m_dDelay_Charge_Move = { 0.0 };
 
 	//오의 용
 	_double		m_dTime_Special_Ready = { 0.0 };

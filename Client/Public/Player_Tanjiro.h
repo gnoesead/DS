@@ -52,7 +52,10 @@ public:
 		ANIM_DOWN_GETUP = 134, //134~135, 61, 82
 		ANIM_ADV_STEALTH_IDLE = 143,
 		ANIM_ADV_STEALTH_WALK = 144, //144~146
-		ANIM_END = 147
+		ANIM_ADV_STEALTH_WALK_L180 = 147, ANIM_ADV_STEALTH_WALK_L90 = 148,
+		ANIM_ADV_STEALTH_WALK_R180 = 149, ANIM_ADV_STEALTH_WALK_R90 = 150,
+
+		ANIM_END = 151
 	};
 
 private:
@@ -94,6 +97,9 @@ private: //애니메이션 제어용 함수들
 
 	void	Web_Gimmick(_double dTimeDelta);
 	void	Make_Web( _int type );
+
+private:
+	void Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
 
 private:
 	CSword* m_pSword = { nullptr };
@@ -156,6 +162,8 @@ private:
 	// Outline Face
 	_float	m_fOutlineFaceThickness = 0.3f;
 
+private:
+	_double m_dWaterEffectAccTime = { 0.0 };	// 물에 빠졌을때 이펙트 용(안원)
 
 
 private:

@@ -146,6 +146,10 @@ private: //애니메이션 제어용 변수들
 	_int		m_iSmallHit_Index = { 0 };
 	
 
+	//hit_Hekireki
+	_double		m_dHekireki_Hit = { 0.0 };
+	_bool		m_isHekireki_Hit = { false };
+
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
 	

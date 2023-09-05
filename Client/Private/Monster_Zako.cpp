@@ -558,8 +558,8 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 			Animation_Control_Hit(dTimeDelta);
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
-		/*else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta, m_eCurPattern);*/
+		else if (m_eCurState == STATE_ATTACK)
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
 	}
 }
 
@@ -1377,18 +1377,58 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		pPlayer->Set_Hit_Success_Hekireki(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		m_pModelCom->Set_Animation(ANIM_FALL);
+		
 		m_isStrictUpper = true;
 
-		if (m_isJumpOn == false)
+
+		m_isHekireki_Hit = true;
+		m_dHekireki_Hit = 0.0;
+		/*if (m_isJumpOn == false)
 		{
 			Jumping(1.85f, 0.03f);
 		}
 		else
 		{
 			Jumping(0.85f, 0.030f);
+		}*/
+	}
+
+
+	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 0.2f, AtkDir);
+	//Go_Dir_Constant(dTimeDelta, 117, 0.3f, AtkDir);
+	if (m_isHekireki_Hit)
+	{
+		m_dHekireki_Hit += dTimeDelta;
+		if (m_dHekireki_Hit > 0.15f)
+		{
+			if (m_isJumpOn == false)
+			{
+				Jumping(1.85f, 0.03f);
+			}
+			else
+			{
+				Jumping(0.85f, 0.030f);
+			}
+
+			if (m_iHekirekiHit_Index == 0)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+				m_iHekirekiHit_Index++;
+			}
+			else if (m_iHekirekiHit_Index == 1)
+			{
+				m_pModelCom->Set_Animation(ANIM_FALL);
+				m_iHekirekiHit_Index = 0;
+			}
+
+			m_isHekireki_Hit = false;
 		}
 	}
+	if (m_dHekireki_Hit >= 0.14f)
+	{
+		Ground_Animation_Play(117, 118);
+	}
+
 #pragma endregion
 
 

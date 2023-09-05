@@ -8,6 +8,7 @@
 #include "Player_Tanjiro.h"
 #include "Player_Zenitsu.h"
 #include "Player_Rengoku.h"
+#include "NPC_Zenitsu.h"
 
 #include "Monster_Test.h"
 #include "Boss_Akaza.h"
@@ -79,6 +80,8 @@
 #include "Swamp_AlertRect.h"
 #include "WaterParticleEffect.h"
 #include "Swamp_SmokeEffect.h"
+#include "GroundSmoke.h"
+#include "StoneParticle.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -671,7 +674,13 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
-
+	/* Prototype_GameObject_NPC_Zenitsu */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Zenitsu"),
+		CNPC_Zenitsu::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_NPC_Zenitsu");
+		return E_FAIL;
+	}
 
 	/* Prototype_GameObject_NPC_Female */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NPC_Female"),
@@ -796,6 +805,16 @@ HRESULT CLoader::LoadingForLobby()
 	/* For.Prototype_GameObject_SmellBundle*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmellBundle"),
 		CSmellBundle::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_GroundSmoke*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GroundSmoke"),
+		CGroundSmoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_StoneParticle*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StoneParticle"),
+		CStoneParticle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
