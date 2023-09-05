@@ -457,7 +457,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 					if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w >= iSize - 1)
 						((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w = iSize - 2;
 
-					if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fLifetime)
+					if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 						break;
 
 					++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w;
@@ -468,7 +468,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 				_float y = fabs(m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fValue - m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w].fValue);
 				_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w].fLifetime)
-					/ fabs(m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fLifetime - m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w].fLifetime);
+					/ (fabs(m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fLifetime - m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 				if (m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w + 1].fValue < m_SpeedOverLifeTimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.w].fValue)
 					y *= -1;
@@ -494,7 +494,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w >= iSize - 1)
 								((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = iSize - 2;
 
-							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime)
+							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 								break;
 
 							++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w;
@@ -505,7 +505,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 						_float y = fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue);
 						_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime)
-							/ fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime);
+							/ (fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 						if (m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue < m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue)
 							y *= -1;
@@ -540,7 +540,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w >= iSize - 1)
 											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w = iSize - 2;
 
-										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime)
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 											break;
 
 										++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w;
@@ -551,7 +551,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 									_float y = fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue);
 									_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime)
-										/ fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime);
+										/ (fabs(m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fLifetime - m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 									if (m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w + 1].fValue < m_SizeOverLifeTimesX[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vColor.w].fValue)
 										y *= -1;
@@ -570,7 +570,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y >= iSize - 1)
 											((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y = iSize - 2;
 
-										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime)
+										if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 											break;
 
 										++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y;
@@ -581,7 +581,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 									_float y = fabs(m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fValue - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fValue);
 									_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fLifetime)
-										/ fabs(m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fLifetime);
+										/ (fabs(m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fLifetime - m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 									if (m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y + 1].fValue < m_SizeOverLifeTimesY[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.y].fValue)
 										y *= -1;
@@ -617,7 +617,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 						if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w >= iSize - 1)
 							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w = iSize - 2;
 
-						if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fLifetime)
+						if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 							break;
 
 						++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w;
@@ -628,7 +628,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 					_float y = fabs(m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fValue - m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w].fValue);
 					_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w].fLifetime)
-						/ fabs(m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fLifetime - m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w].fLifetime);
+						/ (fabs(m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fLifetime - m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 					if (m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w + 1].fValue < m_GravityModiferOverLifetimes[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.w].fValue)
 						y *= -1;
@@ -666,7 +666,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.x >= iSize - 1)
 								((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w = iSize - 2;
 
-							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fLifetime)
+							if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x >= m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fLifetime * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z)
 								break;
 
 							++((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w;
@@ -677,7 +677,7 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 
 						_float y = fabs(m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fValue - m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fValue);
 						_float fWeight = fabs(((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x - m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fLifetime)
-							/ fabs(m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fLifetime - m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fLifetime);
+							/ (fabs(m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fLifetime - m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fLifetime) * ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z);
 
 						if (m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w + 1].fValue < m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fValue)
 							y *= -1.f;
@@ -731,9 +731,9 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 		}
 
 		// Velocity Linear
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.x += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x;
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y;
-		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.z += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.x += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.x * m_fSpeedModifier;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.y += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.y * m_fSpeedModifier;
+		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation.z += ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vLinearSpeed.z * m_fSpeedModifier;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -953,6 +953,12 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 
 		// SizeYAcc
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.x = 1;
+
+		// LifetimeRatio
+		//if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z = 1.f;
+		//else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+		//	((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x / m_eEffectDesc.fStartLifeTimeMin;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
@@ -1154,6 +1160,12 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 
 		// SizeYAcc
 		((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional2.x = 1;
+
+		// LifetimeRatio
+		//if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z = 1.f;
+		//else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartLifeTimeOption)
+		//	((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.z = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.x / m_eEffectDesc.fStartLifeTimeMin;
 	}
 
 	m_pContext->Unmap(m_pVBInstance, 0);
