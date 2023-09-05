@@ -1769,6 +1769,7 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isHitMotion = true;
 
 		m_isAir_Hekireki = false;
+		m_isAirDashing = false;
 
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)

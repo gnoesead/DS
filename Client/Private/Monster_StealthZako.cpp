@@ -51,6 +51,9 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
+	m_pModelCom->Set_LinearDuration(ANIM_WALK_FRONT, 0.3);
+	m_pModelCom->Set_LinearDuration(ANIM_RUN, 0.4);
+
 	/*
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -363,13 +366,35 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				m_pModelCom->Set_Animation(70);
 			}
 		}
+		m_isFirst_Questioning = true;
 	}
 
 
 	if (m_isQuestioning)
 	{
+		if (m_isFirst_Questioning)
+		{
+			m_isFirst_Questioning = false;
+
+			m_pModelCom->Set_Animation(ANIM_POSE_MUT);
+		}
+
+		//안걸리는거
+		_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
+		if (Calculate_Distance() > 6.0f || fAngle > 45.0f)
+		{
+			m_dDelay_Questioning = 0.0;
+			m_isQuestioning = false;
+			m_isFinding = false;
+
+			m_isGo = false;
+			m_dDelay_SpotWalk = 0.0;
+			m_fTime_Stay = 1.5f;
+		}
+
+		//걸리는거
 		m_dDelay_Questioning += dTimeDelta;
-		if (m_dDelay_Questioning > 5.0f)
+		if (m_dDelay_Questioning > 3.0f)
 		{
 			m_dDelay_Questioning = 0.0;
 			m_isQuestioning = false;
@@ -385,9 +410,12 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		{
 			m_isFirst_Finding = false;
 
-			m_pModelCom->Set_Animation(ANIM_RUN);
+			m_pModelCom->Set_Animation(ANIM_POSE_HOWLING);
 		}
 
+		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
+			m_pModelCom->Set_Animation(ANIM_RUN);
+		
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
 		Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.2f);
 	}

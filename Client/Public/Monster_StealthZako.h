@@ -91,6 +91,7 @@ private:
 
 
 	_int	m_iSpot_Index = { 0 };
+	
 
 	_double m_dDelay_SpotWalk = { 0.0 };
 	_float	m_fTime_Stay = { 3.0f };
@@ -100,6 +101,7 @@ private:
 
 private:
 	_bool	m_isQuestioning = { false };
+	_bool	m_isFirst_Questioning = { true };
 	_double m_dDelay_Questioning = { 0.0 };
 
 

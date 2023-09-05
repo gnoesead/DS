@@ -91,12 +91,11 @@ void CNPC_Zenitsu::Tick(_double dTimeDelta)
 
 void CNPC_Zenitsu::LateTick(_double dTimeDelta)
 {
-	if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
-	{
-		__super::LateTick(dTimeDelta);
+	
+	__super::LateTick(dTimeDelta);
 
-		Gravity(dTimeDelta);
-	}
+	Gravity(dTimeDelta);
+	
 	
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -231,7 +230,24 @@ void CNPC_Zenitsu::EventCall_Control(_double dTimeDelta)
 void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 {
 	//Set_Height();
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	
+	if(pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+		Animation_Control_Village(dTimeDelta);
+	else if(pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+		Animation_Control_House(dTimeDelta);
 
+	Safe_Release(pGameInstance);
+}
+
+void CNPC_Zenitsu::Animation_Control_Village(_double dTimeDelta)
+{
+
+}
+
+void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
+{
 	m_dDelay_GoOn += dTimeDelta;
 	if (m_dDelay_GoOn > 0.8f)
 	{

@@ -2230,6 +2230,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| ANIM_DMG_AIR_SMALL_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_1 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_2 == iCurAnimIndex)
 	{
 		m_Moveset.m_isHitMotion = true;
+
+		m_isAirDashing = false;
 		
 		//다운상태
 		if (ANIM_DOWN == iCurAnimIndex)
