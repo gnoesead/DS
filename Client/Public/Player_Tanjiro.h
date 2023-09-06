@@ -161,8 +161,6 @@ private:
 	_uint	m_iMeshNum = { 0 };
 
 	
-
-
 private:
 	// Outline Default
 	_float	m_fOutlineThickness = 0.9f;

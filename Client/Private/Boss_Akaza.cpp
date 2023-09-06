@@ -729,6 +729,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+		AtkDir.y = 0.f;
 
 		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 		EffectWorldDesc.vPosition.y += 0.8f;
