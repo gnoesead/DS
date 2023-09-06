@@ -689,8 +689,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//if (0 == m_iEvent_Index)	// 0.0
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 		}
 
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
@@ -809,7 +809,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
 			else if(1 == m_iEvent_Index)	// 0.58
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 		}
@@ -833,7 +837,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (133 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin되면서 떨어짐
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
 			
 		}
 
@@ -2102,10 +2109,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//m_isBoxJumping = true;
 		//떨어지는
 		if (m_isPlayerStatus_OnRoof)
-			Jumping(1.0f, 0.08f);			// 처음 점프 // 파워 , 감속도
+			Jumping(1.0f, 0.077f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(1.55f, 0.07f);			
+			Jumping(1.55f, 0.067f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 

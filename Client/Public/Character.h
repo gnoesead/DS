@@ -173,6 +173,7 @@ protected:
 	void Create_StoneParticle(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 
+	void Play_FallDownEffect();
 	void Play_HitEffect();
 	
 protected:

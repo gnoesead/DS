@@ -8,6 +8,7 @@
 #include "Monster.h"
 
 #include "PlayerManager.h"
+#include "MonsterManager.h"
 
 #include "EffectPlayer.h"
 #include "OptionManager.h"
@@ -1265,12 +1266,16 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 			}
 		}
 
