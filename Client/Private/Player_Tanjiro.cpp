@@ -20,6 +20,7 @@
 #include "Camera_Free.h"
 #include "GroundSmoke.h"
 #include "WaterParticleEffect.h"
+#include "EffectW_Manager.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -132,9 +133,19 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
 
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+
+		
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 	}
 
 	Safe_Release(pGameInstance); 
@@ -2631,10 +2642,19 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 
 	if (m_dWaterEffectAccTime > 0.1)
 	{
-		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
-		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , 0.f , 0.f , 0.f);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+			
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+		
 		for (_uint i = 0; i < 5; ++i)
-			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
 		m_dWaterEffectAccTime = 0.0;
 	}

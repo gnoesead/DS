@@ -10,6 +10,7 @@
 #include "EffectPlayer.h"
 #include "GroundSmoke.h"
 #include "StoneParticle.h"
+#include "EffectW_Manager.h"
 
 BEGIN(Engine)
 class CModel;
