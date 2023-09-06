@@ -309,7 +309,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			
+
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -1750,6 +1750,7 @@ void CBoss_Kyogai::Trigger_Hit_Small()
 	m_iSmallHit_Index++;
 	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_L);
 	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_R);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT);
 	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L);
 	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R);
 
@@ -1758,6 +1759,17 @@ void CBoss_Kyogai::Trigger_Hit_Small()
 
 void CBoss_Kyogai::Trigger_Hit_ConnectSmall()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+	m_isConnectHitting = true;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_iSmallHit_Index++;
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_L);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_R);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R);
+	m_eCurstate = STATE_HIT_SMALL;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Upper()
@@ -2365,13 +2377,15 @@ void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 		if (false == m_bAnimFinish)
 		{
 			if (m_iSmallHit_Index == 1)
-			{
 				m_eCurAnimIndex = ANIM_BASETURN_L;
-			}
+
 			if (m_iSmallHit_Index == 2)
 				m_eCurAnimIndex = ANIM_BASETURN_R;
 
-			if (m_iSmallHit_Index >= 3)
+			if (m_iSmallHit_Index == 3)
+				m_eCurAnimIndex = ANIM_HIT;
+
+			if (m_iSmallHit_Index >= 4)
 			{
 				m_iSmallHit_Index = 1;
 
@@ -2379,11 +2393,12 @@ void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 
 
 		}
-		if ((m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L) || m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R)))
+		if ((m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L) || m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R)|| m_pModelCom->Get_AnimFinish(ANIM_HIT)))
 		{
 			m_bAnimFinish = true;
 			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_L);
 			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_R);
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT);
 			m_eCurAnimIndex = ANIM_IDLE;
 			Trigger_Interact();
 			//m_eCurAnimIndex = ANIM_BASETURN_L;
@@ -2393,6 +2408,7 @@ void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 	{
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_L, 0.3f, 0.0, 0.7);
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_R, 0.3f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT, 0.3f, 0.0, 0.7);
 
 	}
 
@@ -2498,7 +2514,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB1;
-				
+
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
 			{
@@ -2533,7 +2549,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
-				{					
+				{
 					m_bTurn = false;
 					m_dTurnTime = 0.0;
 					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
@@ -2604,7 +2620,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 		if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
 		{
 			if (m_bAnimFinish2 == false)
-			{   
+			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB_01READY;
 			}

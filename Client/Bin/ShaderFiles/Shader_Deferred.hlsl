@@ -215,6 +215,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 
+
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
