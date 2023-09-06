@@ -209,6 +209,7 @@ protected:
 
 	//스왑시
 	_bool		m_isSwap_OnSky = { false };
+	_bool		m_isSwapping_State = { false };
 	
 	//공격시 거리줄임.
 	_float	m_fAtk_Move_Ratio = { 0.7f };
