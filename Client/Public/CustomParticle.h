@@ -25,6 +25,7 @@ public:
 		_double		dSpriteSpeed = { 1.0 };
 		_int2		vSpriteCount = { 1, 1 };
 		_float		fLifeTime = { 1.f };
+		_float		fRampMax = { 1.f };
 		_bool		bUseRamp = { false };
 		_tchar		szTextureTag[MAX_PATH] = { TEXT("") };
 		_tchar		szBufferTag[MAX_PATH] = { TEXT("") };

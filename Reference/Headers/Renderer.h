@@ -94,6 +94,7 @@ private:
 	HRESULT Render_EffectBloom();
 	HRESULT Render_EffectNoBloom();
 	HRESULT Render_Effect(); // Effect
+	HRESULT Render_Test(); // Effect
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();
 	HRESULT Render_RadialBlur();

@@ -11,7 +11,7 @@ texture2D g_RampTexture;
 float		g_fAlpha;
 float2		g_vTexCoord;
 int2		g_vSpriteCount;
-//_float g_fScale;
+float		g_fRampMax;
 
 struct VS_IN
 {
@@ -140,8 +140,7 @@ PS_OUT  PS_Ramp(PS_IN _In)
 	
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, _In.vTexCoord);
 	float fRamp = vMtrlEffect.r;
-	if (0.98 <= fRamp)
-		fRamp = 0.98;
+	fRamp *= g_fRampMax;
 	float2 vGradientUV = float2(fRamp, _In.vTexCoord.y);
 	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
 
@@ -179,8 +178,7 @@ PS_OUT  PS_Sprite_Ramp(PS_IN _In)
 
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, vTexUV);
 	float fRamp = vMtrlEffect.r;
-	if (0.98 <= fRamp)
-		fRamp = 0.98;
+	fRamp *= g_fRampMax;
 	float2 vGradientUV = float2(fRamp, _In.vTexCoord.y);
 	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
 

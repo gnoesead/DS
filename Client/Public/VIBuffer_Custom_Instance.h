@@ -10,15 +10,16 @@ BEGIN(Client)
 class CVIBuffer_CustomParticle final : public CVIBuffer_Point_Instance
 {
 public:
-	enum CHANGE_OPTION { 
-		CHANGE_SIZE, CHANGE_DIR, CHANGE_SIZE_DIR, CHANGE_END 
+	enum PARTICLE_TYPE { 
+		TYPE_SIZE, TYPE_DIR, TYPE_SIZE_DIR, CHANGE_END 
 	};
 
 	typedef struct tagVIB_CustomParticleDesc
 	{
-		CHANGE_OPTION	eChangeOption = { CHANGE_SIZE };
+		PARTICLE_TYPE	eParticleType = { TYPE_SIZE };
 		_float	fTickPerSize = { 1.f };
 		_float3	vTickPerDir = { 1.f, 1.f, 1.f };
+		_int3	vDirOption = { 1, 1, 1 };
 		CVIBuffer_Point_Instance::INSTANCEDESC		InstanceDesc;
 	}VIB_CUSTOMPARTDESC;
 private:
@@ -38,10 +39,10 @@ private:
 	VIB_CUSTOMPARTDESC	m_CustomPartDesc;
 
 private:
-	void Change_Size(_double dTimeDelta);
-	void Change_Dir(_double dTimeDelta);
+	void Tick_Size(_double dTimeDelta);
+	void Tick_Dir(_double dTimeDelta);
 
-	void Change_Size_Dir(_double dTimeDelta);
+	void Tick_Size_Dir(_double dTimeDelta);
 
 public:
 	static CVIBuffer_CustomParticle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, _uint iNumInstance);

@@ -10,6 +10,8 @@
 #include "Camera_Manager.h"
 #include "Camera_Free.h"
 
+#include "ParticleManager.h"
+#include "CustomParticle.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -365,6 +367,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.f), 0.3,
 					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 2.5, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
+
+				_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+				vPos.y += 1.f;
+				_float3 vRange = { 0.5f, 0.5f, 0.5f };
+				_float3 vTPerD = { 7.f, 10.f, -5.f };
+				_int3	vDirOption = { 1, 0, 0 };
+				// PoolTag, BufferTag, TextureTag, 
+				// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+				// Range, TickPerSize, TickPerDir, DirOption, ShaderPass, SpriteSpeed, SpriteXY
+				CParticleManager::GetInstance()->PlayParticle("Test2",
+					TEXT("Prototype_Component_VIBuffer_20_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grd_Radial007")
+					, vPos, 3.f, 0.1f, 0.15f, 0.1f, 0.3f, vRange, -1.f, vTPerD, vDirOption, CCustomParticle::PASS_RAMP, 1.f, _int2(1, 1),
+					TEXT("Prototype_Component_Texture_Ramp08"), 0.98f);
 			}
 			if (32 == m_iEvent_Index)
 			{

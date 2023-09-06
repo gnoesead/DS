@@ -87,7 +87,7 @@ void CParticleManager::Reuse_Particle(const char* pPoolTag, CCustomParticle::CUS
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
 	_float3 vRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
@@ -108,10 +108,12 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = fTickPerSize;
 	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = { 1.f, 1.f, 1.f };
-	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_SIZE;
+	CustomPartDesc.VIB_CustomPartDesc.vDirOption = { 0, 0, 0 };
+	CustomPartDesc.VIB_CustomPartDesc.eParticleType = CVIBuffer_CustomParticle::TYPE_SIZE;
 
 	if (nullptr != pRampTag)
 	{
+		CustomPartDesc.fRampMax = fRampMax;
 		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
 		CustomPartDesc.bUseRamp = true;
 	}
@@ -121,8 +123,8 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-	_float3 vRange, _float3 vTickPerDir, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+	_float3 vRange, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
@@ -143,10 +145,12 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = 1.f;
 	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = vTickPerDir;
-	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_DIR;
+	CustomPartDesc.VIB_CustomPartDesc.vDirOption = vDirOption;
+	CustomPartDesc.VIB_CustomPartDesc.eParticleType = CVIBuffer_CustomParticle::TYPE_DIR;
 
 	if (nullptr != pRampTag)
 	{
+		CustomPartDesc.fRampMax = fRampMax;
 		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
 		CustomPartDesc.bUseRamp = true;
 	}
@@ -156,8 +160,8 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-	_float3 vRange, _float fTickPerSize, _float3 vTickPerDir, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag)
+	_float3 vRange, _float fTickPerSize, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
@@ -178,10 +182,12 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 	CustomPartDesc.VIB_CustomPartDesc.fTickPerSize = fTickPerSize;
 	CustomPartDesc.VIB_CustomPartDesc.vTickPerDir = vTickPerDir;
-	CustomPartDesc.VIB_CustomPartDesc.eChangeOption = CVIBuffer_CustomParticle::CHANGE_SIZE_DIR;
+	CustomPartDesc.VIB_CustomPartDesc.vDirOption = vDirOption;
+	CustomPartDesc.VIB_CustomPartDesc.eParticleType = CVIBuffer_CustomParticle::TYPE_SIZE_DIR;
 
 	if (nullptr != pRampTag)
 	{
+		CustomPartDesc.fRampMax = fRampMax;
 		wsprintf(CustomPartDesc.szRampTextureTag, pRampTag);
 		CustomPartDesc.bUseRamp = true;
 	}

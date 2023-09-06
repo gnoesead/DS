@@ -113,7 +113,7 @@ void CCustomParticle::LateTick(_double dTimeDelta)
 		Set_Dead();
 	}
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_TEST, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
 		return;
 }
 
@@ -228,6 +228,9 @@ HRESULT CCustomParticle::SetUp_ShaderResources()
 	{
 		if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture")))
 			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_fRampMax", &m_CustomPartDesc.fRampMax, sizeof(_float))))
+			return E_FAIL;
 	}
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTexCoord", &m_vTexCoord, sizeof(_float2))))
@@ -236,6 +239,7 @@ HRESULT CCustomParticle::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSpriteCount", &m_CustomPartDesc.vSpriteCount, sizeof(_int2))))
 		return E_FAIL;
 
+	
 	return S_OK;
 }
 
