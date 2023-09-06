@@ -28,7 +28,7 @@ public:
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE, STATE_HIT_HEKIREKI
 
 	};
 	enum TURN
@@ -69,7 +69,7 @@ public:
 		ANIM_ATKSKCMB = 8, // 으으 기모으고 배꼽치기 와다다다닥
 		ANIM_ATKPUNCH = 9, // 강펀치~
 		ANIM_ATKPUNCH2 = 10, // 연속펀치~ 10 -11 / 10 - 12 / 0.54
-		
+
 		ANIM_KICKDOWN = 11, // 왼발 내려찍기
 
 		ANIM_ATKCMBW05 = 12, // 발 내밀고 배꼽 땅땅~
@@ -129,7 +129,7 @@ public:
 		ANIM_GUARD_03 = 34,
 		ANIM_GUARD_HIT_SMALL = 35,
 		ANIM_GUARD_HIT_BIG = 36,
-		
+
 		////////////////// 컷신모션 ///////////////////
 		ANIM_AWAKE = 0 // 개방신
 
@@ -177,7 +177,7 @@ public:
 	void Trigger_JumpStep();
 	void Trigger_AtkCmb();
 	void Trigger_AtkCmb2();
-	void Trigger_AtkStep(); 
+	void Trigger_AtkStep();
 	void Trigger_StompKick();
 	void Trigger_AtkPunch();
 	void Trigger_LinkerCmb();
@@ -185,21 +185,19 @@ public:
 	void Trigger_Awake_AtkskCmb();
 	void Trigger_AtkSk();
 	void Trigger_AtkPangPang();
+	
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
 	void Trigger_Hit_Upper();
 	void Trigger_Hit_Big();
 	void Trigger_Hit_Blow();
-	void Trigger_Hit_BigBlow();
-	void Trigger_Hit_Bound();
-	void Trigger_Hit_Spin();
+	
 	void Trigger_Hit_CutScene();
 	void Trigger_Hit_GetUp();
-	void Trigger_Hit_RollGetUp();
-	void Trigger_Hit_BigGetUp();
-
-	void Trigger_Awake_RoomChange(_double dTimeDelta); 
+	
+	void Trigger_Hit_Hekireki();
+	
 
 #pragma endregion
 
@@ -207,19 +205,17 @@ public:
 private: //패턴 함수들
 	void Update_State(_double dTimeDelta);
 	void Update_Interact(_double dTimeDelta);
-	void Update_PushAway(_double dTimeDelta); // 안함
 	void Update_Guard(_double dTimeDelta);
 	void Update_NextPhase(_double dTimeDelta);
-	void Update_Heal(_double dTimeDelta);
 	void Update_Awake(_double dTimeDelta);
 	void Update_JumpStep(_double dTimeDelta);
 	void Update_AtkCmb(_double dTimeDelta);
 	void Update_AtkCmb2(_double dTimeDelta);
-	void Update_AtkStep(_double dTimeDelta); 
+	void Update_AtkStep(_double dTimeDelta);
 	void Update_StompKick(_double dTimeDelta);
 	void Update_AtkPunch(_double dTimeDelta);
 	void Update_LinkerCmb(_double dTimeDelta);
-	void Update_AtkSkCmb(_double dTimeDelta);	
+	void Update_AtkSkCmb(_double dTimeDelta);
 	void Update_Awake_AtkskCmb(_double dTimeDelta);	//와다다다 패턴임
 	void Update_AtkSk(_double dTimeDelta);
 	void Update_AtkPangPang(_double dTimeDelta);
@@ -235,16 +231,18 @@ private: //패턴 함수들
 	void Update_Hit_GetUp(_double dTimeDelta);
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
+	void Update_Hit_Hekireki(_double dTimeDelta);
 
 	void Update_RoomChange(_double dTimeDelta);
 	void Update_RoomChange_2(_double dTimeDelta);
 
 private:
-	enum BLADETYPE { BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT , BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
+	enum BLADETYPE {
+		BLADE_ONE_RANDOM, BLADE_THREE_RANDOM, BLADE_THREE_FRONT, BLADE_FIVE_RANDOM, BLADE_FIVE_FRONT, BLADE_VERTICAL_FIVE, BLADE_HORIZON_FIVE
 	};
 	void	Create_AlertRect(BLADETYPE eBladeType, _fvector vDir = { 0.f }, _float fMovepos = { 0.f }, _bool bLiarColor = { false });
 	void	Create_BladeEffect(BLADETYPE eBladeType, _fvector vDir, _double dLongLifeTime, _double dSpeed, CAtkCollider::BULLET_TYPE eBulletType, _float fPosX = 0.f);
-	
+
 private:
 	void Turn_Trigger(_double dTimeDelta);
 	void TurnRoom();
@@ -255,6 +253,10 @@ private:
 
 	_vector	Vertical_Dir();
 	_vector HorizonDir();
+
+private: /* Calculate */
+	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
+
 
 
 #pragma endregion
@@ -273,11 +275,13 @@ private: // _bool
 
 	_bool	m_bLoop = { true };
 
+	_bool	m_bHit = { true };
+
 private: // time
 	_double m_dTimeAcc = { 0.0 };
 	_double m_dTurnTime = { 0.0 };
 	_double m_dReturnTime = { 0.0 };
-	
+
 private:
 	_float	m_fPreAngleX = { 0.f };
 	_float	m_fPreAngleZ = { 0.f };
@@ -288,10 +292,10 @@ private:
 	_vector m_vPos = { 0.f, 0.f, 0.f, 0.f };
 	_vector m_vDir = { 0.f, 0.f, 0.f, 0.f };
 	_vector	m_vRotDir = { 0.f, 0.f, 0.f, 0.f };
-private:	
+private:
 	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };
-	
+
 private:
 	PHASE   m_eCurPhase = BEGIN;
 	STATE	m_eCurstate = STATE_INTERACT;

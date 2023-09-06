@@ -24,6 +24,7 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
+#include "PlayerManager.h"
 #include "EffectW_Manager.h"
 
 
@@ -107,7 +108,10 @@ void CMainApp::Tick(_double dTimeDelta)
 	if (nullptr == m_pGameInstance)
 		return;
 
+	
 	m_pGameInstance->Tick_Engine(dTimeDelta);
+
+	CPlayerManager::GetInstance()->Slow_Acc(dTimeDelta);
 
 	CTitleManager::GetInstance()->Tick();
 	

@@ -39,7 +39,7 @@ public:
 		_uint           Dialog_Type = { 99 };
 		_bool           Interaction = { false };
 
-		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:inside
+		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:third street , 4:last street ,5:last street
 
 		_float4			WalkSpot[4];
 	}NPCDESC;
@@ -200,6 +200,8 @@ protected: //status 게이지 관련
 	_double m_dDelay_ComboReset = { 0.0 };
 	_double m_dDelay_ComboReset_2 = { 0.0 };
 
+	//slow
+	_int m_iCnt_Slow = { 0 };
 
 protected:
 	_float4		m_Save_RootPos = { 0.0f, 0.0f, 0.0f, 1.0f };
