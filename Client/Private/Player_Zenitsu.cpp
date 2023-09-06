@@ -311,6 +311,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				//EffectWorldDesc.fScale = 1.8f;
 				EffectWorldDesc.vPosition.y = 0.42f;
@@ -729,7 +730,19 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.25f;
+				EffectWorldDesc.vPosition.y += 0.1f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Awake", m_pTransformCom, &EffectWorldDesc);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.3f;
+				EffectWorldDesc.vPosition.y += 0.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 

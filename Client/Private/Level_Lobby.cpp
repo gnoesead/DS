@@ -1664,6 +1664,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Awake.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Awake");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Awake_Aura.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Awake_Aura");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 
