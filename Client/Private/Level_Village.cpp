@@ -1140,6 +1140,19 @@ HRESULT CLevel_Village::Ready_Layer_NPC_LastStreet(const _tchar* pLayerTag)
 
 #pragma endregion
 
+
+    //NPC_Zenitsu
+    CharacterDesc.WorldInfo.vPosition = _float4(564.4f, 4.55f, 362.73f, 1.f);
+    XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 1.0f, 0.0f }));
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
+        TEXT("Prototype_GameObject_NPC_Zenitsu"), &CharacterDesc)))
+    {
+        MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
+        return E_FAIL;
+    }
+
+
     Safe_Release(pGameInstance);
     return S_OK;
 }

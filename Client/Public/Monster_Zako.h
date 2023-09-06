@@ -105,6 +105,7 @@ private: //애니메이션 제어용 함수
 private:
 	_float	m_fScale = { 0.8f };
 
+	_bool	m_isCan_Tutorial = { false };
 
 	_bool	m_isFirst_BattleOn = { true };
 

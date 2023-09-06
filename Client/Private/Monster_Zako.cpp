@@ -111,6 +111,13 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 	m_StatusDesc.fHp = 70.f;
 
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
+	{
+		m_isCan_Tutorial = true;
+		m_StatusDesc.fHp_Max = 100000.f;
+		m_StatusDesc.fHp = 100000.f;
+	}
+
 	Safe_Release(pGameInstance);
 
 	if(m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
@@ -130,7 +137,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start())
+	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() || m_isCan_Tutorial)
 	{
 		if (m_isFirst_BattleOn)
 		{
@@ -139,11 +146,17 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 		}
 
 		Trigger();
-		Animation_Control(dTimeDelta);
+		if (CPlayerManager::GetInstance()->Get_Slow() == false)
+		{
+			Animation_Control(dTimeDelta);
+		}
 	}
 
 	//애니메이션 처리
- 	m_pModelCom->Play_Animation(dTimeDelta);
+	if (CPlayerManager::GetInstance()->Get_Slow() == false)
+	{
+		m_pModelCom->Play_Animation(dTimeDelta);
+	}
 	RootAnimation(dTimeDelta);
 
 	//이벤트 콜
@@ -159,8 +172,10 @@ void CMonster_Zako::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	Gravity(dTimeDelta);
-
+	if (CPlayerManager::GetInstance()->Get_Slow() == false)
+	{
+		Gravity(dTimeDelta);
+	}
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
@@ -352,6 +367,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 
 				EffectWorldDesc.vPosition.x = -0.2f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
 			if (9 == m_iEvent_Index)
 			{//1.39
@@ -1416,7 +1433,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	if (m_isHekireki_Hit)
 	{
 		m_dHekireki_Hit += dTimeDelta;
-		if (m_dHekireki_Hit > 0.15f)
+		if (m_dHekireki_Hit > 0.09f) // 0.15f
 		{
 			if (m_isJumpOn == false)
 			{
@@ -1441,7 +1458,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isHekireki_Hit = false;
 		}
 	}
-	if (m_dHekireki_Hit >= 0.14f)
+	if (m_dHekireki_Hit >= 0.088f)
 	{
 		Ground_Animation_Play(117, 118);
 	}

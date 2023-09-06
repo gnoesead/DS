@@ -142,7 +142,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //ÅºÁö·Î
 	{
 		Player_Change_Setting_Status(dTimeDelta);
-		Animation_Control(dTimeDelta);
+
+		if(m_isSwapping_State == false)
+			Animation_Control(dTimeDelta);
 	}
 	else
 	{
@@ -608,18 +610,20 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+			}
+			
+		}
+		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			
+			if (0 == m_iEvent_Index)
+			{
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air3", m_pTransformCom);
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
-			}
-		}
-		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
-		{
-			if (0 == m_iEvent_Index)
-			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
 #pragma endregion
@@ -881,6 +885,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 			Animation_Control_Battle_Move(dTimeDelta);
 
+			
 			Animation_Control_Battle_Attack(dTimeDelta);
 
 			Animation_Control_Battle_Charge(dTimeDelta);
@@ -894,6 +899,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 			Animation_Control_Battle_Awaken(dTimeDelta);
 
 			Animation_Control_Battle_Special(dTimeDelta);
+			
 		}
 	}
 	else if (m_ePlayerState == PLAYER_ADVENTURE)
@@ -1056,7 +1062,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 		JumpStop(0.3);
-		Set_FallingStatus(3.0f, 0.0f);
+		Set_FallingStatus(2.8f, 0.01f);
 	}
 	Ground_Animation_Play(50, 51);
 	Go_Straight_Constant(dTimeDelta, 50, 4.f * m_fScaleChange);
@@ -1829,8 +1835,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.3f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 125, 0.3f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 125, 0.2f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(125, 126);
 #pragma endregion
@@ -2250,6 +2256,7 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
 
 		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -2258,9 +2265,9 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		if (m_dDelay_Player_Change < 1.5)
+		if (m_dDelay_Player_Change < 0.9)
 		{
-			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+			m_pTransformCom->Go_Up(dTimeDelta * 7.0f);
 
 			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
 			_float4 MyPos;
