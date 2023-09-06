@@ -461,9 +461,48 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.f;
+				EffectWorldDesc.vPosition.z += 0.2f;
+				EffectWorldDesc.fScale = 1.5f;
+
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+				}
+					
+				EffectWorldDesc.vPosition.y += -1.f;
+				EffectWorldDesc.vPosition.z += 0.6f;
+				EffectWorldDesc.fScale = 1.1f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind", m_pTransformCom, &EffectWorldDesc);
+
+				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f);
+			}
+			else if (1 == m_iEvent_Index) {
+				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 1.f;
+				EffectWorldDesc.fScale = 2.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind_Rev", m_pTransformCom, &EffectWorldDesc);
+			}
+			else if (2 == m_iEvent_Index) {
+
+				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 3.f;
+				EffectWorldDesc.fScale = 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 

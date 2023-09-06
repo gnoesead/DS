@@ -1684,6 +1684,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Upper_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Upper_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Upper_Wind_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Upper_Wind_Rev");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 
