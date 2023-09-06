@@ -160,9 +160,6 @@
     <Filter Include="02. GameObjects\UI\06.Map\Mini">
       <UniqueIdentifier>{196a8218-dd1d-48ec-af3d-0905c9415e49}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\08.Mini_Game">
-      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\UI\09.Main_UI">
       <UniqueIdentifier>{da294850-ab41-4dc0-8595-3688dcf29f0f}</UniqueIdentifier>
     </Filter>
@@ -360,6 +357,12 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Swamp\SmeshStone">
       <UniqueIdentifier>{08d41dee-392b-4f21-82b2-b9babe1a32b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In">
+      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In\Zenitsu">
+      <UniqueIdentifier>{3cf6f466-7458-456e-be11-196e7536fb16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -684,6 +687,9 @@
     <ClInclude Include="..\Public\SmeshStone.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Zenitsu_Awake_UI.h">
+      <Filter>02. GameObjects\UI\08.Cut_In\Zenitsu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -997,6 +1003,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SmeshStone.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Zenitsu_Awake_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Cut_In\Zenitsu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

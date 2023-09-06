@@ -587,6 +587,16 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion	
 
+
+#pragma region CutIn_UI	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/%d.png"),5))))
+		return E_FAIL;
+
+#pragma endregion	
+
+
 #pragma region MiniGame_UI	
 
 	

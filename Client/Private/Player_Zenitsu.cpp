@@ -416,6 +416,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		}
 
+		// ´Ù¿îÄÆ
 		if (ANIM_ATK_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -444,6 +445,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		// ¾îÆÛÄÆ
 		if (ANIM_ATK_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -454,7 +456,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		
+		// ¿ÀÀÇ
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
@@ -691,6 +693,57 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 		}
 #pragma endregion
+
+
+
+#pragma region Step
+		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+		else if (71 == m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
+#pragma endregion
+
+
+#pragma region Awake
+
+		if (ANIM_BATTLE_AWAKEN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				
+			}
+		}
+
+		if (ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (0 == m_iEvent_Index)
+			{
+				
+			}
+		}
+
+#pragma endregion
+
+
 
 
 		m_iEvent_Index++;

@@ -1172,10 +1172,11 @@ PS_OUT  PS_DIFFUSE_CALC_RED_DISSOLVE(PS_IN In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
-	if (vMtrlDiffuse.r < 0.1)
-		discard;
+	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
 
-	vMtrlDiffuse.a = vMtrlDiffuse.r;
+	vMtrlDiffuse.a *= amount;
+
+	vMtrlDiffuse.a += amount * 0.3f;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1567,10 +1568,11 @@ PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
 
-	if (vMtrlDiffuse.r < 0.1)
-		discard;
+	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
 
-	vMtrlDiffuse.a = vMtrlDiffuse.r;
+	vMtrlDiffuse.a *= amount;
+
+	vMtrlDiffuse.a += amount * 0.3f;
 
 	Out.vDiffuse = vMtrlDiffuse;
 

@@ -29,6 +29,7 @@
 #include "Pause.h"
 #include "Option.h"
 #include "Paper.h"
+#include "Zenitsu_Awake_UI.h"
 
 
 #include "ColliderManager.h"
@@ -85,7 +86,7 @@ HRESULT CLevel_House::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
 		return E_FAIL;
@@ -101,7 +102,7 @@ HRESULT CLevel_House::Initialize()
 	{
 		MSG_BOX("Failed to Ready_Layer_Boss : CLevel_House");
 		return E_FAIL;
-	}*/
+	}
 
     if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
     {
@@ -717,6 +718,22 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+// Zenitsu_Awake_UI
+	Zenitsu_Awake_UI::UIDESC UIDesc8;
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Type = 0;
+
+	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}*/
+
+
+
+
 
     Safe_Release(pGameInstance);
 

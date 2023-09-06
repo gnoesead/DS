@@ -33,7 +33,7 @@ private:
 
 	list<_tchar*>			m_ProtoTag;
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 private:
 	void Key_Input(_double dTimeDelta);
 
@@ -45,7 +45,7 @@ private:
 
 	_bool					m_isRenderFPS = { true };
 	_bool                   m_isRenderDebugInfo = { false };
-#endif
+//#endif
 
 private:
 	HRESULT	Ready_Prototype_Component_For_Static();
