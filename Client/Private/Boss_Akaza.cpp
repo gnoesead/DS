@@ -510,7 +510,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_AIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-
+			dLongLifeTime = 5.0;
 			if (0 == m_iEvent_Index) // 0.2
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -751,9 +751,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
-				/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
-
+				
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 

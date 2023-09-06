@@ -72,6 +72,21 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 
 void CBoss_Kyogai::Tick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -100,6 +115,21 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 void CBoss_Kyogai::LateTick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_4_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::LateTick(dTimeDelta);
 	Update_AnimIndex(m_eCurAnimIndex);
 	if (m_bTurn == false)
@@ -149,18 +179,6 @@ HRESULT CBoss_Kyogai::Render()
 		m_pModelCom->Render(i);
 	}
 
-#ifdef _DEBUG
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	_tchar	m_szFPS[MAX_PATH] = TEXT("");
-	_sntprintf_s(m_szFPS, MAX_PATH, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	//wsprintf(m_szFPS, TEXT("HP : %.2f"), m_StatusDesc.fHp);
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(640.f, 0.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
-#endif // DEBUG
 
 	return S_OK;
 }
@@ -291,7 +309,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			Trigger_Awake_AtkskCmb();
+			
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -479,6 +497,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_2", m_pTransformCom, &EffectWorldDesc);
 
 				dLongLifeTime = 4.0;
+
 				if (m_iLoopCount == 0)
 				{
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -487,7 +506,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 					Create_AlertRect(BLADE_FIVE_RANDOM, vVerticalDir, 8.5f);
 					Create_BladeEffect(BLADE_FIVE_RANDOM, vVerticalDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET, 8.5f);
-					
+
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.5f, 1.0f, 0.f), dLongLifeTime,
 						CAtkCollider::TYPE_BIG, vVerticalDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
@@ -511,24 +530,24 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				}
 				if (m_iLoopCount == 2)
 				{
-					vMonsterDir = Rotation_Dir(vMonsterDir, 20.f, 0.f);
+					vHorizonDir = Rotation_Dir(vHorizonDir, 20.f, 0.f);
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Create_AlertRect(BLADE_ONE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 				}
 				if (m_iLoopCount == 3)
 				{
-					vMonsterDir = Rotation_Dir(vMonsterDir, 60.f, 0.f);
+					vHorizonDir = Rotation_Dir(vHorizonDir, 60.f, 0.f);
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Create_AlertRect(BLADE_ONE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 				}
 
@@ -560,32 +579,32 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				}
 				if (m_iLoopCount == 1)
 				{
-					
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_SMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
-					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_SMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					Create_AlertRect(BLADE_ONE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 				if (m_iLoopCount == 2)
-				{					
-					vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				{
+					vHorizonDir = Rotation_Dir(vHorizonDir, 40.f, 0.f);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Create_AlertRect(BLADE_ONE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
 				}
 				if (m_iLoopCount == 3)
-				{					
-					vMonsterDir = Rotation_Dir(vMonsterDir, 80.f, 0.f);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+				{
+					vHorizonDir = Rotation_Dir(vHorizonDir, 80.f, 0.f);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+						CAtkCollider::TYPE_CONNECTSMALL, vHorizonDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-					Create_AlertRect(BLADE_THREE_RANDOM, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					Create_AlertRect(BLADE_ONE_RANDOM, vHorizonDir);
+					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 				}
 			}
@@ -653,9 +672,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
-				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
-
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+			}
+
+			if (2 == m_iEvent_Index) // 1.73
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 			}
 
 
@@ -778,58 +800,123 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index)	// 1.0
+			switch (m_eCurPhase)
 			{
-
-				dLongLifeTime = 5.f;
-
-				if (m_iAtkStepTypeNum == 1) // 일직선
+			case CBoss_Kyogai::PHASE_1:
+			{
+				if (1 == m_iEvent_Index)	// 1.0
 				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
-					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+					dLongLifeTime = 5.f;
+
+					if (m_iAtkStepTypeNum == 1) // 일직선
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+					}
+					if (m_iAtkStepTypeNum == 2) // 삼각
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						vMonsterDir = Rotation_Dir(vMonsterDir, 10);
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						vMonsterDir = Rotation_Dir(vMonsterDir, -20);
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+					}
+
+					if (m_iAtkStepTypeNum == 3) // 랜덤 두곳
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						Create_AlertRect(BLADE_THREE_RANDOM);
+						Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
+
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						Create_AlertRect(BLADE_THREE_RANDOM);
+						Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					}
 				}
-				if (m_iAtkStepTypeNum == 2) // 삼각
+			}
+			break;
+			case CBoss_Kyogai::PHASE_2:
+			{
+				if (1 == m_iEvent_Index)	// 1.0
 				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
-					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
-					vMonsterDir = Rotation_Dir(vMonsterDir, 10);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+					dLongLifeTime = 5.f;
 
-					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+					if (m_iAtkStepTypeNum == 1) // 일직선
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
-					vMonsterDir = Rotation_Dir(vMonsterDir, -20);
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						Create_AlertRect(BLADE_FIVE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_FIVE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+					}
+					if (m_iAtkStepTypeNum == 2) // 삼각
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						Create_AlertRect(BLADE_FIVE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_FIVE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
-					Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
-					Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+						vMonsterDir = Rotation_Dir(vMonsterDir, 10);
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(1.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
 
+						Create_AlertRect(BLADE_FIVE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_FIVE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						vMonsterDir = Rotation_Dir(vMonsterDir, -20);
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vMonsterDir, m_fBigDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+						Create_AlertRect(BLADE_THREE_FRONT, vMonsterDir);
+						Create_BladeEffect(BLADE_THREE_FRONT, vMonsterDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_DELAY_BULLET);
+
+					}
+
+					if (m_iAtkStepTypeNum == 3) // 랜덤 두곳
+					{
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						Create_AlertRect(BLADE_THREE_RANDOM);
+						Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
+
+						Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
+							CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+						Create_AlertRect(BLADE_THREE_RANDOM);
+						Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+					}
 				}
+			}
+			break;
 
-				if (m_iAtkStepTypeNum == 3) // 랜덤 두곳
-				{
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-					Create_AlertRect(BLADE_THREE_RANDOM);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-					vRandomDir = Random_Dir(vDir, 0.f, 0.f, 0.f, 360.f);
-
-					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-						CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-					Create_AlertRect(BLADE_THREE_RANDOM);
-					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-				}
 			}
 		}
 
@@ -906,103 +993,25 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				//{
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(0, 8), 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
-				//}
-				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				//{
-				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-				//	dSpeed = 5.0;
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
-
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-				//}
 			}
 
 			if (1 == m_iEvent_Index)	// 0.28
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				//{
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);
 
-				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
-				//}
-				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				//{
-				//	dSpeed = 5.0;
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
-
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-
-
-				//}
 			}
 
 			if (2 == m_iEvent_Index)	// 0.56
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				//{
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(8.0f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);*/
-				//}
-				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				//{
-				//	dSpeed = 5.0;
-				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
-
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-
-				//}
 			}
 
 			if (3 == m_iEvent_Index)	// 0.84
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-				//if ((15.0 <= m_dTurnTime && m_dTurnTime <= 19.0) || (44.0 <= m_dTurnTime && m_dTurnTime <= 49.0))
-				//{
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(-8.0f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
-				//	/*Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(Random::Generate_Int(-8, 0), 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_BIG, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET);*/
-				//}
-				//if ((19.0 <= m_dTurnTime && m_dTurnTime <= 24.0) || (49.0 <= m_dTurnTime && m_dTurnTime <= 53.0))
-				//{
-				//	dSpeed = 5.0;
-				//	vMonsterDir = Rotation_Dir(vMonsterDir, 40.f, 0.f);
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_SMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
-
-				//	/*vRandomDir = Rotation_Dir(vRandomDir, 20.f, 0.f);
-
-				//	Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), dLongLifeTime,
-				//		CAtkCollider::TYPE_CONNECTSMALL, vRandomDir, m_fBigDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);*/
-				//}
 			}
 		}
 
@@ -1305,7 +1314,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_bFirstAwake = true;
 		m_bTrigger = false;
 		m_iTriggerCnt = 9;
-		
+
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
@@ -1359,7 +1368,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			case 9:
 				Trigger_AtkSkCmb();
 				break;
-				
+
 
 			}
 		}
@@ -1699,6 +1708,8 @@ void CBoss_Kyogai::Trigger_AtkSkCmb()
 	m_bAnimFinish3 = false;
 	m_bSuperArmor = true;
 	m_bTurn = false;
+
+	m_iLoopCount = 0;
 	m_dTurnTime = 0.0;
 	m_dReturnTime = 0.0;
 	m_dTimeAcc = 0.0;
@@ -2208,112 +2219,15 @@ void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 {
-	if (m_eCurPhase == PHASE_1)
+	switch (m_eCurPhase)
 	{
-		if (m_bTurn == false)
-		{
-			if (Check_Distance_FixY(3.f) == true)
-			{
-				if (m_bAnimFinish == false)
-				{
-					m_bAnimFinish = true;
-					m_eCurAnimIndex = ANIM_PUSHAWAY;
-				}
-			}
-			else
-			{
-				if (m_bAnimFinish == false)
-				{
-					m_bAnimFinish = true;
-					m_eCurAnimIndex = ANIM_ATKSK_READY;
-				}
-			}
-			if (m_pModelCom->Get_AnimFinish(ANIM_PUSHAWAY))
-			{
-				m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
-				m_eCurAnimIndex = ANIM_ATKSK_READY;
-			}
-			if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_READY))
-			{
-				m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_READY);
-				m_eCurAnimIndex = ANIM_ATKSK_LOOP;
-			}
-
-			if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LOOP) && m_bTurn == false)
-			{
-				m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LOOP);
-				m_eCurAnimIndex = ANIM_ATKSK_RF;
-				m_bTurn = true;
-				m_bTurnRF = true;
-				m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
-			}
-		}
-		else
-		{
-			m_dTurnTime += dTimeDelta;
-
-			Turn_Trigger(dTimeDelta); // 방돌리기
-			TurnRoom(); // 쿄우가이 돌리기
-
-			if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
-			{
-				if (m_bAnimFinish2 == false)
-				{
-					m_bAnimFinish2 = true;
-					m_eCurAnimIndex = ANIM_ATKCMB1;
-				}
-				if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
-				{
-					m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB1);
-					m_eCurAnimIndex = ANIM_ATKCMB2;
-				}
-				if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB2))
-				{
-					m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB2);
-					m_eCurAnimIndex = ANIM_ATKCMB3;
-				}
-				if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
-				{
-					m_eCurAnimIndex = ANIM_IDLE;
-					m_dReturnTime += dTimeDelta;
-					if (1.0 < m_dReturnTime)
-					{
-						m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB3);
-						m_eCurAnimIndex = ANIM_ATKSK_LF;
-						m_bTurnLF = true;
-						m_dReturnTime = 0.0;
-					}
-				}
-				if (m_fCurAngleX == 0.f && m_fCurANgleZ == 0.f)
-				{
-
-					if (m_bAnimFinish3 == false)
-					{
-						m_bAnimFinish3 = true;
-						m_eCurAnimIndex = ANIM_ATKSK_END;
-					}
-					if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
-					{
-						m_bTurn = false;
-						m_dTurnTime = 0.0;
-						m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
-						m_eCurAnimIndex = ANIM_IDLE;
-						Trigger_Interact();
-					}
-
-				}
-			}
-
-
-		}
-		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_RF) || m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LF))
-		{
-			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_RF);
-			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LF);
-			m_eCurAnimIndex = ANIM_ATKSK_LOOP;
-		}
+	case CBoss_Kyogai::PHASE_1:
+		Update_RoomChange(dTimeDelta);
+		break;
+	case CBoss_Kyogai::PHASE_2:
+		Update_RoomChange_2(dTimeDelta);
+		break;
 	}
-
 }
 
 void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
@@ -2347,6 +2261,8 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_END);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_AtkSk();
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+
 	}
 
 	if (Event_Time(dTimeDelta, 0.5, m_dTurnTime)) // 맨처음
@@ -2529,8 +2445,234 @@ void CBoss_Kyogai::Update_Hit_BigGetUp(_double dTimeDelta)
 {
 }
 
-void CBoss_Kyogai::Update_Awake_RoomChange(_double dTimeDelta)
+void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 {
+	if (m_bTurn == false)
+	{
+		if (Check_Distance_FixY(3.f) == true)
+		{
+			if (m_bAnimFinish == false)
+			{
+				m_bAnimFinish = true;
+				m_eCurAnimIndex = ANIM_PUSHAWAY;
+			}
+		}
+		else
+		{
+			if (m_bAnimFinish == false)
+			{
+				m_bAnimFinish = true;
+				m_eCurAnimIndex = ANIM_ATKSK_READY;
+			}
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_PUSHAWAY))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
+			m_eCurAnimIndex = ANIM_ATKSK_READY;
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_READY))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_READY);
+			m_eCurAnimIndex = ANIM_ATKSK_LOOP;
+		}
+
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LOOP) && m_bTurn == false)
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LOOP);
+			m_eCurAnimIndex = ANIM_ATKSK_RF;
+			m_bTurn = true;
+			m_bTurnRF = true;
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
+		}
+	}
+	else
+	{
+		m_dTurnTime += dTimeDelta;
+
+		Turn_Trigger(dTimeDelta); // 방돌리기
+		TurnRoom(); // 쿄우가이 돌리기
+
+		if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
+		{
+			if (m_bAnimFinish2 == false)
+			{
+				m_bAnimFinish2 = true;
+				m_eCurAnimIndex = ANIM_ATKCMB1;
+				
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
+			{
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
+				m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB1);
+				m_eCurAnimIndex = ANIM_ATKCMB2;
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB2))
+			{
+				m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB2);
+				m_eCurAnimIndex = ANIM_ATKCMB3;
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB3))
+			{
+				m_eCurAnimIndex = ANIM_IDLE;
+				m_dReturnTime += dTimeDelta;
+				if (1.0 < m_dReturnTime)
+				{
+					m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB3);
+					m_eCurAnimIndex = ANIM_ATKSK_LF;
+					m_bTurnLF = true;
+					m_dReturnTime = 0.0;
+				}
+			}
+			if (m_fCurAngleX == 0.f && m_fCurANgleZ == 0.f)
+			{
+
+				if (m_bAnimFinish3 == false)
+				{
+					m_bAnimFinish3 = true;
+					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+				}
+				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
+				{					
+					m_bTurn = false;
+					m_dTurnTime = 0.0;
+					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
+					m_eCurAnimIndex = ANIM_IDLE;
+					Trigger_Interact();
+				}
+
+			}
+		}
+
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_RF) || m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LF))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_RF);
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LF);
+		m_eCurAnimIndex = ANIM_ATKSK_LOOP;
+	}
+}
+
+void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
+{
+	if (m_bTurn == false)
+	{
+		if (Check_Distance_FixY(3.f) == true)
+		{
+			if (m_bAnimFinish == false)
+			{
+				m_bAnimFinish = true;
+				m_eCurAnimIndex = ANIM_PUSHAWAY;
+			}
+		}
+		else
+		{
+			if (m_bAnimFinish == false)
+			{
+				m_bAnimFinish = true;
+				m_eCurAnimIndex = ANIM_ATKSK_READY;
+			}
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_PUSHAWAY))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_PUSHAWAY);
+			m_eCurAnimIndex = ANIM_ATKSK_READY;
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_READY))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_READY);
+			m_eCurAnimIndex = ANIM_ATKSK_LOOP;
+		}
+
+		if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LOOP) && m_bTurn == false)
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LOOP);
+			m_eCurAnimIndex = ANIM_ATKSK_RF;
+			m_bTurn = true;
+			m_bTurnRF = true;
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
+		}
+	}
+	else
+	{
+		m_dTurnTime += dTimeDelta;
+
+		Turn_Trigger(dTimeDelta); // 방돌리기
+		TurnRoom(); // 쿄우가이 돌리기
+
+		if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
+		{
+			if (m_bAnimFinish2 == false)
+			{   
+				m_bAnimFinish2 = true;
+				m_eCurAnimIndex = ANIM_ATKCMB_01READY;
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_01READY))
+			{
+				CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
+				m_eCurAnimIndex = ANIM_ATKCMB_02LOOP;
+			}
+			if (m_pModelCom->Check_PickAnimRatio(ANIM_ATKCMB_02LOOP, 0.95, dTimeDelta))
+			{
+				m_iLoopCount++;
+				if (m_iLoopCount >= 4 && m_bLoop == true)
+				{
+					m_iLoopCount = 0;
+					m_bLoop = false;
+				}
+			}
+			if (m_iLoopCount >= 4 && m_bLoop == false)
+			{
+				m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_01READY);
+
+				if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_02LOOP))
+				{
+					m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_02LOOP);
+					m_eCurAnimIndex = ANIM_ATKCMB_03END;
+				}
+
+				if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB_03END))
+				{
+					m_eCurAnimIndex = ANIM_IDLE;
+					m_dReturnTime += dTimeDelta;
+					if (1.0 < m_dReturnTime)
+					{
+						m_pModelCom->Set_AnimisFinish(ANIM_ATKCMB_03END);
+						m_eCurAnimIndex = ANIM_ATKSK_LF;
+						m_bTurnLF = true;
+						m_dReturnTime = 0.0;
+					}
+				}
+			}
+
+			if ((m_fCurAngleX == 0.f && m_fCurANgleZ == 0.f) || (m_fCurAngleX == 0.f && m_fCurANgleZ == 360.f))
+			{
+				if (m_bAnimFinish3 == false)
+				{
+					m_bAnimFinish3 = true;
+					m_eCurAnimIndex = ANIM_ATKSK_END;
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+				}
+				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
+				{
+					m_bTurn = false;
+					m_dTurnTime = 0.0;
+					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
+					m_eCurAnimIndex = ANIM_IDLE;
+					Trigger_Interact();
+				}
+			}
+		}
+
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_RF) || m_pModelCom->Get_AnimFinish(ANIM_ATKSK_LF))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_RF);
+		m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_LF);
+		m_eCurAnimIndex = ANIM_ATKSK_LOOP;
+	}
 }
 
 void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir, _float fMovePos, _bool bLiarColor)
@@ -2543,7 +2685,7 @@ void CBoss_Kyogai::Create_AlertRect(BLADETYPE eBladeType, _fvector vDir, _float 
 
 	CAlertRect::EFFECTDESC EffectDesc;
 	EffectDesc.bLiarColor = bLiarColor;
-	
+
 	CRoomSmoke::EFFECTDESC SmokeEffectDesc;
 	SmokeEffectDesc.eType = CRoomSmoke::TYPE_PART;
 
@@ -2763,28 +2905,28 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 		m_dTimeAcc = 0.0;
 		m_bTurnRF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_PLUS);
-		
+
 	}
 	if (true == m_bTurnLF && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLF = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_X_MINUS);
-		
+
 	}
 	if (true == m_bTurnRB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnRB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_PLUS);
-		
+
 	}
 	if (true == m_bTurnLB && m_dTimeAcc > 2.5)
 	{
 		m_dTimeAcc = 0.0;
 		m_bTurnLB = false;
 		pRotationMapObject->Set_TurnRoomTriggerOn(CRotationMapObject::ROT_Z_MINUS);
-		
+
 	}
 
 	Safe_Release(pGameInstance);
@@ -2845,6 +2987,7 @@ void CBoss_Kyogai::TurnRoom()
 		m_fPreAngleX = pRotationMapObject->Get_RotAngle().x;
 		m_fPreAngleZ = pRotationMapObject->Get_RotAngle().z;
 	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -2855,6 +2998,7 @@ void CBoss_Kyogai::Rotation_Bullet(_double dTimeDelta, _double dTime, _fvector v
 	////////////////////////////////////////칼날 1개////////////////////////////////////////////////////
 	if (dTime < m_dTurnTime && m_dTurnTime <= dTime + dTimeDelta)
 	{
+		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 		//vMonsterDir = Rotation_Dir(vMonsterDir, 30.f, 0.f);
 		Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 0.f), 3.0,
 			CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, eBulletType);

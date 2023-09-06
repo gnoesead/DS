@@ -414,6 +414,8 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 {
 	CParticleSystem* pParentParticleSystem = nullptr;
 
+	_float3 vFloat3 = { 0.f, 0.f, 0.f };
+
 	if (m_EffectParticlePool.empty())
 	{
 		list<class CParticleSystem*>* pList = Find_ParticlePool(pTag);
@@ -444,6 +446,18 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 				Safe_Release(pGameInstance);
 				return nullptr;
 			}
+
+			vFloat3 = pParticleSystem->Get_Postion();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
+			pParticleSystem->Set_Position(vFloat3);
+
+			vFloat3 = pParticleSystem->Get_Rotation();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
+			pParticleSystem->Set_Rotation(vFloat3);
+
+			vFloat3 = pParticleSystem->Get_Scale();
+			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
+			pParticleSystem->Set_Scale(vFloat3);
 
 			pParticleSystem->Set_Collect(false);
 

@@ -210,6 +210,9 @@
     <ClInclude Include="..\Public\Fade.h" />
     <ClInclude Include="..\Public\Fade_Manager.h" />
     <ClInclude Include="..\Public\FIcon.h" />
+    <ClInclude Include="..\Public\SmeshStone.h" />
+    <ClInclude Include="..\Public\StoneParticle.h" />
+    <ClInclude Include="..\Public\GroundSmoke.h" />
     <ClInclude Include="..\Public\InstanceMapObject.h" />
     <ClInclude Include="..\Public\Interaction.h" />
     <ClInclude Include="..\Public\Level_FinalBoss.h" />
@@ -240,6 +243,7 @@
     <ClInclude Include="..\Public\NPC_ChildF.h" />
     <ClInclude Include="..\Public\NPC_ChildM.h" />
     <ClInclude Include="..\Public\NPC_Female.h" />
+    <ClInclude Include="..\Public\NPC_Zenitsu.h" />
     <ClInclude Include="..\Public\Option.h" />
     <ClInclude Include="..\Public\OptionManager.h" />
     <ClInclude Include="..\Public\Paper.h" />
@@ -320,6 +324,9 @@
     <ClCompile Include="..\Private\Fade.cpp" />
     <ClCompile Include="..\Private\Fade_Manager.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
+    <ClCompile Include="..\Private\SmeshStone.cpp" />
+    <ClCompile Include="..\Private\StoneParticle.cpp" />
+    <ClCompile Include="..\Private\GroundSmoke.cpp" />
     <ClCompile Include="..\Private\InstanceMapObject.cpp" />
     <ClCompile Include="..\Private\Interaction.cpp" />
     <ClCompile Include="..\Private\Level_FinalBoss.cpp" />
@@ -350,6 +357,7 @@
     <ClCompile Include="..\Private\NPC_ChildF.cpp" />
     <ClCompile Include="..\Private\NPC_ChildM.cpp" />
     <ClCompile Include="..\Private\NPC_Female.cpp" />
+    <ClCompile Include="..\Private\NPC_Zenitsu.cpp" />
     <ClCompile Include="..\Private\Option.cpp" />
     <ClCompile Include="..\Private\OptionManager.cpp" />
     <ClCompile Include="..\Private\Paper.cpp" />

@@ -13,6 +13,8 @@
 #include "PlayerManager.h"
 #include "World_UI_Hp.h"
 
+#include "Fade_Manager.h"
+
 CMonster_Zako::CMonster_Zako(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -105,12 +107,18 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
+	m_StatusDesc.fHp_Max = 70.f;
+	m_StatusDesc.fHp = 70.f;
 
 
 	Safe_Release(pGameInstance);
 
+	if(m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
+		m_iAttackIndex = 0; // 2,5
+	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_TALK)
+		m_iAttackIndex = 2; // 2,5
+	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_WALKTALK)
+		m_iAttackIndex = 5; // 2,5
 
 	return S_OK;
 }
@@ -122,8 +130,17 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Trigger();
-	Animation_Control(dTimeDelta);
+	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start())
+	{
+		if (m_isFirst_BattleOn)
+		{
+			m_isFirst_BattleOn = false;
+			CMonsterManager::GetInstance()->Set_BattleOn(true);
+		}
+
+		Trigger();
+		Animation_Control(dTimeDelta);
+	}
 
 	//局聪皋捞记 贸府
  	m_pModelCom->Play_Animation(dTimeDelta);
@@ -558,8 +575,8 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 			Animation_Control_Hit(dTimeDelta);
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
-		/*else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta, m_eCurPattern);*/
+		else if (m_eCurState == STATE_ATTACK)
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
 	}
 }
 
@@ -1377,18 +1394,58 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		pPlayer->Set_Hit_Success_Hekireki(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		m_pModelCom->Set_Animation(ANIM_FALL);
+		
 		m_isStrictUpper = true;
 
-		if (m_isJumpOn == false)
+
+		m_isHekireki_Hit = true;
+		m_dHekireki_Hit = 0.0;
+		/*if (m_isJumpOn == false)
 		{
 			Jumping(1.85f, 0.03f);
 		}
 		else
 		{
 			Jumping(0.85f, 0.030f);
+		}*/
+	}
+
+
+	//Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 0.2f, AtkDir);
+	//Go_Dir_Constant(dTimeDelta, 117, 0.3f, AtkDir);
+	if (m_isHekireki_Hit)
+	{
+		m_dHekireki_Hit += dTimeDelta;
+		if (m_dHekireki_Hit > 0.15f)
+		{
+			if (m_isJumpOn == false)
+			{
+				Jumping(1.85f, 0.03f);
+			}
+			else
+			{
+				Jumping(0.85f, 0.030f);
+			}
+
+			if (m_iHekirekiHit_Index == 0)
+			{
+				m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+				m_iHekirekiHit_Index++;
+			}
+			else if (m_iHekirekiHit_Index == 1)
+			{
+				m_pModelCom->Set_Animation(ANIM_FALL);
+				m_iHekirekiHit_Index = 0;
+			}
+
+			m_isHekireki_Hit = false;
 		}
 	}
+	if (m_dHekireki_Hit >= 0.14f)
+	{
+		Ground_Animation_Play(117, 118);
+	}
+
 #pragma endregion
 
 
@@ -1397,6 +1454,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	if (m_StatusDesc.fHp <= 0.0f)
 	{
 		m_pModelCom->Set_Animation(ANIM_DEATH);
+
+		if (m_isFirst_Death_For_Stealth)
+		{
+			m_isFirst_Death_For_Stealth = false;
+
+			CMonsterManager::GetInstance()->Plus_ThreeCnt();
+		}
 	}
 #pragma endregion
 

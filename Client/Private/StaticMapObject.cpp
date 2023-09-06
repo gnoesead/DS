@@ -5,6 +5,7 @@
 #include "Camera_Free.h"
 #include "Player.h"
 #include "Camera_Manager.h"
+#include "MonsterManager.h"
 
 CStaticMapObject::CStaticMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMapObject(pDevice, pContext)
@@ -42,6 +43,79 @@ void CStaticMapObject::Tick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_BigMountain")))
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+			{
+				if (m_MapObject_Info.iRenderGroup == 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else
+			{
+				if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		if (m_MapObject_Info.iRenderGroup <= 4)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			_uint iNavi = pPlayer->Get_CurNaviMesh();
+
+			if (iNavi == CLandObject::NAVI_HOUSE_0_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_1_0 || iNavi == CLandObject::NAVI_HOUSE_1_1)
+			{
+				if (m_MapObject_Info.iRenderGroup != 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_2_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 2)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_3_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 3)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_4_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 4)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+
 	m_bBlocked = false;
 
 	__super::Tick(TimeDelta);
@@ -76,6 +150,82 @@ void CStaticMapObject::Tick(_double TimeDelta)
 
 void CStaticMapObject::LateTick(_double TimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_BigMountain")))
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			if (pPlayer->Get_CurNaviMesh() == CLandObject::NAVI_VILLAGE_BATTLE)
+			{
+				if (m_MapObject_Info.iRenderGroup == 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else
+			{
+				if (m_MapObject_Info.iRenderGroup == 3 || m_MapObject_Info.iRenderGroup == 2 || m_MapObject_Info.iRenderGroup == 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		if (m_MapObject_Info.iRenderGroup <= 3)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+			_uint iNavi = pPlayer->Get_CurNaviMesh();
+
+			if (iNavi == CLandObject::NAVI_HOUSE_0_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 0)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_1_0 || iNavi == CLandObject::NAVI_HOUSE_1_1)
+			{
+				if (m_MapObject_Info.iRenderGroup != 1)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_2_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 2)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_3_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 3)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+			else if (iNavi == CLandObject::NAVI_HOUSE_4_0)
+			{
+				if (m_MapObject_Info.iRenderGroup != 4)
+				{
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+		}
+	}
+
 	__super::LateTick(TimeDelta);
 
 	if ((m_MapObject_Info.iSceneType == SCENE_VILLAGE) && ((m_MapObject_Info.iRenderGroup == 1) || (m_MapObject_Info.iRenderGroup == 2)))
@@ -96,9 +246,6 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 			m_fAlpha = 1.f;
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
 	if (_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_01a")) ||
 		_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_02a")) ||
 		_tcscmp(m_MapObject_Info.szMeshName, TEXT("Prototype_Component_Model_Far_04a")) ||
@@ -107,18 +254,27 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 	{
 		if (m_bBlocked)
 		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7 || m_MapObject_Info.iRenderGroup == 8 || m_MapObject_Info.iRenderGroup == 9)
 		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_BLEND, this)))
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 		else
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			{
+				Safe_Release(pGameInstance);
 				return;
+			}
 		}
 	}
 
@@ -346,6 +502,9 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
 		pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_0); // 네비 매쉬 변경
 
+		//젠이츠npc에 보내주기
+		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+
 		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
 		break; }
 		case INTERACTION_ROOMCHANGE1:
@@ -353,11 +512,17 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
 			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1); // 네비 매쉬 변경
 
+			//젠이츠npc에 보내주기
+			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+
 			break;
 		case INTERACTION_ROOMCHANGE2:
 		vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
 			pPlayer->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
 			pPlayer_2->Change_NaviMesh(CLandObject::NAVI_HOUSE_3_0); // 네비 매쉬 변경
+
+			//젠이츠npc에 보내주기
+			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
 
 			break;
 		}

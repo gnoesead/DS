@@ -91,11 +91,17 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}
 
-	/*if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
+	if (FAILED(Ready_Layer_StealthObj(TEXT("Layer_StealthObj"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_House");
+		return E_FAIL;
+	}
+
+	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Boss : CLevel_House");
 		return E_FAIL;
-	}*/
+	}
 
     if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
     {
@@ -142,11 +148,14 @@ HRESULT CLevel_House::Initialize()
 	CMissionManager::GetInstance()->Set_Main_Sub_Num(0);
 
 
-	CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
-	CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);
-
 	CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
 	CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
+
+	CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
+	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
     return S_OK;
 }
@@ -325,6 +334,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -334,6 +344,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	}
 
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
@@ -343,11 +354,39 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	}
 
 	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
+	}
+
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CCharacter::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
+
+
+	//NPC_Zenitsu
+	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_NPC_Zenitsu"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_GamePlay");
 		return E_FAIL;
 	}
 
@@ -360,12 +399,17 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 19.95f, 0.05f, 9.16f, 1.f };
 	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 19.8f, 0.05f, 25.66f, 1.f };
 
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+	
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
 		return E_FAIL;
 	}
+
+	
 
 	Safe_Release(pGameInstance);
 
@@ -439,6 +483,16 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
+
+	ZeroMemory(&UIDesc, sizeof UIDesc);
+
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 4;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
  // Mini_Map
@@ -1993,12 +2047,6 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;
 	}
 

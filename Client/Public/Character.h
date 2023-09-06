@@ -8,6 +8,8 @@
 
 #include "AtkCollider.h"
 #include "EffectPlayer.h"
+#include "GroundSmoke.h"
+#include "StoneParticle.h"
 
 BEGIN(Engine)
 class CModel;
@@ -165,6 +167,14 @@ public:
 	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
+
+protected:
+	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+	void Create_StoneParticle(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+
+	void Play_FallDownEffect();
+	void Play_HitEffect();
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;

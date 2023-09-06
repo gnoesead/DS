@@ -49,6 +49,8 @@ protected: // Calculate
 	_vector Calculate_Dir_ZeroY();
 	_vector Calculate_Dir_Cross();
 
+	_float	Calculate_Angle(_fvector vSourDir, _fvector vDestDir);
+
 	_vector Random_Dir(_fvector vDir, _float fMinY = -30.f, _float fMaxY = 30.f, _float fMinX = -20.f, _float fMaxX = 20.f);
 	_vector Rotation_Dir(_fvector vDir, _float fAngleX = 0.f, _float fAngleY = 0.f);
 
@@ -104,6 +106,7 @@ protected:
 
 protected:
 	_uint	m_iSmallHit_Index = { 0 };
+	_uint	m_iHekirekiHit_Index = { 0 };
 	_uint	m_iIdleCnt = { 0 };
 	_uint	m_iTriggerCnt = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };

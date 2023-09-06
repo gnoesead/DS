@@ -517,6 +517,18 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle0.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/FallDown_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : FallDown_Particle");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region RENGOKU
@@ -525,17 +537,68 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1_DecalParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo2_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal1Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal1Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal2Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal2Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up_DecalParticle");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region KYOGAI
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 4)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;
 	}
 #pragma endregion
 
-
+#pragma region SWAMP
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle2.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle3.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle4.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle4");
+		return E_FAIL;
+	}
+#pragma endregion
 	return S_OK;
 }
 

@@ -148,7 +148,17 @@ HRESULT CLevel_Village::Initialize()
     CMissionManager::GetInstance()->Set_Main_Mission_Type(0);
     CMissionManager::GetInstance()->Set_Sub_Mission_Type(0);
 
+    CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
+    CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
+
     CFadeManager::GetInstance()->Set_Is_Village_Battle_Start(false);
+    CFadeManager::GetInstance()->Set_Is_House_Monster_Battle_Start(false);
+    CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(false);
+    CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
+    CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
+
+
+
 
     return S_OK;
 }
@@ -2556,6 +2566,12 @@ HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_Village::Ready_Layer_Effect()
 {
+    if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Atk_5.bin"))))
+    {
+        MSG_BOX("Failed to Load Effect : Swamp_Atk_5");
+        return E_FAIL;
+    }
+
     if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Atk_10.bin"))))
     {
         MSG_BOX("Failed to Load Effect : Swamp_Atk_10");
@@ -2583,6 +2599,12 @@ HRESULT CLevel_Village::Ready_Layer_Effect()
     if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Atk_22.bin"))))
     {
         MSG_BOX("Failed to Load Effect : Swamp_Atk_22");
+        return E_FAIL;
+    }
+
+    if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Stone.bin"))))
+    {
+        MSG_BOX("Failed to Load Effect : Swamp_Stone");
         return E_FAIL;
     }
 

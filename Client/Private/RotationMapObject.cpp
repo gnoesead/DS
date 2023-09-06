@@ -2,6 +2,7 @@
 #include "..\Public\RotationMapObject.h"
 
 #include "GameInstance.h"
+#include "Player.h"
 
 CRotationMapObject::CRotationMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CMapObject(pDevice, pContext)
@@ -33,10 +34,28 @@ HRESULT CRotationMapObject::Initialize(void* pArg)
 
 void CRotationMapObject::Tick(_double TimeDelta)
 {
-    __super::Tick(TimeDelta);
 
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
+
+    if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+    {
+        if (m_MapObject_Info.iRenderGroup <= 4)
+        {
+            CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+            _uint iNavi = pPlayer->Get_CurNaviMesh();
+
+            if (iNavi != CLandObject::NAVI_HOUSE_4_0)
+            {
+                Safe_Release(pGameInstance);
+                return;
+            }
+        }
+    }
+    
+    Safe_Release(pGameInstance);
+
+    __super::Tick(TimeDelta);
 
 	if (m_bTriggerTurnRoom)
 	{
@@ -63,15 +82,38 @@ void CRotationMapObject::Tick(_double TimeDelta)
     if (m_bTurn)
         TurnRoom(TimeDelta);
 
-    Safe_Release(pGameInstance);
+   
 }
 
 void CRotationMapObject::LateTick(_double TimeDelta)
 {
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+
+    if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+    {
+        if (m_MapObject_Info.iRenderGroup <= 4)
+        {
+            CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+            _uint iNavi = pPlayer->Get_CurNaviMesh();
+
+            if (iNavi != CLandObject::NAVI_HOUSE_4_0)
+            {
+                Safe_Release(pGameInstance);
+                return;
+            }
+        }
+    }
+
+    Safe_Release(pGameInstance);
+
     __super::LateTick(TimeDelta);
 
     if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
         return;
+
+  
 }
 
 HRESULT CRotationMapObject::Render()

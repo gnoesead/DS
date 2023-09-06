@@ -62,8 +62,13 @@ HRESULT CPlayer::Initialize(void* pArg)
 
 	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);
 
+	//level판명
+	m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+
 	Safe_Release(pGameInstance);
 
+
+	
 	return S_OK;
 }
 
@@ -119,6 +124,8 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
+
+	
 
 #ifdef _DEBUG
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -284,7 +291,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -303,7 +310,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -322,7 +329,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -342,7 +349,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -361,7 +368,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -382,7 +389,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_dDelay_ComboReset_2 = 0.0;
 
-			if (m_Moveset.m_State_Battle_Guard)
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
 				m_isGuardHit = true;
 			else
 			{
@@ -530,7 +537,6 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
 	
 	//무브키를 누르고 있는 상태
 	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)
@@ -586,7 +592,6 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 			m_Moveset.m_isPressing_While_Restrict = false;
 	}
 	
-
 	Safe_Release(pGameInstance);
 }
 
@@ -724,13 +729,13 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
-		m_Moveset.m_Down_Skill_Normal = true;
+	//if(m_isCan_Air_Hekireki && pGameInstance->Get_DIKeyDown(DIK_I))
+	//	m_Moveset.m_Down_Skill_Normal = true;
 
 	m_dDelay_CanSkill += dTimeDelta;
 	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_I))
+		if (pGameInstance->Get_DIKeyDown(DIK_I) && m_isCan_Air_Hekireki == false)
 		{
 			if (pGameInstance->Get_DIKeyState(DIK_O))
 			{

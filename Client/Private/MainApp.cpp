@@ -124,11 +124,11 @@ void CMainApp::Tick(_double dTimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.4f);
 	}
 
-
+	m_TimeAcc += dTimeDelta;
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
 
-	m_TimeAcc += dTimeDelta;
+	
 #endif
 }
  
@@ -156,7 +156,6 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
 	
-	#ifdef _DEBUG
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
@@ -171,6 +170,7 @@ HRESULT CMainApp::Render()
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 	}
+	#ifdef _DEBUG
 
 	if (m_isRenderDebugInfo) {
 
