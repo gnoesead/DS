@@ -138,6 +138,11 @@ private: //애니메이션 제어용 변수들
 	_double		m_dDelay_BoxJump = { 0.0 };
 	
 	_float4		m_vTanjrioToBoxDir = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+
+	// 위치 지정
+	_float4 m_ResetPos[4];
+	_int	m_iResetIndex = { 0 }; // 3이 자코방 앞
 	
 private:
 	//웹 기믹 시작

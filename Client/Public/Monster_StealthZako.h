@@ -99,7 +99,9 @@ private:
 	_bool	m_isGo = { false };
 	_bool	m_isFirst_Go = { true };
 
-
+	//�Ͽ︵
+	_double m_dDelay_Howling = { 0.0 };
+	_bool	m_isFirst_Howling = { true };
 private:
 	_bool	m_isQuestioning = { false };
 	_bool	m_isFirst_Questioning = { true };

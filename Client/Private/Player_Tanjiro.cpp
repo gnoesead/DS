@@ -77,7 +77,13 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
-	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, -1.0f, 0.0f});
+	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, 1.0f, 0.0f});
+
+	//_vector{ 8.f, 0.f, 10.f, 1.f }
+	m_ResetPos[0] = { 8.f, 0.f, 10.f, 1.f }; //첫지역
+	m_ResetPos[1] = { 78.18f, 0.05f, 7.75f, 1.f }; // 처음 이동
+	m_ResetPos[2] = { 75.1f, 0.05f, 67.63f, 1.f }; // 둘째 이동
+	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // 마지막 이동
 
 	return S_OK;
 }
@@ -2044,6 +2050,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 
 			m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 			m_dChangePositionAccTime = 0.0;
+
+			CFadeManager::GetInstance()->Set_Fade_Color(true);
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
 
 		Safe_Release(pGameInstance);
@@ -2073,8 +2083,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_isPlayerBack_Tanjiro = false;
 			m_dDelay_PlayerBack_Tanjiro = 0.0;
 
+			m_iResetIndex = CMonsterManager::GetInstance()->Get_ResetIndex_Player();
 			m_Moveset.m_isRestrict_Adventure = false;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 8.f, 0.f, 10.f, 1.f });
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
 		}
 	}
 }
@@ -2098,10 +2109,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//m_isBoxJumping = true;
 		//떨어지는
 		if (m_isPlayerStatus_OnRoof)
-			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
+			Jumping(1.0f, 0.077f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(1.55f, 0.06f);			
+			Jumping(1.55f, 0.067f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -2123,7 +2134,6 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_ReverseDir), 0.8f);
 
 			m_eCurNavi = m_eNextNavi;
-
 		}
 	}
 
@@ -2146,7 +2156,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 	NAVI_VILLAGE_INSIDEWALL2 , NAVI_VILLAGE_ROOF , NAVI_VILLAGE_WALL , NAVI_VILLAGE_BATTLE,
 	NAVI_HOUSE_0_0,NAVI_HOUSE_1_0,NAVI_HOUSE_1_1,NAVI_HOUSE_2_0,NAVI_HOUSE_3_0,NAVI_HOUSE_4_0, 
 	NAVI_TRAIN, NAVI_ACAZA, NAVI_END };
-*/
+	*/
 	if (m_isPlayerStatus_OnRoof == false)
 	{
 		if (NAVI_VILLAGE_WALL == m_eNextNavi)
@@ -2177,10 +2187,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_ScondJump_Box), 0.8f);
 			//떨어지는
 			if(m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.07f);		// 두번째 올라갈때 점프(땅)
+				Jumping(1.1f, 0.077f);		// 두번째 올라갈때 점프(땅)
 			//올라가는
 			else
-				Jumping(2.15f, 0.08f);
+				Jumping(2.15f, 0.087f);
 		}
 
 		m_dDelay_BoxJump += dTimeDelta;
@@ -2206,10 +2216,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isFirst_Jump2_To_Box = false;
 			//떨어지는
 			if (m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.08f); // 지붕에서 내려갈때 두번째 점프
+				Jumping(1.1f, 0.087f); // 지붕에서 내려갈때 두번째 점프
 			//올라가는
 			else
-				Jumping(2.45f, 0.08f);
+				Jumping(2.45f, 0.087f);
 		}
 
 	}
@@ -2221,7 +2231,6 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isPlayerStatus_OnRoof = true;
 		else
 			m_isPlayerStatus_OnRoof = false;
-		
 	}
 	
 }

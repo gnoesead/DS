@@ -69,6 +69,12 @@ HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 	m_ResetPos[2] = { 74.1f, 0.05f, 66.63f, 1.f }; // 둘째 이동
 	m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
 	
+	//m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
+
+	CMonsterManager::GetInstance()->Set_ThreeCnt(0);
+	m_iResetIndex = 0;
+	CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(false);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[0]));
 
 	return S_OK;
 }
@@ -85,7 +91,7 @@ void CNPC_Zenitsu::Tick(_double dTimeDelta)
 		{
 			CMonsterManager::GetInstance()->Set_BattleOn(false);
 			CMonsterManager::GetInstance()->Set_ThreeCnt(0);
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[3]));
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 69.26f, 0.05f, 24.7f, 1.f });
 		}
 		Safe_Release(pGameInstance);
 	}
