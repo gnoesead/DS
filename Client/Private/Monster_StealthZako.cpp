@@ -8,6 +8,7 @@
 #include "AtkCollManager.h"
 
 #include "MonsterManager.h"
+#include "Fade_Manager.h"
 
 #include "Player.h"
 #include "PlayerManager.h"
@@ -266,21 +267,55 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 
 	_vector AtkDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
+	if (ANIM_POSE_HOWLING == m_pModelCom->Get_iCurrentAnimIndex())
+	{
+		m_dDelay_Howling += dTimeDelta;
+		if (m_dDelay_Howling > 1.0f && m_isFirst_Howling)
+		{
+			CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_Push", m_pTransformCom);
+			m_dDelay_Howling = 0.0;
+			m_isFirst_Howling = false;
+		}
+	}
+
 	if (EventCallProcess())
 	{
-		/*
-		if (0 == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{//0.3
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+			{//0.10
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
 			}
-			if (1 == m_iEvent_Index)
-			{//0.39
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+			
+			if (2 == m_iEvent_Index)
+			{//0.30
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
 			}
-		}*/
+			
+			if (4 == m_iEvent_Index)
+			{//0.50
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+			}
+			
+			if (6 == m_iEvent_Index)
+			{//0.80
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+			}
+			
+			if (8 == m_iEvent_Index)
+			{//1.30
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.2f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.x = -0.2f;
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+			}
+			
+		}
+
 		m_iEvent_Index++;
 	}
 }
@@ -417,6 +452,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isFirst_Finding = false;
 
 			m_pModelCom->Set_Animation(ANIM_POSE_HOWLING);
+			m_dDelay_Howling = 0.0;
+			m_isFirst_Howling = true;
 		}
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
@@ -425,7 +462,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
 
 		if(Calculate_Distance() > 1.f)
-			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.6f, true);
+			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.25f, true);
 		else
 		{
 			m_isFinding = false;
@@ -443,6 +480,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isFirst_Attacking = false;
 
 			m_pModelCom->Set_Animation(ANIM_ATK_CLAWS);
+
+			CFadeManager::GetInstance()->Set_Fade_OutIn_Basic(true, 2.5f);
 		}
 
 		m_dDelay_Attacking += dTimeDelta;
@@ -493,13 +532,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			}
 		}
 	}
-	else
-	{
-		if (CMonsterManager::GetInstance()->Get_StealthAttack())
-		{
-			CMonsterManager::GetInstance()->Set_StealthAttack(false);
-		}
-	}
+	
 	_float4 HitDir = CMonsterManager::GetInstance()->Get_DirStealthAtk();
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_BACK, 1.3f, 0.09f, HitDir, true);
 
@@ -507,6 +540,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 	if (m_isBattleStart_Stealth)
 	{
 		m_dDelay_BattleStart_Stealth += dTimeDelta;
+
 		if (m_dDelay_BattleStart_Stealth > 0.5f)
 		{
 			m_dDelay_BattleStart_Stealth = 0.0;
@@ -518,9 +552,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart(true);
 			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart_Fade(true);
 		}
-
 	}
-
 }
 
 HRESULT CMonster_StealthZako::Add_Components()

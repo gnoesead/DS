@@ -103,14 +103,15 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	__super::Tick(dTimeDelta);
-
 	if (true == m_isDead)
 		return;
 	
 
-	if (CFadeManager::GetInstance()->Get_Is_Village_Battle_Start())
+	if (CMonsterManager::GetInstance()->Get_BattleOn_Swamp())
 	{
+		//d
+		__super::Tick(dTimeDelta);
+
 		if (m_isFirst_BattleOn)
 		{
 			m_isFirst_BattleOn = false;
@@ -119,15 +120,17 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 
 		Trigger();
 		Animation_Control(dTimeDelta);
+
+		//애니메이션 처리
+		m_pModelCom->Play_Animation(dTimeDelta);
+		RootAnimation(dTimeDelta);
+
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
 	}
 
 
-	//애니메이션 처리
-	m_pModelCom->Play_Animation(dTimeDelta);
-	RootAnimation(dTimeDelta);
-
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
+	
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -152,9 +155,13 @@ void CMonster_Swamp::LateTick(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);
 
-	__super::LateTick(dTimeDelta);
+	if (CMonsterManager::GetInstance()->Get_BattleOn_Swamp())
+	{
 
-	Gravity(dTimeDelta);
+		__super::LateTick(dTimeDelta);
+
+		Gravity(dTimeDelta);
+	}
 
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -164,44 +171,46 @@ void CMonster_Swamp::LateTick(_double dTimeDelta)
 
 HRESULT CMonster_Swamp::Render()
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-	if (FAILED(SetUp_ShaderResources()))
-		return E_FAIL;
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+	if (CMonsterManager::GetInstance()->Get_BattleOn_Swamp())
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		if (FAILED(__super::Render()))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+		if (FAILED(SetUp_ShaderResources()))
 			return E_FAIL;
 
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
-			m_pShaderCom->Begin(1);
+		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		m_pModelCom->Render(m_iMeshNum);
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
+
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
+			else
+				m_pShaderCom->Begin(1);
+
+			m_pModelCom->Render(m_iMeshNum);
+		}
+		// Default Render
+		for (_uint i = 0; i < iNumMeshes; i++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
+
+			m_pShaderCom->Begin(0);
+
+			m_pModelCom->Render(i);
+		}
+
 	}
-	// Default Render
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-		m_pShaderCom->Begin(0);
-
-		m_pModelCom->Render(i);
-	}
-
-
 	return S_OK;
 }
 
@@ -821,6 +830,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		}
 		else
 		{
+			m_iIndex_Rage = 2;
 			if (m_iIndex_Rage == 2)
 			{
 				if (m_dCooltime_Atk_Pattern > 0.1f)
