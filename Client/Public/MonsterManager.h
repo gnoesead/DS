@@ -34,6 +34,9 @@ public:
 	void	Plus_ThreeCnt() { m_iThreeCnt++; }
 
 	//잠입모드용
+	_int	Get_ResetIndex_Player() { return m_iResetIndex_ForPlayer; }
+	void	Set_ResetIndeX_Player(_int index) { m_iResetIndex_ForPlayer = index; }
+
 	_bool	Get_PlayerBack() { return m_isPlayerBack; }
 	void	Set_PlayerBack(_bool back) { m_isPlayerBack = back; }
 	_bool	Get_ZenitsuBack() { return m_isZenitsuBack; }
@@ -65,6 +68,8 @@ private:
 
 
 	//잠입 모드용
+	_int	m_iResetIndex_ForPlayer = { 0 };
+
 	_bool	m_isPlayerBack = { false };
 	_bool	m_isZenitsuBack = { false };
 	_float4		m_Dir_StealthAtk = { 0.0f, 0.0f, 0.0f, 0.0f };

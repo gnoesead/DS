@@ -1219,12 +1219,12 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
 			}
-
+			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
-			}
+			}*/
 		}
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B])

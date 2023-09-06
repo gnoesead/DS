@@ -87,8 +87,8 @@ private:
 
 
 	//잠입모드 발각시
-	_bool	m_isPlayerBack = true;
-	_double m_dDelay_PlayerBack = 0.0;
+	_bool	m_isPlayerBack = { false };
+	_double m_dDelay_PlayerBack = { 0.0 };
 
 	//위치 지정
 	_float4 m_ResetPos[4];
