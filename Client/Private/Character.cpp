@@ -961,6 +961,21 @@ void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
 	Safe_Release(pGameInstance);
 }
 
+void CCharacter::Play_FallDownEffect()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (iCurIdx == LEVEL_VILLAGE)
+	{
+		CEffectPlayer::Get_Instance()->Play("FallDown_Particle", m_pTransformCom);	// 돌 이펙트
+		CEffectPlayer::Get_Instance()->Play("FallDown_Effect", m_pTransformCom);	// 동그란 이펙트 점점 커지는
+	}
+
+	Safe_Release(pGameInstance);
+}
+
 void CCharacter::Play_HitEffect()
 {
 	_uint iRanNum = Random::Generate_Int(0, 5);

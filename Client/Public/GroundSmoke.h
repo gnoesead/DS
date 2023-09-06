@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CGroundSmoke final : public CMasterEffect
+class CGroundSmoke final : public CGameObject
 {
 public:
 	enum SMOKE_TYPE{SMOKE_FALLDOWN , SMOKE_SMESHSPREAD , SMOKE_SIDESTEP , SMOKE_UPDOWN , SMOKE_DASHLAND , SMOKE_RUN};

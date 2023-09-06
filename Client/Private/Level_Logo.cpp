@@ -523,6 +523,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/FallDown_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : FallDown_Particle");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region RENGOKU
@@ -571,7 +577,28 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	}
 #pragma endregion
 
-
+#pragma region SWAMP
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle2.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle3.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle4.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle4");
+		return E_FAIL;
+	}
+#pragma endregion
 	return S_OK;
 }
 

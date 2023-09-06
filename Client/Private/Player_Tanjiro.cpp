@@ -688,8 +688,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//if (0 == m_iEvent_Index)	// 0.0
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 		}
 
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
@@ -808,7 +808,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
 			else if(1 == m_iEvent_Index)	// 0.58
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 		}
@@ -832,7 +836,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (133 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin되면서 떨어짐
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
 			
 		}
 
