@@ -404,6 +404,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle2", m_pTransformCom);
 			}
 			else if (2 == m_iEvent_Index) // 0.47
 			{
@@ -426,6 +429,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle", m_pTransformCom);
 			}
 		}
 		else if (12 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -441,6 +446,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle2", m_pTransformCom);
 			}
 		}
 		else if (13 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -481,6 +488,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_StoneParticle(vPlusPos);
 				Create_SmeshStone(vPlusPos);
 				Camera_Shake();
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle3", m_pTransformCom);
 			}
 		}
 
@@ -513,6 +522,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
 					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle4", m_pTransformCom);
 			}
 		}
 		else if (ANIM_ATK_SHORYU_TO_SWAMP_0 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -585,6 +596,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
 			}
 		}
 
@@ -694,7 +707,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
 		m_eCurState = STATE_ATTACK;
-		m_eCurPattern = PATTERN_JUMPSTOMP;
+		m_eCurPattern = PATTERN_COMBO;
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
@@ -1850,9 +1863,9 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			/*CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 			EffectWorldDesc.vPosition.y += 0.5f;
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom , &EffectWorldDesc);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom , &EffectWorldDesc);*/
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
@@ -1861,7 +1874,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);*/
 
 		}
 
