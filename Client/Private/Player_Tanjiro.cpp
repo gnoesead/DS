@@ -622,7 +622,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
-
 #pragma endregion
 
 
@@ -636,8 +635,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
-		
 #pragma endregion
+
 
 
 #pragma region Charge_Attack
@@ -665,9 +664,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}
-
 		}
-
 #pragma endregion
 
 #pragma region Move & Hitted

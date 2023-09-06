@@ -38,7 +38,7 @@ public:
 		_uint           Dialog_Type = { 99 };
 		_bool           Interaction = { false };
 
-		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:inside
+		_uint			iSection = { 0 }; // 1:first street , 2:Second Street , 3:third street , 4:last street ,5:last street
 
 		_float4			WalkSpot[4];
 	}NPCDESC;

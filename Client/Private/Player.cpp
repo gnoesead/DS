@@ -1112,6 +1112,11 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 				m_iSection_Sub = 3;
 				m_isSection_RoofOn = true;
 			}
+			else if (eNextNavi == NAVI_VILLAGE_WALL || eNextNavi == NAVI_VILLAGE_MAINROAD2)
+			{
+				m_iSection = 5;
+				m_iSection_Sub = 5;
+			}
 		}
 	}
 	else

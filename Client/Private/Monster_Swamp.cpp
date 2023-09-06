@@ -90,7 +90,6 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
 	{
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
@@ -100,13 +99,11 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 			return;
 		}
 	}
-
 	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
 		return;
 	
-
 	if (CMonsterManager::GetInstance()->Get_BattleOn_Swamp())
 	{
 		//d
@@ -129,8 +126,6 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
-
-	
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;

@@ -470,12 +470,12 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 
 
 
-	CharacterDesc.WorldInfo.vPosition = _float4(55.26f, 0.05f, 32.81f, 1.f);
+	CharacterDesc.WorldInfo.vPosition = _float4(69.43f, 0.05f, 16.58f, 1.f);
 
-	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 56.76f, 0.05f, 30.01f, 1.f };
-	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 67.62f, 0.05f, 30.35f, 1.f };
-	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 67.5f, 0.05f, 18.6f, 1.f };
-	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 68.22f, 0.05f, 32.94f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 69.74f, 0.05f, 29.4f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 64.28f, 0.05f, 31.37f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 65.53f, 0.05f, 23.42f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 69.45f, 0.05f, 18.06f, 1.f };
 
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
 	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
