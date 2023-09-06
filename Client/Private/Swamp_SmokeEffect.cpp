@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CSwamp_SmokeEffect::CSwamp_SmokeEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CEffectW(pDevice, pContext)
 {
 
 }
 
 CSwamp_SmokeEffect::CSwamp_SmokeEffect(const CSwamp_SmokeEffect& rhs)
-	: CMasterEffect(rhs)
+	: CEffectW(rhs)
 {
 
 }
@@ -25,29 +25,13 @@ HRESULT CSwamp_SmokeEffect::Initialize_Prototype()
 
 HRESULT CSwamp_SmokeEffect::Initialize(void* pArg)
 {
-	if(nullptr != pArg)
-		memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fPlusX = Random::Generate_Float(-3.0f, 3.0f);
-	m_fPlusY = Random::Generate_Float(0.5f, 2.0f);
-	m_fPlusZ = Random::Generate_Float(-3.f, 3.f);
-
-
-	m_dFrameSpeed = (_double)Random::Generate_Float(0.1f, 0.12f);
-
-	m_dSpeedY = (_double)Random::Generate_Float(0.5f, 1.0f);
-
-	m_iFrame = Random::Generate_Int(0, 5);
-
-	m_vSize = { Random::Generate_Float(1.f, 1.5f) , Random::Generate_Float(3.0f, 5.0f),1.f };
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
 	m_fAlpha = 0.f;
 
@@ -59,8 +43,6 @@ HRESULT CSwamp_SmokeEffect::Initialize(void* pArg)
 void CSwamp_SmokeEffect::Tick(_double TimeDelta) 
 {
 	__super::Tick(TimeDelta);
-
-	//m_dSpeedY -= 10.f * TimeDelta;
 
 	if (m_fAlpha > 0.7f)
 	{
@@ -182,24 +164,6 @@ HRESULT CSwamp_SmokeEffect::SetUp_ShaderResources()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
-}
-
-void CSwamp_SmokeEffect::Update_Frame(_double TimeDelta)
-{
-	m_FrameAccTime += TimeDelta;
-
-	if (m_FrameAccTime >= m_dFrameSpeed)
-	{
-		++m_iFrame;
-		m_FrameAccTime = 0.0;
-		if (m_iFrame >= m_iNumX * m_iNumY)
-		{
-			m_iFrame = m_iNumX * m_iNumY - 1;
-
-			m_isDead = true;
-		}
-
-	}
 }
 
 CSwamp_SmokeEffect* CSwamp_SmokeEffect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

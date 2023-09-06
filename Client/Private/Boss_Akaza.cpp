@@ -46,14 +46,14 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	Get_PlayerComponent();
 
-	m_StatusDesc.fHp = 100.f;
-	m_StatusDesc.fHp_Max = 100.f;
+	m_StatusDesc.fHp = 150.f;
+	m_StatusDesc.fHp_Max = 150.f;
 	m_eCurAnimIndex = ANIM_IDLE;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
 	m_eCurNavi = NAVI_ACAZA;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
-	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START, 1.0);
+	
 	return S_OK;
 
 }
@@ -61,7 +61,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 void CBoss_Akaza::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
-	m_pModelCom->Set_LinearDuration(ANIM_AWAKE_START, 1.2);
+	
 	if (true == m_isDead)
 		return;
 
@@ -703,7 +703,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
-				}				
+				}
 			}
 
 		}
@@ -729,6 +729,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+		AtkDir.y = 0.f;
 
 		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 		EffectWorldDesc.vPosition.y += 0.8f;
@@ -751,7 +752,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
-				
+
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
@@ -797,7 +798,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom , &EffectWorldDesc);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -850,6 +851,21 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			pPlayer->Set_Hit_SurgeCutScene(true);
 			pPlayer->Set_Hit_Success(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			if (m_bSuperArmor == false)
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				Tirgger_Hit_Hekireki();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+
+			pPlayer->Set_Hit_Success(true);
+			pPlayer->Set_Hit_Success_Hekireki(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		}
@@ -997,7 +1013,9 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_BIGGETUP:
 		Update_Hit_BigGetUp(dTimeDelta);
 		break;
-
+	case CBoss_Akaza::STATE_HIT_HEKIREKI:
+		Update_Hit_Hekireki(dTimeDelta);
+		break;
 
 	}
 
@@ -1967,6 +1985,16 @@ void CBoss_Akaza::Trigger_Hit_RollGetUp()
 
 void CBoss_Akaza::Trigger_Hit_BigGetUp()
 {
+}
+
+void CBoss_Akaza::Tirgger_Hit_Hekireki()
+{
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT_BLOW);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_dTimeAcc = 0.0;
+	m_eCurstate = STATE_HIT_HEKIREKI;
 }
 
 void CBoss_Akaza::Update_Escape(_double dTimeDelta)
@@ -3363,6 +3391,43 @@ void CBoss_Akaza::Update_Hit_RollGetUp(_double dTimeDelta)
 
 void CBoss_Akaza::Update_Hit_BigGetUp(_double dTimeDelta)
 {
+}
+
+void CBoss_Akaza::Update_Hit_Hekireki(_double dTimeDelta)
+{
+	m_dTimeAcc += dTimeDelta;
+	if (m_dTimeAcc > 0.150)
+	{
+
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			//m_eCurAnimIndex = ANIM_HIT_AIR_UPPER;
+			m_eCurAnimIndex = ANIM_HIT_BLOW;
+			if (m_isJumpOn == false)
+				Jumping(1.5f, 0.03f);
+			else
+				Jumping(0.85f, 0.03f);
+		}
+		/*if (m_pModelCom->Get_AnimFinish(ANIM_HIT_AIR_UPPER))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT_AIR_UPPER);
+			m_eCurAnimIndex = ANIM_HIT_BLOW;
+		}*/
+		if (m_pModelCom->Get_AnimFinish(ANIM_HIT_BLOW))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
+			m_eCurAnimIndex = ANIM_HIT_BLOW_LOOP;
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_HIT_BLOW_END))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
+			m_eCurAnimIndex = ANIM_HIT_GETUP_DIZZY;
+			Trigger_Hit_GetUp();
+		}
+	}
+	if (m_dTimeAcc >= 0.150)
+		Land_Anim_Play(ANIM_HIT_BLOW_LOOP, ANIM_HIT_BLOW_END);
 }
 
 void CBoss_Akaza::Land_Anim_Play(ANIM CurAnim, ANIM LandAnim)

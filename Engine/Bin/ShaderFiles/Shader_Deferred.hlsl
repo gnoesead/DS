@@ -215,6 +215,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 
+
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
@@ -225,13 +226,14 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 
 
-	/*if (fBrightness < 0.7)
+	/*if (fBrightness > 0.7)
 		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
+	else
+		Out.vShade.rgb = float3(0.f, 0.f, 0.f);*/
+	/*else if(fBrightness < 0.5)
+		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);*/
 
-	else if(fBrightness < 0.5)
-		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-
-		Out.vShade = saturate(Out.vShade * 0.5f);
+		/*Out.vShade = saturate(Out.vShade * 0.5f);
 		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;*/
 
 
@@ -526,7 +528,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.99f)
+	if (fBrightness > 0.90f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -612,8 +614,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
-		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
-			discard;
+				
 		Out.vColor.a = vFinalColor.a;
 		/*if (Out.vColor.a == 0.f)
 			discard;*/
@@ -705,9 +706,9 @@ PS_OUT PS_BlurX(PS_IN _In)
 		}
 	}
 	if (g_bSSAO == true)
-		Out.vColor /= Total;
+		Out.vColor /= Total * 0.5f;
 	else
-		Out.vColor /= FinalTotal;
+		Out.vColor /= FinalTotal * 0.5f;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;
