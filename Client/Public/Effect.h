@@ -92,8 +92,6 @@ public:
 public:
 	void Set_Parent(class CTransform* pTransform, class CParticleSystem* pParent)
 	{
-		// Ãß°¡
-		Safe_AddRef(pTransform); Safe_AddRef(pParent);
 		m_ParentDesc.pParentTransform = pTransform; m_ParentDesc.pParent = pParent;
 	}
 	void Set_EffectDesc(EFFECTDESC* pDesc)

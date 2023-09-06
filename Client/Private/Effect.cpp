@@ -816,7 +816,4 @@ void CEffect::Free(void)
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pTransformCom);
-
-	Safe_Release(m_ParentDesc.pParentTransform);
-	Safe_Release(m_ParentDesc.pParent);
 }
