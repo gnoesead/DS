@@ -145,11 +145,7 @@ HRESULT CParticleSystem::Render(void)
 void CParticleSystem::Set_PartsParent(CTransform* pTransformCom)
 {
 	for (auto Part : m_PartEffects)
-	{
-		// 추가
-		Safe_AddRef(pTransformCom);
 		Part->Set_Parent(pTransformCom, this);
-	}
 }
 
 HRESULT CParticleSystem::Create_Effect(int eEffectType)
@@ -352,8 +348,4 @@ void CParticleSystem::Free(void)
 	Safe_Release(m_pEffect);
 
 	Safe_Release(m_pTransformCom);
-
-	// 추가
-	Safe_Release(m_pParentTransform);
-	Safe_Release(m_pParent);
 }
