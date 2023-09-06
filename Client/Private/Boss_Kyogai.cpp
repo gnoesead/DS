@@ -12,6 +12,8 @@
 #include "RoomSmoke.h"
 #include "Camera_Manager.h"
 #include "Camera_Free.h"
+#include "Fade_Manager.h"
+#include "MonsterManager.h"
 
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1226,13 +1228,15 @@ void CBoss_Kyogai::Update_Begin(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
 	_float fDistance = Calculate_Distance();
-	if (Check_Distance_FixY(5.f) == true)
+	if (CFadeManager::GetInstance()->Get_Is_House_Boss_Battle_Start())
 	{
 		m_dTriggerTime = 0.0;
 		m_eCurPhase = PHASE_1;
 		m_iTriggerCnt = 1;
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
+
+		CMonsterManager::GetInstance()->Set_BattleOn(true);
 	}
 }
 

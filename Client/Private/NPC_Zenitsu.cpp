@@ -69,59 +69,132 @@ HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 	m_ResetPos[2] = { 74.1f, 0.05f, 66.63f, 1.f }; // 둘째 이동
 	m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
 	
+	//m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
+
+	CMonsterManager::GetInstance()->Set_ThreeCnt(0);
+	m_iResetIndex = 0;
+	CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(false);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[0]));
+
+	m_pTransformCom->Set_Look(m_CharacterDesc.NPCDesc.DirNPC);
 
 	return S_OK;
 }
 
 void CNPC_Zenitsu::Tick(_double dTimeDelta)
 {
-	//젠이츠 다시 생김
-	if (CMonsterManager::GetInstance()->Get_ThreeCnt() == 3)
-	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
 
-		if (pGameInstance->Get_DIKeyDown(DIK_9))
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		Find_Section();
+
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 		{
-			CMonsterManager::GetInstance()->Set_BattleOn(false);
-			CMonsterManager::GetInstance()->Set_ThreeCnt(0);
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[3]));
+			__super::Tick(dTimeDelta);
+
+			if (true == m_isDead)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+			Animation_Control(dTimeDelta);
+
+			//애니메이션 처리
+			m_pModelCom->Play_Animation(dTimeDelta);
+			RootAnimation(dTimeDelta);
+
+			//이벤트 콜
+			EventCall_Control(dTimeDelta);
+
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
 		}
-		Safe_Release(pGameInstance);
 	}
-
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
 	{
-		__super::Tick(dTimeDelta);
+		//젠이츠 다시 생김
+		if (CMonsterManager::GetInstance()->Get_ThreeCnt() == 3)
+		{
+			if (pGameInstance->Get_DIKeyDown(DIK_9))
+			{
+				CMonsterManager::GetInstance()->Set_BattleOn(false);
+				CMonsterManager::GetInstance()->Set_ThreeCnt(0);
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 69.26f, 0.05f, 24.7f, 1.f });
+			}
+		}
 
-		if (true == m_isDead)
-			return;
+		if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+		{
+			__super::Tick(dTimeDelta);
 
-		Animation_Control(dTimeDelta);
+			if (true == m_isDead)
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+			Animation_Control(dTimeDelta);
 
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
+			//애니메이션 처리
+			m_pModelCom->Play_Animation(dTimeDelta);
+			RootAnimation(dTimeDelta);
 
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
+			//이벤트 콜
+			EventCall_Control(dTimeDelta);
 
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
 	}
+	
+	Safe_Release(pGameInstance);
 }
 
 void CNPC_Zenitsu::LateTick(_double dTimeDelta)
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
-	{
-		__super::LateTick(dTimeDelta);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-		Gravity(dTimeDelta);
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		Find_Section();
+
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
+		{
+			__super::LateTick(dTimeDelta);
+
+			Gravity(dTimeDelta);
+		}
 	}
-	
+	else
+	{
+		if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+		{
+			__super::LateTick(dTimeDelta);
+
+			Gravity(dTimeDelta);
+		}
+	}
+
+	Safe_Release(pGameInstance);
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
@@ -130,45 +203,97 @@ void CNPC_Zenitsu::LateTick(_double dTimeDelta)
 
 HRESULT CNPC_Zenitsu::Render()
 {
-	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
 	{
-		if (FAILED(__super::Render()))
-			return E_FAIL;
+		Find_Section();
 
-		if (FAILED(SetUp_ShaderResources()))
-			return E_FAIL;
-
-		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-		//Outline Render
-		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		if (m_iPlayer_Section == m_CharacterDesc.NPCDesc.iSection || m_iPlayer_Section_Sub == m_CharacterDesc.NPCDesc.iSection)
 		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+			if (FAILED(__super::Render()))
 				return E_FAIL;
-
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+			
+			if (FAILED(SetUp_ShaderResources()))
 				return E_FAIL;
+			
+			_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+			//Outline Render
+			for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
 
-			if (m_iMeshNum == 2)
-				m_pShaderCom->Begin(2);
-			else
-				m_pShaderCom->Begin(1);
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
 
-			m_pModelCom->Render(m_iMeshNum);
-		}
-		// Default Render
-		for (_uint i = 0; i < iNumMeshes; i++)
-		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-				return E_FAIL;
+				if (m_iMeshNum == 2)
+					m_pShaderCom->Begin(2);
+				else
+					m_pShaderCom->Begin(1);
 
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-				return E_FAIL;
+				m_pModelCom->Render(m_iMeshNum);
+			}
+			// Default Render
+			for (_uint i = 0; i < iNumMeshes; i++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
 
-			m_pShaderCom->Begin(0);
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
 
-			m_pModelCom->Render(i);
+				m_pShaderCom->Begin(0);
+
+				m_pModelCom->Render(i);
+			}
 		}
 	}
+	else
+	{
+		if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
+		{
+			if (FAILED(__super::Render()))
+				return E_FAIL;
+
+			if (FAILED(SetUp_ShaderResources()))
+				return E_FAIL;
+
+			_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+			//Outline Render
+			for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
+
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
+
+				if (m_iMeshNum == 2)
+					m_pShaderCom->Begin(2);
+				else
+					m_pShaderCom->Begin(1);
+
+				m_pModelCom->Render(m_iMeshNum);
+			}
+			// Default Render
+			for (_uint i = 0; i < iNumMeshes; i++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
+
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
+
+				m_pShaderCom->Begin(0);
+
+				m_pModelCom->Render(i);
+			}
+		}
+	}
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -270,7 +395,7 @@ void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 
 void CNPC_Zenitsu::Animation_Control_Village(_double dTimeDelta)
 {
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 564.4f, 4.55f ,362.73f, 1.0f });
 }
 
 void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)

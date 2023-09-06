@@ -8,6 +8,7 @@
 #include "Monster.h"
 
 #include "PlayerManager.h"
+#include "MonsterManager.h"
 
 #include "EffectPlayer.h"
 #include "OptionManager.h"
@@ -735,7 +736,7 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	m_dDelay_CanSkill += dTimeDelta;
 	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_I) && m_isCan_Air_Hekireki == false)
+		if (pGameInstance->Get_DIKeyDown(DIK_I) /* && m_isCan_Air_Hekireki == false */ )
 		{
 			if (pGameInstance->Get_DIKeyState(DIK_O))
 			{
@@ -1111,6 +1112,11 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 				m_iSection_Sub = 3;
 				m_isSection_RoofOn = true;
 			}
+			else if (eNextNavi == NAVI_VILLAGE_WALL || eNextNavi == NAVI_VILLAGE_MAINROAD2)
+			{
+				m_iSection = 5;
+				m_iSection_Sub = 5;
+			}
 		}
 	}
 	else
@@ -1219,12 +1225,12 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
 			}
-
+			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
-			}
+			}*/
 		}
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B])
@@ -1265,12 +1271,16 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 			}
 		}
 
@@ -1382,22 +1392,32 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 
 		m_Moveset.m_isRestrict_Adventure = false;
 
-		Set_FallingStatus(3.0f, 0.09f);
+		Set_FallingStatus(5.5f, 0.05f);
 
 		m_isJump_Move = false;
 		if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
 		{
-			m_pModelCom->Set_Animation(84);
+			m_pModelCom->Set_Animation(85);
 		}
 		else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
 		{
-			m_pModelCom->Set_Animation(57);
+			m_pModelCom->Set_Animation(58);
 		}
 
 		m_dDelay_Swapping_Pos = 0.0;
 		
+		m_isSwapping_State = true;
 	}
 	
+	if (m_isSwapping_State)
+	{
+		_float4 MyPos;
+		XMStoreFloat4(&MyPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (MyPos.y <= m_fLand_Y + 0.01f)
+		{
+			m_isSwapping_State = false;
+		}
+	}
 	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);

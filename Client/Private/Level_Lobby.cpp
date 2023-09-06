@@ -1516,6 +1516,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/FallDown_Effect.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : FallDown_Effect");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : SmellBundle");
@@ -1663,6 +1669,8 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zen_Heki_Delay_Elc");
 		return E_FAIL;
 	}
+
+	// 여기까지 문제없음
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Awake.bin"))))
 	{

@@ -76,6 +76,39 @@ public:
 		isFirst_Setting_Status =  true ;
 		PlayerPos_Change = { 0.0f, 0.0f, 0.0f,  1.0f };
 	}
+
+private:
+	_bool	m_isSlow = { false };
+	_double m_dDelay_Slow = { 0.0 };
+	_double m_dLimit_Slow = { 0.0 };
+
+	_int	m_iCnt_Slow = { 0 };
+	_int	m_iCnt_Limit_Slow = { 0 };
+
+public:
+	_bool	Get_Slow() { 
+		m_iCnt_Slow++;
+		if (m_isSlow)
+		{
+			if (m_iCnt_Slow >= m_iCnt_Limit_Slow)
+			{
+				m_iCnt_Slow = 0;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		return m_isSlow;
+	}
+	void	Set_Slow( _double dTime, _int Cnt) { 
+		m_isSlow = true;
+		m_dLimit_Slow = dTime;
+		m_iCnt_Limit_Slow = Cnt;
+	}
+
+	void	Slow_Acc(_double dTimeDelta);
+
 public:
 	virtual void Free() override;
 };

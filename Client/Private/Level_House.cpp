@@ -383,6 +383,7 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 
 	//NPC_Zenitsu
 	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
+	XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 1.0f, 0.0f }));
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_NPC_Zenitsu"), &CharacterDesc)))
@@ -400,8 +401,8 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 19.95f, 0.05f, 9.16f, 1.f };
 	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 19.8f, 0.05f, 25.66f, 1.f };
 
-	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
-	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
 	
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
@@ -410,7 +411,85 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
+
+
+	CharacterDesc.WorldInfo.vPosition = _float4(72.96f, 0.05f, 14.5f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 81.62f, 0.05f, 15.8f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 81.13f, 0.05f, 23.68f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 73.56f, 0.05f, 23.81f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 74.01f, 0.05f, 15.81f, 1.f };
+
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
+
+
+
+	CharacterDesc.WorldInfo.vPosition = _float4(86.46f, 0.05f, 52.72f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 85.44f, 0.05f, 49.73f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 85.72f, 0.05f, 31.9f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 89.04f, 0.05f, 31.5f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 89.77f, 0.05f, 46.14f, 1.f };
+
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
+
 	
+
+
+	CharacterDesc.WorldInfo.vPosition = _float4(65.44f, 0.05f, 77.9f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 65.29f, 0.05f, 66.4f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 65.70f, 0.05f, 40.0f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 69.46f, 0.05f, 40.0f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 69.7f, 0.05f, 67.7f, 1.f };
+
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
+
+
+
+	CharacterDesc.WorldInfo.vPosition = _float4(69.43f, 0.05f, 16.58f, 1.f);
+
+	CharacterDesc.NPCDesc.WalkSpot[0] = _float4{ 69.74f, 0.05f, 29.4f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[1] = _float4{ 64.28f, 0.05f, 31.37f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[2] = _float4{ 65.53f, 0.05f, 23.42f, 1.f };
+	CharacterDesc.NPCDesc.WalkSpot[3] = _float4{ 69.45f, 0.05f, 18.06f, 1.f };
+
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_StealthZako");
+		return E_FAIL;
+	}
+
+
 
 	Safe_Release(pGameInstance);
 

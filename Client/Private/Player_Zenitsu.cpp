@@ -97,7 +97,12 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 젠이츠
 	{
 		Player_Change_Setting_Status(dTimeDelta);
-		Animation_Control(dTimeDelta);
+
+		//if (CPlayerManager::GetInstance()->Get_Slow() == false)
+		//{
+			if (m_isSwapping_State == false)
+				Animation_Control(dTimeDelta);
+		//}
 	}
 	else
 	{
@@ -107,8 +112,11 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 	if (m_isSwap_OnSky == false)
 	{
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
+		//if (CPlayerManager::GetInstance()->Get_Slow() == false)
+		//{
+			//애니메이션 처리
+			m_pModelCom->Play_Animation(dTimeDelta);
+		//}
 		RootAnimation(dTimeDelta);
 
 		//이벤트 콜
@@ -142,9 +150,11 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 			m_isJumpOn = true;
 		}
 
-
-		if (m_isAir_Hekireki == false && m_isAirDashing == false)
-			Gravity(dTimeDelta);
+		//if (CPlayerManager::GetInstance()->Get_Slow() == false)
+		//{
+			if (m_isAir_Hekireki == false && m_isAirDashing == false)
+				Gravity(dTimeDelta);
+		//}
 
 		//추가
 		if (m_isCan_AirDash)
@@ -773,23 +783,28 @@ void CPlayer_Zenitsu::Animation_Control(_double dTimeDelta)
 
 	if (m_Moveset.m_isHitMotion == false)
 	{
+
 		Animation_Control_Battle_Jump(dTimeDelta);
 
 		Animation_Control_Battle_Move(dTimeDelta);
 
-		Animation_Control_Battle_Attack(dTimeDelta);
+		if (m_isSwapping_State == false)
+		{
+			Animation_Control_Battle_Attack(dTimeDelta);
 
-		Animation_Control_Battle_Charge(dTimeDelta);
+			Animation_Control_Battle_Charge(dTimeDelta);
 
-		Animation_Control_Battle_Skill(dTimeDelta);
+			Animation_Control_Battle_Skill(dTimeDelta);
 
-		Animation_Control_Battle_Guard(dTimeDelta);
+			Animation_Control_Battle_Guard(dTimeDelta);
 
-		Animation_Control_Battle_Dash(dTimeDelta);
+			Animation_Control_Battle_Dash(dTimeDelta);
 
-		Animation_Control_Battle_Awaken(dTimeDelta);
+			Animation_Control_Battle_Awaken(dTimeDelta);
 
-		Animation_Control_Battle_Special(dTimeDelta);
+			Animation_Control_Battle_Special(dTimeDelta);
+		}
+		
 	}
 
 }
@@ -930,7 +945,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 			}
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 			JumpStop(0.9);
-			Set_FallingStatus(3.0f, 0.0f);
+			Set_FallingStatus(2.8f, 0.01f);
 		}
 	}
 	m_pModelCom->Set_EarlyEnd(2, true, 0.55f);
@@ -1108,12 +1123,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	_int CurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
 	
-	/*
+	
 	//벽력일섬 콤보용
 	m_dDelay_Hekireki_AnotherCan += dTimeDelta;
 	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_END || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
 	{
-		if (0.8 < m_dDelay_Hekireki_AnotherCan )
+		if (1.5 < m_dDelay_Hekireki_AnotherCan )
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
@@ -1121,7 +1136,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_Moveset.m_Down_Skill_Normal = true;
 			Safe_Release(pGameInstance);
 		}
-	}*/
+	}
 	//마나제한
 	if (m_Moveset.m_iAwaken < 2)
 	{
@@ -1146,11 +1161,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Safe_Release(pGameInstance);
 
 		m_isHit_Hekireki = false;
-		m_isHekireki_Hitting = true;
+		//m_isHekireki_Hitting = true;
+
+		CPlayerManager::GetInstance()->Set_Slow(0.2, 4);
 	}
 	
 	//벽력일섬 히트시 살짝 느려지는거 구현 위한것. 이게 켜질시 히트상태임.
-	if (m_isHekireki_Hitting)
+	/*if (m_isHekireki_Hitting)
 	{
 		m_dDelay_Hekireki_Hit += dTimeDelta;
 		m_isHekireki_After = true;
@@ -1161,7 +1178,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			m_dDelay_Hekireki_Hit = 0.0;
 			m_isHekireki_Hitting = false;
 		}
-	}
+	}*/
+	
 
 
 	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
@@ -1213,7 +1231,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 			Get_LockOn_MonPos();
-			if (m_LockOnPos.y <= PlayerPos.y + 0.01f)
+			if ((m_LockOnPos.y <= PlayerPos.y + 0.01f) && m_isJumpOn == false)
 				m_isAir_Hekireki = false;
 			else
 				m_isAir_Hekireki = true;
@@ -1232,7 +1250,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 						m_pTransformCom->LookAt(XMLoadFloat4(&m_LockOnPos));
 					}
 				}
-				
+				m_isHekireki_End_ForDir = true;
 			}
 			else
 			{
@@ -1244,10 +1262,16 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 				}
-				
+				m_isHekireki_End_ForDir = true;
 			}
 			
-			Use_Mp_Skill();
+			//Use_Mp_Skill();
+			if (m_isCan_Mp_Skill)
+			{
+				if (m_StatusDesc.iAwaken < 2)
+					m_StatusDesc.fMp -= 10.0f;
+				m_dDelay_Mp_Used = 0.0;
+			}
 		}
 	}
 	else
@@ -1256,7 +1280,19 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_Moveset.m_Down_Skill_Move = false;
 	}
 
+	if (CurAnim == ANIM_JUMP_IDLE)
+	{
+		if (m_isHekireki_End_ForDir)
+		{
+			m_isHekireki_End_ForDir = false;
 
+			_float4	Dir;
+			XMStoreFloat4(&Dir, m_pTransformCom->Get_State(CTransform::STATE_LOOK));
+			Dir.y = 0.0f;
+			XMStoreFloat4(&Dir, XMVector4Normalize(XMLoadFloat4(&Dir)));
+			m_pTransformCom->Set_Look(Dir);
+		}
+	}
 
 	if (m_isHekireki)
 	{
@@ -1777,8 +1813,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	}
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.35f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 100, 0.35f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 100, 0.2f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(100, 101);
 #pragma endregion
@@ -1862,6 +1898,7 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
 
 		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -1870,9 +1907,9 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 57 || iCurAnim == 58 || iCurAnim == 59)
 	{
-		if (m_dDelay_Player_Change < 1.5)
+		if (m_dDelay_Player_Change < 0.9)
 		{
-			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+			m_pTransformCom->Go_Up(dTimeDelta * 7.0f);
 
 			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
 			_float4 MyPos;
