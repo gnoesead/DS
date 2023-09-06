@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CWaterParticleEffect::CWaterParticleEffect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CEffectW(pDevice, pContext)
 {
 
 }
 
 CWaterParticleEffect::CWaterParticleEffect(const CWaterParticleEffect& rhs)
-	: CMasterEffect(rhs)
+	: CEffectW(rhs)
 {
 
 }
@@ -25,34 +25,13 @@ HRESULT CWaterParticleEffect::Initialize_Prototype()
 
 HRESULT CWaterParticleEffect::Initialize(void* pArg)
 {
-	if(nullptr != pArg)
-		memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-
-	m_fPlusX = Random::Generate_Float(-0.4f, 0.4f);
-	m_fPlusZ = Random::Generate_Float(-0.4f, 0.4f);
-
-
-
-	m_dFrameSpeed = (_double)Random::Generate_Float(0.03f, 0.05f);
-
-	m_dSpeedX = (_double)Random::Generate_Float(-2.f, 2.f);
-
-	m_dSpeedY = (_double)Random::Generate_Float(3.5f, 6.5f);
-
-	m_iFrame = Random::Generate_Int(0, 5);
-
-	if(m_EffectDesc.eType == TYPE_NORMAL)
-		m_vSize = { Random::Generate_Float(0.7f, 1.1f) , Random::Generate_Float(1.1f, 1.5f),1.f };
-	else if (m_EffectDesc.eType == TYPE_SCREW)
-		m_vSize = { Random::Generate_Float(0.7f, 1.0f) , Random::Generate_Float(0.7f, 1.0f),1.f };
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.vPos + XMVectorSet(m_fPlusX, 0.f, m_fPlusZ, 0.f));
+	
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, 0.f, m_fPlusZ, 0.f));
 
 	return S_OK;
 }
@@ -61,7 +40,7 @@ void CWaterParticleEffect::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_dSpeedY -= 10.f * TimeDelta;
+	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * TimeDelta;
 
 	m_pTransformCom->Set_Speed(m_dSpeedY);
 	m_pTransformCom->Go_Up(TimeDelta);
@@ -174,24 +153,6 @@ HRESULT CWaterParticleEffect::SetUp_ShaderResources()
 	Safe_Release(pGameInstance);
 
 	return S_OK;
-}
-
-void CWaterParticleEffect::Update_Frame(_double TimeDelta)
-{
-	m_FrameAccTime += TimeDelta;
-
-	if (m_FrameAccTime >= m_dFrameSpeed)
-	{
-		++m_iFrame;
-		m_FrameAccTime = 0.0;
-		if (m_iFrame >= m_iNumX * m_iNumY)
-		{
-			m_iFrame = m_iNumX * m_iNumY - 1;
-
-			m_isDead = true;
-		}
-
-	}
 }
 
 CWaterParticleEffect* CWaterParticleEffect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

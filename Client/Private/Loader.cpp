@@ -83,6 +83,7 @@
 #include "GroundSmoke.h"
 #include "StoneParticle.h"
 #include "SmeshStone.h"
+#include "Aurora.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -818,6 +819,10 @@ HRESULT CLoader::LoadingForLobby()
 		CStoneParticle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Aurora*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Aurora"),
+		CAurora::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 

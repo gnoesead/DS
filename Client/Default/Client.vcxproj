@@ -181,6 +181,7 @@
     <ClInclude Include="..\Public\AlertRect.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
+    <ClInclude Include="..\Public\Aurora.h" />
     <ClInclude Include="..\Public\BackGround.h" />
     <ClInclude Include="..\Public\Battle_Signal.h" />
     <ClInclude Include="..\Public\Battle_UI_Manager.h" />
@@ -203,6 +204,8 @@
     <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
     <ClInclude Include="..\Public\EffectPlayer.h" />
+    <ClInclude Include="..\Public\EffectW.h" />
+    <ClInclude Include="..\Public\EffectW_Manager.h" />
     <ClInclude Include="..\Public\Effect_Mesh.h" />
     <ClInclude Include="..\Public\Effect_Particle.h" />
     <ClInclude Include="..\Public\Effect_Texture.h" />
@@ -293,6 +296,7 @@
     <ClCompile Include="..\Private\AlertRect.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />
+    <ClCompile Include="..\Private\Aurora.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
     <ClCompile Include="..\Private\Battle_Signal.cpp" />
     <ClCompile Include="..\Private\Battle_UI_Manager.cpp" />
@@ -314,6 +318,8 @@
     <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
     <ClCompile Include="..\Private\EffectPlayer.cpp" />
+    <ClCompile Include="..\Private\EffectW.cpp" />
+    <ClCompile Include="..\Private\EffectW_Manager.cpp" />
     <ClCompile Include="..\Private\Effect_Mesh.cpp" />
     <ClCompile Include="..\Private\Effect_Particle.cpp" />
     <ClCompile Include="..\Private\Effect_Texture.cpp" />

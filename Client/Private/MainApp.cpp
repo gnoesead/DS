@@ -24,6 +24,8 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
+#include "EffectW_Manager.h"
+
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -954,6 +956,8 @@ void CMainApp::Free()
 	CCameraManager::GetInstance()->DestroyInstance();
 	CBattle_UI_Manager::GetInstance()->DestroyInstance();
 	COptionManager::GetInstance()->DestroyInstance();
+
+	CEffectW_Manager::Get_Instance()->Destroy_Instance();
 
 	CGameInstance::Release_Engine();
 }
