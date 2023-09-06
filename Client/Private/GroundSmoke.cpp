@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CGroundSmoke::CGroundSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CGameObject(pDevice, pContext)
 {
 
 }
 
 CGroundSmoke::CGroundSmoke(const CGroundSmoke& rhs)
-	: CMasterEffect(rhs)
+	: CGameObject(rhs)
 {
 
 }

@@ -1516,6 +1516,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/FallDown_Effect.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : FallDown_Effect");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/SmellBundle.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : SmellBundle");
