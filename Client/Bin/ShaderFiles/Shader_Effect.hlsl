@@ -271,7 +271,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total * 0.5f;
+	Out.vColor /= Total;
 
 
 	if (Out.vColor.a == 0.f)
@@ -295,7 +295,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total * 0.5f;
+	Out.vColor /= Total;
 
 
 	if (Out.vColor.a == 0.f)
@@ -321,7 +321,7 @@ PS_OUT PS_BlurX_3(PS_IN _In)
 	}
 
 
-	Out.vColor /= FinalTotal;
+	Out.vColor /= FinalTotal ;
 	/*if (Out.vColor.a == 0.f)
 		discard;*/
 
@@ -343,7 +343,7 @@ PS_OUT PS_BlurY_3(PS_IN _In)
 		Out.vColor += FinalWeight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= FinalTotal;
+	Out.vColor /= FinalTotal ;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;*/

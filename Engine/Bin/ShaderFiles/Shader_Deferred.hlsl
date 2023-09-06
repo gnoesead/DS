@@ -215,6 +215,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 
+
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
@@ -225,13 +226,14 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 
 
-	/*if (fBrightness < 0.7)
+	if (fBrightness > 0.7)
 		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
+	else
+		Out.vShade.rgb = float3(0.f, 0.f, 0.f);
+	/*else if(fBrightness < 0.5)
+		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);*/
 
-	else if(fBrightness < 0.5)
-		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-
-		Out.vShade = saturate(Out.vShade * 0.5f);
+		/*Out.vShade = saturate(Out.vShade * 0.5f);
 		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;*/
 
 
