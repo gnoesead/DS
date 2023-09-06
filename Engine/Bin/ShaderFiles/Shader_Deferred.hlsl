@@ -226,10 +226,10 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 
 
-	if (fBrightness > 0.7)
+	/*if (fBrightness > 0.7)
 		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
 	else
-		Out.vShade.rgb = float3(0.f, 0.f, 0.f);
+		Out.vShade.rgb = float3(0.f, 0.f, 0.f);*/
 	/*else if(fBrightness < 0.5)
 		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);*/
 
@@ -607,15 +607,14 @@ PS_OUT PS_RadialBlur(PS_IN In)
 	{
 		float2 Direction = In.vTexUV - float2(0.5f, 0.5f);
 		float3 c = float3(0.0, 0.0, 0.0);
-		float f = 1.0 / 3;
+		float f = 1.0 / 12;
 
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 12; i++)
 		{
-			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.007 * Direction * float(i)) * f;
+			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
-		if (c.r == 0.f && c.g == 0.f && c.b == 0.f)
-			discard;
+				
 		Out.vColor.a = vFinalColor.a;
 		/*if (Out.vColor.a == 0.f)
 			discard;*/
@@ -707,9 +706,9 @@ PS_OUT PS_BlurX(PS_IN _In)
 		}
 	}
 	if (g_bSSAO == true)
-		Out.vColor /= Total;
+		Out.vColor /= Total * 0.5f;
 	else
-		Out.vColor /= FinalTotal;
+		Out.vColor /= FinalTotal * 0.5f;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;
