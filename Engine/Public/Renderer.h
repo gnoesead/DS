@@ -83,7 +83,7 @@ private:
 	HRESULT Render_ShadowBlur();
 	HRESULT Render_SSAO();
 	HRESULT Render_SSAOBlurX();
-	HRESULT Render_SSAOBlurY();
+	HRESULT Render_SSAOBlurY(); 
 	HRESULT Render_SSAOFinal();
 	HRESULT Render_ExportDeferred();
 	HRESULT Render_BlurX();
@@ -94,7 +94,6 @@ private:
 	HRESULT Render_EffectBloom();
 	HRESULT Render_EffectNoBloom();
 	HRESULT Render_Effect(); // Effect
-	HRESULT Render_Test(); // Effect
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();
 	HRESULT Render_RadialBlur();

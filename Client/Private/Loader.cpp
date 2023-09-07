@@ -83,13 +83,14 @@
 #include "GroundSmoke.h"
 #include "StoneParticle.h"
 #include "SmeshStone.h"
+#include "Aurora.h"
 
 #include "VIBuffer_Custom_Instance.h"
 #include "CustomParticle.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
-	, m_pContext{pContext}
+	, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
@@ -178,7 +179,7 @@ unsigned int APIENTRY Loading_Main(void* pArg)
 		}
 		break;
 	}
-	
+
 	if (FAILED(hr))
 		return 1;
 
@@ -269,18 +270,18 @@ HRESULT CLoader::LoadingForLogo()
 
 #pragma endregion
 
-	
+
 #pragma endregion
 
 #pragma region GAMEOBJECTS
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
 #pragma region Object
-	
+
 #pragma endregion
 
 #pragma region UI
-	
+
 #pragma endregion
 
 #pragma region Particale
@@ -291,7 +292,7 @@ HRESULT CLoader::LoadingForLogo()
 
 #pragma endregion
 
-	
+
 
 #pragma endregion
 
@@ -305,7 +306,7 @@ HRESULT CLoader::LoadingForLogo()
 
 HRESULT CLoader::LoadingForLobby()
 {
-	
+
 	SetWindowText(g_hWnd, TEXT("LoadingForStage"));
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -557,7 +558,7 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Model_Monster_Zako_0");
 		return E_FAIL;
 	}
-	
+
 	/* Prototype_Component_Model_Monster_Swamp_Horn1 */
 	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Swamp_Horn1"),
@@ -794,7 +795,7 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Spider");
 		return E_FAIL;
 	}
-	
+
 	/* Prototype_GameObject_Monster_Zako_0 */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Zako_0"),
 		CMonster_Zako::Create(m_pDevice, m_pContext))))
@@ -860,6 +861,10 @@ HRESULT CLoader::LoadingForLobby()
 		CStoneParticle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Aurora*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Aurora"),
+		CAurora::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -1071,7 +1076,7 @@ HRESULT CLoader::LoadingForGamePlay()
 #pragma endregion
 
 #pragma region UI
-	
+
 
 #pragma endregion
 
@@ -1154,7 +1159,7 @@ HRESULT CLoader::LoadingForVillage()
 #pragma endregion
 
 #pragma region Character
-	
+
 #pragma endregion
 
 #pragma region NonCharacter
@@ -1169,7 +1174,7 @@ HRESULT CLoader::LoadingForVillage()
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -1215,7 +1220,7 @@ HRESULT CLoader::LoadingForVillage()
 
 
 #pragma region Object
-	
+
 #pragma endregion
 
 #pragma region Environment
@@ -1290,19 +1295,19 @@ HRESULT CLoader::LoadingForHouse()
 #pragma endregion
 
 #pragma region NonCharacter
-	
+
 #pragma endregion
 
 #pragma region Terrain
 	Load_MapObjectModel_House();
-	
+
 #pragma endregion
 
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -1322,11 +1327,11 @@ HRESULT CLoader::LoadingForHouse()
 		return E_FAIL;
 
 #pragma region Object
-	
+
 #pragma endregion
 
 #pragma region Environment
-	
+
 #pragma endregion
 
 #pragma region UI
@@ -1402,7 +1407,7 @@ HRESULT CLoader::LoadingForTrain()
 #pragma endregion
 
 #pragma region NonCharacter
-	
+
 #pragma endregion
 
 #pragma region Terrain
@@ -1413,7 +1418,7 @@ HRESULT CLoader::LoadingForTrain()
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -1427,7 +1432,7 @@ HRESULT CLoader::LoadingForTrain()
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
 #pragma region Object
-	
+
 	/* For.Prototype_GameObject_TrainSmoke*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TrainSmoke"),
 		CTrainSmoke::Create(m_pDevice, m_pContext))))
@@ -1436,7 +1441,7 @@ HRESULT CLoader::LoadingForTrain()
 #pragma endregion
 
 #pragma region Environment
-	
+
 #pragma endregion
 
 #pragma region UI
@@ -1474,7 +1479,7 @@ HRESULT CLoader::LoadingForFinalBoss()
 #pragma region Texture
 
 #pragma region EnvironmentTexture
-	
+
 #pragma endregion
 
 #pragma region RampTexture
@@ -1503,11 +1508,11 @@ HRESULT CLoader::LoadingForFinalBoss()
 #pragma endregion
 
 #pragma region Character
-	
+
 #pragma endregion
 
 #pragma region NonCharacter
-	
+
 #pragma endregion
 
 #pragma region Terrain
@@ -1518,7 +1523,7 @@ HRESULT CLoader::LoadingForFinalBoss()
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
 #pragma region Shader
-	
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading ETC..."));
@@ -1964,7 +1969,7 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 
 	/* For.Prototype_Component_Model_VillageTerrain*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_VillageTerrain"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM,"../Bin/Resources/Models/Environments/Map/Village/VillageTerrain.bin", PivotMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/VillageTerrain.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_104_River_01a*/
@@ -2793,7 +2798,7 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_ModelInstance_WoodFence_01a"),
 		CModel_Instance::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Environments/Map/Village/WoodFence_01a.bin", PivotMatrix, 50))))
 		return E_FAIL;
-	 
+
 	/* For.Prototype_Component_ModelInstance_Wall_07a*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_ModelInstance_Wall_07a"),
 		CModel_Instance::Create(m_pDevice, m_pContext, "../Bin/Resources/Models/Environments/Map/Village/Wall_07a.bin", PivotMatrix, 30))))
@@ -3446,7 +3451,7 @@ HRESULT CLoader::Load_MapObjectModel_Train()
 
 
 
-	 
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -3569,7 +3574,7 @@ HRESULT CLoader::Load_MapObjectModel_FinalBoss()
 HRESULT CLoader::LoadingForEffect(CGameInstance* pGameInstance)
 {
 	SetWindowText(g_hWnd, TEXT("LoadingForEffect"));
-	
+
 #pragma region Buffer
 	/* Prototype_Component_VIBuffer_Point_Effect */
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Point_Effect"),

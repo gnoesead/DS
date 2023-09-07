@@ -6,13 +6,13 @@
 static _uint iNum = 0;
 
 CAlertCircle::CAlertCircle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CAlertCircle::CAlertCircle(const CAlertCircle& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

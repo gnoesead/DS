@@ -31,6 +31,7 @@ private:
 	HRESULT Ready_Layer_NPC_FirstStreet(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_NPC_Inside(const _tchar* pLayerTag);
+	HRESULT Ready_Layer_NPC_LastStreet(const _tchar* pLayerTag);
 
 	HRESULT Ready_Layer_MapObject(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_CollisionBox(const _tchar* pLayerTag);

@@ -24,7 +24,10 @@
 #include "SoundMgr.h"
 #include "EffectPlayer.h"
 
+#include "PlayerManager.h"
+#include "EffectW_Manager.h"
 #include "ParticleManager.h"
+
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::GetInstance())
@@ -106,7 +109,10 @@ void CMainApp::Tick(_double dTimeDelta)
 	if (nullptr == m_pGameInstance)
 		return;
 
+	
 	m_pGameInstance->Tick_Engine(dTimeDelta);
+
+	CPlayerManager::GetInstance()->Slow_Acc(dTimeDelta);
 
 	CTitleManager::GetInstance()->Tick();
 	
@@ -957,6 +963,8 @@ void CMainApp::Free()
 	CCameraManager::GetInstance()->DestroyInstance();
 	CBattle_UI_Manager::GetInstance()->DestroyInstance();
 	COptionManager::GetInstance()->DestroyInstance();
+
+	CEffectW_Manager::Get_Instance()->Destroy_Instance();
 
 	CGameInstance::Release_Engine();
 }

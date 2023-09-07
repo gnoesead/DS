@@ -504,6 +504,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 		//Á¨ÀÌÃ÷npc¿¡ º¸³»ÁÖ±â
 		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+		CMonsterManager::GetInstance()->Set_ResetIndeX_Player(1);
 
 		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
 		break; }
@@ -514,6 +515,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 			//Á¨ÀÌÃ÷npc¿¡ º¸³»ÁÖ±â
 			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+			CMonsterManager::GetInstance()->Set_ResetIndeX_Player(2);
 
 			break;
 		case INTERACTION_ROOMCHANGE2:
@@ -523,6 +525,7 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 
 			//Á¨ÀÌÃ÷npc¿¡ º¸³»ÁÖ±â
 			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
+			CMonsterManager::GetInstance()->Set_ResetIndeX_Player(3);
 
 			break;
 		}

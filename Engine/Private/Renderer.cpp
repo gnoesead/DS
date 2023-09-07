@@ -145,6 +145,23 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
 		, (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
 		return E_FAIL;
+
+    /* For.Target_EffectBlurX */
+    _float4 vColor_DiffuseBlurX = { 0.f, 0.f, 0.f, 1.f };
+    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_DiffuseBlurX")
+        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_DiffuseBlurX)))
+        return E_FAIL;
+    /* For.Target_EffectBlurY */
+    _float4 vColor_DiffuseBlurY = { 0.f, 0.f, 0.f, 1.f };
+    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_DiffuseBlurY")
+        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_DiffuseBlurY)))
+        return E_FAIL;
+    /* For.Target_EffectCombineBlur */
+    _float4 vColor_EffectDiffuseCombineBlur = { 0.f, 0.f, 0.f, 1.f };
+    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuseCombineBlur")
+        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuseCombineBlur)))
+        return E_FAIL;
+     
 	/* For.Target_EffectBloom */
 	_float4 vColor_EffectBloom = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectBloom")
@@ -261,6 +278,12 @@ HRESULT CRenderer::Initialize_Prototype()
     if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectBlurY"), TEXT("Target_EffectBlurY"))))
         return E_FAIL;
     if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectCombineBlur"), TEXT("Target_EffectCombineBlur"))))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_DiffuseBlurX"), TEXT("Target_DiffuseBlurX"))))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_DiffuseBlurY"), TEXT("Target_DiffuseBlurY"))))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectDiffuseCombineBlur"), TEXT("Target_EffectDiffuseCombineBlur"))))
         return E_FAIL;
     if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_EffectRadialBlur"), TEXT("Target_EffectRadialBlur"))))
         return E_FAIL;
@@ -1225,6 +1248,89 @@ HRESULT CRenderer::Render_EffectBloom()
 
     if (FAILED(m_pTarget_Manager->End_MRT()))
         return E_FAIL;
+    // 추가 블러
+    if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_DiffuseBlurX"))))
+        return E_FAIL;
+
+
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_BlurTexture")))
+        return E_FAIL;
+
+    /*if (FAILED(m_pEffectShader->Begin(2)))
+        return E_FAIL;*/
+    if (FAILED(m_pEffectShader->Begin(5)))
+        return E_FAIL;
+
+    /*if (FAILED(m_pEffectShader->Begin(10)))
+       return E_FAIL;*/
+
+    if (FAILED(m_pVIBuffer->Render()))
+        return E_FAIL;
+
+    if (FAILED(m_pTarget_Manager->End_MRT()))
+        return E_FAIL;
+    // Y
+    if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_DiffuseBlurY"))))
+        return E_FAIL;
+
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+        return E_FAIL;
+
+    /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BlurTexture")))
+       return E_FAIL;*/
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_DiffuseBlurX"), m_pEffectShader, "g_BlurTexture")))
+        return E_FAIL;
+
+    /*if (FAILED(m_pEffectShader->Begin(3)))
+        return E_FAIL;*/
+
+    if (FAILED(m_pEffectShader->Begin(6)))
+        return E_FAIL;
+    
+
+    if (FAILED(m_pVIBuffer->Render()))
+        return E_FAIL;
+
+    if (FAILED(m_pTarget_Manager->End_MRT()))
+        return E_FAIL;
+
+    // 블러 적용
+    if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectDiffuseCombineBlur"))))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+        return E_FAIL;
+    if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+        return E_FAIL;
+
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_DiffuseBlurX"), m_pEffectShader, "g_BlurXTexture")))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_DiffuseBlurY"), m_pEffectShader, "g_BlurYTexture")))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectDiffuseCombineBlur"), m_pEffectShader, "g_Texture")))
+        return E_FAIL;
+
+
+    if (FAILED(m_pEffectShader->Begin(4)))
+        return E_FAIL;
+
+    if (FAILED(m_pVIBuffer->Render()))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->End_MRT()))
+        return E_FAIL;
+    // 추가블러 끝
 
     // 밝은 것만 추출작업
     if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_EffectBloom"))))
@@ -1239,7 +1345,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
     /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectDiffuse"), m_pEffectShader, "g_FinalTexture")))
        return E_FAIL;*/
-    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_FinalTexture")))
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectDiffuseCombineBlur"), m_pEffectShader, "g_FinalTexture")))
         return E_FAIL;
 
     if (FAILED(m_pEffectShader->Begin(7)))
@@ -1360,7 +1466,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
 HRESULT CRenderer::Render_EffectNoBloom()
 {
-    m_RenderObjects[RENDER_EFFECT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+    m_RenderObjects[RENDER_EffectNoBloom].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
         return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
         });
 

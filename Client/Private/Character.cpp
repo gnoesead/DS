@@ -840,85 +840,87 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 	Safe_AddRef(pGameInstance);
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
-	CGroundSmoke::EFFECTDESC EffectDesc;
-	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	CEffectW::EFFECTWDESC EffectWDesc;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_GROUNDSMOKE;
+	EffectWDesc.iNumX = 6; EffectWDesc.iNumY = 6;
 
 	switch (eSmokeType)
 	{
 	case CGroundSmoke::SMOKE_FALLDOWN:
-		EffectDesc.vStartPosX = { -0.5f,0.5f }; EffectDesc.vStartPosY = { -0.02f,0.15f }; EffectDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
-		EffectDesc.vSizeX = { 0.9f , 1.4f }; EffectDesc.vSizeY = { 0.8f , 1.1f };
-		EffectDesc.vSpeedX = { -2.0f , 2.0f }; EffectDesc.vSpeedY = { 0.05f , 0.1f };EffectDesc.vSpeedZ = { -3.f , 3.f };
-		EffectDesc.vSizeSpeedX = { 0.8f , 1.3f }; EffectDesc.vSizeSpeedY = { 0.8f , 1.3f };
-
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.02f,0.15f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
+		EffectWDesc.vFrameSpeed = { 0.07f , 0.07f };
+		EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { -3.f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 0.8f , 1.3f }; EffectWDesc.vSizeSpeedY = { 0.8f , 1.3f };
+		
 		for (_uint i = 0; i < 10; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+
 		break;
 	case CGroundSmoke::SMOKE_SMESHSPREAD:
-		EffectDesc.vStartPosX = { -0.7f,0.7f }; EffectDesc.vStartPosY = { -0.1f,0.15f }; EffectDesc.vStartPosZ = { -0.7f,0.7f };
-		EffectDesc.vFrameSpeed = { 0.04f , 0.06f };
-		EffectDesc.vSizeX = { 0.7f , 1.0f }; EffectDesc.vSizeY = { 0.7f , 1.0f };
-		EffectDesc.vSpeedX = { -2.6f , 2.6f }; EffectDesc.vSpeedY = { 0.04f , 0.06f }; EffectDesc.vSpeedZ = { -2.6f , 2.6f };
-		EffectDesc.vSizeSpeedX = { 2.1f , 2.6f }; EffectDesc.vSizeSpeedY = { 2.1f , 2.6f };
+		EffectWDesc.vStartPosX = { -0.7f,0.7f }; EffectWDesc.vStartPosY = { -0.1f,0.15f }; EffectWDesc.vStartPosZ = { -0.7f,0.7f };
+		EffectWDesc.vFrameSpeed = { 0.04f , 0.06f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.0f }; EffectWDesc.vStartSizeY = { 0.7f , 1.0f };
+		EffectWDesc.vSpeedX = { -2.6f , 2.6f }; EffectWDesc.vSpeedY = { 0.04f , 0.06f }; EffectWDesc.vSpeedZ = { -2.6f , 2.6f };
+		EffectWDesc.vSizeSpeedX = { 2.1f , 2.6f }; EffectWDesc.vSizeSpeedY = { 2.1f , 2.6f };
 
 		for (_uint i = 0; i < 30; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_SIDESTEP:
-		EffectDesc.vStartPosX = { -0.3f,0.3f };EffectDesc.vStartPosY = { -0.01f,0.2f };EffectDesc.vStartPosZ = { -0.3f,0.3f };
-		EffectDesc.vFrameSpeed = { 0.01f , 0.015f };
-		EffectDesc.vSizeX = { 1.2f , 1.4f };	EffectDesc.vSizeY = { 1.1f , 1.5f };
-		EffectDesc.vSpeedX = { -2.0f , 2.0f };EffectDesc.vSpeedY = { 0.12f , 0.19f };EffectDesc.vSpeedZ = { -2.0f , 2.0f };
-		EffectDesc.vSizeSpeedX = { 0.7f , 1.2f }; EffectDesc.vSizeSpeedY = { 0.7f , 1.2f };
+		EffectWDesc.vStartPosX = { -0.3f,0.3f };EffectWDesc.vStartPosY = { -0.01f,0.2f };EffectWDesc.vStartPosZ = { -0.3f,0.3f };
+		EffectWDesc.vFrameSpeed = { 0.01f , 0.015f };
+		EffectWDesc.vStartSizeX = { 1.2f , 1.4f };	EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f };EffectWDesc.vSpeedY = { 0.12f , 0.19f };EffectWDesc.vSpeedZ = { -2.0f , 2.0f };
+		EffectWDesc.vSizeSpeedX = { 0.7f , 1.2f }; EffectWDesc.vSizeSpeedY = { 0.7f , 1.2f };
 
 		for (_uint i = 0; i < 8; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_UPDOWN:
-		EffectDesc.vStartPosX = { -0.15f,0.15f }; EffectDesc.vStartPosY = { -0.05f,-0.03f }; EffectDesc.vStartPosZ = { -0.15f,0.15f };
-		EffectDesc.vFrameSpeed = { 0.04f , 0.06f }; 
-		EffectDesc.vSizeX = { 1.2f , 1.4f }; EffectDesc.vSizeY = { 1.2f , 1.8f };
-		EffectDesc.vSpeedX = { -0.0f , 0.0f }; EffectDesc.vSpeedY = { 2.f , 5.5f }; EffectDesc.vSpeedZ = { -0.0f , 0.f };
-		EffectDesc.vSizeSpeedX = { 1.2f , 1.4f }; EffectDesc.vSizeSpeedY = { 1.6f , 1.8f };
-		EffectDesc.fGravity = 4.5f;
+		EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { -0.05f,-0.03f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
+		EffectWDesc.vFrameSpeed = { 0.04f , 0.06f }; 
+		EffectWDesc.vStartSizeX = { 1.2f , 1.4f }; EffectWDesc.vStartSizeY = { 1.2f , 1.8f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 2.f , 5.5f }; EffectWDesc.vSpeedZ = { -0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 1.2f , 1.4f }; EffectWDesc.vSizeSpeedY = { 1.6f , 1.8f };
+		EffectWDesc.fGravity = 4.5f;
 
 		for (_uint i = 0; i < 12; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_DASHLAND:
 	
-		EffectDesc.vStartPosX = { -0.5f,0.5f };
-		EffectDesc.vStartPosY = { -0.05f,0.15f };
-		EffectDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
-		EffectDesc.vSizeX = { 0.9f , 1.4f };
-		EffectDesc.vSizeY = { 0.8f , 1.1f };
-		EffectDesc.vSpeedX = { -3.0f , 3.0f };
-		EffectDesc.vSpeedY = { 0.05f , 0.1f };
-		EffectDesc.vSpeedZ = { -3.0f , 3.f };
-		EffectDesc.vSizeSpeedX = { 1.5f , 1.9f };
-		EffectDesc.vSizeSpeedY = { 1.5f , 1.9f };
+		EffectWDesc.vStartPosX = { -0.5f,0.5f };EffectWDesc.vStartPosY = { -0.05f,0.15f };EffectWDesc.vStartPosZ = { -0.5f,0.5f };
+		EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
+		EffectWDesc.vStartSizeX = { 0.9f , 1.4f };EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -3.0f , 3.0f };	EffectWDesc.vSpeedY = { 0.05f , 0.1f }; 	EffectWDesc.vSpeedZ = { -3.0f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 1.5f , 1.9f };EffectWDesc.vSizeSpeedY = { 1.5f , 1.9f };
 
 		for (_uint i = 0; i < 15; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_RUN:
 
-		EffectDesc.vStartPosX = { -0.2f,0.2f };
-		EffectDesc.vStartPosY = { -0.05f,0.1f };
-		EffectDesc.vStartPosZ = { -0.2f,0.2f };
-		EffectDesc.vFrameSpeed = { 0.005f , 0.01f };
-		EffectDesc.vSizeX = { 0.7f , 1.2f };
-		EffectDesc.vSizeY = { 0.6f , 1.0f };
-		EffectDesc.vSpeedX = { -0.0f , 0.0f };
-		EffectDesc.vSpeedY = { 0.05f , 0.1f };
-		EffectDesc.vSpeedZ = { 0.0f , 3.f };
-		EffectDesc.vSizeSpeedX = { 0.4f , 0.7f };
-		EffectDesc.vSizeSpeedY = { 0.4f , 0.7f };
+		EffectWDesc.vStartPosX = { -0.2f,0.2f };EffectWDesc.vStartPosY = { -0.05f,0.1f };EffectWDesc.vStartPosZ = { -0.2f,0.2f };
+		EffectWDesc.vFrameSpeed = { 0.005f , 0.01f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.2f };EffectWDesc.vStartSizeY = { 0.6f , 1.0f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f };EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 0.4f , 0.7f };EffectWDesc.vSizeSpeedY = { 0.4f , 0.7f };
 
 		for (_uint i = 0; i < 2; ++i)
-			pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	 case CGroundSmoke::SMOKE_JUMP:
+	
+		EffectWDesc.vStartPosX = { -0.5f,0.5f };EffectWDesc.vStartPosY = { -0.05f,0.15f };EffectWDesc.vStartPosZ = { 0.f,0.5f };
+		EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
+		EffectWDesc.vStartSizeX = { 0.9f , 1.4f };EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f };EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 0.3f , 0.5f };EffectWDesc.vSizeSpeedY = { 0.3f , 0.5f };
+
+		for (_uint i = 0; i < 5; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	default:
 		break;
@@ -933,16 +935,19 @@ void CCharacter::Create_StoneParticle(_fvector vOffsetPos)
 	Safe_AddRef(pGameInstance);
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
-	CStoneParticle::EFFECTDESC EffectDesc;
-	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
-	EffectDesc.vStartPosX = { -0.5f,0.5f }; EffectDesc.vStartPosY = { -0.00f,0.7f }; EffectDesc.vStartPosZ = { -0.1f,0.1f };
-	EffectDesc.vSizeX = { 0.05f , 0.20f }; EffectDesc.vSizeY = { 0.05f , 0.20f };
-	EffectDesc.vSpeedX = { -2.5f , 2.5f }; EffectDesc.vSpeedY = { 1.f , 7.f }; EffectDesc.vSpeedZ = { -2.5f , 2.5f };
-	EffectDesc.vSizeSpeedX = { 0.f , 0.f }; EffectDesc.vSizeSpeedY = { 0.f , 0.f };
-	EffectDesc.fGravity = 6.0f;
+	CEffectW::EFFECTWDESC EffectWDesc;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_STONEPARTICLE;
+	EffectWDesc.iNumX = 2; EffectWDesc.iNumY = 2;
+
+	EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+	EffectWDesc.vStartSizeX = { 0.05f , 0.20f }; EffectWDesc.vStartSizeY = { 0.05f , 0.20f };
+	EffectWDesc.vSpeedX = { -2.5f , 2.5f }; EffectWDesc.vSpeedY = { 1.f , 7.f }; EffectWDesc.vSpeedZ = { -2.5f , 2.5f };
+	EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+	EffectWDesc.fGravity = 6.0f;
 
 	for (_uint i = 0; i < 30; ++i)
-		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_StoneParticle"), &EffectDesc);
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
 
 	Safe_Release(pGameInstance);
 }
@@ -967,7 +972,7 @@ void CCharacter::Play_FallDownEffect()
 	Safe_AddRef(pGameInstance);
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
-	if (iCurIdx == LEVEL_VILLAGE)
+	if (iCurIdx == LEVEL_VILLAGE || iCurIdx == LEVEL_FINALBOSS)
 	{
 		CEffectPlayer::Get_Instance()->Play("FallDown_Particle", m_pTransformCom);	// 돌 이펙트
 		CEffectPlayer::Get_Instance()->Play("FallDown_Effect", m_pTransformCom);	// 동그란 이펙트 점점 커지는
