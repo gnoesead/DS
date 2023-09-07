@@ -5,13 +5,13 @@
 #include "EffectW_Manager.h"
 
 CEffectW::CEffectW(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CEffectW::CEffectW(const CEffectW& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CSwamp_AlertRect::CSwamp_AlertRect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CSwamp_AlertRect::CSwamp_AlertRect(const CSwamp_AlertRect& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

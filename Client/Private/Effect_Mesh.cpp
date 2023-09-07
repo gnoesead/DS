@@ -267,7 +267,6 @@ void CEffect_Mesh::Check_PassIndex(void)
 	}
 	else if (nullptr != m_pTextures[TEX_MASK])
 	{
-
 		if (nullptr != m_pTextures[TEX_RAMP])
 		{
 			m_iPassIndex = 4;

@@ -10,13 +10,13 @@
 static _uint g_iNum = 0;
 
 CSwamp::CSwamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CSwamp::CSwamp(const CSwamp& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

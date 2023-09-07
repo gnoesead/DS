@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 
@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CTrainSmoke final : public CGameObject
+class CTrainSmoke final : public CMasterEffect
 {
 private:
 	CTrainSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

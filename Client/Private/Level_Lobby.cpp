@@ -1229,9 +1229,21 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo1_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo1_Decal");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo2.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo2_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2_Decal");
 		return E_FAIL;
 	}
 
@@ -1241,9 +1253,27 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo3_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo3_Decal");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down_Decal1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down_Decal1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down_Decal2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down_Decal2");
 		return E_FAIL;
 	}
 
@@ -1256,6 +1286,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up_Decal");
 		return E_FAIL;
 	}
 
@@ -1280,6 +1316,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt_Decal.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_Decal");
 		return E_FAIL;
 	}
 #pragma endregion
