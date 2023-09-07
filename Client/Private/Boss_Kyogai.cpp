@@ -627,14 +627,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				//CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
 
-				CAlertCircle::EFFECTDESC EffectDesc;
-				EffectDesc.pOwnerTransform = m_pTransformCom;
-				EffectDesc.iType = CAlertCircle::TYPE_KICKDOWN;
-
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
-
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(8.0f, 8.0f, 8.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_BOUND, vMonsterDir, m_fBigDmg);
 
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
@@ -733,11 +727,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.5f;
-				EffectWorldDesc.fScale = 3.0f;
+				EffectWorldDesc.fScale = 2.0f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9_2", m_pTransformCom, &EffectWorldDesc);
 
+
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+
 			}
 
 			if (1 == m_iEvent_Index) // 1.50
@@ -748,11 +744,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 3.0f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_9", m_pTransformCom, &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 
-
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Swing_Particle1", m_pTransformCom);
 			}
 
 		}
@@ -764,7 +761,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.5f;
-				EffectWorldDesc.fScale = 3.0f;
+				EffectWorldDesc.fScale = 2.0f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10_2", m_pTransformCom, &EffectWorldDesc);
 
@@ -779,6 +776,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 3.0f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_10", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Swing_Particle2", m_pTransformCom);
 
 			}
 
@@ -1014,6 +1012,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			}
 		}
+	
 
 		m_iEvent_Index++;
 	}
@@ -2214,7 +2213,20 @@ void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
 			if (m_iLinkerNum == 1)
 			{
 				m_eCurAnimIndex = ANIM_KICKDOWN;
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
+
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+				
+				CAlertCircle::EFFECTDESC EffectDesc;
+				EffectDesc.pOwnerTransform = m_pTransformCom;
+				EffectDesc.iType = CAlertCircle::TYPE_KICKDOWN;
+
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
+				Safe_Release(pGameInstance);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.7f;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom, &EffectWorldDesc);
 			}
 			if (m_iLinkerNum == 2)
 			{

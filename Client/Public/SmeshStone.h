@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CSmeshStone final : public CGameObject
+class CSmeshStone final : public CMasterEffect
 {
 public:
 	enum TYPE { TYPE_NORMAL , TYPE_DISAPEEAR };

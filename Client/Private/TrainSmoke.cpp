@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CTrainSmoke::CTrainSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CTrainSmoke::CTrainSmoke(const CTrainSmoke& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

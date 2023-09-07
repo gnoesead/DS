@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 #include "EffectW_Manager.h"
 
 BEGIN(Engine)
@@ -16,7 +16,7 @@ END
 
 BEGIN(Client)
 
-class CEffectW abstract : public CGameObject
+class CEffectW abstract : public CMasterEffect
 {
 public:
 	typedef struct EffectWtag

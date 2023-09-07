@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 
@@ -14,7 +14,7 @@ END
 
 BEGIN(Client)
 
-class CSwamp final : public CGameObject
+class CSwamp final : public CMasterEffect
 {
 public:
 	enum TYPE {TYPE_NORMAL , TYPE_REMAIN , TYPE_LAND , TYPE_TRAP};

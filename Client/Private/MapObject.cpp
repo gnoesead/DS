@@ -4,12 +4,12 @@
 #include "GameInstance.h"
 
 CMapObject::CMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 }
 
 CMapObject::CMapObject(const CMapObject& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 }
 

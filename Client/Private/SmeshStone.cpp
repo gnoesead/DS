@@ -5,13 +5,13 @@
 #include "EffectPlayer.h"
 
 CSmeshStone::CSmeshStone(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CSmeshStone::CSmeshStone(const CSmeshStone& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }
