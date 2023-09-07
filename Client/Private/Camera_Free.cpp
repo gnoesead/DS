@@ -909,7 +909,7 @@ void CCamera_Free::Ready_CutInFinish()
 	// Á¨ÀÌÃ÷ °¢¼º
 	CutInCamDesc Zenitsu_Awake_1 = { true,true, 0.f, 0.f, 1.2f, 0.5f , false , {0.f, -0.8f ,0.f} };
 	CutInCamDesc Zenitsu_Awake_2 = { true,true, 0.f, 0.f, 1.f, 0.6f , true , {0.f, -0.8f ,0.f} };
-	CutInCamDesc Zenitsu_Awake_3 = { true,true, 0.f, 0.f, 2.4f, 1.8f , true , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_3 = { true,true, 0.f, 0.f, 2.4f, 1.88f , true , {0.f, -0.8f ,0.f} };
 
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_1);
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_2);

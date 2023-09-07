@@ -801,21 +801,37 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index)
 			{
-				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(1);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.4f;
+				EffectWorldDesc.vPosition.y += 0.23f;
+				EffectWorldDesc.vPosition.z += 0.14f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Cross_Eye", m_pTransformCom, &EffectWorldDesc);
+
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(2);
-				m_pRendererCom->Set_Invert();
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(1);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.19f;
+				EffectWorldDesc.vPosition.z += 0.18f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Eye_1", m_pTransformCom, &EffectWorldDesc);
+
+				// ¹ø°³ UI
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Elc_On(true);
+				
 			}
 			else if (2 == m_iEvent_Index)
 			{
 				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
-				m_pRendererCom->Set_Invert();
+				
 			}
 			else if (3 == m_iEvent_Index)
 			{
-				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(3);
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(2);
 				m_pRendererCom->Set_Invert();
 			}
 			else if (4 == m_iEvent_Index)
@@ -825,7 +841,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 			else if (5 == m_iEvent_Index)
 			{
-				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(4);
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(3);
 				m_pRendererCom->Set_Invert();
 			}
 			else if (6 == m_iEvent_Index)
@@ -835,7 +851,48 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 			else if (7 == m_iEvent_Index)
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(4);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (8 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
+				m_pRendererCom->Set_Invert();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.32f;
+				EffectWorldDesc.vPosition.z += 0.18f;
+				EffectWorldDesc.vPosition.x += -0.1f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Eye_2", m_pTransformCom, &EffectWorldDesc);
+
+				// Trans
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Trans_On(true);
+			}
+			else if (9 == m_iEvent_Index)
+			{
 				//ÀÌÆåÆ®
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += 0.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Finish_Awake_Main", m_pTransformCom, &EffectWorldDesc);
+
+
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += 0.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Stage", m_pTransformCom, &EffectWorldDesc);
+
+
 			}
 		}
 

@@ -52,6 +52,43 @@ HRESULT Zenitsu_Awake_UI::Initialize(void * pArg)
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
 
+
+
+	if (m_UI_Desc.m_Type == 0) {
+
+	}
+	else if (m_UI_Desc.m_Type == 1) {
+
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 11;
+
+		m_Sprite_Max = { 15 };
+		m_Speed = { 30.f };
+
+	}
+	else if (m_UI_Desc.m_Type == 2) {
+
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 11;
+
+		m_Sprite_Max = { 19 };
+		m_Speed = { 30.f };
+
+	}
+
+
+
+	m_Is_Render = false;
+
+
 	Set_UI();
 
 
@@ -64,30 +101,65 @@ void Zenitsu_Awake_UI::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
+	if (m_UI_Desc.m_Type == 0) {
+		if (m_Cur_Num == 1) {
+			m_Is_Render = true;
+			m_Is_Mask = false;
+			m_Is_Black_Mask = false;
+			m_fX = 640;
+			m_fY = 360;
+			m_Origin_X = 1280.f;
+			m_Origin_Y = 720.f;
+			m_Size_Param = 1.f;
+			m_UI_Layer = 11;
+		}
+		else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
+			m_Is_Render = true;
+			m_Is_Mask = true;
+			m_Is_Black_Mask = false;
+			m_fX = 640;
+			m_fY = 360;
+			m_Origin_X = 1280.f;
+			m_Origin_Y = 720.f;
+			m_Size_Param = 1.f;
+			m_UI_Layer = 11;
+		}
+	}
+	else if (m_UI_Desc.m_Type == 1) {
 
+		m_Speed = 30.f;
+
+		if (CBattle_UI_Manager::GetInstance()->Get_Zen_Trans_On() == true) {
+			m_Is_Render = true;
+
+			m_Sprite += (_float)TimeDelta * m_Speed;
+
+			if (m_Sprite > m_Sprite_Max) {
+				m_Sprite = 0.f;
+				m_Is_Render = false;
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Trans_On(false);
+			}
+
+		}
+	}
+	else if (m_UI_Desc.m_Type == 2) {
+
+		m_Speed = 30.f;
+
+		if (CBattle_UI_Manager::GetInstance()->Get_Zen_Elc_On() == true) {
+			m_Is_Render = true;
+
+			m_Sprite += (_float)TimeDelta * m_Speed;
+
+			if (m_Sprite > m_Sprite_Max) {
+				m_Sprite = 0.f;
+				m_Is_Render = false;
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Elc_On(false);
+			}
+
+		}
+	}
 	
-	if (m_Cur_Num == 1) {
-		m_Is_Render = true;
-		m_Is_Mask = false;
-		m_Is_Black_Mask = false;
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_X = 1280.f;
-		m_Origin_Y = 720.f;
-		m_Size_Param = 1.f;
-		m_UI_Layer = 11;
-	}
-	else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
-		m_Is_Render = true;
-		m_Is_Mask = true;
-		m_Is_Black_Mask = false;
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_X = 1280.f;
-		m_Origin_Y = 720.f;
-		m_Size_Param = 1.f;
-		m_UI_Layer = 11;
-	}
 
 
 
@@ -100,35 +172,38 @@ void Zenitsu_Awake_UI::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
+	if (m_UI_Desc.m_Type == 0) {
+		m_Cur_Num = CBattle_UI_Manager::GetInstance()->Get_Zen_UI_Num();
 
-	m_Cur_Num = CBattle_UI_Manager::GetInstance()->Get_Zen_UI_Num();
+		if (m_Cur_Num == 1) {
+			m_Is_Render = true;
+			m_Is_Mask = false;
+			m_Is_Black_Mask = true;
+			m_fX = 625;
+			m_fY = 580;
+			m_Origin_X = 1024.f * 1.f;
+			m_Origin_Y = 1024.f * 1.f;
+			m_Size_Param = 1.f;
+			m_UI_Layer = 11;
+		}
+		else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
+			m_Is_Render = true;
+			m_Is_Mask = true;
+			m_Is_Black_Mask = false;
+			m_fX = 640;
+			m_fY = 360;
+			m_Origin_X = 1280.f;
+			m_Origin_Y = 720.f;
+			m_Size_Param = 1.f;
+			m_UI_Layer = 11;
+		}
 
-	if (m_Cur_Num == 1) {
-		m_Is_Render = true;
-		m_Is_Mask = false;
-		m_Is_Black_Mask = true;
-		m_fX = 625;
-		m_fY = 580;
-		m_Origin_X = 1024.f * 1.f;
-		m_Origin_Y = 1024.f * 1.f;
-		m_Size_Param = 1.f;
-		m_UI_Layer = 11;
-	}
-	else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
-		m_Is_Render = true;
-		m_Is_Mask = true;
-		m_Is_Black_Mask = false;
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_X = 1280.f;
-		m_Origin_Y = 720.f;
-		m_Size_Param = 1.f;
-		m_UI_Layer = 11;
+		if (m_Cur_Num == 0) {
+			m_Is_Render = false;
+		}
 	}
 	
-	if (m_Cur_Num == 0) {
-		m_Is_Render = false;
-	}
+	
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -145,16 +220,24 @@ HRESULT Zenitsu_Awake_UI::Render()
 		if (FAILED(SetUp_ShaderResources()))
 			return E_FAIL;
 
-
-		if (m_Is_Mask == true) {
-			if (m_Is_Black_Mask)
-				m_pShaderCom->Begin(27);
-			else
-				m_pShaderCom->Begin(14);
+		if (m_UI_Desc.m_Type == 0) {
+			if (m_Is_Mask == true) {
+				if (m_Is_Black_Mask)
+					m_pShaderCom->Begin(27);
+				else
+					m_pShaderCom->Begin(14);
+			}
+			else {
+				m_pShaderCom->Begin(1);
+			}
 		}
-		else {
-			m_pShaderCom->Begin(1);
+		else if (m_UI_Desc.m_Type == 1) {
+			m_pShaderCom->Begin(27);
 		}
+		else if (m_UI_Desc.m_Type == 2) {
+			m_pShaderCom->Begin(27);
+		}
+		
 		
 		m_pVIBufferCom->Render();
 
@@ -182,10 +265,29 @@ HRESULT Zenitsu_Awake_UI::Add_Components()
 		TEXT("Com_VIBuffer"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	/* For.Com_Texture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
-		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (m_UI_Desc.m_Type == 0) {
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 1) {
+
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI_Trans"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
+	else if (m_UI_Desc.m_Type == 2) {
+
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI_Elc"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
+	
 
 
 	return S_OK;
@@ -210,8 +312,19 @@ HRESULT Zenitsu_Awake_UI::SetUp_ShaderResources()
 		return E_FAIL;
 
 
-	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Cur_Num)))
-		return E_FAIL;
+	if (m_UI_Desc.m_Type == 0) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Cur_Num)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 1) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Sprite)))
+			return E_FAIL;
+	}
+	else if (m_UI_Desc.m_Type == 2) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", (_uint)m_Sprite)))
+			return E_FAIL;
+	}
+	
 
 
 	return S_OK;

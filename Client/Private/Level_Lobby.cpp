@@ -1696,6 +1696,36 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Cross_Eye.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Cross_Eye");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Eye_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Eye_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Eye_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Eye_2");
+		return E_FAIL;
+	}
+	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Finish_Awake_Main.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Finish_Awake_Main");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Stage.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Stage");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 

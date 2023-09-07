@@ -65,6 +65,11 @@ public: // Zen_Cut_In
 	void Set_Zen_UI_Num(_int On);
 	_int Get_Zen_UI_Num();
 
+	void Set_Zen_Elc_On(_bool On);
+	_bool Get_Zen_Elc_On();
+
+	void Set_Zen_Trans_On(_bool On);
+	_bool Get_Zen_Trans_On();
 
 
 private:
@@ -101,6 +106,8 @@ private:
 private: // Cut_In
 	_int m_Zen_UI_Num = { 0 };
 
+	_bool m_Zen_Elc_On = { false };
+	_bool m_Zen_Trans_On = { false };
 
 
 public:

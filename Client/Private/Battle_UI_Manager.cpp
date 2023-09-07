@@ -231,5 +231,25 @@ _int CBattle_UI_Manager::Get_Zen_UI_Num()
 	return m_Zen_UI_Num;
 }
 
+void CBattle_UI_Manager::Set_Zen_Elc_On(_bool On)
+{
+	m_Zen_Elc_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Zen_Elc_On()
+{
+	return m_Zen_Elc_On;
+}
+
+void CBattle_UI_Manager::Set_Zen_Trans_On(_bool On)
+{
+	m_Zen_Trans_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Zen_Trans_On()
+{
+	return m_Zen_Trans_On;
+}
+
 
 

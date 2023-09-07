@@ -54,8 +54,12 @@ private:
 	_bool                  m_Is_Mask = { true };
 	_bool                  m_Is_Black_Mask = { true };
 
-
 	_bool                  m_Is_Selected = { false };
+
+	_float                 m_Sprite = { 0 };
+	_float                 m_Sprite_Max = { 0 };
+	_float                 m_Speed = { 0.f };
+
 
 private:
 	_bool m_Is_In = { false };
