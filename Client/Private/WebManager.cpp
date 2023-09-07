@@ -5,37 +5,134 @@
 
 #include "GameInstance.h"
 
+#include "WebShot.h"
+
 IMPLEMENT_SINGLETON(CWebManager)
 
 CWebManager::CWebManager()
 {
 }
 
-
-
-
 void CWebManager::Tick(_double dTimeDelta)
 {
+
+	m_dDelay_WebGimmick_0 += dTimeDelta;
+	if (m_dDelay_WebGimmick_0 > 1.5f)
+	{
+		m_dDelay_WebGimmick_0 = 0.0;
+
+		if (m_iWebEffect_Type == 0)
+		{
+			m_iWebEffect_Type = 1;
+			
+			//size, pos, atkdir, speed, // BulletType , EffectTag
+			//Make_WebBullet(_float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f),_vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 3.0, 
+			//	CAtkCollider::TYPE_BULLET_WEB, "SpiderWeb");
+
+			_float4 PlayerPos;
+			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			PlayerPos.y += 1.5f;
+			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
+			Shoot_ArrowWeb(PlayerPos, Dir);
+			
+		}
+		else if (m_iWebEffect_Type == 1)
+		{
+			m_iWebEffect_Type = 0;
+
+			_float4 PlayerPos;
+			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			PlayerPos.y += 1.5f;
+			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
+			Shoot_WebBall(PlayerPos, Dir);
+		}
+	}
+
+	
+	
+	m_dDelay_WebGimmick_Full += dTimeDelta;
+	if (m_dDelay_WebGimmick_Full > 3.0f)
+	{
+		m_dDelay_WebGimmick_Full = 0.0;
+
+		_float4 PlayerPos;
+		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		PlayerPos.y += 1.0f;
+		_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
+		//Shoot_WideWeb(PlayerPos, Dir);	
+		Shoot_JikWeb(PlayerPos, Dir);
+	}
+
+	
 }
 
-void CWebManager::Make_WebBullet(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime,
-	CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform,
-	_double Speed, CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc)
+void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CWebShot::WEBDESC WebDesc;
+	WebDesc.iWebTexIndex = TexIdx;
+	WebDesc.WorldInfo.vPosition = CreatePos;
+	WebDesc.vScale = Scale;
+	WebDesc.vDir = ShotDir;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_WebShot"), &WebDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : WebWebShot");
+		return;
+	}
+
+	Safe_Release(pGameInstance);
+}
+
+void CWebManager::Shoot_ArrowWeb(_float4 CreatePos, _float4 ShotDir)
+{
+	// index, Pos, Scale, Dir
+	Create_WebShot(7, CreatePos, _float3{ 1.5f, 4.5f, 1.5f }, ShotDir);
+}
+
+void CWebManager::Shoot_WebBall(_float4 CreatePos, _float4 ShotDir)
+{
+	// index, Pos, Scale, Dir
+	Create_WebShot(28, CreatePos, _float3{ 1.5f, 1.5f, 1.5f }, ShotDir);
+}
+
+void CWebManager::Shoot_WideWeb(_float4 CreatePos, _float4 ShotDir)
+{
+	// index, Pos, Scale, Dir
+	Create_WebShot(12, CreatePos, _float3{ 20.0f, 6.0f, 6.0f }, ShotDir);
+}
+
+void CWebManager::Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir)
+{
+	// index, Pos, Scale, Dir
+	Create_WebShot(32, CreatePos, _float3{ 26.0f, 5.0f, 5.0f }, ShotDir);
+	
+}
+
+void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
+	CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag)
+{
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	EffectWorldDesc.vPosition.y = 1.f;
+	CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc = &EffectWorldDesc;
+
+
 	CAtkCollider::ATKCOLLDESC AtkCollDesc;
 	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
 
 	AtkCollDesc.ColliderDesc.vSize = Size;
 	AtkCollDesc.ColliderDesc.vPosition = Pos;
 
-	AtkCollDesc.dLifeTime = DurationTime;
+	AtkCollDesc.dLifeTime = 10.0;
 
-	AtkCollDesc.pParentTransform = pTransform;
+	AtkCollDesc.pParentTransform = m_pTransformCom;
 
-	AtkCollDesc.eAtkType = AtkType;
+	AtkCollDesc.eAtkType = CAtkCollider::TYPE_WEB;
 	AtkCollDesc.eBulletType = eBulletType;
 
-	AtkCollDesc.fDamage = fDmg;
+	AtkCollDesc.fDamage = 1.0f;
 	AtkCollDesc.Speed = Speed;
 
 	AtkCollDesc.bBullet = true;
@@ -53,7 +150,7 @@ void CWebManager::Make_WebBullet(const _tchar* pLayerTag, _float3 Size, _float3 
 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector3Normalize(vAtkDir));
 
-	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
+	CAtkCollManager::GetInstance()->Reuse_Collider(TEXT("Layer_MonsterAtk"), &AtkCollDesc);
 }
 
 void CWebManager::Free()

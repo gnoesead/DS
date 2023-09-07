@@ -367,6 +367,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Spider\WebManager">
       <UniqueIdentifier>{9ed97551-bbec-43cf-97b9-b6b1695bbc21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Spider\Web">
+      <UniqueIdentifier>{19db0fba-f920-48b2-859b-6b860fa9483a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -702,6 +705,9 @@
     <ClInclude Include="..\Public\WebManager.h">
       <Filter>02. GameObjects\Character\Monster\Spider\WebManager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WebShot.h">
+      <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1027,6 +1033,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\WebManager.cpp">
       <Filter>02. GameObjects\Character\Monster\Spider\WebManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WebShot.cpp">
+      <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

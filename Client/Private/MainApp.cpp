@@ -278,6 +278,8 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 	Load_Effect_Resources();
 
+
+
 #pragma region UI
 	/* Protoype_GameObject_Title*/
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Title"),

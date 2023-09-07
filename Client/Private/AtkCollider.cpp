@@ -511,7 +511,8 @@ void CAtkCollider::Setting_WebBullet()
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	_vector vOriginPos = { Random::Generate_Float(201.37f, 208.8f), 7.4f, PlayerPos.z + 35.0f, 1.f };
+	//_vector vOriginPos = { Random::Generate_Float(201.37f, 208.8f), 7.4f, PlayerPos.z + 35.0f, 1.f };
+	_vector vOriginPos = { Random::Generate_Float(201.37f, 208.8f), 7.4f, 381.8f, 1.f };
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
 }
@@ -528,7 +529,8 @@ void CAtkCollider::Setting_WebBullet_Full()
 
 	fX = 201.5f + (_float)index * 0.5f;
 
-	_vector vOriginPos = { fX, 7.4f, PlayerPos.z + 35.0f, 1.f };
+	//_vector vOriginPos = { fX, 7.4f, PlayerPos.z + 35.0f, 1.f };
+	_vector vOriginPos = { fX, 7.4f, 381.8f, 1.f };
 
 	if (index <= 13)
 		index++;
