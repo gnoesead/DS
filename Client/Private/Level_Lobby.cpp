@@ -1577,6 +1577,8 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+
+
 #pragma region ZENITSU
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
 	{
@@ -1704,7 +1706,72 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Heki_Delay_Elc.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Heki_Delay_Elc");
+		return E_FAIL;
+	}
+
+	// 여기까지 문제없음
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Awake.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Awake");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Awake_Aura.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Awake_Aura");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Upper_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Upper_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Upper_Wind_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Upper_Wind_Rev");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Cross_Eye.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Cross_Eye");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Eye_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Eye_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Eye_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Eye_2");
+		return E_FAIL;
+	}
+	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Finish_Awake_Main.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Finish_Awake_Main");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Stage.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Stage");
+		return E_FAIL;
+	}
+
 #pragma endregion
+
+
+
 
 #pragma region DS_SHAREEFFECT
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_XYZ_Small.bin"))))

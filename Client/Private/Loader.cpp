@@ -48,6 +48,7 @@
 #include "Battle_Signal.h"
 #include "Option.h"
 #include "Paper.h"
+#include "Zenitsu_Awake_UI.h"
 
 
 #include "NPC_Female.h"
@@ -972,6 +973,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Paper */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Paper_UI"),
 		CPaper::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Zenitsu_Awake_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
+		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
