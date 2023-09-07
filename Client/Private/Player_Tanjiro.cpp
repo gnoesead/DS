@@ -332,6 +332,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -354,6 +357,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -371,6 +377,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -394,12 +403,18 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1Particle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2Particle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
@@ -432,6 +447,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
@@ -602,18 +620,18 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				if (m_Moveset.m_iAwaken == 0)
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air3", m_pTransformCom);
-				else
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
 		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo_Air3", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 			}
 		}
 
@@ -656,6 +674,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (3 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_DecalParticle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}

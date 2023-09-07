@@ -1360,7 +1360,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
 HRESULT CRenderer::Render_EffectNoBloom()
 {
-    m_RenderObjects[RENDER_EFFECT].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
+    m_RenderObjects[RENDER_EffectNoBloom].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {
         return dynamic_cast<CMasterEffect*>(pDest)->Get_Order() > dynamic_cast<CMasterEffect*>(pSrc)->Get_Order();
         });
 
