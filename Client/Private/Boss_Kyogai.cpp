@@ -58,16 +58,8 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 	m_eCurNavi = NAVI_HOUSE_4_0;
 
 	//m_eCurNavi = NAVI_ACAZA;
-	m_StatusDesc.fHp = 100.f;
-	m_StatusDesc.fHp_Max = 100.f;
-
-	_vector vPlayerDir = m_pPlayerTransformCom->Get_State(CTransform::STATE_LOOK);
-
-	_vector vRandomDir = Random_Dir(vPlayerDir, 0.f, 0.f, 0.f, 360.f);
-
-	_double dLifeTime = 0.20;
-	_double dLongLifeTime = 1.0;
-	_double dSpeed = 5.0;
+	m_StatusDesc.fHp = 200.f;
+	m_StatusDesc.fHp_Max = 200.f;
 
 	return S_OK;
 }
@@ -108,6 +100,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
 	EventCall_Control(dTimeDelta);
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -311,7 +304,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
-			
+			pGameInstance->Time_Slow(0.5,0.2);
 		}
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -1032,8 +1025,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 		Safe_AddRef(pGameInstance);
 		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
-
+		 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
+		AtkDir.y = 0.f;
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
@@ -1049,7 +1043,6 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 					m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
 					Trigger_Hit_ConnectSmall();
 				}
-
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
 			}
@@ -1062,36 +1055,61 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		}
-		/*if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-			Trigger_Hit_Blow();
+			if (m_bSuperArmor == false)
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				Trigger_Hit_Blow();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-			Trigger_Hit_Upper();
+			if (m_bSuperArmor == false)
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+				Trigger_Hit_Small();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-
-			Trigger_Hit_Big();
+			if (m_bSuperArmor == false)
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+				Trigger_Hit_Blow();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
 		{
-			m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
-			Trigger_Hit_Bound();
+			if (m_bSuperArmor == false)
+			{
+				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
+				Trigger_Hit_Small();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
-			Set_FallingStatus(3.0f, 0.0f);
+			//Set_FallingStatus(3.0f, 0.0f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
 		{
@@ -1101,8 +1119,22 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		}*/
+		}
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			if (m_bSuperArmor == false)
+			{
+				//m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
+				Trigger_Hit_Hekireki();
+			}
+			else
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 
+			pPlayer->Set_Hit_Success(true);
+			pPlayer->Set_Hit_Success_Hekireki(true);
+			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		}
 		Safe_Release(pGameInstance);
 	}
 	else
@@ -1156,9 +1188,6 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_NEXTPHASE:
 		Update_NextPhase(dTimeDelta);
 		break;
-	case CBoss_Kyogai::STATE_HEAL:
-		Update_Heal(dTimeDelta);
-		break;
 	case CBoss_Kyogai::STATE_AWAKE:
 		Update_Awake(dTimeDelta);
 		break;
@@ -1203,6 +1232,18 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Kyogai::STATE_HIT_BIG:
 		Update_Hit_Big(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_HIT_BLOW:
+		Update_Hit_Blow(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_GETUP:
+		Update_Hit_GetUp(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_HIT_CUTSCENE:
+		Update_Hit_CutScene(dTimeDelta);
+		break;
+	case CBoss_Kyogai::STATE_HIT_HEKIREKI:
+		Update_Hit_Hekireki(dTimeDelta);
 		break;
 
 
@@ -1571,6 +1612,7 @@ void CBoss_Kyogai::Trigger_Interact()
 	m_bTrigger = true;
 	m_bSuperArmor = false;
 	m_bNoDmg = false;
+	m_bHit = false;
 	m_eCurstate = STATE_INTERACT;
 }
 
@@ -1754,6 +1796,7 @@ void CBoss_Kyogai::Trigger_Hit_Small()
 	m_iSmallHit_Index++;
 	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_L);
 	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_R);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT);
 	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L);
 	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R);
 
@@ -1762,6 +1805,17 @@ void CBoss_Kyogai::Trigger_Hit_Small()
 
 void CBoss_Kyogai::Trigger_Hit_ConnectSmall()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+	m_isConnectHitting = true;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_iSmallHit_Index++;
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_L);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_BASETURN_R);
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_HIT);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L);
+	m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R);
+	m_eCurstate = STATE_HIT_SMALL;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Upper()
@@ -1770,42 +1824,53 @@ void CBoss_Kyogai::Trigger_Hit_Upper()
 
 void CBoss_Kyogai::Trigger_Hit_Big()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_eCurstate = STATE_HIT_BIG;
 }
 
 void CBoss_Kyogai::Trigger_Hit_Blow()
 {
-}
-
-void CBoss_Kyogai::Trigger_Hit_BigBlow()
-{
-}
-
-void CBoss_Kyogai::Trigger_Hit_Bound()
-{
-}
-
-void CBoss_Kyogai::Trigger_Hit_Spin()
-{
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_pModelCom->Set_AnimisFinish(ANIM_SPIN);
+	m_pModelCom->Set_AnimisFinish(ANIM_SPIN_LOOP);
+	m_pModelCom->Set_AnimisFinish((ANIM_SPIN_END));
+	m_eCurstate = STATE_HIT_BLOW;
 }
 
 void CBoss_Kyogai::Trigger_Hit_CutScene()
 {
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_CutScene(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bSuperArmor = false;
+	m_bNoDmg = true;
+
+	m_eCurstate = STATE_HIT_CUTSCENE;
 }
 
 void CBoss_Kyogai::Trigger_Hit_GetUp()
 {
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bNoDmg = true;
+	m_bAir_Motion = false;
+
+	m_eCurstate = STATE_GETUP;
 }
 
-void CBoss_Kyogai::Trigger_Hit_RollGetUp()
+void CBoss_Kyogai::Trigger_Hit_Hekireki()
 {
-}
-
-void CBoss_Kyogai::Trigger_Hit_BigGetUp()
-{
-}
-
-void CBoss_Kyogai::Trigger_Awake_RoomChange(_double dTimeDelta)
-{
+	m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_dTimeAcc = 0.0;
+	m_eCurstate = STATE_HIT_HEKIREKI;
 }
 
 void CBoss_Kyogai::Update_Guard(_double dTimeDelta)
@@ -1813,11 +1878,6 @@ void CBoss_Kyogai::Update_Guard(_double dTimeDelta)
 
 }
 
-
-void CBoss_Kyogai::Update_PushAway(_double dTimeDelta)
-{
-
-}
 
 void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 {
@@ -1870,47 +1930,6 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 	}
 
 
-}
-
-
-void CBoss_Kyogai::Update_Heal(_double dTimeDelta)
-{
-	if (m_bAnimFinish == false)
-	{
-		m_StatusDesc.fHp = 0.f;
-		m_bAnimFinish = true;
-		m_eCurAnimIndex = ANIM_HEAL;
-	}
-
-	if (m_pModelCom->Get_AnimRatio(ANIM_HEAL, 0.0) && !m_pModelCom->Get_AnimRatio(ANIM_HEAL, 1.0))
-	{
-
-		_double dRatio = m_pModelCom->Get_dAnimRatio(ANIM_HEAL);
-		if (dRatio > 0.0)
-		{
-			if (dRatio > 0.97)
-				dRatio = 1.0;
-
-			m_StatusDesc.fHp = 100.f * (_float)dRatio;
-		}
-	}
-
-	if (m_pModelCom->Get_AnimFinish(ANIM_HEAL))
-	{
-		if (m_eCurPhase == PHASE_1)
-		{
-			m_iTriggerCnt = 0;
-			m_dAwakeTime = 0.0;
-			m_eCurPhase = PHASE_2;
-		}
-
-		/*else if (m_eCurPhase == PHASE_2)
-			m_eCurPhase = PHASE_3;*/
-
-		m_eCurAnimIndex = ANIM_IDLE;
-		Trigger_Interact();
-
-	}
 }
 
 void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
@@ -2364,30 +2383,32 @@ void CBoss_Kyogai::Update_AtkPangPang(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 {
+
 	if (m_isJumpOn == false && m_bAir_Motion == false)
 	{
 		if (false == m_bAnimFinish)
 		{
 			if (m_iSmallHit_Index == 1)
-			{
 				m_eCurAnimIndex = ANIM_BASETURN_L;
-			}
+
 			if (m_iSmallHit_Index == 2)
 				m_eCurAnimIndex = ANIM_BASETURN_R;
 
-			if (m_iSmallHit_Index >= 3)
-			{
+			if (m_iSmallHit_Index == 3)
+				m_eCurAnimIndex = ANIM_HIT;
+
+			if (m_iSmallHit_Index >= 4)
 				m_iSmallHit_Index = 1;
 
-			}
 
 
 		}
-		if ((m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L) || m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R)))
+		if ((m_pModelCom->Get_AnimFinish(ANIM_BASETURN_L) || m_pModelCom->Get_AnimFinish(ANIM_BASETURN_R) || m_pModelCom->Get_AnimFinish(ANIM_HIT)))
 		{
 			m_bAnimFinish = true;
 			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_L);
 			m_pModelCom->Set_AnimisFinish(ANIM_BASETURN_R);
+			m_pModelCom->Set_AnimisFinish(ANIM_HIT);
 			m_eCurAnimIndex = ANIM_IDLE;
 			Trigger_Interact();
 			//m_eCurAnimIndex = ANIM_BASETURN_L;
@@ -2397,6 +2418,7 @@ void CBoss_Kyogai::Update_Hit_Small(_double dTimeDelta)
 	{
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_L, 0.3f, 0.0, 0.7);
 		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_BASETURN_R, 0.3f, 0.0, 0.7);
+		Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT, 0.3f, 0.0, 0.7);
 
 	}
 
@@ -2415,10 +2437,46 @@ void CBoss_Kyogai::Update_Hit_Upper(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Hit_Big(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_HIT;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_HIT))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_HIT);
+		m_eCurAnimIndex = ANIM_IDLE;
+		Trigger_Interact();
+	}
+
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_HIT, 1.2f, 0.01, 0.85);
 }
 
 void CBoss_Kyogai::Update_Hit_Blow(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_SPIN;
+		Jumping(1.0f, 0.05f);
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_SPIN))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_SPIN);
+		m_eCurAnimIndex = ANIM_SPIN_LOOP;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_SPIN_END))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_SPIN_END);
+		m_eCurAnimIndex = ANIM_GETUP_SPIN;
+		Trigger_Hit_GetUp();
+	}
+
+	Land_Anim_Play(ANIM_SPIN_LOOP, ANIM_SPIN_END);
+
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_SPIN, 3.0f);
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_SPIN_LOOP, 3.0f);
+	Go_Dir_Constant(dTimeDelta, DIR_DOWN, ANIM_SPIN_END, 1.0f, 0.0, 0.3);
 }
 
 void CBoss_Kyogai::Update_Hit_BigBlow(_double dTimeDelta)
@@ -2435,10 +2493,40 @@ void CBoss_Kyogai::Update_Hit_Spin(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Hit_CutScene(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_DEATH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_DEATH);
+		m_eCurAnimIndex = ANIM_DEATH_GETUP;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH_GETUP))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_DEATH_GETUP);
+		m_bNoDmg = false;
+		m_eCurAnimIndex = ANIM_STEP_FRONT2;
+		Trigger_JumpStep();
+	}
+
 }
 
 void CBoss_Kyogai::Update_Hit_GetUp(_double dTimeDelta)
 {
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_GETUP_SPIN;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_GETUP_SPIN))
+	{
+		m_pModelCom->Set_AnimisFinish(ANIM_GETUP_SPIN);
+		m_eCurAnimIndex = ANIM_STEP_FRONT2;
+		Trigger_JumpStep();
+	}
+
 }
 
 void CBoss_Kyogai::Update_Hit_RollGetUp(_double dTimeDelta)
@@ -2447,6 +2535,38 @@ void CBoss_Kyogai::Update_Hit_RollGetUp(_double dTimeDelta)
 
 void CBoss_Kyogai::Update_Hit_BigGetUp(_double dTimeDelta)
 {
+}
+
+void CBoss_Kyogai::Update_Hit_Hekireki(_double dTimeDelta)
+{
+	m_dTimeAcc += dTimeDelta;
+	if (m_dTimeAcc > 0.150)
+	{
+		
+		if (m_bAnimFinish == false)
+		{
+			m_bAnimFinish = true;
+			m_eCurAnimIndex = ANIM_SPIN;
+			if (m_isJumpOn == false)
+				Jumping(1.85f, 0.03f);
+			else
+				Jumping(0.85f, 0.03f);
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_SPIN))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_SPIN);
+			m_eCurAnimIndex = ANIM_SPIN_LOOP;
+		}
+		if (m_pModelCom->Get_AnimFinish(ANIM_SPIN_END))
+		{
+			m_pModelCom->Set_AnimisFinish(ANIM_SPIN_END);
+			m_eCurAnimIndex = ANIM_GETUP_SPIN;
+			Trigger_Hit_GetUp();
+		}
+	}
+	if(m_dTimeAcc >= 0.150)
+	Land_Anim_Play(ANIM_SPIN_LOOP, ANIM_SPIN_END);
+		
 }
 
 void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
@@ -2502,7 +2622,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB1;
-				
+
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_ATKCMB1))
 			{
@@ -2537,7 +2657,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
-				{					
+				{
 					m_bTurn = false;
 					m_dTurnTime = 0.0;
 					m_pModelCom->Set_AnimisFinish(ANIM_ATKSK_END);
@@ -2608,7 +2728,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 		if ((3.0 + dTimeDelta < m_dTurnTime) && m_bTurnRoom == false) // 방 돌리기는 애니메이션 이후 1.5초
 		{
 			if (m_bAnimFinish2 == false)
-			{   
+			{
 				m_bAnimFinish2 = true;
 				m_eCurAnimIndex = ANIM_ATKCMB_01READY;
 			}
@@ -3991,6 +4111,23 @@ _vector CBoss_Kyogai::HorizonDir()
 	_vector vHorizonPos = { 126.536f, 0.f, 140.840f, 1.f };
 
 	return XMVector3Normalize(vHorizonPos - vRoomPos);
+}
+
+void CBoss_Kyogai::Land_Anim_Play(ANIM CurAnim, ANIM LandAnim)
+{
+	if (m_pModelCom->Get_iCurrentAnimIndex() == CurAnim)
+	{
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+		if (Pos.y <= m_fLand_Y)
+		{
+			m_eCurAnimIndex = LandAnim;
+
+			Pos.y = m_fLand_Y;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+		}
+	}
 }
 
 HRESULT CBoss_Kyogai::Add_Components()

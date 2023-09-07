@@ -510,7 +510,6 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_Up.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_Up");

@@ -485,7 +485,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		}
 
 		m_dDelay_Attacking += dTimeDelta;
-		if (m_dDelay_Attacking > 0.3f)
+		if (m_dDelay_Attacking > 0.1f)
 		{
 			m_dDelay_Attacking = 0.0;
 

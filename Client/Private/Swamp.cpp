@@ -398,13 +398,20 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
 
-			CSwamp_SmokeEffect::EFFECTDESC EffectDesc;
-			EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			CEffectW::EFFECTWDESC EffectWDesc;
 
+			EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPSMOKE;
+			EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+
+			EffectWDesc.vStartPosX = { -3.0f,3.0f }; EffectWDesc.vStartPosY = { 0.5f,2.0f }; EffectWDesc.vStartPosZ = { -3.f,3.f };
+			EffectWDesc.vStartSizeX = { 1.f , 1.5f }; EffectWDesc.vStartSizeY = { 3.00f , 5.00f };
+			EffectWDesc.vSpeedY = { 0.5f , 1.f }; 
+		
 			_uint iNum = Random::Generate_Int(3, 5);
 
 			for (_uint i = 0; i < iNum; ++i)
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Swamp_SmokeEffect"), &EffectDesc);
+				CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
 
 			m_dMakeSmokeEffectAccTime = 0.0;
 
@@ -498,10 +505,19 @@ void CSwamp::Create_WatterEffect()
 
 	pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Swamp"), TEXT("Prototype_GameObject_SwampWaterEffect"), &EffectDesc);
 
-	CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
-	EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	CEffectW::EFFECTWDESC EffectWDesc;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+	EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+
+	EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+	EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+	EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+	EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+	EffectWDesc.vStartFrame = { 0.f ,5.f };
+
 	for (_uint i = 0; i < 20; ++i)
-		pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
 	
 	Safe_Release(pGameInstance);
@@ -512,10 +528,19 @@ void CSwamp::Create_WatterParticleEffect(_uint iNum)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
-	EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , -1.3f , 0.f , 0.f);
+	CEffectW::EFFECTWDESC EffectWDesc;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f, -1.3f, 0.f, 0.f);
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+	EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+
+	EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+	EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+	EffectWDesc.vStartSizeX = { 0.7f , 1.0f }; EffectWDesc.vStartSizeY = { 0.7f , 1.0f };
+	EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+	EffectWDesc.vStartFrame = { 0.f ,5.f };
+
 	for (_uint i = 0; i < iNum; ++i)
-		pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
 	Safe_Release(pGameInstance);
 }

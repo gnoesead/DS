@@ -231,23 +231,23 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-	{
-		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType != CAtkCollider::TYPE_EFFECT)
-		{
-			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float vPosX = XMVectorGetX(vPos);
-			_float vPosZ = XMVectorGetZ(vPos);
-			if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
-			{
-				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
-				Reset_Dead();
-				
-			}
-		}
-		/*if(m_pColliderCom->Get_Coll() == true)
-			Reset_Dead();*/
-	}
+	//if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	//{
+	//	if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType != CAtkCollider::TYPE_EFFECT)
+	//	{
+	//		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	//		_float vPosX = XMVectorGetX(vPos);
+	//		_float vPosZ = XMVectorGetZ(vPos);
+	//		if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
+	//		{
+	//			CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+	//			Reset_Dead();
+	//			
+	//		}
+	//	}
+	//	/*if(m_pColliderCom->Get_Coll() == true)
+	//		Reset_Dead();*/
+	//}
 	
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
 		Check_OutLine();
