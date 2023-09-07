@@ -115,7 +115,7 @@ void CEffectW::Reset_Data(void* pArg)
 
 	m_iFrame = Random::Generate_Int((_uint)m_EffectWDesc.vStartFrame.x, (_uint)m_EffectWDesc.vStartFrame.y);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
 	m_FrameAccTime = 0.0;
 	m_dLifeAccTime = 0.0;

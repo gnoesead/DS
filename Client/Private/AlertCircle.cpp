@@ -42,7 +42,7 @@ HRESULT CAlertCircle::Initialize(void* pArg)
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_pTransformCom->Scaling(_float3(6.f, 6.f, 6.f));
+		m_pTransformCom->Scaling(_float3(14.f, 14.f, 14.f));
 	}
 	else if (m_EffectDesc.iType == TYPE_ROOMCHANGE)
 	{

@@ -536,8 +536,8 @@ PS_OUT  PS_GROUNDSMOKE(PS_IN In)
 
 	Out.vColor = vDiffuse * g_Alpha;
 
-	if (Out.vColor.a < 0.01f)
-		discard;
+	//if (Out.vColor.a < 0.01f)
+		//discard;
 
 	return Out;
 }

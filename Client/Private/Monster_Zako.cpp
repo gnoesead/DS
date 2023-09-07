@@ -132,6 +132,21 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 
 void CMonster_Zako::Tick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_2_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::Tick(dTimeDelta);
 
 	if (true == m_isDead)
@@ -170,6 +185,21 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 
 void CMonster_Zako::LateTick(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")));
+		if (pPlayer->Get_CurNaviMesh() != CLandObject::NAVI_HOUSE_2_0)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
+	Safe_Release(pGameInstance);
+
 	__super::LateTick(dTimeDelta);
 
 	if (CPlayerManager::GetInstance()->Get_Slow() == false)

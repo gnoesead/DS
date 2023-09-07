@@ -131,7 +131,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			m_isStealthMode = true;
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
+	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
 		CEffectW::EFFECTWDESC EffectWDesc;
 		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -146,7 +146,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 		
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
-	}
+	}*/
 
 	Safe_Release(pGameInstance); 
 
@@ -712,20 +712,34 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
 		{
-			if(0 == m_iEvent_Index)	// 0.0
+			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (1 == m_iEvent_Index)	// 0.05
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (2 == m_iEvent_Index)	// 0.10
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (3 == m_iEvent_Index)	// 0.15
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (4 == m_iEvent_Index)	// 0.20
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (5 == m_iEvent_Index)	// 0.25
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (6 == m_iEvent_Index)	// 0.30
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 		}
 
 		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
