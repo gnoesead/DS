@@ -43,7 +43,7 @@ HRESULT CLevel_Manager::Open_Level(_uint iLevelIndex, CLevel* pNextLevel, _bool 
 	Safe_AddRef(pGameInstance);
 
 	pGameInstance->Clear(m_iLevelIndex);
-	pGameInstance->Clear(0);
+	//pGameInstance->Clear(0);
 
 	Safe_Release(pGameInstance);
 
@@ -75,7 +75,7 @@ HRESULT CLevel_Manager::Swap_Level(_uint iLevelIndex)
 	Safe_AddRef(pGameInstance);
 
 	pGameInstance->Clear(m_iLevelIndex);
-	pGameInstance->Clear(0);
+	//pGameInstance->Clear(0);
 
 	Safe_Release(pGameInstance);
 

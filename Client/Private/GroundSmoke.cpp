@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CGroundSmoke::CGroundSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CEffectW(pDevice, pContext)
 {
 
 }
 
 CGroundSmoke::CGroundSmoke(const CGroundSmoke& rhs)
-	: CMasterEffect(rhs)
+	: CEffectW(rhs)
 {
 
 }
@@ -25,34 +25,13 @@ HRESULT CGroundSmoke::Initialize_Prototype()
 
 HRESULT CGroundSmoke::Initialize(void* pArg)
 {
-	if (nullptr != pArg)
-		memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fPlusX = Random::Generate_Float(m_EffectDesc.vStartPosX.x, m_EffectDesc.vStartPosX.y);
-	m_fPlusY = Random::Generate_Float(m_EffectDesc.vStartPosY.x, m_EffectDesc.vStartPosY.y);
-	m_fPlusZ = Random::Generate_Float(m_EffectDesc.vStartPosZ.x, m_EffectDesc.vStartPosZ.y);
-
-
-	m_dFrameSpeed = (_double)Random::Generate_Float(m_EffectDesc.vFrameSpeed.x, m_EffectDesc.vFrameSpeed.y);
-
-	m_dSpeedX = (_double)Random::Generate_Float(m_EffectDesc.vSpeedX.x, m_EffectDesc.vSpeedX.y);
-	m_dSpeedY = (_double)Random::Generate_Float(m_EffectDesc.vSpeedY.x, m_EffectDesc.vSpeedY.y);
-	m_dSpeedZ = (_double)Random::Generate_Float(m_EffectDesc.vSpeedZ.x, m_EffectDesc.vSpeedZ.y);
-
-	m_vSize = { Random::Generate_Float(m_EffectDesc.vSizeX.x,m_EffectDesc.vSizeX.y) , Random::Generate_Float(m_EffectDesc.vSizeY.x, m_EffectDesc.vSizeY.y),1.f };
-	
-	m_fSizeSpeedX = Random::Generate_Float(m_EffectDesc.vSizeSpeedX.x, m_EffectDesc.vSizeSpeedX.y);
-	m_fSizeSpeedY = Random::Generate_Float(m_EffectDesc.vSizeSpeedY.x, m_EffectDesc.vSizeSpeedY.y);
-
-	m_iFrame = Random::Generate_Int(0, 12);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
 	m_fAlpha = 0.5f;
 
@@ -65,7 +44,7 @@ void CGroundSmoke::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_dSpeedY -= m_EffectDesc.fGravity * (TimeDelta);
+	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * (TimeDelta);
 
 	m_pTransformCom->Set_Speed(m_dSpeedY);
 	m_pTransformCom->Go_Up(TimeDelta);
@@ -191,23 +170,6 @@ HRESULT CGroundSmoke::SetUp_ShaderResources()
 	return S_OK;
 }
 
-void CGroundSmoke::Update_Frame(_double TimeDelta)
-{
-	m_FrameAccTime += TimeDelta;
-
-	if (m_FrameAccTime >= m_dFrameSpeed)
-	{
-		++m_iFrame;
-		m_FrameAccTime = 0.0;
-		if (m_iFrame >= m_iNumX * m_iNumY)
-		{
-			m_iFrame = m_iNumX * m_iNumY - 1;
-
-			m_isDead = true;
-		}
-
-	}
-}
 
 CGroundSmoke* CGroundSmoke::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

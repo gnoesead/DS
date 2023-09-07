@@ -15,12 +15,19 @@ END
 
 BEGIN(Client)
 
-class CTrainSmoke final : public CMasterEffect
+class CAurora final : public CGameObject
 {
+public:
+	typedef struct Effecttag
+	{
+		CTransform* pTransform;
+
+	}EFFECTDESC;
+
 private:
-	CTrainSmoke(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CTrainSmoke(const CTrainSmoke& rhs);
-	virtual ~CTrainSmoke() = default;
+	CAurora(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAurora(const CAurora& rhs);
+	virtual ~CAurora() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -50,15 +57,28 @@ private:
 	_double					m_FrameAccTime = { 0.0 };
 	_uint					m_iFrame = { 0 };
 
-	_float					m_fSize = { 0.f };
+	_float3					m_vSize = { 0.f ,0.f , 0.f };
 	_double					m_dFrameSpeed = { 0.f };
+
 	_double					m_dSpeedX = { 0.f };
 	_double					m_dSpeedY = { 0.f };
-	_float					m_fSizeSpeed = { 0.f };
+	_double					m_dSpeedZ = { 0.f };
 
+	_float					m_fPlusX = { 0.f };
+	_float					m_fPlusY = { 0.f };
 	_float					m_fPlusZ = { 0.f };
+
+	_float					m_fSizeSpeedX = { 0.f };
+	_float					m_fSizeSpeedY = { 0.f };
+
+	EFFECTDESC				m_EffectDesc;
+
+	_float					m_fAlpha = { 1.f };
+	_float					m_fAlphaDecreseSpeed = { 0.f };
+	_float					m_fColor = { 0.f };
+
 public:
-	static CTrainSmoke* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAurora* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };

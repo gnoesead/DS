@@ -287,7 +287,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
-	/*
+	
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
 	    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
 	{
@@ -299,15 +299,15 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
-	}*/
-
+	}
+	/*
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Rengoku"), &CharacterDesc)))
 	{
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
 	}
-
+	*/
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -331,8 +331,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
 		return E_FAIL;
 	}
-
-	
 
 
 	Safe_Release(pGameInstance);

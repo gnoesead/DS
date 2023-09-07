@@ -33,7 +33,13 @@ public:
 	void	Set_ThreeCnt(_int Cnt) { m_iThreeCnt = Cnt; }
 	void	Plus_ThreeCnt() { m_iThreeCnt++; }
 
+	_bool	Get_BattleOn_Swamp() { return m_isBattleOn_Swamp; }
+	void	Set_BattleOn_Swamp(_bool on) { m_isBattleOn_Swamp = on; }
+
 	//잠입모드용
+	_int	Get_ResetIndex_Player() { return m_iResetIndex_ForPlayer; }
+	void	Set_ResetIndeX_Player(_int index) { m_iResetIndex_ForPlayer = index; }
+
 	_bool	Get_PlayerBack() { return m_isPlayerBack; }
 	void	Set_PlayerBack(_bool back) { m_isPlayerBack = back; }
 	_bool	Get_ZenitsuBack() { return m_isZenitsuBack; }
@@ -64,7 +70,13 @@ private:
 	_int	m_iThreeCnt = { 0 };
 
 
+	//스왐프 몬스터 배틀 시작 관련
+	_bool	m_isBattleOn_Swamp = { false };
+
+
 	//잠입 모드용
+	_int	m_iResetIndex_ForPlayer = { 0 };
+
 	_bool	m_isPlayerBack = { false };
 	_bool	m_isZenitsuBack = { false };
 	_float4		m_Dir_StealthAtk = { 0.0f, 0.0f, 0.0f, 0.0f };

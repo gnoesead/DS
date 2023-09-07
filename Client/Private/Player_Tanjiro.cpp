@@ -20,6 +20,7 @@
 #include "Camera_Free.h"
 #include "GroundSmoke.h"
 #include "WaterParticleEffect.h"
+#include "EffectW_Manager.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -77,7 +78,13 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
-	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, -1.0f, 0.0f});
+	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, 1.0f, 0.0f});
+
+	//_vector{ 8.f, 0.f, 10.f, 1.f }
+	m_ResetPos[0] = { 8.f, 0.f, 10.f, 1.f }; //첫지역
+	m_ResetPos[1] = { 78.18f, 0.05f, 7.75f, 1.f }; // 처음 이동
+	m_ResetPos[2] = { 75.1f, 0.05f, 67.63f, 1.f }; // 둘째 이동
+	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // 마지막 이동
 
 	return S_OK;
 }
@@ -98,6 +105,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_C))
+	{
+		//m_pRendererCom->Set_RadialBlur();
+		m_pRendererCom->Set_RadialBlur();
 	}
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
@@ -121,9 +133,19 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
 
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+
+		
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 	}
 
 	Safe_Release(pGameInstance); 
@@ -136,7 +158,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) //탄지로
 	{
 		Player_Change_Setting_Status(dTimeDelta);
-		Animation_Control(dTimeDelta);
+
+		if(m_isSwapping_State == false)
+			Animation_Control(dTimeDelta);
 	}
 	else
 	{
@@ -623,9 +647,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
+			
 		}
 		if (50 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			
 			if (0 == m_iEvent_Index)
 			{
 				if (m_Moveset.m_iAwaken == 0)
@@ -634,7 +660,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 			}
 		}
-
 #pragma endregion
 
 
@@ -648,8 +673,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
 		}
-		
 #pragma endregion
+
 
 
 #pragma region Charge_Attack
@@ -680,9 +705,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}
-
 		}
-
 #pragma endregion
 
 #pragma region Move & Hitted
@@ -704,8 +727,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (10 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기멈춤
 		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			//if (0 == m_iEvent_Index)	// 0.0
+			//	Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 		}
 
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
@@ -824,7 +847,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
 			else if(1 == m_iEvent_Index)	// 0.58
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 		}
@@ -848,7 +875,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		if (133 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin되면서 떨어짐
 		{
 			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
 			
 		}
 
@@ -892,6 +922,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 			Animation_Control_Battle_Move(dTimeDelta);
 
+			
 			Animation_Control_Battle_Attack(dTimeDelta);
 
 			Animation_Control_Battle_Charge(dTimeDelta);
@@ -905,6 +936,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 			Animation_Control_Battle_Awaken(dTimeDelta);
 
 			Animation_Control_Battle_Special(dTimeDelta);
+			
 		}
 	}
 	else if (m_ePlayerState == PLAYER_ADVENTURE)
@@ -1067,7 +1099,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 		JumpStop(0.3);
-		Set_FallingStatus(3.0f, 0.0f);
+		Set_FallingStatus(2.8f, 0.01f);
 	}
 	Ground_Animation_Play(50, 51);
 	Go_Straight_Constant(dTimeDelta, 50, 4.f * m_fScaleChange);
@@ -1840,8 +1872,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.3f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 125, 0.3f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		Go_Dir_Constant(dTimeDelta, 125, 0.2f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(125, 126);
 #pragma endregion
@@ -2058,6 +2090,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 
 			m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 			m_dChangePositionAccTime = 0.0;
+
+			CFadeManager::GetInstance()->Set_Fade_Color(true);
+			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
+			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
 
 		Safe_Release(pGameInstance);
@@ -2087,8 +2123,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_isPlayerBack_Tanjiro = false;
 			m_dDelay_PlayerBack_Tanjiro = 0.0;
 
+			m_iResetIndex = CMonsterManager::GetInstance()->Get_ResetIndex_Player();
 			m_Moveset.m_isRestrict_Adventure = false;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 8.f, 0.f, 10.f, 1.f });
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
 		}
 	}
 }
@@ -2112,10 +2149,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		//m_isBoxJumping = true;
 		//떨어지는
 		if (m_isPlayerStatus_OnRoof)
-			Jumping(1.0f, 0.07f);			// 처음 점프 // 파워 , 감속도
+			Jumping(1.0f, 0.077f);			// 처음 점프 // 파워 , 감속도
 		//올라가는
 		else
-			Jumping(1.55f, 0.06f);			
+			Jumping(1.55f, 0.067f);			
 		m_isFirst_Jump2_To_Box = true;
 		m_dDelay_BoxJump = 0.0;
 
@@ -2137,7 +2174,6 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_ReverseDir), 0.8f);
 
 			m_eCurNavi = m_eNextNavi;
-
 		}
 	}
 
@@ -2160,7 +2196,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 	NAVI_VILLAGE_INSIDEWALL2 , NAVI_VILLAGE_ROOF , NAVI_VILLAGE_WALL , NAVI_VILLAGE_BATTLE,
 	NAVI_HOUSE_0_0,NAVI_HOUSE_1_0,NAVI_HOUSE_1_1,NAVI_HOUSE_2_0,NAVI_HOUSE_3_0,NAVI_HOUSE_4_0, 
 	NAVI_TRAIN, NAVI_ACAZA, NAVI_END };
-*/
+	*/
 	if (m_isPlayerStatus_OnRoof == false)
 	{
 		if (NAVI_VILLAGE_WALL == m_eNextNavi)
@@ -2191,10 +2227,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&m_Dir_ScondJump_Box), 0.8f);
 			//떨어지는
 			if(m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.07f);		// 두번째 올라갈때 점프(땅)
+				Jumping(1.1f, 0.077f);		// 두번째 올라갈때 점프(땅)
 			//올라가는
 			else
-				Jumping(2.15f, 0.08f);
+				Jumping(2.15f, 0.087f);
 		}
 
 		m_dDelay_BoxJump += dTimeDelta;
@@ -2220,10 +2256,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isFirst_Jump2_To_Box = false;
 			//떨어지는
 			if (m_isPlayerStatus_OnRoof)
-				Jumping(1.1f, 0.08f); // 지붕에서 내려갈때 두번째 점프
+				Jumping(1.1f, 0.087f); // 지붕에서 내려갈때 두번째 점프
 			//올라가는
 			else
-				Jumping(2.45f, 0.08f);
+				Jumping(2.45f, 0.087f);
 		}
 
 	}
@@ -2235,7 +2271,6 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			m_isPlayerStatus_OnRoof = true;
 		else
 			m_isPlayerStatus_OnRoof = false;
-		
 	}
 	
 }
@@ -2258,6 +2293,7 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 		CPlayerManager::GetInstance()->Set_Support(m_StatusDesc.fSupport);
 
 		CPlayerManager::GetInstance()->Set_Swaping_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
 	}
 
 	m_dDelay_Player_Change += dTimeDelta;
@@ -2266,9 +2302,9 @@ void CPlayer_Tanjiro::Player_Change(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_BATTLE_JUMP || iCurAnim == 84 || iCurAnim == 85 || iCurAnim == 86)
 	{
-		if (m_dDelay_Player_Change < 1.5)
+		if (m_dDelay_Player_Change < 0.9)
 		{
-			m_pTransformCom->Go_Up(dTimeDelta * 5.0f);
+			m_pTransformCom->Go_Up(dTimeDelta * 7.0f);
 
 			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
 			_float4 MyPos;
@@ -2627,10 +2663,19 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 
 	if (m_dWaterEffectAccTime > 0.1)
 	{
-		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
-		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , 0.f , 0.f , 0.f);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+			
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+		
 		for (_uint i = 0; i < 5; ++i)
-			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
 		m_dWaterEffectAccTime = 0.0;
 	}

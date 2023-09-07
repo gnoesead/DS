@@ -25,13 +25,13 @@ public:
 		STATE_NEXTPHASE2, STATE_NEXTPHASE3,
 		STATE_HEAL,
 		STATE_AWAKE, STATE_AWAKE_COMBOPUNCH,
-
+		
 		STATE_NACHIM, STATE_NACHIM_COMBOPUNCH, STATE_NACHIM_AIRGUN,
 		STATE_CINEMATIC,
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER, STATE_HIT_CUTSCENE
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE,STATE_HIT_HEKIREKI
 
 
 	};
@@ -253,6 +253,7 @@ public:
 	void Trigger_Hit_GetUp();
 	void Trigger_Hit_RollGetUp();
 	void Trigger_Hit_BigGetUp();
+	void Tirgger_Hit_Hekireki();
 
 #pragma endregion
 
@@ -294,7 +295,7 @@ private: //패턴 함수들
 	void Update_Hit_GetUp(_double dTimeDelta);
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
-
+	void Update_Hit_Hekireki(_double dTimeDelta);
 
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);

@@ -368,7 +368,7 @@ void CMission::LateTick(_double TimeDelta)
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 			CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(true);
 		}
-
+		/*
 		// Monster
 		_vector Trigger_2 = { 67.f, 3.f, 19.9f };
 		_vector vDist_2 = Pos - Trigger_2;
@@ -381,7 +381,7 @@ void CMission::LateTick(_double TimeDelta)
 			CFadeManager::GetInstance()->Set_Fade_OutIn(true, 1.f);
 			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
-
+		*/
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE) {

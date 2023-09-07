@@ -89,7 +89,8 @@ void CPlayer_Rengoku::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Animation_Control(dTimeDelta);
+	if (m_isSwapping_State == false)
+		Animation_Control(dTimeDelta);
 	
 	//局聪皋捞记 贸府
 	m_pModelCom->Play_Animation(dTimeDelta);
@@ -779,7 +780,7 @@ void CPlayer_Rengoku::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 		JumpStop(0.45);
-		Set_FallingStatus(3.2f, 0.0f);
+		Set_FallingStatus(3.0f, 0.01f);
 	}
 	Ground_Animation_Play(25, 26);
 	Go_Straight_Constant(dTimeDelta, 25, 4.2f * m_fScaleChange);
