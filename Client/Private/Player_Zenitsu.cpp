@@ -1808,6 +1808,7 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		
 	}
 
+
 	m_dDelay_Player_Change += dTimeDelta;
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1842,6 +1843,8 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		AnotherPos.y = 13.0f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 	}
+	
+
 	
 }
 

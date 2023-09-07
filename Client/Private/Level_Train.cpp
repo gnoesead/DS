@@ -28,6 +28,7 @@
 #include "ColliderManager.h"
 
 #include "PlayerManager.h"
+#include "WebManager.h"
 #include "Camera_Manager.h"
 #include "OptionManager.h"
 
@@ -169,6 +170,10 @@ void CLevel_Train::Tick(_double dTimeDelta)
 
         }
     }
+
+
+	//web ±â¹Í
+	CWebManager::GetInstance()->Tick(dTimeDelta);
 
 
     Safe_Release(pGameInstance);

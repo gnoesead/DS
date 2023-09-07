@@ -25,6 +25,7 @@
 #include "EffectPlayer.h"
 
 #include "PlayerManager.h"
+#include "WebManager.h"
 
 
 CMainApp::CMainApp()
@@ -946,6 +947,8 @@ void CMainApp::Free()
 	CMonsterManager::GetInstance()->DestroyInstance();
 	CSwampManager::GetInstance()->DestroyInstance();
 	CPlayerManager::GetInstance()->DestroyInstance();
+	CWebManager::GetInstance()->DestroyInstance();
+	
 
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();

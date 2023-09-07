@@ -61,7 +61,6 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 
 	switch (m_AtkCollDesc.eBulletType)
 	{
-
 	case CAtkCollider::TYPE_BULLET:
 		Setting_BaseBullet();
 		break;

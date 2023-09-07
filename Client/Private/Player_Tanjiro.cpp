@@ -14,6 +14,7 @@
 #include "Fade_Manager.h"
 
 #include "MonsterManager.h"
+#include "WebManager.h"
 
 #include "Camera_Manager.h"
 #include "OptionManager.h"
@@ -1230,14 +1231,15 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			Go_Straight_Deceleration(dTimeDelta, 28, 4.5f, 0.1f);
 		}
 
-		if (0.5f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 1.0f)
+		/*
+		if (0.5f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 0.7f)
 		{
 			m_pTransformCom->Go_Left(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
 		}
-		else if (1.0f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 1.5f)
+		else if (0.7f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 1.0f)
 		{
 			m_pTransformCom->Go_Right(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
-		}
+		}*/
 		
 	}
 	else
