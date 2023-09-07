@@ -804,11 +804,11 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	UIDesc8.m_Type = 0;
 
-	/*if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc8))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}*/
+	}
 
 
 

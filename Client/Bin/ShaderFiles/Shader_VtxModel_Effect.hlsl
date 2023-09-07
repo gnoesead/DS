@@ -44,6 +44,8 @@ float2			g_vPaddingEnd = { 0.f, 0.f };
 float2			g_vTileSize = { 1.f, 1.f };			// Width, Height
 float2			g_vCurTile = { 0.f, 0.f };			// ї­, За
 
+float           g_Black_Cull_Amount = { 0.5f };
+
 struct VS_IN
 {
 	float3		vPosition : POSITION;
@@ -254,7 +256,7 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.5f;
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1177,7 +1179,7 @@ PS_OUT  PS_DIFFUSE_CALC_RED_DISSOLVE(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.5f;
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1573,7 +1575,7 @@ PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.5f;
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1805,7 +1807,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_DIFFUSE_CALC_RED_DISSOLVE();
 	}
 
-	pass DiffuseCalcRedNoiseNoZWrite	// 16
+	pass DiffuseCalcRedDissolveNoZWrite	// 16
 	{
 		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);

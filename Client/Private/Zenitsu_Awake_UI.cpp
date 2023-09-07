@@ -10,6 +10,8 @@
 #include "Fade_Manager.h"
 #include "Level_Loading.h"
 #include "OptionManager.h"
+#include "Battle_UI_Manager.h"
+
 
 Zenitsu_Awake_UI::Zenitsu_Awake_UI(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -63,26 +65,22 @@ void Zenitsu_Awake_UI::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 
-	if (m_Cur_Num == 0) {
-		m_Is_Mask = true;
+	
+	if (m_Cur_Num == 1) {
+		m_Is_Render = true;
+		m_Is_Mask = false;
+		m_Is_Black_Mask = false;
 		m_fX = 640;
 		m_fY = 360;
-		m_Origin_X = 256.f;
-		m_Origin_Y = 128.f;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
 		m_UI_Layer = 11;
 	}
-	else if (m_Cur_Num == 1) {
-		m_Is_Mask = true;
-		m_fX = 640;
-		m_fY = 360;
-		m_Origin_X = 1024.f;
-		m_Origin_Y = 1024.f;
-		m_Size_Param = 0.5f;
-		m_UI_Layer = 11;
-	}
 	else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
-		m_Is_Mask = false;
+		m_Is_Render = true;
+		m_Is_Mask = true;
+		m_Is_Black_Mask = false;
 		m_fX = 640;
 		m_fY = 360;
 		m_Origin_X = 1280.f;
@@ -102,28 +100,35 @@ void Zenitsu_Awake_UI::LateTick(_double TimeDelta)
 {
 	__super::LateTick(TimeDelta);
 
-	Get_Player_Info(TimeDelta);
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	m_Cur_Num = CBattle_UI_Manager::GetInstance()->Get_Zen_UI_Num();
 
-
-	// Player
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player")) != nullptr) {
-
-		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
-
+	if (m_Cur_Num == 1) {
+		m_Is_Render = true;
+		m_Is_Mask = false;
+		m_Is_Black_Mask = true;
+		m_fX = 625;
+		m_fY = 580;
+		m_Origin_X = 1024.f * 1.f;
+		m_Origin_Y = 1024.f * 1.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 11;
 	}
-
-	Safe_Release(pGameInstance);
-
-	if (m_Alpha == 0.f) {
+	else if (m_Cur_Num >= 2 && m_Cur_Num <= 4) {
+		m_Is_Render = true;
+		m_Is_Mask = true;
+		m_Is_Black_Mask = false;
+		m_fX = 640;
+		m_fY = 360;
+		m_Origin_X = 1280.f;
+		m_Origin_Y = 720.f;
+		m_Size_Param = 1.f;
+		m_UI_Layer = 11;
+	}
+	
+	if (m_Cur_Num == 0) {
 		m_Is_Render = false;
 	}
-	else {
-		m_Is_Render = true;
-	}
-
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
@@ -142,7 +147,10 @@ HRESULT Zenitsu_Awake_UI::Render()
 
 
 		if (m_Is_Mask == true) {
-			m_pShaderCom->Begin(27);
+			if (m_Is_Black_Mask)
+				m_pShaderCom->Begin(27);
+			else
+				m_pShaderCom->Begin(14);
 		}
 		else {
 			m_pShaderCom->Begin(1);

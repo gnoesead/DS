@@ -61,6 +61,12 @@ public:
 	_bool Get_Battle_Result_Off_2();
 
 
+public: // Zen_Cut_In
+	void Set_Zen_UI_Num(_int On);
+	_int Get_Zen_UI_Num();
+
+
+
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
@@ -91,6 +97,11 @@ private:
 	_bool m_Battle_Result_Off_2 = { false };
 	_float m_Battle_Result_TimeAcc_2 = { 0.f };
 	_bool m_Battle_Result_Time_2 = { false };
+
+private: // Cut_In
+	_int m_Zen_UI_Num = { 0 };
+
+
 
 public:
 	virtual void Free() override;

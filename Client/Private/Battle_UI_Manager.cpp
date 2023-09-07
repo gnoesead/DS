@@ -221,5 +221,15 @@ _bool CBattle_UI_Manager::Get_Battle_Result_Off_2()
 	return m_Battle_Result_Off_2;
 }
 
+void CBattle_UI_Manager::Set_Zen_UI_Num(_int On)
+{
+	m_Zen_UI_Num = On;
+}
+
+_int CBattle_UI_Manager::Get_Zen_UI_Num()
+{
+	return m_Zen_UI_Num;
+}
+
 
 
