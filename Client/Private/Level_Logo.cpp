@@ -569,6 +569,14 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+#pragma region AKAZA
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_0.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_0");
+		return E_FAIL;
+	}
+#pragma endregion
+
 #pragma region KYOGAI
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
 	{
@@ -599,6 +607,20 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 #pragma endregion
+
+#pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_L.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_L");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_R.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_R");
+		return E_FAIL;
+	}
+#pragma endregion
+
 	return S_OK;
 }
 

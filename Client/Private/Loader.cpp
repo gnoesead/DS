@@ -359,6 +359,20 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_20_Particle");
 		return E_FAIL;
 	}
+	/* Prototype_Component_VIBuffer_10_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_10_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 10))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_10_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_5_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_5_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 5))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_5_Particle");
+		return E_FAIL;
+	}
 #pragma endregion
 	_matrix		PivotMatrix = XMMatrixIdentity();
 #pragma region Effect

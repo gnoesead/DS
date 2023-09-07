@@ -50,7 +50,7 @@ HRESULT CCustomParticle::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fAlpha = 0.f;
+	m_fAlpha = 0.7f;
 
 	return S_OK;
 }
@@ -62,7 +62,7 @@ void CCustomParticle::Tick(_double dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	if (m_CustomPartDesc.fLifeTime * 0.7f > m_dTimeAcc)
+	/*if (m_CustomPartDesc.fLifeTime * 0.7f > m_dTimeAcc)
 	{
 		m_fAlpha += (_float)dTimeDelta * 1.5f;
 
@@ -75,7 +75,7 @@ void CCustomParticle::Tick(_double dTimeDelta)
 
 		if (0.f > m_fAlpha)
 			m_fAlpha = 0.f;
-	}
+	}*/
 
 	//m_fScale += (_float)dTimeDelta * 0.7f;
 

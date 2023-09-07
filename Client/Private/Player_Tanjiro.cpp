@@ -96,37 +96,88 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
-	{
-		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		vPos.y += 1.f;
-		_float3 vRange = { 1.f, 1.f, 1.f };
-		// PoolTag, BufferTag, TextureTag, 
-		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-		// Range, TickPerSize, ShaderPass, SpriteSpeed, SpriteXY
-		CParticleManager::GetInstance()->PlayParticle("Test", 
-			TEXT("Prototype_Component_VIBuffer_50_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grd_Radial007")
-			, vPos, 2.f, 0.5f, 2.0f, 0.2f, 1.f, vRange, -1.f, CCustomParticle::PASS_RAMP, 1.f, _int2(1, 1), 
-			TEXT("Prototype_Component_Texture_Ramp08"), 0.98f);
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_RBRACKET))
-	{
-		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		vPos.y += 1.f;
-		vPos.z += 1.f;
-		_float3 vRange = { 0.1f, 0.1f, 0.1f };
-		_float3 vTPerD = { 7.f, 10.f, 7.f };
-		_int3	vDirOption = { 1, 0, 1 };
-		// PoolTag, BufferTag, TextureTag, 
-		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-		// Range, TickPerSize, TickPerDir, DirOption, ShaderPass, SpriteSpeed, SpriteXY
-		CParticleManager::GetInstance()->PlayParticle("Test2",
-			TEXT("Prototype_Component_VIBuffer_20_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grd_Radial007")
-			, vPos, 3.f, 0.1f, 0.15f, 0.1f, 0.3f, vRange, -1.f, vTPerD, vDirOption, CCustomParticle::PASS_RAMP, 1.f, _int2(1, 1), 
-			TEXT("Prototype_Component_Texture_Ramp08"), 0.98f);
-	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	if (pGameInstance->Get_DIKeyDown(DIK_T))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		vPos.y += 1.f;
+		vPos.z -= 0.5f;
+		_float3 vRange = { 0.3f, 0.5f, 0.3f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 1, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("Test",
+			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_Cmn_Smoke_24_A")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_Y))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		vPos.y += 1.f;
+		vPos.z -= 0.5f;
+		_float3 vRange = { 0.3f, 0.5f, 0.3f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 1, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("Test2",
+			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_25_A")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_G))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		vPos.y += 1.f;
+		vPos.z -= 0.5f;
+		_float3 vRange = { 0.3f, 0.5f, 0.3f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 1, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("Test3",
+			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_29_A")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_H))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		vPos.y += 1.f;
+		vPos.z -= 0.5f;
+		_float3 vRange = { 0.3f, 0.5f, 0.3f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 1, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("Test4",
+			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P0002_Aura006_00")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(8, 8),
+			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.9f);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_V))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		vPos.y += 1.f;
+		vPos.z -= 0.5f;
+		_float3 vRange = { 0.3f, 0.5f, 0.3f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 1, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("Test5",
+			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Splash003")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4),
+			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	}
+	if (pGameInstance->Get_DIKeyDown(DIK_B))
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
