@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CAlertRect::CAlertRect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject(pDevice, pContext)
+	: CMasterEffect(pDevice, pContext)
 {
 
 }
 
 CAlertRect::CAlertRect(const CAlertRect& rhs)
-	: CGameObject(rhs)
+	: CMasterEffect(rhs)
 {
 
 }

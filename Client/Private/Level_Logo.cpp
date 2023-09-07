@@ -568,6 +568,50 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	}
 #pragma endregion
 
+#pragma region TANJIRO
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo1_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo1_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo2_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo2_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo3_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo3_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down_Decal1Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down_Decal1Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Down_Decal2Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Down_Decal2Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_BasicCombo4_Up_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_BasicCombo4_Up_DecalParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt_DecalParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_DecalParticle");
+		return E_FAIL;
+	}
+#pragma endregion
+
 #pragma region KYOGAI
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
 	{

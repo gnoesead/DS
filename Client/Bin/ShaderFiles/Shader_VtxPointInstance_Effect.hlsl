@@ -93,7 +93,7 @@ VS_OUT VS_MAIN(VS_IN In)
 	Out.vPSize = In.vPSize;
 	Out.vAdditional = In.vAdditional;
 	Out.vAdditional2 = In.vAdditional2;
-	Out.vLook = In.vLook;
+	Out.vLook = mul(In.vLook, g_WorldMatrix);
 
 	float2 vCurTile = float2(g_vTileSize.x * ((int)In.vAdditional3.x % (int)g_vTiles.x), g_vTileSize.y * ((int)In.vAdditional3.x / (int)g_vTiles.y));
 

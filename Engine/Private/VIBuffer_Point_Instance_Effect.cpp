@@ -683,6 +683,12 @@ void CVIBuffer_Point_Instance_Effect::Tick(_double TimeDelta, INSTANCEDESC* pDes
 							y *= -1.f;
 
 						((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.x = fWeight * y + m_FrameOverTime[((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.w].fValue;
+					
+						if (((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.x >= m_eEffectDesc.vTiles.x * m_eEffectDesc.vTiles.y)
+						{
+							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.x = 0.f;
+							((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional.y = 0;
+						}
 					}
 				}
 			}
@@ -835,7 +841,7 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 		case CMasterEffect::CIRCLE:
 		{
 			_float fAngle = Random::Generate_Float(0, m_eEffectDesc.fArc);
-			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)), 0.f, sinf(XMConvertToRadians(fAngle)), 1.f);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)) * m_eEffectDesc.fShapeRadius, 0.f, sinf(XMConvertToRadians(fAngle)) * m_eEffectDesc.fShapeRadius, 1.f);
 
 			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
 			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
@@ -939,6 +945,13 @@ void CVIBuffer_Point_Instance_Effect::InitialSetting()
 				else
 					((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.z = m_eEffectDesc.fFrameSpeedMin;
 			}
+
+			if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartFrameOption)
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y = m_eEffectDesc.iStartFrame.x;
+			else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartFrameOption)
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y = Random::Generate_Int(m_eEffectDesc.iStartFrame.x, m_eEffectDesc.iStartFrame.y);
+
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y;
 		}
 
 		// CurSpeedIndex
@@ -1043,7 +1056,7 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 		case CMasterEffect::CIRCLE:
 		{
 			_float fAngle = Random::Generate_Float(0, m_eEffectDesc.fArc);
-			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)), 0.f, sinf(XMConvertToRadians(fAngle)), 1.f);
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation = _float4(cosf(XMConvertToRadians(fAngle)) * m_eEffectDesc.fShapeRadius, 0.f, sinf(XMConvertToRadians(fAngle)) * m_eEffectDesc.fShapeRadius, 1.f);
 
 			_vector vPos = XMLoadFloat4(&((VTXINSTANCEEFFECT*)SubResource.pData)[i].vTranslation);
 			_vector vLook = XMVector3Normalize(vPos - XMVectorSet(0.f, 0.f, 0.f, 1.f));
@@ -1146,6 +1159,13 @@ void CVIBuffer_Point_Instance_Effect::Reset_Data()
 				else
 					((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.z = m_eEffectDesc.fFrameSpeedMin;
 			}
+
+			if (CMasterEffect::OP_CONSTANT == m_eEffectDesc.eStartFrameOption)
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y = m_eEffectDesc.iStartFrame.x;
+			else if (CMasterEffect::OP_RAND_TWO_CONSTANT == m_eEffectDesc.eStartFrameOption)
+				((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y = Random::Generate_Int(m_eEffectDesc.iStartFrame.x, m_eEffectDesc.iStartFrame.y);
+
+			((VTXINSTANCEEFFECT*)SubResource.pData)[i].vAdditional3.x = ((VTXINSTANCEEFFECT*)SubResource.pData)[i].vFrame.y;
 		}
 
 		// CurSpeedIndex

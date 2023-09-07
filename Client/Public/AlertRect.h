@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 
@@ -14,7 +14,7 @@ END
 
 BEGIN(Client)
 
-class CAlertRect final : public CGameObject
+class CAlertRect final : public CMasterEffect
 {
 public:
 	enum  STATE{ STATE_SHOWON , STATE_WAIT,STATE_SHOWOFF};
