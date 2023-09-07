@@ -130,7 +130,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		if (m_Swap_TimeAcc >= 1.2f)
+		if (m_Swap_TimeAcc >= 1.f)
 			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		m_fLandY = pPlayer->Get_LandY();
@@ -272,7 +272,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 // Center
 	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, m_fLandY);
 
-	if (m_Swap_TimeAcc < 1.2f)
+	if (m_Swap_TimeAcc < 1.f)
 		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
 
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;

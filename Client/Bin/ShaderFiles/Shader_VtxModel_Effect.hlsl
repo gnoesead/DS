@@ -254,7 +254,7 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.25f;
+	vMtrlDiffuse.a += amount * 0.5f;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1177,7 +1177,7 @@ PS_OUT  PS_DIFFUSE_CALC_RED_DISSOLVE(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.25f;
+	vMtrlDiffuse.a += amount * 0.5f;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1573,7 +1573,7 @@ PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
 
 	vMtrlDiffuse.a *= amount;
 
-	vMtrlDiffuse.a += amount * 0.25f;
+	vMtrlDiffuse.a += amount * 0.5f;
 
 	Out.vDiffuse = vMtrlDiffuse;
 

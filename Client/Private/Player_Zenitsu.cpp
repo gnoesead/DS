@@ -646,7 +646,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.3f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
@@ -657,6 +657,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 			else if (1 == m_iEvent_Index) {
+
+				
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.2f;
@@ -694,7 +696,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.3f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
