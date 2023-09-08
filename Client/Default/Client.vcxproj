@@ -287,6 +287,8 @@
     <ClInclude Include="..\Public\TrainSmoke.h" />
     <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h" />
     <ClInclude Include="..\Public\WaterParticleEffect.h" />
+    <ClInclude Include="..\Public\WebManager.h" />
+    <ClInclude Include="..\Public\WebShot.h" />
     <ClInclude Include="..\Public\World_UI_Hp.h" />
     <ClInclude Include="..\Public\Zenitsu_Awake_UI.h" />
     <ClInclude Include="Client.h" />
@@ -405,6 +407,8 @@
     <ClCompile Include="..\Private\Swamp_SmokeEffect.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp" />
     <ClCompile Include="..\Private\WaterParticleEffect.cpp" />
+    <ClCompile Include="..\Private\WebManager.cpp" />
+    <ClCompile Include="..\Private\WebShot.cpp" />
     <ClCompile Include="..\Private\World_UI_Hp.cpp" />
     <ClCompile Include="..\Private\Zenitsu_Awake_UI.cpp" />
     <ClCompile Include="Client.cpp" />

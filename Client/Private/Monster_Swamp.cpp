@@ -1375,7 +1375,10 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_JUMP_IDLE)
 	{
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		//m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		_float4 Dir;
+		XMStoreFloat4(&Dir, Calculate_Dir_FixY());
+		m_pTransformCom->Set_Look(Dir);
 
 		if (m_isFirst_Atk_0)
 		{

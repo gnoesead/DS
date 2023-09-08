@@ -1313,7 +1313,6 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 	}*/
 	
 
-
 	if (CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR || CurAnim == ANIM_ATK_SKILL_HEKIREKI_AIR_END)
 	{
 		_float4 PlayerPos;
@@ -2033,6 +2032,7 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		
 	}
 
+
 	m_dDelay_Player_Change += dTimeDelta;
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -2067,6 +2067,8 @@ void CPlayer_Zenitsu::Player_Change(_double dTimeDelta)
 		AnotherPos.y = 13.0f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&AnotherPos));
 	}
+	
+
 	
 }
 

@@ -68,9 +68,6 @@ private:
 private:
 	CSwamp*			m_pMySwamp = { nullptr };
 
-private:
-	PrimitiveBatch<DirectX::VertexPositionColor>* m_pPrimitiveBatch = { nullptr };
-	BoundingSphere* m_pSphere = { nullptr };
 
 private:
 	HRESULT Add_Components();

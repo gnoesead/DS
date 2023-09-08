@@ -430,6 +430,12 @@
     <Filter Include="02. GameObjects\UI\08.Cut_In\Zenitsu">
       <UniqueIdentifier>{3cf6f466-7458-456e-be11-196e7536fb16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Spider\WebManager">
+      <UniqueIdentifier>{9ed97551-bbec-43cf-97b9-b6b1695bbc21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Spider\Web">
+      <UniqueIdentifier>{19db0fba-f920-48b2-859b-6b860fa9483a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03. Component\VIBuffer">
       <UniqueIdentifier>{c4dd76a7-9728-4ef9-bf3c-61d79e4def09}</UniqueIdentifier>
     </Filter>
@@ -774,6 +780,12 @@
     <ClInclude Include="..\Public\SmeshStone.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\WebManager.h">
+      <Filter>02. GameObjects\Character\Monster\Spider\WebManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WebShot.h">
+      <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h">
       <Filter>03. Component\VIBuffer</Filter>
     </ClInclude>
@@ -1108,6 +1120,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\SmeshStone.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WebManager.cpp">
+      <Filter>02. GameObjects\Character\Monster\Spider\WebManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WebShot.cpp">
+      <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp">
       <Filter>03. Component\VIBuffer</Filter>
