@@ -283,7 +283,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 
 		if (pGameInstance->Get_DIKeyDown(DIK_1))
 		{
-			Trigger_LinkerCmb();
+			Trigger_LinkerCmb	();
 
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
@@ -629,9 +629,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(8.0f, 8.0f, 8.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
-					CAtkCollider::TYPE_BOUND, vMonsterDir, m_fBigDmg);
+					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
 				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 			}
 
 
@@ -789,14 +792,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATKSTEP_BACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)	// 0.0
+			if (0 == m_iEvent_Index)	// 0.77
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				EffectWorldDesc.vPosition.z += 0.f;
 				EffectWorldDesc.fScale = 1.f;
 
-				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkBack", m_pTransformCom, &EffectWorldDesc);
 			}
 			switch (m_eCurPhase)
 			{
@@ -1012,6 +1015,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			}
 		}
+
+		if (ANIM_SPIN_END == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0
+			{
+				Play_FallDownEffect();
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
 	
 
 		m_iEvent_Index++;
@@ -1032,6 +1044,8 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 		 
 		_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		AtkDir.y = 0.f;
+
+		_float3 vKyogaiOffset = { 0.f , 0.5f, 0.f };
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
@@ -1058,6 +1072,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
+			Play_HitEffect(vKyogaiOffset);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
@@ -1072,6 +1089,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
@@ -1086,6 +1106,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
@@ -1100,6 +1123,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
 		{
@@ -1113,6 +1139,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 			//Set_FallingStatus(3.0f, 0.0f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
@@ -1123,6 +1152,8 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
@@ -1138,6 +1169,8 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success_Hekireki(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			Play_HitEffect(vKyogaiOffset);
 		}
 		Safe_Release(pGameInstance);
 	}

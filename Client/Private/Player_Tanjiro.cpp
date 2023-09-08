@@ -22,6 +22,8 @@
 #include "WaterParticleEffect.h"
 #include "EffectW_Manager.h"
 
+#include "SwampManager.h"
+
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -129,6 +131,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			m_isStealthMode = false;
 		else
 			m_isStealthMode = true;
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
+	{
+		CSwampManager::GetInstance()->Set_Dmg(10.0f);
 	}
 
 	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
@@ -2687,6 +2694,8 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
 		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
 		EffectWDesc.vStartFrame = { 0.f ,5.f };
+		EffectWDesc.fGravity = { 2.f };
+
 		
 		for (_uint i = 0; i < 5; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);

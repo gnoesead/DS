@@ -2140,6 +2140,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_Atk_26");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkBack.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkBack");
+		return E_FAIL;
+	}
 	
 	return S_OK;
 }

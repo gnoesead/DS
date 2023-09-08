@@ -73,12 +73,12 @@ void CSwamp_AlertRect::Tick(_double TimeDelta)
 
 		m_dSetDirAccTime += TimeDelta;
 
-		if (m_dSetDirAccTime < 0.8)
-		{
+		//if (m_dSetDirAccTime < 0.8)
+		//{
 			_vector vLook = Calculate_Dir();
 
 			m_pTransformCom->Rotation(_float3(0.f, -Get_Angle(vLook) + 90.f, 0.f));
-		}
+		//}
 
 		if (m_fAlpha > 1.f)
 			m_eSTATE = STATE_WAIT;

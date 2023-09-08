@@ -259,11 +259,11 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 				if (m_bLineOut == false)
 				{
 					m_dEffectAcc += dTimeDelta;
-					if (m_dEffectAcc > 0.2)
+					if (m_dEffectAcc > 0.05)
 					{
 						m_dEffectAcc = 0.0;
 
-						/* Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);*/
+ 						//Create_GroundSmoke(CGroundSmoke::SMOKE_BLADE );
 					}
 				}
 			}
@@ -633,6 +633,18 @@ void CAtkCollider::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvec
 		EffectWDesc.vStartFrame = { 0.f , 8.f };
 		EffectWDesc.fGravity = { 12.f };
 
+		for (_uint i = 0; i < 1; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_BLADE:
+		
+		EffectWDesc.vStartPosX = { -0.f,0.f }; EffectWDesc.vStartPosY = { 0.0f,0.2f }; EffectWDesc.vStartPosZ = { -0.0f,0.0 };
+		EffectWDesc.vFrameSpeed = { 0.005f , 0.010f };
+		EffectWDesc.vStartSizeX = { 0.5f ,	1.0f }; EffectWDesc.vStartSizeY = { 0.5f , 1.0f };
+		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.5f , 1.0f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSizeSpeedY = { 0.5f , 1.0f };
+		EffectWDesc.vStartFrame = { 0.f , 4.f };
+	
 		for (_uint i = 0; i < 1; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;

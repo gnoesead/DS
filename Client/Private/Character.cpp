@@ -848,13 +848,13 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 	switch (eSmokeType)
 	{
 	case CGroundSmoke::SMOKE_FALLDOWN:
-		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.02f,0.15f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.02f,0.10f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
 		EffectWDesc.vFrameSpeed = { 0.03f , 0.04f };
-		EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
-		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { -3.f , 3.f };
-		EffectWDesc.vSizeSpeedX = { 0.8f , 1.3f }; EffectWDesc.vSizeSpeedY = { 0.8f , 1.3f };
+		EffectWDesc.vStartSizeX = { 0.8f , 1.1f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -1.5f , 1.5f }; EffectWDesc.vSpeedY = { 0.07f , 0.1f };EffectWDesc.vSpeedZ = { -1.5f , 1.5f };
+		EffectWDesc.vSizeSpeedX = { 1.f , 1.3f }; EffectWDesc.vSizeSpeedY = { 1.0f , 1.3f };
 		
-		for (_uint i = 0; i < 10; ++i)
+		for (_uint i = 0; i < 20; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 
 		break;
@@ -1011,24 +1011,28 @@ void CCharacter::Play_FallDownEffect()
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	if (iCurIdx == LEVEL_VILLAGE || iCurIdx == LEVEL_FINALBOSS)
-	{
+	{ 
+		
 		CEffectPlayer::Get_Instance()->Play("FallDown_Particle", m_pTransformCom);	// 돌 이펙트
-		CEffectPlayer::Get_Instance()->Play("FallDown_Effect", m_pTransformCom);	// 동그란 이펙트 점점 커지는
+	
 	}
 
+	CEffectPlayer::Get_Instance()->Play("FallDown_Effect", m_pTransformCom); // 동그란 이펙트 점점 커지는
+	
 	Safe_Release(pGameInstance);
 }
 
-void CCharacter::Play_HitEffect()
+void CCharacter::Play_HitEffect(_float3 vOffset)
 {
 	_uint iRanNum = Random::Generate_Int(0, 5);
 
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	EffectWorldDesc.vPosition = vOffset;
 
 	switch (iRanNum)
 	{
 	case 0:
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom , &EffectWorldDesc);
 		break;
 	case 1:
 	{
@@ -1046,15 +1050,15 @@ void CCharacter::Play_HitEffect()
 	}
 	case 3:
 		EffectWorldDesc.fScale = 1.4f;
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
 		break;
 	case 4:
 		EffectWorldDesc.fScale = 1.4f;
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect6", m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect6", m_pTransformCom, &EffectWorldDesc);
 		break;
 	case 5:
 		EffectWorldDesc.fScale = 1.4f;
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
 		break;
 	}
 }
