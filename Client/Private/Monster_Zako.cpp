@@ -611,7 +611,24 @@ void CMonster_Zako::Trigger()
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
+
+			pPlayer->Set_Hit_Success_Hekireki(true);
+
+			Safe_Release(pGameInstance);
+
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+		}
+		else
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+		}
 	}
 }
 

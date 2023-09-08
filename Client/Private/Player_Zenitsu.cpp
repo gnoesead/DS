@@ -440,13 +440,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
 			}
 			if (3 == m_iEvent_Index)
 			{
@@ -1118,9 +1118,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 					m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, true, 0.3f);
 				else if( 4 == iCurAnimIndex)
 					m_pModelCom->Set_EarlyEnd(4, true, 0.3f);
-				else if(5 == iCurAnimIndex)
-					m_pModelCom->Set_EarlyEnd(5, true, 0.4f);
-
+				else if (5 == iCurAnimIndex)
+				{
+					m_pModelCom->Set_EarlyEnd(5, true, 0.45f);
+				}
 				m_pModelCom->Set_Combo_Trigger(true);
 				//ÄÞº¸ ºÐ±â ¼³Á¤
 				if (5 == iCurAnimIndex)
@@ -1134,7 +1135,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 					// ¾Æ·¡ÄÞº¸ sÄÞº¸
 					if (m_Moveset.m_Down_Battle_Combo_Down)
 					{
-						m_pModelCom->Set_Combo_Another(6);
+						//m_pModelCom->Set_Combo_Another(6);
+						m_pModelCom->Set_Combo_Another(8);
 					}
 					// À§ÄÞº¸ wÄÞº¸
 					else if (m_Moveset.m_Down_Battle_Combo_Up)
@@ -1149,7 +1151,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	}
 	m_pModelCom->Set_EarlyEnd(ANIM_ATK_COMBO, false, 0.3f);
 	m_pModelCom->Set_EarlyEnd(4, false, 0.3f);
-	m_pModelCom->Set_EarlyEnd(5, false, 0.4f);
+	m_pModelCom->Set_EarlyEnd(5, false, 0.45f);
 
 	if (fDistance > 0.7f)
 	{
@@ -1183,7 +1185,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 		else if (0.1f < m_dTime_Comboing_Down && m_dTime_Comboing_Down < 1.05f)
 			Go_Backward_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 12.0f * m_fScaleChange);
 		else if (0.0f < m_dTime_Comboing_Down && m_dTime_Comboing_Down < 0.05f)
-			Go_Straight_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 12.0f * m_fScaleChange);
+			Go_Straight_Constant(dTimeDelta, ANIM_ATK_COMBO_DOWN, 24.0f * m_fScaleChange);
 	}
 
 	//Up

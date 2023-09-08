@@ -59,7 +59,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-
+	
 	m_pTransformCom = pPlayer->Get_TransformCom();
 
 	_float4 PlayerPos;
@@ -122,7 +122,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	//첫 거미줄 웨이브
 	if (m_isTrigger_First)
 	{
-		if (m_dDelay_All > 10.0f)
+		if (m_dDelay_All > 7.0f)
 		{
 			m_dDelay_All = 0.0;
 			m_isTrigger_First = false;
@@ -133,7 +133,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.50f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -146,7 +146,7 @@ void CWebManager::Tick(_double dTimeDelta)
 		if (m_dDelay_All > 10.0f)
 		{
 			m_dDelay_All = 0.0;
-			m_isTrigger_First = false;
+			m_isTrigger_Second = false;
 		}
 		else
 		{
@@ -154,7 +154,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+				m_fLimit_First = Random::Generate_Float(0.13f, 0.45f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -164,10 +164,10 @@ void CWebManager::Tick(_double dTimeDelta)
 	//셋 거미줄 웨이브
 	if (m_isTrigger_Third)
 	{
-		if (m_dDelay_All > 10.0f)
+		if (m_dDelay_All > 14.0f)
 		{
 			m_dDelay_All = 0.0;
-			m_isTrigger_First = false;
+			m_isTrigger_Third = false;
 		}
 		else
 		{
@@ -175,7 +175,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.40f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
