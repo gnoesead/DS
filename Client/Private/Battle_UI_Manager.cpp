@@ -95,7 +95,9 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 		}
 	}
 
-
+	/*if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6)) {
+		m_Timing_On = true;
+	}*/
 
 
 	Safe_Release(pGameInstance);
