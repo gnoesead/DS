@@ -32,6 +32,8 @@
 #include "Fade.h"
 #include "Fade_Manager.h"
 #include "Option.h"
+#include "Timing_UI.h"
+
 
 #include "PlayerManager.h"
 #include "OptionManager.h"
@@ -1857,6 +1859,23 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         TEXT("Prototype_GameObject_FIcon"), &UIDesc6))) {
         Safe_Release(pGameInstance);
         return E_FAIL;
+    }
+
+
+ // Timing_UI
+    CTiming_UI::UIDESC UIDesc7;
+
+
+    for (int i = 0; i < 7; i++) {
+        ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+        UIDesc7.m_Type = i;
+
+        if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+            TEXT("Prototype_GameObject_Timing_UI"), &UIDesc7))) {
+            Safe_Release(pGameInstance);
+            return E_FAIL;
+        }
     }
 
    
