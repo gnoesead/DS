@@ -392,8 +392,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
 
-				CEffectPlayer::Get_Instance()->Play("asdfsdaf", m_pTransformCom);
-
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, m_fBigBlowDmg); // ºòºí·Î¿ì
@@ -551,6 +549,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN);
+
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
@@ -578,7 +579,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 			}
-
+			if (2 == m_iEvent_Index) // 0.75
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Upper", m_pTransformCom);
+			}
 
 		}
 #pragma region ÆòÅ¸ÄÞº¸

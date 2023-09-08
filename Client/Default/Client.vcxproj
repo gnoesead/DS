@@ -288,6 +288,7 @@
     <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h" />
     <ClInclude Include="..\Public\WaterParticleEffect.h" />
     <ClInclude Include="..\Public\World_UI_Hp.h" />
+    <ClInclude Include="..\Public\Zenitsu_Awake_UI.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -405,6 +406,7 @@
     <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp" />
     <ClCompile Include="..\Private\WaterParticleEffect.cpp" />
     <ClCompile Include="..\Private\World_UI_Hp.cpp" />
+    <ClCompile Include="..\Private\Zenitsu_Awake_UI.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

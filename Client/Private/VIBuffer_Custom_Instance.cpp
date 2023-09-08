@@ -57,6 +57,7 @@ HRESULT CVIBuffer_CustomParticle::Reset_Particle(void* pArg)
 
 	m_pContext->Unmap(m_pVBInstance, 0);
 
+	return S_OK;
 }
 
 HRESULT CVIBuffer_CustomParticle::Initialize_Prototype(_uint iNumInstance)

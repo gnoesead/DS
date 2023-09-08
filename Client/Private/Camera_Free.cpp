@@ -130,7 +130,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		CTransform* m_pTargetTransformCom = pPlayer->Get_TransformCom();
 
-		if (m_Swap_TimeAcc >= 1.2f)
+		if (m_Swap_TimeAcc >= 1.f)
 			m_vTargetPos = m_pTargetTransformCom->Get_State(CTransform::STATE_POSITION);
 
 		m_fLandY = pPlayer->Get_LandY();
@@ -272,7 +272,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 // Center
 	m_vBattleTargetPos = XMVectorSetY(m_vBattleTargetPos, m_fLandY);
 
-	if (m_Swap_TimeAcc < 1.2f)
+	if (m_Swap_TimeAcc < 1.f)
 		m_vTargetPos = XMVectorSetY(m_vTargetPos, m_fLandY);
 
 	m_vBattleCenter = (m_vTargetPos + m_vBattleTargetPos) * 0.5f;
@@ -907,9 +907,9 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_3);
 
 	// Á¨ÀÌÃ÷ °¢¼º
-	CutInCamDesc Zenitsu_Awake_1 = { true,true, 0.f, 0.f, 1.3f, 0.7f , false , {0.f, -0.8f ,0.f} };
-	CutInCamDesc Zenitsu_Awake_2 = { true,true, 0.f, 0.f, 1.f, 0.5f , true , {0.f, -0.8f ,0.f} };
-	CutInCamDesc Zenitsu_Awake_3 = { true,true, 0.f, 0.f, 2.8f, 2.2f , true , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_1 = { true,true, 0.f, 0.f, 1.2f, 0.5f , false , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_2 = { true,true, 0.f, 0.f, 1.f, 0.6f , true , {0.f, -0.8f ,0.f} };
+	CutInCamDesc Zenitsu_Awake_3 = { true,true, 0.f, 0.f, 2.4f, 1.88f , true , {0.f, -0.8f ,0.f} };
 
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_1);
 	m_Cut_In_Finish[ZENITSU_AWAKE].push_back(Zenitsu_Awake_2);

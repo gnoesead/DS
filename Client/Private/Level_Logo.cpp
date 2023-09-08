@@ -638,6 +638,11 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Upper.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Upper");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region KYOGAI

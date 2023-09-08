@@ -321,6 +321,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				//EffectWorldDesc.fScale = 1.8f;
 				EffectWorldDesc.vPosition.y = 0.42f;
@@ -426,6 +427,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		}
 
+		// 다운컷
 		if (ANIM_ATK_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -454,17 +456,57 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		// 어퍼컷
 		if (ANIM_ATK_COMBO_UP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.f;
+				EffectWorldDesc.vPosition.z += 0.2f;
+				EffectWorldDesc.fScale = 1.5f;
+
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+				}
+					
+				EffectWorldDesc.vPosition.y += -1.f;
+				EffectWorldDesc.vPosition.z += 0.6f;
+				EffectWorldDesc.fScale = 1.1f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind", m_pTransformCom, &EffectWorldDesc);
+
+				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f);
 			}
+			else if (1 == m_iEvent_Index) {
+				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 1.f;
+				EffectWorldDesc.fScale = 2.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind_Rev", m_pTransformCom, &EffectWorldDesc);
+			}
+			else if (2 == m_iEvent_Index) {
+
+				
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 3.f;
+				EffectWorldDesc.fScale = 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Upper_Wind", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
-		
+		// 오의
 		if (ANIM_ATK_SPECIAL_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
@@ -475,12 +517,16 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma region Air_Attack, charge_attack
 		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			// 검기 발사 , 원통 이펙트
 		}
 		if (2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_1", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
@@ -488,6 +534,11 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_2_2", m_pTransformCom);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
 			}
@@ -552,12 +603,24 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATK_CHARGE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			// 기모으기
 		}
 		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
+
+				// 검기발사
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.z += 1.5f;
+				EffectWorldDesc.vPosition.y += 1.4f;
+
+
+				if (m_Moveset.m_iAwaken == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
+				else
+					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
@@ -569,11 +632,10 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma region Dash_Tackle
 		if (ANIM_BATTLE_DASH == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)
-			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
-			}
+
+			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
+				CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+
 		}
 
 #pragma endregion
@@ -584,7 +646,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.3f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
@@ -595,6 +657,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
 			}
 			else if (1 == m_iEvent_Index) {
+
+				
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.2f;
@@ -617,7 +681,14 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_ATK_SKILL_HEKIREKI_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
 
@@ -625,7 +696,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.2f);
+				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.3f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
@@ -674,6 +745,160 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			}
 		}
 #pragma endregion
+
+
+
+#pragma region Step
+		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+		else if (71 == m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
+#pragma endregion
+
+
+#pragma region Awake
+
+		if (ANIM_BATTLE_AWAKEN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.25f;
+				EffectWorldDesc.vPosition.y += 0.1f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Awake", m_pTransformCom, &EffectWorldDesc);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.3f;
+				EffectWorldDesc.vPosition.y += 0.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
+		if (ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.4f;
+				EffectWorldDesc.vPosition.y += 0.23f;
+				EffectWorldDesc.vPosition.z += 0.14f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Cross_Eye", m_pTransformCom, &EffectWorldDesc);
+
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(1);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.19f;
+				EffectWorldDesc.vPosition.z += 0.18f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Eye_1", m_pTransformCom, &EffectWorldDesc);
+
+				// 번개 UI
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Elc_On(true);
+				
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
+				
+			}
+			else if (3 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(2);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (4 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (5 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(3);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (6 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (7 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(4);
+				m_pRendererCom->Set_Invert();
+			}
+			else if (8 == m_iEvent_Index)
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Zen_UI_Num(0);
+				m_pRendererCom->Set_Invert();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.2f;
+				EffectWorldDesc.vPosition.y += 0.32f;
+				EffectWorldDesc.vPosition.z += 0.18f;
+				EffectWorldDesc.vPosition.x += -0.1f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Eye_2", m_pTransformCom, &EffectWorldDesc);
+
+				// Trans
+				CBattle_UI_Manager::GetInstance()->Set_Zen_Trans_On(true);
+			}
+			else if (9 == m_iEvent_Index)
+			{
+				//이펙트
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += 0.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Finish_Awake_Main", m_pTransformCom, &EffectWorldDesc);
+
+
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += 0.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Stage", m_pTransformCom, &EffectWorldDesc);
+
+
+			}
+		}
+
+#pragma endregion
+
+
 
 
 		m_iEvent_Index++;
