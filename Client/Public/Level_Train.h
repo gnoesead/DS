@@ -48,7 +48,7 @@ private:
 	_float	m_Battle_TimeDir = { 1.f };
 
 
-	_bool	m_isWebGimmick_On = { false };
+	
 
 
 public:
