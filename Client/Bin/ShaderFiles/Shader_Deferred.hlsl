@@ -233,8 +233,8 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	/*else if(fBrightness < 0.5)
 		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);*/
 
-		Out.vShade = saturate(Out.vShade);
-		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+		//Out.vShade = saturate(Out.vShade);
+		//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
 
 		/*Out.vShade = saturate(Out.vShade);
@@ -319,8 +319,8 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-	/*else if (g_bSSAOSwitch == true)
-		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;*/
+	else if (g_bSSAOSwitch == true)
+		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 
 	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
@@ -346,15 +346,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
-	vector		vEffectDiffuse = g_EffectTexture.Sample(LinearSampler, In.vTexUV);
-	//vShade = ceil(vShade * 3) / 3.0f; // 보통 3톤 이건 근데 자유 5톤까지
-
-		/*if (vShade.r < 0.21f)
-			vShade.rgb = float3(0.2f, 0.2f, 0.2f);
-		else if (vShade.r >= 0.21f && vShade.r < 0.41f)
-			vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-		else if (vShade.r >= 0.41f && vShade.r <= 1.f)
-			vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
+	
 
 	if (vDiffuse.a == 0.f)
 		discard;
