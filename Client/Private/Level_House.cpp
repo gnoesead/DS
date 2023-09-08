@@ -29,6 +29,7 @@
 #include "Pause.h"
 #include "Option.h"
 #include "Paper.h"
+#include "Zenitsu_Awake_UI.h"
 
 
 #include "ColliderManager.h"
@@ -343,25 +344,25 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
-	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
+	//CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-		return E_FAIL;
-	}
+	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	return E_FAIL;
+	//}
 
-	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
-	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
+	//CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-		return E_FAIL;
-	}
+	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	return E_FAIL;
+	//}
 
 
 	Safe_Release(pGameInstance);
@@ -796,6 +797,40 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
+
+// Zenitsu_Awake_UI
+	Zenitsu_Awake_UI::UIDESC UIDesc8;
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc8, sizeof UIDesc8);
+
+	UIDesc8.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc8))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
 
     Safe_Release(pGameInstance);
 
@@ -2138,6 +2173,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Atk_26.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Atk_26");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkBack.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkBack");
 		return E_FAIL;
 	}
 	

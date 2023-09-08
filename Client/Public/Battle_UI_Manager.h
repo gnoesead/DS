@@ -61,6 +61,17 @@ public:
 	_bool Get_Battle_Result_Off_2();
 
 
+public: // Zen_Cut_In
+	void Set_Zen_UI_Num(_int On);
+	_int Get_Zen_UI_Num();
+
+	void Set_Zen_Elc_On(_bool On);
+	_bool Get_Zen_Elc_On();
+
+	void Set_Zen_Trans_On(_bool On);
+	_bool Get_Zen_Trans_On();
+
+
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
@@ -91,6 +102,13 @@ private:
 	_bool m_Battle_Result_Off_2 = { false };
 	_float m_Battle_Result_TimeAcc_2 = { 0.f };
 	_bool m_Battle_Result_Time_2 = { false };
+
+private: // Cut_In
+	_int m_Zen_UI_Num = { 0 };
+
+	_bool m_Zen_Elc_On = { false };
+	_bool m_Zen_Trans_On = { false };
+
 
 public:
 	virtual void Free() override;

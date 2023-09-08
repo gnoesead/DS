@@ -140,7 +140,6 @@ void CFade::LateTick(_double TimeDelta)
 
 HRESULT CFade::Render()
 {
-
 	if (m_Is_Render == true) {
 
 		if (FAILED(__super::Render()))

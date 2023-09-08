@@ -302,6 +302,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BLOW, AtkDir, 7.2f);
 
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle_Kulbam", m_pTransformCom);
+
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
 			}
 		}
@@ -377,6 +379,10 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_MySwampEffect();	// 扁粮 此 滚府绊 货此栏肺
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Swamp_Land", m_pTransformCom , &EffectWorldDesc);
 			}
 		}
 
@@ -490,6 +496,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_SHORYU);
 
 				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_22", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle_Upper", m_pTransformCom);
 			}
 
 			if (1 == m_iEvent_Index)	// 0.41
@@ -509,6 +517,28 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (ANIM_ATK_SHORYU_TO_SWAMP_1 == m_pModelCom->Get_iCurrentAnimIndex())  // 24
+		{
+			if (0 == m_iEvent_Index) // 0.0
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_24", m_pTransformCom , &EffectWorldDesc);
+
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
+					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
+
+				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle_Upper", m_pTransformCom);
+			}
+
+			else if (1 == m_iEvent_Index) // 0.23
+			{
+				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
+				Create_MySwampEffect();
+			}
+		}
+		
 		if (ANIM_STEP_SWAMPIN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)	// 0.4
@@ -1375,7 +1405,10 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 
 	if (iCurAnim == ANIM_JUMP_IDLE)
 	{
-		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		//m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
+		_float4 Dir;
+		XMStoreFloat4(&Dir, Calculate_Dir_FixY());
+		m_pTransformCom->Set_Look(Dir);
 
 		if (m_isFirst_Atk_0)
 		{
@@ -1505,9 +1538,10 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SCREW);
 		}
 	}
-	Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
-	Go_Dir_Deceleration(dTimeDelta, 8, 2.6f, 0.15f, m_SaveDir);
-
+	//Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
+	//Go_Dir_Deceleration(dTimeDelta, 8, 2.6f, 0.15f, m_SaveDir);
+	Go_Straight_Constant(dTimeDelta, 7, 2.6f);
+	Go_Straight_Deceleration(dTimeDelta, 8, 2.6f, 0.15f);
 	
 
 	if (iCurAnim == ANIM_ATK_SWAMP_SCREW)
@@ -1520,15 +1554,15 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 		{
 			m_dSetDirAccTime += dTimeDelta;
 
-			if (m_dSetDirAccTime > 0.8)
-			{
+			//if (m_dSetDirAccTime > 0.8)
+			//{
 				XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 				m_bSetDir = true;
 				m_dSetDirAccTime = 0.0;
 				m_bLandEffect[0] = false;
 				m_bLandEffect[1] = false;
 				m_bLandEffect[2] = false;
-			}
+			//}
 		}
 	}
 	else if (iCurAnim == 8)
@@ -2362,6 +2396,7 @@ void CMonster_Swamp::Create_WaterParticleEffect(_uint iNum)
 	EffectWDesc.vStartSizeX = { 0.7f , 1.0f }; EffectWDesc.vStartSizeY = { 0.7f , 1.0f };
 	EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
 	EffectWDesc.vStartFrame = { 0.f ,5.f };
+	EffectWDesc.fGravity = { 2.f };
 
 	for (_uint i = 0; i < 5; ++i)
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);

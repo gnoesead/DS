@@ -141,6 +141,8 @@ void CSwamp::LateTick(_double TimeDelta)
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 
+	m_ePrePattern = m_eCurPattern;
+
 	Safe_Release(pGameInstance);
 }
 
@@ -249,6 +251,9 @@ void CSwamp::Position_Setting()
 
 void CSwamp::Pattern_Setting(_double TimeDelta)
 {
+	if (m_eCurPattern != m_ePrePattern)
+		m_bWaterEffect = false;
+
 	switch (m_eCurPattern)
 	{
 	case PATTERN_NONE:
@@ -350,6 +355,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		}
 	
 		break;
+
 	case PATTERN_THROWAWAY:
 		if (!m_bWaterEffect)
 		{
@@ -534,10 +540,11 @@ void CSwamp::Create_WatterParticleEffect(_uint iNum)
 	EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
 
 	EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
-	EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+	EffectWDesc.vFrameSpeed = { 0.045f , 0.055f };
 	EffectWDesc.vStartSizeX = { 0.7f , 1.0f }; EffectWDesc.vStartSizeY = { 0.7f , 1.0f };
 	EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
 	EffectWDesc.vStartFrame = { 0.f ,5.f };
+	EffectWDesc.fGravity = { 5.f };
 
 	for (_uint i = 0; i < iNum; ++i)
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);

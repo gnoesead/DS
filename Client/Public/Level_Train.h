@@ -43,9 +43,13 @@ private:
 
 
 private:
-	_float m_Battle_TimeAcc = { 0.f };
-	_float m_Battle_MaxTime = { 2.f };
-	_float m_Battle_TimeDir = { 1.f };
+	_float	m_Battle_TimeAcc = { 0.f };
+	_float	m_Battle_MaxTime = { 2.f };
+	_float	m_Battle_TimeDir = { 1.f };
+
+
+	
+
 
 public:
 	static			CLevel_Train* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
