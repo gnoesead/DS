@@ -1786,12 +1786,13 @@ HRESULT CLevel_Train::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
 			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
 			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
 			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
 			{
 				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
 				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
 			}
 

@@ -14,6 +14,7 @@
 #include "Effect.h"
 #include "ParticleSystem.h"
 #include "Effect_Texture.h"
+#include "Effect_Particle.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -610,6 +611,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_DecalParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1_WaterParticle");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region KYOGAI
@@ -1011,13 +1018,19 @@ HRESULT CLevel_Logo::LoadEffects(const _tchar* pPath, _bool isParticle, _int iCn
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
 			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
 			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
 			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
 			{
 				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
 				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
+			}
+			else if (CEffect::EFFECT_PARTICLE == EffectDesc.eEffectType)
+			{
+				CEffect_Particle* pParticleEffect = dynamic_cast<CEffect_Particle*>(pParticleSystem->Get_Effect());
+				pParticleEffect->Set_CameraRightLookPos(vCameraRightLookPos);
 			}
 
 			// Texture

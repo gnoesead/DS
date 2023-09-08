@@ -24,14 +24,28 @@ public:
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render(void) override;
 
+	virtual void Set_Initial_Data(void) override;
+	virtual void Reset_Data(void) override;
+
+
+public:
+	void Set_CameraRightLookPos(_float2 vPos) {
+		m_vCameraRightLookPos = vPos;
+	}
+	_float2 Get_CameraRightLookPos(void) {
+		return m_vCameraRightLookPos;
+	}
+
 private:
 	CVIBuffer_Point_Instance_Effect* m_pVIBufferCom = { nullptr };
+
+private:
+	_float2			m_vCameraRightLookPos = { 0.f, 0.f };
 
 private:
 	HRESULT Add_Components(void);
 	virtual HRESULT SetUp_ShaderResources(void) override;
 	virtual void Check_PassIndex(void) override;
-	virtual void Set_Initial_Data(void) override;
 
 public:
 	static CEffect_Particle* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const char* pComponentTag = nullptr);
