@@ -167,6 +167,7 @@ void CWebShot::Tick_For_Index(_double dTimeDelta)
 	m_pTransformCom->Set_Look(m_WebDesc.vDir);
 	m_pTransformCom->Go_Straight(dTimeDelta);
 
+
 	//¾Ö·Î¿ì
 	if (m_WebDesc.iWebTexIndex == 7)
 	{

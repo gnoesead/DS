@@ -108,7 +108,6 @@ void CWebManager::Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir)
 {
 	// index, Pos, Scale, Dir
 	Create_WebShot(32, CreatePos, _float3{ 26.0f, 5.0f, 5.0f }, ShotDir);
-	
 }
 
 void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
