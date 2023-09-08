@@ -76,11 +76,17 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, -1.0f, 0.0f });
+	else
+		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, 1.0f, 0.0f });
+
+
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
-	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, 1.0f, 0.0f});
 
+	
 	//_vector{ 8.f, 0.f, 10.f, 1.f }
 	m_ResetPos[0] = { 8.f, 0.f, 10.f, 1.f }; //첫지역
 	m_ResetPos[1] = { 78.18f, 0.05f, 7.75f, 1.f }; // 처음 이동

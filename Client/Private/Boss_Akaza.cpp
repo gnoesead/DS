@@ -46,8 +46,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	Get_PlayerComponent();
 
-	m_StatusDesc.fHp = 150.f;
-	m_StatusDesc.fHp_Max = 150.f;
+	m_StatusDesc.fHp = 15000.f;
+	m_StatusDesc.fHp_Max = 15000.f;
 	m_eCurAnimIndex = ANIM_IDLE;
 	m_eCurstate = STATE_BEGIN;
 	m_eCurPhase = BEGIN;
@@ -71,7 +71,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #endif // _DEBUG	
 
 	Update_Hit_Messenger(dTimeDelta);
-	Update_Trigger(dTimeDelta);
+	//Update_Trigger(dTimeDelta);
 	Update_State(dTimeDelta);
 
 	m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -207,11 +207,11 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 		m_iTriggerCnt = 0;
 		m_iIdleCnt = 0;
-		m_eCurstate = STATE_IDLE;
+		Trigger_Interact();
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		Camera_Shake();
+		m_pRendererCom->Set_BloomRatio(0.75f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -334,7 +334,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 	{
 		m_iEvent_Index = 0;
 	}
-
+	
 	if (EventCallProcess())
 	{
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -478,6 +478,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.0f, 0.0f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);
+				m_pRendererCom->Set_BloomRatio(0.5f);
 			}
 
 		}
@@ -880,6 +881,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 	}
 
 }
@@ -1593,6 +1595,7 @@ void CBoss_Akaza::Trigger_Interact()
 	m_bTrigger = true;
 	m_bAir_Motion = false;
 	m_bSuperArmor = false;
+	m_pRendererCom->Set_BloomRatio();
 	m_eCurstate = STATE_IDLE;
 
 }
@@ -2882,6 +2885,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 		m_bDashOn = true;
 		m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		m_eCurAnimIndex = ANIM_DASH;
+		m_pRendererCom->Set_BloomRatio(0.5);
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH))
@@ -2930,6 +2934,7 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 			//if (m_pModelCom->Get_AnimFinish(ANIM_STEP_BEHIND) == true)
 			if (m_pModelCom->Check_PickAnimRatio(ANIM_STEP_BEHIND, 0.950, dTimeDelta))
 			{
+				m_pRendererCom->Set_BloomRatio();
 				m_eCurAnimIndex = ANIM_IDLE;
 				Trigger_Interact();
 			}
