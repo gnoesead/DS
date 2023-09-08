@@ -414,6 +414,14 @@ HRESULT CGameInstance::Clear_Light()
 	return m_pLight_Manager->Clear_Light();
 }
 
+_uint CGameInstance::Get_LightListSize()
+{
+	if (nullptr == m_pLight_Manager)
+		return E_FAIL;
+
+	return m_pLight_Manager->Get_LightListSize();
+}
+
 HRESULT CGameInstance::Add_Font(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontTag, const _tchar* pFontFilePath)
 {
 	if (nullptr == m_pFont_Manager)

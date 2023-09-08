@@ -175,7 +175,7 @@ protected:
 	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 
 	void Play_FallDownEffect();
-	void Play_HitEffect();
+	void Play_HitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
 	
 protected:
 	CHARACTERDESC	m_CharacterDesc;
