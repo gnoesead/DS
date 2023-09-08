@@ -617,6 +617,24 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1_WaterParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2_WaterParticle1.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2_WaterParticle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2_WaterParticle2.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2_WaterParticle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo3_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3_WaterParticle");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region AKAZA
