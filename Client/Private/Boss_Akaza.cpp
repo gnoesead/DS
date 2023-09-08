@@ -89,7 +89,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	Update_Train_Stage();
 		
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
-	{
+	{		
 		Update_Hit_Messenger(dTimeDelta);
 		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
@@ -113,7 +113,7 @@ void CBoss_Akaza::LateTick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_AnimIndex(m_eCurAnimIndex);
-		Gravity(dTimeDelta);
+		Gravity(dTimeDelta);		
 	}
 }
 
@@ -919,7 +919,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
 			if (m_bSuperArmor == false)
-			{
+			{				
 				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
 				Tirgger_Hit_Hekireki();
 			}
