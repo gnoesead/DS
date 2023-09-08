@@ -49,6 +49,7 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Timing_UI.h"
 
 
 #include "NPC_Female.h"
@@ -1022,6 +1023,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Zenitsu_Awake_UI */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
 		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Timing_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Timing_UI"),
+		CTiming_UI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
