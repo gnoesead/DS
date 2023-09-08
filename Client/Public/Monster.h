@@ -99,8 +99,8 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bSuperArmor = { false };
 	_bool	m_bMove = { false };
 
-	_bool	m_bPlayerAwake = { false };
-
+	_bool	m_bTanjiroAwake = { false };
+	_bool	m_bZenitsuAwake = { false };
 protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };

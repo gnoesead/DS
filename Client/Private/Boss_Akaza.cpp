@@ -85,12 +85,21 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
-	m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
-	int a = m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex();
-	int b = m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex();
-			
-	if (a != 55 || b != 40)
+	////m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+	////m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
+	//int a = m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex();
+	//int b = CPlayerManager::GetInstance()->Get_PlayerIndex();
+
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
+		m_bTanjiroAwake = true;
+	else
+		m_bTanjiroAwake = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
+		m_bZenitsuAwake = true;
+	else
+		m_bZenitsuAwake = false;
+
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
