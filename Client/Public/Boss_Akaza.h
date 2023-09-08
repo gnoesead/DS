@@ -31,7 +31,9 @@ public:
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER, STATE_HIT_CUTSCENE,STATE_HIT_HEKIREKI
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE,STATE_HIT_HEKIREKI,
+
+		STATE_TRAIN_JUMPSTOMP
 
 
 	};
@@ -241,6 +243,8 @@ public:
 	void Trigger_Nachim_AirGun();
 	void Trigger_Awake_Cinematic();
 
+	void Trigger_Train_JumpStomp();
+
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
 	void Trigger_Hit_Upper();
@@ -284,6 +288,8 @@ private: //패턴 함수들
 	void Update_Nachim_AirGun(_double dTimeDelta);
 	void Update_Awake_Cinematic(_double dTimeDelta);
 
+	void Update_Train_JumpStomp(_double dTimeDelta);
+
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
 	void Update_Hit_Big(_double dTimeDelta);
@@ -313,6 +319,7 @@ private: // _bool
 	_bool	m_bJump = { false };
 	_bool	m_bTrigger = { false };
 
+	_bool	m_bTrain_Stomp = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };

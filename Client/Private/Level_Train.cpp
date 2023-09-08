@@ -53,6 +53,8 @@ HRESULT CLevel_Train::Initialize()
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
+	CWebManager::GetInstance()->Reset();
+
     if (FAILED(Ready_Lights()))
     {
         MSG_BOX("Failed to Ready_Lights : CLevel_Train");
@@ -338,27 +340,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 }
 
 HRESULT CLevel_Train::Ready_Layer_Boss(const _tchar* pLayerTag)
-{
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	CBoss_Akaza::CHARACTERDESC CharacterDesc;
-	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
-
-
-	CharacterDesc.WorldInfo.vPosition = _float4(205.f, 15.f, 290.f, 1.f);
-
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
-		return E_FAIL;
-	}
-
-
-	Safe_Release(pGameInstance);
-
+{	
 	return S_OK;
 }
 
