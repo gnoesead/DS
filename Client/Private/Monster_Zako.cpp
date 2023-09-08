@@ -357,6 +357,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.10
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.17
@@ -366,6 +368,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (2 == m_iEvent_Index)
 			{//0.30
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 			}
 			if (3 == m_iEvent_Index)
 			{//0.35
@@ -374,7 +378,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 			if (4 == m_iEvent_Index)
 			{//0.50
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws", m_pTransformCom);
+				
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 			}
 			if (5 == m_iEvent_Index)
 			{//0.61
@@ -384,6 +390,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (6 == m_iEvent_Index)
 			{//0.80
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 			}
 			if (7 == m_iEvent_Index)
 			{//0.84
@@ -400,6 +408,10 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 
 				EffectWorldDesc.vPosition.x = -0.2f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
