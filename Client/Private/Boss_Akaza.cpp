@@ -211,7 +211,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.75f);
+		m_pRendererCom->Set_BloomRatio(0.5f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -1900,7 +1900,7 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(1.5f, 0.03f);
+	Jumping(1.85f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()
