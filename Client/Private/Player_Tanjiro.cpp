@@ -23,6 +23,10 @@
 #include "WaterParticleEffect.h"
 #include "EffectW_Manager.h"
 
+#include "SwampManager.h"
+
+#include "ParticleManager.h"
+
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -76,11 +80,17 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, -1.0f, 0.0f });
+	else
+		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, 1.0f, 0.0f });
+
+
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
-	m_pTransformCom->Set_Look(_float4{0.0f, 0.0f, 1.0f, 0.0f});
 
+	
 	//_vector{ 8.f, 0.f, 10.f, 1.f }
 	m_ResetPos[0] = { 8.f, 0.f, 10.f, 1.f }; //첫지역
 	m_ResetPos[1] = { 78.18f, 0.05f, 7.75f, 1.f }; // 처음 이동
@@ -88,7 +98,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // 마지막 이동
 
 
-	CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
+	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
 
 	return S_OK;
 }
@@ -106,7 +116,87 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	//if (pGameInstance->Get_DIKeyDown(DIK_T))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_Cmn_Smoke_24_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_Y))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test2",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_25_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_G))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test3",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_29_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_H))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test4",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P0002_Aura006_00")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(8, 8),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.9f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_V))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test5",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Splash003")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	if (pGameInstance->Get_DIKeyDown(DIK_B))
 	{
 		m_pRendererCom->Set_GrayScale();
 	}
@@ -126,7 +216,12 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			m_isStealthMode = true;
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
+	{
+		CSwampManager::GetInstance()->Set_Dmg(10.0f);
+	}
+
+	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
 		CEffectW::EFFECTWDESC EffectWDesc;
 		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -141,7 +236,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 		
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
-	}
+	}*/
 
 	Safe_Release(pGameInstance); 
 
@@ -177,7 +272,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 			return;
 	}
-
+	
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_int ak = 47;
@@ -344,15 +439,19 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)					
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
+				{
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);	
+				}
 
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_DecalParticle", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1_WaterParticle", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
@@ -370,6 +469,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2_WaterParticle1", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -378,6 +480,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_DecalParticle", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo2_WaterParticle2", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
@@ -398,6 +503,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_DecalParticle", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo3_WaterParticle", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
@@ -728,20 +836,34 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (80 == m_pModelCom->Get_iCurrentAnimIndex()) // 겁나달리기
 		{
-			if(0 == m_iEvent_Index)	// 0.0
+			if (0 == m_iEvent_Index)	// 0.0
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (1 == m_iEvent_Index)	// 0.05
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (2 == m_iEvent_Index)	// 0.10
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (3 == m_iEvent_Index)	// 0.15
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (4 == m_iEvent_Index)	// 0.20
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (5 == m_iEvent_Index)	// 0.25
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 			else if (6 == m_iEvent_Index)	// 0.30
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
 		}
 
 		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
@@ -2563,6 +2685,8 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
 		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
 		EffectWDesc.vStartFrame = { 0.f ,5.f };
+		EffectWDesc.fGravity = { 2.f };
+
 		
 		for (_uint i = 0; i < 5; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);

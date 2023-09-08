@@ -49,6 +49,8 @@ public:
 
 		_uint eEffectWType;
 
+		_bool	bWorld = { false };
+
 	}EFFECTWDESC;
 
 protected:

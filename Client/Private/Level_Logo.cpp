@@ -14,6 +14,7 @@
 #include "Effect.h"
 #include "ParticleSystem.h"
 #include "Effect_Texture.h"
+#include "Effect_Particle.h"
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -528,6 +529,41 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_0_X");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_Z.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_0_Z");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_1_X.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_1_X");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_1_Z.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_1_Z");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_2_X.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_2_X");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_2_Z.bin"), true, 20)))
+	{
+		MSG_BOX("Failed to Load Effect : Hit_Particle_2_Z");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region RENGOKU
@@ -610,12 +646,81 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_DecalParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2_WaterParticle1.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2_WaterParticle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo2_WaterParticle2.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo2_WaterParticle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo3_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3_WaterParticle");
+		return E_FAIL;
+	}
+#pragma endregion
+
+#pragma region AKAZA
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_0.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_1.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_2.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_2_1.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_2_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3.bin"), true, 22)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Upper.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Upper");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region KYOGAI
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Swing_Particle1.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Swing_Particle2.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle2");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -641,7 +746,33 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle4");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle_Upper.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle_Upper");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle_Kulbam.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle_Kulbam");
+		return E_FAIL;
+	}
+	
+
 #pragma endregion
+
+#pragma region Zako
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_L.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_L");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_R.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_R");
+		return E_FAIL;
+	}
+#pragma endregion
+
 	return S_OK;
 }
 
@@ -1011,13 +1142,19 @@ HRESULT CLevel_Logo::LoadEffects(const _tchar* pPath, _bool isParticle, _int iCn
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
 			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
 			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
 			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
 			{
 				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
 				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
+			}
+			else if (CEffect::EFFECT_PARTICLE == EffectDesc.eEffectType)
+			{
+				CEffect_Particle* pParticleEffect = dynamic_cast<CEffect_Particle*>(pParticleSystem->Get_Effect());
+				pParticleEffect->Set_CameraRightLookPos(vCameraRightLookPos);
 			}
 
 			// Texture

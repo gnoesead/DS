@@ -185,14 +185,14 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 			return E_FAIL;
 		}
 
-		///* Prototype_Component_Model_Akaza */
-		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-		//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
-		//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Akaza/Akaza.bin", PivotMatrix))))
-		//{
-		//	MSG_BOX("Failed to Add_Prototype_Model_Akaza");
-		//	return E_FAIL;
-		//}
+		/* Prototype_Component_Model_Akaza */
+		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Akaza"),
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Akaza/Akaza.bin", PivotMatrix))))
+		{
+			MSG_BOX("Failed to Add_Prototype_Model_Akaza");
+			return E_FAIL;
+		}
 
 		///* Prototype_Component_Model_Kyogai */
 		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -203,14 +203,14 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 		//	return E_FAIL;
 		//}
 
-		/* Prototype_Component_Model_Zenitsu */
-		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Zenitsu"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin", PivotMatrix))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Model_Zenitsu");
-			return E_FAIL;
-		}
+		///* Prototype_Component_Model_Zenitsu */
+		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Zenitsu"),
+		//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zenitsu/Zenitsu.bin", PivotMatrix))))
+		//{
+		//	MSG_BOX("Failed to Add_Prototype_Model_Zenitsu");
+		//	return E_FAIL;
+		//}
 
 		///* Prototype_Component_Model_Rengoku */
 		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
@@ -276,14 +276,14 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 		//	return E_FAIL;
 		//}
 
-		/* Prototype_Component_Model_Monster_Zako_0 */
-		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Zako_0"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zako_0/Zako_0.bin", PivotMatrix))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Model_Monster_Zako_0");
-			return E_FAIL;
-		}
+		///* Prototype_Component_Model_Monster_Zako_0 */
+		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Zako_0"),
+		//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Zako_0/Zako_0.bin", PivotMatrix))))
+		//{
+		//	MSG_BOX("Failed to Add_Prototype_Model_Monster_Zako_0");
+		//	return E_FAIL;
+		//}
 
 
 		///* Prototype_Component_Model_Monster_Swamp_Horn1 */
@@ -302,14 +302,14 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 		//	MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn2");
 		//	return E_FAIL;
 		//}
-		/* Prototype_Component_Model_Monster_Swamp_Horn3 */
-		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Swamp_Horn3"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn3/SwampHorn3.bin", PivotMatrix))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn3");
-			return E_FAIL;
-		}
+		///* Prototype_Component_Model_Monster_Swamp_Horn3 */
+		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Monster_Swamp_Horn3"),
+		//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Swamp/Swamp_Horn3/SwampHorn3.bin", PivotMatrix))))
+		//{
+		//	MSG_BOX("Failed to Add_Prototype_Model_Monster_Swamp_Horn3");
+		//	return E_FAIL;
+		//}
 
 
 	

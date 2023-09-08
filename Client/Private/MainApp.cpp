@@ -27,6 +27,7 @@
 #include "PlayerManager.h"
 #include "EffectW_Manager.h"
 #include "WebManager.h"
+#include "ParticleManager.h"
 
 
 CMainApp::CMainApp()
@@ -132,9 +133,11 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	m_TimeAcc += dTimeDelta;
 
+
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
 #endif
+
 }
  
 HRESULT CMainApp::Render()
@@ -984,6 +987,8 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CSoundMgr::Get_Instance()->StopAll();
+
+	CParticleManager::GetInstance()->DestroyInstance();
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
 	CMonsterManager::GetInstance()->DestroyInstance();

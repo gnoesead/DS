@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP { RENDER_PRIORITY, RENDER_SHADOWDEPTH, RENDER_SSAO, RENDER_NONBLEND, RENDER_EffectBloom, RENDER_EffectNoBloom, RENDER_UI, RENDER_EFFECT, RENDER_WORLD_UI,RENDER_END };
+	enum RENDERGROUP { RENDER_PRIORITY, RENDER_SHADOWDEPTH, RENDER_SSAO, RENDER_NONBLEND, RENDER_EffectBloom, RENDER_EffectNoBloom, RENDER_Effect_Particle, RENDER_UI, RENDER_EFFECT, RENDER_WORLD_UI,RENDER_END };
 private:
 	CRenderer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual ~CRenderer() = default;
@@ -49,6 +49,9 @@ public:
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
 	void Set_SSAO(_bool Is) { m_bSSAOSwitch = Is; }
+	void Set_BloomRatio(_float fBloomRatio = 0.99f) {
+		m_fBrigthRatio = fBloomRatio;
+	}
 
 private:
 	list<class CGameObject*>	m_RenderObjects[RENDER_END];
@@ -83,7 +86,7 @@ private:
 	HRESULT Render_ShadowBlur();
 	HRESULT Render_SSAO();
 	HRESULT Render_SSAOBlurX();
-	HRESULT Render_SSAOBlurY();
+	HRESULT Render_SSAOBlurY(); 
 	HRESULT Render_SSAOFinal();
 	HRESULT Render_ExportDeferred();
 	HRESULT Render_BlurX();
@@ -93,7 +96,8 @@ private:
 	HRESULT Render_NonBlend();
 	HRESULT Render_EffectBloom();
 	HRESULT Render_EffectNoBloom();
-	HRESULT Render_Effect(); // Effect
+	HRESULT Render_Effect_Particle();
+	HRESULT Render_Effect();
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();
 	HRESULT Render_RadialBlur();
@@ -117,12 +121,17 @@ private:
 	_bool					m_bInvert = { false };
 	_bool					m_bRadialBlur = { false };
 	_bool					m_bGrayScale = { false };
+	
 private:
 	D3D11_VIEWPORT			m_VP; // Shadow
 
 	_float					m_fSSAOBias = { 0.0003f };
 	//_float					m_fSSAORadius = { 0.000005f };
 	_float					m_fSSAORadius = { 0.005f };
+	_float					m_fBrigthRatio = { 0.99f };
+	_float					m_fParticle_BrightRatio = { 0.8f };
+	_float					m_fBloomPower = { 1.f };
+	_float					m_fBlurWeight = { 1.f };
 public:
 	static CRenderer* Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual CComponent* Clone(void* pArg) override;

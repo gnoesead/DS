@@ -643,8 +643,15 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 			m_vDist = XMVector3Normalize(m_vDist);
 		}
 		else {
-			m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+				m_vOffSet = { 0.f, 1.7f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			else {
+				m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			
 
 			m_fDistance = 7.f + m_Zoom;
 

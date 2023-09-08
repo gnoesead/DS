@@ -208,12 +208,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+
 
 	return Out;
 }
@@ -237,12 +232,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	
 
 	return Out;
 }
@@ -267,12 +257,7 @@ PS_OUT PS_BlurX_3(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	
 
 	return Out;
 }

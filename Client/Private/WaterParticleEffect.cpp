@@ -40,7 +40,8 @@ void CWaterParticleEffect::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * TimeDelta;
+	//m_dSpeedY -= (_double)m_EffectWDesc.fGravity * TimeDelta;
+	m_dSpeedY -=10.f * TimeDelta;
 
 	m_pTransformCom->Set_Speed(m_dSpeedY);
 	m_pTransformCom->Go_Up(TimeDelta);

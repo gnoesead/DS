@@ -69,6 +69,7 @@ private:
 	_double		m_dDelay_All = { 0.0 };
 
 	
+	_float		m_fUv_Web = { 1.0f };
 
 private:
 	HRESULT Add_Components();
