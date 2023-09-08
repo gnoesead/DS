@@ -25,6 +25,9 @@ matrix         g_matLightView;
 //블러
 float m_TexW = 1280.f;
 float m_TexH = 720.f;
+float g_fBrigthRatio;
+float g_fBloomPower;
+float g_BlurWeight;
 
 //static const float Weight[13] =
 //{
@@ -54,7 +57,7 @@ static const float Weight[25] =
 	0.1122, 0.2706, 0.556, 0.9736, 1.4522, 1.8462,
 	1.999, 1.8462, 1.4522, 0.9736, 0.556, 0.2706
 };
-static const float Total = /*6.2108*/ /*1.00000012 *//*12.4216*/22.799;
+static const float Total = /*6.2108*/ /*1.00000012 *//*12.4216*/24.198;
 //static const float Total = 2.636;
 //static const float FinalWeight[7] =
 //{
@@ -202,7 +205,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 
-	if (fBrightness > 0.99f)
+	if (fBrightness > g_fBrigthRatio)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -225,31 +228,19 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 	if (vHDRColor.a == 0.f)
 		discard;
 
-	vector vBloom = pow(pow(abs(vBloomColor), 0.5f) + pow(abs(vBloomOriTex), 0.5f), 1.f / 0.5f);
+	vector vBloom = pow(pow(abs(vBloomColor), 2.2f) + pow(abs(vBloomOriTex), 2.2f), 1.f / 2.2f);
 
 	vector vOut = (vHDRColor);
 
-	vOut = pow(abs(vOut), 0.5f);
-	vBloom = pow(abs(vBloom), 0.5f);
+	vOut = pow(abs(vOut), 1.9f);
+	vBloom = pow(abs(vBloom), 1.9f);
 
-	vOut += vBloom * 1.f;
-	Out.vColor = pow(abs(vOut), 1 / 0.5f);
+	vOut += vBloom * g_fBloomPower;
+	Out.vColor = pow(abs(vOut), 1 / 2.2f);
 
 	if (Out.vColor.a == 0.f)
 		discard;
-
-	//// 레디얼 블러
-	//float2 Direction = _In.vTexUV - float2(0.5f, 0.5f);
-	//float3 c = float3(0.0, 0.0, 0.0);
-	//float f = 1.0 / 24;
-
-	//for (int i = 0; i < 24; i++)
-	//{
-	//	c += g_BlurTexture.Sample(BlurSampler, _In.vTexUV - 0.01 * Direction * float(i)) * f;
-	//	Out.vColor.rgb = c;
-	//}
-
-
+	
 	return Out;
 }
 
@@ -271,7 +262,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * g_BlurWeight;
 
 
 	if (Out.vColor.a == 0.f)
@@ -295,7 +286,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * g_BlurWeight;
 
 
 	if (Out.vColor.a == 0.f)
@@ -357,10 +348,6 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 	vector      vFinal = g_Texture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
-
-	/*if (vFinal.a < 0.2f)
-		discard;*/
-
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
