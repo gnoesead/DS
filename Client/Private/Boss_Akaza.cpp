@@ -783,8 +783,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
-				/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);*/
 			}
 			else
 			{
@@ -812,9 +810,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
-
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -831,9 +826,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -855,11 +847,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();

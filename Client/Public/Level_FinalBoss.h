@@ -42,7 +42,7 @@ private:
 	_float m_Battle_MaxTime = { 2.f };
 	_float m_Battle_TimeDir = { 1.f };
 
-
+	_double m_dGrassAcc = { 0.0 };
 
 public:
 	static			CLevel_FinalBoss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

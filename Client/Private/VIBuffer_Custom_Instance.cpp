@@ -131,25 +131,25 @@ void CVIBuffer_CustomParticle::Tick_Dir(_double dTimeDelta)
 			_float3 vDir_float = Convert::ToFloat3(vDir);
 
 			if(1 == m_CustomPartDesc.vDirOption.x)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
 
 			if (1 == m_CustomPartDesc.vDirOption.y)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
 
 			if (1 == m_CustomPartDesc.vDirOption.z)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 		}
 		else
 		{
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 		}
 	}
 

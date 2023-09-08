@@ -245,6 +245,51 @@ HRESULT CLoader::LoadingForLogo()
 
 	Load_MapObjectModel_AllStage(pGameInstance);
 
+#pragma region Buffer
+	/* Prototype_Component_VIBuffer_1000_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_1000_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 1000))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_1000_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_500_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_500_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 500))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_500_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_50_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_50_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 50))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_50_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_20_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_20_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 20))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_20_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_10_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_10_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 10))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_10_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_5_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_5_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 5))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_5_Particle");
+		return E_FAIL;
+	}
+#pragma endregion
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
@@ -348,34 +393,7 @@ HRESULT CLoader::LoadingForLobby()
 #pragma region Model
 
 #pragma region Buffer
-	/* Prototype_Component_VIBuffer_50_Particle */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_50_Particle"),
-		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 50))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_50_Particle");
-		return E_FAIL;
-	}
-	/* Prototype_Component_VIBuffer_20_Particle */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_20_Particle"),
-		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 20))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_20_Particle");
-		return E_FAIL;
-	}
-	/* Prototype_Component_VIBuffer_10_Particle */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_10_Particle"),
-		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 10))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_10_Particle");
-		return E_FAIL;
-	}
-	/* Prototype_Component_VIBuffer_5_Particle */
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_5_Particle"),
-		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 5))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_5_Particle");
-		return E_FAIL;
-	}
+
 #pragma endregion
 	_matrix		PivotMatrix = XMMatrixIdentity();
 #pragma region Effect
