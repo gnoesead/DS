@@ -880,6 +880,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 	}
 
 }
