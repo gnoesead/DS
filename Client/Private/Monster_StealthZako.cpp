@@ -115,7 +115,7 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 	*/
-
+	Get_PlayerComponent();
 	return S_OK;
 }
 
