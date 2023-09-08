@@ -33,8 +33,10 @@ void CWebManager::Tick(_double dTimeDelta)
 			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 			PlayerPos.y += 1.5f;
 			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-			Shoot_ArrowWeb(PlayerPos, Dir);
+			//Shoot_ArrowWeb(PlayerPos, Dir);
 			
+
+			Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
 		}
 		else if (m_iWebEffect_Type == 1)
 		{
@@ -44,7 +46,9 @@ void CWebManager::Tick(_double dTimeDelta)
 			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 			PlayerPos.y += 1.5f;
 			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-			Shoot_WebBall(PlayerPos, Dir);
+			//Shoot_WebBall(PlayerPos, Dir);
+
+			Shoot_JikWeb(PlayerPos, Dir, -45.0f);
 		}
 	}
 
@@ -59,12 +63,14 @@ void CWebManager::Tick(_double dTimeDelta)
 		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		PlayerPos.y += 1.0f;
 		_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-		//Shoot_WideWeb(PlayerPos, Dir);	
+		Shoot_WideWeb(PlayerPos, Dir);	
 		//Shoot_JikWeb(PlayerPos, Dir, -45.0f);
-		Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
+		//Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
 	}
 
 	
+
+
 }
 
 void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir, _float Turn)
