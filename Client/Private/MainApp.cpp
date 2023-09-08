@@ -27,6 +27,7 @@
 #include "PlayerManager.h"
 #include "EffectW_Manager.h"
 #include "WebManager.h"
+#include "ParticleManager.h"
 
 
 CMainApp::CMainApp()
@@ -965,6 +966,8 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CSoundMgr::Get_Instance()->StopAll();
+
+	CParticleManager::GetInstance()->DestroyInstance();
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
 	CMonsterManager::GetInstance()->DestroyInstance();

@@ -248,9 +248,27 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	//	/*if(m_pColliderCom->Get_Coll() == true)
 	//		Reset_Dead();*/
 	//}
-	
+
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	{
+		if (m_AtkCollDesc.bBullet == true)
+		{
+			if (m_dTimeAcc > 0.5)
+			{
+				if (m_bLineOut == false)
+				{
+					m_dEffectAcc += dTimeDelta;
+					if (m_dEffectAcc > 0.05)
+					{
+						m_dEffectAcc = 0.0;
+
+ 						//Create_GroundSmoke(CGroundSmoke::SMOKE_BLADE );
+					}
+				}
+			}
+		}
 		Check_OutLine();
+	}
 
 
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
@@ -549,33 +567,27 @@ void CAtkCollider::Check_OutLine()
 	_float vPosX = XMVectorGetX(vPos);
 	_float vPosZ = XMVectorGetZ(vPos);
 
-	vPos = XMVectorSetX(vPos, vPosX + vMovePosX);
+	if (((140.f < vPosZ) || (vPosZ < 108.f)))
+		vPos = XMVectorSetX(vPos, vPosX + vMovePosX);
+
+	if (((143.f < vPosX) || (vPosX < 109.f)))
+		vPos = XMVectorSetZ(vPos, vPosZ + vMovePosX);
 
 	if (m_dTimeAcc > 0.9)
 	{
-		if (((144.f < vPosX) || (vPosX < 108.f)) || ((141.f < vPosZ) || (vPosZ < 106.f)))
+		if (((143.f < vPosX) || (vPosX < 109.f)) || ((140.f < vPosZ) || (vPosZ < 106.5f)))
 		{
 			if (m_bLineOut == false)
 			{
 				m_bLineOut = true;
 				// ÀÌÆåÆ® »ý¼º
 
-				/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
 				Safe_AddRef(pGameInstance);
 				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
-				CGroundSmoke::EFFECTDESC EffectDesc;
-				EffectDesc.vPos = vPos;
-
-				EffectDesc.vStartPosX = { -0.0f,0.0f }; EffectDesc.vStartPosY = { -0.00f,0.15f }; EffectDesc.vStartPosZ = { -0.0f,0.0f };
-				EffectDesc.vFrameSpeed = { 0.01f , 0.02f };
-				EffectDesc.vSizeX = { 7.9f , 8.0f }; EffectDesc.vSizeY = { 7.9f , 8.0f };
-				EffectDesc.vSpeedX = { -0.0f , 0.0f }; EffectDesc.vSpeedY = { 0.05f , 0.1f }; EffectDesc.vSpeedZ = { -0.f , 0.f };
-				EffectDesc.vSizeSpeedX = { 1.0f , 1.6f }; EffectDesc.vSizeSpeedY = { 1.0f , 1.6f };
-
-				for (_uint i = 0; i < 10; ++i)
-					pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_GroundSmoke"), &EffectDesc);*/
-
+				Create_GroundSmoke(CGroundSmoke::SMOKE_BLADEDISAPPEAR, vPos);
+				Safe_Release(pGameInstance);
 			}
 		}
 
@@ -597,6 +609,52 @@ void CAtkCollider::Reset_Dead()
 	m_iCollCount = 0;
 
 	Set_Dead();
+}
+
+void CAtkCollider::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	CEffectW::EFFECTWDESC EffectWDesc;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_GROUNDSMOKE;
+	EffectWDesc.iNumX = 6; EffectWDesc.iNumY = 6;
+
+	switch (eSmokeType)
+	{
+	case CGroundSmoke::SMOKE_BLADEDISAPPEAR:
+		EffectWDesc.vPos = vOffsetPos;
+		EffectWDesc.vStartPosX = { -0.f,0.f }; EffectWDesc.vStartPosY = { 0.7f,1.2f }; EffectWDesc.vStartPosZ = { -0.0f,0.0 };
+		EffectWDesc.vFrameSpeed = { 0.02f , 0.03f };
+		EffectWDesc.vStartSizeX = { 2.5f ,	3.0f }; EffectWDesc.vStartSizeY = { 6.8f , 7.f };
+		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 4.f , 4.5f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 0.5f , 1.0f }; EffectWDesc.vSizeSpeedY = { 3.0f , 4.0f };
+		EffectWDesc.vStartFrame = { 0.f , 8.f };
+		EffectWDesc.fGravity = { 12.f };
+
+		for (_uint i = 0; i < 1; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_BLADE:
+		
+		EffectWDesc.vStartPosX = { -0.f,0.f }; EffectWDesc.vStartPosY = { 0.0f,0.2f }; EffectWDesc.vStartPosZ = { -0.0f,0.0 };
+		EffectWDesc.vFrameSpeed = { 0.005f , 0.010f };
+		EffectWDesc.vStartSizeX = { 0.5f ,	1.0f }; EffectWDesc.vStartSizeY = { 0.5f , 1.0f };
+		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.5f , 1.0f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSizeSpeedY = { 0.5f , 1.0f };
+		EffectWDesc.vStartFrame = { 0.f , 4.f };
+	
+		for (_uint i = 0; i < 1; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	default:
+		break;
+	}
+
+	Safe_Release(pGameInstance);
+
 }
 
 void CAtkCollider::Setting_AtkCollDesc()

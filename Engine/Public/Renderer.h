@@ -86,7 +86,7 @@ private:
 	HRESULT Render_ShadowBlur();
 	HRESULT Render_SSAO();
 	HRESULT Render_SSAOBlurX();
-	HRESULT Render_SSAOBlurY();
+	HRESULT Render_SSAOBlurY(); 
 	HRESULT Render_SSAOFinal();
 	HRESULT Render_ExportDeferred();
 	HRESULT Render_BlurX();

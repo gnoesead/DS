@@ -6,7 +6,7 @@
 #include "Effect_Texture.h"
 
 #include "GameInstance.h"
-
+#include "Effect_Particle.h"
 CEffectPlayer* CEffectPlayer::m_pInstance = nullptr;
 
 CEffectPlayer::CEffectPlayer()
@@ -428,7 +428,7 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 
 		Add_Particles_In_Pool(pTag);
 
-		pParentParticleSystem = pList->front();
+		pParentParticleSystem = pList->front();		// empty?
 		pList->pop_front();
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -514,7 +514,7 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 
 			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParticleSystem);
 
-			CEffect* pEffect = pParticleSystem->Get_Effect();
+			CEffect_Particle* pEffect = dynamic_cast<CEffect_Particle*>(pParticleSystem->Get_Effect());
 
 			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pEffect);
 
@@ -716,9 +716,9 @@ HRESULT CEffectPlayer::Add_Particles_In_Pool(const char* pEffectTag, int iCnt)
 			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
 			pParticleSystem->Set_Scale(vFloat3);
 
-			CEffect* pEffectOrigin = pParticleSystemOrigin->Get_Effect();
+			CEffect_Particle* pEffectOrigin = dynamic_cast<CEffect_Particle*>(pParticleSystemOrigin->Get_Effect());
 
-			CEffect* pEffect = dynamic_cast<CEffect*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectParticle"), &iLevelIndex));
+			CEffect_Particle* pEffect = dynamic_cast<CEffect_Particle*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectParticle"), &iLevelIndex));
 
 			if (nullptr == pEffect)
 			{
@@ -736,6 +736,9 @@ HRESULT CEffectPlayer::Add_Particles_In_Pool(const char* pEffectTag, int iCnt)
 			pEffectDescOrigin = pEffectOrigin->Get_EffectDesc();
 			pEffect->Set_EffectDesc(pEffectDescOrigin);
 			pEffect->Set_PlaySpeed(m_EffectWorldDesc.dSpeed);
+
+			pEffect->Set_CameraRightLookPos(pEffectOrigin->Get_CameraRightLookPos());
+			pEffect->Set_Order(pEffectOrigin->Get_Order());
 
 			pEffect->Reserve_BurstList(pEffectDescOrigin->iNumBursts);
 

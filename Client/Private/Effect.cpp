@@ -291,34 +291,43 @@ void CEffect::Tick(_double dTimeDelta)
 					}
 					m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_vCurPos));
 				}
+			}
 
-				size_t iSizeAlpha = m_AlphaOverLifetimes.size();
-				if (0 < iSizeAlpha)
+			size_t iSizeAlpha = m_AlphaOverLifetimes.size();
+			if (0 < iSizeAlpha)
+			{
+				if (m_iCurAlphaIndex < iSizeAlpha)
 				{
-					if (m_iCurAlphaIndex < iSizeAlpha)
+					while (true)
 					{
-						while (true)
-						{
-							if (m_fLifeTime >= m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime)
-								break;
+						if (m_iCurAlphaIndex < 0)
+							m_iCurAlphaIndex = 0;
 
-							++m_iCurAlphaIndex;
-						}
+						if (m_fLifeTime < 0)
+							m_fLifeTime = 0;
 
-						_float y = fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue - m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue);
-						_float fWeight = fabs(m_fLifeTime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime)
-							/ fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime);
+						if (m_fLifeTime >= m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime)
+							break;
 
-						if (m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue < m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue)
-							y *= -1;
+						++m_iCurAlphaIndex;
 
-						m_fAlpha = fWeight * y + m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue;
-
-						if (m_fAlpha > 1)
-							m_fAlpha = 1;
-						else if (m_fAlpha < 0)
-							m_fAlpha = 0;
+						if (m_iCurAlphaIndex >= iSizeAlpha - 1)
+							m_iCurAlphaIndex = (int)iSizeAlpha - 2;
 					}
+
+					_float y = fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue - m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue);
+					_float fWeight = fabs(m_fLifeTime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime)
+						/ fabs(m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fLifetime - m_AlphaOverLifetimes[m_iCurAlphaIndex].fLifetime);
+
+					if (m_AlphaOverLifetimes[m_iCurAlphaIndex + 1].fValue < m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue)
+						y *= -1;
+
+					m_fAlpha = fWeight * y + m_AlphaOverLifetimes[m_iCurAlphaIndex].fValue;
+
+					if (m_fAlpha > 1)
+						m_fAlpha = 1;
+					else if (m_fAlpha < 0)
+						m_fAlpha = 0;
 				}
 			}
 		}
@@ -581,6 +590,8 @@ void CEffect::Set_Initial_Data(void)
 	}
 
 	m_vStartSize = m_eEffectDesc.vStartSizeMin;
+
+	m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
 }
 
 void CEffect::Reset_Data(void)
@@ -615,6 +626,8 @@ void CEffect::Reset_Data(void)
 	m_AlphaOverLifetimes.clear();
 
 	m_fDissolveAmount = 0.f;
+
+	m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
 }
 
 HRESULT CEffect::Add_Components(void)

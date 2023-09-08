@@ -110,6 +110,9 @@ public:
 	void Set_PlaySpeed(_double dSpeed) {
 		m_dPlaySpeed = dSpeed;
 	}
+	void Set_Alpha(_float fAlpha) {
+		m_fAlpha = fAlpha;
+	}
 
 public:
 	HRESULT Add_Component_Texture(_uint iLevelIndex, const _tchar* pComponentTag, int eType);
@@ -177,7 +180,7 @@ public:
 		m_FrameOverTime.push_back(value);
 	}
 	virtual void Clear(void);
-	void Reset_Data(void);
+	virtual void Reset_Data(void);
 	virtual void Set_Initial_Data(void);
 
 protected:
@@ -215,6 +218,7 @@ protected:
 	vector<BURSTDESC>		m_BurstList;
 	vector<LIFETIMEVALUE>	m_RotOverLifeTimes[3];	// x,y,z
 	vector<LIFETIMEVALUE>	m_PosOverLifeTimes[3];	// x,y,z
+
 	vector<LIFETIMEVALUE>	m_AlphaOverLifetimes;
 
 	_tchar					m_szModelKey[MAX_PATH] = { TEXT("") };
