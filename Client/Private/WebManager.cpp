@@ -15,56 +15,74 @@ CWebManager::CWebManager()
 
 void CWebManager::Tick(_double dTimeDelta)
 {
+	_float4 PlayerPos;
+	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
+	
 
-	m_dDelay_WebGimmick_0 += dTimeDelta;
-	if (m_dDelay_WebGimmick_0 > 1.5f)
+#pragma region TriggerSet
+	//Trigger onoff
+	if (m_iTrigger_Index == 1 && PlayerPos.z >= 264.2f)
 	{
-		m_dDelay_WebGimmick_0 = 0.0;
-
-		if (m_iWebEffect_Type == 0)
-		{
-			m_iWebEffect_Type = 1;
-			
-			//size, pos, atkdir, speed, // BulletType , EffectTag
-			//Make_WebBullet(_float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f),_vector{ 0.0f, 0.0f, -1.0f, 0.0f }, 3.0, 
-			//	CAtkCollider::TYPE_BULLET_WEB, "SpiderWeb");
-
-			_float4 PlayerPos;
-			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-			PlayerPos.y += 1.5f;
-			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-			Shoot_ArrowWeb(PlayerPos, Dir);
-			
-		}
-		else if (m_iWebEffect_Type == 1)
-		{
-			m_iWebEffect_Type = 0;
-
-			_float4 PlayerPos;
-			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-			PlayerPos.y += 1.5f;
-			_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-			Shoot_WebBall(PlayerPos, Dir);
-		}
+		m_iTrigger_Index++;
+		m_isTrigger_First = true;
 	}
-
-	
-	
-	m_dDelay_WebGimmick_Full += dTimeDelta;
-	if (m_dDelay_WebGimmick_Full > 3.0f)
+	else if (m_iTrigger_Index == 2 && PlayerPos.z >= 292.9f)
 	{
-		m_dDelay_WebGimmick_Full = 0.0;
+		m_iTrigger_Index++;
+		m_isTrigger_Second = true;
+	}
+	else if (m_iTrigger_Index == 3 && PlayerPos.z >= 321.6f)
+	{
+		m_iTrigger_Index++;
+		m_isTrigger_Third = true;
+	}
+	//아카자 만남
+	else if (m_iTrigger_Index == 4 && PlayerPos.z >= 350.0f)
+	{
+		m_iTrigger_Index++;
+		m_isTrigger_Akaza = true;
+	}
+#pragma endregion
 
-		_float4 PlayerPos;
-		XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-		PlayerPos.y += 1.0f;
-		_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
-		//Shoot_WideWeb(PlayerPos, Dir);	
-		//Shoot_JikWeb(PlayerPos, Dir, -45.0f);
+	/*
+		PlayerPos.y += 1.5f;
+		
+		Shoot_ArrowWeb(PlayerPos, Dir);
+		Shoot_WebBall(PlayerPos, Dir);
+		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
+		Shoot_WideWeb(PlayerPos, Dir);
+		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
 		Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
-	}
+	*/
 
-	
+#pragma region Event
+	//첫 거미줄 웨이브
+	if (m_isTrigger_First)
+	{
+
+	}
+	//둘 거미줄 웨이브
+	if (m_isTrigger_Second)
+	{
+
+	}
+	//셋 거미줄 웨이브
+	if (m_isTrigger_Third)
+	{
+
+	}
+	//아카자 이벤트
+	if (m_isTrigger_Akaza)
+	{
+		if (m_isFirst_Akaza)
+		{
+			m_isFirst_Akaza = false;
+
+
+		}
+	}
+#pragma endregion
 }
 
 void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir, _float Turn)

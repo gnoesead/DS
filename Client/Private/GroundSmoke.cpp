@@ -34,8 +34,18 @@ HRESULT CGroundSmoke::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
 	m_fAlpha = 0.5f;
-
+	
 	m_fColor = Random::Generate_Float(0.4f, 0.6f);
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	if(LEVEL_HOUSE == iCurIdx)
+		m_fColor = Random::Generate_Float(0.8f, 0.9f);
+	
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -56,7 +66,7 @@ void CGroundSmoke::Tick(_double TimeDelta)
 	Update_Frame(TimeDelta);
 
 	m_vSize.x += m_fSizeSpeedX * (_float)TimeDelta;
-	m_vSize.y += m_fSizeSpeedX * (_float)TimeDelta;
+	m_vSize.y += m_fSizeSpeedY * (_float)TimeDelta;
 
 	m_pTransformCom->Scaling(m_vSize);
 }

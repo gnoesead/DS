@@ -46,7 +46,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void	Set_Pattern(PATTERN ePattern) { m_eCurPattern = ePattern; }
+	void	Set_Pattern(PATTERN ePattern) { m_eCurPattern = ePattern; m_bWaterEffect = false; }
 
 private:
 	HRESULT Add_Components();
@@ -74,6 +74,7 @@ private:
 
 	STATE					m_eCurState = { STATE_WAIT };
 	PATTERN					m_eCurPattern = { PATTERN_NONE };
+	PATTERN					m_ePrePattern = { PATTERN_NONE };
 
 	_float					m_fSize = { 0.01f };
 

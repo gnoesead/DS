@@ -172,18 +172,7 @@ void CLevel_Train::Tick(_double dTimeDelta)
         }
     }
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
-	{
-		if (m_isWebGimmick_On)
-			m_isWebGimmick_On = false;
-		else
-			m_isWebGimmick_On = true;
-	}
-	if (m_isWebGimmick_On)
-	{
-		//web ±â¹Í
-		CWebManager::GetInstance()->Tick(dTimeDelta);
-	}
+	CWebManager::GetInstance()->Tick(dTimeDelta);
 
     Safe_Release(pGameInstance);
 }

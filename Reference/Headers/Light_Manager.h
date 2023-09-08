@@ -13,6 +13,9 @@ private:
 public:
 	LIGHTDESC*	Get_Light(_uint iIndex);
 	void		Set_Light(_uint iIndex, _uint iOption, _float4 vLightValue);
+
+	_uint		Get_LightListSize() { return (_uint)(m_Lights.size()); }
+
 public:
 	HRESULT Add_Light(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const LIGHTDESC& LightDesc , class CTransform* pOwnerTransform = nullptr);
 	HRESULT	Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);

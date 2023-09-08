@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Collider.h"
 #include "EffectPlayer.h"
+#include "GroundSmoke.h"
 
 BEGIN(Engine)
 
@@ -97,6 +98,9 @@ private:
 	void	Reset_Dead();
 
 private:
+	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f , 0.f , 0.f , 0.f });
+
+private:
 	CTransform* m_pTransformCom = { nullptr };
 	CCollider* m_pColliderCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
@@ -106,6 +110,7 @@ private:
 	ATKCOLLDESC		m_AtkCollDesc;
 	_double			m_dTimeAcc = { 0.0 };
 	_double			m_dStopAcc = { 0.0 };
+	_double			m_dEffectAcc = { 0.0 };
 	
 
 	_uint			m_iCollCount = { 0 };
