@@ -29,6 +29,7 @@
 #include "Zenitsu_Awake_UI.h"
 
 #include "PlayerManager.h"
+#include "WebManager.h"
 #include "Camera_Manager.h"
 #include "OptionManager.h"
 
@@ -171,6 +172,18 @@ void CLevel_Train::Tick(_double dTimeDelta)
         }
     }
 
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+	{
+		if (m_isWebGimmick_On)
+			m_isWebGimmick_On = false;
+		else
+			m_isWebGimmick_On = true;
+	}
+	if (m_isWebGimmick_On)
+	{
+		//web ±â¹Í
+		CWebManager::GetInstance()->Tick(dTimeDelta);
+	}
 
     Safe_Release(pGameInstance);
 }
@@ -659,7 +672,7 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-
+	
 // Zenitsu_Awake_UI
 	Zenitsu_Awake_UI::UIDESC UIDesc3;
 	ZeroMemory(&UIDesc3, sizeof UIDesc3);
@@ -691,7 +704,7 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
-
+	
 
 
 

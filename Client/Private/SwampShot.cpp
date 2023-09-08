@@ -215,14 +215,14 @@ void CSwampShot::Tick_Type_Big(_double dTimeDelta)
 {
 	_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
 	
-	if (3.0f < m_dDelay_All )
+	if (0.5f < m_dDelay_All )
 	{
 		if (m_isFirst)
 		{
 			m_isFirst = false;
 
 			_vector AtkDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(5.0f, 5.0f, 5.0f), _float3(0.f, 0.0f, 0.0f), 10.0,
+			Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(5.0f, 5.0f, 5.0f), _float3(0.f, 0.0f, 0.0f), 3.0,
 				CAtkCollider::TYPE_SWAMP, AtkDir, 3.0f);
 		}
 	}

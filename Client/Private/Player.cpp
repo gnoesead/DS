@@ -493,42 +493,44 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	
 	Trigger_Hit(dTimeDelta);
 
-	if (m_Moveset.m_isHitMotion == false)
+	if (m_isSwapping_State == false)
 	{
-		if (m_Moveset.m_isRestrict_Adventure == false)
+		if (m_Moveset.m_isHitMotion == false)
 		{
-			Key_Input_Battle_Move(dTimeDelta);
+			if (m_Moveset.m_isRestrict_Adventure == false)
+			{
+				Key_Input_Battle_Move(dTimeDelta);
+			}
+
+
+			if (m_ePlayerState == PLAYER_ADVENTURE)
+			{
+				Key_Input_Adventure(dTimeDelta);
+			}
+			else if (m_ePlayerState == PLAYER_BATTLE)
+			{
+				Key_Input_Battle_Jump(dTimeDelta);
+
+				Key_Input_Battle_Attack(dTimeDelta);
+
+				Key_Input_Battle_ChargeAttack(dTimeDelta);
+
+				Key_Input_Battle_Skill(dTimeDelta);
+
+				Key_Input_Battle_Guard(dTimeDelta);
+
+				Key_Input_Battle_Dash(dTimeDelta);
+
+				Key_Input_Battle_Awaken(dTimeDelta);
+
+				Key_Input_Battle_Special(dTimeDelta);
+			}
 		}
-
-
-		if (m_ePlayerState == PLAYER_ADVENTURE)
+		else
 		{
-			Key_Input_Adventure(dTimeDelta);
-		}
-		else if (m_ePlayerState == PLAYER_BATTLE)
-		{
-			Key_Input_Battle_Jump(dTimeDelta);
-
-			Key_Input_Battle_Attack(dTimeDelta);
-
-			Key_Input_Battle_ChargeAttack(dTimeDelta);
-
-			Key_Input_Battle_Skill(dTimeDelta);
-
-			Key_Input_Battle_Guard(dTimeDelta);
-
-			Key_Input_Battle_Dash(dTimeDelta);
-
-			Key_Input_Battle_Awaken(dTimeDelta);
-
-			Key_Input_Battle_Special(dTimeDelta);
+			Key_Input_Down(dTimeDelta);
 		}
 	}
-	else
-	{
-		Key_Input_Down(dTimeDelta);
-	}
-	
 	
 
 	Safe_Release(pGameInstance);
@@ -798,6 +800,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 
 	if (m_Moveset.m_isRestrict_Throw == false)
 	{
+		/*
 		//잡기공격 ( O키 + J키)
 		if (pGameInstance->Get_DIKeyState(DIK_O) )
 		{
@@ -805,7 +808,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 				m_Moveset.m_Down_Battle_Throw = true;
 			else if (pGameInstance->Get_DIKeyDown(DIK_W) || pGameInstance->Get_DIKeyDown(DIK_S) || pGameInstance->Get_DIKeyDown(DIK_A) || pGameInstance->Get_DIKeyDown(DIK_D))
 				m_Moveset.m_Down_Battle_Push = true;
-		}
+		}*/
 	}
 	
 	if (m_isMaintain_Guard)
@@ -989,7 +992,7 @@ void CPlayer::Key_Input_Down(_double dTimeDelta)
 	{
 		m_dDelay_GetUp += dTimeDelta;
 
-		if (m_dDelay_GetUp > 0.8f && m_Moveset.m_isGetUpMotion == false)
+		if (m_dDelay_GetUp > 0.15f && m_Moveset.m_isGetUpMotion == false)
 		{
 			if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 			{
