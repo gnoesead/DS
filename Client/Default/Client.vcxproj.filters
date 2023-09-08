@@ -436,6 +436,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Spider\Web">
       <UniqueIdentifier>{19db0fba-f920-48b2-859b-6b860fa9483a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\07.Gimmick\Timing">
+      <UniqueIdentifier>{7b431a55-524f-4ed0-8083-b95cdd09ce3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -777,6 +780,9 @@
     <ClInclude Include="..\Public\WebShot.h">
       <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Timing_UI.h">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1108,6 +1114,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\WebShot.cpp">
       <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Timing_UI.cpp">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

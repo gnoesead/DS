@@ -71,7 +71,28 @@ public: // Zen_Cut_In
 	void Set_Zen_Trans_On(_bool On);
 	_bool Get_Zen_Trans_On();
 
+public: // Timing
+	
+	void Set_Timing_On(_bool On);
+	_bool Get_Timing_On();
 
+	void Set_Timing_Success(_bool Is);
+	_bool Get_Timing_Success();
+
+	void Set_Timing_Failed(_bool Is);
+	_bool Get_Timing_Failed();
+
+	void Set_Timing_Sprite1(_bool Is);
+	_bool Get_Timing_Sprite1();
+
+	void Set_Timing_Sprite2(_bool Is);
+	_bool Get_Timing_Sprite2();
+
+	void Set_Timing_Sprite3(_bool Is);
+	_bool Get_Timing_Sprite3();
+
+	void Set_Timing_Light(_bool Is);
+	_bool Get_Timing_Light();
 private:
 	_uint m_Player_Index = { 0 };
 	_uint m_Player_Skill_Index = { 0 };
@@ -108,6 +129,25 @@ private: // Cut_In
 
 	_bool m_Zen_Elc_On = { false };
 	_bool m_Zen_Trans_On = { false };
+
+private: // Timing
+	
+	_bool m_Timing_On = { false };
+	_bool m_Timing_Success = { false };
+	_bool m_Timing_Failed = { false };
+
+
+	_bool m_Timing_Sprite1 = { false };
+	_bool m_Timing_Sprite2 = { false };
+	_bool m_Timing_Sprite3 = { false };
+
+	_bool m_Timing_Light = { false };
+
+
+
+
+
+
 
 
 public:

@@ -79,6 +79,25 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 
 	}
 
+	if (m_Timing_Success == true) {
+
+		if (m_Timing_Sprite1 == false) {
+			m_Timing_Sprite1 = true;
+		}
+		if (m_Timing_Sprite2 == false) {
+			m_Timing_Sprite2 = true;
+		}
+		if (m_Timing_Sprite3 == false) {
+			m_Timing_Sprite3 = true;
+		}
+		if (m_Timing_Light == false) {
+			m_Timing_Light = true;
+		}
+	}
+
+
+
+
 	Safe_Release(pGameInstance);
 }
 
@@ -249,6 +268,76 @@ void CBattle_UI_Manager::Set_Zen_Trans_On(_bool On)
 _bool CBattle_UI_Manager::Get_Zen_Trans_On()
 {
 	return m_Zen_Trans_On;
+}
+
+void CBattle_UI_Manager::Set_Timing_On(_bool On)
+{
+	m_Timing_On = On;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_On()
+{
+	return m_Timing_On;
+}
+
+void CBattle_UI_Manager::Set_Timing_Success(_bool Is)
+{
+	m_Timing_Success = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Success()
+{
+	return m_Timing_Success;
+}
+
+void CBattle_UI_Manager::Set_Timing_Failed(_bool Is)
+{
+	m_Timing_Failed = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Failed()
+{
+	return m_Timing_Failed;
+}
+
+void CBattle_UI_Manager::Set_Timing_Sprite1(_bool Is)
+{
+	m_Timing_Sprite1 = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Sprite1()
+{
+	return  m_Timing_Sprite1;
+}
+
+void CBattle_UI_Manager::Set_Timing_Sprite2(_bool Is)
+{
+	m_Timing_Sprite2 = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Sprite2()
+{
+	return m_Timing_Sprite2;
+}
+
+void CBattle_UI_Manager::Set_Timing_Sprite3(_bool Is)
+{
+	m_Timing_Sprite3 = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Sprite3()
+{
+	return m_Timing_Sprite3;
+}
+
+void CBattle_UI_Manager::Set_Timing_Light(_bool Is)
+{
+	m_Timing_Light = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Light()
+{
+	return m_Timing_Light;
 }
 
 

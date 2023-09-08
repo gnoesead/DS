@@ -30,7 +30,7 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
-
+#include "Timing_UI.h"
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -830,8 +830,26 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+// Timing_UI
+	CTiming_UI::UIDESC UIDesc9;
 
 
+    for (int i = 0; i < 7; i++) {
+		ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+		UIDesc9.m_Type = i;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+			TEXT("Prototype_GameObject_Timing_UI"), &UIDesc9))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+
+	
+
+	
     Safe_Release(pGameInstance);
 
     return S_OK;
