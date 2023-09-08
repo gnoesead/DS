@@ -49,7 +49,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	Get_PlayerComponent();
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-		
+
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
 		m_StatusDesc.fHp = 200.f;
@@ -61,7 +61,10 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
 	}
 	else
-	{	
+	{
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			m_bTrain_Stage = true;
+
 		m_eCurNavi = NAVI_TRAIN;
 	}
 
@@ -81,42 +84,16 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
 
-#endif // _DEBUG	
+#endif // _DEBUG
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-	////m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
-	////m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
-	//int a = m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex();
-	//int b = CPlayerManager::GetInstance()->Get_PlayerIndex();
+	Update_Train_Stage();
 
-	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
-		m_bTanjiroAwake = true;
-	else
-		m_bTanjiroAwake = false;
-	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
-		m_bZenitsuAwake = true;
-	else
-		m_bZenitsuAwake = false;
+	Check_Player_Awake();
 
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
-
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-		{
-			if (m_bTrain_Stomp == false)
-			{
-				m_bTrain_Stomp = true;
-				Trigger_Train_JumpStomp();
-				m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-			}
-		}
-		else
-		{
-			Update_Hit_Messenger(dTimeDelta);
-			Update_Trigger(dTimeDelta);
-		}
-		Safe_Release(pGameInstance);
+		Update_Hit_Messenger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -124,6 +101,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 	}
+	
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -134,8 +112,11 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 void CBoss_Akaza::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
-	Update_AnimIndex(m_eCurAnimIndex);
-	Gravity(dTimeDelta);
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	{
+		Update_AnimIndex(m_eCurAnimIndex);
+		Gravity(dTimeDelta);
+	}
 }
 
 HRESULT CBoss_Akaza::Render()
@@ -826,6 +807,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
+				/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);*/
 			}
 			else
 			{
@@ -853,6 +836,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
+			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -869,6 +855,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+
+			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -890,6 +879,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
+
+			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_X", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -976,9 +970,19 @@ void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 
 }
 
-void CBoss_Akaza::Update_TriggerTime(_double dTimeDelta)
+void CBoss_Akaza::Update_Train_Stage()
 {
+	if (m_bTrain_Stage == true)
+	{
+		if (m_bTrain_Stomp == false)
+		{
+			m_bTrain_Stomp = true;
+			Trigger_Train_JumpStomp();
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+		}
+	}
 }
+
 
 void CBoss_Akaza::Update_State(_double dTimeDelta)
 {
@@ -2377,7 +2381,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						EffectWorldDesc.vPosition.y = 1.5f;
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom, &EffectWorldDesc);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom, &EffectWorldDesc);
-						
+
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
@@ -3237,7 +3241,7 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
-					Camera_Shake(1.0,600);
+					Camera_Shake(1.0, 600);
 
 				}
 
@@ -3248,7 +3252,8 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
 				m_eCurAnimIndex = ANIM_IDLE;
-				Trigger_Interact();
+				m_bTrain_Stage = false;
+				//Trigger_Interact();
 			}
 		}
 	}

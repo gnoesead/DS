@@ -208,9 +208,9 @@ public:
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
-	void Update_TriggerTime(_double dTimeDelta);
+	void Update_Train_Stage();
 
-	//	void Update_Begin(_double dTimeDelta);
+	
 	void Update_Phase_1(_double dTimeDelta);
 	void Update_Phase_2(_double dTimeDelta);
 	void Update_Phase_3(_double dTimeDelta);
@@ -320,6 +320,7 @@ private: // _bool
 	_bool	m_bTrigger = { false };
 
 	_bool	m_bTrain_Stomp = { false };
+	_bool	m_bTrain_Stage = { false };
 
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };

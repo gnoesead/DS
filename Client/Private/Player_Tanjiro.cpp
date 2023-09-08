@@ -98,7 +98,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // 마지막 이동
 
 
-	CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
+	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
 
 	return S_OK;
 }
@@ -272,7 +272,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 			return;
 	}
-
+	
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_int ak = 47;

@@ -131,6 +131,8 @@ HRESULT CLevel_Train::Initialize()
 
 	m_Battle_MaxTime = { 2.f };
 
+	CWebManager::GetInstance()->Initialize();
+
     return S_OK;
 }
 

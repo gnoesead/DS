@@ -87,6 +87,18 @@ void CMonster::Get_PlayerComponent()
 	Safe_Release(pGameInstance);
 }
 
+void CMonster::Check_Player_Awake()
+{
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
+		m_bTanjiroAwake = true;
+	else
+		m_bTanjiroAwake = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
+		m_bZenitsuAwake = true;
+	else
+		m_bZenitsuAwake = false;
+}
+
 void CMonster::Calculate_To_Player()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

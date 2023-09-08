@@ -31,6 +31,7 @@ public:
 
 protected:
 	void Get_PlayerComponent();
+	void Check_Player_Awake();
 
 protected: // Calculate
 	void  Calculate_To_Player();

@@ -86,19 +86,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-
-#ifdef _DEBUG
-
-
-#endif // _DEBUG
-	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
-		m_bTanjiroAwake = true;
-	else
-		m_bTanjiroAwake = false;
-	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
-		m_bZenitsuAwake = true;
-	else
-		m_bZenitsuAwake = false;
+	Check_Player_Awake();
 
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
@@ -137,9 +125,12 @@ void CBoss_Kyogai::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 
 	__super::LateTick(dTimeDelta);
-	Update_AnimIndex(m_eCurAnimIndex);
-	if (m_bTurn == false)
-		Gravity(dTimeDelta);
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	{
+		Update_AnimIndex(m_eCurAnimIndex);
+		if (m_bTurn == false)
+			Gravity(dTimeDelta);
+	}
 }
 
 HRESULT CBoss_Kyogai::Render()
