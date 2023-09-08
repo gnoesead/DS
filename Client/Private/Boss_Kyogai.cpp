@@ -14,6 +14,7 @@
 #include "Camera_Free.h"
 #include "Fade_Manager.h"
 #include "MonsterManager.h"
+#include "Battle_UI_Manager.h"
 
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -86,8 +87,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Check_Player_Awake();
-
+	
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Debug_State(dTimeDelta);
@@ -239,6 +239,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
 		m_iTriggerCnt = 0;
 		m_iIdleCnt = 0;
+		m_dTimeAcc = 0.0;
 		m_eCurstate = STATE_INTERACT;
 	}
 
@@ -1184,7 +1185,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			m_pPlayer_Zenitsu->Set_Hit_Success_Hekireki(true);
+		}
 	}
 }
 
@@ -3052,7 +3057,8 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 	if (true == m_bTurnRF || true == m_bTurnLF || true == m_bTurnRB || true == m_bTurnLB)
 		m_dTimeAcc += dTimeDelta;
 
-
+	if (Event_Time(dTimeDelta, 1.5, m_dTimeAcc))
+		CBattle_UI_Manager::GetInstance()->Set_Timing_On(true);
 
 	if (Event_Time(dTimeDelta, 2.0, m_dTimeAcc))
 	{
@@ -3062,6 +3068,7 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 				TEXT("Prototype_GameObject_RoomSmoke"));
 		}
 		CCameraManager::GetInstance()->Camera_Shake(0.5, 200);
+		//CBattle_UI_Manager::GetInstance()->Set_Timing_On(true);
 	}
 
 	if (true == m_bTurnRF && m_dTimeAcc > 2.5)

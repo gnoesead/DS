@@ -295,7 +295,7 @@ void CTiming_UI::Tick(_double TimeDelta)
 
 		if (CBattle_UI_Manager::GetInstance()->Get_Timing_On() == true) {
 
-			m_Size_Param -= (_float)TimeDelta * 0.3f;
+			m_Size_Param -= (_float)TimeDelta * 0.5f;
 
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE)) {
 

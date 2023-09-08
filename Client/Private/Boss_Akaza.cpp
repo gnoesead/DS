@@ -52,8 +52,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 200.f;
-		m_StatusDesc.fHp_Max = 200.f;
+		m_StatusDesc.fHp = 2000.f;
+		m_StatusDesc.fHp_Max = 2000.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -87,9 +87,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #endif // _DEBUG
 
 	Update_Train_Stage();
-
-	Check_Player_Awake();
-
+		
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
@@ -101,7 +99,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 	}
-	
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -944,7 +942,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			m_pPlayer_Zenitsu->Set_Hit_Success_Hekireki(true);
+		}
 	}
 
 }

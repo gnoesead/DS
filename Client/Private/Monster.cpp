@@ -46,6 +46,8 @@ void CMonster::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
+
+	Check_Player_Awake();
 }
 
 void CMonster::LateTick(_double dTimeDelta)

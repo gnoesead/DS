@@ -62,6 +62,7 @@ void CWebManager::Tick(_double dTimeDelta)
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 	
+	if(pPlayer != nullptr)
 	m_pTransformCom = pPlayer->Get_TransformCom();
 
 	_float4 PlayerPos;
