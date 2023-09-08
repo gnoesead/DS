@@ -132,7 +132,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	m_TimeAcc += dTimeDelta;
 #ifdef _DEBUG
-	//Key_Input(dTimeDelta);
+	Key_Input(dTimeDelta);
 
 	
 #endif

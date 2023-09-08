@@ -101,7 +101,7 @@ HRESULT CWebShot::Render()
 void CWebShot::Initialize_Create_Coll()
 {
 	//가로로 긴
-	if (m_WebDesc.iWebTexIndex == 12 || m_WebDesc.iWebTexIndex == 13)
+	if (m_WebDesc.iWebTexIndex == 12 )
 	{
 		_vector AtkDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(-0.3f, 0.0f, 0.0f), 13.0,
@@ -110,6 +110,19 @@ void CWebShot::Initialize_Create_Coll()
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
 		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(-0.1f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.0f, 0.0f, 0.0f), 13.0,
+			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.1f, 0.0f, 0.0f), 13.0,
+			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.2f, 0.0f, 0.0f), 13.0,
+			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.3f, 0.0f, 0.0f), 13.0,
+			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
+	}
+	//슬라이드
+	else if (m_WebDesc.iWebTexIndex == 13)
+	{
+		_vector AtkDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.0f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
 		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(0.1f, 0.0f, 0.0f), 13.0,
