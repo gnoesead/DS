@@ -132,7 +132,7 @@ void CMainApp::Tick(_double dTimeDelta)
 
 	m_TimeAcc += dTimeDelta;
 #ifdef _DEBUG
-	Key_Input(dTimeDelta);
+	//Key_Input(dTimeDelta);
 
 	
 #endif
@@ -162,6 +162,7 @@ HRESULT CMainApp::Render()
 	if (FAILED(m_pRenderer->Draw_RenderObjects()))
 		return E_FAIL;
 	
+	
 	++m_iRenderCnt;
 
 	if (m_TimeAcc >= 1.0)
@@ -176,7 +177,8 @@ HRESULT CMainApp::Render()
 		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
 			return E_FAIL;
 	}
-	#ifdef _DEBUG
+
+#ifdef _DEBUG
 
 	if (m_isRenderDebugInfo) {
 
@@ -593,6 +595,24 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	
 
 #pragma endregion	
+
+
+#pragma region CutIn_UI	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/%d.png"),5))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI_Trans"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/Trans/ELC_Transition_%d.png"), 16))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI_Elc"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/Elc/ELC_Face_000%d.png"), 20))))
+		return E_FAIL;
+
+#pragma endregion	
+
 
 #pragma region MiniGame_UI	
 

@@ -26,6 +26,7 @@
 #include "Pause.h"
 #include "Option.h"
 #include "ColliderManager.h"
+#include "Zenitsu_Awake_UI.h"
 
 #include "PlayerManager.h"
 #include "WebManager.h"
@@ -671,6 +672,39 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
+	
+// Zenitsu_Awake_UI
+	Zenitsu_Awake_UI::UIDESC UIDesc3;
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
+
+	UIDesc3.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+	
 
 
 

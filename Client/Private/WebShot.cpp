@@ -101,7 +101,7 @@ HRESULT CWebShot::Render()
 void CWebShot::Initialize_Create_Coll()
 {
 	//가로로 긴
-	if (m_WebDesc.iWebTexIndex == 12)
+	if (m_WebDesc.iWebTexIndex == 12 || m_WebDesc.iWebTexIndex == 13)
 	{
 		_vector AtkDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.05f, 0.05f, 0.05f), _float3(-0.3f, 0.0f, 0.0f), 13.0,
@@ -173,10 +173,16 @@ void CWebShot::Tick_For_Index(_double dTimeDelta)
 	{
 		
 	}
+	//슬라이드웹
+	else if (m_WebDesc.iWebTexIndex == 13)
+	{
+		//m_WebDesc.fTurn
+		m_pTransformCom->Rotation(_float3{ 0.0f, m_WebDesc.fTurn, 0.0f });
+	}
 	//직선
 	else if (m_WebDesc.iWebTexIndex == 32 )
 	{
-		m_pTransformCom->Rotation(_float3{ 0.0f, 0.0f, 90.0f });
+		m_pTransformCom->Rotation(_float3{ 30.0f , m_WebDesc.fTurn, 90.0f });
 	}
 
 }
@@ -184,12 +190,12 @@ void CWebShot::Tick_For_Index(_double dTimeDelta)
 HRESULT CWebShot::Render_For_Index()
 {
 	//한 번 렌더
-	if (m_WebDesc.iWebTexIndex == 12 || m_WebDesc.iWebTexIndex == 32)
+	if (m_WebDesc.iWebTexIndex == 12 || m_WebDesc.iWebTexIndex == 32 || m_WebDesc.iWebTexIndex == 13)
 	{
 		if (FAILED(SetUp_ShaderResources(0)))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(27); //pass
+		m_pShaderCom->Begin(28); //pass
 
 		m_pVIBufferCom->Render();
 	}
@@ -198,12 +204,12 @@ HRESULT CWebShot::Render_For_Index()
 	{
 		if (FAILED(SetUp_ShaderResources(3)))
 			return E_FAIL;
-		m_pShaderCom->Begin(27); //pass
+		m_pShaderCom->Begin(28); //pass
 		m_pVIBufferCom->Render();
 
 		if (FAILED(SetUp_ShaderResources(4)))
 			return E_FAIL;
-		m_pShaderCom->Begin(27); //pass
+		m_pShaderCom->Begin(28); //pass
 		m_pVIBufferCom->Render();
 	}
 	
@@ -215,7 +221,7 @@ HRESULT CWebShot::Render_For_Index()
 			if (FAILED(SetUp_ShaderResources(i)))
 				return E_FAIL;
 
-			m_pShaderCom->Begin(27); //pass
+			m_pShaderCom->Begin(28); //pass
 
 			m_pVIBufferCom->Render();
 		}

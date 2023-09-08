@@ -23,11 +23,12 @@ private:
 public: // ÇÔ¼ö
 	void	Tick(_double dTimeDelta);
 
-	void	Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir);
+	void	Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir, _float Turn = 0.0f);
 	void	Shoot_ArrowWeb(_float4 CreatePos, _float4 ShotDir);
 	void	Shoot_WebBall(_float4 CreatePos, _float4 ShotDir);
 	void	Shoot_WideWeb(_float4 CreatePos, _float4 ShotDir);
-	void	Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir);
+	void	Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir, _float Turn);
+	void	Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn);
 
 	void	Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
 		CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag);

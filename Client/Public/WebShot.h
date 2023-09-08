@@ -22,8 +22,10 @@ public:
 
 		_float3 vScale = { 1.0f, 1.0f, 1.0f };
 		_float4	vDir = { 0.0f, 0.0f, -1.0f, 0.0f };
-		_float	fSpeed = 1.0f;
+		_float	fSpeed = { 1.0f };
 		//_double	dDelay = 0.0;
+
+		_float	fTurn = { 0.0f };
 		
 	}WEBDESC;
 private:

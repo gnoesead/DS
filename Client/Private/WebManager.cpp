@@ -60,13 +60,14 @@ void CWebManager::Tick(_double dTimeDelta)
 		PlayerPos.y += 1.0f;
 		_float4 Dir = { 0.0f, 0.0f , 1.0f, 0.0f };
 		//Shoot_WideWeb(PlayerPos, Dir);	
-		Shoot_JikWeb(PlayerPos, Dir);
+		//Shoot_JikWeb(PlayerPos, Dir, -45.0f);
+		Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
 	}
 
 	
 }
 
-void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir)
+void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, _float4 ShotDir, _float Turn)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -76,6 +77,7 @@ void CWebManager::Create_WebShot(_int TexIdx, _float4 CreatePos, _float3 Scale, 
 	WebDesc.WorldInfo.vPosition = CreatePos;
 	WebDesc.vScale = Scale;
 	WebDesc.vDir = ShotDir;
+	WebDesc.fTurn = Turn;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Shot"), TEXT("Prototype_GameObject_WebShot"), &WebDesc)))
 	{
@@ -104,10 +106,16 @@ void CWebManager::Shoot_WideWeb(_float4 CreatePos, _float4 ShotDir)
 	Create_WebShot(12, CreatePos, _float3{ 20.0f, 6.0f, 6.0f }, ShotDir);
 }
 
-void CWebManager::Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir)
+void CWebManager::Shoot_JikWeb(_float4 CreatePos, _float4 ShotDir, _float Turn)
 {
 	// index, Pos, Scale, Dir
-	Create_WebShot(32, CreatePos, _float3{ 26.0f, 5.0f, 5.0f }, ShotDir);
+	Create_WebShot(32, CreatePos, _float3{ 25.0f, 3.5f, 3.5f }, ShotDir, Turn);
+}
+
+void CWebManager::Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn)
+{
+	// index, Pos, Scale, Dir
+	Create_WebShot(13, CreatePos, _float3{ 17.0f, 8.0f, 6.0f }, ShotDir);
 }
 
 void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
