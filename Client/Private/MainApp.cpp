@@ -26,6 +26,7 @@
 
 #include "PlayerManager.h"
 #include "EffectW_Manager.h"
+#include "WebManager.h"
 
 
 CMainApp::CMainApp()
@@ -278,6 +279,8 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 	}
 
 	Load_Effect_Resources();
+
+
 
 #pragma region UI
 	/* Protoype_GameObject_Title*/
@@ -967,6 +970,8 @@ void CMainApp::Free()
 	CMonsterManager::GetInstance()->DestroyInstance();
 	CSwampManager::GetInstance()->DestroyInstance();
 	CPlayerManager::GetInstance()->DestroyInstance();
+	CWebManager::GetInstance()->DestroyInstance();
+	
 
 	CColliderManager::GetInstance()->DestroyInstance();
 	CEffectPlayer::Get_Instance()->Destroy_Instance();
