@@ -67,7 +67,7 @@ HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 	m_ResetPos[0] = { 4.61f, 0.05f, 7.37f, 1.f }; //첫지역
 	m_ResetPos[1] = { 77.18f, 0.05f, 6.75f, 1.f }; // 처음 이동
 	m_ResetPos[2] = { 74.1f, 0.05f, 66.63f, 1.f }; // 둘째 이동
-	m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
+	m_ResetPos[3] = { 197.1f, 0.05f, 31.95f, 1.f }; // 자코방 앞
 	
 	//m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
 
@@ -121,7 +121,7 @@ void CNPC_Zenitsu::Tick(_double dTimeDelta)
 			}
 		}
 	}
-	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
 	{
 		//젠이츠 다시 생김
 		if (CMonsterManager::GetInstance()->Get_ThreeCnt() == 3)

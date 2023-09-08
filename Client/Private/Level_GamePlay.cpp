@@ -23,6 +23,7 @@
 #include "World_UI_Hp.h"
 #include "Pause.h"
 #include "Option.h"
+#include "Zenitsu_Awake_UI.h"
 
 #include "Monster_Spider.h"
 #include "Story_Manager.h"
@@ -1459,6 +1460,39 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc14))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+
+// Zenitsu_Awake_UI
+	Zenitsu_Awake_UI::UIDESC UIDesc15;
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 1;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc15))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	ZeroMemory(&UIDesc15, sizeof UIDesc15);
+
+	UIDesc15.m_Type = 2;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_GAMEPLAY, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Zenitsu_Awake_UI"), &UIDesc15))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

@@ -48,6 +48,7 @@
 #include "Battle_Signal.h"
 #include "Option.h"
 #include "Paper.h"
+#include "Zenitsu_Awake_UI.h"
 
 
 #include "NPC_Female.h"
@@ -84,6 +85,7 @@
 #include "StoneParticle.h"
 #include "SmeshStone.h"
 #include "Aurora.h"
+#include "WebShot.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -754,6 +756,7 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+
 	/* Prototype_GameObject_Monster_Zako_0 */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster_Zako_0"),
 		CMonster_Zako::Create(m_pDevice, m_pContext))))
@@ -974,6 +977,11 @@ HRESULT CLoader::LoadingForLobby()
 		CPaper::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_Zenitsu_Awake_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
+		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Particale
@@ -1096,6 +1104,7 @@ HRESULT CLoader::LoadingForVillage()
 		return E_FAIL;
 	}
 
+	
 
 #pragma endregion
 
@@ -1341,6 +1350,14 @@ HRESULT CLoader::LoadingForTrain()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Models/Environments/Map/Effect/T_e_cmn_Smoke008.dds")))))
 		return E_FAIL;
 
+	/* Prototype_Component_Texture_Web*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_TRAIN, TEXT("Prototype_Component_Texture_Web"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Web/Web_%d.dds"), 34))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_Web");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region UITexture
@@ -1394,6 +1411,12 @@ HRESULT CLoader::LoadingForTrain()
 	/* For.Prototype_GameObject_TrainSmoke*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TrainSmoke"),
 		CTrainSmoke::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	/* For.Prototype_GameObject_WebShot*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_WebShot"),
+		CWebShot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

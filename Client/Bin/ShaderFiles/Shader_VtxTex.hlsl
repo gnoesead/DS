@@ -271,6 +271,21 @@ PS_OUT  PS_MAIN_INK_MASK(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_MAIN_BLACK_MASK(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+
+	vColor.w *= vColor.r;
+
+
+	Out.vColor = vColor;
+
+	return Out;
+}
+
 PS_OUT  PS_MAIN_ALPHA_MASK_GRAY(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
@@ -561,6 +576,21 @@ PS_OUT  PS_STONEPARTICLE(PS_IN In)
 
 
 	if (Out.vColor.a < 0.01f)
+		discard;
+
+	return Out;
+}
+
+
+PS_OUT  PS_WEB(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+	
+	if (Out.vColor.r < 0.1f)
 		discard;
 
 	return Out;
@@ -908,4 +938,32 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_STONEPARTICLE();
 	}
+	// 27
+	pass Alpha_Black_Mask // (종혁)
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MAIN_BLACK_MASK();
+	}
+
+
+	// 28
+	pass Web // (태훈)
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		/* 버텍스 쉐이더는 5.0버젼으로 번역하고 VS_MAIN이라는 이름을 가진 함수를 호출해라. */
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_WEB();
+	}
+
 }

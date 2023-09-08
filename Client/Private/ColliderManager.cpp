@@ -83,6 +83,7 @@ HRESULT CColliderManager::Check_PlayerToMonster(_uint iLevelIndex, _double dTime
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 	
 	//CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
@@ -198,7 +199,10 @@ HRESULT CColliderManager::Check_PlayerToBoss(_uint iLevelIndex, _double dTimeDel
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+
+	//CCollider* pPlayerCollider = dynamic_cast<CCollider*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), TEXT("Com_Sphere")));
+	CCollider* pPlayerCollider = pPlayer->Get_ColliderCom();
 
 	list<CGameObject*>* pMonsters = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Boss"));
 
@@ -224,7 +228,8 @@ HRESULT CColliderManager::Check_PlayerToBoss(_uint iLevelIndex, _double dTimeDel
 				{
 					CTransform* pMonsterTransform = dynamic_cast<CTransform*>(pMonster->Find_Component(TEXT("Com_Transform")));
 
-					CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+					//CTransform* pPlayerTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(iLevelIndex, TEXT("Layer_Player"), (TEXT("Com_Transform"))));
+					CTransform* pPlayerTransform = pPlayer->Get_TransformCom();
 
 					_float fRad = pPlayerCollider->Get_Collider() + pMonsterCollider->Get_Collider();
 
@@ -248,6 +253,8 @@ HRESULT CColliderManager::Check_PlayerToBoss(_uint iLevelIndex, _double dTimeDel
 						vMonPos += vMove;
 						pMonsterTransform->Set_State(CTransform::STATE_POSITION, vMonPos);
 					}
+
+
 				}
 			}
 		}

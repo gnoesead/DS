@@ -118,6 +118,9 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		m_StatusDesc.fHp = 100000.f;
 	}
 
+	m_StatusDesc.fHp_Max = 100000.f;
+	m_StatusDesc.fHp = 100000.f;
+
 	Safe_Release(pGameInstance);
 
 	if(m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
@@ -400,11 +403,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
-			if (9 == m_iEvent_Index)
-			{//1.39
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
-			}
+			
 		}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -622,8 +621,8 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 			Animation_Control_Hit(dTimeDelta);
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
-		else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
+		/*else if (m_eCurState == STATE_ATTACK)
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);*/
 	}
 }
 

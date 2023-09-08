@@ -204,6 +204,8 @@ protected:
 	//스킬상태
 	_bool	m_isSkilling = { false };
 
+	
+
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 
