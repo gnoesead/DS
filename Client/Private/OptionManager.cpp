@@ -36,7 +36,7 @@ void COptionManager::Tick(_double dTimeDelta)
 		}
 	}
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
 	if (pGameInstance->Get_Light(0) != nullptr) {
@@ -53,7 +53,7 @@ void COptionManager::Tick(_double dTimeDelta)
 		pGameInstance->Get_Light(0)->vLightDiffuse = Convert::ToFloat4(Light);
 	}
 
-	Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);*/
 	
 }
 

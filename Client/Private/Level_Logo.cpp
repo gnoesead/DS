@@ -618,6 +618,18 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Swing_Particle1.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Swing_Particle2.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle2");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region SWAMP
@@ -641,6 +653,18 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle4");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle_Upper.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle_Upper");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_AtkParticle_Kulbam.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_AtkParticle_Kulbam");
+		return E_FAIL;
+	}
+	
+
 #pragma endregion
 	return S_OK;
 }
