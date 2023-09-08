@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "MasterEffect.h"
 
 BEGIN(Engine)
 class CModel;
@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CMapObject  abstract : public CGameObject
+class CMapObject  abstract : public CMasterEffect
 {
 public:
 	enum MAPOBJECT_TYPE { MAPOBJECT_STATIC, MAPOBJECT_TERRAIN, MAPOBJECT_ROTATION, MAPOBJECT_INSTANCE, MAPOBJECT_END };

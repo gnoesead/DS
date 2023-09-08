@@ -20,6 +20,7 @@
 #include "Camera_Free.h"
 #include "GroundSmoke.h"
 #include "WaterParticleEffect.h"
+#include "EffectW_Manager.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -138,9 +139,19 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom);
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
 
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+
+		
+		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 	}
 
 	Safe_Release(pGameInstance); 
@@ -351,6 +362,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -373,6 +387,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -390,6 +407,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -413,12 +433,18 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1Particle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2Particle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
@@ -451,6 +477,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_DecalParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
@@ -676,6 +705,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (3 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_Decal", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_DecalParticle", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
 			}
@@ -2637,10 +2669,19 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 
 	if (m_dWaterEffectAccTime > 0.1)
 	{
-		CWaterParticleEffect::EFFECTDESC EffectParticleDesc;
-		EffectParticleDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSet(0.f , 0.f , 0.f , 0.f);
+		CEffectW::EFFECTWDESC EffectWDesc;
+		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
+		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
+			
+		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
+		EffectWDesc.vStartFrame = { 0.f ,5.f };
+		
 		for (_uint i = 0; i < 5; ++i)
-			pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_WaterParticleEffect"), &EffectParticleDesc);
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
 		m_dWaterEffectAccTime = 0.0;
 	}

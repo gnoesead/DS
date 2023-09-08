@@ -4,13 +4,13 @@
 #include "GameInstance.h"
 
 CStoneParticle::CStoneParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CEffectW(pDevice, pContext)
 {
 
 }
 
 CStoneParticle::CStoneParticle(const CStoneParticle& rhs)
-	: CMasterEffect(rhs)
+	: CEffectW(rhs)
 {
 
 }
@@ -25,33 +25,13 @@ HRESULT CStoneParticle::Initialize_Prototype()
 
 HRESULT CStoneParticle::Initialize(void* pArg)
 {
-	if (nullptr != pArg)
-		memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
-
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fPlusX = Random::Generate_Float(m_EffectDesc.vStartPosX.x, m_EffectDesc.vStartPosX.y);
-	m_fPlusY = Random::Generate_Float(m_EffectDesc.vStartPosY.x, m_EffectDesc.vStartPosY.y);
-	m_fPlusZ = Random::Generate_Float(m_EffectDesc.vStartPosZ.x, m_EffectDesc.vStartPosZ.y);
-
-	m_dFrameSpeed = (_double)Random::Generate_Float(m_EffectDesc.vFrameSpeed.x, m_EffectDesc.vFrameSpeed.y);
-
-	m_dSpeedX = (_double)Random::Generate_Float(m_EffectDesc.vSpeedX.x, m_EffectDesc.vSpeedX.y);
-	m_dSpeedY = (_double)Random::Generate_Float(m_EffectDesc.vSpeedY.x, m_EffectDesc.vSpeedY.y);
-	m_dSpeedZ = (_double)Random::Generate_Float(m_EffectDesc.vSpeedZ.x, m_EffectDesc.vSpeedZ.y);
-
-	m_vSize = { Random::Generate_Float(m_EffectDesc.vSizeX.x,m_EffectDesc.vSizeX.y) , Random::Generate_Float(m_EffectDesc.vSizeY.x, m_EffectDesc.vSizeY.y),1.f };
-	
-	m_fSizeSpeedX = Random::Generate_Float(m_EffectDesc.vSizeSpeedX.x, m_EffectDesc.vSizeSpeedX.y);
-	m_fSizeSpeedY = Random::Generate_Float(m_EffectDesc.vSizeSpeedY.x, m_EffectDesc.vSizeSpeedY.y);
-
-	m_iFrame = Random::Generate_Int(0, 3);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
 	m_fAlpha = 1.f;
 
@@ -66,7 +46,7 @@ void CStoneParticle::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	m_dSpeedY -= m_EffectDesc.fGravity * (TimeDelta);
+	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * (TimeDelta);
 
 	m_pTransformCom->Set_Speed(m_dSpeedY);
 	m_pTransformCom->Go_Up(TimeDelta);
@@ -83,7 +63,10 @@ void CStoneParticle::Tick(_double TimeDelta)
 	m_dLifeAccTime += TimeDelta;
 
 	if (m_dLifeAccTime > 4.f)
-		m_isDead = true;
+	{
+		CEffectW_Manager::Get_Instance()->Collect_Effect((CEffectW_Manager::EFFECTW_TYPE)m_EffectWDesc.eEffectWType, this);
+		Set_Dead();
+	}
 }
 
 void CStoneParticle::LateTick(_double TimeDelta)

@@ -44,6 +44,8 @@ float2			g_vPaddingEnd = { 0.f, 0.f };
 float2			g_vTileSize = { 1.f, 1.f };			// Width, Height
 float2			g_vCurTile = { 0.f, 0.f };			// ї­, За
 
+float           g_Black_Cull_Amount = { 0.5f };
+
 struct VS_IN
 {
 	float3		vPosition : POSITION;
@@ -250,10 +252,11 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
-	if (vMtrlDiffuse.r < 0.1)
-		discard;
+	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
 
-	vMtrlDiffuse.a = vMtrlDiffuse.r;
+	vMtrlDiffuse.a *= amount;
+
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1172,10 +1175,11 @@ PS_OUT  PS_DIFFUSE_CALC_RED_DISSOLVE(PS_IN In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
-	if (vMtrlDiffuse.r < 0.1)
-		discard;
+	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
 
-	vMtrlDiffuse.a = vMtrlDiffuse.r;
+	vMtrlDiffuse.a *= amount;
+
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1567,10 +1571,11 @@ PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
 
-	if (vMtrlDiffuse.r < 0.1)
-		discard;
+	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
 
-	vMtrlDiffuse.a = vMtrlDiffuse.r;
+	vMtrlDiffuse.a *= amount;
+
+	vMtrlDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vDiffuse = vMtrlDiffuse;
 
@@ -1648,7 +1653,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		//SetDepthStencilState(DS_Default, 0);
+		SetDepthStencilState(DS_Default, 0);
 		
 		SetDepthStencilState(DS_None_ZEnable, 0);
 
@@ -1802,7 +1807,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_DIFFUSE_CALC_RED_DISSOLVE();
 	}
 
-	pass DiffuseCalcRedNoiseNoZWrite	// 16
+	pass DiffuseCalcRedDissolveNoZWrite	// 16
 	{
 		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);

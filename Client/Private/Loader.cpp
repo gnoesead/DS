@@ -48,6 +48,7 @@
 #include "Battle_Signal.h"
 #include "Option.h"
 #include "Paper.h"
+#include "Zenitsu_Awake_UI.h"
 
 
 #include "NPC_Female.h"
@@ -83,6 +84,7 @@
 #include "GroundSmoke.h"
 #include "StoneParticle.h"
 #include "SmeshStone.h"
+#include "Aurora.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -818,6 +820,10 @@ HRESULT CLoader::LoadingForLobby()
 		CStoneParticle::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For.Prototype_GameObject_Aurora*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Aurora"),
+		CAurora::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -967,6 +973,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Paper */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Paper_UI"),
 		CPaper::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Zenitsu_Awake_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
+		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

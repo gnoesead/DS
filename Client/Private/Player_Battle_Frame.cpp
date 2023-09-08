@@ -97,7 +97,7 @@ void CPlayer_Battle_Frame::Tick(_double TimeDelta)
 
 	if (pGameInstance->GetInstance()->Get_CurLevelIdx() == LEVEL_FINALBOSS) {
 
-		m_UI_Desc.m_C_Num = 4;
+		//m_UI_Desc.m_C_Num = 4;
 	}
 
 

@@ -82,45 +82,6 @@
     <Filter Include="02. GameObjects\Character\Monster\Test">
       <UniqueIdentifier>{77d1a976-2a7d-4590-9dea-f030a3b4999b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI">
-      <UniqueIdentifier>{7afcbce9-d973-4cb6-9ef8-0643e6e0f97f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar">
-      <UniqueIdentifier>{31189834-560c-4c54-963d-5759dcde14bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Frame">
-      <UniqueIdentifier>{99b17ca9-771c-4409-8058-387ba3f8c8cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Hp_Bar">
-      <UniqueIdentifier>{44fdf3de-4e5f-4358-bc3e-04c748b5e6e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Mp_Bar">
-      <UniqueIdentifier>{4b53252b-bc69-43b5-a502-8aeb0f33f4fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar">
-      <UniqueIdentifier>{737eeae9-6477-497b-b695-212bde7aa94f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar">
-      <UniqueIdentifier>{51aaec38-0e7b-4a45-b88c-2f526de4b2fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\02.Combo_Info">
-      <UniqueIdentifier>{3ffd5914-2d3f-4140-83f6-8b399a25f622}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\02.Combo_Info\Combo">
-      <UniqueIdentifier>{cfcd049f-051e-4a94-9eac-bb9ad1ef641d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Effect">
-      <UniqueIdentifier>{ce090631-8518-4c4a-b0fe-cf0531c25610}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame">
-      <UniqueIdentifier>{c34d91bb-0b04-48e2-9505-1e60445f2921}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar\Effect">
-      <UniqueIdentifier>{5953ceac-3f27-4aad-93be-d12bd6f001df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar\Frame">
-      <UniqueIdentifier>{75cdf47c-c18e-49a1-b217-8c15b666530c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\AtkCollider">
       <UniqueIdentifier>{7f94dad7-d326-47f1-b06d-c52075fed801}</UniqueIdentifier>
     </Filter>
@@ -214,12 +175,6 @@
     <Filter Include="02. GameObjects\Character\Player\Zenitsu">
       <UniqueIdentifier>{4d7c5d11-0973-432f-af5e-fe51cae8ff5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Title\Title_Manager">
-      <UniqueIdentifier>{6a398fac-b43b-461a-a46d-0a180b3a9c9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager">
-      <UniqueIdentifier>{47b281f5-fff1-49d3-b33f-a6f5a869ade8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Levels\02. GamePlay">
       <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
     </Filter>
@@ -235,15 +190,6 @@
     <Filter Include="01. Levels\06. FinalBoss">
       <UniqueIdentifier>{ccaeb494-6aa8-4cdf-8a8c-3e6c75ea2f68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
-      <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Option\Option_Manager">
-      <UniqueIdentifier>{77e19af2-afba-4242-9190-38f5013fb4f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager">
-      <UniqueIdentifier>{05100fc0-dd63-41ed-8f22-3b2b40242d05}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\NPC">
       <UniqueIdentifier>{f27e214a-4bc3-47d4-986b-68b66d972785}</UniqueIdentifier>
     </Filter>
@@ -255,9 +201,6 @@
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager">
-      <UniqueIdentifier>{0cc59fe8-88a9-4669-bee0-e2d20d650935}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\CollisionBox">
       <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
@@ -271,29 +214,14 @@
     <Filter Include="02. GameObjects\Camera\Free\Manager">
       <UniqueIdentifier>{aa966765-6075-47e8-b365-fc9113e28c10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\UI\10.Skill_Name">
-      <UniqueIdentifier>{ae9e1dde-8d52-45ca-bf9b-855475fe96fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\11.Battle_UI_Manager">
-      <UniqueIdentifier>{ded556a7-45ce-4462-852c-28c482291a30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\12.Battle_Signal">
-      <UniqueIdentifier>{0c5e686d-a9c2-4f43-9a8d-d31d2bd7b04f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Player\PlayerManager">
       <UniqueIdentifier>{b8c29c98-f2c8-4acc-a6d5-e826cfb59d61}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Environment\AlertCircle">
       <UniqueIdentifier>{1fcc66ec-5608-4569-b4b0-91886eb7715f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Environment\Sky\TrainSmoke">
-      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Swamp">
       <UniqueIdentifier>{b7224a9e-5e9a-4867-b09d-ad10e90f0ca0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\Environment\RoomSmoke">
-      <UniqueIdentifier>{3ede2645-e084-4d91-b1df-068b00737579}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Environment\AlertRect">
       <UniqueIdentifier>{b14fd503-70cd-41dc-9a37-4cda1a419f8f}</UniqueIdentifier>
@@ -306,12 +234,6 @@
     </Filter>
     <Filter Include="02. GameObjects\Environment\SmellBundle">
       <UniqueIdentifier>{7b0f0804-7c3f-42c5-a3fd-ae27b19aa658}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\07.Gimmick">
-      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Paper">
-      <UniqueIdentifier>{e817ebb6-58c9-427c-9d1b-ef22a995441c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza">
       <UniqueIdentifier>{d2c90a76-e1c2-4c66-bbc5-f1db78e2408a}</UniqueIdentifier>
@@ -328,20 +250,8 @@
     <Filter Include="02. GameObjects\Character\NPC\NPC_ChildM">
       <UniqueIdentifier>{166c0673-b791-4883-a767-e5019c73952a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect">
-      <UniqueIdentifier>{f0385af9-dd1c-418c-9438-f8b82155a5b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect">
-      <UniqueIdentifier>{2515c59b-7822-49cd-bebb-134c3bdcd5b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterParicleEffect">
-      <UniqueIdentifier>{3fd890ae-ad6c-47bb-a19b-6d835c9d3b1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_AlertRect">
       <UniqueIdentifier>{2acb8c54-a24c-4bfa-8af9-e45a9d5e79f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect">
-      <UniqueIdentifier>{5732d849-a0af-462d-be70-91ef3b013ca8}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Zako\StealthMode">
       <UniqueIdentifier>{7d843af3-187d-4527-8f4c-8f46cd002242}</UniqueIdentifier>
@@ -349,17 +259,176 @@
     <Filter Include="01. Levels\01. Lobby">
       <UniqueIdentifier>{3ebf771f-04be-4093-8b16-c63e9637b325}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\Environment\GroundSmoke">
-      <UniqueIdentifier>{cf5eafe3-54b3-48cf-9f27-34af332f6602}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02. GameObjects\Environment\StoneParticle">
-      <UniqueIdentifier>{094cf555-e02f-4832-8733-1a3b433cbe42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\NPC\NPC_Zenitsu">
       <UniqueIdentifier>{fe8c0157-0581-4e1f-b3cc-6c3b8a5b3e6c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Swamp\SmeshStone">
       <UniqueIdentifier>{08d41dee-392b-4f21-82b2-b9babe1a32b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\Aurora">
+      <UniqueIdentifier>{abe5d168-edee-496e-a632-fa5412af3381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW">
+      <UniqueIdentifier>{d8235205-841b-4e60-9f5d-a8536169fb80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW\GroundSmoke">
+      <UniqueIdentifier>{cf5eafe3-54b3-48cf-9f27-34af332f6602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW\RoomSmoke">
+      <UniqueIdentifier>{3ede2645-e084-4d91-b1df-068b00737579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW\StoneParticle">
+      <UniqueIdentifier>{094cf555-e02f-4832-8733-1a3b433cbe42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW\Swamp_SmokeEffect">
+      <UniqueIdentifier>{5732d849-a0af-462d-be70-91ef3b013ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Swamp\WaterEffect">
+      <UniqueIdentifier>{2515c59b-7822-49cd-bebb-134c3bdcd5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI">
+      <UniqueIdentifier>{7afcbce9-d973-4cb6-9ef8-0643e6e0f97f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar">
+      <UniqueIdentifier>{31189834-560c-4c54-963d-5759dcde14bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Frame">
+      <UniqueIdentifier>{99b17ca9-771c-4409-8058-387ba3f8c8cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Hp_Bar">
+      <UniqueIdentifier>{44fdf3de-4e5f-4358-bc3e-04c748b5e6e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Mp_Bar">
+      <UniqueIdentifier>{4b53252b-bc69-43b5-a502-8aeb0f33f4fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar">
+      <UniqueIdentifier>{737eeae9-6477-497b-b695-212bde7aa94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar\Effect">
+      <UniqueIdentifier>{5953ceac-3f27-4aad-93be-d12bd6f001df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Sup_Bar\Frame">
+      <UniqueIdentifier>{75cdf47c-c18e-49a1-b217-8c15b666530c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar">
+      <UniqueIdentifier>{51aaec38-0e7b-4a45-b88c-2f526de4b2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Effect">
+      <UniqueIdentifier>{ce090631-8518-4c4a-b0fe-cf0531c25610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\00.Player_Battle_Bar\Ult_Bar\Frame">
+      <UniqueIdentifier>{c34d91bb-0b04-48e2-9505-1e60445f2921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\02.Combo_Info">
+      <UniqueIdentifier>{3ffd5914-2d3f-4140-83f6-8b399a25f622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\02.Combo_Info\Combo">
+      <UniqueIdentifier>{cfcd049f-051e-4a94-9eac-bb9ad1ef641d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI">
+      <UniqueIdentifier>{83794500-3eef-43d7-af6b-3d8241299e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Hp_Bar">
+      <UniqueIdentifier>{7c4d3dfc-0126-4bf0-a8f2-fe2fcda539fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\FIcon">
+      <UniqueIdentifier>{e7195b5a-20e4-4391-81b3-18ee832c962b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\03.World_UI\Interaction">
+      <UniqueIdentifier>{3f046026-042f-4f0c-9221-8c2fce0fe032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map">
+      <UniqueIdentifier>{0e86ec12-a0e4-47d9-8d11-762bd00246c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map\Mini">
+      <UniqueIdentifier>{196a8218-dd1d-48ec-af3d-0905c9415e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\06.Map\Mini\Mini_Map_Manager">
+      <UniqueIdentifier>{0cc59fe8-88a9-4669-bee0-e2d20d650935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Mini_Game">
+      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI">
+      <UniqueIdentifier>{da294850-ab41-4dc0-8595-3688dcf29f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title">
+      <UniqueIdentifier>{1c7cb107-3f60-4626-a7a3-4ff99b14544b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Title\Title_Manager">
+      <UniqueIdentifier>{6a398fac-b43b-461a-a46d-0a180b3a9c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading">
+      <UniqueIdentifier>{a0e5bb6b-cce6-4425-a366-032098bdd2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Loading_Bar">
+      <UniqueIdentifier>{adc12239-0a2b-4954-a0d2-895091e02169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Fade_Manager">
+      <UniqueIdentifier>{05100fc0-dd63-41ed-8f22-3b2b40242d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board">
+      <UniqueIdentifier>{d033310c-a2c6-45c6-a67a-84fa61a43b8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Story_Board\Story_Manager">
+      <UniqueIdentifier>{47b281f5-fff1-49d3-b33f-a6f5a869ade8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option">
+      <UniqueIdentifier>{53ad77b6-fc16-4e82-8d85-dd029aed7add}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Option\Option_Manager">
+      <UniqueIdentifier>{77e19af2-afba-4242-9190-38f5013fb4f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Pause">
+      <UniqueIdentifier>{493ad216-5aa5-4c36-8e3f-c55767cdf314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar">
+      <UniqueIdentifier>{f13d0d49-42ea-4e53-8dd2-9f26cf9f415b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Frame">
+      <UniqueIdentifier>{da25a8b7-bd41-458d-b89c-58daa3050c63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\01.Boss_Battle_Bar\Hp_Bar">
+      <UniqueIdentifier>{aca9ca19-5fde-4f45-a001-619d29b09a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog">
+      <UniqueIdentifier>{79f4ca1b-c951-4efb-899a-c3f129cde58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\04.Dialog\Dialog_Manager">
+      <UniqueIdentifier>{7dcfc00b-edb8-4728-9c69-2cf847708ab7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission">
+      <UniqueIdentifier>{8aa4b174-b287-49a1-9dab-ea39e81388f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Manager">
+      <UniqueIdentifier>{00451467-f9dc-439c-bfc6-a29a7137316a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\05.Mission\Mission_Paper">
+      <UniqueIdentifier>{e817ebb6-58c9-427c-9d1b-ef22a995441c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\10.Skill_Name">
+      <UniqueIdentifier>{ae9e1dde-8d52-45ca-bf9b-855475fe96fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\11.Battle_UI_Manager">
+      <UniqueIdentifier>{ded556a7-45ce-4462-852c-28c482291a30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\12.Battle_Signal">
+      <UniqueIdentifier>{0c5e686d-a9c2-4f43-9a8d-d31d2bd7b04f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\07.Gimmick">
+      <UniqueIdentifier>{21de2c83-78e6-4a76-842c-5437207f31c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Environment\TrainSmoke">
+      <UniqueIdentifier>{425e937a-4a65-4701-9cf9-a83b91b5a707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\EffectW\WaterParicleEffect">
+      <UniqueIdentifier>{3fd890ae-ad6c-47bb-a19b-6d835c9d3b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In">
+      <UniqueIdentifier>{a97d6a23-672f-4f67-8cc9-07c83ad27341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In\Zenitsu">
+      <UniqueIdentifier>{3cf6f466-7458-456e-be11-196e7536fb16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -610,7 +679,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TrainSmoke.h">
-      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\OptionManager.h">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
@@ -625,7 +694,7 @@
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\RoomSmoke.h">
-      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+      <Filter>02. GameObjects\EffectW\RoomSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AlertRect.h">
       <Filter>02. GameObjects\Environment\AlertRect</Filter>
@@ -654,32 +723,44 @@
     <ClInclude Include="..\Public\NPC_ChildM.h">
       <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Swamp.h">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\SwampWaterEffect.h">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
+      <Filter>02. GameObjects\Character\Monster\Swamp\WaterEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WaterParticleEffect.h">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterParicleEffect</Filter>
+      <Filter>02. GameObjects\EffectW\WaterParicleEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Swamp_AlertRect.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_AlertRect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Swamp_SmokeEffect.h">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect</Filter>
+      <Filter>02. GameObjects\EffectW\Swamp_SmokeEffect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_StealthZako.h">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GroundSmoke.h">
-      <Filter>02. GameObjects\Environment\GroundSmoke</Filter>
+      <Filter>02. GameObjects\EffectW\GroundSmoke</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StoneParticle.h">
-      <Filter>02. GameObjects\Environment\StoneParticle</Filter>
+      <Filter>02. GameObjects\EffectW\StoneParticle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NPC_Zenitsu.h">
       <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Aurora.h">
+      <Filter>02. GameObjects\Environment\Aurora</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectW.h">
+      <Filter>02. GameObjects\EffectW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Swamp.h">
+      <Filter>02. GameObjects\Character\Monster\Swamp\WaterEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectW_Manager.h">
+      <Filter>02. GameObjects\EffectW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Zenitsu_Awake_UI.h">
+      <Filter>02. GameObjects\UI\08.Cut_In\Zenitsu</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SmeshStone.h">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
@@ -924,7 +1005,7 @@
       <Filter>02. GameObjects\UI\09.Main_UI\Option</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TrainSmoke.cpp">
-      <Filter>02. GameObjects\Environment\Sky\TrainSmoke</Filter>
+      <Filter>02. GameObjects\Environment\TrainSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\OptionManager.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Option\Option_Manager</Filter>
@@ -939,7 +1020,7 @@
       <Filter>02. GameObjects\Character\Monster\Swamp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\RoomSmoke.cpp">
-      <Filter>02. GameObjects\Environment\RoomSmoke</Filter>
+      <Filter>02. GameObjects\EffectW\RoomSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AlertRect.cpp">
       <Filter>02. GameObjects\Environment\AlertRect</Filter>
@@ -968,32 +1049,44 @@
     <ClCompile Include="..\Private\NPC_ChildM.cpp">
       <Filter>02. GameObjects\Character\NPC\NPC_ChildM</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Swamp.cpp">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\SwampWaterEffect.cpp">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterEffect</Filter>
+      <Filter>02. GameObjects\Character\Monster\Swamp\WaterEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WaterParticleEffect.cpp">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_Effect\WaterParicleEffect</Filter>
+      <Filter>02. GameObjects\EffectW\WaterParicleEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Swamp_AlertRect.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_AlertRect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Swamp_SmokeEffect.cpp">
-      <Filter>02. GameObjects\Character\Monster\Swamp\Swamp_SmokeEffect</Filter>
+      <Filter>02. GameObjects\EffectW\Swamp_SmokeEffect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_StealthZako.cpp">
       <Filter>02. GameObjects\Character\Monster\Zako\StealthMode</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GroundSmoke.cpp">
-      <Filter>02. GameObjects\Environment\GroundSmoke</Filter>
+      <Filter>02. GameObjects\EffectW\GroundSmoke</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StoneParticle.cpp">
-      <Filter>02. GameObjects\Environment\StoneParticle</Filter>
+      <Filter>02. GameObjects\EffectW\StoneParticle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NPC_Zenitsu.cpp">
       <Filter>02. GameObjects\Character\NPC\NPC_Zenitsu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Aurora.cpp">
+      <Filter>02. GameObjects\Environment\Aurora</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectW.cpp">
+      <Filter>02. GameObjects\EffectW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Swamp.cpp">
+      <Filter>02. GameObjects\Character\Monster\Swamp\WaterEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectW_Manager.cpp">
+      <Filter>02. GameObjects\EffectW</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Zenitsu_Awake_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Cut_In\Zenitsu</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SmeshStone.cpp">
       <Filter>02. GameObjects\Character\Monster\Swamp\SmeshStone</Filter>
