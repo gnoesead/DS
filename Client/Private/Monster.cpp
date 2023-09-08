@@ -35,8 +35,6 @@ HRESULT CMonster::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	
-
 	return S_OK;
 }
 

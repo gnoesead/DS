@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderManager.h" />
     <ClInclude Include="..\Public\CollisionBox.h" />
+    <ClInclude Include="..\Public\CustomParticle.h" />
     <ClInclude Include="..\Public\Dialog.h" />
     <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
@@ -249,6 +250,7 @@
     <ClInclude Include="..\Public\Option.h" />
     <ClInclude Include="..\Public\OptionManager.h" />
     <ClInclude Include="..\Public\Paper.h" />
+    <ClInclude Include="..\Public\ParticleManager.h" />
     <ClInclude Include="..\Public\ParticleSystem.h" />
     <ClInclude Include="..\Public\Pause.h" />
     <ClInclude Include="..\Public\Player.h" />
@@ -283,6 +285,7 @@
     <ClInclude Include="..\Public\Title.h" />
     <ClInclude Include="..\Public\Title_Manager.h" />
     <ClInclude Include="..\Public\TrainSmoke.h" />
+    <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h" />
     <ClInclude Include="..\Public\WaterParticleEffect.h" />
     <ClInclude Include="..\Public\WebManager.h" />
     <ClInclude Include="..\Public\WebShot.h" />
@@ -317,6 +320,7 @@
     <ClCompile Include="..\Private\Character.cpp" />
     <ClCompile Include="..\Private\ColliderManager.cpp" />
     <ClCompile Include="..\Private\CollisionBox.cpp" />
+    <ClCompile Include="..\Private\CustomParticle.cpp" />
     <ClCompile Include="..\Private\Dialog.cpp" />
     <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
@@ -366,6 +370,7 @@
     <ClCompile Include="..\Private\Option.cpp" />
     <ClCompile Include="..\Private\OptionManager.cpp" />
     <ClCompile Include="..\Private\Paper.cpp" />
+    <ClCompile Include="..\Private\ParticleManager.cpp" />
     <ClCompile Include="..\Private\ParticleSystem.cpp" />
     <ClCompile Include="..\Private\Pause.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
@@ -400,6 +405,7 @@
     <ClCompile Include="..\Private\Title_Manager.cpp" />
     <ClCompile Include="..\Private\TrainSmoke.cpp" />
     <ClCompile Include="..\Private\Swamp_SmokeEffect.cpp" />
+    <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp" />
     <ClCompile Include="..\Private\WaterParticleEffect.cpp" />
     <ClCompile Include="..\Private\WebManager.cpp" />
     <ClCompile Include="..\Private\WebShot.cpp" />
@@ -426,6 +432,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModelInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Effect.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Effect.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPoint_Effect.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTerrainModel.hlsl" />

@@ -10,6 +10,8 @@
 #include "Camera_Manager.h"
 #include "Camera_Free.h"
 
+#include "ParticleManager.h"
+#include "CustomParticle.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -548,6 +550,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN);
+
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
@@ -575,7 +580,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 			}
-
+			if (2 == m_iEvent_Index) // 0.75
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Upper", m_pTransformCom);
+			}
 
 		}
 #pragma region ÆòÅ¸ÄÞº¸
@@ -584,6 +592,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_0", m_pTransformCom);
+
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
@@ -595,29 +605,41 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
-			{
+			{//0.3
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_1", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
-
+			if (1 == m_iEvent_Index)
+			{//0.45
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_1", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
+			{//0.6
+			}
 		}
 		if (ANIM_COMBO3 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.47
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 			if (1 == m_iEvent_Index)
+			{//0.57
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_2", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
 			{//0.75
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2_1", m_pTransformCom);
 			}
-			if (2 == m_iEvent_Index)
+			if (3 == m_iEvent_Index)
 			{//0.8
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_2_1", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
@@ -642,10 +664,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3", m_pTransformCom, &EffectWorldDesc);
+
 				EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
 				EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3", m_pTransformCom, &EffectWorldDesc);
 			}
 
 
@@ -2280,6 +2306,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 				{
 					if (m_bAwake == true)
 					{
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
@@ -2287,8 +2315,11 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					}
 					else
 					{
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
+						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom, &EffectWorldDesc);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom, &EffectWorldDesc);
+						
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
