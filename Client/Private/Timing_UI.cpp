@@ -364,7 +364,7 @@ void CTiming_UI::LateTick(_double TimeDelta)
 HRESULT CTiming_UI::Render()
 {
 
-	if (m_Is_Render == true) {
+	if (m_Is_Render == true && m_Alpha != 0) {
 
 		if (FAILED(__super::Render()))
 			return E_FAIL;
