@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Character.h"
-
+#include "Player.h"
 BEGIN(Engine)
 
 END
@@ -128,7 +128,8 @@ protected:
 	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-
+	CPlayer* m_pPlayer_Tanjiro = { nullptr };
+	CPlayer* m_pPlayer_Zenitsu = { nullptr };
 protected:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();

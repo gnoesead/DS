@@ -47,11 +47,11 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	Get_PlayerComponent();
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
+		
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 15000.f;
-		m_StatusDesc.fHp_Max = 15000.f;
+		m_StatusDesc.fHp = 200.f;
+		m_StatusDesc.fHp_Max = 200.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -83,29 +83,33 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+	
+			
+	if (m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() != 55 || m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() != 40)
 	{
-		if (m_bTrain_Stomp == false)
+
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
 		{
-			m_bTrain_Stomp = true;
-			Trigger_Train_JumpStomp();
-			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			if (m_bTrain_Stomp == false)
+			{
+				m_bTrain_Stomp = true;
+				Trigger_Train_JumpStomp();
+				m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+			}
 		}
+		else
+		{
+			Update_Hit_Messenger(dTimeDelta);
+			Update_Trigger(dTimeDelta);
+		}
+		Safe_Release(pGameInstance);
+		Update_State(dTimeDelta);
+
+		m_pModelCom->Set_Animation(m_eCurAnimIndex);
+		m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+
+		EventCall_Control(dTimeDelta);
 	}
-	else
-	{
-		Update_Hit_Messenger(dTimeDelta);
-		Update_Trigger(dTimeDelta);
-	}
-	Safe_Release(pGameInstance);
-	Update_State(dTimeDelta);
-
-	m_pModelCom->Set_Animation(m_eCurAnimIndex);
-	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
-
-	EventCall_Control(dTimeDelta);
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -1942,7 +1946,7 @@ void CBoss_Akaza::Trigger_Hit_Upper()
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_BLOW_END);
 	m_eCurstate = STATE_HIT_UPPER;
-	Jumping(1.85f, 0.03f);
+	Jumping(1.5f, 0.03f);
 }
 
 void CBoss_Akaza::Trigger_Hit_Big()

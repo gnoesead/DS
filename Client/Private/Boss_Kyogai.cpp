@@ -91,16 +91,18 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 
 #endif // _DEBUG
-	Debug_State(dTimeDelta);
-	Update_Hit_Messenger(dTimeDelta);
-	Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);
+	if (m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() != 55 || m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() != 40)
+	{
+		Debug_State(dTimeDelta);
+		Update_Hit_Messenger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
+		Update_State(dTimeDelta);
 
-	m_pModelCom->Set_Animation(m_eCurAnimIndex);
-	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+		m_pModelCom->Set_Animation(m_eCurAnimIndex);
+		m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
 
-	EventCall_Control(dTimeDelta);
-
+		EventCall_Control(dTimeDelta);
+	}
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
