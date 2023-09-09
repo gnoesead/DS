@@ -95,9 +95,8 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 		}
 	}
 
-	/*if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6)) {
-		m_Timing_On = true;
-	}*/
+	
+	
 
 
 	Safe_Release(pGameInstance);
@@ -270,6 +269,43 @@ void CBattle_UI_Manager::Set_Zen_Trans_On(_bool On)
 _bool CBattle_UI_Manager::Get_Zen_Trans_On()
 {
 	return m_Zen_Trans_On;
+}
+
+void CBattle_UI_Manager::Set_Akaza_UI_Num(_int On)
+{
+	m_Akaza_UI_Num = On;
+}
+
+_int CBattle_UI_Manager::Get_Akaza_UI_Num()
+{
+	return m_Akaza_UI_Num;
+}
+
+_int CBattle_UI_Manager::Get_Web_UI_Num()
+{
+	return m_Web_UI_Num;
+}
+
+void CBattle_UI_Manager::Set_Web_UI_On(_int num)
+{
+
+	if (m_Web_On == false) {
+
+		m_Web_On = true;
+
+		m_Web_UI_Num = num;
+	}
+
+}
+
+void CBattle_UI_Manager::Set_Web_UI_Off()
+{
+	m_Web_On = false;
+}
+
+_bool CBattle_UI_Manager::Get_Web_UI_On()
+{
+	return m_Web_On;
 }
 
 void CBattle_UI_Manager::Set_Timing_On(_bool On)
