@@ -18,6 +18,10 @@ HRESULT CVIBuffer_CustomParticle::Reset_Particle(void* pArg)
 	if (nullptr == pArg)
 		return E_FAIL;
 
+	memcpy(&m_CustomPartDesc, pArg, sizeof m_CustomPartDesc);
+
+	m_dCycle = _double(m_CustomPartDesc.fLifeTime / (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y));
+
 	for (_uint i = 0; i < m_iNumInstance; ++i)
 	{
 		_float fRand = Random::Generate_Float(0.01f, 1.f);
@@ -78,6 +82,8 @@ HRESULT CVIBuffer_CustomParticle::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&m_CustomPartDesc.InstanceDesc)))
 		return E_FAIL;
 
+	m_dCycle = _double(m_CustomPartDesc.fLifeTime / (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y));
+
 	return S_OK;
 }
 
@@ -95,6 +101,8 @@ void CVIBuffer_CustomParticle::Tick(_double dTimeDelta)
 		Tick_Size_Dir(dTimeDelta);
 		break;
 	}
+
+	m_dTimeAcc += dTimeDelta;
 }
 
 void CVIBuffer_CustomParticle::Tick_Size(_double dTimeDelta)
@@ -131,25 +139,25 @@ void CVIBuffer_CustomParticle::Tick_Dir(_double dTimeDelta)
 			_float3 vDir_float = Convert::ToFloat3(vDir);
 
 			if(1 == m_CustomPartDesc.vDirOption.x)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += vDir_float.x * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
 
 			if (1 == m_CustomPartDesc.vDirOption.y)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += vDir_float.y * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
 
 			if (1 == m_CustomPartDesc.vDirOption.z)
-				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
+				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += vDir_float.z * m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 			else
 				((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 		}
 		else
 		{
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
-			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.x;
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.y;
+			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * m_CustomPartDesc.vTickPerDir.z;
 		}
 	}
 
@@ -158,6 +166,11 @@ void CVIBuffer_CustomParticle::Tick_Dir(_double dTimeDelta)
 
 void CVIBuffer_CustomParticle::Tick_Size_Dir(_double dTimeDelta)
 {
+	_bool bSprite = false;
+
+	if (3 <= m_CustomPartDesc.vSpriteCount.x + m_CustomPartDesc.vSpriteCount.y)
+		bSprite = true;
+
 	D3D11_MAPPED_SUBRESOURCE		SubResource;
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -197,6 +210,13 @@ void CVIBuffer_CustomParticle::Tick_Size_Dir(_double dTimeDelta)
 			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.x += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.x);
 			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.y += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.y);
 			((VTXINSTANCE*)SubResource.pData)[i].vTranslation.z += m_pSpeed[i] * (_float)dTimeDelta * _float(m_CustomPartDesc.vTickPerDir.z);
+		}
+
+		if (bSprite)
+		{
+			_int iCount = _int(_double(m_pSpeed[i]) * (m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed)));
+			((VTXINSTANCE*)SubResource.pData)[i].vUV.x = _float(iCount % m_CustomPartDesc.vSpriteCount.x) * (1.f / _float(m_CustomPartDesc.vSpriteCount.x));
+			((VTXINSTANCE*)SubResource.pData)[i].vUV.y = _float(iCount / m_CustomPartDesc.vSpriteCount.x) * (1.f / _float(m_CustomPartDesc.vSpriteCount.y));
 		}
 	}
 

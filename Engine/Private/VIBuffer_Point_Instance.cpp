@@ -139,6 +139,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 		pInstanceVertices[i].vColor = _float4(1.0f, 1.f, (_float)(rand() % 2), 0.f);
 		pInstanceVertices[i].vPSize = _float2(m_pScale[i], m_pScale[i]);
 		pInstanceVertices[i].fAngle = m_pAngle[i];
+		pInstanceVertices[i].vUV = _float2(0.f, 0.f);
 	}
 
 	ZeroMemory(&m_SubresourceData, sizeof m_SubresourceData);

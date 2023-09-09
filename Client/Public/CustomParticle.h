@@ -16,15 +16,14 @@ class CCustomParticle final : public CGameObject
 {
 public:
 	enum CUSTOM_PARTICLE_PASS {
-		PASS_NORMAL, PASS_RAMP, PASS_SPRITE, PASS_SPRITE_RAMP, PASS_END
+		PASS_NORMAL, PASS_RAMP, PASS_SPRITE, PASS_SPRITE_NONBLEND, PASS_SPRITE_RAMP, PASS_END
 	};
 	typedef struct tagCustomParticleDesc
 	{
 		CUSTOM_PARTICLE_PASS		eShaderPass = { PASS_NORMAL };
 		_float3		vPosition = { 0.f, 0.f, 0.f };
-		_double		dSpriteSpeed = { 1.0 };
-		_int2		vSpriteCount = { 1, 1 };
-		_float		fLifeTime = { 1.f };
+		
+
 		_float		fRampMax = { 1.f };
 		_bool		bUseRamp = { false };
 		_tchar		szTextureTag[MAX_PATH] = { TEXT("") };
@@ -53,8 +52,8 @@ private:
 	_double		m_dTimeAcc = { 0.0 };
 	_float		m_fScale = { 0.001f };
 	_float		m_fAlpha = { 0.f };
-	_float2		m_vTexCoord = { 0.f, 0.f };
-	_double		m_dCycle = { 1.0 };
+	//_float2		m_vTexCoord = { 0.f, 0.f };
+
 
 private:
 	CShader*					m_pShaderCom = { nullptr };

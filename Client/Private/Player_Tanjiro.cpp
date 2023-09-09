@@ -219,7 +219,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
-		CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		//CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
 	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
@@ -813,11 +814,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 #pragma endregion
 
 #pragma region Move & Hitted
-		if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지(탐험)
-		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
-		}
+		//if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지(탐험)
+		//{
+		//	if (0 == m_iEvent_Index)	// 0.0
+		//		Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		//}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// 어드벤쳐 달리기
 		{
@@ -961,6 +962,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 			}
 		}
+
+		if (121 == m_pModelCom->Get_iCurrentAnimIndex())	// Blow 쓰러짐
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
+		}
+
 
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 쓰러짐(2번)
 		{

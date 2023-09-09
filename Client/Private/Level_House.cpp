@@ -2172,10 +2172,15 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_12.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_11");
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_12");
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_22.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_22");
+		return E_FAIL;
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{
