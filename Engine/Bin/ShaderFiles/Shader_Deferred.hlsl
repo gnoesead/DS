@@ -229,8 +229,9 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	if (fBrightness < 0.7)
 		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);	
 	else if(fBrightness < 0.5)
-		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-
+		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);
+	else if (fBrightness < 0.2)
+		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);
 		//Out.vShade = saturate(Out.vShade);
 		//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
@@ -348,11 +349,14 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (vDiffuse.a == 0.f)
 		discard;
-
+	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
 	Out.vColor = vDiffuse * vShade;
 
 	Out.vColor.rgb += vEmissive.rgb;
+
+	/*if (fBrightness < 0.5)
+		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
 	float3 grayColor = { grayValue , grayValue ,grayValue };
@@ -569,8 +573,8 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 		vector vOut = (vHDRColor);
 
-		vOut = pow(abs(vOut), 2.2f);
-		vBloom = pow(abs(vBloom), 2.2f);
+		vOut = pow(abs(vOut), 1.8f);
+		vBloom = pow(abs(vBloom), 1.8f);
 
 		vOut += vBloom;
 		Out.vColor = pow(abs(vOut), 1 / 2.2f);

@@ -1667,6 +1667,22 @@ HRESULT CRenderer::Render_Effect_Particle()
     return S_OK;
 }
 
+HRESULT CRenderer::Render_Effect_Envrionment()
+{
+    for (auto& pGameObject : m_RenderObjects[RENDER_EFFECT_ENVIRONMENT])
+    {
+        if (nullptr != pGameObject)
+            pGameObject->Render();
+
+        Safe_Release(pGameObject);
+
+    }
+
+    m_RenderObjects[RENDER_EFFECT_ENVIRONMENT].clear();
+
+    return S_OK;
+}
+
 HRESULT CRenderer::Render_UI()
 {
     m_RenderObjects[RENDER_UI].sort([](CGameObject* pDest, CGameObject* pSrc)->bool {

@@ -266,11 +266,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 
-
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
 	}
 	
 	_float4 TestPos;
@@ -368,9 +363,7 @@ HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
-
 	
-
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);

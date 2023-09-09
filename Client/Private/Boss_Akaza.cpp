@@ -100,11 +100,6 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
-
 }
 
 void CBoss_Akaza::LateTick(_double dTimeDelta)
@@ -235,7 +230,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.5f);
+		m_pRendererCom->Set_BloomRatio(0.25f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -1161,6 +1156,11 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+	}
+	if ((m_StatusDesc.fHp > 0.f) && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max < 0.5f))
+	{
+		if (m_iTriggerCnt == 5)
+			m_iTriggerCnt = 0;		
 	}
 
 	if (m_bTrigger == false)

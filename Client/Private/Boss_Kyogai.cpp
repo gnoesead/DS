@@ -100,10 +100,6 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 	}
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
 
 }
 

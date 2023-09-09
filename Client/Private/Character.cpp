@@ -110,6 +110,11 @@ void CCharacter::LateTick(_double dTimeDelta)
 
 	Status_Work(dTimeDelta);
 
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+		return;
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+		return;
+
 #ifdef _DEBUG
 	for (_uint i = 0; i < COLL_END; i++)
 	{
@@ -117,6 +122,8 @@ void CCharacter::LateTick(_double dTimeDelta)
 			return;
 	}
 #endif // _DEBUG
+
+
 
 }
 

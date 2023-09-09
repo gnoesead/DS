@@ -129,10 +129,6 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 	}
 
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
 }
 
 void CMonster_Swamp::LateTick(_double dTimeDelta)

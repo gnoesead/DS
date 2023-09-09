@@ -47,7 +47,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	LIGHTDESC tLightInfo;
+	/*LIGHTDESC tLightInfo;
 	ZeroMemory(&tLightInfo, sizeof tLightInfo);
 
 	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
@@ -61,7 +61,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
-	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);
+	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);*/
 
 	//levelÆÇ¸í
 	m_iLevelCur = pGameInstance->Get_CurLevelIdx();

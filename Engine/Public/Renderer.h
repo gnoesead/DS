@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CRenderer final : public CComponent
 {
 public:
-	enum RENDERGROUP { RENDER_PRIORITY, RENDER_SHADOWDEPTH, RENDER_SSAO, RENDER_NONBLEND, RENDER_EffectBloom, RENDER_EffectNoBloom, RENDER_Effect_Particle, RENDER_UI, RENDER_EFFECT, RENDER_WORLD_UI,RENDER_END };
+	enum RENDERGROUP { RENDER_PRIORITY, RENDER_SHADOWDEPTH, RENDER_SSAO, RENDER_NONBLEND, RENDER_EffectBloom, RENDER_EffectNoBloom, RENDER_Effect_Particle, RENDER_EFFECT_ENVIRONMENT ,RENDER_UI, RENDER_EFFECT, RENDER_WORLD_UI,RENDER_END };
 private:
 	CRenderer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext);
 	virtual ~CRenderer() = default;
@@ -97,6 +97,7 @@ private:
 	HRESULT Render_EffectBloom();
 	HRESULT Render_EffectNoBloom();
 	HRESULT Render_Effect_Particle();
+	HRESULT Render_Effect_Envrionment();
 	HRESULT Render_Effect();
 	HRESULT Render_World_UI();
 	HRESULT Render_UI();

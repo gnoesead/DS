@@ -109,16 +109,7 @@ void CNPC_Zenitsu::Tick(_double dTimeDelta)
 			//이벤트 콜
 			EventCall_Control(dTimeDelta);
 
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			{
-				Safe_Release(pGameInstance);
-				return;
-			}
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			{
-				Safe_Release(pGameInstance);
-				return;
-			}
+			
 		}
 	}
 	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
@@ -151,17 +142,7 @@ void CNPC_Zenitsu::Tick(_double dTimeDelta)
 
 			//이벤트 콜
 			EventCall_Control(dTimeDelta);
-
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			{
-				Safe_Release(pGameInstance);
-				return;
-			}
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			{
-				Safe_Release(pGameInstance);
-				return;
-			}
+						
 		}
 	}
 	
