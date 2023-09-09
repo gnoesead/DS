@@ -33,6 +33,7 @@
 #include "WebManager.h"
 #include "Camera_Manager.h"
 #include "OptionManager.h"
+#include "Web_UI.h"
 
 #include "Effect.h"
 #include "Effect_Texture.h"
@@ -699,6 +700,18 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 	
+	
+// Web_UI
+	Web_UI::UIDESC UIDesc4;
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Web_UI"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 

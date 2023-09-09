@@ -71,6 +71,17 @@ public: // Zen_Cut_In
 	void Set_Zen_Trans_On(_bool On);
 	_bool Get_Zen_Trans_On();
 
+public: // Akaza_Cut_In
+	void Set_Akaza_UI_Num(_int On);
+	_int Get_Akaza_UI_Num();
+
+public: // Web
+	void Set_Web_UI_On(_int num);
+	void Set_Web_UI_Off();
+	_bool Get_Web_UI_On();
+	_int Get_Web_UI_Num();
+
+	
 public: // Timing
 	
 	void Set_Timing_On(_bool On);
@@ -130,6 +141,8 @@ private: // Cut_In
 	_bool m_Zen_Elc_On = { false };
 	_bool m_Zen_Trans_On = { false };
 
+	_int m_Akaza_UI_Num = { 0 };
+
 private: // Timing
 	
 	_bool m_Timing_On = { false };
@@ -144,10 +157,9 @@ private: // Timing
 	_bool m_Timing_Light = { false };
 
 
-
-
-
-
+private: // Web
+	_bool m_Web_On = { false };
+	_int m_Web_UI_Num = { 0 };
 
 
 public:

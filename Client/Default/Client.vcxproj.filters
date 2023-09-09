@@ -448,6 +448,12 @@
     <Filter Include="02. GameObjects\UI\07.Gimmick\Timing">
       <UniqueIdentifier>{7b431a55-524f-4ed0-8083-b95cdd09ce3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In\Akaza">
+      <UniqueIdentifier>{fe62ddbb-9785-4bc5-a3af-2afbb6181f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Mini_Game\Web">
+      <UniqueIdentifier>{8402ec33-5796-4232-9eb8-f7210a07ae80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -801,6 +807,12 @@
     <ClInclude Include="..\Public\Timing_UI.h">
       <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Akaza_Awake_UI.h">
+      <Filter>02. GameObjects\UI\08.Cut_In\Akaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Web_UI.h">
+      <Filter>02. GameObjects\UI\08.Mini_Game\Web</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1144,6 +1156,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Timing_UI.cpp">
       <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Akaza_Awake_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Cut_In\Akaza</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Web_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Mini_Game\Web</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

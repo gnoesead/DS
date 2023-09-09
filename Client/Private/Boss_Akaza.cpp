@@ -87,9 +87,9 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 #endif // _DEBUG
 
 	Update_Train_Stage();
-		
+
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
-	{		
+	{
 		Update_Hit_Messenger(dTimeDelta);
 		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
@@ -113,7 +113,7 @@ void CBoss_Akaza::LateTick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_AnimIndex(m_eCurAnimIndex);
-		Gravity(dTimeDelta);		
+		Gravity(dTimeDelta);
 	}
 }
 
@@ -903,7 +903,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
 			if (m_bSuperArmor == false)
-			{				
+			{
 				m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.9f);
 				Tirgger_Hit_Hekireki();
 			}
@@ -3213,21 +3213,14 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
 				{
-					if (m_bAwake == true)
-					{
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
-					}
-					else
-					{
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
-						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
-							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
-					}
-					Camera_Shake(1.0, 600);
+					//CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+						CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
+
+					Camera_Shake(1.0, 1000);
 
 				}
 

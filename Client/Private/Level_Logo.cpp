@@ -30,7 +30,6 @@ HRESULT CLevel_Logo::Initialize()
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
         return E_FAIL;
 
-
     //_tchar szBgm[MAX_PATH] = TEXT("Intro.mp3");
     //CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
@@ -61,7 +60,6 @@ void CLevel_Logo::Tick(_double dTimeDelta)
                 COptionManager::GetInstance()->Set_Is_Reset(false);
             }
         }
-       
     }
 
     if (CFadeManager::GetInstance()->Get_Ink_In_Done() == true) {
@@ -485,16 +483,6 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
-
-
-
-
-
-
-
-
-
-
 
 
     Safe_Release(pGameInstance);

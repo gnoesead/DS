@@ -709,7 +709,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 // Icon
 	CFIcon::UIDESC UIDesc5;
-	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+	/*ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
 	UIDesc5.m_Type = 0;
 	UIDesc5.Pos = { 67.f, 0.f, 19.9f , 1.f };
@@ -719,7 +719,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 	ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
