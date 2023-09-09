@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+#include "Boss_Akaza.h"
+
 IMPLEMENT_SINGLETON(CWebManager)
 
 CWebManager::CWebManager()
@@ -56,17 +58,18 @@ void CWebManager::Initialize()
 void CWebManager::Tick(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	//Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-
+	
+	if(pPlayer != nullptr)
 	m_pTransformCom = pPlayer->Get_TransformCom();
 
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
 	
-	Safe_Release(pGameInstance);
+	//Safe_Release(pGameInstance);
 
 #pragma region TriggerSet
 	//Trigger onoff
@@ -107,7 +110,7 @@ void CWebManager::Tick(_double dTimeDelta)
 
 	/*
 		PlayerPos.y += 1.5f;
-		
+
 		Shoot_ArrowWeb(PlayerPos, Dir);
 		Shoot_WebBall();
 		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
@@ -117,77 +120,88 @@ void CWebManager::Tick(_double dTimeDelta)
 	*/
 
 #pragma region Event
-	m_dDelay_All += dTimeDelta;
+	//m_dDelay_All += dTimeDelta;
 
-	//첫 거미줄 웨이브
-	if (m_isTrigger_First)
-	{
-		if (m_dDelay_All > 10.0f)
-		{
-			m_dDelay_All = 0.0;
-			m_isTrigger_First = false;
-		}
-		else
-		{
-			m_dDelay_First += dTimeDelta;
-			if (m_fLimit_First < m_dDelay_First)
-			{
-				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+	////첫 거미줄 웨이브
+	//if (m_isTrigger_First)
+	//{
+	//	if (m_dDelay_All > 10.0f)
+	//	{
+	//		m_dDelay_All = 0.0;
+	//		m_isTrigger_First = false;
+	//	}
+	//	else
+	//	{
+	//		m_dDelay_First += dTimeDelta;
+	//		if (m_fLimit_First < m_dDelay_First)
+	//		{
+	//			m_dDelay_First = 0.0;
+	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
 
-				//Shoot_WebBall();
-				Shoot_JikWeb();
-			}
-		}
-	}
-	//둘 거미줄 웨이브
-	if (m_isTrigger_Second)
-	{
-		if (m_dDelay_All > 10.0f)
-		{
-			m_dDelay_All = 0.0;
-			m_isTrigger_First = false;
-		}
-		else
-		{
-			m_dDelay_First += dTimeDelta;
-			if (m_fLimit_First < m_dDelay_First)
-			{
-				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+	//			//Shoot_WebBall();
+	//			Shoot_JikWeb();
+	//		}
+	//	}
+	//}
+	////둘 거미줄 웨이브
+	//if (m_isTrigger_Second)
+	//{
+	//	if (m_dDelay_All > 10.0f)
+	//	{
+	//		m_dDelay_All = 0.0;
+	//		m_isTrigger_First = false;
+	//	}
+	//	else
+	//	{
+	//		m_dDelay_First += dTimeDelta;
+	//		if (m_fLimit_First < m_dDelay_First)
+	//		{
+	//			m_dDelay_First = 0.0;
+	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
 
-				//Shoot_WebBall();
-				Shoot_JikWeb();
-			}
-		}
-	}
-	//셋 거미줄 웨이브
-	if (m_isTrigger_Third)
-	{
-		if (m_dDelay_All > 10.0f)
-		{
-			m_dDelay_All = 0.0;
-			m_isTrigger_First = false;
-		}
-		else
-		{
-			m_dDelay_First += dTimeDelta;
-			if (m_fLimit_First < m_dDelay_First)
-			{
-				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+	//			//Shoot_WebBall();
+	//			Shoot_JikWeb();
+	//		}
+	//	}
+	//}
+	////셋 거미줄 웨이브
+	//if (m_isTrigger_Third)
+	//{
+	//	if (m_dDelay_All > 10.0f)
+	//	{
+	//		m_dDelay_All = 0.0;
+	//		m_isTrigger_First = false;
+	//	}
+	//	else
+	//	{
+	//		m_dDelay_First += dTimeDelta;
+	//		if (m_fLimit_First < m_dDelay_First)
+	//		{
+	//			m_dDelay_First = 0.0;
+	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
 
-				//Shoot_WebBall();
-				Shoot_JikWeb();
-			}
-		}
-	}
+	//			//Shoot_WebBall();
+	//			Shoot_JikWeb();
+	//		}
+	//	}
+	//}
 	//아카자 이벤트
 	if (m_isTrigger_Akaza)
 	{
 		if (m_isFirst_Akaza)
 		{
 			m_isFirst_Akaza = false;
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			CBoss_Akaza::CHARACTERDESC CharacterDesc;
+			ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+			CharacterDesc.WorldInfo.vPosition = _float4(204.9f, 0.f, 380.f, 1.f);
+			pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_NPC"),
+				TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc);
+
+			Safe_Release(pGameInstance);
 
 		}
 	}
@@ -278,7 +292,7 @@ void CWebManager::Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn
 	Create_WebShot(13, CreatePos, _float3{ 17.0f, 8.0f, 6.0f }, ShotDir, 1.0f);
 }
 
-void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
+void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed,
 	CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag)
 {
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -322,5 +336,5 @@ void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _do
 
 void CWebManager::Free()
 {
-	
+
 }

@@ -315,6 +315,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Side_Off = true;
 
 			m_vCameraAngle = 0.f;
+
+			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 		}
 		else {
 			m_vCameraAngle = 10.f;
@@ -637,16 +639,28 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 			m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
 			m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
-
+			
 			m_vDist = XMVector3Normalize(m_vDist);
 		}
 		else {
-			m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+				m_vOffSet = { 0.f, 1.7f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			else {
+				m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			
 
 			m_fDistance = 7.f + m_Zoom;
 
-			Turn_Camera(dTimeDelta);
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			}
+			else {
+				Turn_Camera(dTimeDelta);
+			}
+			
 
 			m_vDist = { XMVectorGetX(m_vDist), 0.3f ,XMVectorGetZ(m_vDist), 0.f };
 

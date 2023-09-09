@@ -445,6 +445,9 @@
     <Filter Include="02. GameObjects\Effect\CustomParticle\Manager">
       <UniqueIdentifier>{fe195ec4-dd95-48e8-bcdf-87dd191709e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\07.Gimmick\Timing">
+      <UniqueIdentifier>{7b431a55-524f-4ed0-8083-b95cdd09ce3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -795,6 +798,9 @@
     <ClInclude Include="..\Public\ParticleManager.h">
       <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Timing_UI.h">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1135,6 +1141,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\ParticleManager.cpp">
       <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Timing_UI.cpp">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

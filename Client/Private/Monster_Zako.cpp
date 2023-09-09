@@ -50,7 +50,7 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Zako_0");
 		return E_FAIL;
 	}
-
+	Get_PlayerComponent();
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 
@@ -123,7 +123,7 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
-	if(m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
+	if (m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
 		m_iAttackIndex = 0; // 2,5
 	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_TALK)
 		m_iAttackIndex = 2; // 2,5
@@ -154,32 +154,33 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-
-	if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() || m_isCan_Tutorial)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
-		if (m_isFirst_BattleOn)
+		if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() || m_isCan_Tutorial)
 		{
-			m_isFirst_BattleOn = false;
-			CMonsterManager::GetInstance()->Set_BattleOn(true);
+			if (m_isFirst_BattleOn)
+			{
+				m_isFirst_BattleOn = false;
+				CMonsterManager::GetInstance()->Set_BattleOn(true);
+			}
+
+			Trigger();
+			if (CPlayerManager::GetInstance()->Get_Slow() == false)
+			{
+				Animation_Control(dTimeDelta);
+			}
 		}
 
-		Trigger();
+		//애니메이션 처리
 		if (CPlayerManager::GetInstance()->Get_Slow() == false)
 		{
-			Animation_Control(dTimeDelta);
+			m_pModelCom->Play_Animation(dTimeDelta);
 		}
+		RootAnimation(dTimeDelta);
+
+		//이벤트 콜
+		EventCall_Control(dTimeDelta);
 	}
-
-	//애니메이션 처리
-	if (CPlayerManager::GetInstance()->Get_Slow() == false)
-	{
-		m_pModelCom->Play_Animation(dTimeDelta);
-	}
-	RootAnimation(dTimeDelta);
-
-	//이벤트 콜
-	EventCall_Control(dTimeDelta);
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -204,10 +205,12 @@ void CMonster_Zako::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 
 	__super::LateTick(dTimeDelta);
-
-	if (CPlayerManager::GetInstance()->Get_Slow() == false)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
-		Gravity(dTimeDelta);
+		if (CPlayerManager::GetInstance()->Get_Slow() == false)
+		{
+			Gravity(dTimeDelta);
+		}
 	}
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
@@ -379,7 +382,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (4 == m_iEvent_Index)
 			{//0.50
 				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws", m_pTransformCom);
-				
+
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 			}
 			if (5 == m_iEvent_Index)
@@ -415,7 +418,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
-			
+
 		}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -454,7 +457,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
-			}			
+			}
 		}
 
 		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -474,7 +477,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		if (24 == m_pModelCom->Get_iCurrentAnimIndex()) 
+		if (24 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{//0.1
@@ -725,7 +728,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 		{
 			m_isFirst_Move_0 = false;
 			m_isFirst_Move_1 = true;
-			
+
 			m_pModelCom->Set_Animation(ANIM_WALK_FRONT);
 			m_dDelay_Move = 0.0;
 		}
@@ -734,7 +737,7 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	Go_Backward_Constant(dTimeDelta, 66, 0.3f);
 	Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.3f);
 	Go_Straight_Constant(dTimeDelta, 69, 0.3f);
-	
+
 
 	Idle_ATK_Pattern_Controler(dTimeDelta);
 }
@@ -742,14 +745,14 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 {
 	// Attack CoolTime
-	if(m_isCoolTime_On)
+	if (m_isCoolTime_On)
 		m_dCoolTime_AtkPattern += dTimeDelta;
-	
+
 #pragma region Cheat
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	/*enum PATTERN { PATTERN_CLAWS, PATTERN_TACKLE, PATTERN_SPINKICK, PATTERN_JUMPKICK, 
-		PATTERN_BUTTERFLY, PATTERN_CLAWCROSS, 
+	/*enum PATTERN { PATTERN_CLAWS, PATTERN_TACKLE, PATTERN_SPINKICK, PATTERN_JUMPKICK,
+		PATTERN_BUTTERFLY, PATTERN_CLAWCROSS,
 		PATTERN_SPINMOVE, PATTERN_MOVE,
 		PATTERN_END };*/
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
@@ -934,14 +937,14 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 	if (m_iAttackIndex == 9 && m_isAtkFinish)
 	{
 		m_isAtkFinish = false;
-		
+
 		m_iAttackIndex = 0;
 		m_isCoolTime_On = true;
 	}
 }
 
 void CMonster_Zako::Animation_Control_Attack(_double dTimeDelta, _int AttackIndex)
-{	
+{
 	switch (AttackIndex)
 	{
 	case 0: //ANIM_ATK_CLAWS
@@ -966,7 +969,7 @@ void CMonster_Zako::Animation_Control_Attack(_double dTimeDelta, _int AttackInde
 		Animation_Control_Attack_SpinMove(dTimeDelta);
 		break;
 	case 7: // Dash
-		
+
 		break;
 	default:
 		break;
@@ -1040,7 +1043,7 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_ATK_TACKLE )
+	if (iCurAnim == ANIM_ATK_TACKLE)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
 
 	if (iCurAnim == 8)
@@ -1060,9 +1063,9 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 		}
 	}
 
-	if(iCurAnim == ANIM_ATK_CLAW_FROG || iCurAnim == 23 || iCurAnim == 24 || iCurAnim == 25 || iCurAnim == 26)
+	if (iCurAnim == ANIM_ATK_CLAW_FROG || iCurAnim == 23 || iCurAnim == 24 || iCurAnim == 25 || iCurAnim == 26)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
-	
+
 	Go_Straight_Deceleration(dTimeDelta, 26, 2.0f, 0.03f);
 }
 
@@ -1078,7 +1081,7 @@ void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_ATK_SPINKICK || iCurAnim == 17 )
+	if (iCurAnim == ANIM_ATK_SPINKICK || iCurAnim == 17)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
 
 	Go_Straight_Constant(dTimeDelta, 18, 2.0f);
@@ -1101,7 +1104,7 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if (iCurAnim == ANIM_ATK_JUMPKICK || iCurAnim == 12 )
+	if (iCurAnim == ANIM_ATK_JUMPKICK || iCurAnim == 12)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.35f);
 
 	if (iCurAnim == 12 && m_isFirst_ATK_0)
@@ -1111,8 +1114,8 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 		Jumping(2.0f, 0.03f);
 	}
 	Go_Straight_Deceleration(dTimeDelta, 12, 2.0f, 0.04f);
-	
-	
+
+
 	if (iCurAnim == 13 && m_isFirst_ATK_1)
 	{
 		m_isFirst_ATK_1 = false;
@@ -1177,7 +1180,7 @@ void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
 
 	Go_Straight_Constant(dTimeDelta, 30, 4.0f);
 	Go_Straight_Deceleration(dTimeDelta, 31, 4.0f, 0.075f);
-	
+
 
 }
 
@@ -1197,7 +1200,7 @@ void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if(iCurAnim == ANIM_ATK_CLAW_CROSS)
+	if (iCurAnim == ANIM_ATK_CLAW_CROSS)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
 	if (m_isTime_ATK_0)
@@ -1219,7 +1222,7 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 		m_isFirst_AtkPattern = false;
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SPINPUNCH);
-		
+
 		m_isFirst_ATK_0 = true;
 		m_isFirst_ATK_1 = true;
 
@@ -1228,7 +1231,7 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
-	if(iCurAnim == ANIM_ATK_SPINPUNCH)
+	if (iCurAnim == ANIM_ATK_SPINPUNCH)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
 
 	if (iCurAnim == 44 && m_isFirst_ATK_0)
@@ -1257,16 +1260,16 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	
+
 	AtkDir.y = 0.0f;
-	XMStoreFloat4(&AtkDir, XMVector4Normalize( XMLoadFloat4(&AtkDir)));
+	XMStoreFloat4(&AtkDir, XMVector4Normalize(XMLoadFloat4(&AtkDir)));
 
 	m_pTransformCom->LerpVector(-XMLoadFloat4(&AtkDir), 0.05f);
 
 #pragma region Hit_Small
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small() || m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 	{
-		if(m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
@@ -1312,10 +1315,10 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_LEFT, 1.1f, 0.04f, AtkDir);
 		Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL_RIGHT, 1.1f, 0.04f, AtkDir);
 	}
-	
-	
+
+
 #pragma endregion
-	
+
 
 #pragma region Hit_Big
 	if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
@@ -1452,7 +1455,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		pPlayer->Set_Hit_Success_Hekireki(true);
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		
+
 		m_isStrictUpper = true;
 
 
@@ -1537,7 +1540,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_IDLE;
-		
+
 		if (m_iAttackIndex != 10)
 		{
 			_int i = rand() % 3;
@@ -1550,7 +1553,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 	}
 
-	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim ==  112) //112는 fall마지막 모션
+	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == 112) //112는 fall마지막 모션
 	{
 		m_dDelay_ComboChain = 0.0;
 
@@ -1595,7 +1598,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 		{
 			m_dDelay_Down = 0.0;
 
-			if(iCurAnim == ANIM_DEATH_IDLE)
+			if (iCurAnim == ANIM_DEATH_IDLE)
 				m_pModelCom->Set_Animation(ANIM_DEATH_GETUP);
 			else
 				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
@@ -1619,7 +1622,7 @@ HRESULT CMonster_Zako::Add_Components()
 		return E_FAIL;
 	}
 
-	
+
 
 	/* for.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
@@ -1664,7 +1667,7 @@ HRESULT CMonster_Zako::Add_Components()
 		return E_FAIL;
 	}
 
-	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f , 1.0f , 1.0f );
+	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize = _float3(1.0f, 1.0f, 1.0f);
 	//m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, 0.0f, 0.f);
 	m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vPosition = _float3(0.f, m_CharacterDesc.ColliderDesc[CCharacter::COLL_SPHERE].vSize.x, 0.f);
 	// for.Com_Sphere 
@@ -1684,7 +1687,7 @@ HRESULT CMonster_Zako::Add_Components()
 		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
 		return E_FAIL;
 	}
-	
+
 	/* for.Com_Navigation_Village_Battle*/
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Village_Battle"),
 		TEXT("Com_Navigation_Village_Battle"), (CComponent**)&m_pNavigationCom[NAVI_VILLAGE_BATTLE], &m_CharacterDesc.NaviDesc)))
@@ -1766,6 +1769,6 @@ CGameObject* CMonster_Zako::Clone(void* pArg)
 
 void CMonster_Zako::Free()
 {
-	
+
 	__super::Free();
 }

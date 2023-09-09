@@ -27,6 +27,7 @@
 #include "Option.h"
 #include "ColliderManager.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Boss_Akaza.h"
 
 #include "PlayerManager.h"
 #include "WebManager.h"
@@ -51,6 +52,8 @@ HRESULT CLevel_Train::Initialize()
 	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
+
+	CWebManager::GetInstance()->Reset();
 
     if (FAILED(Ready_Lights()))
     {
@@ -339,7 +342,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 }
 
 HRESULT CLevel_Train::Ready_Layer_Boss(const _tchar* pLayerTag)
-{
+{	
 	return S_OK;
 }
 

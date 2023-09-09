@@ -49,6 +49,7 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Timing_UI.h"
 
 
 #include "NPC_Female.h"
@@ -258,6 +259,13 @@ HRESULT CLoader::LoadingForLogo()
 		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 500))))
 	{
 		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_500_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_100_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_100_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 100))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_100_Particle");
 		return E_FAIL;
 	}
 	/* Prototype_Component_VIBuffer_50_Particle */
@@ -1040,6 +1048,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Zenitsu_Awake_UI */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
 		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Timing_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Timing_UI"),
+		CTiming_UI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

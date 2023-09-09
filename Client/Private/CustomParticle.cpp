@@ -20,7 +20,6 @@ void CCustomParticle::Reset_Particle(CUSTOMPARTDESC* pCustomPartDesc)
 	ZeroMemory(&m_CustomPartDesc, sizeof m_CustomPartDesc);
 
 	m_CustomPartDesc = *pCustomPartDesc;
-	m_dCycle = _double(m_CustomPartDesc.fLifeTime / (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y));
 
 	m_pVIBufferCom->Reset_Particle(&m_CustomPartDesc.VIB_CustomPartDesc);
 
@@ -42,7 +41,6 @@ HRESULT CCustomParticle::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_CustomPartDesc, pArg, sizeof m_CustomPartDesc);
-	m_dCycle = _double(m_CustomPartDesc.fLifeTime / (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y));
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -50,7 +48,7 @@ HRESULT CCustomParticle::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_fAlpha = 0.7f;
+	m_fAlpha = 1.f;
 
 	return S_OK;
 }
@@ -97,13 +95,13 @@ void CCustomParticle::LateTick(_double dTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_CustomPartDesc.vPosition));
 
-	_int iCount = _int(m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed));
+	/*_int iCount = _int(m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed));
 
 	m_vTexCoord.x = _float(iCount % m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.x));
 
-	m_vTexCoord.y = _float(iCount / m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.y));
+	m_vTexCoord.y = _float(iCount / m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.y));*/
 	
-	if (m_CustomPartDesc.fLifeTime < m_dTimeAcc)
+	if (m_CustomPartDesc.VIB_CustomPartDesc.fLifeTime < m_dTimeAcc)
 	{
 		CParticleManager::GetInstance()->Collect_Particle(m_CustomPartDesc.szPoolTag, this);
 		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
@@ -113,7 +111,7 @@ void CCustomParticle::LateTick(_double dTimeDelta)
 		Set_Dead();
 	}
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_Effect_Particle, this)))
 		return;
 }
 
@@ -233,10 +231,10 @@ HRESULT CCustomParticle::SetUp_ShaderResources()
 			return E_FAIL;
 	}
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTexCoord", &m_vTexCoord, sizeof(_float2))))
-		return E_FAIL;
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_vTexCoord", &m_vTexCoord, sizeof(_float2))))
+		return E_FAIL;*/
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSpriteCount", &m_CustomPartDesc.vSpriteCount, sizeof(_int2))))
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vSpriteCount", &m_CustomPartDesc.VIB_CustomPartDesc.vSpriteCount, sizeof(_int2))))
 		return E_FAIL;
 
 	

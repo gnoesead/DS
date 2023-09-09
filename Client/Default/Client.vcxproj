@@ -282,6 +282,7 @@
     <ClInclude Include="..\Public\Sword.h" />
     <ClInclude Include="..\Public\SwordHome.h" />
     <ClInclude Include="..\Public\TerrainMapObject.h" />
+    <ClInclude Include="..\Public\Timing_UI.h" />
     <ClInclude Include="..\Public\Title.h" />
     <ClInclude Include="..\Public\Title_Manager.h" />
     <ClInclude Include="..\Public\TrainSmoke.h" />
@@ -401,6 +402,7 @@
     <ClCompile Include="..\Private\Sword.cpp" />
     <ClCompile Include="..\Private\SwordHome.cpp" />
     <ClCompile Include="..\Private\TerrainMapObject.cpp" />
+    <ClCompile Include="..\Private\Timing_UI.cpp" />
     <ClCompile Include="..\Private\Title.cpp" />
     <ClCompile Include="..\Private\Title_Manager.cpp" />
     <ClCompile Include="..\Private\TrainSmoke.cpp" />

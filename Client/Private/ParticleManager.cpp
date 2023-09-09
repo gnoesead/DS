@@ -97,11 +97,13 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;
-	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
-	CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.fLifeTime = fLifeTime;
+
 	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
 	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
 	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
@@ -134,11 +136,13 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;
-	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
-	CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.fLifeTime = fLifeTime;
+
 	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
 	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
 	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);
@@ -171,11 +175,13 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
+	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;
-	CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
-	CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.fLifeTime = fLifeTime;
+	
 	wsprintf(CustomPartDesc.szTextureTag, pTextureTag);
 	wsprintf(CustomPartDesc.szBufferTag, pBufferTag);
 	strcpy_s(CustomPartDesc.szPoolTag, pPoolTag);

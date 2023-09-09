@@ -1077,7 +1077,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 			}
 			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
 			JumpStop(0.9);
-			Set_FallingStatus(2.8f, 0.01f);
+			Set_FallingStatus(5.5f, 0.04f);
 		}
 	}
 	m_pModelCom->Set_EarlyEnd(2, true, 0.55f);

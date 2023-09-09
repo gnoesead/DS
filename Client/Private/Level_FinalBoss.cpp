@@ -200,20 +200,20 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	m_dGrassAcc += dTimeDelta;
 
-	if (25, 0 < m_dGrassAcc)
+	if (25.0 < m_dGrassAcc)
 	{
 		_float3 vPos = { 128.5f, 10.f, 128.5f };
 		_float3 vRange = { 20.f, 10.f, 20.f };
-		_float3 vTPerD = { 0.2f, -0.5f, 0.2f };
+		_float3 vTPerD = { -0.2f, -0.5f, -0.2f };
 		_int3	vDirOption = { 1, 0, 1 };
 		// PoolTag, BufferTag, TextureTag, 
 		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
 		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
 		CParticleManager::GetInstance()->PlayParticle("Test",
-			TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_Cmn_Smoke_24_A")
-			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
-			TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+			TEXT("Prototype_Component_VIBuffer_500_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grass001C")
+			, vPos, 30.f, 0.3f, .5f, 0.5f, 1.5f, vRange, -0.01f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_NONBLEND, 25.f, _int2(4, 4));
 
+		m_dGrassAcc = 0.0;
 	}
 
 	Safe_Release(pGameInstance);

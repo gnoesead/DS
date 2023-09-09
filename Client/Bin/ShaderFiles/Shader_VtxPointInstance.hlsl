@@ -9,7 +9,7 @@ texture2D g_Texture;
 texture2D g_RampTexture;
 
 float		g_fAlpha;
-float2		g_vTexCoord;
+//float2		g_vTexCoord;
 int2		g_vSpriteCount;
 float		g_fRampMax;
 
@@ -17,21 +17,23 @@ struct VS_IN
 {
 	float3		vPosition : POSITION;
 
-	float4		vRight : TEXCOORD1;
-	float4		vUp : TEXCOORD2;
-	float4		vLook : TEXCOORD3;
-	float4		vTranslation : TEXCOORD4;
-	float4		vColor : COLOR0;
-	float2		vPSize : PSIZE;
-	float		fAngle : COLOR1;
+	float4		vRight			: TEXCOORD1;
+	float4		vUp				: TEXCOORD2;
+	float4		vLook			: TEXCOORD3;
+	float4		vTranslation	: TEXCOORD4;
+	float4		vColor			: COLOR0;
+	float2		vPSize			: PSIZE;
+	float2		vUV				: COLOR1;
+	float		fAngle			: COLOR2;
 };
 
 struct VS_OUT
 {
-	float4		vPosition : POSITION;
-	float4		vColor : COLOR0;
-	float2		vPSize : PSIZE;
-	float		fAngle : COLOR1;
+	float4		vPosition	: POSITION;
+	float4		vColor		: COLOR0;
+	float2		vPSize		: PSIZE;
+	float		fAngle		: COLOR1;
+	float2		vUV			: COLOR2;
 };
 
 VS_OUT VS_Main(VS_IN _In)
@@ -45,23 +47,26 @@ VS_OUT VS_Main(VS_IN _In)
 	Out.vPSize = _In.vPSize;
 	Out.vColor = _In.vColor;
 	Out.fAngle = _In.fAngle;
+	Out.vUV = _In.vUV;
 
 	return Out;
 };
 
 struct GS_IN
 {
-	float4		vPosition : POSITION;
-	float4		vColor : COLOR0;
-	float2		vPSize : PSIZE;
-	float		fAngle : COLOR1;
+	float4		vPosition	: POSITION;
+	float4		vColor		: COLOR0;
+	float2		vPSize		: PSIZE;
+	float		fAngle		: COLOR1;
+	float2		vUV			: COLOR2;
 };
 
 struct GS_OUT
 {
-	float4		vPosition : SV_POSITION;
-	float4		vColor : COLOR0;
-	float2		vTexCoord : TEXCOORD0;
+	float4		vPosition	: SV_POSITION;
+	float4		vColor		: COLOR0;
+	float2		vTexCoord	: TEXCOORD0;
+	float2		vUV			: COLOR1;
 };
 
 [maxvertexcount(20)]
@@ -80,21 +85,25 @@ void GS_Main(point GS_IN _In[1], inout TriangleStream<GS_OUT> OutStream)
 	Out[0].vPosition = mul(Out[0].vPosition, matVP);
 	Out[0].vColor = _In[0].vColor;
 	Out[0].vTexCoord = float2(0.f, 0.f);
+	Out[0].vUV = _In[0].vUV;
 
 	Out[1].vPosition = float4(_In[0].vPosition.xyz - vRight + vUp, 1.f);
 	Out[1].vPosition = mul(Out[1].vPosition, matVP);
 	Out[1].vColor = _In[0].vColor;
 	Out[1].vTexCoord = float2(1.f, 0.f);
+	Out[1].vUV = _In[0].vUV;
 
 	Out[2].vPosition = float4(_In[0].vPosition.xyz - vRight - vUp, 1.f);
 	Out[2].vPosition = mul(Out[2].vPosition, matVP);
 	Out[2].vColor = _In[0].vColor;
 	Out[2].vTexCoord = float2(1.f, 1.f);
+	Out[2].vUV = _In[0].vUV;
 
 	Out[3].vPosition = float4(_In[0].vPosition.xyz + vRight - vUp, 1.f);
 	Out[3].vPosition = mul(Out[3].vPosition, matVP);
 	Out[3].vColor = _In[0].vColor;
 	Out[3].vTexCoord = float2(0.f, 1.f);
+	Out[3].vUV = _In[0].vUV;
 
 	OutStream.Append(Out[0]);
 	OutStream.Append(Out[1]);
@@ -109,9 +118,10 @@ void GS_Main(point GS_IN _In[1], inout TriangleStream<GS_OUT> OutStream)
 
 struct PS_IN
 {
-	float4		vPosition : SV_POSITION;
-	float4		vColor : COLOR0;
-	float2		vTexCoord : TEXCOORD0;
+	float4		vPosition	: SV_POSITION;
+	float4		vColor		: COLOR0;
+	float2		vTexCoord	: TEXCOORD0;
+	float2		vUV			: COLOR1;
 };
 
 struct PS_OUT
@@ -157,7 +167,8 @@ PS_OUT  PS_Sprite(PS_IN _In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
+	//float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
+	float2 vTexUV = float2(_In.vUV.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), _In.vUV.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
 
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, vTexUV);
 
@@ -174,7 +185,8 @@ PS_OUT  PS_Sprite_Ramp(PS_IN _In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
+	//float2 vTexUV = float2(g_vTexCoord.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), g_vTexCoord.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
+	float2 vTexUV = float2(_In.vUV.x + (_In.vTexCoord.x * (1.f / g_vSpriteCount.x)), _In.vUV.y + (_In.vTexCoord.y * (1.f / g_vSpriteCount.y)));
 
 	vector vMtrlEffect = g_Texture.Sample(LinearSampler, vTexUV);
 	float fRamp = vMtrlEffect.r;
@@ -232,8 +244,21 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_Sprite();
 	}
 
-	pass Sprite_Ramp
+	pass Sprite_NonBlend
 	{//3
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Not_ZWrite, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = compile gs_5_0 GS_Main();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Sprite();
+	}
+
+	pass Sprite_Ramp
+	{//4
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Not_ZWrite, 0);

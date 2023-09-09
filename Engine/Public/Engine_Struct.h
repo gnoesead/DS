@@ -149,6 +149,7 @@ namespace Engine
 		XMFLOAT4		vTranslation;
 		XMFLOAT4		vColor;
 		XMFLOAT2		vPSize;
+		XMFLOAT2		vUV;
 		float			fAngle;
 	}VTXINSTANCE;
 
@@ -180,14 +181,14 @@ namespace Engine
 
 	typedef struct ENGINE_DLL tagVertex_Rect_Instance_Declaration
 	{
-		static const unsigned int			iNumElements = { 9 };
-		static D3D11_INPUT_ELEMENT_DESC		Elements[9];
+		static const unsigned int			iNumElements = { 10 };
+		static D3D11_INPUT_ELEMENT_DESC		Elements[10];
 	}VTXRECTINSTANCE_DECL;
 
 	typedef struct ENGINE_DLL tagVertex_Point_Instance_Declaration
 	{
-		const static unsigned int			iNumElements = { 8 };
-		static D3D11_INPUT_ELEMENT_DESC		Elements[8];
+		const static unsigned int			iNumElements = { 9 };
+		static D3D11_INPUT_ELEMENT_DESC		Elements[9];
 	}VTXPOINTINSTANCE_DECL;
 
 	typedef struct ENGINE_DLL tagVertex_Point_Instance_Effect_Declaration
