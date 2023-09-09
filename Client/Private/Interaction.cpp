@@ -100,6 +100,11 @@ void CInteraction::Tick(_double TimeDelta)
 
 	if (dist < 2.f) {
 
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+			CDialogManager::GetInstance()->Set_Dialog_Type(99);
+		}
+
+
 		if (m_UI_Desc.m_Is_Smell == true) {
 			CDialogManager::GetInstance()->Set_Dialog_Type(m_UI_Desc.m_Dialog_Type);
 		}
