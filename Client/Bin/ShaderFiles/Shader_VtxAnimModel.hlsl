@@ -184,7 +184,7 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
-	vector		vDepth2 : SV_TARGET3;
+	vector		vDiffuse_Cha : SV_TARGET3;
 };
 
 struct PS_OUT_DEFERRED
@@ -207,7 +207,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse.a = 1.f;
 
 	
-	
+	Out.vDiffuse_Cha = vMtrlDiffuse * 0.75f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
@@ -241,7 +241,7 @@ PS_OUT  PS_Outline(PS_IN In)
 
 
 	Out.vDiffuse = Color;
-
+	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);

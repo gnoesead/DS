@@ -129,18 +129,26 @@ void CCharacter::LateTick(_double dTimeDelta)
 
 HRESULT CCharacter::Render()
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CCharacter::Render_ShadowDepth()
-{
+{	
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-	_vector   vLightAt = vPlayerPos;
+	//_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 50.f, -5.f, 1.f);
+	_vector   vLightEye = XMVectorSet(90.f, 50.f, 90.f, 1.f);
+	_vector   vLightAt = { 128.5f, 0.f, 128.5f, 1.f };
+	//_vector   vLightAt = vPlayerPos;
 	//_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 

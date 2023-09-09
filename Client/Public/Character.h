@@ -98,7 +98,7 @@ public:
 	virtual void	Tick(_double dTimeDelta) override;
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT Render_ShadowDepth();
+	virtual HRESULT Render_ShadowDepth() override;
 
 public:
 	CTransform* Get_TransformCom();

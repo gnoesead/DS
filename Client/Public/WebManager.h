@@ -45,6 +45,7 @@ public: // 겟셋
 	}
 
 	_bool	Get_Trigger_Akaza() { return m_isTrigger_Akaza; }
+	
 
 private: // 변수
 	CTransform* m_pTransformCom = { nullptr }; // 플레이어의 트랜스폼임.

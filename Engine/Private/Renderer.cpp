@@ -36,6 +36,11 @@ HRESULT CRenderer::Initialize_Prototype()
     if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse")
         , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_Diffuse)))
         return E_FAIL;
+
+    _float4 vColor_Diffuse_Cha = { 1.f, 0.f, 1.f, 0.f };
+    if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_Diffuse_Cha")
+        , (_uint)Viewport.Width, (_uint)Viewport.Height, DXGI_FORMAT_B8G8R8A8_UNORM, vColor_Diffuse_Cha)))
+        return E_FAIL;
    
        /* For.Target_Normal */
     _float4 vColor_Normal = { 1.f, 1.f, 0.f, 1.f };
@@ -208,6 +213,8 @@ HRESULT CRenderer::Initialize_Prototype()
     if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Depth"))))
         return E_FAIL;
     if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Emissive"))))
+        return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Add_MRT(TEXT("MRT_GameObject"), TEXT("Target_Diffuse_Cha"))))
         return E_FAIL;
 
 
@@ -2073,6 +2080,8 @@ HRESULT CRenderer::Render_Deferred()
 
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Diffuse"), m_pShader, "g_DiffuseTexture")))
         return E_FAIL;
+    if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Diffuse_Cha"), m_pShader, "g_DiffuseTexture_Cha")))
+        return E_FAIL;
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Shade"), m_pShader, "g_ShadeTexture")))
         return E_FAIL;
     if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Specular"), m_pShader, "g_SpecularTexture")))
@@ -2142,13 +2151,15 @@ HRESULT CRenderer::Render_Deferred()
     Safe_Release(pPipeLine);
 
     CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-    _vector   vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-    _vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
+    _vector   vLightEye = XMVectorSet(90.f, 50.f, 90.f, 1.f);
+    _vector   vLightAt = { 128.5f, 0.f, 128.5f, 1.f };
     if (pPlayerTransformCom != nullptr)
     {
         _vector   vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-        vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-        vLightAt = vPlayerPos;
+        //vLightEye = vPlayerPos + XMVectorSet(-5.f, 100.f, -5.f, 1.f);
+         vLightEye = XMVectorSet(90.f, 50.f, 90.f, 1.f);
+        _vector   vLightAt = { 128.5f, 0.f, 128.5f, 1.f };
+        //vLightAt = vPlayerPos;
     }
 
     _vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);

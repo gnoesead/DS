@@ -140,7 +140,7 @@ public:
 	virtual void	Tick(_double dTimeDelta) override;
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT Render_ShadowDepth();
+	virtual HRESULT Render_ShadowDepth() override;
 
 
 public:
@@ -208,6 +208,7 @@ protected:
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	PLAYERTYPE		m_ePlayerType = { PLAYERTYPE_END };
 
 	//½º¿Ò½Ã
 	_bool		m_isSwap_OnSky = { false };

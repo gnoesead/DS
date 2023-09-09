@@ -109,6 +109,14 @@ public:
 
 	void	Slow_Acc(_double dTimeDelta);
 
+
+private:
+	_bool	m_isHit_WebShot = { false };
+
+public:
+	_bool	Get_Hit_WebShot() { return m_isHit_WebShot; }
+	void	Set_Hit_WebShot(_bool hit) { m_isHit_WebShot = hit; }
+
 public:
 	virtual void Free() override;
 };

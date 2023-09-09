@@ -14,6 +14,9 @@
 #include "OptionManager.h"
 #include "Camera_Manager.h"
 
+#include "WebManager.h"
+#include "Battle_UI_Manager.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -146,12 +149,13 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+	__super::Render();
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_ShadowDepth()
 {
-
+	__super::Render_ShadowDepth();
 	return S_OK;
 }
 
@@ -415,7 +419,20 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_Moveset.m_Down_Dmg_Web = true;
+			
 		}
+
+	
+		if (CPlayerManager::GetInstance()->Get_Hit_WebShot() && CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
+		{
+			CPlayerManager::GetInstance()->Set_Hit_WebShot(false);
+
+			m_Moveset.m_Down_Dmg_Web = true;
+
+			CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
+		}
+		
+		
 	}
 	else
 	{

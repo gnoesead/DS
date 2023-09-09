@@ -77,6 +77,7 @@ struct PS_OUT
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
 	vector		vEmissive : SV_TARGET3;
+	vector		vDiffuse_Cha : SV_TARGET4;
 };
 
 struct PS_NONDEFERRED
@@ -95,6 +96,7 @@ PS_OUT  PS_Main(PS_IN _In)
 		discard;
 
 	Out.vDiffuse = vMtrlDiffuse;
+	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
@@ -129,6 +131,7 @@ PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
 	Out.vEmissive = vEmissive;
+	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 
 	return Out;
 };

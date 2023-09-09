@@ -60,13 +60,13 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
-
+	__super::Render();
 	return S_OK;
 }
 
 HRESULT CMonster::Render_ShadowDepth()
 {
-
+	__super::Render_ShadowDepth();
 	return S_OK;
 }
 

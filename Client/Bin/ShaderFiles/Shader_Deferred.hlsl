@@ -17,6 +17,7 @@ vector         g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
 texture2D      g_NormalTexture;
 texture2D      g_DiffuseTexture;
+texture2D	   g_DiffuseTexture_Cha;
 texture2D      g_ShadeTexture;
 texture2D      g_SpecularTexture;
 texture2D      g_DepthTexture;
@@ -226,29 +227,29 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 
 
-	if (fBrightness < 0.7)
-		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);	
-	else if(fBrightness < 0.5)
+	/*if (fBrightness < 0.7)
+		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
+	else if (fBrightness < 0.5)
 		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);
 	else if (fBrightness < 0.2)
-		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);
-		//Out.vShade = saturate(Out.vShade);
-		//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);*/
+	//Out.vShade = saturate(Out.vShade);
+	//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
 
-		/*Out.vShade = saturate(Out.vShade);
-		if (Out.vShade.r < 0.71f && Out.vShade.g < 0.71f && Out.vShade.b < 0.71f)
-			Out.vShade.rgb = ceil(Out.vShade * 0.4f) / 0.4f;
-		else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
-			Out.vShade.rgb = ceil(Out.vShade * 0.2f) / 0.2f;*/
+	/*Out.vShade = saturate(Out.vShade);
+	if (Out.vShade.r < 0.71f && Out.vShade.g < 0.71f && Out.vShade.b < 0.71f)
+		Out.vShade.rgb = ceil(Out.vShade * 0.4f) / 0.4f;
+	else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+		Out.vShade.rgb = ceil(Out.vShade * 0.2f) / 0.2f;*/
 
-			/*else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
-				Out.vShade.rgb = float3(0.5f, 0.5f, 0.5f);*/
+		/*else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+			Out.vShade.rgb = float3(0.5f, 0.5f, 0.5f);*/
 
-				/*else if ((Out.vShade.r >= 0.21f && Out.vShade.r < 0.41f) && (Out.vShade.g >= 0.21f && Out.vShade.g < 0.41f) && (Out.vShade.b >= 0.21f && Out.vShade.b < 0.41f))
-					Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-				else if ((Out.vShade.r >= 0.41f && Out.vShade.r <= 1.f) && (Out.vShade.g >= 0.41f && Out.vShade.g <= 1.f) && (Out.vShade.b >= 0.41f && Out.vShade.b <= 1.f))
-					Out.vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
+			/*else if ((Out.vShade.r >= 0.21f && Out.vShade.r < 0.41f) && (Out.vShade.g >= 0.21f && Out.vShade.g < 0.41f) && (Out.vShade.b >= 0.21f && Out.vShade.b < 0.41f))
+				Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
+			else if ((Out.vShade.r >= 0.41f && Out.vShade.r <= 1.f) && (Out.vShade.g >= 0.41f && Out.vShade.g <= 1.f) && (Out.vShade.b >= 0.41f && Out.vShade.b <= 1.f))
+				Out.vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
 
 
 
@@ -320,9 +321,9 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
-		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
+	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 
-	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 
 	Out.vShade.a = 1.f;
 
@@ -340,18 +341,19 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	PS_OUT         Out = (PS_OUT)0;
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vDiffuse_Cha = g_DiffuseTexture_Cha.Sample(LinearSampler, In.vTexUV);
 	vector      vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
-	
+
 
 	if (vDiffuse.a == 0.f)
 		discard;
 	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
-	Out.vColor = vDiffuse * vShade;
+	Out.vColor = vDiffuse * vShade * 0.8f;
 
 	Out.vColor.rgb += vEmissive.rgb;
 
@@ -609,7 +611,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
-				
+
 		Out.vColor.a = vFinalColor.a;
 		/*if (Out.vColor.a == 0.f)
 			discard;*/
