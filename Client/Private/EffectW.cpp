@@ -46,6 +46,8 @@ HRESULT CEffectW::Initialize(void* pArg)
 
 	m_iFrame = Random::Generate_Int((_uint)m_EffectWDesc.vStartFrame.x, (_uint)m_EffectWDesc.vStartFrame.y);
 
+	m_fColor = Random::Generate_Float(m_EffectWDesc.vColor.x, m_EffectWDesc.vColor.y);
+
 	return S_OK;
 }
 
@@ -119,6 +121,11 @@ void CEffectW::Reset_Data(void* pArg)
 
 	m_FrameAccTime = 0.0;
 	m_dLifeAccTime = 0.0;
+
+	m_fAlpha = m_EffectWDesc.fAlpha;
+	m_fAlphaSpeed = m_EffectWDesc.fAlphaSpeed;
+
+	m_fColor = Random::Generate_Float(m_EffectWDesc.vColor.x, m_EffectWDesc.vColor.y);
 }
 
 void CEffectW::Free()

@@ -536,6 +536,11 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
         return E_FAIL;
     }
 
+    if (FAILED(Render_TransparentWall()))
+    {
+        MSG_BOX("Failed to Render_TransparentWall");
+        return E_FAIL;
+    }
 #ifdef _DEBUG
     if (true == m_isRenderDebug)
     {
@@ -1722,6 +1727,22 @@ HRESULT CRenderer::Render_CallBack()
         if (FAILED(m_Func()))
             return S_OK;
     }
+
+    return S_OK;
+}
+
+HRESULT CRenderer::Render_TransparentWall()
+{
+    for (auto& pGameObject : m_RenderObjects[RENDER_TRANSPARENTWALL])
+    {
+        if (nullptr != pGameObject)
+            pGameObject->Render();
+
+        Safe_Release(pGameObject);
+
+    }
+
+    m_RenderObjects[RENDER_TRANSPARENTWALL].clear();
 
     return S_OK;
 }

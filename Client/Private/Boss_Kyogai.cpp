@@ -616,6 +616,18 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
+				if (ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex())
+				{
+					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom);
+				}
+
+				if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex())
+				{
+					CEffectPlayer::EFFECTWORLDDESC EffectDesc;
+					EffectDesc.vPosition.x += 0.6f;
+					EffectDesc.vPosition.y += 0.5f;
+					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom , &EffectDesc);
+				}
 			}
 
 

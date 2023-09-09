@@ -1779,6 +1779,13 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Small");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Step_Effect.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Step_Effect");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 	return 	S_OK;

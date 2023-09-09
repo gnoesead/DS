@@ -393,11 +393,15 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.8f;
 
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_10", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_10", m_pTransformCom, &EffectWorldDesc);  
 			}
 			else if (1 == m_iEvent_Index)	// 0.38
 			{
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.4,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.8f), 0.2,
+					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(1.f, 1.0f, 1.8f), 0.2,
+					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-1.f, 1.0f, 1.8f), 0.2,
 					CAtkCollider::TYPE_BLOW, AtkDir, 3.0f);
 
 				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle", m_pTransformCom);
@@ -465,6 +469,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD , vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN, vPlusPos);
+	
 				Create_StoneParticle(vPlusPos);
 				Create_SmeshStone(vPlusPos);
 				Camera_Shake();
@@ -568,6 +573,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom , &EffectWorldDesc);
 			}
 		}
 
@@ -576,6 +584,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom , &EffectWorldDesc);
 			}
 		}
 
@@ -584,6 +595,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -592,6 +606,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -764,7 +781,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3))
 	{
 		m_eCurState = STATE_ATTACK;
-		m_eCurPattern = PATTERN_RAGE_DUDUGE;
+		m_eCurPattern = PATTERN_BIGSWAMP;
 	}
 	
 	//레이지 모드

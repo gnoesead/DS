@@ -33,11 +33,6 @@ private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources();
 
-private:
-	_float					m_fAlpha = { 1.f };
-	_float					m_fAlphaDecreseSpeed = { 0.f };
-	_float					m_fColor = { 0.f };
-
 public:
 	static CStoneParticle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;

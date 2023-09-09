@@ -403,7 +403,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
 			}
-			
+
 		}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -442,7 +442,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
-			}			
+			}
 		}
 
 		if (18 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -462,7 +462,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		if (24 == m_pModelCom->Get_iCurrentAnimIndex()) 
+		if (24 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{//0.1
@@ -567,6 +567,154 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 6.0f);
+			}
+		}
+
+		if (45 == m_pModelCom->Get_iCurrentAnimIndex())	// 공격하고 착지
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.62
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+			}
+		}
+
+		if (52 == m_pModelCom->Get_iCurrentAnimIndex())	// 점프
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.07
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+		}
+
+		if (55 == m_pModelCom->Get_iCurrentAnimIndex())	// 점프 착지
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+			}
+		}
+
+		if (57 == m_pModelCom->Get_iCurrentAnimIndex())	// Run
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+			else if (1 == m_iEvent_Index)
+			{// 0.20
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+			else if (2 == m_iEvent_Index)
+			{// 0.44
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (58 == m_pModelCom->Get_iCurrentAnimIndex())	// Run End
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.10
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (ANIM_STEP_BACK == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_STEP_FRONT == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_STEP_LEFT == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_STEP_RIGHT == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.4
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (93 == m_pModelCom->Get_iCurrentAnimIndex()) // Blow Fall
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.04
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (94 == m_pModelCom->Get_iCurrentAnimIndex()) // Blow 데구르르
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.25
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (1 == m_iEvent_Index)
+			{// 0.52
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (2 == m_iEvent_Index)
+			{// 0.96
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (3 == m_iEvent_Index)
+			{// 1.75
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (95 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.45
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (97 == m_pModelCom->Get_iCurrentAnimIndex()) // BoundFall
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.04
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+
+		if (112 == m_pModelCom->Get_iCurrentAnimIndex()) // Fall
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.05
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+
+		if (118 == m_pModelCom->Get_iCurrentAnimIndex()) // SpinFall
+		{
+			if (0 == m_iEvent_Index)
+			{// 0.00
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
 			}
 		}
 
@@ -1258,11 +1406,17 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
+
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			m_isConnectHitting = true;
+
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
 
 		m_dDelay_ComboChain = 1.0;
@@ -1324,6 +1478,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_BIG_FRONT);
 			m_dDelay_ComboChain = 1.7;
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1340,6 +1497,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
 		Jumping(1.85f, 0.03f);
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1378,6 +1538,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
 		}
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1406,6 +1569,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		Jumping(1.2f, 0.05f);
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1426,6 +1592,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_dDelay_ComboChain = 5.5;
 
 		m_pModelCom->Set_Animation(ANIM_DEATH);
+
+		Play_HitEffect();
+
 	}
 #pragma endregion
 
@@ -1446,6 +1615,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isHekireki_Hit = true;
 		m_dHekireki_Hit = 0.0;
+
+		Play_HitEffect();
+		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		/*if (m_isJumpOn == false)
 		{
 			Jumping(1.85f, 0.03f);
