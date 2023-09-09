@@ -33,9 +33,6 @@ HRESULT CSwamp_SmokeEffect::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectWDesc.vPos + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
 
-	m_fAlpha = 0.f;
-
-	m_fAlphaDecreseSpeed = 3.f;
 
 	return S_OK;
 }
@@ -47,10 +44,10 @@ void CSwamp_SmokeEffect::Tick(_double TimeDelta)
 	if (m_fAlpha > 0.7f)
 	{
 		m_fAlpha = 0.7f;
-		m_fAlphaDecreseSpeed = -0.5f;
+		m_fAlphaSpeed = -0.5f;
 	}
 
-	m_fAlpha += m_fAlphaDecreseSpeed * (_float)TimeDelta;
+	m_fAlpha += m_fAlphaSpeed * (_float)TimeDelta;
 
 	m_pTransformCom->Set_Speed(m_dSpeedY);
 	m_pTransformCom->Go_Up(TimeDelta);

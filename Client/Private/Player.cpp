@@ -72,7 +72,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 
-	
 	return S_OK;
 }
 

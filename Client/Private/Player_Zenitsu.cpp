@@ -185,6 +185,7 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		else if (m_bMotionBlur == false)
 			m_bMotionBlur = true;
 	}
+
 	Safe_Release(pGameInstance);
 
 
@@ -638,6 +639,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
 				CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
 
+			
 		}
 
 #pragma endregion
@@ -657,6 +659,10 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
 					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
+
+				
+				
+				
 			}
 			else if (1 == m_iEvent_Index) {
 
@@ -668,6 +674,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom , &EffectWorldDesc);
 
+				
+
 			}
 			else if (2 == m_iEvent_Index) {
 
@@ -678,6 +686,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 
 			}
 		}
@@ -753,9 +763,30 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 #pragma region Step
-		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_BATTLE_STEP_B == m_pModelCom->Get_iCurrentAnimIndex())	// 68
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_BATTLE_STEP_F == m_pModelCom->Get_iCurrentAnimIndex())	// 69
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())	// 70
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+
+			else if (1 == m_iEvent_Index)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
@@ -766,13 +797,34 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		}
 		else if (71 == m_pModelCom->Get_iCurrentAnimIndex()) {
 
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+
+			if (1 == m_iEvent_Index)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.f;
 
 				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
+		if (72 == m_pModelCom->Get_iCurrentAnimIndex())	// 72
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (73 == m_pModelCom->Get_iCurrentAnimIndex())	// 73
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 			}
 		}
 
@@ -902,8 +954,87 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 #pragma endregion
 
+#pragma region Run & DmgDown
+		if (59 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+			}
+		}
+
+		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 62
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+			else if (1 == m_iEvent_Index) // 0.16
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+			else if (2 == m_iEvent_Index) // 0.38
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// Blow 떨어짐
+		{
+			if (0 == m_iEvent_Index)	// 0.04
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (87 == m_pModelCom->Get_iCurrentAnimIndex())	// Big Blow 데구르르르
+		{
+			if (0 == m_iEvent_Index)	// 0.23
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+			else if (1 == m_iEvent_Index) // 0.5
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (2 == m_iEvent_Index) // 0.95
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+		}
+
+		if (101 == m_pModelCom->Get_iCurrentAnimIndex())	// Dmg Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (111 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (114 == m_pModelCom->Get_iCurrentAnimIndex())	// UpperBlow Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
 
 
+#pragma endregion
 
 		m_iEvent_Index++;
 	}

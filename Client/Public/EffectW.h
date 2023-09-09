@@ -51,6 +51,11 @@ public:
 
 		_bool	bWorld = { false };
 
+		_float	fAlpha = { 0.f };
+		_float	fAlphaSpeed = { 0.f };
+
+		_float2	vColor = { 0.f , 0.f };
+
 	}EFFECTWDESC;
 
 protected:
@@ -99,7 +104,12 @@ protected:
 	
 
 protected:
-	_bool					m_IsPlaying = { false };				
+	_bool					m_IsPlaying = { false };
+	
+	_float					m_fAlpha = { 0.f };
+	_float					m_fAlphaSpeed = { 0.f };
+
+	_float					m_fColor = { 0.f };
 
 public:
 	virtual void Free() override;

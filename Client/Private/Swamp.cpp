@@ -410,9 +410,11 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPSMOKE;
 			EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
 
+			EffectWDesc.vFrameSpeed = { 0.035f, 0.045f };
 			EffectWDesc.vStartPosX = { -3.0f,3.0f }; EffectWDesc.vStartPosY = { 0.5f,2.0f }; EffectWDesc.vStartPosZ = { -3.f,3.f };
 			EffectWDesc.vStartSizeX = { 1.f , 1.5f }; EffectWDesc.vStartSizeY = { 3.00f , 5.00f };
 			EffectWDesc.vSpeedY = { 0.5f , 1.f }; 
+			EffectWDesc.fAlpha = 0.f; EffectWDesc.fAlphaSpeed = 3.f;
 		
 			_uint iNum = Random::Generate_Int(3, 5);
 
