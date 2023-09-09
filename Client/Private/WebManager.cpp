@@ -39,7 +39,7 @@ void CWebManager::Initialize()
 	m_dDelay_Akaza = 0.0;
 	m_isFirst_Akaza = true;
 
-
+	
 
 	m_WebBallPos[0] = { 199.07f, 7.44f, 404.06f, 1.0f };
 	m_WebBallPos[1] = { 200.1f, 7.6f, 404.06f, 1.0f };
@@ -60,8 +60,10 @@ void CWebManager::Tick(_double dTimeDelta)
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 	
-	m_pTransformCom = pPlayer->Get_TransformCom();
-
+	if (pPlayer != nullptr)
+	{
+		m_pTransformCom = pPlayer->Get_TransformCom();
+	}
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
@@ -133,7 +135,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.15f, 0.50f);
+				m_fLimit_First = Random::Generate_Float(0.2f, 0.55f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -154,7 +156,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.13f, 0.45f);
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.55f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -175,7 +177,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.15f, 0.40f);
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.50f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -262,7 +264,7 @@ void CWebManager::Shoot_JikWeb()
 	_float4		ShotDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 
 	_int		iRandomTurn_Idx = Random::Generate_Int(0, 5);
-	_float		Turn = Random::Generate_Float(-75.f, 75.f);
+	_float		Turn = Random::Generate_Float(-65.f, 65.f);
 
 
 	_float4 PlayerPos;

@@ -71,6 +71,12 @@ private:
 	
 	_float		m_fUv_Web = { 1.0f };
 
+
+	//히트시 삭제 관련
+	_bool		m_isHit = { false };
+	_bool		m_isFirst_Hit = { true };
+	_float		m_fAlphaCut = { 0.1f };
+
 private:
 	HRESULT Add_Components();
 	HRESULT SetUp_ShaderResources(_int icross);

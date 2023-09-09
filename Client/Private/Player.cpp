@@ -14,6 +14,8 @@
 #include "OptionManager.h"
 #include "Camera_Manager.h"
 
+#include "WebManager.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -413,6 +415,14 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
+			m_Moveset.m_Down_Dmg_Web = true;
+			
+		}
+
+		if (CPlayerManager::GetInstance()->Get_Hit_WebShot())
+		{
+			CPlayerManager::GetInstance()->Set_Hit_WebShot(false);
 
 			m_Moveset.m_Down_Dmg_Web = true;
 		}
