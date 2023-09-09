@@ -141,6 +141,10 @@ private: //애니메이션 제어용 변수들
 	_float4 m_ResetPos[4];
 	_int	m_iResetIndex = { 0 }; // 3이 자코방 앞
 
+	//스왐프 관련
+	_bool	m_isFirst_SwampUi = { true };
+	_bool	m_isFirst_SwampHit = { true };
+	_double m_dDelay_SwampHit_Again = { 0.0 };
 
 private:
 	/* 임시 코드 */

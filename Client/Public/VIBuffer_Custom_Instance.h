@@ -17,9 +17,13 @@ public:
 	typedef struct tagVIB_CustomParticleDesc
 	{
 		PARTICLE_TYPE	eParticleType = { TYPE_SIZE };
-		_float	fTickPerSize = { 1.f };
-		_float3	vTickPerDir = { 1.f, 1.f, 1.f };
-		_int3	vDirOption = { 1, 1, 1 };
+		_float		fLifeTime = { 1.f };
+		_float		fTickPerSize = { 1.f };
+		_float3		vTickPerDir = { 1.f, 1.f, 1.f };
+		_int3		vDirOption = { 1, 1, 1 };
+		_double		dSpriteSpeed = { 1.0 };
+		_int2		vSpriteCount = { 1, 1 };
+
 		CVIBuffer_Point_Instance::INSTANCEDESC		InstanceDesc;
 	}VIB_CUSTOMPARTDESC;
 private:
@@ -37,6 +41,8 @@ public:
 
 private:
 	VIB_CUSTOMPARTDESC	m_CustomPartDesc;
+	_double				m_dTimeAcc = { 0.0 };
+	_double				m_dCycle = { 1.0 };
 
 private:
 	void Tick_Size(_double dTimeDelta);
