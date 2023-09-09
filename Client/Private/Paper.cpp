@@ -51,7 +51,7 @@ HRESULT CPaper::Initialize(void * pArg)
 		
 		m_Origin_X = 860.f;
 		m_Origin_Y = 592.f;
-		m_Size_Param = 0.8f;
+		m_Size_Param = 0.67f;
 		m_UI_Layer = 11;
 	}
 
@@ -62,11 +62,11 @@ HRESULT CPaper::Initialize(void * pArg)
 
 	Set_UI();
 
-	m_szText_0.push_back(L"장구 소리에 귀를 기울여라");
+	m_szText_0.push_back(L"피가 필요해...희귀혈이...!!!");
 
-	m_szText_1.push_back(L"항상 주위를 경계하라");
+	m_szText_1.push_back(L"누구도..이 집에서 빠져나갈 순 없다");
 	
-	m_szText_2.push_back(L"피 냄새를 쫓아 나에게 와라");
+	m_szText_2.push_back(L"소생은 반드시 다시 십이귀월이..!");
 	
 	
 	return S_OK;
@@ -212,24 +212,24 @@ HRESULT CPaper::Render()
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 
-		/*if (m_UI_Desc.m_Paper_Type == 0) {
+		if (m_UI_Desc.m_Paper_Type == 0) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_0[0].c_str(), _float2((_float)m_fX - 200.f 
-				, (_float)m_fY), _float2(0.6f, 0.6f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_0[0].c_str(), _float2((_float)m_fX - 140.f 
+				, (_float)m_fY - 25.f), _float2(0.6f, 0.6f), XMVectorSet(1.f, 0.f, 0.f, 1.f))))
 				return E_FAIL;
 		}
 		else if (m_UI_Desc.m_Paper_Type == 1) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[0].c_str(), _float2((_float)m_fX - 200.f
-				, (_float)m_fY), _float2(0.6f, 0.6f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_1[0].c_str(), _float2((_float)m_fX - 180.f
+				, (_float)m_fY - 25.f), _float2(0.6f, 0.6f), XMVectorSet(1.f, 0.f, 0.f, 1.f))))
 				return E_FAIL;
 		}
 		else if (m_UI_Desc.m_Paper_Type == 2) {
 
-			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[0].c_str(), _float2((_float)m_fX - 200.f
-				, (_float)m_fY), _float2(0.6f, 0.6f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szText_2[0].c_str(), _float2((_float)m_fX - 170.f
+				, (_float)m_fY - 25.f), _float2(0.6f, 0.6f), XMVectorSet(1.f, 0.f, 0.f, 1.f))))
 				return E_FAIL;
-		}*/
+		}
 		
 
 		Safe_Release(pGameInstance);

@@ -77,6 +77,11 @@ void CNPC::Tick(_double dTimeDelta)
 		}
 	
 	}
+	else {
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE) {
+			CDialogManager::GetInstance()->Set_Dialog_Type(99);
+		}
+	}
 
 	
 
