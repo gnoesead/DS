@@ -948,12 +948,15 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		m_Moveset.m_Down_Battle_Awaken = true;
 		m_StatusDesc.iSpecial_Cnt--;
 
+		m_StatusDesc.fMp = m_StatusDesc.fMp_Max;
+
 		if (m_Moveset.m_iAwaken == 0)
 		{
 			m_Moveset.m_iAwaken = 1;
 			m_StatusDesc.iAwaken = 1;
 			m_StatusDesc.isAwaken_First = true;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
+
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{

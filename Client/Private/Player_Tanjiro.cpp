@@ -430,6 +430,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
+	_float fDmg = 1.0f;
+	if (m_Moveset.m_iAwaken == 1)
+		fDmg = 1.2f;
+	else if (m_Moveset.m_iAwaken == 2)
+		fDmg = 1.5f;
+
+
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
@@ -456,7 +463,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -475,7 +482,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -487,7 +494,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 
 		}
@@ -510,7 +517,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 
@@ -527,7 +534,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -536,7 +543,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -545,7 +552,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
-					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) // Combo_Normal
@@ -561,7 +568,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Up
@@ -580,7 +587,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (27 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Surge_Attack
@@ -589,7 +596,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.5,
-					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 9.0f);
+					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 9.0f * fDmg);
 			}
 		}
 
@@ -612,7 +619,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (30 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_
@@ -628,7 +635,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -648,31 +655,31 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (5 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f * fDmg);
 			}
 		}
 
@@ -692,27 +699,27 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (41 == m_pModelCom->Get_iCurrentAnimIndex()) // SKILL_MOVE µµÁß
@@ -720,7 +727,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 			}
 			
 		}
@@ -733,7 +740,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
 			}
@@ -749,7 +756,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			
 		}
@@ -774,7 +781,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 5.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -794,12 +801,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -807,7 +814,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_DecalParticle", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
