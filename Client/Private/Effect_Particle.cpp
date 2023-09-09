@@ -172,6 +172,12 @@ HRESULT CEffect_Particle::SetUp_ShaderResources(void)
 	if (FAILED(__super::SetUp_ShaderResources()))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fTextureOrder", (void*)&m_eEffectDesc.fTextureOrder, sizeof(float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fCameraRightLookPos", (void*)&m_vCameraRightLookPos, sizeof(_float2))))
+		return E_FAIL;
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bAlignToDir", (void*)&m_eEffectDesc.isAlignToDirection, sizeof(_bool))))
 		return E_FAIL;
 
@@ -226,6 +232,31 @@ void CEffect_Particle::Set_Initial_Data(void)
 	__super::Set_Initial_Data();
 
 	m_pVIBufferCom->InitialSetting();
+}
+
+void CEffect_Particle::Reset_Data(void)
+{
+	for (int i = 0; i < 3; ++i)
+		m_iCurSizeIndex[i] = 0;
+
+	for (int i = 0; i < 3; ++i)
+		m_iCurRotIndex[i] = 0;
+
+	for (int i = 0; i < 3; ++i)
+		m_iCurPosIndex[i] = 0;
+
+	m_iCurAlphaIndex = 0;
+
+	m_eEffectDesc.fTimeAcc = 0.f;
+	m_fDelayTimeAcc = 0.f;
+	m_fDiscardTimeAcc = 0.f;
+	m_fDissolveTimeAcc = 0.f;
+	m_fPaddingTimeStartAcc = 0.f;
+	m_fPaddingTimeEndAcc = 0.f;
+
+	m_fDissolveAmount = 0.f;
+
+	m_fLifeTime = m_eEffectDesc.fStartLifeTimeMin;
 }
 
 CEffect_Particle* CEffect_Particle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const char* pComponentTag)

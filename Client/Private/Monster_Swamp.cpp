@@ -57,7 +57,7 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : SwampHorn3");
 		return E_FAIL;
 	}
-
+	Get_PlayerComponent();
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 
@@ -103,27 +103,29 @@ void CMonster_Swamp::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-	
+
 	if (CMonsterManager::GetInstance()->Get_BattleOn_Swamp())
 	{
 		//d
 		__super::Tick(dTimeDelta);
-
-		if (m_isFirst_BattleOn)
+		if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 		{
-			m_isFirst_BattleOn = false;
-			CMonsterManager::GetInstance()->Set_BattleOn(true);
+			if (m_isFirst_BattleOn)
+			{
+				m_isFirst_BattleOn = false;
+				CMonsterManager::GetInstance()->Set_BattleOn(true);
+			}
+
+			Trigger();
+			Animation_Control(dTimeDelta);
+
+			//애니메이션 처리
+			m_pModelCom->Play_Animation(dTimeDelta);
+			RootAnimation(dTimeDelta);
+
+			//이벤트 콜
+			EventCall_Control(dTimeDelta);
 		}
-
-		Trigger();
-		Animation_Control(dTimeDelta);
-
-		//애니메이션 처리
-		m_pModelCom->Play_Animation(dTimeDelta);
-		RootAnimation(dTimeDelta);
-
-		//이벤트 콜
-		EventCall_Control(dTimeDelta);
 	}
 
 
@@ -154,8 +156,8 @@ void CMonster_Swamp::LateTick(_double dTimeDelta)
 	{
 
 		__super::LateTick(dTimeDelta);
-
-		Gravity(dTimeDelta);
+		if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+			Gravity(dTimeDelta);
 	}
 
 #ifdef _DEBUG
@@ -382,7 +384,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
-				CEffectPlayer::Get_Instance()->Play("Swamp_Land", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Land", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -420,7 +422,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_11", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_11", m_pTransformCom, &EffectWorldDesc);
 
 			}
 
@@ -438,7 +440,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_12", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_12", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			if (1 == m_iEvent_Index) // 0.3
@@ -455,7 +457,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.0f;
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_13", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_13", m_pTransformCom, &EffectWorldDesc);
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
 			}
@@ -466,8 +468,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BIG, AtkDir, 8.0f);
 
 				_vector vPlusPos = m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.5f;
-				
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD , vPlusPos);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD, vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN, vPlusPos);
 	
 				Create_StoneParticle(vPlusPos);
@@ -529,7 +531,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				EffectWorldDesc.vPosition.y += 0.3f;
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_24", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_24", m_pTransformCom, &EffectWorldDesc);
 
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.3f), 1.5,
 					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
@@ -543,7 +545,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_MySwampEffect();
 			}
 		}
-		
+
 		if (ANIM_STEP_SWAMPIN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)	// 0.4
@@ -579,7 +581,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		if(ANIM_STEP_F == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_STEP_F == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)	// 0
 			{
@@ -783,9 +785,9 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_eCurPattern = PATTERN_BIGSWAMP;
 	}
-	
+
 	//레이지 모드
-	if(CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
+	if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
 	{
 		m_dCooltime_Atk_Pattern += dTimeDelta;
 
@@ -1517,7 +1519,7 @@ void CMonster_Swamp::Animation_Control_Teleport_Shoryu(_double dTimeDelta)
 
 			Jumping(4.2f, 0.65f);
 
-	
+
 		}
 	}
 }
@@ -1559,7 +1561,7 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 	//Go_Dir_Deceleration(dTimeDelta, 8, 2.6f, 0.15f, m_SaveDir);
 	Go_Straight_Constant(dTimeDelta, 7, 2.6f);
 	Go_Straight_Deceleration(dTimeDelta, 8, 2.6f, 0.15f);
-	
+
 
 	if (iCurAnim == ANIM_ATK_SWAMP_SCREW)
 	{
@@ -1573,12 +1575,12 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 
 			//if (m_dSetDirAccTime > 0.8)
 			//{
-				XMStoreFloat4(&m_SaveDir, Calculate_Dir());
-				m_bSetDir = true;
-				m_dSetDirAccTime = 0.0;
-				m_bLandEffect[0] = false;
-				m_bLandEffect[1] = false;
-				m_bLandEffect[2] = false;
+			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
+			m_bSetDir = true;
+			m_dSetDirAccTime = 0.0;
+			m_bLandEffect[0] = false;
+			m_bLandEffect[1] = false;
+			m_bLandEffect[2] = false;
 			//}
 		}
 	}
@@ -1619,7 +1621,7 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 				m_dSetDirAccTime = 0.0;
 			}
 		}
-		
+
 		m_bMakeSwampAlertRect = false;
 
 		m_bSetDir = false;
@@ -2587,7 +2589,7 @@ HRESULT CMonster_Swamp::SetUp_ShaderResources()
 		return E_FAIL;
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix))) 
+	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
 

@@ -436,6 +436,24 @@
     <Filter Include="02. GameObjects\Character\Monster\Spider\Web">
       <UniqueIdentifier>{19db0fba-f920-48b2-859b-6b860fa9483a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Component\VIBuffer">
+      <UniqueIdentifier>{c4dd76a7-9728-4ef9-bf3c-61d79e4def09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Effect\CustomParticle">
+      <UniqueIdentifier>{5ed810cd-13fd-4aa2-87f6-e2b6d533087c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Effect\CustomParticle\Manager">
+      <UniqueIdentifier>{fe195ec4-dd95-48e8-bcdf-87dd191709e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\07.Gimmick\Timing">
+      <UniqueIdentifier>{7b431a55-524f-4ed0-8083-b95cdd09ce3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Cut_In\Akaza">
+      <UniqueIdentifier>{fe62ddbb-9785-4bc5-a3af-2afbb6181f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\UI\08.Mini_Game\Web">
+      <UniqueIdentifier>{8402ec33-5796-4232-9eb8-f7210a07ae80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -777,6 +795,24 @@
     <ClInclude Include="..\Public\WebShot.h">
       <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Custom_Instance.h">
+      <Filter>03. Component\VIBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CustomParticle.h">
+      <Filter>02. GameObjects\Effect\CustomParticle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ParticleManager.h">
+      <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Timing_UI.h">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Akaza_Awake_UI.h">
+      <Filter>02. GameObjects\UI\08.Cut_In\Akaza</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Web_UI.h">
+      <Filter>02. GameObjects\UI\08.Mini_Game\Web</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1109,6 +1145,24 @@
     <ClCompile Include="..\Private\WebShot.cpp">
       <Filter>02. GameObjects\Character\Monster\Spider\Web</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Custom_Instance.cpp">
+      <Filter>03. Component\VIBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CustomParticle.cpp">
+      <Filter>02. GameObjects\Effect\CustomParticle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ParticleManager.cpp">
+      <Filter>02. GameObjects\Effect\CustomParticle\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Timing_UI.cpp">
+      <Filter>02. GameObjects\UI\07.Gimmick\Timing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Akaza_Awake_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Cut_In\Akaza</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Web_UI.cpp">
+      <Filter>02. GameObjects\UI\08.Mini_Game\Web</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1149,6 +1203,9 @@
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Effect.hlsl">
+      <Filter>97. ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
       <Filter>97. ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

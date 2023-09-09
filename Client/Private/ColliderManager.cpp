@@ -7,6 +7,8 @@
 
 #include "PlayerManager.h"
 
+#include "WebManager.h"
+
 IMPLEMENT_SINGLETON(CColliderManager)
 
 CColliderManager::CColliderManager()
@@ -520,6 +522,8 @@ HRESULT CColliderManager::Check_MonsterAtkToPlayer(_uint iLevelIndex, _double dT
 							pPlayerCollider->Set_AtkDir(pAtkCollider->Get_AtkDir());
 							pPlayerCollider->Set_fDamage(pAtkCollider->Get_fDamage());
 
+
+							
 							
 						}
 					}

@@ -18,8 +18,6 @@ protected:
 	virtual ~CVIBuffer_Point_Instance() = default;
 
 public:
-	
-public:
 	virtual HRESULT Initialize_Prototype(_uint iNumInstance);
 	virtual HRESULT Initialize(void* pArg) override;
 

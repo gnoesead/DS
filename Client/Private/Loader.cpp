@@ -49,6 +49,10 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Akaza_Awake_UI.h"
+#include "Timing_UI.h"
+#include "Web_UI.h"
+
 
 
 #include "NPC_Female.h"
@@ -86,6 +90,9 @@
 #include "SmeshStone.h"
 #include "Aurora.h"
 #include "WebShot.h"
+
+#include "VIBuffer_Custom_Instance.h"
+#include "CustomParticle.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -242,6 +249,58 @@ HRESULT CLoader::LoadingForLogo()
 
 	Load_MapObjectModel_AllStage(pGameInstance);
 
+#pragma region Buffer
+	/* Prototype_Component_VIBuffer_1000_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_1000_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 1000))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_1000_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_500_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_500_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 500))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_500_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_100_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_100_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 100))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_100_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_50_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_50_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 50))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_50_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_20_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_20_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 20))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_20_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_10_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_10_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 10))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_10_Particle");
+		return E_FAIL;
+	}
+	/* Prototype_Component_VIBuffer_5_Particle */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_5_Particle"),
+		CVIBuffer_CustomParticle::Create(m_pDevice, m_pContext, 5))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_VIBuffer_5_Particle");
+		return E_FAIL;
+	}
+#pragma endregion
+
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Shader..."));
@@ -326,9 +385,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma endregion
 
 #pragma region EffectTexture
-
-
-
+	/* Prototype_Component_Shader_VtxNorTex */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE_DECL::Elements, VTXPOINTINSTANCE_DECL::iNumElements))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxPointInstance");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region UITexture
@@ -630,6 +693,14 @@ HRESULT CLoader::LoadingForLobby()
 #pragma region GAMEOBJECTS
 
 	SetWindowText(g_hWnd, TEXT("Loading GameObject..."));
+
+	/* Prototype_GameObject_AtkCollider */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CustomParticle"),
+		CCustomParticle::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_AtkCollider");
+		return E_FAIL;
+	}
 
 	/* Prototype_GameObject_AtkCollider */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AtkCollider"),
@@ -980,6 +1051,21 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Zenitsu_Awake_UI */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zenitsu_Awake_UI"),
 		Zenitsu_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Timing_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Timing_UI"),
+		CTiming_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Web_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Web_UI"),
+		Web_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Akaza_Awake_UI */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Akaza_Awake_UI"),
+		Akaza_Awake_UI::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion

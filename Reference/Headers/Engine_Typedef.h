@@ -21,6 +21,8 @@ namespace Engine
 
 	typedef		bool					_bool;
 
+	typedef		XMINT2					_int2;
+	typedef		XMINT3					_int3;
 	typedef		XMUINT3					_uint3;
 	typedef		XMFLOAT2				_float2;
 	typedef		XMFLOAT3				_float3;

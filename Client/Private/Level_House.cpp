@@ -30,7 +30,7 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
-
+#include "Timing_UI.h"
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -709,7 +709,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 // Icon
 	CFIcon::UIDESC UIDesc5;
-	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+	/*ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
 	UIDesc5.m_Type = 0;
 	UIDesc5.Pos = { 67.f, 0.f, 19.9f , 1.f };
@@ -719,7 +719,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 	ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
@@ -830,8 +830,26 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+// Timing_UI
+	CTiming_UI::UIDESC UIDesc9;
 
 
+    for (int i = 0; i < 7; i++) {
+		ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+		UIDesc9.m_Type = i;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+			TEXT("Prototype_GameObject_Timing_UI"), &UIDesc9))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+
+	
+
+	
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -2556,12 +2574,13 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
 			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
 			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
 			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
 			{
 				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
 				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
 			}
 

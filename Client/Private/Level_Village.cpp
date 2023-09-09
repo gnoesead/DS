@@ -32,6 +32,8 @@
 #include "Fade.h"
 #include "Fade_Manager.h"
 #include "Option.h"
+#include "Timing_UI.h"
+
 
 #include "PlayerManager.h"
 #include "OptionManager.h"
@@ -174,7 +176,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
 
-   /* if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
+    if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
     {
         _float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
@@ -264,7 +266,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
             pGameInstance->Set_Light(i, 1, vDiffuse);
         }
 
-    }*/
+    }
    
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
@@ -1857,6 +1859,23 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         TEXT("Prototype_GameObject_FIcon"), &UIDesc6))) {
         Safe_Release(pGameInstance);
         return E_FAIL;
+    }
+
+
+ // Timing_UI
+    CTiming_UI::UIDESC UIDesc7;
+
+
+    for (int i = 0; i < 7; i++) {
+        ZeroMemory(&UIDesc7, sizeof UIDesc7);
+
+        UIDesc7.m_Type = i;
+
+        if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
+            TEXT("Prototype_GameObject_Timing_UI"), &UIDesc7))) {
+            Safe_Release(pGameInstance);
+            return E_FAIL;
+        }
     }
 
    
@@ -3786,12 +3805,13 @@ HRESULT CLevel_Village::LoadEffects(const _tchar* pPath)
             inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
             inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
             inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+            pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
             _float2 vCameraRightLookPos = _float2(0.f, 0.f);
             inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
             if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
             {
                 CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-                pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
                 pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
             }
 

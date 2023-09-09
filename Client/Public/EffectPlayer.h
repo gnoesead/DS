@@ -84,7 +84,6 @@ public:
 	void Add_ParticlePool(const char* pEffectTag);
 	HRESULT Add_Particles_In_Pool(const char* pEffectTag, int iCnt = 1);
 
-
 private:
 	class CParticleSystem* Find_ParticleSystem(const char* pEffectTag);
 	list<class CParticleSystem*>* Find_ParticlePool(const char* pEffectTag);

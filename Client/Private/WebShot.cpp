@@ -14,6 +14,8 @@
 #include "Swamp.h"
 #include "WaterParticleEffect.h"
 
+#include "WebManager.h"
+
 CWebShot::CWebShot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMasterEffect(pDevice, pContext)
 {
@@ -56,8 +58,16 @@ HRESULT CWebShot::Initialize(void* pArg)
 	}
 
 
+	//Jik
+	if (m_WebDesc.iWebTexIndex == 32)
+	{
 
-	Initialize_Create_Coll();
+	}
+	else
+	{
+		Initialize_Create_Coll();
+	}
+	
 
 	return S_OK;
 }
@@ -71,6 +81,7 @@ void CWebShot::Tick(_double dTimeDelta)
 
 	Tick_For_Index(dTimeDelta);
 
+
 	//m_pTransformCom->Go_Dir(dTimeDelta * m_WebDesc.fSpeed, XMLoadFloat4(&m_WebDesc.vDir));
 	//m_pTransformCom->Go_Straight(dTimeDelta);
 }
@@ -81,6 +92,37 @@ void CWebShot::LateTick(_double dTimeDelta)
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
 		return;
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+	_float4 PlayerPos;
+	XMStoreFloat4(&PlayerPos, pPlayer->Get_TransformCom()->Get_State(CTransform::STATE_POSITION));
+
+	_float4 WebPos;
+	XMStoreFloat4(&WebPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	Safe_Release(pGameInstance);
+
+	if (WebPos.z < PlayerPos.z - 10.0f)
+	{
+		m_isDead = true;
+	}
+
+	
+	if (m_isHit)
+	{
+		m_fAlphaCut += 0.05f;
+		if (1.0f <= m_fAlphaCut )
+		{
+			m_isDead = true;
+		}
+	}
+
+	
+	m_fUv_Web -= 0.03f;
+
 #ifdef _DEBUG
 	/*if (FAILED(m_pRendererCom->Add_DebugGroup(m_pNavigationCom)))
 		return;*/
@@ -136,19 +178,19 @@ void CWebShot::Initialize_Create_Coll()
 	else if (m_WebDesc.iWebTexIndex == 32 )
 	{
 		_vector AtkDir = { 0.0f, 0.0f, -1.0f, 0.0f };
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(-0.3f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.25f, 0.05f), _float3(-0.3f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(-0.2f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(-0.2f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(-0.1f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(-0.1f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(0.0f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(0.0f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(0.1f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(0.1f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(0.2f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(0.2f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
-		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.03f, 0.05f, 0.05f), _float3(0.3f, 0.0f, 0.0f), 13.0,
+		Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.025f, 0.05f, 0.05f), _float3(0.3f, 0.0f, 0.0f), 13.0,
 			CAtkCollider::TYPE_WEB, AtkDir, 0.0f);
 	}
 	//콜라이더 한개 제작
@@ -178,24 +220,56 @@ void CWebShot::Tick_For_Index(_double dTimeDelta)
 	//m_pTransformCom->Go_Straight(dTimeDelta);
 
 	m_pTransformCom->Set_Look(m_WebDesc.vDir);
-	m_pTransformCom->Go_Straight(dTimeDelta);
 
 
 	//애로우
 	if (m_WebDesc.iWebTexIndex == 7)
 	{
-		
+		m_pTransformCom->Go_Straight(dTimeDelta * m_WebDesc.fSpeed);
 	}
 	//슬라이드웹
 	else if (m_WebDesc.iWebTexIndex == 13)
 	{
 		//m_WebDesc.fTurn
 		m_pTransformCom->Rotation(_float3{ 0.0f, m_WebDesc.fTurn, 0.0f });
+
+
+		m_pTransformCom->Go_Straight(dTimeDelta * m_WebDesc.fSpeed);
 	}
-	//직선
+	//직
 	else if (m_WebDesc.iWebTexIndex == 32 )
 	{
 		m_pTransformCom->Rotation(_float3{ 30.0f , m_WebDesc.fTurn, 90.0f });
+
+		m_pTransformCom->Go_Dir(dTimeDelta * m_WebDesc.fSpeed, XMLoadFloat4(& m_WebDesc.vDir));
+
+
+		if (m_isHit == false)
+		{
+			//충돌
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+			CTransform* pTransform = pPlayer->Get_TransformCom();
+			_float4 PlayerPos;
+			XMStoreFloat4(&PlayerPos, pTransform->Get_State(CTransform::STATE_POSITION));
+
+			if (Calculate_Distance_From_Pos(PlayerPos) < 0.7f)
+			{
+				m_isHit = true;
+				if (m_isFirst_Hit)
+				{
+					m_isFirst_Hit = false;
+					CPlayerManager::GetInstance()->Set_Hit_WebShot(true);
+				}
+			}
+			Safe_Release(pGameInstance);
+		}
+	}
+	else
+	{
+		m_pTransformCom->Go_Straight(dTimeDelta * m_WebDesc.fSpeed);
 	}
 
 }
@@ -411,6 +485,11 @@ HRESULT CWebShot::SetUp_ShaderResources(_int icross)
 		return E_FAIL;
 
 	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", m_WebDesc.iWebTexIndex)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Web", &m_fUv_Web, sizeof _float)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fWebAlpha", &m_fAlphaCut, sizeof _float)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

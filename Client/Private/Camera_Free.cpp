@@ -315,6 +315,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Side_Off = true;
 
 			m_vCameraAngle = 0.f;
+
+			CCameraManager::GetInstance()->Set_Is_Battle_LockFree(true);
 		}
 		else {
 			m_vCameraAngle = 10.f;
@@ -637,16 +639,28 @@ void CCamera_Free::BattleCamera(_double dTimeDelta)
 			m_vDist = XMVector3TransformNormal(m_vDist, RotationMatrix);
 
 			m_vDist = { XMVectorGetX(m_vDist), 0.1f ,XMVectorGetZ(m_vDist), XMVectorGetW(m_vDist) };
-
+			
 			m_vDist = XMVector3Normalize(m_vDist);
 		}
 		else {
-			m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
-			m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+				m_vOffSet = { 0.f, 1.7f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			else {
+				m_vOffSet = { 0.f, 2.f, 0.f, 0.f };
+				m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+			}
+			
 
 			m_fDistance = 7.f + m_Zoom;
 
-			Turn_Camera(dTimeDelta);
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {
+			}
+			else {
+				Turn_Camera(dTimeDelta);
+			}
+			
 
 			m_vDist = { XMVectorGetX(m_vDist), 0.3f ,XMVectorGetZ(m_vDist), 0.f };
 
@@ -898,9 +912,9 @@ void CCamera_Free::Ready_CutInFinish()
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam2);
 
 	// 아카자 각성
-	CutInCamDesc Akaza_Awake_1 = { false,false, 0.f, 0.f, 1.2f, 1.7f , false , {0.f, -0.3f ,0.f} };
-	CutInCamDesc Akaza_Awake_2 = { false,false, 5.f, 0.f, 0.8f, 0.3f , true , {0.f, -0.3f ,0.f} };
-	CutInCamDesc Akaza_Awake_3 = { false,false, 5.f, 5.f, 1.f, 2.5f , true , {0.f, -0.6f ,0.f} };
+	CutInCamDesc Akaza_Awake_1 = { false,false, 0.f, 0.f, 1.2f, 1.4f , false , {0.f, -0.3f ,0.f} };
+	CutInCamDesc Akaza_Awake_2 = { false,false, 0.f, 0.f, 0.9f, 0.6f , true , {0.f, -0.4f ,0.f} };
+	CutInCamDesc Akaza_Awake_3 = { false,false, 0.f, 5.f, 1.4f, 2.5f , true , {0.f, -0.6f ,0.f} };
 
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_1);
 	m_Cut_In_Finish[AKAZA_AWAKE].push_back(Akaza_Awake_2);

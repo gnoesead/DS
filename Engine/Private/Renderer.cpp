@@ -1551,6 +1551,7 @@ HRESULT CRenderer::Render_Effect_Particle()
         return E_FAIL;
     if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
         return E_FAIL;
+    m_fParticle_BrightRatio = 1.5f;
     if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBrigthRatio", &m_fParticle_BrightRatio, sizeof(_float))))
         return E_FAIL;
 

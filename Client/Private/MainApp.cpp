@@ -27,6 +27,7 @@
 #include "PlayerManager.h"
 #include "EffectW_Manager.h"
 #include "WebManager.h"
+#include "ParticleManager.h"
 
 
 CMainApp::CMainApp()
@@ -131,11 +132,12 @@ void CMainApp::Tick(_double dTimeDelta)
 	}
 
 	m_TimeAcc += dTimeDelta;
+
+
 #ifdef _DEBUG
 	Key_Input(dTimeDelta);
-
-	
 #endif
+
 }
  
 HRESULT CMainApp::Render()
@@ -592,6 +594,26 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma region Jump_UI	
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Circle_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Timing_%d.png"), 3))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Light_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Light.png")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Light_Sprite_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Light_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Spike1_Sprite_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Spike1_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Spike2_Sprite_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Spike2_%d.png"), 2))))
+		return E_FAIL;
+
 	
 
 #pragma endregion	
@@ -599,6 +621,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma region CutIn_UI	
 
+	// Zenitsu
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/%d.png"),5))))
 		return E_FAIL;
@@ -611,12 +634,22 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/Elc/ELC_Face_000%d.png"), 20))))
 		return E_FAIL;
 
+	// Akaza
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Akaza_CutIn_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Akaza_CutIn/%d.png"), 5))))
+		return E_FAIL;
+
+
 #pragma endregion	
 
 
 #pragma region MiniGame_UI	
 
-	
+	// Web
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Web_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Web/Web_%d.png"), 4))))
+		return E_FAIL;
+
 
 #pragma endregion	
 
@@ -965,6 +998,8 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 
 	CSoundMgr::Get_Instance()->StopAll();
+
+	CParticleManager::GetInstance()->DestroyInstance();
 
 	CAtkCollManager::GetInstance()->DestroyInstance();
 	CMonsterManager::GetInstance()->DestroyInstance();

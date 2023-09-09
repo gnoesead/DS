@@ -51,6 +51,8 @@ private:
 	vector<CMasterEffect::LIFETIMEVALUE>	m_SizeOverLifeTimesX;
 	vector<CMasterEffect::LIFETIMEVALUE>	m_SizeOverLifeTimesY;
 
+	vector<CMasterEffect::LIFETIMEVALUE>	m_AlphaOverLifeTime;
+
 public:
 	static CVIBuffer_Point_Instance_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iNumInstance);
 	virtual CComponent* Clone(void* pArg) override;

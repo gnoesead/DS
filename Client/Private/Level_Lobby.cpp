@@ -1774,6 +1774,31 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 
 
 #pragma region DS_SHAREEFFECT
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Big.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Big");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Medium.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Medium");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Small.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Stomp_Small");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Big.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Medium");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_Medium.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Medium");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shockwave_XYZ_Small.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Shockwave_Small");
@@ -2157,12 +2182,13 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iC
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fMaxParticleSize), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vPivot), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fTextureOrder), sizeof(float));
+			pParticleSystem->Get_Effect()->Set_Order(EffectDesc.fTextureOrder);
+
 			_float2 vCameraRightLookPos = _float2(0.f, 0.f);
 			inputFile.read(reinterpret_cast<char*>(&vCameraRightLookPos), sizeof(_float2));
 			if (CEffect::EFFECT_TEXTURE == EffectDesc.eEffectType)
 			{
 				CEffect_Texture* pTextureEffect = dynamic_cast<CEffect_Texture*>(pParticleSystem->Get_Effect());
-				pTextureEffect->Set_Order(EffectDesc.fTextureOrder);
 				pTextureEffect->Set_CameraRightLookPos(vCameraRightLookPos);
 			}
 
