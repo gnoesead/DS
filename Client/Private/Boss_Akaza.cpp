@@ -572,9 +572,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
-				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN);
-
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
@@ -805,8 +802,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
-				/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);*/
 			}
 			else
 			{
@@ -834,9 +829,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
 
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
-
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -853,9 +845,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -877,11 +866,6 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_Z", m_pTransformCom);*/
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
