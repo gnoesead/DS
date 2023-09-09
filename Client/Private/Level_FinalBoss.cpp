@@ -25,6 +25,7 @@
 #include "Pause.h"
 #include "Option.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Akaza_Awake_UI.h"
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -1310,7 +1311,17 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
+// Zenitsu_Awake_UI
+	Zenitsu_Awake_UI::UIDESC UIDesc17;
+	ZeroMemory(&UIDesc17, sizeof UIDesc17);
 
+	UIDesc17.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Akaza_Awake_UI"), &UIDesc17))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 

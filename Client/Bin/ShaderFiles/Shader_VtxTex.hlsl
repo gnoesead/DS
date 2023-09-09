@@ -280,7 +280,7 @@ PS_OUT  PS_MAIN_BLACK_MASK(PS_IN In)
 	vector	vColor = g_Texture.Sample(LinearSampler, In.vTexUV);
 
 
-	vColor.w *= vColor.r;
+	vColor.w *= vColor.r * g_Alpha;
 
 
 	Out.vColor = vColor;
