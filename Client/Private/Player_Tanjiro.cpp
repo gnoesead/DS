@@ -47,7 +47,8 @@ HRESULT CPlayer_Tanjiro::Initialize_Prototype()
 
 HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 {
-	
+	m_ePlayerType = PLAYER_TANJIRO;
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -196,7 +197,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4),
 	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
 	//}
-	if (pGameInstance->Get_DIKeyDown(DIK_B))
+	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
 	}

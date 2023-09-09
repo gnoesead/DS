@@ -33,6 +33,8 @@ HRESULT CPlayer_Zenitsu::Initialize_Prototype()
 
 HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 {
+	m_ePlayerType = PLAYER_ZENITSU;
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -739,6 +741,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f);

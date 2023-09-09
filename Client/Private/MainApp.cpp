@@ -621,6 +621,7 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma region CutIn_UI	
 
+	// Zenitsu
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Zenitsu_CutIn_UI"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/%d.png"),5))))
 		return E_FAIL;
@@ -633,12 +634,22 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Zenitsu_CutIn/Elc/ELC_Face_000%d.png"), 20))))
 		return E_FAIL;
 
+	// Akaza
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Akaza_CutIn_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Akaza_CutIn/%d.png"), 5))))
+		return E_FAIL;
+
+
 #pragma endregion	
 
 
 #pragma region MiniGame_UI	
 
-	
+	// Web
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Web_UI"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Web/Web_%d.png"), 4))))
+		return E_FAIL;
+
 
 #pragma endregion	
 

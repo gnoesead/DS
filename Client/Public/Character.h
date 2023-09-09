@@ -101,6 +101,9 @@ public:
 
 public:
 	CTransform* Get_TransformCom();
+	CModel* Get_ModelCom() {
+		return m_pModelCom;
+	}
 	CCollider* Get_ColliderCom() { return m_pColliderCom[CCollider::TYPE_SPHERE]; }
 	_bool	Get_IsJumpOn() { return m_isJumpOn; }
 

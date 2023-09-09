@@ -176,7 +176,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
 
-   /* if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
+    if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
     {
         _float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
@@ -266,7 +266,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
             pGameInstance->Set_Light(i, 1, vDiffuse);
         }
 
-    }*/
+    }
    
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {

@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+#include "Boss_Akaza.h"
+
 IMPLEMENT_SINGLETON(CWebManager)
 
 CWebManager::CWebManager()
@@ -109,7 +111,7 @@ void CWebManager::Tick(_double dTimeDelta)
 
 	/*
 		PlayerPos.y += 1.5f;
-		
+
 		Shoot_ArrowWeb(PlayerPos, Dir);
 		Shoot_WebBall();
 		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
@@ -190,6 +192,17 @@ void CWebManager::Tick(_double dTimeDelta)
 		if (m_isFirst_Akaza)
 		{
 			m_isFirst_Akaza = false;
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			CBoss_Akaza::CHARACTERDESC CharacterDesc;
+			ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+
+			CharacterDesc.WorldInfo.vPosition = _float4(204.9f, 0.f, 380.f, 1.f);
+			pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_NPC"),
+				TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc);
+
+			Safe_Release(pGameInstance);
 
 		}
 	}
@@ -280,7 +293,7 @@ void CWebManager::Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn
 	Create_WebShot(13, CreatePos, _float3{ 17.0f, 8.0f, 6.0f }, ShotDir, 1.0f);
 }
 
-void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed, 
+void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _double Speed,
 	CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag)
 {
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -324,5 +337,5 @@ void CWebManager::Make_WebBullet(_float3 Size, _float3 Pos, _vector vAtkDir, _do
 
 void CWebManager::Free()
 {
-	
+
 }

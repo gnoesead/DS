@@ -27,11 +27,13 @@
 #include "Option.h"
 #include "ColliderManager.h"
 #include "Zenitsu_Awake_UI.h"
+#include "Boss_Akaza.h"
 
 #include "PlayerManager.h"
 #include "WebManager.h"
 #include "Camera_Manager.h"
 #include "OptionManager.h"
+#include "Web_UI.h"
 
 #include "Effect.h"
 #include "Effect_Texture.h"
@@ -51,6 +53,8 @@ HRESULT CLevel_Train::Initialize()
 	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
+
+	CWebManager::GetInstance()->Reset();
 
     if (FAILED(Ready_Lights()))
     {
@@ -339,7 +343,7 @@ HRESULT CLevel_Train::Ready_Layer_Monster(const _tchar* pLayerTag)
 }
 
 HRESULT CLevel_Train::Ready_Layer_Boss(const _tchar* pLayerTag)
-{
+{	
 	return S_OK;
 }
 
@@ -696,6 +700,18 @@ HRESULT CLevel_Train::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 	
+	
+// Web_UI
+	Web_UI::UIDESC UIDesc4;
+	ZeroMemory(&UIDesc4, sizeof UIDesc4);
+
+	UIDesc4.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Web_UI"), &UIDesc4))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 

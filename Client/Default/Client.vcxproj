@@ -177,6 +177,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Akaza_Awake_UI.h" />
     <ClInclude Include="..\Public\AlertCircle.h" />
     <ClInclude Include="..\Public\AlertRect.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
@@ -290,6 +291,7 @@
     <ClInclude Include="..\Public\WaterParticleEffect.h" />
     <ClInclude Include="..\Public\WebManager.h" />
     <ClInclude Include="..\Public\WebShot.h" />
+    <ClInclude Include="..\Public\Web_UI.h" />
     <ClInclude Include="..\Public\World_UI_Hp.h" />
     <ClInclude Include="..\Public\Zenitsu_Awake_UI.h" />
     <ClInclude Include="Client.h" />
@@ -299,6 +301,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\Akaza_Awake_UI.cpp" />
     <ClCompile Include="..\Private\AlertCircle.cpp" />
     <ClCompile Include="..\Private\AlertRect.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
@@ -411,6 +414,7 @@
     <ClCompile Include="..\Private\WaterParticleEffect.cpp" />
     <ClCompile Include="..\Private\WebManager.cpp" />
     <ClCompile Include="..\Private\WebShot.cpp" />
+    <ClCompile Include="..\Private\Web_UI.cpp" />
     <ClCompile Include="..\Private\World_UI_Hp.cpp" />
     <ClCompile Include="..\Private\Zenitsu_Awake_UI.cpp" />
     <ClCompile Include="Client.cpp" />

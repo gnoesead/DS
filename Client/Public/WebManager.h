@@ -38,7 +38,11 @@ public: // °Ù¼Â
 	void	Set_TransformCom(CTransform* pTransform) { 
 		m_pTransformCom = pTransform;
 	}
-	
+	void	Reset() {
+		m_isTrigger_Akaza = false;
+		m_isFirst_Akaza = true;
+		m_iTrigger_Index = 1;
+	}
 
 	_bool	Get_Trigger_Akaza() { return m_isTrigger_Akaza; }
 	
