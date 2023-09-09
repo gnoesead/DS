@@ -42,6 +42,7 @@ public:
 		
 		_bool		bBullet;
 		char		pEffectTag[MAX_PATH] = { "" };
+
 		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 	}ATKCOLLDESC;
 private:

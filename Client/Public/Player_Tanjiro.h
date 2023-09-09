@@ -98,7 +98,7 @@ private: //애니메이션 제어용 함수들
 	
 
 private:
-	void Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
+	void	Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
 
 private:
 	CSword* m_pSword = { nullptr };
@@ -116,8 +116,6 @@ private:
 private: //애니메이션 제어용 변수들
 	//Move
 	_float	m_fMove_Speed = { 20.0f  }; 
-
-	
 
 
 	//오의 용
@@ -142,9 +140,7 @@ private: //애니메이션 제어용 변수들
 	// 위치 지정
 	_float4 m_ResetPos[4];
 	_int	m_iResetIndex = { 0 }; // 3이 자코방 앞
-	
-private:
-	
+
 
 private:
 	/* 임시 코드 */

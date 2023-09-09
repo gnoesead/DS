@@ -23,6 +23,7 @@ float			g_fRatio;
 float			g_fColor;
 
 float			g_Web;
+float			g_fWebAlpha;
 
 
 struct VS_IN
@@ -597,7 +598,10 @@ PS_OUT  PS_WEB(PS_IN In)
 
 	if (In.vTexUV.x < g_Web)
 		discard;
-	
+
+
+	if (Out.vColor.r < g_fWebAlpha)
+		discard;
 
 	return Out;
 }

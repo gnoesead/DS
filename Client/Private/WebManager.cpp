@@ -41,7 +41,7 @@ void CWebManager::Initialize()
 	m_dDelay_Akaza = 0.0;
 	m_isFirst_Akaza = true;
 
-
+	
 
 	m_WebBallPos[0] = { 199.07f, 7.44f, 404.06f, 1.0f };
 	m_WebBallPos[1] = { 200.1f, 7.6f, 404.06f, 1.0f };
@@ -58,18 +58,19 @@ void CWebManager::Initialize()
 void CWebManager::Tick(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//Safe_AddRef(pGameInstance);
+	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 	
-	if(pPlayer != nullptr)
-	m_pTransformCom = pPlayer->Get_TransformCom();
-
+	if (pPlayer != nullptr)
+	{
+		m_pTransformCom = pPlayer->Get_TransformCom();
+	}
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
 	
-	//Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
 #pragma region TriggerSet
 	//Trigger onoff
@@ -120,71 +121,71 @@ void CWebManager::Tick(_double dTimeDelta)
 	*/
 
 #pragma region Event
-	//m_dDelay_All += dTimeDelta;
+	m_dDelay_All += dTimeDelta;
 
-	////첫 거미줄 웨이브
-	//if (m_isTrigger_First)
-	//{
-	//	if (m_dDelay_All > 10.0f)
-	//	{
-	//		m_dDelay_All = 0.0;
-	//		m_isTrigger_First = false;
-	//	}
-	//	else
-	//	{
-	//		m_dDelay_First += dTimeDelta;
-	//		if (m_fLimit_First < m_dDelay_First)
-	//		{
-	//			m_dDelay_First = 0.0;
-	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+	//첫 거미줄 웨이브
+	if (m_isTrigger_First)
+	{
+		if (m_dDelay_All > 7.0f)
+		{
+			m_dDelay_All = 0.0;
+			m_isTrigger_First = false;
+		}
+		else
+		{
+			m_dDelay_First += dTimeDelta;
+			if (m_fLimit_First < m_dDelay_First)
+			{
+				m_dDelay_First = 0.0;
+				m_fLimit_First = Random::Generate_Float(0.2f, 0.55f);
 
-	//			//Shoot_WebBall();
-	//			Shoot_JikWeb();
-	//		}
-	//	}
-	//}
-	////둘 거미줄 웨이브
-	//if (m_isTrigger_Second)
-	//{
-	//	if (m_dDelay_All > 10.0f)
-	//	{
-	//		m_dDelay_All = 0.0;
-	//		m_isTrigger_First = false;
-	//	}
-	//	else
-	//	{
-	//		m_dDelay_First += dTimeDelta;
-	//		if (m_fLimit_First < m_dDelay_First)
-	//		{
-	//			m_dDelay_First = 0.0;
-	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+				//Shoot_WebBall();
+				Shoot_JikWeb();
+			}
+		}
+	}
+	//둘 거미줄 웨이브
+	if (m_isTrigger_Second)
+	{
+		if (m_dDelay_All > 10.0f)
+		{
+			m_dDelay_All = 0.0;
+			m_isTrigger_Second = false;
+		}
+		else
+		{
+			m_dDelay_First += dTimeDelta;
+			if (m_fLimit_First < m_dDelay_First)
+			{
+				m_dDelay_First = 0.0;
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.55f);
 
-	//			//Shoot_WebBall();
-	//			Shoot_JikWeb();
-	//		}
-	//	}
-	//}
-	////셋 거미줄 웨이브
-	//if (m_isTrigger_Third)
-	//{
-	//	if (m_dDelay_All > 10.0f)
-	//	{
-	//		m_dDelay_All = 0.0;
-	//		m_isTrigger_First = false;
-	//	}
-	//	else
-	//	{
-	//		m_dDelay_First += dTimeDelta;
-	//		if (m_fLimit_First < m_dDelay_First)
-	//		{
-	//			m_dDelay_First = 0.0;
-	//			m_fLimit_First = Random::Generate_Float(0.1f, 0.40f);
+				//Shoot_WebBall();
+				Shoot_JikWeb();
+			}
+		}
+	}
+	//셋 거미줄 웨이브
+	if (m_isTrigger_Third)
+	{
+		if (m_dDelay_All > 14.0f)
+		{
+			m_dDelay_All = 0.0;
+			m_isTrigger_Third = false;
+		}
+		else
+		{
+			m_dDelay_First += dTimeDelta;
+			if (m_fLimit_First < m_dDelay_First)
+			{
+				m_dDelay_First = 0.0;
+				m_fLimit_First = Random::Generate_Float(0.15f, 0.50f);
 
-	//			//Shoot_WebBall();
-	//			Shoot_JikWeb();
-	//		}
-	//	}
-	//}
+				//Shoot_WebBall();
+				Shoot_JikWeb();
+			}
+		}
+	}
 	//아카자 이벤트
 	if (m_isTrigger_Akaza)
 	{
@@ -276,7 +277,7 @@ void CWebManager::Shoot_JikWeb()
 	_float4		ShotDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 
 	_int		iRandomTurn_Idx = Random::Generate_Int(0, 5);
-	_float		Turn = Random::Generate_Float(-75.f, 75.f);
+	_float		Turn = Random::Generate_Float(-65.f, 65.f);
 
 
 	_float4 PlayerPos;

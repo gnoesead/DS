@@ -47,7 +47,8 @@ HRESULT CPlayer_Tanjiro::Initialize_Prototype()
 
 HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 {
-	
+	m_ePlayerType = PLAYER_TANJIRO;
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
