@@ -45,8 +45,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-
-	Get_PlayerComponent();
+		
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -161,58 +160,58 @@ HRESULT CBoss_Akaza::Render()
 
 HRESULT CBoss_Akaza::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-	//Get_PlayerComponent();
+	//if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	//	return E_FAIL;
+	////Get_PlayerComponent();
 
-	//_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	////_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
+	//_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
+	//_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
 
-	/*if (m_pPlayerTransformCom != nullptr)
-	{
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-		vLightAt = vPlayerPos;
+	///*if (m_pPlayerTransformCom != nullptr)
+	//{
+	//	vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
+	//	vLightAt = vPlayerPos;
 
-	}*/
+	//}*/
 
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+	//_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+	//_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	//_float4x4   FloatLightViewMatrix;
+	//XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
 
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
+	//if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
+	//	&FloatLightViewMatrix)))
+	//	return E_FAIL;
 
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
+	//_matrix      LightProjMatrix;
+	//_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+	//LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
+	//XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+	//if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
+	//	&FloatLightProjMatrix)))
+	//	return E_FAIL;
 
 
-		m_pShaderCom->Begin(3);
+	//_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-		m_pModelCom->Render(i);
-	}
+	//for (_uint i = 0; i < iNumMeshes; i++)
+	//{
+	//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+	//		return E_FAIL;
+
+	//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+	//		return E_FAIL;
+
+
+	//	m_pShaderCom->Begin(3);
+
+	//	m_pModelCom->Render(i);
+	//}
 	return S_OK;
 }
 #ifdef _DEBUG

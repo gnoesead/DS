@@ -57,7 +57,7 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : SwampHorn3");
 		return E_FAIL;
 	}
-	Get_PlayerComponent();
+	
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 

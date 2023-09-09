@@ -49,7 +49,7 @@ HRESULT CMonster_Spider::Initialize(void* pArg)
 	}
 
 	First_Initiate();
-	Get_PlayerComponent();
+	
 	return S_OK;
 }
 

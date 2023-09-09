@@ -50,7 +50,7 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	Get_PlayerComponent();
+	//Get_PlayerComponent();
 
 	m_eCurAnimIndex = ANIM_IDLE;
 	m_eCurstate = STATE_INTERACT;
@@ -178,7 +178,7 @@ HRESULT CBoss_Kyogai::Render()
 
 HRESULT CBoss_Kyogai::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	/*if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
 	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -221,7 +221,7 @@ HRESULT CBoss_Kyogai::Render_ShadowDepth()
 		m_pShaderCom->Begin(3);
 
 		m_pModelCom->Render(i);
-	}
+	}*/
 	return S_OK;
 }
 //#ifdef _DEBUG

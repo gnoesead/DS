@@ -50,7 +50,7 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Zako_0");
 		return E_FAIL;
 	}
-	Get_PlayerComponent();
+	
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 

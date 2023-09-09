@@ -34,7 +34,7 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-
+	Get_PlayerComponent();
 
 
 	return S_OK;
