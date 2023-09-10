@@ -72,6 +72,10 @@ protected:
 	//워크스팟
 	_int	m_iSpot_Index = { 0 };
 	_bool	m_isSpot_Reverse = { false };
+
+	//대화 
+	_bool	m_isTalking = { false };
+	_bool	m_isFirst_Talk = { true };
 	
 private:
 	CFIcon* m_pIcon = { nullptr };
