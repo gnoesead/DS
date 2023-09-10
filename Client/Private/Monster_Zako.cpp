@@ -107,8 +107,8 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	m_StatusDesc.fHp_Max = 70.f;
-	m_StatusDesc.fHp = 70.f;
+	m_StatusDesc.fHp_Max = 100.f;
+	m_StatusDesc.fHp = 100.f;
 
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
@@ -798,8 +798,8 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 			Animation_Control_Hit(dTimeDelta);
 		else if (m_eCurState == STATE_IDLE)
 			Animation_Control_Idle(dTimeDelta);
-		/*else if (m_eCurState == STATE_ATTACK)
-			Animation_Control_Attack(dTimeDelta, m_eCurPattern);*/
+		else if (m_eCurState == STATE_ATTACK)
+			Animation_Control_Attack(dTimeDelta, m_eCurPattern);
 	}
 }
 

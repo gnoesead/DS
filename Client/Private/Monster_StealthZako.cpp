@@ -403,11 +403,11 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 {
 	if (!m_isQuestioning && !m_isFinding && !m_isAttacking && !m_isPlayerBack)
 	{
-		if (Calculate_Distance() < 6.0f)
+		if (Calculate_Distance() < 8.0f) // 6.0
 		{
 			_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
 
-			if (fAngle < 45.0f)
+			if (fAngle < 35.0f)
 			{
 				//Find
 				m_isQuestioning = true;

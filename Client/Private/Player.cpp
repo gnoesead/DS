@@ -535,7 +535,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
 	{
 		//Äì¿ì°¡ÀÌ µ¹¾Æ°¡´Â ·ë
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE && CMonsterManager::GetInstance()->Get_Kyogai_On())
 		{
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
 			{

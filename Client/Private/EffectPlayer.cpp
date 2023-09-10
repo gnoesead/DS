@@ -416,6 +416,14 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 
 	_float3 vFloat3 = { 0.f, 0.f, 0.f };
 
+	CParticleSystem* pParentParticleSystemOrigin = Find_ParticleSystem(pTag);
+
+	if (nullptr == pParentParticleSystemOrigin)
+	{
+		MSG_BOX("해당 태그를 가진 이펙트가 존재하지 않습니다.");
+		return nullptr;
+	}
+
 	if (m_EffectParticlePool.empty())
 	{
 		list<class CParticleSystem*>* pList = Find_ParticlePool(pTag);
@@ -428,18 +436,19 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 
 		Add_Particles_In_Pool(pTag);
 
-		pParentParticleSystem = pList->front();		// empty?
+		pParentParticleSystem = pList->front();
 		pList->pop_front();
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
 		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParentParticleSystem);
 
-		int iNumEffects = pParentParticleSystem->Get_NumEffects();
+		int iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
 		for (int i = 0; i < iNumEffects; ++i)
 		{
+			CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);
 			CParticleSystem* pParticleSystem = nullptr;
-			pParticleSystem = pParentParticleSystem->Get_Part(i);
+			pParticleSystem = pParentParticleSystemOrigin->Get_Part(i);
 
 			if (nullptr == pParticleSystem)
 			{
@@ -447,15 +456,15 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 				return nullptr;
 			}
 
-			vFloat3 = pParticleSystem->Get_Postion();
+			vFloat3 = pParticleSystemOrigin->Get_Postion();
 			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
 			pParticleSystem->Set_Position(vFloat3);
 
-			vFloat3 = pParticleSystem->Get_Rotation();
+			vFloat3 = pParticleSystemOrigin->Get_Rotation();
 			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
 			pParticleSystem->Set_Rotation(vFloat3);
 
-			vFloat3 = pParticleSystem->Get_Scale();
+			vFloat3 = pParticleSystemOrigin->Get_Scale();
 			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
 			pParticleSystem->Set_Scale(vFloat3);
 
@@ -498,9 +507,10 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 
 		pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParentParticleSystem);
 
-		int iNumEffects = pParentParticleSystem->Get_NumEffects();
+		int iNumEffects = pParentParticleSystemOrigin->Get_NumEffects();
 		for (int i = 0; i < iNumEffects; ++i)
 		{
+			CParticleSystem* pParticleSystemOrigin = pParentParticleSystemOrigin->Get_Part(i);
 			CParticleSystem* pParticleSystem = nullptr;
 			pParticleSystem = pParentParticleSystem->Get_Part(i);
 
@@ -509,6 +519,18 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 				Safe_Release(pGameInstance);
 				return nullptr;
 			}
+
+			vFloat3 = pParticleSystemOrigin->Get_Postion();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vPosition.x, vFloat3.y + m_EffectWorldDesc.vPosition.y, vFloat3.z + m_EffectWorldDesc.vPosition.z };
+			pParticleSystem->Set_Position(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Rotation();
+			vFloat3 = { vFloat3.x + m_EffectWorldDesc.vRotation.x, vFloat3.y + m_EffectWorldDesc.vRotation.y, vFloat3.z + m_EffectWorldDesc.vRotation.z };
+			pParticleSystem->Set_Rotation(vFloat3);
+
+			vFloat3 = pParticleSystemOrigin->Get_Scale();
+			vFloat3 = { vFloat3.x * m_EffectWorldDesc.fScale, vFloat3.y * m_EffectWorldDesc.fScale, vFloat3.z * m_EffectWorldDesc.fScale };
+			pParticleSystem->Set_Scale(vFloat3);
 
 			pParticleSystem->Set_Collect(false);
 

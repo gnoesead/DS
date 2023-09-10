@@ -318,8 +318,17 @@ void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 		if (m_isFirst_Talk)
 		{
 			m_isFirst_Talk = false;
-			m_pModelCom->Set_LinearDuration(ANIM_SIT_LISTEN, 0.5f);
-			m_pModelCom->Set_Animation(ANIM_SIT_LISTEN);
+
+			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SIT_IDLE)
+			{
+				m_pModelCom->Set_LinearDuration(ANIM_SIT_LISTEN, 0.5f);
+				m_pModelCom->Set_Animation(ANIM_SIT_LISTEN);
+			}
+			else if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_STAND_IDLE)
+			{
+				m_pModelCom->Set_LinearDuration(ANIM_LISTE_HARD, 0.5f);
+				m_pModelCom->Set_Animation(ANIM_LISTE_HARD);
+			}
 		}
 
 		if (m_isTalking)
@@ -328,8 +337,17 @@ void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 			if (Calculate_Distance() > 2.0f)
 			{
 				m_isTalking = false;
-				m_pModelCom->Set_LinearDuration(ANIM_SIT_IDLE, 0.5f);
-				m_pModelCom->Set_Animation(ANIM_SIT_IDLE);
+
+				if (m_pModelCom->Get_iCurrentAnimIndex() == 10)
+				{
+					m_pModelCom->Set_LinearDuration(ANIM_SIT_LISTEN_END, 0.5f);
+					m_pModelCom->Set_Animation(ANIM_SIT_LISTEN_END);
+				}
+				else if (m_pModelCom->Get_iCurrentAnimIndex() == 5)
+				{
+					m_pModelCom->Set_LinearDuration(ANIM_LISTEN_HARD_END, 0.5f);
+					m_pModelCom->Set_Animation(ANIM_LISTEN_HARD_END);
+				}
 			}
 		}
 	}
