@@ -36,6 +36,7 @@ public:
 		_bool	m_Down_Dmg_Great_Blow = { false };
 		_bool	m_Down_Dmg_Swamp = { false };
 		_bool	m_Down_Dmg_Web = { false };
+		_bool	m_Down_Dmg_SwampUpper = { false };
 
 		// มฆวั
 		_bool	m_isRestrict_KeyInput = { false };

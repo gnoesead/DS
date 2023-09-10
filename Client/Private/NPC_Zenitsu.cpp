@@ -377,6 +377,11 @@ void CNPC_Zenitsu::Animation_Control(_double dTimeDelta)
 void CNPC_Zenitsu::Animation_Control_Village(_double dTimeDelta)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _vector{ 564.4f, 4.55f ,362.73f, 1.0f });
+
+	if (m_isTalking)
+	{
+		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
+	}
 }
 
 void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)

@@ -898,6 +898,12 @@ HRESULT CLoader::LoadingForLobby()
 		CAurora::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+	/* Prototype_GameObject_SmeshStone */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmeshStone"),
+		CSmeshStone::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Environment
@@ -1264,11 +1270,6 @@ HRESULT CLoader::LoadingForVillage()
 	/* Prototype_GameObject_Swamp_SmokeEffect */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp_SmokeEffect"),
 		CSwamp_SmokeEffect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_SmeshStone */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmeshStone"),
-		CSmeshStone::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

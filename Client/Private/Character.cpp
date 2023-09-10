@@ -951,19 +951,19 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		EffectWDesc.vStartSizeX = { 1.2f , 1.4f }; EffectWDesc.vStartSizeY = { 1.2f , 1.8f };
 		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 2.f , 5.5f }; EffectWDesc.vSpeedZ = { -0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 1.2f , 1.4f }; EffectWDesc.vSizeSpeedY = { 1.6f , 1.8f };
-		EffectWDesc.fGravity = 4.5f;
+		EffectWDesc.fGravity = 6.f;
 
 		for (_uint i = 0; i < 12; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_DASHLAND:
-
-		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.05f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectWDesc.vFrameSpeed = { 0.017f , 0.018f };
-		EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
-		EffectWDesc.vSpeedX = { -1.0f , 1.0f };	EffectWDesc.vSpeedY = { 0.05f , 0.07f }; 	EffectWDesc.vSpeedZ = { -1.0f , 1.f };
-		EffectWDesc.vSizeSpeedX = { 1.2f , 1.3f }; EffectWDesc.vSizeSpeedY = { 1.2f , 1.3f };
-
+	
+		EffectWDesc.vStartPosX = { -0.5f,0.5f };EffectWDesc.vStartPosY = { -0.00f,0.05f };EffectWDesc.vStartPosZ = { -0.5f,0.5f };
+		EffectWDesc.vFrameSpeed = { 0.017f , 0.017f };
+		EffectWDesc.vStartSizeX = { 0.9f , 1.4f };EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -1.5f , 1.5f };	EffectWDesc.vSpeedY = { 0.05f , 0.07f }; 	EffectWDesc.vSpeedZ = { -1.5f , 1.5f };
+		EffectWDesc.vSizeSpeedX = { 1.0f , 1.1f };EffectWDesc.vSizeSpeedY = { 1.0f , 1.1f };
+		EffectWDesc.vStartFrame = { 0.f , 2.f };
 		for (_uint i = 0; i < 10; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
@@ -978,9 +978,9 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		for (_uint i = 0; i < 1; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
-	case CGroundSmoke::SMOKE_JUMP:
-
-		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.05f,0.15f }; EffectWDesc.vStartPosZ = { 0.f,0.5f };
+	 case CGroundSmoke::SMOKE_JUMP:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		EffectWDesc.vStartPosX = { -0.5f,0.5f };EffectWDesc.vStartPosY = { -0.05f,0.15f };EffectWDesc.vStartPosZ = { 0.f,0.5f };
 		EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
 		EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
 		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f }; EffectWDesc.vSpeedZ = { 0.0f , 3.f };
@@ -1036,9 +1036,42 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		EffectWDesc.vSizeSpeedX = { 2.0f , 2.8f }; EffectWDesc.vSizeSpeedY = { 2.5f , 3.0f };
 		EffectWDesc.vStartFrame = { 0.f , 5.f };
 
-		for (_uint i = 0; i < 10; ++i)
-			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
-		break;
+		 for (_uint i = 0; i < 10; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
+	 case CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_UPDOWN:
+		 EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { -0.05f,-0.03f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
+		 EffectWDesc.vFrameSpeed = { 0.03f , 0.035f };
+		 EffectWDesc.vStartSizeX = { 1.2f , 1.4f }; EffectWDesc.vStartSizeY = { 1.2f , 1.8f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 3.f , 8.5f }; EffectWDesc.vSpeedZ = { -0.0f , 0.f };
+		 EffectWDesc.vSizeSpeedX = { 1.4f , 1.6f }; EffectWDesc.vSizeSpeedY = { 1.8f , 2.0f };
+		 EffectWDesc.vStartFrame = { 0.f , 5.f };
+		 EffectWDesc.fGravity = 8.5f;
+
+		 for (_uint i = 0; i < 12; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
+	 case CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_SPREAD:
+		 EffectWDesc.vStartPosX = { -0.7f,0.7f }; EffectWDesc.vStartPosY = { -0.1f,0.15f }; EffectWDesc.vStartPosZ = { -0.7f,0.7f };
+		 EffectWDesc.vFrameSpeed = { 0.03f , 0.035f };
+		 EffectWDesc.vStartSizeX = { 0.7f , 1.0f }; EffectWDesc.vStartSizeY = { 0.7f , 1.0f };
+		 EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 0.04f , 0.06f }; EffectWDesc.vSpeedZ = { -2.0f , 2.0f };
+		 EffectWDesc.vSizeSpeedX = { 1.1f , 1.6f }; EffectWDesc.vSizeSpeedY = { 1.1f , 1.6f };
+
+		 for (_uint i = 0; i < 30; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
+	 case CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_KICK:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		 EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.05f,0.15f }; EffectWDesc.vStartPosZ = { 0.f,0.5f };
+		 EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
+		 EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f }; EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		 EffectWDesc.vSizeSpeedX = { 0.3f , 0.5f }; EffectWDesc.vSizeSpeedY = { 0.3f , 0.5f };
+
+		 for (_uint i = 0; i < 5; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
 	default:
 		break;
 	}
@@ -1046,7 +1079,7 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 	Safe_Release(pGameInstance);
 }
 
-void CCharacter::Create_StoneParticle(_fvector vOffsetPos)
+void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fvector vOffsetPos)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -1057,15 +1090,59 @@ void CCharacter::Create_StoneParticle(_fvector vOffsetPos)
 	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_STONEPARTICLE;
 	EffectWDesc.iNumX = 2; EffectWDesc.iNumY = 2;
 
-	EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
-	EffectWDesc.vStartSizeX = { 0.05f , 0.20f }; EffectWDesc.vStartSizeY = { 0.05f , 0.20f };
-	EffectWDesc.vSpeedX = { -2.5f , 2.5f }; EffectWDesc.vSpeedY = { 1.f , 7.f }; EffectWDesc.vSpeedZ = { -2.5f , 2.5f };
-	EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
-	EffectWDesc.fGravity = 6.0f;
-	EffectWDesc.vColor = { 0.4f , 0.6f };
+	switch (eStoneType)
+	{
+	case CStoneParticle::STONE_SWAMP:
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+		EffectWDesc.vStartSizeX = { 0.02f , 0.20f }; EffectWDesc.vStartSizeY = { 0.05f , 0.20f };
+		EffectWDesc.vSpeedX = { -2.5f , 2.5f }; EffectWDesc.vSpeedY = { 1.f , 10.f }; EffectWDesc.vSpeedZ = { -2.5f , 2.5f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 15.0f;
+		EffectWDesc.vColor = { 0.1f , 0.2f };
 
-	for (_uint i = 0; i < 30; ++i)
-		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		for (_uint i = 0; i < 30; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+
+		break;
+	case CStoneParticle::STONE_AKAZA_COMBODOWN:
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+		EffectWDesc.vStartSizeX = { 0.05f , 0.20f }; EffectWDesc.vStartSizeY = { 0.05f , 0.20f };
+		EffectWDesc.vSpeedX = { -5.f , 5.f }; EffectWDesc.vSpeedY = { 3.f , 15.f }; EffectWDesc.vSpeedZ = { -5.f , 5.f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 20.0f;
+		EffectWDesc.vColor = { 0.1f , 0.2f };
+		
+
+		for (_uint i = 0; i < 80; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		break;
+
+	case CStoneParticle::STONE_TANJIRO_COMBODOWN:
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+		EffectWDesc.vStartSizeX = { 0.01f , 0.20f }; EffectWDesc.vStartSizeY = { 0.01f , 0.20f };
+		EffectWDesc.vSpeedX = { -4.f , 4.f }; EffectWDesc.vSpeedY = { 3.f , 12.f }; EffectWDesc.vSpeedZ = { -4.f , 4.f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 20.0f;
+		EffectWDesc.vColor = { 0.1f , 0.2f };
+
+		for (_uint i = 0; i < 80; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		break;
+	case CStoneParticle::STONE_LAND:
+		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.1f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+		EffectWDesc.vStartSizeX = { 0.025f , 0.035f }; EffectWDesc.vStartSizeY = { 0.025f , 0.035f };
+		EffectWDesc.vSpeedX = { -3.0f , 3.0f }; EffectWDesc.vSpeedY = { 1.5f , 4.f }; EffectWDesc.vSpeedZ = { -3.f , 3.0f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 15.0f;
+		EffectWDesc.vColor = { 0.1f , 0.2f };
+
+		for (_uint i = 0; i < 60; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		break;
+	default:
+		break;
+	}
+
 
 	Safe_Release(pGameInstance);
 }
