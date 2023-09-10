@@ -118,9 +118,6 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		m_StatusDesc.fHp = 100000.f;
 	}
 
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
-
 	Safe_Release(pGameInstance);
 
 	if (m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
