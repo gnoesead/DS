@@ -1498,7 +1498,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
 	{
 		m_dDelay_Swapping_Pos += dTimeDelta;
-		if (m_dDelay_Swapping_Pos < 0.65f) //0.85
+		if (m_dDelay_Swapping_Pos < 0.35f) //0.85
 		{
 			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
 			_float4 MyPos;
