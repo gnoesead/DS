@@ -451,6 +451,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1Particle", m_pTransformCom);
 
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Down_WaterParticle1", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
@@ -459,6 +462,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2Particle", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Down_WaterParticle2", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
@@ -475,6 +481,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
 			}
 			else if (1 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Normal_WaterParticle", m_pTransformCom);
+			}
+			else if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
@@ -494,6 +505,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_DecalParticle", m_pTransformCom);
+
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Up_WaterParticle", m_pTransformCom);
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
@@ -527,6 +541,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air1_WaterParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
@@ -543,6 +560,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air2_WaterParticle", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
@@ -680,6 +700,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 			}
+			else if (1 == m_iEvent_Index)
+			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3_WaterParticle", m_pTransformCom);
+			}
 		}
 #pragma endregion
 
@@ -710,6 +735,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt_WaterParticle1", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
 			}
@@ -720,6 +748,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (3 == m_iEvent_Index)
 			{
+				if (m_Moveset.m_iAwaken != 0)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt_WaterParticle2", m_pTransformCom);
+
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_DecalParticle", m_pTransformCom);
 
