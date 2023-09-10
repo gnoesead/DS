@@ -62,7 +62,17 @@ void CNPC::Tick(_double dTimeDelta)
 
 	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (Distance < 2.f) {
+	_float Distance_Max = {};
+
+	if (m_CharacterDesc.NPCDesc.Dialog_Type == 99) {
+		Distance_Max = 1.f;
+	}
+	else {
+		Distance_Max = 2.f;
+	}
+
+
+	if (Distance < Distance_Max) {
 
 		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
 
