@@ -474,7 +474,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD, vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN, vPlusPos);
 	
-				Create_StoneParticle(vPlusPos);
+				Create_StoneParticle(CStoneParticle::STONE_SWAMP, vPlusPos);
 				Create_SmeshStone(vPlusPos);
 				Camera_Shake();
 
