@@ -30,8 +30,8 @@ HRESULT CLevel_Tool::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
-        return E_FAIL;
+    /*if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
+        return E_FAIL;*/
 
     return S_OK;
 }

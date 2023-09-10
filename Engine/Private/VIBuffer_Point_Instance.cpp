@@ -86,6 +86,21 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 
 	INSTANCEDESC	InstanceDesc = *(INSTANCEDESC*)pArg;
 	m_InstanceDesc = InstanceDesc;
+	if (m_InstanceDesc.vMaxRange.x < m_InstanceDesc.vMinRange.x)
+	{
+		m_InstanceDesc.vMaxRange.x = InstanceDesc.vMinRange.x;
+		m_InstanceDesc.vMinRange.x = InstanceDesc.vMaxRange.x;
+	}
+	if (m_InstanceDesc.vMaxRange.y < m_InstanceDesc.vMinRange.y)
+	{
+		m_InstanceDesc.vMaxRange.y = InstanceDesc.vMinRange.y;
+		m_InstanceDesc.vMinRange.y = InstanceDesc.vMaxRange.y;
+	}
+	if (m_InstanceDesc.vMaxRange.z < m_InstanceDesc.vMinRange.z)
+	{
+		m_InstanceDesc.vMaxRange.z = InstanceDesc.vMinRange.z;
+		m_InstanceDesc.vMinRange.z = InstanceDesc.vMaxRange.z;
+	}
 
 	m_pSpeed = new _float[m_iNumInstance];
 
@@ -133,9 +148,9 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void* pArg)
 		pInstanceVertices[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
 		pInstanceVertices[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
 
-		pInstanceVertices[i].vTranslation = _float4(Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.x,
-													Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.y,
-													Random::Generate_Float(-1.f, 1.f) * InstanceDesc.vRange.z, 1.f);
+		pInstanceVertices[i].vTranslation = _float4(Random::Generate_Float(m_InstanceDesc.vMinRange.x, m_InstanceDesc.vMaxRange.x),
+													Random::Generate_Float(m_InstanceDesc.vMinRange.y, m_InstanceDesc.vMaxRange.y),
+													Random::Generate_Float(m_InstanceDesc.vMinRange.z, m_InstanceDesc.vMaxRange.z), 1.f);
 		pInstanceVertices[i].vColor = _float4(1.0f, 1.f, (_float)(rand() % 2), 0.f);
 		pInstanceVertices[i].vPSize = _float2(m_pScale[i], m_pScale[i]);
 		pInstanceVertices[i].fAngle = m_pAngle[i];

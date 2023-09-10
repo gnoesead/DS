@@ -310,10 +310,8 @@ void CWebManager::Shoot_WideWeb()
 
 void CWebManager::Shoot_JikWeb()
 {
-	_int		RandomIndex = Random::Generate_Int(0, 9);
 	_float4		ShotDir = { 0.0f, 0.0f, -1.0f, 0.0f };
 
-	_int		iRandomTurn_Idx = Random::Generate_Int(0, 5);
 	_float		Turn = Random::Generate_Float(-65.f, 65.f);
 
 
