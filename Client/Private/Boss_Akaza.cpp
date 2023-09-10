@@ -233,7 +233,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-			Trigger_ComboPunch();
+			pGameInstance->Time_Slow(0.5, 0.2);
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{

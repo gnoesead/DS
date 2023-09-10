@@ -91,8 +91,8 @@ float2         g_Pixeloffset;
 
 sampler ShadowDepthSampler = sampler_state
 {
-	texture = g_ShadowDepthTexture;
-	filter = min_mag_mip_linear;
+	//texture = g_ShadowDepthTexture;
+	filter = min_mag_mip_point;
 	AddressU = clamp;
 	AddressV = clamp;
 };
@@ -374,31 +374,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	float3 grayColor = { grayValue , grayValue ,grayValue };
 
 	Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
-	/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
-	float3 c = float3(0.0, 0.0, 0.0);
-	float f = 1.0 / 6;
-
-	float2 minTexCoord = float2(0.01, 0.01);
-	float2 maxTexCoord = float2(0.99, 0.99);
-
-	if (vDiffuse.a == 0.f)
-		discard;
-
-	for (int i = 0; i < 12; i++)
-	{
-		float2 clampedTexCoord = clamp(In.vTexUV - 0.01 * Direction * float(i), minTexCoord, maxTexCoord);
-
-		c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
-		if (c.r == 1.f && c.b == 1.f)
-			discard;
-
-		Out.vColor.rgb = c * vShade.rgb;
-		Out.vColor.a = vDiffuse.a * vShade.a;
-
-		Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
-	}*/
-
-
+	
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
 
@@ -418,7 +394,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	//그림자 적용
 
 	vector      vDepthInfo = g_DepthTexture.Sample(DepthSampler, In.vTexUV);
-	float      fViewZ = vDepthInfo.z * 300.0f;
+	float      fViewZ = vDepthInfo.z * 400.0f;
 
 	vector      vPosition;
 
@@ -441,7 +417,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vNewUV.y = (vUVPos.y / vUVPos.w) * -0.5f + 0.5f;
 
 	vector      vShadowDepthInfo = g_ShadowDepthTexture.Sample(ShadowDepthSampler, vNewUV);
-
+	
 	/*if (vPosition.z  > vShadowDepthInfo.r * vDepthInfo.y * 300.0f)
 	{
 		vector vColor = vector(0.5f, 0.5f, 0.5f, 1.f);
@@ -639,8 +615,8 @@ float m_TexW = 1280.f;
 float m_TexH = 720.f;
 //float m_ShadowTexW = 1280.f;
 //float m_ShadowTexH = 720.f;
-float m_ShadowTexW = 12800.f;
-float m_ShadowTexH = 7200.f;
+float m_ShadowTexW = 1280.f;
+float m_ShadowTexH = 720.f;
 
 
 static const float Weight[13] =
@@ -874,17 +850,17 @@ PS_OUT PS_ShadowBlurX(PS_IN _In)
 		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 
-	if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
+	//if (Out.vColor.a == 0.f)
+	//	discard;
+	/*if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
 		discard;
 	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+		discard;*/
 
 	return Out;
 }
@@ -904,16 +880,16 @@ PS_OUT PS_ShadowBlurY(PS_IN _In)
 		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
-	if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	/*if (Out.vColor.a == 0.f)
+		discard;*/
+	//if (Out.vColor.a == 1.f)
+	//	discard;
+	//if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+	//	discard;
+	//if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+	//	discard;
 
 	return Out;
 }
@@ -925,8 +901,8 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	/*if (vFinal.a == 0.f) // 0812
-		discard;*/
+	if (vFinal.a == 0.f) // 0812
+		discard;
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
@@ -950,20 +926,21 @@ PS_OUT PS_Combine_ShadowBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	/*if (vFinal.a == 0.f) // 0812
-		discard;*/
-
+	if (vFinal.a == 0.f) // 0812
+		discard;
+	//if (vFinal.a == 1.f) // 0812
+	//	discard;
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
-	//if (Out.vColor.a == 0.f) // 0812
-	//	discard;
+	if (Out.vColor.a == 0.f) // 0812
+		discard;
 
-	/*if (Out.vColor.a == 1.f)
+	if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
 		discard;
 	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;*/
+		discard;
 
 	return Out;
 }

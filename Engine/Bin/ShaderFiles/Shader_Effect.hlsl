@@ -17,6 +17,8 @@ texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
 texture2D	   g_HDRTexture; // 블룸 + 블러 텍스처
 
+texture2D	   g_DiffuseDistortion;
+
 matrix         g_matProj;
 matrix         g_matViewInv;
 matrix         g_matProjInv;
@@ -175,6 +177,7 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
 
+	
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
 	if (0.f == vDiffuse.a)

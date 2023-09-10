@@ -208,7 +208,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
 	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / 400.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;
@@ -314,7 +314,7 @@ PS_OUT  PS_Outline_Blue(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float4 outlineColor = { 1.f, 1.f, 1.f, 0.f };
+	float4 outlineColor = { 0.f, 0.f, 1.f, 0.f };
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -330,7 +330,7 @@ PS_OUT  PS_Outline_Blue(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
 	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1

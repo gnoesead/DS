@@ -99,9 +99,10 @@ struct PS_OUT
 {
 	//vector		vColor : SV_TARGET0;
 	vector		vDiffuse : SV_TARGET0;
-	vector		vNormal : SV_TARGET1;
+	vector		vDistortion : SV_TARGET1;
+	/*vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
-	vector		vAdditional : SV_TARGET3;
+	vector		vAdditional : SV_TARGET3;*/
 };
 
 PS_OUT  PS_DEFAULT(PS_IN In)
@@ -510,7 +511,7 @@ PS_OUT  PS_NORMALDISTORTION(PS_IN In)
 	Out.vDiffuse = Out.vDiffuse.r * 1.4f;
 	
 	Out.vDiffuse.a *= g_fAlpha;
-
+	
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
 
@@ -1110,7 +1111,7 @@ PS_OUT  PS_MASKCOLORDISTORTION(PS_IN In)
 
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
-
+	Out.vDistortion = vDistortion;
 	return Out;
 }
 
