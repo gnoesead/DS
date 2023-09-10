@@ -1407,6 +1407,21 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 #pragma endregion
+
+#pragma region TANJIRO_ETC
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SideStep.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SideStep");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_GaeBang.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_GaeBang");
+		return E_FAIL;
+	}
+
+#pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1.bin"))))
@@ -1808,6 +1823,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Step_Effect.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Step_Effect");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Swamp/Swamp_Stone.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Swamp_Stone");
 		return E_FAIL;
 	}
 

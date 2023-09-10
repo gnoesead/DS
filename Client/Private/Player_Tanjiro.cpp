@@ -429,6 +429,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		m_iEvent_Index = 0;
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+
+
 	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
 	if (EventCallProcess())
@@ -547,6 +553,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+
+				_vector vPlusPos = vPlayerDir * 3.0f;
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_SPREAD , vPlusPos);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_UPDOWN , vPlusPos);
+				Create_StoneParticle(CStoneParticle::STONE_TANJIRO_COMBODOWN , vPlusPos);
+				Create_SmeshStone(vPlusPos);
+				Camera_Shake(0.6);
 			}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) // Combo_Normal
@@ -765,6 +779,15 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 			}
 		}
+
+		if (51 == m_pModelCom->Get_iCurrentAnimIndex()) // 점프공격 착지
+		{
+			if (0 == m_iEvent_Index) // 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+				Create_StoneParticle(CStoneParticle::STONE_LAND);
+			}
+		}
 #pragma endregion
 
 
@@ -868,16 +891,19 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
+		if (83 == m_pModelCom->Get_iCurrentAnimIndex())	// 점프
 		{
-			if (0 == m_iEvent_Index)	// 0.02
-				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+			if (0 == m_iEvent_Index)	
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
 		}
 
 		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// 착지
 		{
 			if (0 == m_iEvent_Index)	// 0.02
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+				Create_StoneParticle(CStoneParticle::STONE_LAND);
+			}
 		}
 
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
@@ -933,6 +959,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.6f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+				EffectSideStepDesc.vPosition.y -= 0.01f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom , &EffectSideStepDesc);
+				
 			}
 		}
 
@@ -942,6 +975,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.6f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+				EffectSideStepDesc.vPosition.y -= 0.01f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 			}
 		}
 
@@ -951,6 +990,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.6f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+				EffectSideStepDesc.vPosition.y -= 0.01f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 			}
 		}
 
@@ -960,6 +1005,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.6f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+				EffectSideStepDesc.vPosition.y -= 0.01f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 			}
 		}
 
@@ -1012,10 +1063,22 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			
 		}
 
+		if (ANIM_BATTLE_AWAKEN == m_pModelCom->Get_iCurrentAnimIndex()) // 54 개방
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_GaeBang", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_GaeBang_Particle", m_pTransformCom);
+				Camera_Shake(0.1);
+			}
+		}
+
 #pragma endregion
 
 		m_iEvent_Index++;
 	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
