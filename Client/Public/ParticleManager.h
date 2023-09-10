@@ -27,18 +27,18 @@ public:
 	//Size
 	void PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
 		_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-		_float3 vRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
-		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
+		_float3 vMinRange, _float3 vMaxRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, _bool bSpriteRandomStart = { false }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
 	//Dir||GatherAndDisperse
 	void PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
 		_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-		_float3 vRange, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
-		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
+		_float3 vMinRange, _float3 vMaxRange, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, _bool bSpriteRandomStart = { false }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
 	//Size&Dir||Size&GaD
 	void PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
 		_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-		_float3 vRange, _float fTickPerSize, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
-		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
+		_float3 vMinRange, _float3 vMaxRange, _float fTickPerSize, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+		_double dSpriteSpeed = 1.0, _int2 vSpriteCount = { 1, 1 }, _bool bSpriteRandomStart = { false }, const _tchar* pRampTag = nullptr, _float fRampMax = 1.f);
 
 private:
 	unordered_map<const char*, list<CGameObject*>*> m_ParticlePool;

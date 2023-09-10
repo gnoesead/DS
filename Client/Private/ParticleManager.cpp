@@ -86,20 +86,22 @@ void CParticleManager::Reuse_Particle(const char* pPoolTag, CCustomParticle::CUS
 
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-	_float3 vRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass, 
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
+	_float3 vMinRange, _float3 vMaxRange, _float fTickPerSize, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+	_double dSpriteSpeed, _int2 vSpriteCount, _bool bSpriteRandomStart, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMinRange = vMinRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMaxRange = vMaxRange;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
 	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+	CustomPartDesc.VIB_CustomPartDesc.bSpriteRandomStart = bSpriteRandomStart;
 
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;
@@ -125,20 +127,22 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag, 
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-	_float3 vRange, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
+	_float3 vMinRange, _float3 vMaxRange, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+	_double dSpriteSpeed, _int2 vSpriteCount, _bool bSpriteRandomStart, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMinRange = vMinRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMaxRange = vMaxRange;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
 	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+	CustomPartDesc.VIB_CustomPartDesc.bSpriteRandomStart = bSpriteRandomStart;
 
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;
@@ -164,20 +168,22 @@ void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferT
 
 void CParticleManager::PlayParticle(const char* pPoolTag, const _tchar* pBufferTag, const _tchar* pTextureTag,
 	_float3 vPos, _float fLifeTime, _float fMinScale, _float fMaxScale, _float fMinSpeed, _float fMaxSpeed,
-	_float3 vRange, _float fTickPerSize, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
-	_double dSpriteSpeed, _int2 vSpriteCount, const _tchar* pRampTag, _float fRampMax)
+	_float3 vMinRange, _float3 vMaxRange, _float fTickPerSize, _float3 vTickPerDir, _int3 vDirOption, CCustomParticle::CUSTOM_PARTICLE_PASS eShaderPass,
+	_double dSpriteSpeed, _int2 vSpriteCount, _bool bSpriteRandomStart, const _tchar* pRampTag, _float fRampMax)
 {
 	CCustomParticle::CUSTOMPARTDESC		CustomPartDesc;
 
-	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vRange = vRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMinRange = vMinRange;
+	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.vMaxRange = vMaxRange;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinScale = fMinScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxScale = fMaxScale;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMinSpeed = fMinSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.InstanceDesc.fMaxSpeed = fMaxSpeed;
 
+	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
 	CustomPartDesc.VIB_CustomPartDesc.dSpriteSpeed = dSpriteSpeed;
 	CustomPartDesc.VIB_CustomPartDesc.vSpriteCount = vSpriteCount;
-	CustomPartDesc.VIB_CustomPartDesc.fLifeTime = fLifeTime;
+	CustomPartDesc.VIB_CustomPartDesc.bSpriteRandomStart = bSpriteRandomStart;
 
 	CustomPartDesc.eShaderPass = eShaderPass;
 	CustomPartDesc.vPosition = vPos;

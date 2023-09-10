@@ -8,7 +8,8 @@ class ENGINE_DLL CVIBuffer_Point_Instance abstract : public CVIBuffer_Instance
 public:
 	typedef struct tagInstanceDesc
 	{
-		_float3		vRange;
+		_float3		vMinRange;
+		_float3		vMaxRange;
 		_float		fMinScale, fMaxScale;
 		_float		fMinSpeed, fMaxSpeed;
 	}INSTANCEDESC;

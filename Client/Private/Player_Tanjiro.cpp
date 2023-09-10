@@ -27,6 +27,8 @@
 
 #include "ParticleManager.h"
 
+#include "WebManager.h"
+
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -116,87 +118,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-
-	//if (pGameInstance->Get_DIKeyDown(DIK_T))
-	//{
-	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	//	vPos.y += 1.f;
-	//	vPos.z -= 0.5f;
-	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
-	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
-	//	_int3	vDirOption = { 1, 1, 1 };
-	//	// PoolTag, BufferTag, TextureTag, 
-	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-	//	CParticleManager::GetInstance()->PlayParticle("Test",
-	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_Cmn_Smoke_24_A")
-	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
-	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
-	//}
-	//if (pGameInstance->Get_DIKeyDown(DIK_Y))
-	//{
-	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	//	vPos.y += 1.f;
-	//	vPos.z -= 0.5f;
-	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
-	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
-	//	_int3	vDirOption = { 1, 1, 1 };
-	//	// PoolTag, BufferTag, TextureTag, 
-	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-	//	CParticleManager::GetInstance()->PlayParticle("Test2",
-	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_25_A")
-	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
-	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
-	//}
-	//if (pGameInstance->Get_DIKeyDown(DIK_G))
-	//{
-	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	//	vPos.y += 1.f;
-	//	vPos.z -= 0.5f;
-	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
-	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
-	//	_int3	vDirOption = { 1, 1, 1 };
-	//	// PoolTag, BufferTag, TextureTag, 
-	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-	//	CParticleManager::GetInstance()->PlayParticle("Test3",
-	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_29_A")
-	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
-	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
-	//}
-	//if (pGameInstance->Get_DIKeyDown(DIK_H))
-	//{
-	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	//	vPos.y += 1.f;
-	//	vPos.z -= 0.5f;
-	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
-	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
-	//	_int3	vDirOption = { 1, 1, 1 };
-	//	// PoolTag, BufferTag, TextureTag, 
-	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-	//	CParticleManager::GetInstance()->PlayParticle("Test4",
-	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P0002_Aura006_00")
-	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(8, 8),
-	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.9f);
-	//}
-	//if (pGameInstance->Get_DIKeyDown(DIK_V))
-	//{
-	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	//	vPos.y += 1.f;
-	//	vPos.z -= 0.5f;
-	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
-	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
-	//	_int3	vDirOption = { 1, 1, 1 };
-	//	// PoolTag, BufferTag, TextureTag, 
-	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-	//	CParticleManager::GetInstance()->PlayParticle("Test5",
-	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Splash003")
-	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4),
-	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
-	//}
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
@@ -215,7 +137,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			{
 				//m_isFirst_SwampUi = true;
 				m_isFirst_SwampUi = true;
-				Jumping(2.5f, 0.07f);
+				Jumping(2.5f, 0.08f);
 				m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
 				m_isSwamp_Escape = true;
 				m_Moveset.m_isHitMotion = false;
@@ -1758,7 +1680,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 		else
 			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
-	Go_Straight_Constant(dTimeDelta, 80, 3.0f * m_fScaleChange);
+	Go_Straight_Constant(dTimeDelta, 80, 4.5f * m_fScaleChange);
 
 	if (m_isAirDashing)
 	{
@@ -2149,10 +2071,39 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 	if (m_isConnectHitting == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
-		Go_Dir_Constant(dTimeDelta, 125, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		if (m_isSwampUpper == false)
+		{
+			Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+			Go_Dir_Constant(dTimeDelta, 125, 0.2f * m_fDmg_Move_Ratio, AtkDir);
+		}
+		else // 스왐프 어퍼 히트할때,
+		{
+			Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.45f * m_fDmg_Move_Ratio, AtkDir);
+			Go_Dir_Constant(dTimeDelta, 125, 0.45f * m_fDmg_Move_Ratio, AtkDir);
+		}
 	}
 	Ground_Animation_Play(125, 126);
+
+
+
+	if (m_Moveset.m_Down_Dmg_SwampUpper)
+	{
+		m_Moveset.m_Down_Dmg_SwampUpper = false;
+		m_isConnectHitting = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Jumping(2.0f, 0.075f);
+			m_isSwampUpper = true;
+		}
+	}
+
 #pragma endregion
 
 
@@ -2674,6 +2625,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 			m_Moveset.m_Down_Dmg_Blow = false;
 
 			m_Moveset.m_isGetUpMotion = false;
+
+			m_isSwampUpper = false;
 		}
 
 		//겟업 상태
