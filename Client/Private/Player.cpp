@@ -724,8 +724,10 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 			//점프 트랙 공격 (이동키 + J키)
 			if ( pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 			{
-				if(false == m_Moveset.m_isRestrict_JumpCombo)	
-					m_Moveset.m_Down_Battle_Jump_TrackAttack = true;
+				if (false == m_Moveset.m_isRestrict_JumpCombo) {
+					if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+						m_Moveset.m_Down_Battle_Jump_TrackAttack = true;
+				}
 				else
 					m_Moveset.m_Down_Battle_Jump_Attack = true;
 			}
