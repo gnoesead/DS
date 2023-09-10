@@ -1110,9 +1110,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN )
 		{
 			if (m_isCanNavi)
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			{
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+				
+			}
 			else
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+			{
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+				Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+				
+			}
 		}
 	}
 
@@ -1236,6 +1244,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
 	_float fDistance = Get_Distance_To_LockOnPos();
+
+	if (m_isGroundAttackFalse)
+	{
+		m_isGroundAttackFalse = false;
+		m_Moveset.m_Down_Battle_Combo = false;
+	}
 
 	if (m_isComboing_Upper == false)
 	{

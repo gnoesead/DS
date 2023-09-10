@@ -13,6 +13,8 @@
 #include "ParticleManager.h"
 #include "CustomParticle.h"
 
+#include "MonsterManager.h"
+
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -1299,8 +1301,10 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 	// 조건 주면 시작
 	m_dTriggerTime += dTimeDelta;
 
-	if (m_dTriggerTime > 15.0)
+	CMonsterManager::GetInstance()->Set_Akaza_On(true);
+	if (m_dTriggerTime > 11.0) //11
 	{
+		
 		if (m_bAnimFinish == false)
 		{
 			m_bAnimFinish = true;

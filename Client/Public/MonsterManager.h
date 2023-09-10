@@ -63,6 +63,9 @@ public:
 	_bool	Get_Kyogai_On() { return m_isKyogai_On; }
 	void	Set_Kyogai_On(_bool on) { m_isKyogai_On = on; }
 
+	_bool	Get_Akaza_On() { return m_isAkaza_On; }
+	void	Set_Akaza_On(_bool on) { m_isAkaza_On = on; }
+
 private:
 	//다수 몬스터 어택관련
 	_int	m_iCnt_AttackOn = { 0 };
@@ -92,8 +95,9 @@ private:
 	_bool	m_isZenitsu_IndexPlus = { false };
 
 
-	//잠입모드
+	//보스몹의 시작을 알리는
 	_bool	m_isKyogai_On = { false };
+	_bool	m_isAkaza_On = { false };
 
 public:
 	virtual void Free() override;

@@ -1008,16 +1008,18 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 {
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), dTimeDelta);
 
+
+	/*
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 		m_isBattleStart = true;
 	Safe_Release(pGameInstance);
-
-	if (m_isBattleStart)
+	*/
+	if ( m_isBattleStart && CMonsterManager::GetInstance()->Get_Akaza_On())
 	{
 		m_dDelay_BattleStart += dTimeDelta;
-		if (m_dDelay_BattleStart > 1.5f)
+		if (m_dDelay_BattleStart > 0.3f) //3~
 		{
 			m_pModelCom->Set_Animation(ANIM_BATTLESTART);
 			m_isBattleStart = false;
@@ -1096,9 +1098,17 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 			if (m_isSwamp_Escape == false)
 			{
 				if (m_isCanNavi)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+					Go_Straight_Constant(dTimeDelta, 88, m_fMove_Speed * m_fScaleChange);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+					Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange, true);
+					Go_Straight_Constant(dTimeDelta, 88, m_fMove_Speed * m_fScaleChange, true);
+				}
 			}
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
@@ -1527,7 +1537,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
@@ -2198,7 +2208,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_Moveset.m_Down_Battle_Run = false;
 
 			if (m_isStealthMode)
-				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);//144 145 146
 			else
 				m_pModelCom->Set_Animation(ANIM_ADV_RUN);
 		}
@@ -2213,17 +2223,36 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 
 			if (m_isCanNavi)
 			{
-				if(m_isStealthMode)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f, m_pNavigationCom[m_eCurNavi]);
+				if (m_isStealthMode)
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f, m_pNavigationCom[m_eCurNavi]);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, m_fMove_Speed * m_fScaleChange * 0.35f);
+					Go_Straight_Constant(dTimeDelta, 145, m_fMove_Speed * m_fScaleChange * 0.35f);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_RUN, m_fMove_Speed * m_fScaleChange * 0.7f);
+					//Go_Straight_Constant(dTimeDelta, 10, m_fMove_Speed * m_fScaleChange * 0.7f);
+				}
 			}
 			else
 			{
 				if (m_isStealthMode)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, m_fMove_Speed * m_fScaleChange * 0.35f, true);
+					Go_Straight_Constant(dTimeDelta, 145, m_fMove_Speed * m_fScaleChange * 0.35f, true);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_RUN, m_fMove_Speed * m_fScaleChange * 0.7f, true);
+				}
 			}
 			//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 			

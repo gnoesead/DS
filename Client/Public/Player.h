@@ -321,7 +321,7 @@ protected:
 	_float4		m_Dir_ScondJump_Box = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	//배틀스타트
-	_bool	m_isBattleStart = { false };
+	_bool	m_isBattleStart = { true };
 	_double m_dDelay_BattleStart = { 0.0 };
 
 	//Npc

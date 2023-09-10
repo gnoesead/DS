@@ -251,6 +251,8 @@ protected:
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
+	//zenitsu용 그라운드 공격취소
+	_bool	m_isGroundAttackFalse = { false };
 	
 protected:
 	HRESULT Add_Components();
