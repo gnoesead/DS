@@ -121,6 +121,43 @@ void CWebManager::Tick(_double dTimeDelta)
 	*/
 
 #pragma region Event
+	m_dDelay_Sub += dTimeDelta;
+	if (m_dDelay_Sub >= m_fLimit_Sub)
+	{
+		m_dDelay_Sub = 0.0;
+
+		m_fLimit_Sub = Random::Generate_Float(4.0f, 6.0f);
+		m_isWeb_Sub_2 = true;
+		Shoot_JikWeb();
+	}
+	if (m_isWeb_Sub_2)
+	{
+		m_dDelay_Sub_2 += dTimeDelta;
+		if (m_dDelay_Sub_2 > 0.3f)
+		{
+			m_dDelay_Sub_2 = 0.0;
+			Shoot_JikWeb();
+			m_isWeb_Sub_2 = false;
+
+			if (Random::Generate_Int(0, 1) == 0)
+				m_isWeb_Sub_3 = true;
+			else
+				m_isWeb_Sub_3 = false;
+		}
+	}
+	if (m_isWeb_Sub_3)
+	{
+		m_dDelay_Sub_3 += dTimeDelta;
+		if (m_dDelay_Sub_3 > 0.14f)
+		{
+			m_dDelay_Sub_3 = 0.0;
+			Shoot_JikWeb();
+			m_isWeb_Sub_3 = false;
+		}
+	}
+
+
+
 	m_dDelay_All += dTimeDelta;
 
 	//첫 거미줄 웨이브

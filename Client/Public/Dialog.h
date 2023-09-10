@@ -14,7 +14,7 @@ BEGIN(Client)
 
 class CDialog final : public CUI
 {
-	enum NAME_TYPE { TANJIRO, MOTHER, GIRL, NAME_END };
+	enum NAME_TYPE { TANJIRO, MOTHER, GIRL, ZENITSU, BOY, MAN, NAME_END };
 
 
 public:

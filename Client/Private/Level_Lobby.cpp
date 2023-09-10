@@ -1421,6 +1421,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_ComboDown_Kick.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_ComboDown_Kick");
+		return E_FAIL;
+	}
+
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO

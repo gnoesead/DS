@@ -999,6 +999,17 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		 for (_uint i = 0; i < 30; ++i)
 			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		 break;
+	 case CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_KICK:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		 EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.05f,0.15f }; EffectWDesc.vStartPosZ = { 0.f,0.5f };
+		 EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
+		 EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f }; EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		 EffectWDesc.vSizeSpeedX = { 0.3f , 0.5f }; EffectWDesc.vSizeSpeedY = { 0.3f , 0.5f };
+
+		 for (_uint i = 0; i < 5; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
 	default:
 		break;
 	}
