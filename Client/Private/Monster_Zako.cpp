@@ -1528,7 +1528,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.85f, 0.03f);
+		Jumping(1.5f, 0.03f);
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
