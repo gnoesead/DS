@@ -10,6 +10,8 @@
 #include "Camera_Manager.h"
 #include "Camera_Free.h"
 
+#include "ParticleManager.h"
+#include "CustomParticle.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -45,15 +47,29 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	}
 
 	Get_PlayerComponent();
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-	m_StatusDesc.fHp = 15000.f;
-	m_StatusDesc.fHp_Max = 15000.f;
-	m_eCurAnimIndex = ANIM_IDLE;
-	m_eCurstate = STATE_BEGIN;
-	m_eCurPhase = BEGIN;
-	m_eCurNavi = NAVI_ACAZA;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
-	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	{
+		m_StatusDesc.fHp = 2000.f;
+		m_StatusDesc.fHp_Max = 2000.f;
+		m_eCurAnimIndex = ANIM_IDLE;
+		m_eCurstate = STATE_BEGIN;
+		m_eCurPhase = BEGIN;
+		m_eCurNavi = NAVI_ACAZA;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(120.f, 0.f, 130.f, 1.f));
+	}
+	else
+	{
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			m_bTrain_Stage = true;
+
+		m_eCurNavi = NAVI_TRAIN;
+	}
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 
 }
@@ -61,23 +77,28 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 void CBoss_Akaza::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
-	
+
 	if (true == m_isDead)
 		return;
 
 #ifdef _DEBUG
 	Debug_State(dTimeDelta);
 
-#endif // _DEBUG	
+#endif // _DEBUG
 
-	Update_Hit_Messenger(dTimeDelta);
-	//Update_Trigger(dTimeDelta);
-	Update_State(dTimeDelta);
+	Update_Train_Stage();
 
-	m_pModelCom->Set_Animation(m_eCurAnimIndex);
-	m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	{
+		Update_Hit_Messenger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
+		Update_State(dTimeDelta);
 
-	EventCall_Control(dTimeDelta);
+		m_pModelCom->Set_Animation(m_eCurAnimIndex);
+		m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+
+		EventCall_Control(dTimeDelta);
+	}
 
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
@@ -89,8 +110,11 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 void CBoss_Akaza::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
-	Update_AnimIndex(m_eCurAnimIndex);
-	Gravity(dTimeDelta);
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	{
+		Update_AnimIndex(m_eCurAnimIndex);
+		Gravity(dTimeDelta);
+	}
 }
 
 HRESULT CBoss_Akaza::Render()
@@ -211,7 +235,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.75f);
+		m_pRendererCom->Set_BloomRatio(0.5f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -334,7 +358,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 	{
 		m_iEvent_Index = 0;
 	}
-	
+
 	if (EventCallProcess())
 	{
 		_vector vMonsterDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -555,6 +579,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 
 				Camera_Shake(0.5, 150);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 			}
 
 		}
@@ -575,7 +602,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLongLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 			}
-
+			if (2 == m_iEvent_Index) // 0.75
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Upper", m_pTransformCom);
+			}
 
 		}
 #pragma region 평타콤보
@@ -584,6 +614,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_0", m_pTransformCom);
+
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_0", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
@@ -595,29 +627,41 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			//dLifeTime = 0.20;
 			if (0 == m_iEvent_Index)
-			{
+			{//0.3
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_1", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
-
+			if (1 == m_iEvent_Index)
+			{//0.45
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_1", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
+			{//0.6
+			}
 		}
 		if (ANIM_COMBO3 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.47
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
 			}
 			if (1 == m_iEvent_Index)
+			{//0.57
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_2", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
 			{//0.75
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_2_1", m_pTransformCom);
 			}
-			if (2 == m_iEvent_Index)
+			if (3 == m_iEvent_Index)
 			{//0.8
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_2_1", m_pTransformCom);
+
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
@@ -642,10 +686,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3", m_pTransformCom, &EffectWorldDesc);
+
 				EffectWorldDesc.vPosition.x = Random::Generate_Float(-1.f, 1.f);
 				EffectWorldDesc.vPosition.y = Random::Generate_Float(0.2f, 2.f);
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3", m_pTransformCom, &EffectWorldDesc);
 			}
 
 
@@ -709,6 +757,190 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma endregion 공중장풍 끝
+
+#pragma region 달리기 & 점프 & 착지 등
+
+		if (59 == m_pModelCom->Get_iCurrentAnimIndex()) // Jump
+		{
+			if (0 == m_iEvent_Index) // 0.06
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+		}
+
+		if (62 == m_pModelCom->Get_iCurrentAnimIndex()) // 착지
+		{
+			if (0 == m_iEvent_Index) // 0.03
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (66 == m_pModelCom->Get_iCurrentAnimIndex()) // Run
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+
+			else if (1 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (67 == m_pModelCom->Get_iCurrentAnimIndex()) // Run End
+		{
+			if (0 == m_iEvent_Index) // 0.08
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (72 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (73 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (74 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (75 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (76 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (77 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+			}
+		}
+
+		if (81 == m_pModelCom->Get_iCurrentAnimIndex()) 
+		{
+			if (0 == m_iEvent_Index) 
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (82 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+
+			else if (3 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (83 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (84 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (85 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (88 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.04
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (93 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+#pragma endregion  달리기 & 점프 & 착지 끝
+
+
 		m_iEvent_Index++;
 	}
 }
@@ -881,7 +1113,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
-		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			m_pPlayer_Zenitsu->Set_Hit_Success_Hekireki(true);
+		}
 	}
 
 }
@@ -907,9 +1143,19 @@ void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 
 }
 
-void CBoss_Akaza::Update_TriggerTime(_double dTimeDelta)
+void CBoss_Akaza::Update_Train_Stage()
 {
+	if (m_bTrain_Stage == true)
+	{
+		if (m_bTrain_Stomp == false)
+		{
+			m_bTrain_Stomp = true;
+			Trigger_Train_JumpStomp();
+			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+		}
+	}
 }
+
 
 void CBoss_Akaza::Update_State(_double dTimeDelta)
 {
@@ -1017,6 +1263,9 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Akaza::STATE_HIT_HEKIREKI:
 		Update_Hit_Hekireki(dTimeDelta);
+		break;
+	case CBoss_Akaza::STATE_TRAIN_JUMPSTOMP:
+		Update_Train_JumpStomp(dTimeDelta);
 		break;
 
 	}
@@ -1853,6 +2102,18 @@ void CBoss_Akaza::Trigger_Awake_Cinematic()
 	m_pModelCom->Set_AnimisFinish(ANIM_CINEMATIC10);
 }
 
+void CBoss_Akaza::Trigger_Train_JumpStomp()
+{
+	m_bTrigger = true;
+	m_eCurstate = STATE_TRAIN_JUMPSTOMP;
+	m_pModelCom->Set_AnimResetTimeAcc(ANIM_SKILL_UP);
+	m_pModelCom->Set_AnimisFinish(ANIM_SKILL_UP);
+	m_pModelCom->Set_AnimisFinish(ANIM_SKILL_DOWN);
+	m_pModelCom->Set_AnimisFinish(ANIM_SKILL_DOWNEND);
+	m_bAnimFinish = false;
+	m_dJumpStompTime = 0.0;
+}
+
 void CBoss_Akaza::Trigger_Hit_Small()
 {
 
@@ -2280,6 +2541,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 				{
 					if (m_bAwake == true)
 					{
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
 						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
@@ -2287,8 +2550,11 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					}
 					else
 					{
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom);
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.y = 1.5f;
+						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Medium", m_pTransformCom, &EffectWorldDesc);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Medium", m_pTransformCom, &EffectWorldDesc);
+
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
 					}
@@ -3092,6 +3358,74 @@ void CBoss_Akaza::Update_Awake_Cinematic(_double dTimeDelta)
 
 }
 
+void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_SKILL_UP;
+	}
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_UP, 0.65f, dTimeDelta))
+	{
+		Jumping(12.0f, 0.1f);
+
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_UP) == true)
+	{
+
+		m_dJumpStompTime += dTimeDelta;
+
+		if (m_dJumpStompTime <= 3.10)
+			m_eCurAnimIndex = ANIM_SKILL_DOWN;
+
+		if (0.10 < m_dJumpStompTime && m_dJumpStompTime <= 0.10 + dTimeDelta)
+			JumpStop(3.0);
+		if (m_dJumpStompTime <= 3.0)
+		{
+			if (Check_Distance_FixY(5.f) == false)
+				m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
+		}
+
+		if (m_dJumpStompTime > 3.10)
+		{
+			m_pTransformCom->Go_Down(dTimeDelta * 15.0);
+
+			// 땅에 떨어졌을 때 임시코드
+			_float4 Pos;
+			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			if (Pos.y <= m_fLand_Y)
+			{
+				m_eCurAnimIndex = ANIM_SKILL_DOWNEND;
+
+				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.10, dTimeDelta))
+				{
+					//CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					//CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
+					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
+						CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
+
+					Camera_Shake(1.0, 1000);
+
+				}
+
+				Pos.y = m_fLand_Y;
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+
+			}
+			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
+			{
+				m_eCurAnimIndex = ANIM_IDLE;
+				m_bTrain_Stage = false;
+				//Trigger_Interact();
+			}
+		}
+	}
+
+}
+
 void CBoss_Akaza::Update_Hit_Small(_double dTimeDelta)
 {
 
@@ -3527,7 +3861,14 @@ HRESULT CBoss_Akaza::Add_Components()
 		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
 		return E_FAIL;
 	}
-
+	m_CharacterDesc.NaviDesc.iCurrentIndex = 1;
+	/* for.Com_Navigation_Acaza*/
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Navigation_Train"),
+		TEXT("Com_Navigation_Train"), (CComponent**)&m_pNavigationCom[NAVI_TRAIN], &m_CharacterDesc.NaviDesc)))
+	{
+		MSG_BOX("Failed to Add_Com_Navigation_Acaza: CPlayer");
+		return E_FAIL;
+	}
 
 
 	return S_OK;

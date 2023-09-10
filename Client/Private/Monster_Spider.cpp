@@ -49,7 +49,7 @@ HRESULT CMonster_Spider::Initialize(void* pArg)
 	}
 
 	First_Initiate();
-
+	Get_PlayerComponent();
 	return S_OK;
 }
 
@@ -82,8 +82,13 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 	//이벤트 콜
 	EventCall_Control(dTimeDelta);
 
-	
 
+	if (m_fLand_Y <= 1.1f)
+	{
+		Go_Dir_Constant(dTimeDelta, 18, 2.5f, _float4{ 0.0f, 0.0f, -1.0f, 0.0f });
+		Go_Dir_Constant(dTimeDelta, ANIM_DOWN, 2.5f, _float4{ 0.0f, 0.0f, -1.0f, 0.0f });
+	}
+	
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
 		return;
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
@@ -683,6 +688,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 	{
 		m_isDeath_Motion = true;
 		m_isSpiderBlow_Outer = false;
+
 	}
 
 	
@@ -742,6 +748,7 @@ void CMonster_Spider::Animation_Control_Down(_double dTimeDelta)
 		}
 	}
 
+	
 
 	if (iCurAnim == ANIM_IDLE)
 	{
@@ -788,7 +795,7 @@ void CMonster_Spider::First_Initiate()
 #pragma endregion
 
 
-	m_fScale = (rand() % 14 + 8) * 0.1f;
+	m_fScale = Random::Generate_Float(1.0f, 2.2f);
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 	m_fAttack = (rand() % 100 + 50) * 0.1f;

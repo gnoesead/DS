@@ -204,10 +204,14 @@ protected:
 	//스킬상태
 	_bool	m_isSkilling = { false };
 
-	
+	//쿄우가이 돌아가는 방
+	_bool	m_isJump_TurnRoom = { false };
+	_bool	m_isJump_Room_X = { false };
+	_bool	m_isJump_Room_Z = { false };
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
+	PLAYERTYPE		m_ePlayerType = { PLAYERTYPE_END };
 
 	//스왑시
 	_bool		m_isSwap_OnSky = { false };
@@ -243,6 +247,9 @@ protected: // 애니메이션 제어용 변수들
 	_bool m_isSwampHit = { false };
 	_double m_dSwampHit = { 0.0 };
 	_bool	m_isSwamp_Escape = { false };
+
+
+	_bool	m_isSwampBinding = { false };
 
 
 	//쿨타임 적용

@@ -25,6 +25,8 @@
 
 #include "SwampManager.h"
 
+#include "ParticleManager.h"
+
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -45,7 +47,8 @@ HRESULT CPlayer_Tanjiro::Initialize_Prototype()
 
 HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 {
-	
+	m_ePlayerType = PLAYER_TANJIRO;
+
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
@@ -96,7 +99,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // ¸¶Áö¸· ÀÌµ¿
 
 
-	CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
+	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
 
 	return S_OK;
 }
@@ -114,6 +117,86 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	//if (pGameInstance->Get_DIKeyDown(DIK_T))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_Cmn_Smoke_24_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_Y))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test2",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_25_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_G))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test3",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_d_e_cmn_Smoke_29_A")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(6, 6),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_H))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test4",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P0002_Aura006_00")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(8, 8),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.9f);
+	//}
+	//if (pGameInstance->Get_DIKeyDown(DIK_V))
+	//{
+	//	_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	//	vPos.y += 1.f;
+	//	vPos.z -= 0.5f;
+	//	_float3 vRange = { 0.3f, 0.5f, 0.3f };
+	//	_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+	//	_int3	vDirOption = { 1, 1, 1 };
+	//	// PoolTag, BufferTag, TextureTag, 
+	//	// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+	//	// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+	//	CParticleManager::GetInstance()->PlayParticle("Test5",
+	//		TEXT("Prototype_Component_VIBuffer_10_Particle"), TEXT("Prototype_Component_Texture_T_e_Skl_Wa_Scmn_Splash003")
+	//		, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4),
+	//		TEXT("Prototype_Component_Texture_ramp_ef_common_fire_glow_accent01 #1584892"), 0.95f);
+	//}
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_pRendererCom->Set_GrayScale();
@@ -124,7 +207,33 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		m_pRendererCom->Set_RadialBlur();
 	}
 
-	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
+	{
+		if (m_isFirst_SwampUi == false)
+		{
+			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
+			{
+				//m_isFirst_SwampUi = true;
+				m_isFirst_SwampUi = true;
+				Jumping(2.5f, 0.07f);
+				m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
+				m_isSwamp_Escape = true;
+				m_Moveset.m_isHitMotion = false;
+
+				m_dDelay_SwampHit_Again = 0.0;
+
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
+				m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
+			}
+		}
+	}
+
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
 	{
@@ -136,7 +245,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
-		CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		//CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
 	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
@@ -190,7 +300,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
 			return;
 	}
-
+	
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_int ak = 47;
@@ -347,6 +457,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
+	_float fDmg = 1.0f;
+	if (m_Moveset.m_iAwaken == 1)
+		fDmg = 1.2f;
+	else if (m_Moveset.m_iAwaken == 2)
+		fDmg = 1.5f;
+
+
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
@@ -373,7 +490,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (22 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -392,7 +509,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -404,7 +521,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 
 		}
@@ -427,7 +544,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 
@@ -444,7 +561,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -456,7 +573,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -468,7 +585,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.5f), 0.1,
-					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (25 == m_pModelCom->Get_iCurrentAnimIndex()) // Combo_Normal
@@ -489,7 +606,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (26 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Up
@@ -511,7 +628,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (27 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_Surge_Attack
@@ -520,7 +637,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.5,
-					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 9.0f);
+					CAtkCollider::TYPE_CUTSCENE, vPlayerDir, 9.0f * fDmg);
 			}
 		}
 
@@ -546,7 +663,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (30 == m_pModelCom->Get_iCurrentAnimIndex()) //Combo_
@@ -565,7 +682,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -585,31 +702,31 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (5 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 10.0f * fDmg);
 			}
 		}
 
@@ -629,27 +746,27 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (41 == m_pModelCom->Get_iCurrentAnimIndex()) // SKILL_MOVE µµÁß
@@ -657,7 +774,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 			}
 			
 		}
@@ -670,7 +787,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
 			}
@@ -686,7 +803,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			
 		}
@@ -716,7 +833,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 5.0,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -739,12 +856,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt_WaterParticle1", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -755,17 +872,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_DecalParticle", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 #pragma endregion
 
 #pragma region Move & Hitted
-		if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// ÂøÁö(Å½Çè)
-		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
-		}
+		//if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// ÂøÁö(Å½Çè)
+		//{
+		//	if (0 == m_iEvent_Index)	// 0.0
+		//		Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		//}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// ¾îµåº¥ÃÄ ´Þ¸®±â
 		{
@@ -909,6 +1026,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 			}
 		}
+
+		if (121 == m_pModelCom->Get_iCurrentAnimIndex())	// Blow ¾²·¯Áü
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
+		}
+
 
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// ¸Â°í ¾²·¯Áü(2¹ø)
 		{
@@ -1947,33 +2075,58 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 
 #pragma region Dmg_SwampBind
+
+	m_dDelay_SwampHit_Again += dTimeDelta;
 	if (m_Moveset.m_Down_Dmg_Swamp)
 	{
 		m_Moveset.m_Down_Dmg_Swamp = false;
 
+		if (m_dDelay_SwampHit_Again < 2.0)
+		{
+			// ±×³É °Ç³Ê¶Ü
+		}
+		else
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SWAMPBIND);
 
-		m_pModelCom->Set_Animation(ANIM_DMG_SWAMPBIND);
-		
-		m_isSwampHit = true;
-		m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.0f;
-		Jumping(0.01f, 0.01f);
+			m_isSwampHit = true;
+			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 1.5f;
+			Jumping(0.01f, 0.025f);
+			m_dSwampHit = 0.0;
+			m_isFirst_SwampHit = true;
+		}
 	}
 
 	if (m_isSwampHit)
 	{
 		m_dSwampHit += dTimeDelta;
-		if (m_dSwampHit > 1.5f)
+		if (m_dSwampHit > 0.4f)
 		{
 			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_DMG_SWAMPBIND)
 			{
-				m_isSwamp_Escape = true;
-				m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
-				Jumping(0.01f, 0.01f);
+				//m_isSwamp_Escape = true;
+				//m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
+				if (m_isFirst_SwampHit)
+				{
+					m_isFirst_SwampHit = false;
+					Jumping(0.01f, 0.01f);
+				}
 			}
 
 			_float4 Pos;
 			XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-			if (m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) > Pos.y/*m_fLand_Y*/)
+			if (Pos.y <= m_fLand_Y + 0.1f)
+			{
+				if (m_isFirst_SwampUi)
+				{
+					m_isFirst_SwampUi = false;
+
+					CBattle_UI_Manager::GetInstance()->Set_Timing_On(true);
+				}
+			}
+			
+			
+			if (m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) > Pos.y)
 			{
 				//m_fLand_Y += 0.01f;
 				_int ak = 47;
@@ -1982,12 +2135,23 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			{
 				m_dSwampHit = 0.0;
 				m_isSwampHit = false;
-				m_isSwamp_Escape = false;
+				//m_isSwamp_Escape = false;
+				m_isFirst_SwampUi = true;
+				m_isFirst_SwampHit = true;
 			}
 		}
 		
 		Create_SwampWaterParticleEffect(dTimeDelta);
 
+	}
+	else
+	{
+		_float4 Pos;
+		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		if (Pos.y <= m_fLand_Y + 0.1f)
+		{
+			m_isSwamp_Escape = false;
+		}
 	}
 #pragma endregion
 
@@ -2436,13 +2600,14 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		{
 			m_Moveset.m_isGetUpMotion = true;
 		}
-	}
-	else if (ANIM_DMG_SWAMPBIND == iCurAnimIndex)
-	{
-		if (m_isSwamp_Escape)
-			m_Moveset.m_isRestrict_Jump = false;
-		else
+
+		//½º¿ÑÇÁ ¹ÙÀÎµå
+		if (ANIM_DMG_SWAMPBIND == iCurAnimIndex)
+		{
 			m_Moveset.m_isDownMotion = true;
+			m_isSwampBinding = true;
+			
+		}
 	}
 	//ÄÞº¸°ø°Ý½Ã ¹«ºùÁ¦ÇÑ
 	else if (ANIM_ATK_COMBO == iCurAnimIndex
@@ -2612,6 +2777,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_pSword->Set_SwordIn(false);
 
 		m_isSkilling = false;
+
+		m_isSwampBinding = false;
 	}
 }
 

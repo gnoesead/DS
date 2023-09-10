@@ -30,7 +30,7 @@
 #include "Option.h"
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
-
+#include "Timing_UI.h"
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -379,7 +379,8 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
-
+	CharacterDesc.NPCDesc.Dialog_Type = 10;
+	CharacterDesc.NPCDesc.Icon_Type = 99;
 
 	//NPC_Zenitsu
 	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
@@ -709,7 +710,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 // Icon
 	CFIcon::UIDESC UIDesc5;
-	ZeroMemory(&UIDesc5, sizeof UIDesc5);
+	/*ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
 	UIDesc5.m_Type = 0;
 	UIDesc5.Pos = { 67.f, 0.f, 19.9f , 1.f };
@@ -719,7 +720,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		TEXT("Prototype_GameObject_FIcon"), &UIDesc5))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
-	}
+	}*/
 
 	ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
@@ -830,8 +831,26 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+// Timing_UI
+	CTiming_UI::UIDESC UIDesc9;
 
 
+    for (int i = 0; i < 7; i++) {
+		ZeroMemory(&UIDesc9, sizeof UIDesc9);
+
+		UIDesc9.m_Type = i;
+
+		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+			TEXT("Prototype_GameObject_Timing_UI"), &UIDesc9))) {
+			Safe_Release(pGameInstance);
+			return E_FAIL;
+		}
+	}
+
+
+	
+
+	
     Safe_Release(pGameInstance);
 
     return S_OK;
@@ -2153,10 +2172,15 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_12.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_11");
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_12");
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_22.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_22");
+		return E_FAIL;
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{

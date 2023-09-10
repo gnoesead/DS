@@ -35,7 +35,7 @@ HRESULT CMonster::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	
+
 
 	return S_OK;
 }
@@ -46,13 +46,15 @@ void CMonster::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
+
+	Check_Player_Awake();
 }
 
 void CMonster::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	if(m_isNavi_Y_Off == false)
+	if (m_isNavi_Y_Off == false)
 		Set_Height();
 }
 
@@ -74,17 +76,29 @@ void CMonster::Get_PlayerComponent()
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-
-	//m_pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+	m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
 	m_pPlayerTransformCom = pPlayer->Get_TransformCom();
 
-	if (m_pPlayerTransformCom == nullptr)
+	if (m_pPlayerTransformCom == nullptr || m_pPlayer_Tanjiro == nullptr || m_pPlayer_Zenitsu == nullptr)
 	{
 		Safe_Release(pGameInstance);
 		return;
 	}
-	
+
 	Safe_Release(pGameInstance);
+}
+
+void CMonster::Check_Player_Awake()
+{
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
+		m_bTanjiroAwake = true;
+	else
+		m_bTanjiroAwake = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
+		m_bZenitsuAwake = true;
+	else
+		m_bZenitsuAwake = false;
 }
 
 void CMonster::Calculate_To_Player()
@@ -106,7 +120,7 @@ void CMonster::Calculate_To_Player()
 	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_vector vTargetPosition = XMVectorSetY(vPlayerPos, XMVectorGetY(vMonsterPos));
 	_vector vDir_FixY = XMVector3Normalize(vTargetPosition - vMonsterPos);
-	
+
 	m_fDistance_To_Player = XMVectorGetX(XMVector3Length(vDistance));
 	XMStoreFloat4(&m_PlayerPos, vPlayerPos);
 	XMStoreFloat4(&m_Dir_To_Monster, vDir_To_Player);
@@ -124,7 +138,7 @@ _bool CMonster::Check_Distance(_float fDistance)
 
 	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
+
 	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
@@ -133,7 +147,7 @@ _bool CMonster::Check_Distance_FixY(_float fDistance)
 	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
 	Get_PlayerComponent();
 
-	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);	
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	vPlayerPos = XMVectorSetY(vPlayerPos, 0.f);
@@ -217,7 +231,7 @@ _vector CMonster::Calculate_Dir_Cross()
 	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
 
 	_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
-	_vector vCross = XMVector3Normalize( XMVector3Cross(vDir, vUp));
+	_vector vCross = XMVector3Normalize(XMVector3Cross(vDir, vUp));
 
 
 	return vCross;
@@ -248,14 +262,14 @@ _float CMonster::Calculate_Angle(_fvector vSourDir, _fvector vDestDir)
 _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
 {
 	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	
+
 	_float3 vCheck = Convert::ToFloat3(vRight);
 	if (0.f == vCheck.x && 0.f == vCheck.y && 0.f == vCheck.z)
 		return vDir;
 
 	_float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
 	_matrix RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(RandomAngle));
-	
+
 	_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 	RandomAngle = Random::Generate_Float(fMinX, fMaxX);
@@ -270,7 +284,7 @@ _vector CMonster::Rotation_Dir(_fvector vDir, _float fAngleX, _float fAngleY)
 	_vector vRotationDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
 	fAngle = fAngleY;
-	
+
 	RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(fAngle));
 	return vRotationDir = XMVector3TransformNormal(vRotationDir, RotationMatrix);
 }
@@ -297,7 +311,7 @@ void CMonster::Dir_Setting(_bool Reverse)
 	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
 	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
 
-	
+
 	if (Reverse)
 	{
 		v45Rotate = -v45Rotate;

@@ -14,6 +14,9 @@
 #include "OptionManager.h"
 #include "Camera_Manager.h"
 
+#include "WebManager.h"
+#include "Battle_UI_Manager.h"
+
 
 CPlayer::CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCharacter(pDevice, pContext)
@@ -69,7 +72,6 @@ HRESULT CPlayer::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 
-	
 	return S_OK;
 }
 
@@ -111,7 +113,8 @@ void CPlayer::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	Key_Input(dTimeDelta);
+	if(m_isSwampBinding == false)
+		Key_Input(dTimeDelta);
 }
 
 void CPlayer::LateTick(_double dTimeDelta)
@@ -278,7 +281,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);*/
 
-	if (m_Moveset.m_isDownMotion == false)
+	if (m_Moveset.m_isDownMotion == false && m_isSwamp_Escape == false)
 	{
 		CEffectPlayer::EFFECTWORLDDESC Effect3WorldDesc;
 		Effect3WorldDesc.vPosition.y += 0.8f;
@@ -415,7 +418,20 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 
 			m_Moveset.m_Down_Dmg_Web = true;
+			
 		}
+
+	
+		if (CPlayerManager::GetInstance()->Get_Hit_WebShot() && CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
+		{
+			CPlayerManager::GetInstance()->Set_Hit_WebShot(false);
+
+			m_Moveset.m_Down_Dmg_Web = true;
+
+			CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
+		}
+		
+		
 	}
 	else
 	{
@@ -491,47 +507,99 @@ void CPlayer::Key_Input(_double dTimeDelta)
 #pragma endregion
 
 	
-	Trigger_Hit(dTimeDelta);
-
-	if (m_isSwapping_State == false)
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
 	{
-		if (m_Moveset.m_isHitMotion == false)
+		//Äì¿ì°¡ÀÌ µ¹¾Æ°¡´Â ·ë
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
 		{
-			if (m_Moveset.m_isRestrict_Adventure == false)
+			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
 			{
-				Key_Input_Battle_Move(dTimeDelta);
-			}
-
-
-			if (m_ePlayerState == PLAYER_ADVENTURE)
-			{
-				Key_Input_Adventure(dTimeDelta);
-			}
-			else if (m_ePlayerState == PLAYER_BATTLE)
-			{
-				Key_Input_Battle_Jump(dTimeDelta);
-
-				Key_Input_Battle_Attack(dTimeDelta);
-
-				Key_Input_Battle_ChargeAttack(dTimeDelta);
-
-				Key_Input_Battle_Skill(dTimeDelta);
-
-				Key_Input_Battle_Guard(dTimeDelta);
-
-				Key_Input_Battle_Dash(dTimeDelta);
-
-				Key_Input_Battle_Awaken(dTimeDelta);
-
-				Key_Input_Battle_Special(dTimeDelta);
+				m_isJump_TurnRoom = true;
+				m_isJump_Room_X = false;
+				m_isJump_Room_Z = false;
+				Jumping(3.0f, 0.05f);
+				
+				if (m_ePlayerType == PLAYER_TANJIRO)
+				{
+					m_pModelCom->Set_Animation(83);
+				}
+				else if (m_ePlayerType == PLAYER_ZENITSU)
+				{
+					m_pModelCom->Set_Animation(56);
+				}
 			}
 		}
-		else
+		// 125.11f, 0.05f, 121.95f, 1.0f
+		if (m_isJump_TurnRoom)
 		{
-			Key_Input_Down(dTimeDelta);
+			_float4		PlayerPos;
+			XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			_float	fMove = 0.12f;
+
+			if (PlayerPos.x < 123.1f)
+				PlayerPos.x += fMove;
+			else if (127.1f < PlayerPos.x)
+				PlayerPos.x -= fMove;
+			else
+				m_isJump_Room_X = true;
+
+			if (PlayerPos.z < 120.0f)
+				PlayerPos.z += fMove;
+			else if (124.0f < PlayerPos.z)
+				PlayerPos.z -= fMove;
+			else
+				m_isJump_Room_Z = true;
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&PlayerPos));
+			if (m_isJump_Room_X && m_isJump_Room_Z)
+			{
+				m_isJump_TurnRoom = false;
+				m_isJump_Room_X = false;
+				m_isJump_Room_Z = false;
+			}
+		}
+
+		Trigger_Hit(dTimeDelta);
+
+		if (m_isSwapping_State == false)
+		{
+			if (m_Moveset.m_isHitMotion == false)
+			{
+				if (m_Moveset.m_isRestrict_Adventure == false)
+				{
+					Key_Input_Battle_Move(dTimeDelta);
+				}
+
+
+				if (m_ePlayerState == PLAYER_ADVENTURE)
+				{
+					Key_Input_Adventure(dTimeDelta);
+				}
+				else if (m_ePlayerState == PLAYER_BATTLE)
+				{
+					Key_Input_Battle_Jump(dTimeDelta);
+
+					Key_Input_Battle_Attack(dTimeDelta);
+
+					Key_Input_Battle_ChargeAttack(dTimeDelta);
+
+					Key_Input_Battle_Skill(dTimeDelta);
+
+					Key_Input_Battle_Guard(dTimeDelta);
+
+					Key_Input_Battle_Dash(dTimeDelta);
+
+					Key_Input_Battle_Awaken(dTimeDelta);
+
+					Key_Input_Battle_Special(dTimeDelta);
+				}
+			}
+			else
+			{
+				Key_Input_Down(dTimeDelta);
+			}
 		}
 	}
-	
 
 	Safe_Release(pGameInstance);
 }
@@ -932,12 +1000,15 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 		m_Moveset.m_Down_Battle_Awaken = true;
 		m_StatusDesc.iSpecial_Cnt--;
 
+		m_StatusDesc.fMp = m_StatusDesc.fMp_Max;
+
 		if (m_Moveset.m_iAwaken == 0)
 		{
 			m_Moveset.m_iAwaken = 1;
 			m_StatusDesc.iAwaken = 1;
 			m_StatusDesc.isAwaken_First = true;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
+
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
@@ -1427,7 +1498,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
 	{
 		m_dDelay_Swapping_Pos += dTimeDelta;
-		if (m_dDelay_Swapping_Pos < 0.85f)
+		if (m_dDelay_Swapping_Pos < 0.35f) //0.85
 		{
 			_float4 SwappingPos = CPlayerManager::GetInstance()->Get_Swaping_Pos();
 			_float4 MyPos;

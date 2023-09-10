@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Character.h"
-
+#include "Player.h"
 BEGIN(Engine)
 
 END
@@ -31,6 +31,7 @@ public:
 
 protected:
 	void Get_PlayerComponent();
+	void Check_Player_Awake();
 
 protected: // Calculate
 	void  Calculate_To_Player();
@@ -98,7 +99,9 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bNoDmg = { false };
 	_bool	m_bSuperArmor = { false };
 	_bool	m_bMove = { false };
-
+	
+	_bool	m_bTanjiroAwake = { false };
+	_bool	m_bZenitsuAwake = { false };
 protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
@@ -128,7 +131,8 @@ protected:
 	_float	m_fOutlineFaceThickness = 0.3f;
 protected:
 	CTransform* m_pPlayerTransformCom = { nullptr };
-
+	CPlayer* m_pPlayer_Tanjiro = { nullptr };
+	CPlayer* m_pPlayer_Zenitsu = { nullptr };
 protected:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();
