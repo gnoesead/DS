@@ -16,6 +16,9 @@
 
 #include "WebManager.h"
 
+#include "ParticleManager.h"
+#include "CustomParticle.h"
+
 CWebShot::CWebShot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMasterEffect(pDevice, pContext)
 {
@@ -81,6 +84,25 @@ void CWebShot::Tick(_double dTimeDelta)
 
 	Tick_For_Index(dTimeDelta);
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (pGameInstance->Get_DIKeyDown(DIK_LBRACKET))
+	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_float3 vMinRange = { -1.f, 0.f, -1.f };
+		_float3 vMaxRange = { 1.f, 1.f, 1.f };
+		_float3 vTPerD = { 0.2f, 0.5f, 0.2f };
+		_int3	vDirOption = { 1, 0, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("WebSprite",
+			TEXT("Prototype_Component_VIBuffer_20_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P1007_Atk_Spiderweb010")
+			, vPos, 1.f, 0.5f, 1.f, 0.5f, 1.5f, vMinRange, vMaxRange, 0.5f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE, 0.f, _int2(6, 6), true);
+	}
+
+	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Go_Dir(dTimeDelta * m_WebDesc.fSpeed, XMLoadFloat4(&m_WebDesc.vDir));
 	//m_pTransformCom->Go_Straight(dTimeDelta);
@@ -113,6 +135,18 @@ void CWebShot::LateTick(_double dTimeDelta)
 	
 	if (m_isHit)
 	{
+		_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		_float3 vMinRange = { -0.5f, -0.5f, -0.5f };
+		_float3 vMaxRange = { 0.5f, 1.f, 0.5f };
+		_float3 vTPerD = { 3.f, 1.5f, 3.f };
+		_int3	vDirOption = { 1, 0, 1 };
+		// PoolTag, BufferTag, TextureTag, 
+		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+		// MinRange, MaxRange, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+		CParticleManager::GetInstance()->PlayParticle("WebSprite",
+			TEXT("Prototype_Component_VIBuffer_5_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P1007_Atk_Spiderweb010")
+			, vPos, 1.f, 0.1f, 0.2f, 1.f, 1.5f, vMinRange, vMaxRange, 1.f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE, 0.f, _int2(2, 2), true);
+
 		m_fAlphaCut += 0.05f;
 		if (1.0f <= m_fAlphaCut )
 		{
