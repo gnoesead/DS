@@ -219,7 +219,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
-		CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		//CSwampManager::GetInstance()->Set_Dmg(10.0f);
+		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
 	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
@@ -338,10 +339,30 @@ HRESULT CPlayer_Tanjiro::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(1);
+			{
+				if (m_isSkilling == false)
+					m_pShaderCom->Begin(1);
+				else
+				{					
+					m_pShaderCom->Begin(5);
+				}
+			}
 
 			m_pModelCom->Render(m_iMeshNum);
 		}
+		//// RimLight
+		//for (_uint i = 0; i < iNumMeshes; i++)
+		//{
+		//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		//		return E_FAIL;
+
+		//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+		//		return E_FAIL;
+
+		//	m_pShaderCom->Begin(7);
+
+		//	m_pModelCom->Render(i);
+		//}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
 		{
@@ -355,6 +376,7 @@ HRESULT CPlayer_Tanjiro::Render()
 
 			m_pModelCom->Render(i);
 		}
+		
 #pragma endregion
 	}
 	return S_OK;
@@ -762,11 +784,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 #pragma endregion
 
 #pragma region Move & Hitted
-		if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// ÂøÁö(Å½Çè)
-		{
-			if (0 == m_iEvent_Index)	// 0.0
-				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
-		}
+		//if (4 == m_pModelCom->Get_iCurrentAnimIndex())	// ÂøÁö(Å½Çè)
+		//{
+		//	if (0 == m_iEvent_Index)	// 0.0
+		//		Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+		//}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())	// ¾îµåº¥ÃÄ ´Þ¸®±â
 		{
@@ -910,6 +932,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 			}
 		}
+
+		if (121 == m_pModelCom->Get_iCurrentAnimIndex())	// Blow ¾²·¯Áü
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+
+				Play_FallDownEffect();
+			}
+		}
+
 
 		if (126 == m_pModelCom->Get_iCurrentAnimIndex())	// ¸Â°í ¾²·¯Áü(2¹ø)
 		{
@@ -2742,14 +2775,7 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-
-	
-	// ½´ÆÛ¾Æ¸Ó »óÅÂ ³Ö¾îÁÖ¼À
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
-		return E_FAIL;
-
-
-
+		
 	Safe_Release(pGameInstance);
 
 	return S_OK;

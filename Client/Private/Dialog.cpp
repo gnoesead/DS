@@ -98,6 +98,10 @@ HRESULT CDialog::Initialize(void * pArg)
 	m_szName[TANJIRO] = L"카마도 탄지로";
 	m_szName[GIRL] = L"소녀";
 	m_szName[MOTHER] = L"여자";
+	m_szName[BOY] = L"남자아이";
+	m_szName[MAN] = L"남자";
+	m_szName[ZENITSU] = L"아가츠마 젠이츠";
+
 
 
 // Main
@@ -108,32 +112,34 @@ HRESULT CDialog::Initialize(void * pArg)
 	
 	// 1
 	m_szMain_2.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szMain_2.push_back(L"아리가또");
+	m_szMain_2.push_back(L"그래 알겠어");
 	
 	// 2
 	m_szMain_3.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szMain_3.push_back(L"아리가또");
+	m_szMain_3.push_back(L"그래 알겠어");
 	
 // Sub
 	// 3
-	m_szSub_1.push_back(L"방해되니까 비켜");
-	m_szSub_1.push_back(L"말씀이 심하시네요");
-
+	m_szSub_1.push_back(L"혹시 수상한 혈귀를 보신 적 있나요?");
+	m_szSub_1.push_back(L"혈귀..?? 음..잘 모르겠는걸");
+	m_szSub_1.push_back(L"그럼 마을에 이상한 현상이라도 없었나요?");
+	m_szSub_1.push_back(L"음..아! 요즘 젊은 소녀들이 갑자기 사라진다는 소문이 있어");
+	m_szSub_1.push_back(L"(소녀들이 사라진다고,,?) 흠..그렇군요. 감사합니다!");
 	// 4
-	m_szSub_2.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szSub_2.push_back(L"아리가또");
+	m_szSub_2.push_back(L"저기..말씀 좀 여쭤봐도 될까요?");
+	m_szSub_2.push_back(L"내 딸...내 딸이 사려졌어..아무도 믿어주질 않아..너도 똑같겠지");
 
 	// 5
-	m_szSub_3.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szSub_3.push_back(L"아리가또");
+	m_szSub_3.push_back(L"지붕에서 계속 이상한 기운이 느껴져..");
+	m_szSub_3.push_back(L"(지붕..? 단서가 있을지도 몰라 가보자!)");
 
 	// 6
-	m_szSub_4.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szSub_4.push_back(L"아리가또");
+	m_szSub_4.push_back(L"저희 아빠가 다쳤어요..제발 도와주세요!!");
+	m_szSub_4.push_back(L"이런!! 사람들이..!");
 
 	// 7
-	m_szSub_5.push_back(L"여긴 위험하니 집으로 들어가세요");
-	m_szSub_5.push_back(L"아리가또");
+	m_szSub_5.push_back(L"저 집에 들어갈 생각이라면 그만둬요. 얼마나 음산한지..소름이 끼친다구요");
+	
 
 
 // Talk
@@ -142,26 +148,26 @@ HRESULT CDialog::Initialize(void * pArg)
 	m_szTalk_1.push_back(L"말씀이 심하시네요");
 
 	// 9
-	m_szTalk_2.push_back(L"방해되니까 비켜");
-	m_szTalk_2.push_back(L"말씀이 심하시네요");
+	m_szTalk_2.push_back(L"탄지로!! 왔구나! 이 집은 뭔가 무서워..들어가지말자");
+	m_szTalk_2.push_back(L"이 집에서 악취가 뿜어져나와..들어가봐야겠어.");
 
 	// 10
-	m_szTalk_3.push_back(L"방해되니까 비켜");
-	m_szTalk_3.push_back(L"말씀이 심하시네요");
+	m_szTalk_3.push_back(L"주변에 혈귀들이 있어. 들키지 않게 조용히 해야해");
+	m_szTalk_3.push_back(L"난 분명 죽을거야!! 도와줘 탄지로!!!");
 
 
 // Village Smell
 	// 11
-	m_szVillageSmell_1.push_back(L"(혈귀의 냄새가 남아있어1)");
-	m_szVillageSmell_1.push_back(L"(....서두르자)");
+	m_szVillageSmell_1.push_back(L"(이 냄새는....!!!! 혈귀다)");
+	m_szVillageSmell_1.push_back(L"(....여자들이 사라진 이유가..혹시?)");
 
 	// 12
-	m_szVillageSmell_2.push_back(L"(혈귀의 냄새가 남아있어2)");
-	m_szVillageSmell_2.push_back(L"(....서두르자)");
+	m_szVillageSmell_2.push_back(L"(혈귀의 냄새가 아직 남아있어)");
+	m_szVillageSmell_2.push_back(L"(....서두르자...!)");
 
 	// 13
-	m_szVillageSmell_3.push_back(L"(혈귀의 냄새가 남아있어3)");
-	m_szVillageSmell_3.push_back(L"(....서두르자)");
+	m_szVillageSmell_3.push_back(L"(냄새가 더 진해졌어..아니 이건 뭔가 달라)");
+	m_szVillageSmell_3.push_back(L"(어디서 나오는거지..벽 너머의 저 집인가?)");
 
 
 // House Smell
@@ -443,22 +449,22 @@ HRESULT CDialog::Render()
 			}
 			else if (m_Dialog_Type == 4) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 60.f - (_float)m_szSub_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 5) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_3[m_Cur_Num].c_str(), _float2((_float)m_fX - 50.f - (_float)m_szSub_3[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 6) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_4[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_4[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_4[m_Cur_Num].c_str(), _float2((_float)m_fX - 50.f - (_float)m_szSub_4[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 7) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_5[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szSub_5[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szSub_5[m_Cur_Num].c_str(), _float2((_float)m_fX - 85.f - (_float)m_szSub_5[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 8) {
@@ -468,7 +474,7 @@ HRESULT CDialog::Render()
 			}
 			else if (m_Dialog_Type == 9) {
 
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szTalk_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTalk_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 60.f - (_float)m_szTalk_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 10) {
@@ -482,9 +488,15 @@ HRESULT CDialog::Render()
 					return E_FAIL;
 			}
 			else if (m_Dialog_Type == 12) {
-
-				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szVillageSmell_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
-					return E_FAIL;
+				if (m_Cur_Num == 1) {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_2[m_Cur_Num].c_str(), _float2((_float)m_fX + 0.f - (_float)m_szVillageSmell_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				else {
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szVillageSmell_2[m_Cur_Num].c_str(), _float2((_float)m_fX - 40.f - (_float)m_szVillageSmell_2[m_Cur_Num].size() * 5.f, (_float)m_fY - 15.f), _float2(0.5f, 0.5f))))
+						return E_FAIL;
+				}
+				
 			}
 			else if (m_Dialog_Type == 13) {
 
@@ -552,7 +564,7 @@ HRESULT CDialog::Render()
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[MAN].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -564,7 +576,7 @@ HRESULT CDialog::Render()
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[MAN].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -572,11 +584,11 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 5) {
 
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -584,11 +596,11 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 6) {
 
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[BOY].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -596,11 +608,11 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 7) {
 
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -620,11 +632,11 @@ HRESULT CDialog::Render()
 			else if (m_Dialog_Type == 9) {
 
 				if (m_Name_Type == 1) {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[ZENITSU].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[TANJIRO].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
@@ -636,7 +648,7 @@ HRESULT CDialog::Render()
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[ZENITSU].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 

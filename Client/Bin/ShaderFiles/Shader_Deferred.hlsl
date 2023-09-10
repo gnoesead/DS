@@ -353,7 +353,17 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		discard;
 	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
-	Out.vColor = vDiffuse * vShade * 0.8f;
+	if(vDiffuse_Cha.r == 0.f)
+		Out.vColor = vDiffuse * vShade;
+	else
+	{
+		vShade = saturate(vShade);
+		vShade = ceil(vShade * 3.f) / 3.f;
+
+		Out.vColor = vDiffuse_Cha * vShade * 1.5f;
+	}
+
+	//Out.vColor = vDiffuse * vShade * 0.8f;
 
 	Out.vColor.rgb += vEmissive.rgb;
 

@@ -198,6 +198,11 @@ void CSwampShot::Tick_Type_Quad(_double dTimeDelta)
 
 		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
 		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
+		if (nullptr == pPlayer)
+		{
+			Safe_Release(pGameInstance);
+			return;
+		}
 		_vector vPlayerPos = (pPlayer->Get_TransformCom())->Get_State(CTransform::STATE_POSITION);
 		_float4 PlayerPos;
 		XMStoreFloat4(&PlayerPos, vPlayerPos);

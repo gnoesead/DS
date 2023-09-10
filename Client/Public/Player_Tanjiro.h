@@ -148,13 +148,6 @@ private:
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
 
-	
-private:
-	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
-	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
-
 private:
 	_double m_dWaterEffectAccTime = { 0.0 };	// 물에 빠졌을때 이펙트 용(안원)
 

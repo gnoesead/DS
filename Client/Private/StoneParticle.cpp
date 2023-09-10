@@ -167,9 +167,6 @@ HRESULT CStoneParticle::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fUVRatioY", &fUVRatioY, sizeof _float)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_fAlpha, sizeof _float)))
-		return E_FAIL;
-
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fColor", &m_fColor, sizeof _float)))
 		return E_FAIL;
 

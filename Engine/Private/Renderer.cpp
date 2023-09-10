@@ -543,6 +543,11 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
         return E_FAIL;
     }
 
+    if (FAILED(Render_TransparentWall()))
+    {
+        MSG_BOX("Failed to Render_TransparentWall");
+        return E_FAIL;
+    }
 #ifdef _DEBUG
     if (true == m_isRenderDebug)
     {
@@ -1553,6 +1558,7 @@ HRESULT CRenderer::Render_Effect_Particle()
         return E_FAIL;
     if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
         return E_FAIL;
+    m_fParticle_BrightRatio = 1.5f;
     if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBrigthRatio", &m_fParticle_BrightRatio, sizeof(_float))))
         return E_FAIL;
 
@@ -1745,6 +1751,22 @@ HRESULT CRenderer::Render_CallBack()
         if (FAILED(m_Func()))
             return S_OK;
     }
+
+    return S_OK;
+}
+
+HRESULT CRenderer::Render_TransparentWall()
+{
+    for (auto& pGameObject : m_RenderObjects[RENDER_TRANSPARENTWALL])
+    {
+        if (nullptr != pGameObject)
+            pGameObject->Render();
+
+        Safe_Release(pGameObject);
+
+    }
+
+    m_RenderObjects[RENDER_TRANSPARENTWALL].clear();
 
     return S_OK;
 }

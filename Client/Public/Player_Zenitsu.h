@@ -156,15 +156,6 @@ private:
 	_uint	m_iMeshNum = { 0 };
 
 
-
-private:
-	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
-	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
-
-
-
 private:
 	HRESULT Add_Components();
 	HRESULT	SetUp_ShaderResources();

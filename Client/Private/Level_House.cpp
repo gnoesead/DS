@@ -379,7 +379,8 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
-
+	CharacterDesc.NPCDesc.Dialog_Type = 10;
+	CharacterDesc.NPCDesc.Icon_Type = 99;
 
 	//NPC_Zenitsu
 	CharacterDesc.WorldInfo.vPosition = _float4(4.61f, 0.05f, 7.37f, 1.f);
@@ -2171,10 +2172,15 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_12.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_11");
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_12");
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_AtkCmb_22.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_AtkCmb_22");
+		return E_FAIL;
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{

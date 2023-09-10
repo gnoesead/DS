@@ -254,7 +254,7 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 	{
 		if (m_bBlocked)
 		{
-			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_TRANSPARENTWALL, this)))
 			{
 				Safe_Release(pGameInstance);
 				return;

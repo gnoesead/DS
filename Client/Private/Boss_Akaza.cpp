@@ -45,7 +45,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Akaza");
 		return E_FAIL;
 	}
-		
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -135,7 +135,12 @@ HRESULT CBoss_Akaza::Render()
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
 		else
-			m_pShaderCom->Begin(1);
+		{
+			if (m_bSuperArmor == false)
+				m_pShaderCom->Begin(1);
+			else
+				m_pShaderCom->Begin(4);
+		}
 
 		m_pModelCom->Render(m_iMeshNum);
 	}
@@ -516,9 +521,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.75
 			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
-				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN);
-
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
@@ -526,6 +528,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 
 				Camera_Shake(0.5, 150);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 			}
 
 		}
@@ -701,6 +706,190 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma endregion 공중장풍 끝
+
+#pragma region 달리기 & 점프 & 착지 등
+
+		if (59 == m_pModelCom->Get_iCurrentAnimIndex()) // Jump
+		{
+			if (0 == m_iEvent_Index) // 0.06
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+		}
+
+		if (62 == m_pModelCom->Get_iCurrentAnimIndex()) // 착지
+		{
+			if (0 == m_iEvent_Index) // 0.03
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (66 == m_pModelCom->Get_iCurrentAnimIndex()) // Run
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+
+			else if (1 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (67 == m_pModelCom->Get_iCurrentAnimIndex()) // Run End
+		{
+			if (0 == m_iEvent_Index) // 0.08
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (72 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (73 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (74 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (75 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (76 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (77 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+			}
+		}
+
+		if (81 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (82 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+
+			else if (3 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (83 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (84 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (85 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (88 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.04
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (93 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+#pragma endregion  달리기 & 점프 & 착지 끝
+
+
 		m_iEvent_Index++;
 	}
 }
@@ -745,12 +934,12 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
+				if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+				{
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+				}
 
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
-
-				/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);*/
 			}
 			else
 			{
@@ -771,16 +960,14 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+			{
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
-
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+			}
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -793,14 +980,12 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
-
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_2_Z", m_pTransformCom);*/
-
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+			{
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+			}
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -816,17 +1001,13 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
-
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
-
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_0_Z", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_X", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_1_Z", m_pTransformCom);*/
-
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
+			{
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
+			}
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -1109,7 +1290,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 	if ((m_StatusDesc.fHp > 0.f) && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max < 0.5f))
 	{
 		if (m_iTriggerCnt == 5)
-			m_iTriggerCnt = 0;		
+			m_iTriggerCnt = 0;
 	}
 
 	if (m_bTrigger == false)

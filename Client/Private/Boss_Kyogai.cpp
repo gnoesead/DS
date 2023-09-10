@@ -153,7 +153,12 @@ HRESULT CBoss_Kyogai::Render()
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
 		else
-			m_pShaderCom->Begin(1);
+		{
+			if (m_bSuperArmor == false)
+				m_pShaderCom->Begin(1);
+			else
+				m_pShaderCom->Begin(4);
+		}
 
 		m_pModelCom->Render(m_iMeshNum);
 	}
@@ -573,6 +578,18 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
 
+				if (ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex())
+				{
+					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom);
+				}
+
+				if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex())
+				{
+					CEffectPlayer::EFFECTWORLDDESC EffectDesc;
+					EffectDesc.vPosition.x += 0.6f;
+					EffectDesc.vPosition.y += 0.5f;
+					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom , &EffectDesc);
+				}
 			}
 
 
@@ -4237,9 +4254,6 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bSuperArmor, sizeof(_bool))))
 		return E_FAIL;
 
 	return S_OK;
