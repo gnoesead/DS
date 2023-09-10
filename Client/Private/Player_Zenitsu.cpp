@@ -185,6 +185,7 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		else if (m_bMotionBlur == false)
 			m_bMotionBlur = true;
 	}
+
 	Safe_Release(pGameInstance);
 
 
@@ -316,6 +317,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 	_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
+	_float fDmg = 1.0f;
+	if (m_Moveset.m_iAwaken == 1)
+		fDmg = 1.2f;
+	else if (m_Moveset.m_iAwaken == 2)
+		fDmg = 1.5f;
+	
+
 	if (EventCallProcess())
 	{
 #pragma region Combo_Attack
@@ -335,7 +343,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 0.f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (4 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -350,7 +358,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 		if (5 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -365,7 +373,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -378,7 +386,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -389,7 +397,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 			}
 		}
 		if (7 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -417,7 +425,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.2f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f);
+					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f * fDmg);
 			}
 			else if (1 == m_iEvent_Index) {
 
@@ -436,25 +444,25 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 2.0f * fDmg);
 			}
 			if (1 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.f), 0.5,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 0.f), 0.5,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 4.0f);
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 4.0f * fDmg);
 			}
 		}
 
@@ -486,7 +494,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f * fDmg);
 			}
 			else if (1 == m_iEvent_Index) {
 				
@@ -532,7 +540,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -542,7 +550,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 			}
 		}
 
@@ -563,7 +571,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f * fDmg);
 			}
 
 			
@@ -598,7 +606,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.0f);
+					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.0f * fDmg);
 			}
 		}
 
@@ -625,7 +633,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f);
+					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -636,8 +644,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 
 			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.7f), 5.0,
-				CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f);
+				CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 
+			
 		}
 
 #pragma endregion
@@ -656,7 +665,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 6.7f * fDmg);
 			}
 			else if (1 == m_iEvent_Index) {
 
@@ -668,6 +677,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom , &EffectWorldDesc);
 
+				
+
 			}
 			else if (2 == m_iEvent_Index) {
 
@@ -678,6 +689,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 
 			}
 		}
@@ -706,7 +719,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
-					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 8.6f);
+					CAtkCollider::TYPE_HEKIREKI, vPlayerDir, 6.7f * fDmg);
 			}
 			else if (1 == m_iEvent_Index) {
 
@@ -745,7 +758,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 8.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -753,9 +766,30 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 
 #pragma region Step
-		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_BATTLE_STEP_B == m_pModelCom->Get_iCurrentAnimIndex())	// 68
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_BATTLE_STEP_F == m_pModelCom->Get_iCurrentAnimIndex())	// 69
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (ANIM_BATTLE_STEP_L == m_pModelCom->Get_iCurrentAnimIndex())	// 70
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+
+			else if (1 == m_iEvent_Index)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
@@ -766,13 +800,34 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		}
 		else if (71 == m_pModelCom->Get_iCurrentAnimIndex()) {
 
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+
+			if (1 == m_iEvent_Index)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.f;
 
 				//CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
+		if (72 == m_pModelCom->Get_iCurrentAnimIndex())	// 72
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+			}
+		}
+
+		if (73 == m_pModelCom->Get_iCurrentAnimIndex())	// 73
+		{
+			if (0 == m_iEvent_Index)	// 0초
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 			}
 		}
 
@@ -902,8 +957,87 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 #pragma endregion
 
+#pragma region Run & DmgDown
+		if (59 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DASHLAND);
+			}
+		}
+
+		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 62
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+			else if (1 == m_iEvent_Index) // 0.16
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+			else if (2 == m_iEvent_Index) // 0.38
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+		}
+
+		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (86 == m_pModelCom->Get_iCurrentAnimIndex())	// Blow 떨어짐
+		{
+			if (0 == m_iEvent_Index)	// 0.04
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (87 == m_pModelCom->Get_iCurrentAnimIndex())	// Big Blow 데구르르르
+		{
+			if (0 == m_iEvent_Index)	// 0.23
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+			else if (1 == m_iEvent_Index) // 0.5
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			else if (2 == m_iEvent_Index) // 0.95
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+		}
+
+		if (101 == m_pModelCom->Get_iCurrentAnimIndex())	// Dmg Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (111 == m_pModelCom->Get_iCurrentAnimIndex())	// Spin Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (114 == m_pModelCom->Get_iCurrentAnimIndex())	// UpperBlow Fall
+		{
+			if (0 == m_iEvent_Index)	// 0.0
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
 
 
+#pragma endregion
 
 		m_iEvent_Index++;
 	}
@@ -1066,28 +1200,35 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 
 
 	//공중 트랙공격 (이동키 + 공격키)
-	if (m_Moveset.m_Down_Battle_Jump_TrackAttack)
+	if (m_Moveset.m_Down_Battle_Jump_TrackAttack )
 	{
 		m_Moveset.m_Down_Battle_Jump_TrackAttack = false;
 
-		if (m_isComboing_Down == false)
+		
+		if (m_isHekireki == false)
 		{
-			m_isFirst_JumpAtk = false;
-
-			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			if (m_isComboing_Down == false)
 			{
-				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
-					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+				m_isFirst_JumpAtk = false;
+
+				if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+				{
+					if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
+						m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+				}
+				m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
+				JumpStop(0.9);
+				Set_FallingStatus(5.5f, 0.04f);
 			}
-			m_pModelCom->Set_Animation(ANIM_ATK_AIRTRACK);
-			JumpStop(0.9);
-			Set_FallingStatus(5.5f, 0.04f);
 		}
+		
 	}
 	m_pModelCom->Set_EarlyEnd(2, true, 0.55f);
 	Ground_Animation_Play(1, 2);
 	Go_Straight_Constant(dTimeDelta, 1, 3.f * m_fScaleChange);
 	Go_Straight_Deceleration(dTimeDelta, 2, 3.f * m_fScaleChange, 0.2f * m_fScaleChange); // Down
+
+	
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
@@ -1341,7 +1482,6 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			Set_FallingStatus(0.0f, 0.07f);
 		}
 	}
-
 	
 	
 	m_dDelay_Hekireki_AnotherCan += dTimeDelta;
@@ -1406,7 +1546,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			if (m_isCan_Mp_Skill)
 			{
 				if (m_StatusDesc.iAwaken < 2)
-					m_StatusDesc.fMp -= 10.0f;
+					m_StatusDesc.fMp -= 12.0f;
 				m_dDelay_Mp_Used = 0.0;
 			}
 		}
@@ -2297,6 +2437,8 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_pSwordHome->Set_SwordIn(true);
 
 		m_isSkilling = false;
+
+		
 	}
 }
 

@@ -579,6 +579,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 
 				Camera_Shake(0.5, 150);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 			}
 
 		}
@@ -754,6 +757,190 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		}
 #pragma endregion 공중장풍 끝
+
+#pragma region 달리기 & 점프 & 착지 등
+
+		if (59 == m_pModelCom->Get_iCurrentAnimIndex()) // Jump
+		{
+			if (0 == m_iEvent_Index) // 0.06
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+		}
+
+		if (62 == m_pModelCom->Get_iCurrentAnimIndex()) // 착지
+		{
+			if (0 == m_iEvent_Index) // 0.03
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (66 == m_pModelCom->Get_iCurrentAnimIndex()) // Run
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+
+			else if (1 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (67 == m_pModelCom->Get_iCurrentAnimIndex()) // Run End
+		{
+			if (0 == m_iEvent_Index) // 0.08
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+			}
+		}
+
+		if (72 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (73 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (74 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (75 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (76 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+			}
+		}
+
+		if (77 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		{
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.fScale = 1.8f;
+			}
+		}
+
+		if (81 == m_pModelCom->Get_iCurrentAnimIndex()) 
+		{
+			if (0 == m_iEvent_Index) 
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (82 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+
+			else if (3 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
+		if (83 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (84 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (85 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.05
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (88 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)	// 0.04
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+		if (93 == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
+#pragma endregion  달리기 & 점프 & 착지 끝
+
+
 		m_iEvent_Index++;
 	}
 }

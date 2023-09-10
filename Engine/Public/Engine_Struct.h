@@ -17,6 +17,8 @@ namespace Engine
 		enum TYPE { TYPE_DIRECTION, TYPE_POINT,TYPE_END };
 
 		TYPE				eType;
+		XMFLOAT3			vLightOffsetPos = { 0.f,0.f,0.f };
+
 		XMFLOAT4			vLightDir;
 		XMFLOAT4			vLightPos;
 		float				fLightRange;

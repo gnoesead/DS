@@ -30,8 +30,8 @@ HRESULT CLevel_Tool::Initialize()
     if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
         return E_FAIL;
 
-    if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
-        return E_FAIL;
+    /*if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
+        return E_FAIL;*/
 
     return S_OK;
 }
@@ -94,8 +94,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera(const _tchar* pLayerTag)
     CCamera::CAMERADESC CameraDesc;
     ZeroMemory(&CameraDesc, sizeof(CameraDesc));
 
-    CameraDesc.vEye = _float4(0.f, 10.f, -7.f, 1.f);
-    CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
+    CameraDesc.vEye = _float4(120.f, 10.f, 122.f, 1.f);
+    CameraDesc.vAt = _float4(120.f, 0.f, 128.f, 1.f);
     CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
     CameraDesc.fFovY = XMConvertToRadians(60.f);
@@ -130,7 +130,7 @@ HRESULT CLevel_Tool::Ready_Layer_Player(const _tchar* pLayerTag)
     
     CharacterDesc.WorldInfo.vScale = _float3(1.f, 1.f, 1.f);
     CharacterDesc.WorldInfo.fDegree = 0.f;
-    CharacterDesc.WorldInfo.vPosition = _float4(0.f, 0.f, 0.f, 1.f);
+    CharacterDesc.WorldInfo.vPosition = _float4(120.f, 0.f, 129.f, 1.f);
 
     CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
     CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
