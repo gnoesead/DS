@@ -55,6 +55,13 @@ private: // 변수
 	_bool	m_isFirst_All = { true };
 	_double	m_dDelay_All = { 0.0 };
 
+	_double m_dDelay_Sub = { 0.0 };
+	_double m_dDelay_Sub_2 = { 0.0 };
+	_double m_dDelay_Sub_3 = { 0.0 };
+	_float	m_fLimit_Sub = { 6.0 };
+	_bool	m_isWeb_Sub_2 = { false };
+	_bool	m_isWeb_Sub_3 = { false };
+
 	//트리거 제어용
 	_int	m_iTrigger_Index = { 1 };
 

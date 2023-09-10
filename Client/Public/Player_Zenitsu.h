@@ -136,6 +136,8 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isFirst_Hekireki_AirEnd = { false };
 
 	_bool	m_isHekireki_End_ForDir = { false };
+	
+	
 
 
 	//오의 용
