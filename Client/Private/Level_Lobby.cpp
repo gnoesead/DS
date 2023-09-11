@@ -1789,6 +1789,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Revolution.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Revolution");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 

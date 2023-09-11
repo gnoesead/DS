@@ -57,7 +57,7 @@ HRESULT Web_UI::Initialize(void * pArg)
 	m_fY = 360;
 	m_Origin_X = 1280.f;
 	m_Origin_Y = 720.f;
-	m_Size_Param = 0.2f;
+	m_Size_Param = 1.f;
 	m_UI_Layer = 11;
 
 	m_Is_Render = false;
@@ -75,15 +75,11 @@ void Web_UI::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	
+	m_UI_Layer = -10;
 
 	if (CBattle_UI_Manager::GetInstance()->Get_Web_UI_On() == true) {
-		m_Alpha += (_float)TimeDelta * 2.f;
-		m_Size_Param += TimeDelta * 6.f;
-
-		if (m_Size_Param > 1.4f) {
-			m_Size_Param = 1.4f;
-		}
+		m_Alpha += (_float)TimeDelta * 9.f;
+		
 
 		if (m_Alpha > 1.f) {
 			m_Alpha = 1.f;
@@ -102,11 +98,11 @@ void Web_UI::Tick(_double TimeDelta)
 		}
 	}
 	else {
-		m_Alpha -= (_float)TimeDelta * 0.7f;
+		m_Alpha -= (_float)TimeDelta * 1.5f;
 
 		if (m_Alpha < 0.f) {
 			m_Alpha = 0.f;
-			m_Size_Param = 0.2f;
+			
 		}
 
 	}

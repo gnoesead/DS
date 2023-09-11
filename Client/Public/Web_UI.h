@@ -51,7 +51,7 @@ public:
 
 private:
 	_int                   m_Cur_Num = { 0 };
-	_bool                  m_Is_Mask = { true };
+	_bool                  m_Is_Mask = { false };
 	_bool                  m_Is_Black_Mask = { true };
 
 	_bool                  m_Is_Selected = { false };
