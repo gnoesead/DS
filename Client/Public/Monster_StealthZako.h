@@ -2,6 +2,8 @@
 
 #include "Client_Defines.h"
 #include "Monster.h"
+#include "FIcon.h"
+
 
 BEGIN(Engine)
 
@@ -143,6 +145,10 @@ private:
 	_uint	m_iNumAnim = { 0 };
 	// ·»´õ È®ÀÎ¿ë
 	_uint	m_iMeshNum = { 0 };
+
+	CFIcon* m_pIcon_1 = { nullptr };
+	CFIcon* m_pIcon_2 = { nullptr };
+
 
 
 private:

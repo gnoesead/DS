@@ -111,7 +111,6 @@ public:
 	CHAR_STATUS Get_Status() {
 		return m_StatusDesc;
 	}
-
 	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);

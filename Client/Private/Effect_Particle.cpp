@@ -214,6 +214,11 @@ void CEffect_Particle::Check_PassIndex(void)
 		if (m_eEffectDesc.isTextureSheetAnimation)
 			m_iPassIndex = 4;
 
+		if (nullptr != m_pTextures[TEX_NOISE])
+		{
+			m_iPassIndex = 7;
+		}
+
 		if (nullptr != m_pTextures[TEX_RAMP])
 		{
 			m_iPassIndex = 5;

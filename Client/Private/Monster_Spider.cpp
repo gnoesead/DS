@@ -605,7 +605,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
 
-		pGameInstance->Time_Slow(0.3, 0.4);
+		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.10f, m_Hit_AtkDir);
 
@@ -628,7 +628,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isSpiderBlow = true;
 
-		pGameInstance->Time_Slow(0.3, 0.4);
+		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 #pragma endregion
 
@@ -651,7 +651,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isSpiderBlow = true;
 
-		pGameInstance->Time_Slow(0.3, 0.4);
+		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 	
 	_float4 Dir_To_Monster;

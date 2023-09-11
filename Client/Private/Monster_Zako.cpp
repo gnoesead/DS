@@ -1436,16 +1436,20 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
 
-			Play_HitEffect();
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				Play_HitEffect();
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			m_isConnectHitting = true;
 
-			Play_HitEffect();
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				Play_HitEffect();
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
 		}
 
 		m_dDelay_ComboChain = 1.0;
@@ -1508,9 +1512,10 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_dDelay_ComboChain = 1.7;
 		}
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
 		pGameInstance->Time_Slow(0.3, 0.15);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
@@ -1573,8 +1578,10 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			pGameInstance->Time_Slow(0.15, 0.1);
 		}
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1606,9 +1613,10 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		Jumping(1.4f, 0.05f); //1.2
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
 		pGameInstance->Time_Slow(0.6, 0.2);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
@@ -1652,12 +1660,14 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isStrictUpper = true;
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 		m_isHekireki_Hit = true;
 		m_dHekireki_Hit = 0.0;
-	
+
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
 
 		if (m_isJumpOn == false)
 		{
