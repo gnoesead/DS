@@ -1091,7 +1091,7 @@ void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fv
 	Safe_Release(pGameInstance);
 }
 
-void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
+void CCharacter::Create_SmeshStone(_fvector vOffsetPos , _float fScale)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -1099,6 +1099,7 @@ void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
 
 	CSmeshStone::EFFECTDESC EffectDesc;
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	EffectDesc.fScale = fScale;
 
 	pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_SmeshStone"), &EffectDesc);
 
@@ -1125,7 +1126,7 @@ void CCharacter::Play_FallDownEffect()
 
 void CCharacter::Play_HitEffect(_float3 vOffset)
 {
-	_uint iRanNum = Random::Generate_Int(0, 5);
+	_uint iRanNum = Random::Generate_Int(0, 4);
 
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 	EffectWorldDesc.vPosition = vOffset;
@@ -1137,6 +1138,7 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 		break;
 	case 1:
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
 		EffectWorldDesc.vPosition.y += 0.8f;
 		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
@@ -1144,6 +1146,7 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 	}
 	case 2:
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
 		EffectWorldDesc.vPosition.y += 0.8f;
 		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
@@ -1154,10 +1157,6 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
 		break;
 	case 4:
-		EffectWorldDesc.fScale = 1.4f;
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect6", m_pTransformCom, &EffectWorldDesc);
-		break;
-	case 5:
 		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
 		break;

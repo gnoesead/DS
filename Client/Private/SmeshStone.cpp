@@ -59,7 +59,7 @@ void CSmeshStone::Tick(_double TimeDelta)
 		if (m_TimeAcc > 0.1f)
 		{
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-			EffectWorldDesc.fScale = 2.f;
+			EffectWorldDesc.fScale = m_EffectDesc.fScale;
 			CEffectPlayer::Get_Instance()->Play("Swamp_Stone", m_pTransformCom, &EffectWorldDesc);
 
 			m_bPlay = true;
