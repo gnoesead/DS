@@ -60,6 +60,9 @@ public:
 	_bool	Get_Zenitsu_IndexPlus() { return m_isZenitsu_IndexPlus; }
 	void	Set_Zenitsu_IndexPlus(_bool up) { m_isZenitsu_IndexPlus = up; }
 
+	_bool	Get_Kyogai_On() { return m_isKyogai_On; }
+	void	Set_Kyogai_On(_bool on) { m_isKyogai_On = on; }
+
 private:
 	//다수 몬스터 어택관련
 	_int	m_iCnt_AttackOn = { 0 };
@@ -87,6 +90,10 @@ private:
 	_bool	m_isStealthEnd_BattleStart_Fade = { false };
 
 	_bool	m_isZenitsu_IndexPlus = { false };
+
+
+	//잠입모드
+	_bool	m_isKyogai_On = { false };
 
 public:
 	virtual void Free() override;

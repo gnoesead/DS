@@ -572,7 +572,7 @@ PS_OUT  PS_STONEPARTICLE(PS_IN In)
 
 	vector vDiffuse = g_Texture.Sample(LinearSampler, spriteUV);
 
-	vDiffuse.rgb = float3(vDiffuse.g, vDiffuse.g, vDiffuse.g) * 0.2f;
+	vDiffuse.rgb = float3(vDiffuse.g, vDiffuse.g, vDiffuse.g) * g_fColor;
 
 	Out.vColor = vDiffuse;
 

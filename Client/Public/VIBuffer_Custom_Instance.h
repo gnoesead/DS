@@ -23,7 +23,8 @@ public:
 		_int3		vDirOption = { 1, 1, 1 };
 		_double		dSpriteSpeed = { 1.0 };
 		_int2		vSpriteCount = { 1, 1 };
-
+		_bool		bSpriteRandomStart = { false };
+		
 		CVIBuffer_Point_Instance::INSTANCEDESC		InstanceDesc;
 	}VIB_CUSTOMPARTDESC;
 private:
@@ -43,7 +44,8 @@ private:
 	VIB_CUSTOMPARTDESC	m_CustomPartDesc;
 	_double				m_dTimeAcc = { 0.0 };
 	_double				m_dCycle = { 1.0 };
-
+	_int				m_iNumSprite = { 1 };
+	_int				m_iStartSprite = { 0 };
 private:
 	void Tick_Size(_double dTimeDelta);
 	void Tick_Dir(_double dTimeDelta);

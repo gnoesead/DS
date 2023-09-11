@@ -61,7 +61,7 @@ HRESULT CNPC_Female::Initialize(void* pArg)
 	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
 		m_pModelCom->Set_Animation(ANIM_SIT_IDLE);
 	else if (NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC)
-		m_pModelCom->Set_Animation(ANIM_SIT_LISTEN);
+		m_pModelCom->Set_Animation(ANIM_SIT_IDLE);
 	else if (NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC)
 		m_pModelCom->Set_Animation(ANIM_FLOOR_SIT_IDLE);
 	else if (NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
@@ -90,6 +90,11 @@ void CNPC_Female::Tick(_double dTimeDelta)
 
 			if (true == m_isDead)
 				return;
+
+			if (m_isTalking)
+			{
+				m_CharacterDesc.NPCDesc.eNPC = NPC_TALK;
+			}
 
 			Animation_Control(dTimeDelta);
 
@@ -310,7 +315,41 @@ void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 	}
 	else if ( NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-		
+		if (m_isFirst_Talk)
+		{
+			m_isFirst_Talk = false;
+
+			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SIT_IDLE)
+			{
+				m_pModelCom->Set_LinearDuration(ANIM_SIT_LISTEN, 0.5f);
+				m_pModelCom->Set_Animation(ANIM_SIT_LISTEN);
+			}
+			else if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_STAND_IDLE)
+			{
+				m_pModelCom->Set_LinearDuration(ANIM_LISTE_HARD, 0.5f);
+				m_pModelCom->Set_Animation(ANIM_LISTE_HARD);
+			}
+		}
+
+		if (m_isTalking)
+		{
+			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.01f);
+			if (Calculate_Distance() > 2.0f)
+			{
+				m_isTalking = false;
+
+				if (m_pModelCom->Get_iCurrentAnimIndex() == 10)
+				{
+					m_pModelCom->Set_LinearDuration(ANIM_SIT_LISTEN_END, 0.5f);
+					m_pModelCom->Set_Animation(ANIM_SIT_LISTEN_END);
+				}
+				else if (m_pModelCom->Get_iCurrentAnimIndex() == 5)
+				{
+					m_pModelCom->Set_LinearDuration(ANIM_LISTEN_HARD_END, 0.5f);
+					m_pModelCom->Set_Animation(ANIM_LISTEN_HARD_END);
+				}
+			}
+		}
 	}
 	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
 	{

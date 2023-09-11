@@ -17,6 +17,9 @@ BEGIN(Client)
 
 class CStoneParticle final : public CEffectW
 {
+public: 
+	enum STONE_TYPE {STONE_SWAMP , STONE_AKAZA_COMBODOWN , STONE_TANJIRO_COMBODOWN, STONE_LAND};
+
 private:
 	CStoneParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CStoneParticle(const CStoneParticle& rhs);
