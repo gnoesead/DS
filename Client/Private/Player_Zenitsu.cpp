@@ -1410,7 +1410,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	}
 
 
-	if (m_Moveset.m_Up_Battle_Charge && m_pModelCom->Get_iCurrentAnimIndex() == 20)
+	if (/*m_Moveset.m_Up_Battle_Charge && */m_pModelCom->Get_iCurrentAnimIndex() == 20)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
 	
@@ -1421,12 +1421,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 		}
 		m_pModelCom->Set_Animation(21);
 	}
-	else if (m_Moveset.m_Up_Battle_Charge )
+	/*else if (m_Moveset.m_Up_Battle_Charge )
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
 		
 		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
-	}
+	}*/
 	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
 }
 
