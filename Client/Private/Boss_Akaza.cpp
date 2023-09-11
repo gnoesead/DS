@@ -1032,10 +1032,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
-				if (PlayerIndex == 0) {
-					CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-					CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
-				}
+
+				//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				Play_HitEffect();
 
 			}
 			else
