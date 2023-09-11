@@ -3156,12 +3156,14 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.950, dTimeDelta))
+		m_pRendererCom->Set_BackLight();
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
 		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
 		m_eCurAnimIndex = ANIM_AWAKE_END;
 		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-		m_pRendererCom->Set_BackLight();
+		
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
 	{

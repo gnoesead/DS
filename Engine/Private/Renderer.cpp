@@ -842,7 +842,7 @@ HRESULT CRenderer::Render_SSAO()
 	{
 		m_fSSAOBias -= 0.0001f;
 	}
-	m_fSSAORadius = 0.000005f;
+	//m_fSSAORadius = 0.000005f;
 
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fRadius", &m_fSSAORadius, sizeof(_float))))
 		return E_FAIL;
@@ -2102,6 +2102,7 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAOSwitch", &m_bSSAOSwitch, sizeof(_bool))))
 		return E_FAIL;
 
+	
 	Safe_Release(pGameInstance);
 
 
@@ -2157,11 +2158,12 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
-	if (FAILED(m_pShader->SetUp_RawValue("g_bBackLight", &m_bBakcLight, sizeof(_bool))))
-		return E_FAIL;
+	
 	static _float fGrayRatio = 1.f;
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_fGrayRatio", &fGrayRatio, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_RawValue("g_bBackLight", &m_bBakcLight, sizeof(_bool))))
 		return E_FAIL;
 
 	if (m_bGrayScale)

@@ -229,7 +229,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	{
 		Out.vShade = saturate(Out.vShade);
 		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
-		Out.vShade = Out.vShade * 0.5f;
+		Out.vShade = Out.vShade * 0.25f;
 	}
 	else
 	{
@@ -237,7 +237,11 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
 		Out.vShade = Out.vShade /** 2.f*/;
+				
 	}
+
+	
+
 
 	/*if (fBrightness < 0.7)
 		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
@@ -301,6 +305,8 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
+	vector		vDiffuse_Cha = g_DiffuseTexture_Cha.Sample(LinearSampler, In.vTexUV);
+
 	float       fViewZ = vDepth.x * g_fFar;
 	vector      vWorldPos;
 
@@ -333,9 +339,22 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
-	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 
-//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	
+
+	if (vDiffuse_Cha.r == 0.f)
+	{		
+		Out.vShade = Out.vShade;
+	}
+	else
+	{
+		Out.vShade = saturate(Out.vShade);
+		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+
+		Out.vShade = Out.vShade;		
+	}
+
+	
 
 	Out.vShade.a = 1.f;
 
@@ -364,24 +383,28 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	if (vDiffuse.a == 0.f)
 		discard;
 	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
-
+	
 	if (vDiffuse_Cha.r == 0.f)
-	{
-		vShade = saturate(vShade);
-		vShade = ceil(vShade * 3.f) / 3.f;
-		Out.vColor = vDiffuse * vShade * 0.5f;
+	{		
+		Out.vColor = vDiffuse * vShade;
 	}
 	else
 	{
 		Out.vColor = vDiffuse_Cha * vShade;
 	}
 
+	
+	
+
 	//Out.vColor = vDiffuse * vShade;
 
 	Out.vColor.rgb += vEmissive.rgb;
-	
-	if ((fBrightness < 0.2f) && g_bBackLight == true)
+
+	if ((fBrightness < 0.7f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
+	
+	/*if ((fBrightness < 0.7f) && g_bBackLight == true)
+		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
 	float3 grayColor = { grayValue , grayValue ,grayValue };
