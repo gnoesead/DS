@@ -88,6 +88,9 @@ public:
 	int Get_SimulationSpace(void) {
 		return m_eEffectDesc.eSimulationSpace;
 	}
+	bool Get_IsSetYToGround(void) {
+		return m_eEffectDesc.isSetYToGround;
+	}
 
 public:
 	void Set_Parent(class CTransform* pTransform, class CParticleSystem* pParent)

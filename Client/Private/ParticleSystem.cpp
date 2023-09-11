@@ -5,6 +5,8 @@
 #include "Effect_Mesh.h"
 #include "EffectPlayer.h"
 
+#include "Character.h"
+
 CParticleSystem::CParticleSystem(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CGameObject(pDevice, pContext)
 {
@@ -127,6 +129,18 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 				//}
 
 				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_ParentWorldMatrix));
+			}
+
+			if (m_pEffect->Get_IsSetYToGround())
+			{
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+
+				CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+
+				Safe_Release(pGameInstance);
+
+				m_WorldMatrix._42 = pPlayer->Get_LandY() + m_vPosition.y;
 			}
 		}
 		else    // ±øÅë
