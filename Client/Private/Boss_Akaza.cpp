@@ -13,6 +13,8 @@
 #include "ParticleManager.h"
 #include "CustomParticle.h"
 
+#include "Battle_UI_Manager.h"
+
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -455,6 +457,49 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+		if (ANIM_AWAKE_START == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) 
+			{// 2.07
+				
+			}
+			if (1 == m_iEvent_Index)
+			{// 2.10
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(1);
+			}
+			if (2 == m_iEvent_Index)
+			{// 2.14
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(0);
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(2);
+			}
+			if (3 == m_iEvent_Index)
+			{// 2.17
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(0);
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(3);
+			}
+			if (4 == m_iEvent_Index)
+			{// 2.20
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(0);
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(4);
+			}
+			if (5 == m_iEvent_Index)
+			{// 2.23
+				CBattle_UI_Manager::GetInstance()->Set_Akaza_UI_Num(0);
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Cut", m_pTransformCom);
+			}
+			if (6 == m_iEvent_Index)
+			{// 2.30
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.01f;
+				EffectWorldDesc.vPosition.y = 0.23f;
+				EffectWorldDesc.vPosition.z = 0.15f;
+				EffectWorldDesc.fScale = 1.2f;
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
+			}
+		}
+
 		if (ANIM_NACHIM == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index) // 0.05

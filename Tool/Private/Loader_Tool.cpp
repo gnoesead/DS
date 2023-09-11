@@ -176,14 +176,14 @@ HRESULT CLoader_Tool::LoadingForTool(_bool isLoad)
 #pragma endregion
 
 #pragma region Character
-		/* Prototype_Component_Model_Tanjiro */
-		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-		if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Tanjiro"),
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Tanjiro/Tanjiro.bin", PivotMatrix))))
-		{
-			MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
-			return E_FAIL;
-		}
+		///* Prototype_Component_Model_Tanjiro */
+		//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+		//if (FAILED(pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Tanjiro"),
+		//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../../Client/Bin/Resources/Models/Character/Tanjiro/Tanjiro.bin", PivotMatrix))))
+		//{
+		//	MSG_BOX("Failed to Add_Prototype_Model_Tanjiro");
+		//	return E_FAIL;
+		//}
 
 		/* Prototype_Component_Model_Akaza */
 		PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
