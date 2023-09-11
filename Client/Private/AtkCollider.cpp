@@ -205,17 +205,7 @@ HRESULT CAtkCollider::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	_tchar szText[MAX_PATH] = { TEXT("") };
-
-	wsprintf(szText, TEXT("CollCount : %d"), m_iCollCount);
-
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 60.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
+	
 
 	return S_OK;
 }

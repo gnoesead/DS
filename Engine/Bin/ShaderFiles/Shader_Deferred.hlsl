@@ -365,21 +365,22 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		discard;
 	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
-	/*if(vDiffuse_Cha.r == 0.f)
-		Out.vColor = vDiffuse * vShade;
-	else
+	if (vDiffuse_Cha.r == 0.f)
 	{
 		vShade = saturate(vShade);
 		vShade = ceil(vShade * 3.f) / 3.f;
-
+		Out.vColor = vDiffuse * vShade * 0.5f;
+	}
+	else
+	{
 		Out.vColor = vDiffuse_Cha * vShade;
-	}*/
+	}
 
-	Out.vColor = vDiffuse * vShade;
+	//Out.vColor = vDiffuse * vShade;
 
 	Out.vColor.rgb += vEmissive.rgb;
 	
-	if ((fBrightness < 0.5) && g_bBackLight == true)
+	if ((fBrightness < 0.2f) && g_bBackLight == true)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));

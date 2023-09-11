@@ -646,6 +646,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				m_pRendererCom->Set_BloomRatio(0.25f);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 				
@@ -684,6 +685,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				m_pRendererCom->Set_BloomRatio(1.f);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 			}

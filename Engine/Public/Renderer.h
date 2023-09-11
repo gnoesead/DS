@@ -65,6 +65,8 @@ private:
 	class CShader* m_pEffectShader = { nullptr };
 	class CShader* m_pSSAOShader = { nullptr };
 	class CVIBuffer_Rect* m_pVIBuffer = { nullptr };
+	class CVIBuffer_Rect* m_pVIBufferEffect = { nullptr };
+	
 	_float4x4				m_WorldMatrix;
 	_float4x4				m_ViewMatrix;
 	_float4x4				m_ProjMatrix;

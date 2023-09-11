@@ -186,7 +186,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.25f);
+		m_pRendererCom->Set_BloomRatio(0.75f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))

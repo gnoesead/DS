@@ -147,13 +147,13 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 
 	/* For.Target_EffectDiffuse */
-	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 0.f };
+	_float4 vColor_EffectDiffuse = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDiffuse")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDiffuse)))
 		return E_FAIL;
 
 	/* For.Target_EffectDiffuse */
-	_float4 vColor_EffectDistortion = { 0.f, 0.f, 0.f, 0.f };
+	_float4 vColor_EffectDistortion = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectDistortion")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectDistortion)))
 		return E_FAIL;
@@ -194,7 +194,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectCombineBlur")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectCombineBlur)))
 		return E_FAIL;
-	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 0.f };
+	_float4 vColor_EffectColor = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectColor")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectColor)))
 		return E_FAIL;
@@ -204,7 +204,7 @@ HRESULT CRenderer::Initialize_Prototype()
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_RadialColor)))
 		return E_FAIL;
 
-	_float4 vColor_EffectRadialColor = { 0.f, 0.f, 0.f, 0.f };
+	_float4 vColor_EffectRadialColor = { 0.f, 0.f, 0.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_EffectRadialBlur")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_EffectRadialColor)))
 		return E_FAIL;
@@ -322,11 +322,13 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (nullptr == m_pSSAOShader)
 		return E_FAIL;
 
-
-
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
+	m_pVIBufferEffect = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
+	if (nullptr == m_pVIBufferEffect)
+		return E_FAIL;
+
 
 #ifdef _DEBUG
 	if (FAILED(m_pTarget_Manager->Ready_Debug(TEXT("Target_Diffuse"), 50.f, 100.f, 100.f, 100.f)))
@@ -431,7 +433,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		return E_FAIL;
 	}
 
-	if (FAILED(Render_ShadowBlurX()))
+	/*if (FAILED(Render_ShadowBlurX()))
 	{
 		MSG_BOX("Failed to Render_ShadowBlurX");
 		return E_FAIL;
@@ -445,7 +447,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 	{
 		MSG_BOX("Failed to Render_ShadowBlur");
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Render_NonBlend()))
 	{
@@ -524,15 +526,20 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_NonLights");
 		return E_FAIL;
 	}
-
+		
+	if (FAILED(Render_Effect_Particle()))
+	{
+		MSG_BOX("Failed to Render_Particle");
+		return E_FAIL;
+	}
 	if (FAILED(Render_EffectNoBloom()))
 	{
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
 	}
-	if (FAILED(Render_Effect_Particle()))
+	if (FAILED(Render_Effect_Envrionment()))
 	{
-		MSG_BOX("Failed to Render_Particle");
+		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
 	}
 	/*if (FAILED(Render_Effect()))
@@ -710,8 +717,7 @@ HRESULT CRenderer::Render_ShadowBlurX()
 
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_ShadowBlurX"))))
 		return E_FAIL;
-		
-	//m_pContext->RSSetViewports(1, &m_VP);
+
 	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_Matrix("g_ViewMatrix", &m_ViewMatrix)))
@@ -1224,6 +1230,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
 		return E_FAIL;
 
+	
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_EffectBloom])
 	{
@@ -1257,7 +1264,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pEffectShader->Begin(1)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1306,7 +1313,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pEffectShader->Begin(7)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1333,7 +1340,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 	   return E_FAIL;*/
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1359,7 +1366,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 	   return E_FAIL;*/
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1387,7 +1394,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pEffectShader->Begin(4)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
@@ -1412,7 +1419,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pEffectShader->Begin(8)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 
@@ -1475,7 +1482,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	if (FAILED(m_pEffectShader->Begin(1)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1503,7 +1510,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 	   return E_FAIL;*/
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1531,7 +1538,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 		return E_FAIL;
 
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1558,7 +1565,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	if (FAILED(m_pEffectShader->Begin(4)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
@@ -1574,7 +1581,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	m_fParticle_BrightRatio = 1.5f;
+	m_fParticle_BrightRatio = 0.80f;
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBrigthRatio", &m_fParticle_BrightRatio, sizeof(_float))))
 		return E_FAIL;
 
@@ -1586,7 +1593,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	if (FAILED(m_pEffectShader->Begin(7)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1613,7 +1620,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 	   return E_FAIL;*/
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1639,7 +1646,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	/*if (FAILED(m_pEffectShader->Begin(10)))
 	   return E_FAIL;*/
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	if (FAILED(m_pTarget_Manager->End_MRT()))
@@ -1667,7 +1674,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	if (FAILED(m_pEffectShader->Begin(4)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->End_MRT()))
 		return E_FAIL;
@@ -1690,7 +1697,7 @@ HRESULT CRenderer::Render_Effect_Particle()
 	if (FAILED(m_pEffectShader->Begin(8)))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBuffer->Render()))
+	if (FAILED(m_pVIBufferEffect->Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -2146,7 +2153,7 @@ HRESULT CRenderer::Render_Deferred()
 
 	   // 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
+	///Safe_AddRef(pGameInstance);
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
@@ -2206,7 +2213,7 @@ HRESULT CRenderer::Render_Deferred()
 		break;
 	}
 
-	Safe_Release(pGameInstance);
+	//Safe_Release(pGameInstance);
 
 	m_pShader->Begin(3);
 
@@ -2365,6 +2372,7 @@ void CRenderer::Free()
 	Safe_Release(m_pEffectShader);
 	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pVIBufferEffect);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pLight_Manager);
 
