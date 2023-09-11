@@ -192,7 +192,7 @@ void CNPC::Create_Icon()
 	}
 	if (m_CharacterDesc.NPCDesc.Icon_Type == 5) {
 		UIDesc.m_Type = 5;
-		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.m_Up_Mount = 1.5f;
 		UIDesc.pParentTransform = m_pTransformCom;
 
 		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));

@@ -170,11 +170,10 @@ HRESULT CDialog::Initialize(void * pArg)
 	m_szVillageSmell_3.push_back(L"(어디서 나오는거지..벽 너머의 저 집인가?)");
 
 
-// House Smell
+// Village Talk
 	// 14
-	m_szHouseSmell_1.push_back(L"(혈귀의 냄새가 남아있어1)");
-	m_szHouseSmell_1.push_back(L"(....서두르자)");
-
+	m_szHouseSmell_1.push_back(L"(사람들이 모두 쓰러져있어! 이 앞에 혈귀가..?!)");
+	
 	// 15
 	m_szHouseSmell_2.push_back(L"(혈귀의 냄새가 남아있어2)");
 	m_szHouseSmell_2.push_back(L"(....서두르자)");

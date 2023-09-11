@@ -55,66 +55,36 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 	m_pModelCom->Set_LinearDuration(ANIM_WALK_FRONT, 0.3);
 	m_pModelCom->Set_LinearDuration(ANIM_RUN, 0.4);
 
-	/*
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
+	CFIcon::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 0;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 3;
+	UIDesc.m_Up_Mount = 1.85f;
+	UIDesc.pParentTransform = m_pTransformCom;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+	m_pIcon_1 = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 1;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 0;
+	UIDesc.m_Up_Mount = 1.85f;
+	UIDesc.pParentTransform = m_pTransformCom;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 2;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 3;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
+	m_pIcon_2 = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
 
 
 	Safe_Release(pGameInstance);
-	*/
+
+
+
+
 	Get_PlayerComponent();
 	return S_OK;
 }
@@ -127,6 +97,17 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 
 		if (m_isDead)
 			return;
+
+		if (ANIM_ATK_CLAWS != m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (m_isFirst_Questioning == false && m_isFirst_Finding == true)
+				m_pIcon_1->Tick(dTimeDelta);
+
+		}
+
+		if (m_isFirst_Finding == false || ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
+			m_pIcon_2->Tick(dTimeDelta);
+		
 
 		if (m_isDeath_Stealth)
 		{
@@ -155,6 +136,16 @@ void CMonster_StealthZako::LateTick(_double dTimeDelta)
 	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
 		__super::LateTick(dTimeDelta);
+
+		if (ANIM_ATK_CLAWS != m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (m_isFirst_Questioning == false && m_isFirst_Finding == true)
+				m_pIcon_1->LateTick(dTimeDelta);
+
+		}
+
+		if (m_isFirst_Finding == false || ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
+			m_pIcon_2->LateTick(dTimeDelta);
 
 		Gravity(dTimeDelta);
 	}
@@ -458,6 +449,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		{
 			m_isFirst_Finding = false;
 
+			
+
 			m_pModelCom->Set_Animation(ANIM_POSE_HOWLING);
 			m_dDelay_Howling = 0.0;
 			m_isFirst_Howling = true;
@@ -719,6 +712,9 @@ CGameObject* CMonster_StealthZako::Clone(void* pArg)
 
 void CMonster_StealthZako::Free()
 {
-	
+	Safe_Release(m_pIcon_1);
+	Safe_Release(m_pIcon_2);
+
+
 	__super::Free();
 }
