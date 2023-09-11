@@ -15,6 +15,8 @@
 
 #include "Battle_UI_Manager.h"
 
+#include "AlertCircle_Akaza.h"
+
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -355,6 +357,9 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
 	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
 	{
@@ -615,7 +620,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
-			if (0 == m_iEvent_Index) // 0.75
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				CAlertCircle_Akaza::EFFECTDESC EffectDesc;
+				EffectDesc.pOwnerTransform = m_pTransformCom;
+				EffectDesc.vScale = { 4.f, 4.f, 4.f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectDesc, false);
+			}
+
+			if (1 == m_iEvent_Index) // 0.75
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
@@ -990,6 +1003,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		m_iEvent_Index++;
 	}
+
+	Safe_Release(pGameInstance);
 }
 void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 {

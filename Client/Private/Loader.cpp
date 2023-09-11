@@ -93,6 +93,7 @@
 
 #include "VIBuffer_Custom_Instance.h"
 #include "CustomParticle.h"
+#include "AlertCircle_Akaza.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -867,6 +868,11 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Test");
 		return E_FAIL;
 	}
+
+	/* For.Prototype_GameObject_AlertCircle_Akaza*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle_Akaza"),
+		CAlertCircle_Akaza::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_AlertCircle*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle"),
