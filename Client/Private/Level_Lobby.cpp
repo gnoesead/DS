@@ -1795,6 +1795,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Revolution.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Revolution");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 
@@ -1942,7 +1948,7 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iC
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSetYToGround), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));
