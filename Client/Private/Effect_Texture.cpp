@@ -231,10 +231,23 @@ void CEffect_Texture::Check_PassIndex(void)
 
 	if (nullptr != m_pTextures[TEX_DIFFUSE])
 	{
+		m_iPassIndex = 1;
+
 		if (nullptr != m_pTextures[TEX_NOISE])
+		{
 			m_iPassIndex = 2;
-		else
-			m_iPassIndex = 1;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 13;
+
+			if (OPT_BY_RED == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
+			{
+				m_iPassIndex = 11;
+
+				if (m_eEffectDesc.isTextureSheetAnimation)
+					m_iPassIndex = 12;
+			}
+		}
 
 		if (nullptr != m_pTextures[TEX_DISTORTION])
 			m_iPassIndex = 4;

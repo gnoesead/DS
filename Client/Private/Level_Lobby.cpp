@@ -1386,6 +1386,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeTilt");
 		return E_FAIL;
 	}
+
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1_Decal.bin"))))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1_Decal");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 
 #pragma region TANJIRO_SUPERSKILL
@@ -1909,7 +1915,7 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iC
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSetYToGround), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));
