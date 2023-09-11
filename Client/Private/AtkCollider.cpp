@@ -59,33 +59,7 @@ void CAtkCollider::Reset_AtkCollider(ATKCOLLDESC* pAtkCollDesc)
 	Set_Dead(false);
 	m_dTimeAcc = 0.0;
 
-	switch (m_AtkCollDesc.eBulletType)
-	{
-	case CAtkCollider::TYPE_BULLET:
-		Setting_BaseBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_BULLET:
-		Setting_KyogaiBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
-		Setting_KyogaiDelayBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
-		Setting_KyogaiVerticalBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
-		Setting_KyogaiHorizonBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
-		Setting_KyogaiLiarBullet();
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB:
-		Setting_WebBullet();
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB_FULL:
-		Setting_WebBullet_Full();
-		break;
-	}
+	Setting_Trigger();
 
 	if (true == m_AtkCollDesc.bBullet)
 	{
@@ -142,34 +116,7 @@ HRESULT CAtkCollider::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	switch (m_AtkCollDesc.eBulletType)
-	{
-
-	case CAtkCollider::TYPE_BULLET:
-		Setting_BaseBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_BULLET:
-		Setting_KyogaiBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
-		Setting_KyogaiDelayBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
-		Setting_KyogaiVerticalBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
-		Setting_KyogaiHorizonBullet();
-		break;
-	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
-		Setting_KyogaiLiarBullet();
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB:
-		Setting_WebBullet();
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB_FULL:
-		Setting_WebBullet_Full();
-		break;
-	}
+	Setting_Trigger();
 
 	if (true == m_AtkCollDesc.bBullet)
 	{
@@ -188,36 +135,7 @@ void CAtkCollider::Tick(_double dTimeDelta)
 
 	m_dTimeAcc += dTimeDelta;
 
-	switch (m_AtkCollDesc.eBulletType)
-	{
-	case CAtkCollider::TYPE_DEFAULT:
-		Tick_Default(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_BULLET:
-		Tick_BaseBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_KYOGAI_BULLET:
-		Tick_KyogaiBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
-		Tick_KyogaiDelayBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
-		Tick_KyogaiVerticalBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
-		Tick_KyogaiHorizonBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
-		Tick_KyogaiLiarBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB:
-		Tick_WebBullet(dTimeDelta);
-		break;
-	case CAtkCollider::TYPE_BULLET_WEB_FULL:
-		Tick_WebBullet(dTimeDelta);
-		break;
-	}
+	Update_Trigger(dTimeDelta);
 
 
 	if (m_pColliderCom->Get_Coll())
@@ -231,23 +149,25 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	__super::LateTick(dTimeDelta);
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	//if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-	//{
-	//	if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType != CAtkCollider::TYPE_EFFECT)
-	//	{
-	//		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	//		_float vPosX = XMVectorGetX(vPos);
-	//		_float vPosZ = XMVectorGetZ(vPos);
-	//		if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
-	//		{
-	//			CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
-	//			Reset_Dead();
-	//			
-	//		}
-	//	}
-	//	/*if(m_pColliderCom->Get_Coll() == true)
-	//		Reset_Dead();*/
-	//}
+
+	/*if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	{
+		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_BULLET)
+		{
+			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float vPosX = XMVectorGetX(vPos);
+			_float vPosZ = XMVectorGetZ(vPos);
+			if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
+			{
+				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+				Reset_Dead();				
+			}
+			if (m_pColliderCom->Get_Coll() == true)
+				Reset_Dead();
+		}
+		
+		
+	}*/
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
 	{
@@ -285,21 +205,83 @@ HRESULT CAtkCollider::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	Safe_AddRef(pGameInstance);
-
-	_tchar szText[MAX_PATH] = { TEXT("") };
-
-	wsprintf(szText, TEXT("CollCount : %d"), m_iCollCount);
-
-	if (FAILED(pGameInstance->Draw_Font(TEXT("Font_KR"), szText, _float2(500.f, 60.f), _float2(0.5f, 0.5f))))
-		return E_FAIL;
-
-	Safe_Release(pGameInstance);
+	
 
 	return S_OK;
 }
 
+
+void CAtkCollider::Update_Trigger(_double dTimeDelta)
+{
+	switch (m_AtkCollDesc.eBulletType)
+	{
+	case CAtkCollider::TYPE_DEFAULT:
+		Tick_Default(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET:
+		Tick_BaseBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET_AKAZA:
+		Tick_AkazaBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_BULLET:
+		Tick_KyogaiBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
+		Tick_KyogaiDelayBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
+		Tick_KyogaiVerticalBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
+		Tick_KyogaiHorizonBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
+		Tick_KyogaiLiarBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB:
+		Tick_WebBullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB_FULL:
+		Tick_WebBullet(dTimeDelta);
+		break;
+	}
+}
+
+void CAtkCollider::Setting_Trigger()
+{
+	switch (m_AtkCollDesc.eBulletType)
+	{
+
+	case CAtkCollider::TYPE_BULLET:
+		Setting_BaseBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_AKAZA:
+		Setting_AkazaBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_BULLET:
+		Setting_KyogaiBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_DELAY_BULLET:
+		Setting_KyogaiDelayBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_VERTICAL_BULLET:
+		Setting_KyogaiVerticalBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET:
+		Setting_KyogaiHorizonBullet();
+		break;
+	case CAtkCollider::TYPE_KYOGAI_LIAR_BULLET:
+		Setting_KyogaiLiarBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB:
+		Setting_WebBullet();
+		break;
+	case CAtkCollider::TYPE_BULLET_WEB_FULL:
+		Setting_WebBullet_Full();
+		break;
+	}
+}
 
 void CAtkCollider::Tick_Default(_double dTimeDelta)
 {
@@ -317,6 +299,18 @@ void CAtkCollider::Tick_BaseBullet(_double dTimeDelta)
 
 	}
 
+}
+
+void CAtkCollider::Tick_AkazaBullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+
+	}
 }
 
 void CAtkCollider::Tick_KyogaiBullet(_double dTimeDelta)
@@ -417,6 +411,15 @@ void CAtkCollider::Tick_WebBullet(_double dTimeDelta)
 
 
 void CAtkCollider::Setting_BaseBullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPos += XMLoadFloat4(&m_AtkCollDesc.AtkDir) * 2.f;
+	m_pTransformCom->LookAt(vPos);
+}
+
+void CAtkCollider::Setting_AkazaBullet()
 {
 	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

@@ -50,7 +50,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	LIGHTDESC tLightInfo;
+	/*LIGHTDESC tLightInfo;
 	ZeroMemory(&tLightInfo, sizeof tLightInfo);
 
 	tLightInfo.eType = LIGHTDESC::TYPE_POINT;
@@ -64,7 +64,7 @@ HRESULT CPlayer::Initialize(void* pArg)
 	tLightInfo.vLightAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	tLightInfo.vLightSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
-	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);
+	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);*/
 
 	//level판명
 	m_iLevelCur = pGameInstance->Get_CurLevelIdx();
@@ -113,7 +113,7 @@ void CPlayer::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	if(m_isSwampBinding == false)
+	if (m_isSwampBinding == false)
 		Key_Input(dTimeDelta);
 }
 
@@ -121,7 +121,7 @@ void CPlayer::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	if(m_isSwampHit == false)
+	if (m_isSwampHit == false)
 		Set_Height();
 
 	Check_Change_Position(dTimeDelta);
@@ -129,7 +129,7 @@ void CPlayer::LateTick(_double dTimeDelta)
 	if (m_isLand_Roof)
 		m_eCurNavi = m_eNextNavi;
 
-	
+
 
 #ifdef _DEBUG
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -149,12 +149,13 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+	__super::Render();
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_ShadowDepth()
 {
-
+	__super::Render_ShadowDepth();
 	return S_OK;
 }
 
@@ -180,7 +181,7 @@ void CPlayer::Dir_Setting(_bool Reverse)
 	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
 	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
 
-	
+
 
 	if (Reverse)
 	{
@@ -240,7 +241,7 @@ _bool CPlayer::Get_LockOn_MonPos()
 	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
 	_vector MonPos = pCamera->Get_Battle_Target_Pos();
 	_bool	IsBattle = pCamera->Get_Is_Battle();
-	
+
 	if (IsBattle)
 		XMStoreFloat4(&m_LockOnPos, MonPos);
 
@@ -292,7 +293,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		CEffectPlayer::EFFECTWORLDDESC Effect3WorldDesc;
 		Effect3WorldDesc.vPosition.y += 0.8f;
 
- 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
@@ -450,10 +451,10 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			}
 
 			m_Moveset.m_Down_Dmg_Web = true;
-			
+
 		}
 
-	
+
 		if (CPlayerManager::GetInstance()->Get_Hit_WebShot() && CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
 		{
 			CPlayerManager::GetInstance()->Set_Hit_WebShot(false);
@@ -561,14 +562,14 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		m_StatusDesc.fMp += 1.1f;
 	}
 
-	
+
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 
 		if (pGameInstance->Get_DIKeyDown(DIK_Z))
 		{
 			m_pRendererCom->Set_Invert();
 		}
-		
+
 		if (pGameInstance->Get_DIKeyDown(DIK_C))
 		{
 			m_pRendererCom->Set_RadialBlur();
@@ -578,7 +579,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), -dTimeDelta);
 #pragma endregion
 
-	
+
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
 	{
 		//쿄우가이 돌아가는 룸
@@ -680,7 +681,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	
+
 	//무브키를 누르고 있는 상태
 	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)
 		|| pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
@@ -694,7 +695,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	}
 
 	Dir_Setting(false);
-	
+
 
 	//키를 누를 시
 	if (!m_isCool_MoveKey)
@@ -702,7 +703,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_W) || pGameInstance->Get_DIKeyDown(DIK_S)
 			|| pGameInstance->Get_DIKeyDown(DIK_A) || pGameInstance->Get_DIKeyDown(DIK_D))
 		{
-			if(m_Moveset.m_isRestrict_Move == false)
+			if (m_Moveset.m_isRestrict_Move == false)
 				m_Moveset.m_Down_Battle_Run = true;
 		}
 	}
@@ -711,7 +712,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyUp(DIK_W) || pGameInstance->Get_DIKeyUp(DIK_S)
 		|| pGameInstance->Get_DIKeyUp(DIK_A) || pGameInstance->Get_DIKeyUp(DIK_D))
 	{
-		if(m_Moveset.m_isRestrict_Charge == false )
+		if (m_Moveset.m_isRestrict_Charge == false)
 			m_isCool_MoveKey = true;
 	}
 
@@ -721,7 +722,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 	{
 		m_isCool_MoveKey = false;
 
-		if(m_Moveset.m_isRestrict_Move == false)
+		if (m_Moveset.m_isRestrict_Move == false)
 			m_Moveset.m_Up_Battle_Run = true;
 	}
 
@@ -734,7 +735,7 @@ void CPlayer::Key_Input_Battle_Move(_double dTimeDelta)
 		else
 			m_Moveset.m_isPressing_While_Restrict = false;
 	}
-	
+
 	Safe_Release(pGameInstance);
 }
 
@@ -743,9 +744,9 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
 
-	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump )
+
+	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_K))
 		{
@@ -755,7 +756,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 				m_Moveset.m_Down_Battle_Jump = false;
 
 				Dir_Setting(false);
-				
+
 			}
 			else
 			{
@@ -772,7 +773,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_J) && m_isFirst_JumpAtk)
 		{
 			//점프 트랙 공격 (이동키 + J키)
-			if ( pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
+			if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 			{
 				if (false == m_Moveset.m_isRestrict_JumpCombo) {
 					if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
@@ -786,7 +787,7 @@ void CPlayer::Key_Input_Battle_Jump(_double dTimeDelta)
 			{
 				m_Moveset.m_Down_Battle_Jump_Attack = true;
 			}
-			
+
 		}
 	}
 
@@ -799,7 +800,7 @@ void CPlayer::Key_Input_Battle_Attack(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
+
 	if (false == m_Moveset.m_isRestrict_KeyInput && false == m_Moveset.m_isRestrict_Jump && false == m_Moveset.m_isRestrict_Charge)
 	{
 		// 콤보공격
@@ -855,11 +856,11 @@ void CPlayer::Key_Input_Battle_ChargeAttack(_double dTimeDelta)
 		}
 
 
-		if ( pGameInstance->Get_DIKeyUp(DIK_H))
+		if (pGameInstance->Get_DIKeyUp(DIK_H))
 		{
 			m_Moveset.m_Up_Battle_Charge = true;
 		}
-		
+
 		/*if (pGameInstance->Get_DIKeyState(DIK_H))
 		{
 			m_dDelay_Charge += dTimeDelta;
@@ -880,7 +881,7 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	m_dDelay_CanSkill += dTimeDelta;
 	if (false == m_Moveset.m_isRestrict_KeyInput || (m_dDelay_CanSkill > 1.0 && m_Moveset.m_isRestrict_KeyInput))
 	{
-		if (pGameInstance->Get_DIKeyDown(DIK_I) /* && m_isCan_Air_Hekireki == false */ )
+		if (pGameInstance->Get_DIKeyDown(DIK_I) /* && m_isCan_Air_Hekireki == false */)
 		{
 			if (pGameInstance->Get_DIKeyState(DIK_O))
 			{
@@ -952,18 +953,18 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 				m_Moveset.m_Down_Battle_Push = true;
 		}*/
 	}
-	
+
 	if (m_isMaintain_Guard)
 	{
 		m_isMaintain_Guard = false;
 		m_isThrowing = false;
 
-		if(pGameInstance->Get_DIKeyState(DIK_O))
+		if (pGameInstance->Get_DIKeyState(DIK_O))
 			m_Moveset.m_Down_Battle_Guard = true;
 	}
 
 
-	
+
 
 	Safe_Release(pGameInstance);
 }
@@ -998,7 +999,7 @@ void CPlayer::Key_Input_Battle_Dash(_double dTimeDelta)
 					m_isBack = false;
 					m_isLeft = false;
 					m_isRight = false;
-					
+
 				}
 				else if (pGameInstance->Get_DIKeyState(DIK_S) && m_Moveset.m_isRestrict_Step == false)
 				{
@@ -1088,7 +1089,7 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 			CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0)
 				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::TANJIRO_AWAKE);
-			else if(CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
+			else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1)
 				CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::ZENITSU_AWAKE);
 
 			m_Moveset.m_iAwaken = 2;
@@ -1125,7 +1126,7 @@ void CPlayer::Key_Input_Down(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
+
 	if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 		m_Moveset.m_isPressing_While_Restrict = true;
 	else
@@ -1174,7 +1175,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	
+
 	NAVI_TYPE eNextNavi = NAVI_END;
 
 	//박스 위치
@@ -1188,9 +1189,9 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 		_vector Difference = XMVectorSubtract(vBoxPos, vPlayerPos);
 		_vector squaredDistance = XMVector3LengthSq(Difference);
 
-		
 
-		
+
+
 		XMStoreFloat(&m_fDistanceTo_Box, XMVectorSqrt(squaredDistance));
 
 		if (m_fDistanceTo_Box < 4.0)
@@ -1199,7 +1200,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 			m_isCan_Jump_RoofOn = BoxJump.RoofOn;
 			m_iBoxIndex = index;
 			m_Dir_ScondJump_Box = BoxJump.Dir_SecondJump;
-			
+
 			// 지붕 위에 있을때
 			if (m_isPlayerStatus_OnRoof)
 			{
@@ -1209,7 +1210,7 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 			{
 				eNextNavi = BoxJump.eNextNavi;
 			}
-			
+
 			Check_Box = true;
 
 			XMStoreFloat4(&m_vPlayerToBoxDir, XMVector4Normalize(Difference));
@@ -1223,9 +1224,9 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 
 		index++;
 	}
-	
+
 	//박스에 점프하기
-	if (m_Moveset.m_isRestrict_Adventure == false )
+	if (m_Moveset.m_isRestrict_Adventure == false)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_SPACE) && m_isCan_Jump_To_Box)
 		{
@@ -1277,9 +1278,9 @@ void CPlayer::Key_Input_Adventure(_double dTimeDelta)
 			m_Moveset.m_isPressing_While_Restrict = false;
 		}
 	}
-	
-	
-	
+
+
+
 	Safe_Release(pGameInstance);
 }
 
@@ -1386,14 +1387,14 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		{
 			//vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
 
-			
+
 			if (NAVI_HOUSE_2_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] = true;
 				m_dChangePositionAccTime = 0.0;
 			}
 		}
-		
+
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A])
 		{
@@ -1432,8 +1433,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 			}
-		}
 
+		}
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1B])
 		{
 			if (NAVI_VILLAGE_BATTLE == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_9))
@@ -1442,6 +1443,11 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_dChangePositionAccTime = 0.0;
 			}
 		}
+
+		if (m_eCurNavi == NAVI_VILLAGE_BATTLE)
+			m_pRendererCom->Set_Village_Battle(true);
+		else
+			m_pRendererCom->Set_Village_Battle(false);
 
 	}
 
@@ -1579,10 +1585,10 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		}
 
 		m_dDelay_Swapping_Pos = 0.0;
-		
+
 		m_isSwapping_State = true;
 	}
-	
+
 	if (m_isSwapping_State)
 	{
 		_float4 MyPos;
@@ -1592,7 +1598,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 			m_isSwapping_State = false;
 		}
 	}
-	
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE)
@@ -1607,7 +1613,7 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 			SwappingPos.y = MyPos.y;
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&SwappingPos));
-		}	
+		}
 	}
 	Safe_Release(pGameInstance);
 }

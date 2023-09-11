@@ -157,26 +157,96 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyState(DIK_PGUP))
+	if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
 	{
-		_float4 vAmbient = pGameInstance->Get_Light(0)->vLightAmbient;
+		_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
-		vAmbient.x += 0.05f;
-		vAmbient.y += 0.05f;
-		vAmbient.z += 0.05f;
+		vDiffuse.x += 0.05f;
+		vDiffuse.y += 0.05f;
+		vDiffuse.z += 0.05f;
 
-		pGameInstance->Set_Light(0, 2, vAmbient);
+		if (vDiffuse.x > 1.f)
+			vDiffuse.x = 1.f;
+
+		if (vDiffuse.y > 1.f)
+			vDiffuse.y = 1.f;
+
+		if (vDiffuse.z > 1.f)
+			vDiffuse.z = 1.f;
+
+		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-	if (pGameInstance->Get_DIKeyState(DIK_PGDN))
+	if (pGameInstance->Get_DIKeyDown(DIK_PGDN))
 	{
-		_float4 vAmbient = pGameInstance->Get_Light(0)->vLightDiffuse;
+		_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
-		vAmbient.x -= 0.05f;
-		vAmbient.y -= 0.05f;
-		vAmbient.y -= 0.05f;
+		vDiffuse.x -= 0.05f;
+		vDiffuse.y -= 0.05f;
+		vDiffuse.z -= 0.05f;
 
-		pGameInstance->Set_Light(0, 2, vAmbient);
+		if (vDiffuse.x < 0.f)
+			vDiffuse.x = 0.f;
+
+		if (vDiffuse.y < 0.f)
+			vDiffuse.y = 0.f;
+
+		if (vDiffuse.z < 0.f)
+			vDiffuse.z = 0.f;
+
+		pGameInstance->Set_Light(0, 1, vDiffuse);
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_N))
+	{
+		_uint iLightSize = pGameInstance->Get_LightListSize();
+
+		for (_uint i = 1; i < iLightSize; ++i)
+		{
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(i)->vLightDiffuse;
+
+			vDiffuse_Point.x -= 0.05f;
+			vDiffuse_Point.y -= 0.05f;
+			vDiffuse_Point.z -= 0.05f;
+
+			if (vDiffuse_Point.x < 0.f)
+				vDiffuse_Point.x = 0.f;
+
+			if (vDiffuse_Point.y < 0.f)
+				vDiffuse_Point.y = 0.f;
+
+			if (vDiffuse_Point.z < 0.f)
+				vDiffuse_Point.z = 0.f;
+
+			pGameInstance->Set_Light(i, 1, vDiffuse_Point);
+		}
+
+	}
+
+	if (pGameInstance->Get_DIKeyDown(DIK_M))
+	{
+		_uint iLightSize = pGameInstance->Get_LightListSize();
+
+		for (_uint i = 1; i < iLightSize; ++i)
+		{
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(i)->vLightDiffuse;
+
+			vDiffuse_Point.x += 0.05f;
+			vDiffuse_Point.y += 0.05f;
+			vDiffuse_Point.z += 0.05f;
+
+			if (vDiffuse_Point.x > 1.f)
+				vDiffuse_Point.x = 1.f;
+
+			if (vDiffuse_Point.y > 1.f)
+				vDiffuse_Point.y = 1.f;
+
+			if (vDiffuse_Point.z > 1.f)
+				vDiffuse_Point.z = 1.f;
+
+			pGameInstance->Set_Light(i, 1, vDiffuse_Point);
+		}
+
 	}
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {

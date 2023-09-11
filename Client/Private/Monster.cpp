@@ -34,7 +34,7 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-
+	Get_PlayerComponent();
 
 
 	return S_OK;
@@ -61,13 +61,13 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
-
+	__super::Render();
 	return S_OK;
 }
 
 HRESULT CMonster::Render_ShadowDepth()
 {
-
+	__super::Render_ShadowDepth();
 	return S_OK;
 }
 
