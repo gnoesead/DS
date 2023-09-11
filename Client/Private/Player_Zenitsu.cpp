@@ -787,6 +787,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 8.0f * fDmg);
 			}
+			else if (2 == m_iEvent_Index)
+			{
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 #pragma endregion
 
@@ -1738,7 +1747,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 		else
 			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
 	}
-	Go_Straight_Constant(dTimeDelta, 46, 3.0f * m_fScaleChange);
+	Go_Straight_Constant(dTimeDelta, 46, 4.5f * m_fScaleChange);
 
 
 	if (m_isAirDashing)
@@ -2121,6 +2130,22 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		Go_Dir_Constant(dTimeDelta, 100, 0.2f * m_fDmg_Move_Ratio, AtkDir);
 	}
 	Ground_Animation_Play(100, 101);
+
+	if (m_Moveset.m_Down_Dmg_Upper)
+	{
+		m_Moveset.m_Down_Dmg_Upper = false;
+		m_isConnectHitting = false;
+
+		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
+
+		if (m_isSkilling == false)
+		{
+			Jumping(2.0f, 0.075f);
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+		}
+	}
+
 #pragma endregion
 
 

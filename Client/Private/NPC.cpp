@@ -81,6 +81,8 @@ void CNPC::Tick(_double dTimeDelta)
 			if (pGameInstance->Get_DIKeyDown(DIK_F) == true && m_Sub_Up_Done == false) {
 				m_Sub_Up_Done = true;
 				CMissionManager::GetInstance()->Plus_Sub_Num();
+
+				m_isTalking = true;
 			}
 				
 

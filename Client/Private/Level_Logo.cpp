@@ -658,6 +658,72 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo3_WaterParticle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Normal_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Normal_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Down_WaterParticle1.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Down_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Down_WaterParticle2.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Down_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo4_Up_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo4_Up_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeTilt_WaterParticle1.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeTilt_WaterParticle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeTilt_WaterParticle2.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeTilt_WaterParticle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air1_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air1_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air2_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air2_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo_Air3_WaterParticle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo_Air3_WaterParticle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_GaeBang_Particle.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_GaeBang_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Particle_W.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Particle_W");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region AKAZA

@@ -178,9 +178,6 @@
     <Filter Include="01. Levels\02. GamePlay">
       <UniqueIdentifier>{710b0984-83fa-458c-be02-8efd4a409b0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01. Levels\03. Village">
-      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01. Levels\04. House">
       <UniqueIdentifier>{b72ed52c-d331-417a-a807-1a5bd490af58}</UniqueIdentifier>
     </Filter>
@@ -453,6 +450,9 @@
     </Filter>
     <Filter Include="02. GameObjects\UI\08.Mini_Game\Web">
       <UniqueIdentifier>{8402ec33-5796-4232-9eb8-f7210a07ae80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Levels\03. Village">
+      <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

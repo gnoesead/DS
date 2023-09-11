@@ -1350,6 +1350,7 @@ void CBoss_Kyogai::Update_Begin(_double dTimeDelta)
 		Trigger_Interact();
 
 		CMonsterManager::GetInstance()->Set_BattleOn(true);
+		CMonsterManager::GetInstance()->Set_Kyogai_On(true);
 	}
 }
 
