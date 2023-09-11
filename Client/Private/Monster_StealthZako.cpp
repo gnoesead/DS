@@ -375,8 +375,8 @@ void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_WALK_FRONT);
 		}
-		Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.2f, true);
-		Go_Straight_Constant(dTimeDelta, 69, 0.2f, true);
+		Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.3f, true);
+		Go_Straight_Constant(dTimeDelta, 69, 0.3f, true);
 	}
 	else
 	{
@@ -392,6 +392,8 @@ void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
 
 void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 {
+
+
 	if (!m_isQuestioning && !m_isFinding && !m_isAttacking && !m_isPlayerBack)
 	{
 		if (Calculate_Distance() < 8.0f) // 6.0
@@ -408,6 +410,22 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_isFirst_Questioning = true;
 	}
 
+	if (m_isSlowMotion)
+	{
+		if (m_isFirst_SlowMotion)
+		{
+			m_isFirst_SlowMotion = false;
+			m_pRendererCom->Set_GrayScale_On(true);
+		}
+
+		m_dDelay_SlowMotion += dTimeDelta;
+		if (m_dDelay_SlowMotion > 0.1)
+		{
+			m_isSlowMotion = false;
+			m_dDelay_SlowMotion = 0.0;
+			m_pRendererCom->Set_GrayScale_On(false);
+		}
+	}
 
 	if (m_isQuestioning)
 	{
@@ -416,7 +434,17 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isFirst_Questioning = false;
 
 			m_pModelCom->Set_Animation(ANIM_POSE_MUT);
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.1, 0.4);
+			Safe_Release(pGameInstance);
+
+			m_isSlowMotion = true;
+			m_dDelay_SlowMotion = 0.0;
+			m_isFirst_SlowMotion = true;
 		}
+
 
 		//안걸리는거
 		_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
@@ -433,7 +461,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 		//걸리는거
 		m_dDelay_Questioning += dTimeDelta;
-		if (m_dDelay_Questioning > 3.0f)
+		if (m_dDelay_Questioning > 0.9f)
 		{
 			m_dDelay_Questioning = 0.0;
 			m_isQuestioning = false;
@@ -454,6 +482,11 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_POSE_HOWLING);
 			m_dDelay_Howling = 0.0;
 			m_isFirst_Howling = true;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.15, 0.7);
+			Safe_Release(pGameInstance);
 		}
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
@@ -462,7 +495,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
 
 		if(Calculate_Distance() > 1.f)
-			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.25f, true);
+			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.50f, true);
 		else
 		{
 			m_isFinding = false;
@@ -498,6 +531,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			_float4 Dir;
 			XMStoreFloat4(&Dir, Calculate_Dir());
 			CMonsterManager::GetInstance()->Set_DirStealthAtk(Dir);
+
+
 		}
 	}
 
@@ -529,6 +564,11 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				m_isBattleStart_Stealth = true;
 				m_dDelay_BattleStart_Stealth = 0.0;
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG_BACK);
+
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+				pGameInstance->Time_Slow(0.3, 0.3);
+				Safe_Release(pGameInstance);
 			}
 		}
 	}

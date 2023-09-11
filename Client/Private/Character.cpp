@@ -492,10 +492,16 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
+		if (Pos.y <= m_fLand_Y + 0.2f)
+		{
+			m_isGroundAttackFalse = true;
+		}
+
 		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
 			m_isStrictUpper = false;
+			
 		}
 	}
 

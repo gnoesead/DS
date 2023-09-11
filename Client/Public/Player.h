@@ -291,6 +291,10 @@ protected: // 애니메이션 제어용 변수들
 	//Dash
 	_double		m_dDelay_Dash = { 0.0 };
 
+	//Web히트
+	_bool	m_isWebbing = { false };
+	_double m_dDelay_Webbing = { 0.0 };
+
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
@@ -321,7 +325,7 @@ protected:
 	_float4		m_Dir_ScondJump_Box = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 	//배틀스타트
-	_bool	m_isBattleStart = { false };
+	_bool	m_isBattleStart = { true };
 	_double m_dDelay_BattleStart = { 0.0 };
 
 	//Npc

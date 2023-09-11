@@ -151,7 +151,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false && m_bTanjiroSurge == false)
 	{
 		if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() || m_isCan_Tutorial)
 		{
@@ -202,7 +202,7 @@ void CMonster_Zako::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 
 	__super::LateTick(dTimeDelta);
-	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false && m_bTanjiroSurge == false)
 	{
 		if (CPlayerManager::GetInstance()->Get_Slow() == false)
 		{
@@ -1516,6 +1516,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
+		pGameInstance->Time_Slow(0.3, 0.15);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1531,10 +1532,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.5f, 0.03f);
+		Jumping(1.65f, 0.03f); // 1.5
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+		pGameInstance->Time_Slow(0.23, 0.3);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1572,6 +1575,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
+			pGameInstance->Time_Slow(0.15, 0.1);
 		}
 
 		if (PlayerIndex == 0) {
@@ -1589,7 +1593,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.0f, 0.05f);
+			Jumping(2.25f, 0.05f);//2.0
+
+			pGameInstance->Time_Slow(0.25, 0.1);
 		}
 	}
 #pragma endregion
@@ -1605,12 +1611,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		Jumping(1.2f, 0.05f);
+		Jumping(1.4f, 0.05f); //1.2
 
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
+		pGameInstance->Time_Slow(0.6, 0.2);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1633,6 +1640,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_DEATH);
 
 		Play_HitEffect();
+
+		m_isSurging = true;
 
 	}
 #pragma endregion
@@ -1660,14 +1669,26 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
 
-		/*if (m_isJumpOn == false)
+		if (m_isJumpOn == false)
 		{
-			Jumping(1.85f, 0.03f);
+			Jumping(2.05f, 0.03f); // 1.85
 		}
 		else
 		{
-			Jumping(0.85f, 0.030f);
-		}*/
+			Jumping(1.05f, 0.030f); // 0.85
+		}
+		if (m_iHekirekiHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+			m_iHekirekiHit_Index++;
+		}
+		else if (m_iHekirekiHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			m_iHekirekiHit_Index = 0;
+		}
+
+		pGameInstance->Time_Slow(0.2, 0.1);
 	}
 
 
@@ -1678,7 +1699,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_dHekireki_Hit += dTimeDelta;
 		if (m_dHekireki_Hit > 0.09f) // 0.15f
 		{
-			if (m_isJumpOn == false)
+			/*if (m_isJumpOn == false)
 			{
 				Jumping(1.85f, 0.03f);
 			}
@@ -1696,7 +1717,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_FALL);
 				m_iHekirekiHit_Index = 0;
-			}
+			}*/
 
 			m_isHekireki_Hit = false;
 		}
@@ -1774,6 +1795,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			else if (i == 2)
 				m_iAttackIndex = 5;
 		}
+
+		
 	}
 
 	Safe_Release(pGameInstance);
@@ -1782,6 +1805,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
 
 
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
@@ -1802,6 +1826,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 			else
 				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
 		}
+		m_isSurging = false;
 	}
 
 	if (iCurAnim == ANIM_IDLE)
