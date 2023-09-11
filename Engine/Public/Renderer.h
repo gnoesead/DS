@@ -54,6 +54,7 @@ public:
 	}
 	void Set_Village_Battle(_bool Is) { m_bVillage_Battle = Is; }
 	void Set_PlayerIndex(_uint iPlayerIndex) { m_iPlayerIdx = iPlayerIndex; }
+	void Set_BackLight() { m_bBakcLight = !m_bBakcLight; }
 private:
 	list<class CGameObject*>	m_RenderObjects[RENDER_END];
 	class CTarget_Manager* m_pTarget_Manager = { nullptr };
@@ -134,6 +135,7 @@ private:
 	_bool					m_bRadialBlur = { false };
 	_bool					m_bGrayScale = { false };
 	_bool					m_bVillage_Battle = { false };
+	_bool					m_bBakcLight = { false };
 
 private:
 	D3D11_VIEWPORT			m_VP; // Shadow

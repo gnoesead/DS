@@ -10,6 +10,7 @@ texture2D		g_SplatingTexture;
 texture2D		g_MaskTexture;
 
 float			g_fUVRatio;
+float			g_fFar = 400.f;
 
 struct VS_IN
 {
@@ -98,8 +99,8 @@ PS_OUT  PS_TERRAIN(PS_IN _In)
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	//Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 300.f, 0.f);
+	//Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar, 0.f);
 	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
 	return Out;
@@ -120,7 +121,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse = (vMtrlDiffuse * (1.f - vMask.r)+ vSplatingDiffuse * (vMask.r)) * 0.35f;
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 300.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar, 0.f);
 	//Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
 	return Out;

@@ -10,7 +10,7 @@ texture2D	g_DiffuseTexture;
 bool		g_bMotionBlur;
 
 
-float		g_fFar = 300.f;
+float		g_fFar = 400.f;
 
 //OutLineColor_JH
 float4			g_lineColor = float4(0.f, 0.f, 0.f, 1.f);
@@ -205,10 +205,11 @@ PS_OUT  PS_Main(PS_IN _In)
 	
 	Out.vDiffuse.a = 1.f;
 
-	Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
+	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
+	Out.vEmissive = vMtrlDiffuse * 1.f;
 	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 400.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;
@@ -240,7 +241,7 @@ PS_OUT  PS_RimLight(PS_IN _In)
 	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
 	//Out.vDiffuse_Cha = vMtrlDiffuse * 0.75f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;
@@ -267,13 +268,14 @@ PS_OUT  PS_Outline(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
 	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
 
 	return Out;
 }
@@ -299,13 +301,14 @@ PS_OUT  PS_Outline_Red(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
 	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
 
 	return Out;
 }
@@ -336,7 +339,7 @@ PS_OUT  PS_Outline_Blue(PS_IN In)
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
 
 	return Out;
 }
@@ -367,7 +370,7 @@ PS_OUT  PS_Outline_Yello(PS_IN In)
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
 
 	return Out;
 }
@@ -376,7 +379,7 @@ PS_OUT_DEFERRED PS_MAIN_SHADOW(PS_IN In)
 {
 	PS_OUT_DEFERRED		Out = (PS_OUT_DEFERRED)0;
 
-	Out.vDiffuse.r = In.vProjPos.w / 300.f;
+	Out.vDiffuse.r = In.vProjPos.w / g_fFar;
 
 	Out.vDiffuse.a = 1.f;
 

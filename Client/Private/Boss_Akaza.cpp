@@ -3081,10 +3081,20 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
 	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_PUSHAWAY, 0.950, dTimeDelta))
+	{
+		_vector   vLightEye = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		_vector   vLightAt = { 1.f, 0.f, 1.f, 1.f };
+		_vector	  vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
+		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
+		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
+		m_pRendererCom->Set_BackLight();
+	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE_START;
+		
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
@@ -3092,6 +3102,8 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 	{
 		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
 		m_eCurAnimIndex = ANIM_AWAKE_END;
+		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pRendererCom->Set_BackLight();
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
 	{

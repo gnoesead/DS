@@ -1226,11 +1226,7 @@ void CCharacter::Shadow_Village_Setting()
 	Safe_AddRef(pGameInstance);
 
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-
-	Safe_Release(pGameInstance);
-
 	
-
 
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
@@ -1261,7 +1257,7 @@ void CCharacter::Shadow_Village_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
-
+	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Shadow_House_Setting()
