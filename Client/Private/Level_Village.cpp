@@ -452,6 +452,7 @@ HRESULT CLevel_Village::Ready_Layer_Boss(const _tchar* pLayerTag)
 HRESULT CLevel_Village::Ready_Layer_NPC(const _tchar* pLayerTag)
 {
     Ready_Layer_NPC_FirstStreet(pLayerTag);
+
     Ready_Layer_NPC_SecondStreet(pLayerTag);
 
     Ready_Layer_NPC_Inside(pLayerTag);
@@ -599,9 +600,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC_FirstStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_STAND;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
 
-    CharacterDesc.NPCDesc.Icon_Type = 99;
-    CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = false;
+    CharacterDesc.NPCDesc.Icon_Type = 3;
+    CharacterDesc.NPCDesc.Dialog_Type = 3;
+    CharacterDesc.NPCDesc.Interaction = true;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_Female"), &CharacterDesc)))
     {
@@ -674,9 +675,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC_FirstStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
 
-    CharacterDesc.NPCDesc.Icon_Type = 3;
-    CharacterDesc.NPCDesc.Dialog_Type = 3;
-    CharacterDesc.NPCDesc.Interaction = true;
+    CharacterDesc.NPCDesc.Icon_Type = 99;
+    CharacterDesc.NPCDesc.Dialog_Type = 99;
+    CharacterDesc.NPCDesc.Interaction = false;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_AdultM"), &CharacterDesc)))
     {
@@ -1005,9 +1006,9 @@ HRESULT CLevel_Village::Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_DOWN;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
 
-    CharacterDesc.NPCDesc.Icon_Type = 99;
-    CharacterDesc.NPCDesc.Dialog_Type = 99;
-    CharacterDesc.NPCDesc.Interaction = false;
+    CharacterDesc.NPCDesc.Icon_Type = 5;
+    CharacterDesc.NPCDesc.Dialog_Type = 14;
+    CharacterDesc.NPCDesc.Interaction = true;
 
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_AdultM"), &CharacterDesc)))
     {
