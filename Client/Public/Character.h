@@ -114,8 +114,7 @@ public:
 	CHAR_STATUS Get_Status() {
 		return m_StatusDesc;
 	}
-
-
+	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -178,7 +177,7 @@ protected: // 카메라 쉐이크
 protected:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
-	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f }, _float fScale = 2.f);
 
 	void Play_FallDownEffect();
 	void Play_HitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
@@ -259,7 +258,9 @@ protected:
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
-
+	//zenitsu용 그라운드 공격취소
+	_bool	m_isGroundAttackFalse = { false };
+	
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();

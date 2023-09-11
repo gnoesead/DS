@@ -393,7 +393,19 @@ PS_OUT  PS_MASKCOLORDISSOLVE(PS_IN In)
 
 	Out.vColor.a = vMask.r;
 	Out.vColor.a *= In.vAdditional.y;
+
 	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
 
 	if (Out.vColor.a < 0.1f)
 		discard;

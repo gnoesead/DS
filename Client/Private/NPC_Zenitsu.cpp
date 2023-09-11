@@ -64,12 +64,18 @@ HRESULT CNPC_Zenitsu::Initialize(void* pArg)
 	m_pModelCom->Set_EarlyEnd(147, false, 0.9999f);
 	m_pModelCom->Set_EarlyEnd(148, false, 0.9999f);
 
+	/*
 	m_ResetPos[0] = { 4.61f, 0.05f, 7.37f, 1.f }; //첫지역
 	m_ResetPos[1] = { 77.18f, 0.05f, 6.75f, 1.f }; // 처음 이동
 	m_ResetPos[2] = { 74.1f, 0.05f, 66.63f, 1.f }; // 둘째 이동
 	m_ResetPos[3] = { 197.1f, 0.05f, 31.95f, 1.f }; // 자코방 앞
-	
+	*/
 	//m_ResetPos[3] = { 69.26f, 0.05f, 24.7f, 1.f }; // 자코방 앞
+
+	m_ResetPos[0] = { 8.f, 0.f, 10.f, 1.f }; //첫지역
+	m_ResetPos[1] = { 78.18f, 0.05f, 7.75f, 1.f }; // 처음 이동
+	m_ResetPos[2] = { 75.1f, 0.05f, 67.63f, 1.f }; // 둘째 이동
+	m_ResetPos[3] = { 198.1f, 0.05f, 32.95f, 1.f }; // 마지막 이동
 
 	CMonsterManager::GetInstance()->Set_ThreeCnt(0);
 	m_iResetIndex = 0;
@@ -307,8 +313,7 @@ HRESULT CNPC_Zenitsu::Render_ShadowDepth()
 	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
+	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix)))
 		return E_FAIL;
 
 
@@ -459,9 +464,18 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(false);
 
 		m_iResetIndex++;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
-	}
+		
+		_float4 PrePlayerPos = CMonsterManager::GetInstance()->Get_PlayerPrePos();
+		_float4 RealPlayerPos = Calculate_PlayerPos();
 
+		_float	DistanceToPlayer = Calculate_Distance_From_Pos(PrePlayerPos);
+		_float4 FromPlayerDir = Calculate_Dir_From_Pos(PrePlayerPos);
+		_vector vFromPlayerDir = -XMLoadFloat4(&FromPlayerDir);
+		
+		_vector newPos = XMVectorAdd(XMLoadFloat4(&RealPlayerPos), XMVectorScale(vFromPlayerDir, DistanceToPlayer));
+		
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, newPos);
+	}
 }
 
 

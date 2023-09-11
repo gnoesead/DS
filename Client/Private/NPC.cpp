@@ -62,7 +62,17 @@ void CNPC::Tick(_double dTimeDelta)
 
 	_float Distance = Convert::GetLength(m_Player_Pos - m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	if (Distance < 2.f) {
+	_float Distance_Max = {};
+
+	if (m_CharacterDesc.NPCDesc.Dialog_Type == 99) {
+		Distance_Max = 1.f;
+	}
+	else {
+		Distance_Max = 2.f;
+	}
+
+
+	if (Distance < Distance_Max) {
 
 		CDialogManager::GetInstance()->Set_Dialog_Type(m_CharacterDesc.NPCDesc.Dialog_Type);
 
@@ -184,7 +194,7 @@ void CNPC::Create_Icon()
 	}
 	if (m_CharacterDesc.NPCDesc.Icon_Type == 5) {
 		UIDesc.m_Type = 5;
-		UIDesc.m_Up_Mount = 1.85f;
+		UIDesc.m_Up_Mount = 1.5f;
 		UIDesc.pParentTransform = m_pTransformCom;
 
 		m_pIcon = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
@@ -341,7 +351,12 @@ _vector CNPC::Calculate_Dir_Cross()
 
 _float4 CNPC::Calculate_PlayerPos()
 {
-	return _float4();
+	Get_PlayerComponent();
+	
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	return Pos;
 }
 
 _float CNPC::Calculate_To_Spot()

@@ -719,9 +719,21 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Charge_Particle.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Charge_Particle");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Particle_W.bin"), true, 2)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Particle_W");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -923,7 +935,7 @@ HRESULT CLevel_Logo::LoadEffects(const _tchar* pPath, _bool isParticle, _int iCn
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSetYToGround), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));
