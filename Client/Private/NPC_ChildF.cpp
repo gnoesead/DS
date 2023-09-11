@@ -90,6 +90,13 @@ void CNPC_ChildF::Tick(_double dTimeDelta)
 			if (true == m_isDead)
 				return;
 
+			if (m_isTalking)
+			{
+			
+
+				m_CharacterDesc.NPCDesc.eNPC = NPC_TALK;
+			}
+
 			Animation_Control(dTimeDelta);
 
 			//애니메이션 처리
@@ -307,7 +314,21 @@ void CNPC_ChildF::Animation_Control_Stand(_double dTimeDelta)
 	}
 	else if ( NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-		
+		if (m_isFirst_Talk)
+		{
+			m_isFirst_Talk = false;
+			m_pModelCom->Set_Animation(ANIM_SPEAK_NORLAM);
+		}
+
+		if (m_isTalking)
+		{
+			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.01f);
+			if (Calculate_Distance() > 2.0f)
+			{
+				m_isTalking = false;
+				m_pModelCom->Set_Animation(ANIM_STAND_GONGSON);
+			}
+		}
 	}
 	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
 	{
@@ -377,6 +398,7 @@ void CNPC_ChildF::Sway(_double dTimeDelta)
 				m_dCoolTime_Walk = 0.0;
 				m_isFirst_Sway = true;
 
+				m_pModelCom->Set_LinearDuration(29, 0.5f);
 				m_pModelCom->Set_Animation(29); // walk 중간
 				
 			}
@@ -388,6 +410,7 @@ void CNPC_ChildF::Sway(_double dTimeDelta)
 				m_dCoolTime_Walk = 0.0;
 				m_isFirst_Sway = true;
 
+				m_pModelCom->Set_LinearDuration(ANIM_STAND, 0.5f);
 				m_pModelCom->Set_Animation(ANIM_STAND);
 			}
 		}

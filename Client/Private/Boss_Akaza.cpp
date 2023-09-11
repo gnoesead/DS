@@ -93,7 +93,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		Update_Trigger(dTimeDelta);
+		//Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -627,6 +627,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
+
+				Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 			}
 
 		}
@@ -1032,7 +1034,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					Jumping(0.2f, 0.030f);
 
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+				Play_HitEffect();
 
 			}
 			else
@@ -1059,7 +1061,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+			Play_HitEffect();
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1076,7 +1078,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+			Play_HitEffect();
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1095,9 +1097,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
+			Play_HitEffect();
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.8f;
+			EffectWorldDesc.fScale = 1.4f;
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom , &EffectWorldDesc);
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1113,6 +1117,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
 
+			Play_HitEffect();
 			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
 			pPlayer->Set_Hit_Success(true);

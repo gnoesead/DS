@@ -898,6 +898,12 @@ HRESULT CLoader::LoadingForLobby()
 		CAurora::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+	/* Prototype_GameObject_SmeshStone */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmeshStone"),
+		CSmeshStone::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma region Environment
@@ -1264,11 +1270,6 @@ HRESULT CLoader::LoadingForVillage()
 	/* Prototype_GameObject_Swamp_SmokeEffect */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Swamp_SmokeEffect"),
 		CSwamp_SmokeEffect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* Prototype_GameObject_SmeshStone */
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SmeshStone"),
-		CSmeshStone::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
@@ -2020,6 +2021,12 @@ HRESULT CLoader::Load_MapObjectModel_AllStage(CGameInstance* pGameInstance)
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Effect/Swamp_AlertRect.bin", PivotMatrix))))
 		return E_FAIL;
 
+	PivotMatrix = XMMatrixRotationY(XMConvertToRadians(180.f));
+	/* For.Prototype_Component_Model_Blood*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Blood"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Blood.bin", PivotMatrix))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -2433,6 +2440,11 @@ HRESULT CLoader::Load_MapObjectModel_Village()
 	/* For.Prototype_Component_Model_Gate_02c*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Gate_02c"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Gate_02c.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Gate_03a*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_VILLAGE, TEXT("Prototype_Component_Model_Gate_03a"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Village/Gate_03a.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_GardenDoor_01a*/
@@ -3018,10 +3030,6 @@ HRESULT CLoader::Load_MapObjectModel_House()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Lantern_01a.bin", PivotMatrix))))
 		return E_FAIL;
 
-	/* For.Prototype_Component_Model_Blood*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Blood"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/RoomMap/Blood.bin", PivotMatrix))))
-		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Scratch*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_HOUSE, TEXT("Prototype_Component_Model_Scratch"),

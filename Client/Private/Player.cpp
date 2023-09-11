@@ -431,7 +431,30 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
 		}
 		
-		
+
+
+		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
+		{
+			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
+			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
+
+
+			m_dDelay_ComboReset_2 = 0.0;
+
+			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
+				m_isGuardHit = true;
+			else
+			{
+				m_StatusDesc.iHitCombo++;
+				m_Moveset.m_Down_Dmg_SwampUpper = true;
+			}
+		}
+
 	}
 	else
 	{
@@ -443,6 +466,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
+
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 	}
 }
 
@@ -510,14 +535,14 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == m_ePlayerType)
 	{
 		//Äì¿ì°¡ÀÌ µ¹¾Æ°¡´Â ·ë
-		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE && CMonsterManager::GetInstance()->Get_Kyogai_On())
 		{
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
 			{
 				m_isJump_TurnRoom = true;
 				m_isJump_Room_X = false;
 				m_isJump_Room_Z = false;
-				Jumping(3.0f, 0.05f);
+				Jumping(3.0f, 0.07f);
 				
 				if (m_ePlayerType == PLAYER_TANJIRO)
 				{
@@ -1449,7 +1474,6 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		m_isSwap_OnSky = false;
 		m_Moveset.m_isHitMotion = false;
 
-		
 		m_Moveset.m_isDownMotion = false;
 		m_Moveset.m_isGetUpMotion = false;
 
@@ -1465,6 +1489,10 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		m_Moveset.m_isRestrict_Special = false;
 
 		m_Moveset.m_isRestrict_Adventure = false;
+
+		m_Moveset.m_Down_Battle_Combo = false;
+		m_Moveset.m_Down_Battle_Jump_Attack = false;
+		m_Moveset.m_Down_Battle_Jump_TrackAttack = false;
 
 		Set_FallingStatus(5.5f, 0.05f);
 

@@ -90,6 +90,12 @@ void CNPC_ChildM::Tick(_double dTimeDelta)
 			if (true == m_isDead)
 				return;
 
+			if (m_isTalking)
+			{
+
+				m_CharacterDesc.NPCDesc.eNPC = NPC_TALK;
+			}
+
 			Animation_Control(dTimeDelta);
 
 			//局聪皋捞记 贸府
@@ -308,7 +314,23 @@ void CNPC_ChildM::Animation_Control_Stand(_double dTimeDelta)
 	}
 	else if ( NPC_TALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
-		
+		if (m_isFirst_Talk)
+		{
+			m_isFirst_Talk = false;
+			m_pModelCom->Set_LinearDuration(ANIM_SPEAK_NORLAM, 0.3f);
+			m_pModelCom->Set_Animation(ANIM_SPEAK_NORLAM);
+		}
+
+		if (m_isTalking)
+		{
+			m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.01f);
+			if (Calculate_Distance() > 2.0f)
+			{
+				m_isTalking = false;
+				m_pModelCom->Set_LinearDuration(ANIM_STAND_GONGSON, 0.3f);
+				m_pModelCom->Set_Animation(ANIM_STAND_GONGSON);
+			}
+		}
 	}
 	else if (NPC_SIT == m_CharacterDesc.NPCDesc.eNPC)
 	{
