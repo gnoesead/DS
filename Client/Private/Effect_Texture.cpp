@@ -201,7 +201,6 @@ HRESULT CEffect_Texture::SetUp_ShaderResources(void)
 
 			Safe_Release(pGameInstance);
 
-			_float3 vAxis = _float3(0.f, 1.f, 0.f);
 			vAxis = Convert::ToFloat3(XMVector3TransformNormal(Convert::ToVector(vAxis), XMMatrixRotationAxis(Convert::ToVector(vCameraPos) - m_pTransformCom->Get_State(CTransform::STATE_POSITION), XMConvertToRadians(m_eEffectDesc.vStartRotationMin.x))));
 		}
 
