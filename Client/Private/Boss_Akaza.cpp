@@ -988,7 +988,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
 
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				Play_HitEffect();
 
 			}

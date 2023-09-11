@@ -525,7 +525,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_SPREAD , vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_UPDOWN , vPlusPos);
 				Create_StoneParticle(CStoneParticle::STONE_TANJIRO_COMBODOWN , vPlusPos);
-				Create_SmeshStone(vPlusPos);
+				Create_SmeshStone(vPlusPos * 1.5f , 3.f);
 				Camera_Shake(0.6);
 			}
 		}
@@ -803,7 +803,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				if (m_Moveset.m_iAwaken == 0)
+				{
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt", m_pTransformCom);
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.fScale = 0.6f;
+					EffectWorldDesc.vPosition.y -= 0.5f;
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_Wind", m_pTransformCom, &EffectWorldDesc);
+				}
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
 			}
@@ -832,6 +838,16 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f * fDmg);
 			}
 		}
+		if (32 == m_pModelCom->Get_iCurrentAnimIndex()) // 차지 다 된모션
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Effect", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Particle", m_pTransformCom);
+				Camera_Shake(0.05);
+			}
+		}
+
 #pragma endregion
 
 #pragma region Move & Hitted
