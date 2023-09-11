@@ -281,8 +281,13 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 	Safe_Release(pGameInstance);*/
 
+	
+
 	if (m_Moveset.m_isDownMotion == false && m_isSwamp_Escape == false)
 	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
 		CEffectPlayer::EFFECTWORLDDESC Effect3WorldDesc;
 		Effect3WorldDesc.vPosition.y += 0.8f;
 
@@ -340,6 +345,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_StatusDesc.iHitCombo++;
 				m_Moveset.m_Down_Dmg_Big = true;
 			}
+
+			pGameInstance->Time_Slow(0.4, 0.3);
 		}
 
 
@@ -360,6 +367,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_StatusDesc.iHitCombo++;
 				m_Moveset.m_Down_Dmg_Blow = true;
 			}
+
+			pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
@@ -379,6 +388,8 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_StatusDesc.iHitCombo++;
 				m_Moveset.m_Down_Dmg_BigBlow = true;
 			}
+
+			pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
@@ -428,9 +439,22 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_Moveset.m_Down_Dmg_Web = true;
 
-			CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
+			//CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
+			m_isWebbing = true;
+			m_dDelay_Webbing = 0.0;
+
+			//pGameInstance->Time_Slow(0.2, 0.2);
 		}
-		
+		if (m_isWebbing)
+		{
+			m_dDelay_Webbing += dTimeDelta;
+			if (m_dDelay_Webbing > 0.45f)
+			{
+				m_dDelay_Webbing = 0.0;
+				m_isWebbing = false;
+				CBattle_UI_Manager::GetInstance()->Set_Web_UI_On(Random::Generate_Int(0, 3));
+			}
+		}
 
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
@@ -453,8 +477,10 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_StatusDesc.iHitCombo++;
 				m_Moveset.m_Down_Dmg_SwampUpper = true;
 			}
-		}
 
+			pGameInstance->Time_Slow(0.3, 0.5);
+		}
+		Safe_Release(pGameInstance);
 	}
 	else
 	{
@@ -1033,7 +1059,6 @@ void CPlayer::Key_Input_Battle_Awaken(_double dTimeDelta)
 			m_StatusDesc.iAwaken = 1;
 			m_StatusDesc.isAwaken_First = true;
 			m_StatusDesc.dAwaken_TimeAcc = m_StatusDesc.dAwaken_Duration;
-
 		}
 		else if (m_Moveset.m_iAwaken == 1)
 		{
@@ -1323,6 +1348,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				
 			}
 			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1372,6 +1399,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_dChangePositionAccTime = 0.0;
 
 				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
+
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1410,6 +1438,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 	}
 
 	_vector vNextPos = { 0.f, 0.f , 0.f , 1.f };
+	_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
 
 	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
@@ -1417,25 +1446,45 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		{
 			switch (i)
 			{
-			case CHANGE_POSITON_HOUSE_1A:
+			case CHANGE_POSITON_HOUSE_1A: // ÀÚÄÚ
 				vNextPos = XMVectorSet(43.f, 0.f, 120.f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_2_0);
+
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.3f, 0.0f, -1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(82); // battle_idle
 				break;
-			case CHANGE_POSITON_HOUSE_1B:
+			case CHANGE_POSITON_HOUSE_1B: // ÀÚÄÚ³¡
 				vNextPos = XMVectorSet(67.f, 0.f, 19.9f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_1_1);
+
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(0); // Adv_Idle
 				break;
-			case CHANGE_POSITON_HOUSE_2A:
-				vNextPos = XMVectorSet(118.f, 0.f, 117.f, 1.f);
+			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
+				vNextPos = XMVectorSet(118.f, 0.f, 136.6, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
+
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(82); // battle_idle
 				break;
-			case CHANGE_POSITON_VILLAGE_1A:
+			case CHANGE_POSITON_VILLAGE_1A: // ½º¿ÑÇÁ
 				vNextPos = XMVectorSet(426.55f, 3.0f, 301.92f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_VILLAGE_BATTLE);
+
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(82); // battle_idle
 				break;
-			case CHANGE_POSITON_VILLAGE_1B:
+			case CHANGE_POSITON_VILLAGE_1B://½º¿ÑÇÁ ³¡
 				vNextPos = XMVectorSet(600.f, 4.5f, 317.f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_VILLAGE_MAINROAD1);
+
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(0); // Adv_Idle
 				break;
 			default:
 				break;

@@ -40,6 +40,9 @@ public:
 	_int	Get_ResetIndex_Player() { return m_iResetIndex_ForPlayer; }
 	void	Set_ResetIndeX_Player(_int index) { m_iResetIndex_ForPlayer = index; }
 
+	_float4	Get_PlayerPrePos() { return m_PlayerPrePos; }
+	void	Set_PlayerPrePos(_float4 Pos) { m_PlayerPrePos = Pos; }
+
 	_bool	Get_PlayerBack() { return m_isPlayerBack; }
 	void	Set_PlayerBack(_bool back) { m_isPlayerBack = back; }
 	_bool	Get_ZenitsuBack() { return m_isZenitsuBack; }
@@ -93,6 +96,9 @@ private:
 	_bool	m_isStealthEnd_BattleStart_Fade = { false };
 
 	_bool	m_isZenitsu_IndexPlus = { false };
+
+
+	_float4		m_PlayerPrePos = { 0.0f, 0.0f ,0.0f ,1.0f };
 
 
 	//보스몹의 시작을 알리는

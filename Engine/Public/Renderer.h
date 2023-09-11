@@ -46,6 +46,7 @@ public:
 public:
 	void Set_RadialBlur() { m_bRadialBlur = !m_bRadialBlur; }
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
+	void Set_GrayScale_On(_bool on) { m_bGrayScale = on; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
 	void Set_SSAO(_bool Is) { m_bSSAOSwitch = Is; }

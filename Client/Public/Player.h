@@ -291,6 +291,10 @@ protected: // 애니메이션 제어용 변수들
 	//Dash
 	_double		m_dDelay_Dash = { 0.0 };
 
+	//Web히트
+	_bool	m_isWebbing = { false };
+	_double m_dDelay_Webbing = { 0.0 };
+
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
