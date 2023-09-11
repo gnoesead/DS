@@ -1468,7 +1468,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
-		pGameInstance->Time_Slow(0.3, 0.15);
+		//pGameInstance->Time_Slow(0.3, 0.15);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1489,7 +1489,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-		pGameInstance->Time_Slow(0.23, 0.3);
+		//pGameInstance->Time_Slow(0.23, 0.3);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1527,7 +1527,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
-			pGameInstance->Time_Slow(0.15, 0.1);
+			//pGameInstance->Time_Slow(0.15, 0.1);
 		}
 
 		if (PlayerIndex == 0) {
@@ -1547,7 +1547,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 			Jumping(2.25f, 0.05f);//2.0
 
-			pGameInstance->Time_Slow(0.25, 0.1);
+			//pGameInstance->Time_Slow(0.25, 0.1);
 		}
 	}
 #pragma endregion
@@ -1569,7 +1569,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
-		pGameInstance->Time_Slow(0.6, 0.2);
+		//pGameInstance->Time_Slow(0.6, 0.2);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1640,7 +1640,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_iHekirekiHit_Index = 0;
 		}
 
-		pGameInstance->Time_Slow(0.2, 0.1);
+		//pGameInstance->Time_Slow(0.2, 0.1);
 	}
 
 

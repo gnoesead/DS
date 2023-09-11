@@ -356,7 +356,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Big = true;
 			}
 
-			pGameInstance->Time_Slow(0.4, 0.3);
+			//pGameInstance->Time_Slow(0.4, 0.3);
 		}
 
 
@@ -380,7 +380,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Blow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			//pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
@@ -403,7 +403,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_BigBlow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			//pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
@@ -461,7 +461,6 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_Moveset.m_Down_Dmg_Web = true;
 
-			//CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
 			m_isWebbing = true;
 			m_dDelay_Webbing = 0.0;
 
@@ -474,7 +473,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			{
 				m_dDelay_Webbing = 0.0;
 				m_isWebbing = false;
-				CBattle_UI_Manager::GetInstance()->Set_Web_UI_On(Random::Generate_Int(0, 3));
+				CBattle_UI_Manager::GetInstance()->Set_Web_UI_On(0);
 			}
 		}
 
@@ -500,7 +499,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_SwampUpper = true;
 			}
 
-			pGameInstance->Time_Slow(0.3, 0.5);
+			//pGameInstance->Time_Slow(0.3, 0.5);
 		}
 		Safe_Release(pGameInstance);
 	}
