@@ -240,6 +240,10 @@ void CEffect_Mesh::Check_PassIndex(void)
 			if (OPT_NO_ZWRITE == m_eEffectDesc.eTextureShaderOption[TEX_MASK])
 				m_iPassIndex = 17;
 		}
+		else if (OPT_BY_BLUE == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
+		{
+			m_iPassIndex = 24;
+		}
 
 		if (m_eEffectDesc.isTextureSheetAnimation)
 			m_iPassIndex = 18;
@@ -251,7 +255,12 @@ void CEffect_Mesh::Check_PassIndex(void)
 			if (OPT_BY_RED == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
 			{
 				if (OPT_NO_ZWRITE != m_eEffectDesc.eTextureShaderOption[TEX_MASK])
+				{
 					m_iPassIndex = 15;
+
+					if (m_eEffectDesc.isTextureSheetAnimation)
+						m_iPassIndex = 25;
+				}
 				else
 				{
 					m_iPassIndex = 16;

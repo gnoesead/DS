@@ -724,6 +724,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Particle_W");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region AKAZA

@@ -1387,6 +1387,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/hjd.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : hjd");
+		return E_FAIL;
+	}
+
 	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_SurgeCombo1_Decal.bin"))))
 	//{
 	//	MSG_BOX("Failed to Load Effect : Tanjiro_SurgeCombo1_Decal");
