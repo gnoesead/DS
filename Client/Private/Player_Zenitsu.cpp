@@ -736,8 +736,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 0.6f;
+				EffectWorldDesc.vPosition.y += 0.6f;
+				
 				m_pRendererCom->Set_BloomRatio(1.1f);
-				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom, &EffectWorldDesc);
 
 				
 			}
@@ -745,12 +749,18 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 		
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.fScale = 2.f;
-				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.fScale = 1.6f;
+				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
 
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Revolution", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.fScale = 3.3f;
+				EffectWorldDesc.vPosition.y += -2.3f;
+				EffectWorldDesc.vPosition.z += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Shock", m_pTransformCom, &EffectWorldDesc);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 8.0f * fDmg);
