@@ -93,6 +93,8 @@
 
 #include "VIBuffer_Custom_Instance.h"
 #include "CustomParticle.h"
+#include "AlertCircle_Akaza.h"
+#include "AlertMesh_Akaza.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -245,6 +247,21 @@ HRESULT CLoader::LoadingForLogo()
 	/* For.Prototype_Component_Model_Sky_Train*/
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Sky_Train"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Environments/Map/Train/Sky_Train.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Akaza_Inner_00*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_00"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_Inner_00.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Akaza_Inner_01*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_Inner_01.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Akaza_OuterWave*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_OuterWave"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_OuterWave.bin", PivotMatrix))))
 		return E_FAIL;
 
 	Load_MapObjectModel_AllStage(pGameInstance);
@@ -867,6 +884,16 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_GameObject_Monster_Test");
 		return E_FAIL;
 	}
+
+	/* For.Prototype_GameObject_AlertCircle_Akaza*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle_Akaza"),
+		CAlertCircle_Akaza::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_AlertMesh_Akaza*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertMesh_Akaza"),
+		CAlertMesh_Akaza::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For.Prototype_GameObject_AlertCircle*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle"),

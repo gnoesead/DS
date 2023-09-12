@@ -117,6 +117,8 @@ public:
 		return m_StatusDesc;
 	}
 	
+	_bool	Get_IsAuroraOn() { return m_isAuroraOn; }
+
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -267,6 +269,9 @@ protected:
 
 	//zenitsu용 그라운드 공격취소
 	_bool	m_isGroundAttackFalse = { false };
+
+private:
+	_bool	m_isAuroraOn = { false };
 	
 protected:
 	HRESULT Add_Components();
