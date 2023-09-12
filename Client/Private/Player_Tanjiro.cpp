@@ -28,6 +28,7 @@
 #include "ParticleManager.h"
 
 #include "WebManager.h"
+#include "Aurora.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -89,7 +90,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, 1.0f, 0.0f });
 
 
-	Safe_Release(pGameInstance);
+	
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
 
@@ -102,6 +103,15 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 
 	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
+
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+	for(_uint i = 0 ; i < 35 ; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -171,22 +181,10 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
-	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
+	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		CEffectW::EFFECTWDESC EffectWDesc;
-		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
-		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
-
-		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
-		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
-		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
-		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
-		EffectWDesc.vStartFrame = { 0.f ,5.f };
-
-		
-		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
-	}*/
+		Create_GroundSmoke(CGroundSmoke::SMOKE_TEST);
+	}
 
 	Safe_Release(pGameInstance); 
 
@@ -216,11 +214,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 
-
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
 	}
 	
 	_float4 TestPos;
@@ -292,10 +285,30 @@ HRESULT CPlayer_Tanjiro::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(1);
+			{
+				if (m_isSkilling == false)
+					m_pShaderCom->Begin(1);
+				else
+				{					
+					m_pShaderCom->Begin(5);
+				}
+			}
 
 			m_pModelCom->Render(m_iMeshNum);
 		}
+		//// RimLight
+		//for (_uint i = 0; i < iNumMeshes; i++)
+		//{
+		//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		//		return E_FAIL;
+
+		//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+		//		return E_FAIL;
+
+		//	m_pShaderCom->Begin(7);
+
+		//	m_pModelCom->Render(i);
+		//}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
 		{
@@ -309,6 +322,7 @@ HRESULT CPlayer_Tanjiro::Render()
 
 			m_pModelCom->Render(i);
 		}
+		
 #pragma endregion
 	}
 	return S_OK;
@@ -316,54 +330,8 @@ HRESULT CPlayer_Tanjiro::Render()
 
 HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-	_vector   vLightAt = vPlayerPos;
-	//_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 	
 	return S_OK;
 }
@@ -523,7 +491,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_SPREAD , vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_TANJIRO_COMBODOWN_UPDOWN , vPlusPos);
 				Create_StoneParticle(CStoneParticle::STONE_TANJIRO_COMBODOWN , vPlusPos);
-				Create_SmeshStone(vPlusPos);
+				Create_SmeshStone(vPlusPos * 1.5f , 3.f);
 				Camera_Shake(0.6);
 			}
 		}
@@ -680,6 +648,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				m_pRendererCom->Set_BloomRatio(0.25f);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 				
@@ -718,8 +687,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				m_pRendererCom->Set_BloomRatio(1.f);				
 			}
 			
 		}
@@ -807,7 +781,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				if (m_Moveset.m_iAwaken == 0)
+				{
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt", m_pTransformCom);
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.fScale = 0.6f;
+					EffectWorldDesc.vPosition.y -= 0.5f;
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_Tilt_Wind", m_pTransformCom, &EffectWorldDesc);
+				}
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
 			}
@@ -836,6 +816,16 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 2.0f * fDmg);
 			}
 		}
+		if (32 == m_pModelCom->Get_iCurrentAnimIndex()) // 차지 다 된모션
+		{
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Effect", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Particle", m_pTransformCom);
+				Camera_Shake(0.05);
+			}
+		}
+
 #pragma endregion
 
 #pragma region Move & Hitted
@@ -910,6 +900,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
+			//_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+			//_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+			//CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_RUN_0);
+			//CSoundMgr::Get_Instance()->PlaySound(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.6f);
 			if (0 == m_iEvent_Index)	// 0.0
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			else if (1 == m_iEvent_Index)	// 0.12
@@ -1094,16 +1088,18 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 {
 	//m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), dTimeDelta);
 
+
+	/*
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_DIKeyDown(DIK_Z))
 		m_isBattleStart = true;
 	Safe_Release(pGameInstance);
-
-	if (m_isBattleStart)
+	*/
+	if ( m_isBattleStart && CMonsterManager::GetInstance()->Get_Akaza_On())
 	{
 		m_dDelay_BattleStart += dTimeDelta;
-		if (m_dDelay_BattleStart > 1.5f)
+		if (m_dDelay_BattleStart > 0.3f) //3~
 		{
 			m_pModelCom->Set_Animation(ANIM_BATTLESTART);
 			m_isBattleStart = false;
@@ -1182,9 +1178,17 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 			if (m_isSwamp_Escape == false)
 			{
 				if (m_isCanNavi)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+					Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+					Go_Straight_Constant(dTimeDelta, 88, m_fMove_Speed * m_fScaleChange);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+					Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange, true);
+					Go_Straight_Constant(dTimeDelta, 88, m_fMove_Speed * m_fScaleChange, true);
+				}
 			}
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
@@ -1613,7 +1617,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
@@ -1897,6 +1901,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iGuardHit_Index = 0;
 			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_BIG);
 		}
+
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.fScale = 1.4f;
+		EffectWorldDesc.vPosition.y += 0.4f;
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom , &EffectWorldDesc);
 	}
 #pragma endregion
 
@@ -2284,7 +2294,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_Moveset.m_Down_Battle_Run = false;
 
 			if (m_isStealthMode)
-				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_WALK);//144 145 146
 			else
 				m_pModelCom->Set_Animation(ANIM_ADV_RUN);
 		}
@@ -2299,17 +2309,36 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 
 			if (m_isCanNavi)
 			{
-				if(m_isStealthMode)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f, m_pNavigationCom[m_eCurNavi]);
+				if (m_isStealthMode)
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f, m_pNavigationCom[m_eCurNavi]);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, m_fMove_Speed * m_fScaleChange * 0.35f);
+					Go_Straight_Constant(dTimeDelta, 145, m_fMove_Speed * m_fScaleChange * 0.35f);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f, m_pNavigationCom[m_eCurNavi]);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_RUN, m_fMove_Speed * m_fScaleChange * 0.7f);
+					//Go_Straight_Constant(dTimeDelta, 10, m_fMove_Speed * m_fScaleChange * 0.7f);
+				}
 			}
 			else
 			{
 				if (m_isStealthMode)
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.35f);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_STEALTH_WALK, m_fMove_Speed * m_fScaleChange * 0.35f, true);
+					Go_Straight_Constant(dTimeDelta, 145, m_fMove_Speed * m_fScaleChange * 0.35f, true);
+				}
 				else
-					m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+				{
+					//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange * 0.7f);
+
+					Go_Straight_Constant(dTimeDelta, ANIM_ADV_RUN, m_fMove_Speed * m_fScaleChange * 0.7f, true);
+				}
 			}
 			//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 			
@@ -2394,8 +2423,42 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			m_iResetIndex = CMonsterManager::GetInstance()->Get_ResetIndex_Player();
 			m_Moveset.m_isRestrict_Adventure = false;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
+
+			if (m_iResetIndex == 0)
+			{
+				_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 1.0f, 0.0f, 0.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_IDLE); // 
+			}
+			else if (m_iResetIndex == 1)
+			{
+				_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, 1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_IDLE); // 
+			}
+			else if (m_iResetIndex == 2)
+			{
+				_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_IDLE); // 
+			}
+			else if (m_iResetIndex == 3)
+			{
+				_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
+				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.3f, 0.0f, -1.0f, 0.0f }));
+				m_pTransformCom->Set_Look(PlayerDir);
+				m_pModelCom->Set_Animation(ANIM_ADV_STEALTH_IDLE); // 
+			}
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.3, 0.4);
+			Safe_Release(pGameInstance);
 		}
-	}
+	}	
 }
 
 void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
@@ -2947,14 +3010,7 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-
-	
-	// 슈퍼아머 상태 넣어주셈
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
-		return E_FAIL;
-
-
-
+		
 	Safe_Release(pGameInstance);
 
 	return S_OK;

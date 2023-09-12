@@ -17,6 +17,8 @@ texture2D      g_FinalTexture; // 디퍼드 텍스처
 texture2D	   g_BloomTextrue; // 블룸 텍스처
 texture2D	   g_HDRTexture; // 블룸 + 블러 텍스처
 
+texture2D	   g_DiffuseDistortion;
+
 matrix         g_matProj;
 matrix         g_matViewInv;
 matrix         g_matProjInv;
@@ -175,6 +177,7 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 {
 	PS_OUT         Out = (PS_OUT)0;
 
+	
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
 	if (0.f == vDiffuse.a)
@@ -182,7 +185,7 @@ PS_OUT PS_MAIN_DEFERRED_Test(PS_IN In)
 
 	
 	Out.vColor = vDiffuse;
-
+	Out.vColor.a = 1.f;
 
 	if (0.f == Out.vColor.a)
 		discard;
@@ -212,7 +215,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-
+	Out.vColor.a = 1.f;
 
 	return Out;
 }
@@ -232,15 +235,15 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 	vector vOut = (vHDRColor);
 
-	vOut = pow(abs(vOut), 1.9f);
-	vBloom = pow(abs(vBloom), 1.9f);
+	vOut = pow(abs(vOut), 1.8f);
+	vBloom = pow(abs(vBloom), 1.8f);
 
 	vOut += vBloom * g_fBloomPower;
 	Out.vColor = pow(abs(vOut), 1 / 2.2f);
 
 	if (Out.vColor.a == 0.f)
 		discard;
-	
+	Out.vColor.a = 1.f;
 	return Out;
 }
 
@@ -267,7 +270,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-
+	Out.vColor.a = 1.f;
 	return Out;
 }
 
@@ -291,7 +294,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 
 	if (Out.vColor.a == 0.f)
 		discard;
-
+	Out.vColor.a = 1.f;
 
 	return Out;
 }
@@ -353,7 +356,7 @@ PS_OUT PS_Combine_Blur(PS_IN In)
 
 	if (Out.vColor.a == 0.0f)
 		discard;
-
+	Out.vColor.a = 1.f;
 
 	return Out;
 }
@@ -409,9 +412,9 @@ technique11 DefaultTechnique
 
 	pass Deferred_Test
 	{//1
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -423,9 +426,9 @@ technique11 DefaultTechnique
 
 	pass BlurX
 	{//2
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -436,9 +439,9 @@ technique11 DefaultTechnique
 
 	pass BlurY
 	{//3
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -449,9 +452,9 @@ technique11 DefaultTechnique
 
 	pass CombineBlur
 	{//4
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -462,9 +465,9 @@ technique11 DefaultTechnique
 
 	pass BlurX_3
 	{//5
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -474,9 +477,9 @@ technique11 DefaultTechnique
 	}
 	pass BlurY_3
 	{//6
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -486,9 +489,9 @@ technique11 DefaultTechnique
 	}
 	pass ExportBloom
 	{//7
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -498,9 +501,9 @@ technique11 DefaultTechnique
 	}
 	pass Bloom
 	{//8
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
+		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 1);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
@@ -510,7 +513,7 @@ technique11 DefaultTechnique
 	}
 	pass RadialBlur
 	{//8
-		SetRasterizerState(RS_Default);
+		SetRasterizerState(RS_CULL_NONE);
 		SetBlendState(BS_OneByOne_Engine, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_None_ZEnable_None_ZWrite, 0);
 

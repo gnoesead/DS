@@ -5,6 +5,7 @@ matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 float4			g_vCamPosition;
 
 float			g_fRatio;
+float			g_fFar = 400.f;
 
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
@@ -96,6 +97,8 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
+	vector		vEmissive : SV_TARGET3;
+	vector		vDiffuse_Cha : SV_TARGET4;
 };
 
 
@@ -118,11 +121,13 @@ PS_OUT  PS_MAIN(PS_IN In)
 
 	vNormal = mul(vNormal, WorldMatrix);
 
+	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vDiffuse = vMtrlDiffuse;
+	//Out.vDiffuse_Cha = vector(0.f,0.f,0.f,0.f);
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
 
 	return Out;
 }

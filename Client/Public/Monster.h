@@ -25,13 +25,15 @@ public:
 	virtual void	Tick(_double dTimeDelta) override;
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT Render_ShadowDepth();
+	virtual HRESULT Render_ShadowDepth() override;
 public:
 	void Set_Attack_Success(_bool bHit) { m_bAttack = bHit; }
 
 protected:
 	void Get_PlayerComponent();
 	void Check_Player_Awake();
+
+	void Check_Player_Surge();
 
 protected: // Calculate
 	void  Calculate_To_Player();
@@ -42,6 +44,7 @@ protected: // Calculate
 	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
 		return dTime < dTimeAcc&& dTimeAcc <= dTime + dTimeDelta;
 	}
+	
 
 	_vector Calculate_PlayerPos();
 	_float Calculate_Distance();
@@ -102,6 +105,7 @@ protected: // 애니메이션 제어용 변수들
 	
 	_bool	m_bTanjiroAwake = { false };
 	_bool	m_bZenitsuAwake = { false };
+	_bool	m_bTanjiroSurge = { false };
 protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
@@ -115,6 +119,9 @@ protected:
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iLoopCount = { 0 };
+
+	//서지평타컷씬 히트중
+	_bool	m_isSurging = { false };
 protected:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };

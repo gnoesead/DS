@@ -495,6 +495,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			return;
 		if (nullptr == pPlayer_2)
 			return;
+
+		CTransform* pTransform = pPlayer->Get_TransformCom();
+		_float4 PrePos;
+
 		switch (iInteractionType)
 		{
 		case INTERACTION_ROOMCHANGE0:
@@ -505,6 +509,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		//Á¨ÀÌÃ÷npc¿¡ º¸³»ÁÖ±â
 		CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
 		CMonsterManager::GetInstance()->Set_ResetIndeX_Player(1);
+
+		
+		XMStoreFloat4(&PrePos, pTransform->Get_State(CTransform::STATE_POSITION));
+		CMonsterManager::GetInstance()->Set_PlayerPrePos(PrePos);
 
 		CLandObject::NAVI_TYPE eType = pPlayer->Get_CurNaviMesh();
 		break; }
@@ -517,6 +525,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
 			CMonsterManager::GetInstance()->Set_ResetIndeX_Player(2);
 
+			
+			XMStoreFloat4(&PrePos, pTransform->Get_State(CTransform::STATE_POSITION));
+			CMonsterManager::GetInstance()->Set_PlayerPrePos(PrePos);
+
 			break;
 		case INTERACTION_ROOMCHANGE2:
 		vNextPos = XMVectorSet(189.f, 0.f, 30.f, 1.f);
@@ -526,6 +538,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			//Á¨ÀÌÃ÷npc¿¡ º¸³»ÁÖ±â
 			CMonsterManager::GetInstance()->Set_Zenitsu_IndexPlus(true);
 			CMonsterManager::GetInstance()->Set_ResetIndeX_Player(3);
+
+			
+			XMStoreFloat4(&PrePos, pTransform->Get_State(CTransform::STATE_POSITION));
+			CMonsterManager::GetInstance()->Set_PlayerPrePos(PrePos);
 
 			break;
 		}

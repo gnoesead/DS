@@ -10,7 +10,7 @@ texture2D	g_DiffuseTexture;
 bool		g_bMotionBlur;
 
 
-float		g_fFar = 300.f;
+float		g_fFar = 400.f;
 
 //OutLineColor_JH
 float4			g_lineColor = float4(0.f, 0.f, 0.f, 1.f);
@@ -184,7 +184,8 @@ struct PS_OUT
 	vector		vDiffuse : SV_TARGET0;
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
-	vector		vDepth2 : SV_TARGET3;
+	vector		vEmissive : SV_TARGET3;
+	vector		vDiffuse_Cha : SV_TARGET4;
 };
 
 struct PS_OUT_DEFERRED
@@ -199,31 +200,92 @@ PS_OUT  PS_Main(PS_IN _In)
 	PS_OUT	Out = (PS_OUT)0;
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
-
-
+				
 	Out.vDiffuse = vMtrlDiffuse;
 	
-
 	Out.vDiffuse.a = 1.f;
 
-	
-	
+	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
+	Out.vEmissive = vMtrlDiffuse * 0.75f;
+	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
 	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
 
 	return Out;
 };
+
+PS_OUT  PS_RimLight(PS_IN _In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
+
+
+	float3 vRimColor = float3(-2.f, -2.f, -2.f);
+	float iRimPower = 10.f;
+
+	vector vToCamera = g_vCamPosition - _In.vWorldPos;
+
+	float fRim = saturate(dot(normalize(vToCamera), _In.vNormal.xyz));
+
+	if (fRim > 0.3)
+		fRim = 1;
+	else
+		fRim = -1;
+	float4 vRimLight = (pow(1 - fRim, iRimPower) * vRimColor, 1.f);
+	Out.vDiffuse = vRimLight;
+	Out.vDiffuse_Cha = vRimLight;
+	Out.vDiffuse.a = 1.f;
+
+	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vDiffuse_Cha = vMtrlDiffuse * 0.75f;
+	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
+
+	return Out;
+};
+
 //OutLine_PS
 PS_OUT  PS_Outline(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
 	float4 outlineColor = { 0.f, 0.f, 0.f, 0.f };
-	if (g_bSuperArmor == true)
-		outlineColor = float4(1.f, 0.f, 0.f, 1.f);//g_SuperArmorColor;
-	else
-		outlineColor = g_lineColor;
+	
+	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (diffuseColor.a < 0.1f)
+		discard;
+
+	// 외곽선 색상을 덮어씌우기 위해 Alpha 값을 1로 설정
+	outlineColor.a = 1.0f;
+
+	// 외곽선 두께를 적용하여 외곽선 색상과 일반 렌더링 결과를 합성
+	float outlineFactor = saturate(length(In.vNormal.xyz) * g_OutlineThickness);
+	float blendFactor = smoothstep(0.f, 1.f, outlineFactor); // smoothstep(float edge0, float edge1, float x); edge 0 : 보간시작 edge 1 : 보간 끝나느 값 x: 보간대상
+
+	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
+
+	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
+	Out.vDiffuse = Color;
+	Out.vDiffuse_Cha = Color;
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+
+	return Out;
+}
+
+
+PS_OUT  PS_Outline_Red(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float4 outlineColor = { 1.f, 0.f, 0.f, 0.f };
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -239,21 +301,85 @@ PS_OUT  PS_Outline(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-
+	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
-
+	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
 
 	return Out;
 }
+
+PS_OUT  PS_Outline_Blue(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float4 outlineColor = { 0.f, 0.f, 1.f, 0.f };
+
+	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (diffuseColor.a < 0.1f)
+		discard;
+
+	// 외곽선 색상을 덮어씌우기 위해 Alpha 값을 1로 설정
+	outlineColor.a = 1.0f;
+
+	// 외곽선 두께를 적용하여 외곽선 색상과 일반 렌더링 결과를 합성
+	float outlineFactor = saturate(length(In.vNormal.xyz) * g_OutlineThickness);
+	float blendFactor = smoothstep(0.f, 1.f, outlineFactor); // smoothstep(float edge0, float edge1, float x); edge 0 : 보간시작 edge 1 : 보간 끝나느 값 x: 보간대상
+
+	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
+
+	Out.vEmissive = Color;
+	Out.vDiffuse = Color;
+	Out.vDiffuse_Cha = Color;
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+
+	return Out;
+}
+
+PS_OUT  PS_Outline_Yello(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float4 outlineColor = { 1.f, 1.f, 0.f, 0.f };
+	
+	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (diffuseColor.a < 0.1f)
+		discard;
+
+	// 외곽선 색상을 덮어씌우기 위해 Alpha 값을 1로 설정
+	outlineColor.a = 1.0f;
+
+	// 외곽선 두께를 적용하여 외곽선 색상과 일반 렌더링 결과를 합성
+	float outlineFactor = saturate(length(In.vNormal.xyz) * g_OutlineThickness);
+	float blendFactor = smoothstep(0.f, 1.f, outlineFactor); // smoothstep(float edge0, float edge1, float x); edge 0 : 보간시작 edge 1 : 보간 끝나느 값 x: 보간대상
+
+	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
+
+	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vDiffuse = Color;
+	Out.vDiffuse_Cha = Color;
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1.f, 0.f);
+
+	return Out;
+}
+
 PS_OUT_DEFERRED PS_MAIN_SHADOW(PS_IN In)
 {
 	PS_OUT_DEFERRED		Out = (PS_OUT_DEFERRED)0;
 
-	Out.vDiffuse.r = In.vProjPos.w / 300.f;
+	Out.vDiffuse.r = In.vProjPos.w / g_fFar;
 
 	Out.vDiffuse.a = 1.f;
 
@@ -313,6 +439,58 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_SHADOW();
+	}
+
+	pass Outline_Red // 4
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Outline();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Outline_Red();
+	}
+
+	pass Outline_Blue // 5
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Outline();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Outline_Blue();
+	}
+
+	pass Outline_Yello // 6
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Outline();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Outline_Yello();
+	}
+
+	pass RimLight // 7
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Outline();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_RimLight();
 	}
 };
 

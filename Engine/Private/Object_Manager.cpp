@@ -228,6 +228,8 @@ void CObject_Manager::LateTick(_double dTimeDelta)
 				Pair.second->LateTick(dTimeDelta);
 		}
 	}
+
+	
 }
 
 void CObject_Manager::Clear(_uint iLevelIndex)

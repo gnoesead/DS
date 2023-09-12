@@ -1427,6 +1427,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Charge_Effect.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Charge_Effect");
+		return E_FAIL;
+	}
+
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
@@ -1563,19 +1575,13 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect5.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect6.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		MSG_BOX("Failed to Load Effect : Hit_Effect5");
 		return E_FAIL;
 	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect7.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		MSG_BOX("Failed to Load Effect : Hit_Effect7");
 		return E_FAIL;
 	}
 
@@ -1596,9 +1602,20 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : SmellBundle_Disappear");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Effect_Guard.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Effect_Guard");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Effect_Guard_Zenitsu.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Effect_Guard");
+		return E_FAIL;
+	}
+
 #pragma endregion
-
-
 
 #pragma region ZENITSU
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))

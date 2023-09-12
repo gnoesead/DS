@@ -11,13 +11,14 @@ texture2D	g_RampTexture;
 texture2D	g_EmissiveTexture;
 
 
-float		g_fFar = 300.f;
+float		g_fFar = 400.f;
 
 float			g_fTimeAcc;
 float2			g_vPanningSpeed;
 float			g_fAlpha;
 float			g_fUVRatio;
 float			g_fDiffuseRatio;
+float2			g_vCustomUV;
 
 bool			g_bLiarColor;
 
@@ -77,6 +78,12 @@ struct PS_OUT
 	vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
 	vector		vEmissive : SV_TARGET3;
+	vector		vDiffuse_Cha : SV_TARGET4;
+};
+
+struct PS_OUT_EFFECT
+{
+	vector		vDiffuse : SV_TARGET0;
 };
 
 struct PS_NONDEFERRED
@@ -95,9 +102,10 @@ PS_OUT  PS_Main(PS_IN _In)
 		discard;
 
 	Out.vDiffuse = vMtrlDiffuse;
+	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
 	Out.vEmissive = vEmissive;
 
 	return Out;
@@ -127,8 +135,9 @@ PS_OUT  PS_Main_NormalTexture(PS_IN _In)
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / 300.f, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
 	Out.vEmissive = vEmissive;
+	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 
 	return Out;
 };
@@ -192,7 +201,7 @@ PS_OUT  PS_BLOOD(PS_IN In)
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / 300.f, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
 
 	return Out;
 }
@@ -333,6 +342,35 @@ PS_OUT  PS_REDRECT(PS_IN In)
 
 	return Out;
 }
+
+PS_OUT_EFFECT  PS_ALERTMESH(PS_IN _In)
+{
+	PS_OUT_EFFECT	Out = (PS_OUT_EFFECT)0;
+
+	_In.vTexUV.x += g_vCustomUV.x;
+	_In.vTexUV.y += g_vCustomUV.y;
+
+	float UVX = _In.vTexUV.x;
+	float UVY = _In.vTexUV.y;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+	float fRamp = vMtrlDiffuse.r;
+	if (0.98f < fRamp)
+		fRamp = 0.98f;
+	float2 vGradientUV = float2(fRamp, _In.vTexUV.y);
+	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
+
+	if (0.9f > vMtrlDiffuse.a)
+		discard;
+
+	Out.vDiffuse = vMtrlRamp;
+	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
+	
+	if (0.1f > Out.vDiffuse.a)
+		discard;
+
+	return Out;
+};
 
 technique11 DefaultTechnique
 {
@@ -483,6 +521,20 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_REDRECT();
 	}
+
+	pass AlertMesh // 12
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ALERTMESH();
+	}
+
 };
 
 
