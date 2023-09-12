@@ -40,6 +40,9 @@ public:
 	_int	Get_ResetIndex_Player() { return m_iResetIndex_ForPlayer; }
 	void	Set_ResetIndeX_Player(_int index) { m_iResetIndex_ForPlayer = index; }
 
+	_float4	Get_PlayerPrePos() { return m_PlayerPrePos; }
+	void	Set_PlayerPrePos(_float4 Pos) { m_PlayerPrePos = Pos; }
+
 	_bool	Get_PlayerBack() { return m_isPlayerBack; }
 	void	Set_PlayerBack(_bool back) { m_isPlayerBack = back; }
 	_bool	Get_ZenitsuBack() { return m_isZenitsuBack; }
@@ -62,6 +65,9 @@ public:
 
 	_bool	Get_Kyogai_On() { return m_isKyogai_On; }
 	void	Set_Kyogai_On(_bool on) { m_isKyogai_On = on; }
+
+	_bool	Get_Akaza_On() { return m_isAkaza_On; }
+	void	Set_Akaza_On(_bool on) { m_isAkaza_On = on; }
 
 private:
 	//다수 몬스터 어택관련
@@ -92,8 +98,12 @@ private:
 	_bool	m_isZenitsu_IndexPlus = { false };
 
 
-	//잠입모드
+	_float4		m_PlayerPrePos = { 0.0f, 0.0f ,0.0f ,1.0f };
+
+
+	//보스몹의 시작을 알리는
 	_bool	m_isKyogai_On = { false };
+	_bool	m_isAkaza_On = { false };
 
 public:
 	virtual void Free() override;

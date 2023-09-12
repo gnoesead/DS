@@ -27,8 +27,10 @@ public:
 	enum COLLIDER { COLL_AABB, COLL_OBB, COLL_SPHERE, COLL_END };
 
 	//NPC
-	enum NPC_TYPE { NPC_QUEST, NPC_STAND, NPC_TALK, NPC_LISTEN, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK,
-		NPC_WORK, NPC_CRY, NPC_END };
+	enum NPC_TYPE {
+		NPC_QUEST, NPC_STAND, NPC_TALK, NPC_LISTEN, NPC_WALK, NPC_WALKTALK, NPC_SIT, NPC_SITTALK, NPC_DOWN, NPC_DOWNTALK,
+		NPC_WORK, NPC_CRY, NPC_END
+	};
 public:
 	typedef struct tagNPC
 	{
@@ -98,6 +100,7 @@ public:
 	virtual void	Tick(_double dTimeDelta) override;
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_ShadowDepth() override;
 
 public:
 	CTransform* Get_TransformCom();
@@ -111,12 +114,11 @@ public:
 	CHAR_STATUS Get_Status() {
 		return m_StatusDesc;
 	}
-
 	
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
-	_bool	EventCallProcess( );
+	_bool	EventCallProcess();
 	void	Reset_Decleration(_float fResetSpeed);
 
 	//이동 관련
@@ -127,20 +129,20 @@ protected:
 	void	Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float ResetSpeed, _float fDecrease, _float4 Dir, _bool	bIsNaviOff = false);
 
 	void	Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _float4 Dir, _bool bIsJumpOn = false);
-	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed , _bool bIsJumpOn = false);
+	void	Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed, _bool bIsJumpOn = false);
 	void	Go_Backward_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Left_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 	void	Go_Right_Constant(_double dTimeDelta, _int AnimIndex, _float constantSpeed);
 
 	void	Go_Straight_Deceleration_Common(_double dTimeDelta, _float ResetSpeed, _float fDecrease);
 
-	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0 );
+	void	Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, _float fSpeed, _double dStartRatio = 0.0, _double dEndRatio = 1.0);
 
 
 	void	Navigation_To_Ground(_double dTimeDelta);
 	void	Gravity(_double dTimeDelta);
 	void	Ground_Animation_Play(_int CurAnim, _int GroundAnim);
-	void	Jumping( _float ResetSpeed, _float fFallDecrease);
+	void	Jumping(_float ResetSpeed, _float fFallDecrease);
 	void	JumpStop(_double dDuration);
 
 	//콜라이더 관련`
@@ -152,8 +154,8 @@ protected:
 
 	//스테이터스 hp,mp등등 게이지 관련
 	void	Status_Work(_double dTimeDelta);
-	void	Use_Mp_Skill(); 
-	
+	void	Use_Mp_Skill();
+
 	//calculate
 	_float4	Calculate_Dir_From_Pos(_float4 Pos);
 	_float	Calculate_Distance_From_Pos(_float4 Pos);
@@ -161,7 +163,7 @@ protected:
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
 
-protected:	 
+protected:
 	// 네비매쉬 높이설정(안원추가)
 	void	Set_Height();
 
@@ -171,22 +173,27 @@ public:
 	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
-
+	
 protected:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
-	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
+	void Create_SmeshStone(_fvector vOffsetPos = { 0.f,0.f ,0.f,0.f }, _float fScale = 2.f);
 
 	void Play_FallDownEffect();
 	void Play_HitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
-	
-protected:
-	CHARACTERDESC	m_CharacterDesc;
-	list<class CAtkCollider*>	m_HitCollider; 
+
+	void Shadow_Village_Setting();
+	void Shadow_House_Setting();
+	void Shadow_Train_Setting();
+	void Shadow_Final_Setting();
 
 protected:
-	CModel* m_pModelCom = { nullptr };		
-	CShader* m_pShaderCom = { nullptr };	
+	CHARACTERDESC	m_CharacterDesc;
+	list<class CAtkCollider*>	m_HitCollider;
+
+protected:
+	CModel* m_pModelCom = { nullptr };
+	CShader* m_pShaderCom = { nullptr };
 	CRenderer* m_pRendererCom = { nullptr };
 	CCollider* m_pColliderCom[CCollider::TYPE_END] = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
@@ -217,7 +224,7 @@ protected:
 
 	//Eventcall관련 
 	_int m_iPreAnimIndex_ForEvent = { 0 };
-	
+
 
 	//Death
 	_double		m_dDelay_Die = { 0.0 };
@@ -234,11 +241,11 @@ protected:
 	_bool	m_isReset_Atk_MoveControl = { false };
 
 	//Jump 
-	_float	m_fGravity_Fall = { 0.1f};
+	_float	m_fGravity_Fall = { 0.1f };
 	_double m_dDelay_Fall = { 0.0 };
 	_bool	m_isJumpOn = { false };
 	_float	m_fJump_Acc = { 0.0f };
-	
+
 	_float	m_fLand_Y = { 0.0f }; // 땅의 y위치임.
 	_bool	m_isLand_Roof = { false };
 
@@ -251,6 +258,8 @@ protected:
 	//EventCallIndex
 	_int	m_iEvent_Index = { 0 };
 
+	//zenitsu용 그라운드 공격취소
+	_bool	m_isGroundAttackFalse = { false };
 	
 protected:
 	HRESULT Add_Components();

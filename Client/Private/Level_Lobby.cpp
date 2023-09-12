@@ -1427,6 +1427,18 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Tilt_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Tilt_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Charge_Effect.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Charge_Effect");
+		return E_FAIL;
+	}
+
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
@@ -1563,19 +1575,13 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect5.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect6.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		MSG_BOX("Failed to Load Effect : Hit_Effect5");
 		return E_FAIL;
 	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Effect7.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Hit_Effect4");
+		MSG_BOX("Failed to Load Effect : Hit_Effect7");
 		return E_FAIL;
 	}
 
@@ -1789,6 +1795,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Revolution.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Revolution");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 
@@ -1936,7 +1948,7 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iC
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSetYToGround), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));

@@ -124,10 +124,6 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
 	}
 
 }
@@ -225,7 +221,12 @@ HRESULT CPlayer_Zenitsu::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(1);
+			{
+				if (m_isSkilling == false)
+					m_pShaderCom->Begin(1);
+				else
+					m_pShaderCom->Begin(6);
+			}
 
 			m_pModelCom->Render(m_iMeshNum);
 		}
@@ -242,6 +243,20 @@ HRESULT CPlayer_Zenitsu::Render()
 
 			m_pModelCom->Render(i);
 		}
+
+		//// RimLight
+		//for (_uint i = 0; i < iNumMeshes; i++)
+		//{
+		//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		//		return E_FAIL;
+
+		//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+		//		return E_FAIL;
+
+		//	m_pShaderCom->Begin(7);
+
+		//	m_pModelCom->Render(i);
+		//}
 #pragma endregion
 
 #ifdef _DEBUG
@@ -255,54 +270,9 @@ HRESULT CPlayer_Zenitsu::Render()
 
 HRESULT CPlayer_Zenitsu::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector	vLightEye = XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
 	
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
-
 	return S_OK;
 }
 
@@ -662,6 +632,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
+				//m_pRendererCom->Set_BloomRatio(0.99f);
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
@@ -675,6 +647,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 
+				//m_pRendererCom->Set_BloomRatio(0.79f);
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom , &EffectWorldDesc);
 
 				
@@ -687,6 +661,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y += 0.4f;
 				EffectWorldDesc.vPosition.z += -0.3f;
 
+				//m_pRendererCom->Set_BloomRatio(0.79f);
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
@@ -716,6 +691,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
+				//m_pRendererCom->Set_BloomRatio(0.79f);
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
@@ -727,6 +704,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 
+				//m_pRendererCom->Set_BloomRatio(0.99f);
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom, &EffectWorldDesc);
 
@@ -737,6 +715,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				EffectWorldDesc.vPosition.z += -0.3f;
+
+
+				//m_pRendererCom->Set_BloomRatio(0.99f);
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
@@ -755,14 +736,38 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 
+				m_pRendererCom->Set_BloomRatio(0.99f);
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
+
+				
+			}
+			else if (1 == m_iEvent_Index)
+			{
+		
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+
+				m_pRendererCom->Set_BloomRatio(0.99f);
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Revolution", m_pTransformCom, &EffectWorldDesc);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 0.5f, 1.7f), 0.2,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 8.0f * fDmg);
 			}
+			else if (2 == m_iEvent_Index)
+			{
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				EffectWorldDesc.vPosition.y += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 #pragma endregion
-
 
 
 #pragma region Step
@@ -957,6 +962,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 #pragma endregion
 
+
 #pragma region Run & DmgDown
 		if (59 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -1110,9 +1116,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN )
 		{
 			if (m_isCanNavi)
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+			{
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange, m_pNavigationCom[m_eCurNavi]);
+				Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+				
+			}
 			else
-				m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+			{
+				//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed * m_fScaleChange);
+				Go_Straight_Constant(dTimeDelta, ANIM_BATTLE_RUN, m_fMove_Speed * m_fScaleChange);
+				
+			}
 		}
 	}
 
@@ -1236,6 +1250,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 	_int iCurAnimIndex = m_pModelCom->Get_iCurrentAnimIndex();
 
 	_float fDistance = Get_Distance_To_LockOnPos();
+
+	if (m_isGroundAttackFalse)
+	{
+		m_isGroundAttackFalse = false;
+		m_Moveset.m_Down_Battle_Combo = false;
+	}
 
 	if (m_isComboing_Upper == false)
 	{
@@ -1365,6 +1385,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 	{
 		m_Moveset.m_Down_Battle_Charge = false;
 
+		m_dDelay_Charge = 0.0;
+
 		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
 		{
 			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
@@ -1373,24 +1395,29 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_ATK_CHARGE);
 	}
 
-
-	if (m_Moveset.m_Up_Battle_Charge && m_pModelCom->Get_iCurrentAnimIndex() == 20)
+	//if (m_Moveset.m_Up_Battle_Charge && m_pModelCom->Get_iCurrentAnimIndex() == 20)
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 20)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
 	
-		if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+		m_dDelay_Charge += dTimeDelta;
+		if (m_dDelay_Charge > 1.0f)
 		{
-			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
-				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			m_dDelay_Charge = 0.0;
+			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
+			{
+				if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
+					m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
+			}
+			m_pModelCom->Set_Animation(21);
 		}
-		m_pModelCom->Set_Animation(21);
 	}
-	else if (m_Moveset.m_Up_Battle_Charge )
+	/*else if (m_Moveset.m_Up_Battle_Charge)
 	{
 		m_Moveset.m_Up_Battle_Charge = false;
 		
 		m_pModelCom->Set_Animation(ANIM_BATTLE_IDLE);
-	}
+	}*/
 	Go_Straight_Deceleration(dTimeDelta, 21, 4.5f * m_fScaleChange * m_fAtk_Move_Ratio, 0.15f * m_fScaleChange);
 }
 
@@ -2557,14 +2584,6 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bMotionBlur", &m_bMotionBlur, sizeof(_bool))))
-		return E_FAIL;
-
-	// 슈퍼아머 상태 넣어주셈
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
-		return E_FAIL;
-
 
 	Safe_Release(pGameInstance);
 

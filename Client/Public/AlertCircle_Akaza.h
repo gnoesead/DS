@@ -23,6 +23,8 @@ public:
 	{
 		CTransform* pOwnerTransform = { nullptr };
 		_float3		vScale = { 1.f, 1.f, 1.f };
+		_float2		vTime = { 1.f, 1.f };
+		_float		fLandY = { 0.04f };
 	}EFFECTDESC;
 
 private:
@@ -54,7 +56,6 @@ private:
 
 private:
 	_float					m_fAlpha = 0.1f;
-	_float					m_fLandY = { 0.f };
 	_float					m_fScale = { 9.f };
 
 	_float4					m_vLook = { 0.f , 0.f , 0.f , 0.f };

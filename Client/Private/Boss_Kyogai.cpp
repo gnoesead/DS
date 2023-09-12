@@ -50,7 +50,7 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	Get_PlayerComponent();
+	//Get_PlayerComponent();
 
 	m_eCurAnimIndex = ANIM_IDLE;
 	m_eCurstate = STATE_INTERACT;
@@ -100,10 +100,6 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 	}
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
 
 }
 
@@ -157,7 +153,12 @@ HRESULT CBoss_Kyogai::Render()
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
 		else
-			m_pShaderCom->Begin(1);
+		{
+			if (m_bSuperArmor == false)
+				m_pShaderCom->Begin(1);
+			else
+				m_pShaderCom->Begin(4);
+		}
 
 		m_pModelCom->Render(m_iMeshNum);
 	}
@@ -182,50 +183,8 @@ HRESULT CBoss_Kyogai::Render()
 
 HRESULT CBoss_Kyogai::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 	return S_OK;
 }
 //#ifdef _DEBUG
@@ -1087,8 +1046,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			Play_HitEffect(vKyogaiOffset);
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
 
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
@@ -1105,8 +1066,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
@@ -1122,8 +1085,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
@@ -1139,8 +1104,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
 		{
@@ -1155,8 +1122,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
+
 			//Set_FallingStatus(3.0f, 0.0f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
@@ -1167,8 +1137,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
@@ -1184,8 +1156,10 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success_Hekireki(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect(vKyogaiOffset);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect(vKyogaiOffset);
+			}
 		}
 		Safe_Release(pGameInstance);
 	}
@@ -4296,9 +4270,6 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
-		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bSuperArmor, sizeof(_bool))))
 		return E_FAIL;
 
 	return S_OK;

@@ -6,6 +6,8 @@
 #include "AtkCollManager.h"
 #include "Fade_Manager.h"
 #include "SmeshStone.h"
+#include "MonsterManager.h"
+#include "PlayerManager.h"
 
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -94,7 +96,7 @@ void CCharacter::Tick(_double dTimeDelta)
 		else
 			m_pTransformCom->Scaling(_float3(0.8f, 0.8f, 0.8f));
 	}
-	
+
 
 	Safe_Release(pGameInstance);
 
@@ -110,6 +112,11 @@ void CCharacter::LateTick(_double dTimeDelta)
 
 	Status_Work(dTimeDelta);
 
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+		return;
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
+		return;
+
 #ifdef _DEBUG
 	for (_uint i = 0; i < COLL_END; i++)
 	{
@@ -118,10 +125,65 @@ void CCharacter::LateTick(_double dTimeDelta)
 	}
 #endif // _DEBUG
 
+
+
 }
 
 HRESULT CCharacter::Render()
 {
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CCharacter::Render_ShadowDepth()
+{
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	m_pRendererCom->Set_PlayerIndex(CPlayerManager::GetInstance()->Get_PlayerIndex());
+
+	switch (pGameInstance->Get_CurLevelIdx())
+	{
+	case LEVEL_VILLAGE:
+		Shadow_Village_Setting();
+		break;
+	case LEVEL_HOUSE:
+		Shadow_House_Setting();
+		break;
+	case LEVEL_TRAIN:
+		Shadow_Train_Setting();
+		break;
+	case LEVEL_FINALBOSS:
+		Shadow_Final_Setting();
+		break;
+	}
+	Safe_Release(pGameInstance);
+
+
+	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (_uint i = 0; i < iNumMeshes; i++)
+	{
+		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+			return E_FAIL;
+
+
+		m_pShaderCom->Begin(3);
+
+		m_pModelCom->Render(i);
+	}
+
 	return S_OK;
 }
 
@@ -261,7 +323,7 @@ void CCharacter::Go_Straight_Deceleration(_double dTimeDelta, _int AnimIndex, _f
 	{
 		Reset_Decleration(ResetSpeed);
 
-		m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl , m_pNavigationCom[m_eCurNavi]);
+		m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl, m_pNavigationCom[m_eCurNavi]);
 		m_fAtk_MoveControl -= fDecrease;
 		if (m_fAtk_MoveControl <= 0.0f)
 		{
@@ -325,7 +387,7 @@ void CCharacter::Go_Dir_Deceleration(_double dTimeDelta, _int AnimIndex, _float 
 	{
 		Reset_Decleration(ResetSpeed);
 
-		if(bIsNaviOff == false)
+		if (bIsNaviOff == false)
 			m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 		else
 			m_pTransformCom->Go_Dir(dTimeDelta * m_fAtk_MoveControl, XMLoadFloat4(&Dir));
@@ -342,7 +404,7 @@ void CCharacter::Go_Dir_Constant(_double dTimeDelta, _int AnimIndex, _float cons
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		if(!bIsJumpOn)
+		if (!bIsJumpOn)
 			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir), m_pNavigationCom[m_eCurNavi]);
 		else
 			m_pTransformCom->Go_Dir(dTimeDelta * constantSpeed, XMLoadFloat4(&Dir));
@@ -353,8 +415,8 @@ void CCharacter::Go_Straight_Constant(_double dTimeDelta, _int AnimIndex, _float
 {
 	if (AnimIndex == m_pModelCom->Get_iCurrentAnimIndex())
 	{
-		if(!bIsJumpOn)
-			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed , m_pNavigationCom[m_eCurNavi]);
+		if (!bIsJumpOn)
+			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed, m_pNavigationCom[m_eCurNavi]);
 		else
 			m_pTransformCom->Go_Straight(dTimeDelta * constantSpeed);
 	}
@@ -389,7 +451,7 @@ void CCharacter::Go_Straight_Deceleration_Common(_double dTimeDelta, _float Rese
 	//서서히 느려지는 Transform 이동
 	Reset_Decleration(ResetSpeed);
 
-	m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl , m_pNavigationCom[m_eCurNavi]);
+	m_pTransformCom->Go_Straight(dTimeDelta * m_fAtk_MoveControl, m_pNavigationCom[m_eCurNavi]);
 	m_fAtk_MoveControl -= fDecrease;
 	if (m_fAtk_MoveControl <= 0.0f)
 	{
@@ -428,7 +490,7 @@ void CCharacter::Go_Dir_Constant(_double dTimeDelta, DIR Dir, _uint iAnimindex, 
 	break;
 
 	}
-	
+
 }
 
 void CCharacter::Navigation_To_Ground(_double dTimeDelta)
@@ -442,7 +504,7 @@ void CCharacter::Gravity(_double dTimeDelta)
 	_float4 Pos;
 	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	
+
 
 	//점프 상태
 	if (m_isJumpOn)
@@ -492,10 +554,16 @@ void CCharacter::Ground_Animation_Play(_int CurAnim, _int GroundAnim)
 		_float4 Pos;
 		XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
+		if (Pos.y <= m_fLand_Y + 0.2f)
+		{
+			m_isGroundAttackFalse = true;
+		}
+
 		if (Pos.y <= m_fLand_Y)
 		{
 			m_pModelCom->Set_Animation(GroundAnim);
 			m_isStrictUpper = false;
+			
 		}
 	}
 
@@ -517,9 +585,9 @@ void CCharacter::JumpStop(_double dDuration)
 	m_dTime_JumpStop = 0.0;
 }
 
-void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, 
-								CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg, 
-								 CAtkCollider::BULLET_TYPE eBulletType)
+void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime,
+	CAtkCollider::ATK_TYPE AtkType, _vector vDir, _float fDmg,
+	CAtkCollider::BULLET_TYPE eBulletType)
 {
 	CAtkCollider::ATKCOLLDESC AtkCollDesc;
 	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
@@ -537,7 +605,7 @@ void CCharacter::Make_AttackColl(const _tchar* pLayerTag, _float3 Size, _float3 
 	AtkCollDesc.fDamage = fDmg;
 
 	AtkCollDesc.bBullet = false;
-	
+
 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector4Normalize(vDir));
 
@@ -578,7 +646,7 @@ void CCharacter::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _floa
 	}
 
 	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector3Normalize(vAtkDir));
-	
+
 	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
@@ -658,7 +726,7 @@ void CCharacter::Check_HitType()
 
 void CCharacter::Status_Work(_double dTimeDelta)
 {
-	
+
 	//Mp
 	m_dDelay_Mp_Used += dTimeDelta;
 	if (m_dDelay_Mp_Used > 2.0)
@@ -685,13 +753,13 @@ void CCharacter::Status_Work(_double dTimeDelta)
 		m_isHit_Success = false;
 
 		m_dDelay_ComboReset = 0.0;
-		
+
 		m_StatusDesc.iAttackCombo++;
 
-		if(m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)
+		if (m_StatusDesc.iSpecial_Cnt < 3 && m_StatusDesc.iAwaken == 0)
 			m_StatusDesc.fSpecial += 13.3f;
 	}
-	
+
 	//콤보(Attack)
 	if (m_StatusDesc.iAttackCombo > 0)
 	{
@@ -768,7 +836,7 @@ void CCharacter::Use_Mp_Skill()
 {
 	if (m_isCan_Mp_Skill)
 	{
-		if(m_StatusDesc.iAwaken < 2)
+		if (m_StatusDesc.iAwaken < 2)
 			m_StatusDesc.fMp -= 20.0f;
 		m_dDelay_Mp_Used = 0.0;
 	}
@@ -783,7 +851,7 @@ _float4 CCharacter::Calculate_Dir_From_Pos(_float4 Pos)
 
 	Pos.y = MyPos.y;
 	_vector vTarget = XMLoadFloat4(&Pos);
-	
+
 	_float4		Dir;
 	XMStoreFloat4(&Dir, XMVector3Normalize(vTarget - vMyPos));
 
@@ -799,7 +867,7 @@ _float CCharacter::Calculate_Distance_From_Pos(_float4 Pos)
 
 	Pos.y = MyPos.y;
 	_vector vTarget = XMLoadFloat4(&Pos);
-	
+
 	_vector vDir = XMVector3Normalize(vTarget - vMyPos);
 	_float fDistance = Convert::GetLength(vTarget - vMyPos);
 
@@ -834,15 +902,15 @@ void CCharacter::Camera_Shake(_double dShakeTime, _uint iShakePower)
 	Safe_Release(pGameInstance);
 }
 
-void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvector vOffsetPos)
+void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	CEffectW::EFFECTWDESC EffectWDesc;
-	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSetY(vOffsetPos , 0.f);
- 	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_GROUNDSMOKE;
+	EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + XMVectorSetY(vOffsetPos, 0.f);
+	EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_GROUNDSMOKE;
 	EffectWDesc.iNumX = 6; EffectWDesc.iNumY = 6;
 
 	if (LEVEL_HOUSE == iCurIdx)
@@ -856,9 +924,9 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.02f,0.2f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
 		EffectWDesc.vFrameSpeed = { 0.03f , 0.035f };
 		EffectWDesc.vStartSizeX = { 0.8f , 1.1f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
-		EffectWDesc.vSpeedX = { -1.5f , 1.5f }; EffectWDesc.vSpeedY = { 0.07f , 0.1f };EffectWDesc.vSpeedZ = { -1.5f , 1.5f };
+		EffectWDesc.vSpeedX = { -1.5f , 1.5f }; EffectWDesc.vSpeedY = { 0.07f , 0.1f }; EffectWDesc.vSpeedZ = { -1.5f , 1.5f };
 		EffectWDesc.vSizeSpeedX = { 1.f , 1.3f }; EffectWDesc.vSizeSpeedY = { 1.0f , 1.3f };
-		
+
 		for (_uint i = 0; i < 20; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 
@@ -874,10 +942,10 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_SIDESTEP:
-		EffectWDesc.vStartPosX = { -0.3f,0.3f };EffectWDesc.vStartPosY = { -0.01f,0.2f };EffectWDesc.vStartPosZ = { -0.3f,0.3f };
+		EffectWDesc.vStartPosX = { -0.3f,0.3f }; EffectWDesc.vStartPosY = { -0.01f,0.2f }; EffectWDesc.vStartPosZ = { -0.3f,0.3f };
 		EffectWDesc.vFrameSpeed = { 0.016f , 0.0165f };
 		EffectWDesc.vStartSizeX = { 1.2f , 1.4f };	EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
-		EffectWDesc.vSpeedX = { -2.0f , 2.0f };EffectWDesc.vSpeedY = { 0.12f , 0.19f };EffectWDesc.vSpeedZ = { -2.0f , 2.0f };
+		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 0.12f , 0.19f }; EffectWDesc.vSpeedZ = { -2.0f , 2.0f };
 		EffectWDesc.vSizeSpeedX = { 0.7f , 1.2f }; EffectWDesc.vSizeSpeedY = { 0.7f , 1.2f };
 
 		for (_uint i = 0; i < 8; ++i)
@@ -885,7 +953,7 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		break;
 	case CGroundSmoke::SMOKE_UPDOWN:
 		EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { -0.05f,-0.03f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
-		EffectWDesc.vFrameSpeed = { 0.04f , 0.05f }; 
+		EffectWDesc.vFrameSpeed = { 0.04f , 0.05f };
 		EffectWDesc.vStartSizeX = { 1.2f , 1.4f }; EffectWDesc.vStartSizeY = { 1.2f , 1.8f };
 		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 2.f , 5.5f }; EffectWDesc.vSpeedZ = { -0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 1.2f , 1.4f }; EffectWDesc.vSizeSpeedY = { 1.6f , 1.8f };
@@ -907,11 +975,11 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		break;
 	case CGroundSmoke::SMOKE_RUN:
 
-		EffectWDesc.vStartPosX = { -0.2f,0.2f };EffectWDesc.vStartPosY = { -0.05f,0.1f };EffectWDesc.vStartPosZ = { -0.2f,0.2f };
+		EffectWDesc.vStartPosX = { -0.2f,0.2f }; EffectWDesc.vStartPosY = { -0.05f,0.1f }; EffectWDesc.vStartPosZ = { -0.2f,0.2f };
 		EffectWDesc.vFrameSpeed = { 0.005f , 0.01f };
-		EffectWDesc.vStartSizeX = { 0.7f , 1.2f };EffectWDesc.vStartSizeY = { 0.6f , 1.0f };
-		EffectWDesc.vSpeedX = { -0.0f , 0.0f };EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { 0.0f , 3.f };
-		EffectWDesc.vSizeSpeedX = { 0.4f , 0.7f };EffectWDesc.vSizeSpeedY = { 0.4f , 0.7f };
+		EffectWDesc.vStartSizeX = { 0.7f , 1.2f }; EffectWDesc.vStartSizeY = { 0.6f , 1.0f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f }; EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 0.4f , 0.7f }; EffectWDesc.vSizeSpeedY = { 0.4f , 0.7f };
 
 		for (_uint i = 0; i < 1; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
@@ -920,59 +988,59 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
 		EffectWDesc.vStartPosX = { -0.5f,0.5f };EffectWDesc.vStartPosY = { -0.05f,0.15f };EffectWDesc.vStartPosZ = { 0.f,0.5f };
 		EffectWDesc.vFrameSpeed = { 0.01f , 0.02f };
-		EffectWDesc.vStartSizeX = { 0.9f , 1.4f };EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
-		EffectWDesc.vSpeedX = { -0.0f , 0.0f };EffectWDesc.vSpeedY = { 0.05f , 0.1f };EffectWDesc.vSpeedZ = { 0.0f , 3.f };
-		EffectWDesc.vSizeSpeedX = { 0.3f , 0.5f };EffectWDesc.vSizeSpeedY = { 0.3f , 0.5f };
+		EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.1f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.05f , 0.1f }; EffectWDesc.vSpeedZ = { 0.0f , 3.f };
+		EffectWDesc.vSizeSpeedX = { 0.3f , 0.5f }; EffectWDesc.vSizeSpeedY = { 0.3f , 0.5f };
 
 		for (_uint i = 0; i < 5; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
-	 case CGroundSmoke::SMOKE_BLADECREATE:
- 		 EffectWDesc.vPos = vOffsetPos;
-		 EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { -1.0f,-0.5f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
-		 EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
-		 EffectWDesc.vStartSizeX = { 2.2f ,	2.5f }; EffectWDesc.vStartSizeY = { 3.8f , 4.2f };
-		 EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 7.f , 7.5f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
-		 EffectWDesc.vSizeSpeedX = { 0.5f , 1.0f }; EffectWDesc.vSizeSpeedY = {	2.0f , 2.5f };
-		 EffectWDesc.vStartFrame = { 0.f , 10.f };
-		 EffectWDesc.fGravity = { 15.f};
+	case CGroundSmoke::SMOKE_BLADECREATE:
+		EffectWDesc.vPos = vOffsetPos;
+		EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { -1.0f,-0.5f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
+		EffectWDesc.vStartSizeX = { 2.2f ,	2.5f }; EffectWDesc.vStartSizeY = { 3.8f , 4.2f };
+		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 7.f , 7.5f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 0.5f , 1.0f }; EffectWDesc.vSizeSpeedY = { 2.0f , 2.5f };
+		EffectWDesc.vStartFrame = { 0.f , 10.f };
+		EffectWDesc.fGravity = { 15.f };
 
- 		 for (_uint i = 0; i < 3; ++i)
- 			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
-		 break;
-	 case CGroundSmoke::SMOKE_KYOGAI_KICKDOWN:
-		
-		 EffectWDesc.vStartPosX = { -6.0f,6.0f }; EffectWDesc.vStartPosY = { -1.0f,-0.8f }; EffectWDesc.vStartPosZ = { -6.0f,6.0f };
-		 EffectWDesc.vFrameSpeed = { 0.04f , 0.045f };
-		 EffectWDesc.vStartSizeX = { 0.1f ,	0.3f }; EffectWDesc.vStartSizeY = { 0.1f , 0.3f };
-		 EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.5f , 0.8f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
-		 EffectWDesc.vSizeSpeedX = { 7.5f , 8.0f }; EffectWDesc.vSizeSpeedY = { 7.0f , 8.0f };
-		 EffectWDesc.vStartFrame = { 0.f , 10.f };
+		for (_uint i = 0; i < 3; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_KYOGAI_KICKDOWN:
 
-		 for (_uint i = 0; i < 40; ++i)
-			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
-		 break;
-	 case CGroundSmoke::SMOKE_KYOGAI_LAND:
-		 EffectWDesc.vPos = XMVectorSetY(m_pTransformCom->Get_State(CTransform::STATE_POSITION),0.f);
+		EffectWDesc.vStartPosX = { -6.0f,6.0f }; EffectWDesc.vStartPosY = { -1.0f,-0.8f }; EffectWDesc.vStartPosZ = { -6.0f,6.0f };
+		EffectWDesc.vFrameSpeed = { 0.04f , 0.045f };
+		EffectWDesc.vStartSizeX = { 0.1f ,	0.3f }; EffectWDesc.vStartSizeY = { 0.1f , 0.3f };
+		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.5f , 0.8f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 7.5f , 8.0f }; EffectWDesc.vSizeSpeedY = { 7.0f , 8.0f };
+		EffectWDesc.vStartFrame = { 0.f , 10.f };
 
-		 EffectWDesc.vStartPosX = { -1.0f,1.0f }; EffectWDesc.vStartPosY = { -0.0f,0.2f }; EffectWDesc.vStartPosZ = { -1.0f,1.0f };
-		 EffectWDesc.vFrameSpeed = { 0.01f , 0.015f };
-		 EffectWDesc.vStartSizeX = { 3.5f , 4.0f }; EffectWDesc.vStartSizeY = { 3.5f , 4.0f };
-		 EffectWDesc.vSpeedX = { -0.0f , 0.0f };	EffectWDesc.vSpeedY = { 0.02f , 0.03f }; 	EffectWDesc.vSpeedZ = { -0.0f , 0.f };
-		 EffectWDesc.vSizeSpeedX = { 1.5f , 1.8f }; EffectWDesc.vSizeSpeedY = { 1.5f , 1.8f };
-		 EffectWDesc.vStartFrame = { 0.f , 2.f };
+		for (_uint i = 0; i < 40; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_KYOGAI_LAND:
+		EffectWDesc.vPos = XMVectorSetY(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 0.f);
 
-		 for (_uint i = 0; i < 10; ++i)
-			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
-		 break;
-	 case CGroundSmoke::SMOKE_JENITSU_HIKI:
-		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
-		 EffectWDesc.vStartPosX = { -1.5f,1.5f }; EffectWDesc.vStartPosY = { -0.0f,0.5f }; EffectWDesc.vStartPosZ = { -1.5f,1.5f };
-		 EffectWDesc.vFrameSpeed = { 0.04f , 0.045f };
-		 EffectWDesc.vStartSizeX = { 3.2f , 3.5f }; EffectWDesc.vStartSizeY = { 3.2f , 3.5f };
-		 EffectWDesc.vSpeedX = { -0.1f , 0.1f };	EffectWDesc.vSpeedY = { 0.01f , 3.f }; 	EffectWDesc.vSpeedZ = { -0.1f , 1.f };
-		 EffectWDesc.vSizeSpeedX = { 2.0f , 2.8f }; EffectWDesc.vSizeSpeedY = { 2.5f , 3.0f };
-		 EffectWDesc.vStartFrame = { 0.f , 5.f };
+		EffectWDesc.vStartPosX = { -1.0f,1.0f }; EffectWDesc.vStartPosY = { -0.0f,0.2f }; EffectWDesc.vStartPosZ = { -1.0f,1.0f };
+		EffectWDesc.vFrameSpeed = { 0.01f , 0.015f };
+		EffectWDesc.vStartSizeX = { 3.5f , 4.0f }; EffectWDesc.vStartSizeY = { 3.5f , 4.0f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f };	EffectWDesc.vSpeedY = { 0.02f , 0.03f }; 	EffectWDesc.vSpeedZ = { -0.0f , 0.f };
+		EffectWDesc.vSizeSpeedX = { 1.5f , 1.8f }; EffectWDesc.vSizeSpeedY = { 1.5f , 1.8f };
+		EffectWDesc.vStartFrame = { 0.f , 2.f };
+
+		for (_uint i = 0; i < 10; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_JENITSU_HIKI:
+		EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		EffectWDesc.vStartPosX = { -1.5f,1.5f }; EffectWDesc.vStartPosY = { -0.0f,0.5f }; EffectWDesc.vStartPosZ = { -1.5f,1.5f };
+		EffectWDesc.vFrameSpeed = { 0.04f , 0.045f };
+		EffectWDesc.vStartSizeX = { 3.2f , 3.5f }; EffectWDesc.vStartSizeY = { 3.2f , 3.5f };
+		EffectWDesc.vSpeedX = { -0.1f , 0.1f };	EffectWDesc.vSpeedY = { 0.01f , 3.f }; 	EffectWDesc.vSpeedZ = { -0.1f , 1.f };
+		EffectWDesc.vSizeSpeedX = { 2.0f , 2.8f }; EffectWDesc.vSizeSpeedY = { 2.5f , 3.0f };
+		EffectWDesc.vStartFrame = { 0.f , 5.f };
 
 		 for (_uint i = 0; i < 10; ++i)
 			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
@@ -1085,7 +1153,7 @@ void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fv
 	Safe_Release(pGameInstance);
 }
 
-void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
+void CCharacter::Create_SmeshStone(_fvector vOffsetPos , _float fScale)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
@@ -1093,6 +1161,7 @@ void CCharacter::Create_SmeshStone(_fvector vOffsetPos)
 
 	CSmeshStone::EFFECTDESC EffectDesc;
 	EffectDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION) + vOffsetPos;
+	EffectDesc.fScale = fScale;
 
 	pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_SmeshStone"), &EffectDesc);
 
@@ -1106,20 +1175,20 @@ void CCharacter::Play_FallDownEffect()
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	if (iCurIdx == LEVEL_VILLAGE || iCurIdx == LEVEL_FINALBOSS)
-	{ 
-		
+	{
+
 		CEffectPlayer::Get_Instance()->Play("FallDown_Particle", m_pTransformCom);	// 돌 이펙트
-	
+
 	}
 
 	CEffectPlayer::Get_Instance()->Play("FallDown_Effect", m_pTransformCom); // 동그란 이펙트 점점 커지는
-	
+
 	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Play_HitEffect(_float3 vOffset)
 {
-	_uint iRanNum = Random::Generate_Int(0, 5);
+	_uint iRanNum = Random::Generate_Int(0, 4);
 
 	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 	EffectWorldDesc.vPosition = vOffset;
@@ -1127,17 +1196,19 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 	switch (iRanNum)
 	{
 	case 0:
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom , &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
 		break;
 	case 1:
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
 		EffectWorldDesc.vPosition.y += 0.8f;
 		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
-		break; 
+		break;
 	}
 	case 2:
 	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
 		EffectWorldDesc.vPosition.y += 0.8f;
 		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
@@ -1149,13 +1220,113 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 		break;
 	case 4:
 		EffectWorldDesc.fScale = 1.4f;
-		CEffectPlayer::Get_Instance()->Play("Hit_Effect6", m_pTransformCom, &EffectWorldDesc);
-		break;
-	case 5:
-		EffectWorldDesc.fScale = 1.4f;
 		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
 		break;
 	}
+}
+
+void CCharacter::Shadow_Village_Setting()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	
+
+	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
+	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	if (CMonsterManager::GetInstance()->Get_BattleOn() == true)
+	{
+		vLightEye = XMVectorSet(424.f, 50.f, 311.f, 1.f);
+		vLightAt = XMVectorSet(377.f, 0.f, 311.f, 1.f);
+	}
+	if (pPlayerTransformCom != nullptr)
+	{
+		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		vLightEye = vPlayerPos + XMVectorSet(-5.f, 40.f, -5.f, 1.f);
+		vLightAt = vPlayerPos;
+	}
+	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4   FloatLightViewMatrix;
+	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ViewMatrix", &FloatLightViewMatrix);
+
+	_matrix      LightProjMatrix;
+	_float4x4   FloatLightProjMatrix;
+
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
+	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
+	Safe_Release(pGameInstance);
+}
+
+void CCharacter::Shadow_House_Setting()
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+	_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
+	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	if (pPlayerTransformCom != nullptr)
+	{
+		vLightEye = vPlayerPos + XMVectorSet(-5.f, 3.f, -5.f, 1.f);
+		vLightAt = vPlayerPos;		
+	}
+	// 자코방
+
+	// 쿄우가이방
+
+	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4   FloatLightViewMatrix;
+	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_matLightView", &FloatLightViewMatrix);
+
+	_matrix      LightProjMatrix;
+	_float4x4   FloatLightProjMatrix;
+
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 300.f);
+	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
+
+	Safe_Release(pGameInstance);
+}
+
+void CCharacter::Shadow_Train_Setting()
+{
+}
+
+void CCharacter::Shadow_Final_Setting()
+{
+	_vector   vLightEye = XMVectorSet(90.f, 50.f, 90.f, 1.f);
+	_vector   vLightAt = { 128.5f, 0.f, 128.5f, 1.f };
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4   FloatLightViewMatrix;
+	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ViewMatrix", &FloatLightViewMatrix);
+
+	_matrix      LightProjMatrix;
+	_float4x4   FloatLightProjMatrix;
+
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280) / _float(720), 0.2f, 300.f);
+	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
 }
 
 HRESULT CCharacter::Add_Components()

@@ -38,7 +38,8 @@ public:
 		// ParticleSystem
 		float			fDuration = { 5.f };
 		bool			isLooping = { true };
-		bool			isPrewarm = { false };
+		//bool			isPrewarm = { false };
+		bool			isSetYToGround = { false };
 		bool			isRandomStartDelay = { false };
 		float			fStartDelayMin = { 0.f };
 		float			fStartDelayMax = { 0.f };

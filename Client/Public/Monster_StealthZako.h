@@ -2,6 +2,8 @@
 
 #include "Client_Defines.h"
 #include "Monster.h"
+#include "FIcon.h"
+
 
 BEGIN(Engine)
 
@@ -128,6 +130,10 @@ private:
 	_double m_dDelay_Dead_Stealth = { 0.0 };
 	
 
+	_bool	m_isFirst_SlowMotion = { true };
+	_bool m_isSlowMotion = { false };
+	_double m_dDelay_SlowMotion = { 0.0 };
+
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };
@@ -139,6 +145,10 @@ private:
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
+
+	CFIcon* m_pIcon_1 = { nullptr };
+	CFIcon* m_pIcon_2 = { nullptr };
+
 
 
 private:

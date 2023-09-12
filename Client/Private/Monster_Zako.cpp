@@ -50,7 +50,7 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Zako_0");
 		return E_FAIL;
 	}
-	Get_PlayerComponent();
+	
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 
@@ -151,7 +151,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false && m_bTanjiroSurge == false)
 	{
 		if (CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() || m_isCan_Tutorial)
 		{
@@ -178,10 +178,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 	}
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
+	
 }
 
 void CMonster_Zako::LateTick(_double dTimeDelta)
@@ -202,7 +199,7 @@ void CMonster_Zako::LateTick(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 
 	__super::LateTick(dTimeDelta);
-	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
+	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false && m_bTanjiroSurge == false)
 	{
 		if (CPlayerManager::GetInstance()->Get_Slow() == false)
 		{
@@ -262,53 +259,8 @@ HRESULT CMonster_Zako::Render()
 
 HRESULT CMonster_Zako::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 
 	return S_OK;
 }
@@ -1436,16 +1388,20 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
 			m_isConnectHitting = false;
 
-			Play_HitEffect();
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				Play_HitEffect();
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 			m_isConnectHitting = true;
 
-			Play_HitEffect();
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				Play_HitEffect();
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
 		}
 
 		m_dDelay_ComboChain = 1.0;
@@ -1508,8 +1464,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_dDelay_ComboChain = 1.7;
 		}
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
+		pGameInstance->Time_Slow(0.3, 0.15);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1525,10 +1484,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.5f, 0.03f);
+		Jumping(1.65f, 0.03f); // 1.5
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+		pGameInstance->Time_Slow(0.23, 0.3);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1566,10 +1527,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
+			pGameInstance->Time_Slow(0.15, 0.1);
 		}
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1581,7 +1545,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.0f, 0.05f);
+			Jumping(2.25f, 0.05f);//2.0
+
+			pGameInstance->Time_Slow(0.25, 0.1);
 		}
 	}
 #pragma endregion
@@ -1597,10 +1563,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
-		Jumping(1.2f, 0.05f);
+		Jumping(1.4f, 0.05f); //1.2
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
+		pGameInstance->Time_Slow(0.6, 0.2);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1624,6 +1593,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 
+		m_isSurging = true;
+
 	}
 #pragma endregion
 
@@ -1645,16 +1616,31 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isHekireki_Hit = true;
 		m_dHekireki_Hit = 0.0;
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-		/*if (m_isJumpOn == false)
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
+
+		if (m_isJumpOn == false)
 		{
-			Jumping(1.85f, 0.03f);
+			Jumping(2.05f, 0.03f); // 1.85
 		}
 		else
 		{
-			Jumping(0.85f, 0.030f);
-		}*/
+			Jumping(1.05f, 0.030f); // 0.85
+		}
+		if (m_iHekirekiHit_Index == 0)
+		{
+			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
+			m_iHekirekiHit_Index++;
+		}
+		else if (m_iHekirekiHit_Index == 1)
+		{
+			m_pModelCom->Set_Animation(ANIM_FALL);
+			m_iHekirekiHit_Index = 0;
+		}
+
+		pGameInstance->Time_Slow(0.2, 0.1);
 	}
 
 
@@ -1665,7 +1651,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_dHekireki_Hit += dTimeDelta;
 		if (m_dHekireki_Hit > 0.09f) // 0.15f
 		{
-			if (m_isJumpOn == false)
+			/*if (m_isJumpOn == false)
 			{
 				Jumping(1.85f, 0.03f);
 			}
@@ -1683,7 +1669,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_FALL);
 				m_iHekirekiHit_Index = 0;
-			}
+			}*/
 
 			m_isHekireki_Hit = false;
 		}
@@ -1761,6 +1747,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			else if (i == 2)
 				m_iAttackIndex = 5;
 		}
+
+		
 	}
 
 	Safe_Release(pGameInstance);
@@ -1769,6 +1757,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
 
 
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
@@ -1789,6 +1778,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 			else
 				m_pModelCom->Set_Animation(ANIM_DOWN_GETUP_MOVE);
 		}
+		m_isSurging = false;
 	}
 
 	if (iCurAnim == ANIM_IDLE)

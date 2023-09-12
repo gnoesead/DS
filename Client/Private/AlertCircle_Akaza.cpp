@@ -39,7 +39,6 @@ HRESULT CAlertCircle_Akaza::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-	m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Scaling(m_EffectDesc.vScale);
 
 	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
@@ -52,7 +51,7 @@ void CAlertCircle_Akaza::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 	 
 	 _vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION) + XMVector3Normalize(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_LOOK)) * 0.8f;
-	 vPos = XMVectorSetY(vPos, m_fLandY + 0.05f);
+	 vPos = XMVectorSetY(vPos, m_EffectDesc.fLandY);
 	 m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 
@@ -68,12 +67,12 @@ void CAlertCircle_Akaza::LateTick(_double TimeDelta)
 
 	if (STATE_SHOWON == m_eState)
 	{
-		m_fAlpha += 1.5f * (_float)TimeDelta;
+		m_fAlpha += m_EffectDesc.vTime.x * (_float)TimeDelta;
 		if (m_fAlpha > 1.f)
 			m_eState = STATE_SHOWOFF;
 	}
 	else
-		m_fAlpha -= 2.f * (_float)TimeDelta;
+		m_fAlpha -= m_EffectDesc.vTime.y * (_float)TimeDelta;
 
 	if (m_fAlpha < 0.f)
 		Set_Dead();

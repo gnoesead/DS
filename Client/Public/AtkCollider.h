@@ -21,7 +21,7 @@ class CAtkCollider final : public CGameObject
 public:
 	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_WEB, TYPE_EFFECT, TYPE_END };
 	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAI_BULLET, TYPE_KYOGAI_DELAY_BULLET, TYPE_KYOGAI_VERTICAL_BULLET, TYPE_KYOGAI_HORIZON_BULLET, TYPE_KYOGAI_LIAR_BULLET,
-		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_BULLET_END };
+		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_BULLET_AKAZA, TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
 	{
@@ -74,9 +74,14 @@ public:
 public:
 	void	Setting_AtkCollDesc();
 
+
 private:
+	void	Update_Trigger(_double dTimeDelta);
+	void	Setting_Trigger();
+
 	void	Tick_Default(_double dTimeDelta);
 	void	Tick_BaseBullet(_double dTimeDelta);
+	void	Tick_AkazaBullet(_double dTimeDelta);
 	void	Tick_KyogaiBullet(_double dTimeDelta);
 	void	Tick_KyogaiDelayBullet(_double dTimeDelta);
 	void	Tick_KyogaiVerticalBullet(_double dTimeDelta);
@@ -86,6 +91,7 @@ private:
 
 
 	void	Setting_BaseBullet();
+	void	Setting_AkazaBullet();
 	void	Setting_KyogaiBullet();
 	void	Setting_KyogaiDelayBullet();
 	void	Setting_KyogaiVerticalBullet();

@@ -38,53 +38,35 @@ HRESULT CAlertMesh_Akaza::Initialize(void* pArg)
 	{
 	case TYPE_INNER_0:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring012_Plane"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_00"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Noise004"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
 
-		m_pTransformCom->Rotation(_float3(0.f, 0.f, 90.f));
+		m_pTransformCom->Rotation(_float3(0.f, 0.f, -90.f));
 
 		break;
 	case TYPE_INNER_1:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Cmn_Ring012_Plane"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_01"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_Cmn_Noise003"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
-
-		m_pTransformCom->Rotation(_float3(0.f, 0.f, 90.f));
+		 
+		m_pTransformCom->Rotation(_float3(0.f, 0.f, -90.f));
 
 		break;
 	case TYPE_OUTWAVE:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_SM_e_Ecmn_Cylinder001_HD"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_OuterWave"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		/* For.Com_Texture */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_T_e_cmn_Wave003_02C"),
-			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-			return E_FAIL;
-
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
-		m_fLandY = XMVectorGetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
 
 		m_pTransformCom->Rotation(_float3(0.f, 0.f, 0.f));
@@ -100,8 +82,13 @@ void CAlertMesh_Akaza::Tick(_double TimeDelta)
 	__super::Tick(TimeDelta);
 
 	_vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION) + XMVector3Normalize(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_LOOK)) * 0.8f;
-	vPos = XMVectorSetY(vPos, m_fLandY + 0.05f);
+	vPos = XMVectorSetY(vPos, m_EffectDesc.fLandY);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_vCustomUV.x = m_EffectDesc.vCustomUV.x * m_dAccTime;
+	m_vCustomUV.y = m_EffectDesc.vCustomUV.y * m_dAccTime;
+
+	m_dAccTime += TimeDelta;
 }
 
 void CAlertMesh_Akaza::LateTick(_double TimeDelta)
@@ -116,12 +103,12 @@ void CAlertMesh_Akaza::LateTick(_double TimeDelta)
 
 	if (STATE_SHOWON == m_eState)
 	{
-		m_fAlpha += 1.5f * (_float)TimeDelta;
+		m_fAlpha += m_EffectDesc.vTime.x * (_float)TimeDelta;
 		if (m_fAlpha > 1.f)
 			m_eState = STATE_SHOWOFF;
 	}
 	else
-		m_fAlpha -= 2.f * (_float)TimeDelta;
+		m_fAlpha -= m_EffectDesc.vTime.y * (_float)TimeDelta;
 
 	if (m_fAlpha < 0.f)
 		Set_Dead();
@@ -141,7 +128,10 @@ HRESULT CAlertMesh_Akaza::Render()
 
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
-		m_pShaderCom->Begin(4);
+		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+			return E_FAIL;
+
+		m_pShaderCom->Begin(12);
 
 		m_pModelCom->Render(i);
 	}
@@ -162,7 +152,7 @@ HRESULT CAlertMesh_Akaza::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxModel_Effect"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
 		TEXT("Com_Shader"), (CComponent**)&m_pShaderCom)))
 		return E_FAIL;
 	
@@ -193,10 +183,16 @@ HRESULT CAlertMesh_Akaza::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture", 0)))
+	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_DiffuseTexture")))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_Alpha", &m_fAlpha, sizeof _float)))
+	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCustomUV", &m_vCustomUV, sizeof _float2)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -235,7 +231,7 @@ void CAlertMesh_Akaza::Free()
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pRampTextureCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);
 }

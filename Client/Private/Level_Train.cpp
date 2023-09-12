@@ -80,11 +80,11 @@ HRESULT CLevel_Train::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Train");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -245,7 +245,7 @@ HRESULT CLevel_Train::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 300.f;
+    CameraDesc.fFarZ = 400.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
@@ -1567,7 +1567,7 @@ HRESULT CLevel_Train::LoadEffects(const _tchar* pPath)
 			// ParticleSystem
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fDuration), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isLooping), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isPrewarm), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isSetYToGround), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isRandomStartDelay), sizeof(bool));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMin), sizeof(float));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.fStartDelayMax), sizeof(float));

@@ -55,67 +55,37 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 	m_pModelCom->Set_LinearDuration(ANIM_WALK_FRONT, 0.3);
 	m_pModelCom->Set_LinearDuration(ANIM_RUN, 0.4);
 
-	/*
+	
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	// Monster_Hp
-	CWorld_UI_Hp::UIDESC UIDesc3;
+	CFIcon::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 0;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 3;
+	UIDesc.m_Up_Mount = 1.85f;
+	UIDesc.pParentTransform = m_pTransformCom;
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+	m_pIcon_1 = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 1;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 0;
+	UIDesc.m_Up_Mount = 1.85f;
+	UIDesc.pParentTransform = m_pTransformCom;
 
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 2;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	ZeroMemory(&UIDesc3, sizeof UIDesc3);
-
-	UIDesc3.m_Is_Reverse = false;
-	UIDesc3.m_Type = 3;
-	UIDesc3.m_pMonster = this;
-	UIDesc3.m_Up_Mount = 1.7f;
-
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Boss_Battle_UI"), TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-		Safe_Release(pGameInstance);
-		return E_FAIL;
-	}
-
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
+	m_pIcon_2 = dynamic_cast<CFIcon*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_FIcon"), &UIDesc));
 
 
 	Safe_Release(pGameInstance);
-	*/
-	Get_PlayerComponent();
+
+
+
+
+	
 	return S_OK;
 }
 
@@ -127,6 +97,17 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 
 		if (m_isDead)
 			return;
+
+		if (ANIM_ATK_CLAWS != m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (m_isFirst_Questioning == false && m_isFirst_Finding == true)
+				m_pIcon_1->Tick(dTimeDelta);
+
+		}
+
+		if (m_isFirst_Finding == false || ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
+			m_pIcon_2->Tick(dTimeDelta);
+		
 
 		if (m_isDeath_Stealth)
 		{
@@ -143,10 +124,7 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
+		
 	}
 }
 
@@ -155,6 +133,16 @@ void CMonster_StealthZako::LateTick(_double dTimeDelta)
 	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
 		__super::LateTick(dTimeDelta);
+
+		if (ANIM_ATK_CLAWS != m_pModelCom->Get_iCurrentAnimIndex()) {
+
+			if (m_isFirst_Questioning == false && m_isFirst_Finding == true)
+				m_pIcon_1->LateTick(dTimeDelta);
+
+		}
+
+		if (m_isFirst_Finding == false || ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
+			m_pIcon_2->LateTick(dTimeDelta);
 
 		Gravity(dTimeDelta);
 	}
@@ -213,53 +201,8 @@ HRESULT CMonster_StealthZako::Render()
 
 HRESULT CMonster_StealthZako::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(120.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 
 	return S_OK;
 }
@@ -384,8 +327,8 @@ void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_WALK_FRONT);
 		}
-		Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.2f, true);
-		Go_Straight_Constant(dTimeDelta, 69, 0.2f, true);
+		Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.3f, true);
+		Go_Straight_Constant(dTimeDelta, 69, 0.3f, true);
 	}
 	else
 	{
@@ -401,6 +344,8 @@ void CMonster_StealthZako::Animation_Control_Move(_double dTimeDelta)
 
 void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 {
+
+
 	if (!m_isQuestioning && !m_isFinding && !m_isAttacking && !m_isPlayerBack)
 	{
 		if (Calculate_Distance() < 8.0f) // 6.0
@@ -417,6 +362,22 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_isFirst_Questioning = true;
 	}
 
+	if (m_isSlowMotion)
+	{
+		if (m_isFirst_SlowMotion)
+		{
+			m_isFirst_SlowMotion = false;
+			m_pRendererCom->Set_GrayScale_On(true);
+		}
+
+		m_dDelay_SlowMotion += dTimeDelta;
+		if (m_dDelay_SlowMotion > 0.1)
+		{
+			m_isSlowMotion = false;
+			m_dDelay_SlowMotion = 0.0;
+			m_pRendererCom->Set_GrayScale_On(false);
+		}
+	}
 
 	if (m_isQuestioning)
 	{
@@ -425,7 +386,17 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isFirst_Questioning = false;
 
 			m_pModelCom->Set_Animation(ANIM_POSE_MUT);
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.1, 0.4);
+			Safe_Release(pGameInstance);
+
+			m_isSlowMotion = true;
+			m_dDelay_SlowMotion = 0.0;
+			m_isFirst_SlowMotion = true;
 		}
+
 
 		//안걸리는거
 		_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
@@ -442,7 +413,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 		//걸리는거
 		m_dDelay_Questioning += dTimeDelta;
-		if (m_dDelay_Questioning > 3.0f)
+		if (m_dDelay_Questioning > 0.9f)
 		{
 			m_dDelay_Questioning = 0.0;
 			m_isQuestioning = false;
@@ -458,9 +429,16 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		{
 			m_isFirst_Finding = false;
 
+			
+
 			m_pModelCom->Set_Animation(ANIM_POSE_HOWLING);
 			m_dDelay_Howling = 0.0;
 			m_isFirst_Howling = true;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.15, 0.7);
+			Safe_Release(pGameInstance);
 		}
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
@@ -469,7 +447,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
 
 		if(Calculate_Distance() > 1.f)
-			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.25f, true);
+			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.50f, true);
 		else
 		{
 			m_isFinding = false;
@@ -505,6 +483,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			_float4 Dir;
 			XMStoreFloat4(&Dir, Calculate_Dir());
 			CMonsterManager::GetInstance()->Set_DirStealthAtk(Dir);
+
+
 		}
 	}
 
@@ -536,6 +516,11 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				m_isBattleStart_Stealth = true;
 				m_dDelay_BattleStart_Stealth = 0.0;
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG_BACK);
+
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+				pGameInstance->Time_Slow(0.3, 0.3);
+				Safe_Release(pGameInstance);
 			}
 		}
 	}
@@ -719,6 +704,9 @@ CGameObject* CMonster_StealthZako::Clone(void* pArg)
 
 void CMonster_StealthZako::Free()
 {
-	
+	Safe_Release(m_pIcon_1);
+	Safe_Release(m_pIcon_2);
+
+
 	__super::Free();
 }

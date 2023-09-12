@@ -99,9 +99,10 @@ struct PS_OUT
 {
 	//vector		vColor : SV_TARGET0;
 	vector		vDiffuse : SV_TARGET0;
-	vector		vNormal : SV_TARGET1;
+	vector		vDistortion : SV_TARGET1;
+	/*vector		vNormal : SV_TARGET1;
 	vector		vDepth : SV_TARGET2;
-	vector		vAdditional : SV_TARGET3;
+	vector		vAdditional : SV_TARGET3;*/
 };
 
 PS_OUT  PS_DEFAULT(PS_IN In)
@@ -510,7 +511,7 @@ PS_OUT  PS_NORMALDISTORTION(PS_IN In)
 	Out.vDiffuse = Out.vDiffuse.r * 1.4f;
 	
 	Out.vDiffuse.a *= g_fAlpha;
-
+	
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
 
@@ -1110,7 +1111,7 @@ PS_OUT  PS_MASKCOLORDISTORTION(PS_IN In)
 
 	if (Out.vDiffuse.a < 0.01f)
 		discard;
-
+	Out.vDistortion = vDistortion;
 	return Out;
 }
 
@@ -1595,6 +1596,82 @@ PS_OUT  PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_DIFFUSE_CALC_BLUE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	In.vTexUV.x += g_fTimeAcc * g_vPanningSpeed.x;
+	In.vTexUV.y += g_fTimeAcc * g_vPanningSpeed.y;
+
+	In.vTexUV.x += g_vPaddingStart.x;
+	In.vTexUV.y += g_vPaddingStart.y;
+
+	In.vTexUV.x += g_vPaddingEnd.x;
+	In.vTexUV.y += g_vPaddingEnd.y;
+
+	float UVX = In.vTexUV.x;
+	float UVY = In.vTexUV.y;
+
+	if (g_vPanningSpeed.x == 0)
+	{
+		if (In.vTexUV.x < g_vDiscardedPixelMin.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.x)
+			discard;
+
+		if (In.vTexUV.x > g_vDiscardedPixelMax.x + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.x)
+			discard;
+
+		if (g_vOffset.x > In.vTexUV.x)
+			discard;
+		else if (g_vTilling.x < In.vTexUV.x)
+			discard;
+		else
+		{
+			UVX = (In.vTexUV.x - g_vOffset.x) / (g_vTilling.x - g_vOffset.x);
+			UVX *= (g_vDiscardedPixelMax.x - g_vDiscardedPixelMin.x);
+			UVX += g_vDiscardedPixelMin.x;
+		}
+	}
+
+	if (g_vPanningSpeed.y == 0)
+	{
+		if (In.vTexUV.y < g_vDiscardedPixelMin.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMin.y)
+			discard;
+
+		if (In.vTexUV.y > g_vDiscardedPixelMax.y + g_fDiscardTimeAcc * g_vPixelDiscardSpeedMax.y)
+			discard;
+
+		if (g_vOffset.y > In.vTexUV.y)
+			discard;
+		else if (g_vTilling.y < In.vTexUV.y)
+			discard;
+		else
+		{
+			UVY = (In.vTexUV.y - g_vOffset.y) / (g_vTilling.y - g_vOffset.y);
+			UVY *= (g_vDiscardedPixelMax.y - g_vDiscardedPixelMin.y);
+			UVY += g_vDiscardedPixelMin.y;
+		}
+	}
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+
+	if (vMtrlDiffuse.b < 0.1)
+		discard;
+
+	vMtrlDiffuse.a = vMtrlDiffuse.b;
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	Out.vDiffuse.a *= g_fAlpha;
+
+	if (Out.vDiffuse.a < 0.01f)
+		discard;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	pass Default	//0
@@ -1909,5 +1986,31 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKCOLORDISSOLVE();
+	}
+
+	pass DiffuseCalcBlue		//24
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFFUSE_CALC_BLUE();
+	}
+
+	pass DiffuseCalcRedDissolveSprite		// 25
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFFCALCRED_DISSOLVE_SPRITE_NOZWRITE();
 	}
 }

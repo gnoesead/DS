@@ -15,7 +15,10 @@
 
 #include "Battle_UI_Manager.h"
 
+#include "MonsterManager.h"
+
 #include "AlertCircle_Akaza.h"
+#include "AlertMesh_Akaza.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -50,7 +53,6 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	Get_PlayerComponent();
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -104,11 +106,6 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-		return;
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-		return;
-
 }
 
 void CBoss_Akaza::LateTick(_double dTimeDelta)
@@ -145,7 +142,12 @@ HRESULT CBoss_Akaza::Render()
 		if (m_iMeshNum == 2)
 			m_pShaderCom->Begin(2);
 		else
-			m_pShaderCom->Begin(1);
+		{
+			if (m_bSuperArmor == false)
+				m_pShaderCom->Begin(1);
+			else
+				m_pShaderCom->Begin(4);
+		}
 
 		m_pModelCom->Render(m_iMeshNum);
 	}
@@ -170,58 +172,8 @@ HRESULT CBoss_Akaza::Render()
 
 HRESULT CBoss_Akaza::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-	//Get_PlayerComponent();
-
-	//_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector	vLightEye = XMVectorSet(130.f, 10.f, 140.f, 1.f);
-	_vector	vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-
-	/*if (m_pPlayerTransformCom != nullptr)
-	{
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-		vLightAt = vPlayerPos;
-
-	}*/
-
-	_vector	vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 	return S_OK;
 }
 #ifdef _DEBUG
@@ -239,7 +191,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.5f);
+		m_pRendererCom->Set_BloomRatio(0.75f);
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -288,7 +240,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_2))
 		{
-			Trigger_ComboPunch();
+			pGameInstance->Time_Slow(0.5, 0.2);
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
@@ -622,10 +574,34 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.2
 			{
-				CAlertCircle_Akaza::EFFECTDESC EffectDesc;
-				EffectDesc.pOwnerTransform = m_pTransformCom;
-				EffectDesc.vScale = { 4.f, 4.f, 4.f };
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectDesc, false);
+				
+				CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+				EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+				EffectCircleDesc.vScale = { 4.f, 4.f, 4.f };
+				EffectCircleDesc.vTime = { 1.5f, 5.f };
+				EffectCircleDesc.fLandY = { 0.05f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+				CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+				EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+				EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+				EffectMeshDesc.vTime = { 1.5f, 5.f };
+				EffectMeshDesc.fLandY = { 0.06f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				
+				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+				EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+				EffectMeshDesc.fLandY = { 0.07f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+				EffectMeshDesc.vScale = { 3.8f, 0.8f, 3.8f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+				EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+				EffectMeshDesc.fLandY = { -0.35f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
 			}
 
 			if (1 == m_iEvent_Index) // 0.75
@@ -668,6 +644,79 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+
+		if (ANIM_SKILL_UP == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0.1
+			{
+
+			}
+			if (1 == m_iEvent_Index) // 0.6
+			{
+				if (m_bAwake == true)
+				{
+					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+					EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+					EffectCircleDesc.vScale = { 26.f, 26.f, 26.f };
+					EffectCircleDesc.vTime = { 0.2f, 5.f };
+					EffectCircleDesc.fLandY = { 0.04f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+					CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+					EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+					EffectMeshDesc.vScale = { 32.5f, 32.5f, 32.5f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+					EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+					EffectMeshDesc.vTime = { 0.2f, 5.f };
+					EffectMeshDesc.fLandY = { 0.05f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 32.5f, 32.5f, 32.5f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+					EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+					EffectMeshDesc.fLandY = { 0.07f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 24.7f, 0.8f, 24.7f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+					EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+					EffectMeshDesc.fLandY = { -0.35f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				}
+				else
+				{
+					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+					EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+					EffectCircleDesc.vScale = { 17.f, 17.f, 17.f };
+					EffectCircleDesc.vTime = { 0.2f, 5.f };
+					EffectCircleDesc.fLandY = { 0.04f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+					CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+					EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+					EffectMeshDesc.vScale = { 21.25f, 21.25f, 21.25f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+					EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+					EffectMeshDesc.vTime = { 0.2f, 5.f };
+					EffectMeshDesc.fLandY = { 0.05f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 21.25f, 21.25f, 21.25f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+					EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+					EffectMeshDesc.fLandY = { 0.07f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 16.15f, 0.8f, 16.15f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+					EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+					EffectMeshDesc.fLandY = { -0.35f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				}
+				
+			}
+		}
+
 #pragma region 평타콤보
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -923,9 +972,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
-		if (81 == m_pModelCom->Get_iCurrentAnimIndex()) 
+		if (81 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index) 
+			if (0 == m_iEvent_Index)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
@@ -1048,7 +1097,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				if (true == m_isJumpOn)
 					Jumping(0.2f, 0.030f);
 
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				Play_HitEffect();
 
 			}
@@ -1072,11 +1121,13 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-			Play_HitEffect();
+				Play_HitEffect();
+			}
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1091,9 +1142,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-			Play_HitEffect();
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
+				Play_HitEffect();
+			}
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1111,12 +1164,14 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			Play_HitEffect();
-			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-			EffectWorldDesc.vPosition.y += 0.8f;
-			EffectWorldDesc.fScale = 1.4f;
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom , &EffectWorldDesc);
+			if (PlayerIndex == 0) {
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.8f;
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+			}
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1132,7 +1187,10 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Bound(false);
 
-			Play_HitEffect();
+			if (PlayerIndex == 0) {
+				Play_HitEffect();
+			}
+
 			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
 			pPlayer->Set_Hit_Success(true);
@@ -1364,8 +1422,10 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 	// 조건 주면 시작
 	m_dTriggerTime += dTimeDelta;
 
-	if (m_dTriggerTime > 15.0)
+	CMonsterManager::GetInstance()->Set_Akaza_On(true);
+	if (m_dTriggerTime > 11.0) //11
 	{
+		
 		if (m_bAnimFinish == false)
 		{
 			m_bAnimFinish = true;
@@ -1397,6 +1457,11 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+	}
+	if ((m_StatusDesc.fHp > 0.f) && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max < 0.5f))
+	{
+		if (m_iTriggerCnt == 5)
+			m_iTriggerCnt = 0;
 	}
 
 	if (m_bTrigger == false)
@@ -2608,8 +2673,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					{
 						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 						EffectWorldDesc.vPosition.y = 1.5f;
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom, &EffectWorldDesc);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom, &EffectWorldDesc);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 					}
@@ -3187,17 +3252,31 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
 	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_PUSHAWAY, 0.950, dTimeDelta))
+	{
+		_vector   vLightEye = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+		_vector   vLightAt = { 1.f, 0.f, 1.f, 1.f };
+		_vector	  vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
+		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
+		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
+		m_pRendererCom->Set_BackLight();
+	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE_START;
+		
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.950, dTimeDelta))
+		m_pRendererCom->Set_BackLight();
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
 		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
 		m_eCurAnimIndex = ANIM_AWAKE_END;
+		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+		
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
 	{

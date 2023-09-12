@@ -17,6 +17,7 @@ vector         g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 
 texture2D      g_NormalTexture;
 texture2D      g_DiffuseTexture;
+texture2D	   g_DiffuseTexture_Cha;
 texture2D      g_ShadeTexture;
 texture2D      g_SpecularTexture;
 texture2D      g_DepthTexture;
@@ -46,11 +47,11 @@ bool		   g_bSSAOSwitch;
 bool		   g_bInvert;
 bool		   g_bGrayScale;
 bool		   g_bRadialBlur;
-
+bool		   g_bBackLight;
 //===================================================
 float g_fRadius;
 float g_fBias;
-float g_fFar = 300.f;
+float g_fFar = 400.f;
 float g_fFalloff = 0.000002f;
 float g_fStrength = 0.0007f;
 float g_fTotStrength = 1.38f;
@@ -90,8 +91,8 @@ float2         g_Pixeloffset;
 
 sampler ShadowDepthSampler = sampler_state
 {
-	texture = g_ShadowDepthTexture;
-	filter = min_mag_mip_linear;
+	//texture = g_ShadowDepthTexture;
+	filter = min_mag_mip_point;
 	AddressU = clamp;
 	AddressV = clamp;
 };
@@ -214,7 +215,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
-
+	vector		vDiffuse_Cha = g_DiffuseTexture_Cha.Sample(LinearSampler, In.vTexUV);
 
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
@@ -224,30 +225,47 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	float fBrightness = dot(Out.vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
+	if (vDiffuse_Cha.r == 0.f)
+	{
+		Out.vShade = saturate(Out.vShade);
+		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+		Out.vShade = Out.vShade * 0.25f;
+	}
+	else
+	{
+		Out.vShade = saturate(Out.vShade);
+		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+
+		Out.vShade = Out.vShade /** 2.f*/;
+				
+	}
+
+	
 
 
-	if (fBrightness < 0.7)
-		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);	
-	else if(fBrightness < 0.5)
-		Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
+	/*if (fBrightness < 0.7)
+		Out.vShade.rgb = float3(0.2f, 0.2f, 0.2f);
+	else if (fBrightness < 0.5)
+		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);
+	else if (fBrightness < 0.2)
+		Out.vShade.rgb = float3(0.0f, 0.0f, 0.0f);*/
+	//Out.vShade = saturate(Out.vShade);
+	//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
-		//Out.vShade = saturate(Out.vShade);
-		//Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
 
+	/*Out.vShade = saturate(Out.vShade);
+	if (Out.vShade.r < 0.71f && Out.vShade.g < 0.71f && Out.vShade.b < 0.71f)
+		Out.vShade.rgb = ceil(Out.vShade * 0.4f) / 0.4f;
+	else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+		Out.vShade.rgb = ceil(Out.vShade * 0.2f) / 0.2f;*/
 
-		/*Out.vShade = saturate(Out.vShade);
-		if (Out.vShade.r < 0.71f && Out.vShade.g < 0.71f && Out.vShade.b < 0.71f)
-			Out.vShade.rgb = ceil(Out.vShade * 0.4f) / 0.4f;
-		else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
-			Out.vShade.rgb = ceil(Out.vShade * 0.2f) / 0.2f;*/
+		/*else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
+			Out.vShade.rgb = float3(0.5f, 0.5f, 0.5f);*/
 
-			/*else if ((Out.vShade.r >= 0.71f && Out.vShade.r < 0.91f) && (Out.vShade.g >= 0.71f && Out.vShade.g < 0.91f) && (Out.vShade.b >= 0.71f && Out.vShade.b < 0.91f))
-				Out.vShade.rgb = float3(0.5f, 0.5f, 0.5f);*/
-
-				/*else if ((Out.vShade.r >= 0.21f && Out.vShade.r < 0.41f) && (Out.vShade.g >= 0.21f && Out.vShade.g < 0.41f) && (Out.vShade.b >= 0.21f && Out.vShade.b < 0.41f))
-					Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
-				else if ((Out.vShade.r >= 0.41f && Out.vShade.r <= 1.f) && (Out.vShade.g >= 0.41f && Out.vShade.g <= 1.f) && (Out.vShade.b >= 0.41f && Out.vShade.b <= 1.f))
-					Out.vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
+			/*else if ((Out.vShade.r >= 0.21f && Out.vShade.r < 0.41f) && (Out.vShade.g >= 0.21f && Out.vShade.g < 0.41f) && (Out.vShade.b >= 0.21f && Out.vShade.b < 0.41f))
+				Out.vShade.rgb = float3(0.4f, 0.4f, 0.4f);
+			else if ((Out.vShade.r >= 0.41f && Out.vShade.r <= 1.f) && (Out.vShade.g >= 0.41f && Out.vShade.g <= 1.f) && (Out.vShade.b >= 0.41f && Out.vShade.b <= 1.f))
+				Out.vShade.rgb = float3(0.7f, 0.7f, 0.7f);*/
 
 
 
@@ -256,7 +274,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vReflect = reflect(normalize(g_vLightDir), vNormal);
 
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
-	float      fViewZ = vDepth.x * 300.f;
+	float      fViewZ = vDepth.x * g_fFar;
 
 	vector      vWorldPos;
 
@@ -287,7 +305,9 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	vector      vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexUV);
 	vector      vNormal = vector(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 	vector      vDepth = g_DepthTexture.Sample(PointSampler, In.vTexUV);
-	float       fViewZ = vDepth.x * 300.f;
+	vector		vDiffuse_Cha = g_DiffuseTexture_Cha.Sample(LinearSampler, In.vTexUV);
+
+	float       fViewZ = vDepth.x * g_fFar;
 	vector      vWorldPos;
 
 	/* vDepth.x -> ÇÃ·¹ÀÌ¾î¶û / ¸ÊÀÌ¶û °ªÀÌ ´Þ¶ó.
@@ -319,9 +339,22 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
-		//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient * vSSAO)) * fAtt;
 
-	//Out.vShade = g_vLightDiffuse * (max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+	
+
+	if (vDiffuse_Cha.r == 0.f)
+	{		
+		Out.vShade = Out.vShade;
+	}
+	else
+	{
+		Out.vShade = saturate(Out.vShade);
+		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
+
+		Out.vShade = Out.vShade;		
+	}
+
+	
 
 	Out.vShade.a = 1.f;
 
@@ -339,50 +372,45 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	PS_OUT         Out = (PS_OUT)0;
 
 	vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+	vector		vDiffuse_Cha = g_DiffuseTexture_Cha.Sample(LinearSampler, In.vTexUV);
 	vector      vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vDepth = g_DepthTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vSSAO = g_SSAOFinalTexture.Sample(LinearSampler, In.vTexUV);
 	vector		vEmissive = g_EmissiveTexture.Sample(LinearSampler, In.vTexUV);
-	
+
 
 	if (vDiffuse.a == 0.f)
 		discard;
+	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
+	
+	if (vDiffuse_Cha.r == 0.f)
+	{		
+		Out.vColor = vDiffuse * vShade;
+	}
+	else
+	{
+		Out.vColor = vDiffuse_Cha * vShade;
+	}
 
+	
+	
 
-	Out.vColor = vDiffuse * vShade;
+	//Out.vColor = vDiffuse * vShade;
 
 	Out.vColor.rgb += vEmissive.rgb;
+
+	if ((fBrightness < 0.7f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
+		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
+	
+	/*if ((fBrightness < 0.7f) && g_bBackLight == true)
+		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
 	float3 grayColor = { grayValue , grayValue ,grayValue };
 
 	Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
-	/*float2 Direction = In.vTexUV - float2(0.5f,0.5f);
-	float3 c = float3(0.0, 0.0, 0.0);
-	float f = 1.0 / 6;
-
-	float2 minTexCoord = float2(0.01, 0.01);
-	float2 maxTexCoord = float2(0.99, 0.99);
-
-	if (vDiffuse.a == 0.f)
-		discard;
-
-	for (int i = 0; i < 12; i++)
-	{
-		float2 clampedTexCoord = clamp(In.vTexUV - 0.01 * Direction * float(i), minTexCoord, maxTexCoord);
-
-		c += g_DiffuseTexture.Sample(LinearSampler, clampedTexCoord).rgb * f;
-		if (c.r == 1.f && c.b == 1.f)
-			discard;
-
-		Out.vColor.rgb = c * vShade.rgb;
-		Out.vColor.a = vDiffuse.a * vShade.a;
-
-		Out.vColor.rgb = lerp(vDiffuse.rgb, Out.vColor.rgb, 1.f);
-	}*/
-
-
+	
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
 
@@ -402,7 +430,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	//±×¸²ÀÚ Àû¿ë
 
 	vector      vDepthInfo = g_DepthTexture.Sample(DepthSampler, In.vTexUV);
-	float      fViewZ = vDepthInfo.z * 300.0f;
+	float      fViewZ = vDepthInfo.z * g_fFar;
 
 	vector      vPosition;
 
@@ -425,59 +453,59 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vNewUV.y = (vUVPos.y / vUVPos.w) * -0.5f + 0.5f;
 
 	vector      vShadowDepthInfo = g_ShadowDepthTexture.Sample(ShadowDepthSampler, vNewUV);
-
+	
 	/*if (vPosition.z  > vShadowDepthInfo.r * vDepthInfo.y * 300.0f)
 	{
 		vector vColor = vector(0.5f, 0.5f, 0.5f, 1.f);
 		Out.vColor *= vColor;
 	}*/
 
-	if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.1f)
+	if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.1f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 1.f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.2f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.2f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.3f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.3f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.8f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.4f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.4f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.7f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.5f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.5f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.6f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.6f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.5f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.7f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.7f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.4f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.8f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.8f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.3f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 0.6f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 0.6f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.2f);
 		Out.vColor *= vColor;
 	}
-	else if (vPosition.z > vShadowDepthInfo.r * 300.0f + 1.f)
+	else if (vPosition.z > vShadowDepthInfo.r * g_fFar + 1.f)
 	{
 		vector vColor = vector(0.6f, 0.6f, 0.6f, 0.1f);
 		Out.vColor *= vColor;
@@ -569,8 +597,8 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 		vector vOut = (vHDRColor);
 
-		vOut = pow(abs(vOut), 2.2f);
-		vBloom = pow(abs(vBloom), 2.2f);
+		vOut = pow(abs(vOut), 1.8f);
+		vBloom = pow(abs(vBloom), 1.8f);
 
 		vOut += vBloom;
 		Out.vColor = pow(abs(vOut), 1 / 2.2f);
@@ -605,7 +633,7 @@ PS_OUT PS_RadialBlur(PS_IN In)
 			c += g_RadialBlurTexture.Sample(LinearClampSampler, In.vTexUV - 0.01 * Direction * float(i)) * f;
 			Out.vColor.rgb = c;
 		}
-				
+
 		Out.vColor.a = vFinalColor.a;
 		/*if (Out.vColor.a == 0.f)
 			discard;*/
@@ -623,8 +651,8 @@ float m_TexW = 1280.f;
 float m_TexH = 720.f;
 //float m_ShadowTexW = 1280.f;
 //float m_ShadowTexH = 720.f;
-float m_ShadowTexW = 12800.f;
-float m_ShadowTexH = 7200.f;
+float m_ShadowTexW = 1280.f;
+float m_ShadowTexH = 720.f;
 
 
 static const float Weight[13] =
@@ -858,17 +886,17 @@ PS_OUT PS_ShadowBlurX(PS_IN _In)
 		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 
-	if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
+	//if (Out.vColor.a == 0.f)
+	//	discard;
+	/*if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
 		discard;
 	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+		discard;*/
 
 	return Out;
 }
@@ -888,16 +916,16 @@ PS_OUT PS_ShadowBlurY(PS_IN _In)
 		Out.vColor += Weight[6 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
-	if (Out.vColor.a == 0.f)
-		discard;
-	if (Out.vColor.a == 1.f)
-		discard;
-	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
-		discard;
-	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;
+	/*if (Out.vColor.a == 0.f)
+		discard;*/
+	//if (Out.vColor.a == 1.f)
+	//	discard;
+	//if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
+	//	discard;
+	//if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
+	//	discard;
 
 	return Out;
 }
@@ -909,8 +937,8 @@ PS_OUT PS_Combine_SSAOBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	/*if (vFinal.a == 0.f) // 0812
-		discard;*/
+	if (vFinal.a == 0.f) // 0812
+		discard;
 
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
@@ -934,20 +962,21 @@ PS_OUT PS_Combine_ShadowBlur(PS_IN In)
 	vector      vBlurX = g_BlurXTexture.Sample(LinearSampler, In.vTexUV);
 	vector      vBlurY = g_BlurYTexture.Sample(LinearSampler, In.vTexUV);
 
-	/*if (vFinal.a == 0.f) // 0812
-		discard;*/
-
+	if (vFinal.a == 0.f) // 0812
+		discard;
+	//if (vFinal.a == 1.f) // 0812
+	//	discard;
 	Out.vColor = ((vFinal + vBlurX + vBlurY) / 3.f);
 
-	//if (Out.vColor.a == 0.f) // 0812
-	//	discard;
+	if (Out.vColor.a == 0.f) // 0812
+		discard;
 
-	/*if (Out.vColor.a == 1.f)
+	if (Out.vColor.a == 1.f)
 		discard;
 	if (Out.vColor.r == float(1.f) && Out.vColor.g == float(1.f) && Out.vColor.b == float(1.f))
 		discard;
 	if (Out.vColor.r == float(0.f) && Out.vColor.g == float(0.f) && Out.vColor.b == float(0.f))
-		discard;*/
+		discard;
 
 	return Out;
 }

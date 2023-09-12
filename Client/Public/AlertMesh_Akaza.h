@@ -22,6 +22,9 @@ public:
 		CTransform* pOwnerTransform = { nullptr };
 		TYPE		eType = { TYPE_INNER_0 };
 		_float3		vScale = { 1.f, 1.f, 1.f };
+		_float2		vCustomUV = { 0.f, 0.f };
+		_float2		vTime = { 1.f, 1.f };
+		_float		fLandY = { 0.04f };
 	}EFFECTDESC;
 private:
 	CAlertMesh_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -40,8 +43,8 @@ private:
 	EFFECTDESC	m_EffectDesc;
 
 	_float		m_fAlpha = { 0.1f };
-	_float		m_fLandY = { 0.f };
-	_float		m_fScale = { 9.f };
+	_float		m_fScale = { 1.f };
+	_float2		m_vCustomUV = { 0.f, 0.f };
 
 	STATE		m_eState = STATE_SHOWON;
 	_double		m_dAccTime = { 0.0 };
@@ -49,7 +52,6 @@ private:
 private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
-	CTexture* m_pTextureCom = { nullptr };
 	CTexture* m_pRampTextureCom = { nullptr };
 	CRenderer* m_pRendererCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };

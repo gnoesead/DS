@@ -199,9 +199,6 @@
     <Filter Include="02. GameObjects\Character\Monster\Manager">
       <UniqueIdentifier>{2b897ff2-31e4-4b92-ba1d-7ea9fd177a01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02. GameObjects\CollisionBox">
-      <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Boss_Kyogai">
       <UniqueIdentifier>{b4b6df4d-bb33-4b31-9e81-fafbf4444f20}</UniqueIdentifier>
     </Filter>
@@ -454,6 +451,9 @@
     <Filter Include="01. Levels\03. Village">
       <UniqueIdentifier>{f2d4f22e-0c62-4fce-abcf-bed6e88865c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\CollisionBox">
+      <UniqueIdentifier>{1ae6df93-9f3e-42f8-90d7-1fd8f579104d}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza\Alert">
       <UniqueIdentifier>{019c38c0-48e5-4b0d-a8fc-04a479abbb67}</UniqueIdentifier>
     </Filter>
@@ -685,7 +685,7 @@
       <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CollisionBox.h">
-      <Filter>02. GameObjects\CollisionBox</Filter>
+      <Filter>02. GameObjects\Character\CollisionBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Zako.h">
       <Filter>02. GameObjects\Character\Monster\Zako</Filter>
@@ -1041,7 +1041,7 @@
       <Filter>02. GameObjects\Character\Monster\Boss_Kyogai</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CollisionBox.cpp">
-      <Filter>02. GameObjects\CollisionBox</Filter>
+      <Filter>02. GameObjects\Character\CollisionBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Zako.cpp">
       <Filter>02. GameObjects\Character\Monster\Zako</Filter>
