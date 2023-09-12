@@ -159,6 +159,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 			{
 				m_isFirst_BattleOn = false;
 				CMonsterManager::GetInstance()->Set_BattleOn(true);
+				CMonsterManager::GetInstance()->Set_StealthEnd_Delete(true);
 			}
 
 			Trigger();
@@ -166,6 +167,8 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 			{
 				Animation_Control(dTimeDelta);
 			}
+
+			
 		}
 
 		//局聪皋捞记 贸府
@@ -1484,7 +1487,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.65f, 0.03f); // 1.5
+		Jumping(1.5f, 0.03f); // 1.5
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
@@ -1569,7 +1572,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
-		//pGameInstance->Time_Slow(0.6, 0.2);
+		//pGameInstance->Time_Slow(0.6, 0.4);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1693,6 +1696,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Death_For_Stealth = false;
 
 			CMonsterManager::GetInstance()->Plus_ThreeCnt();
+
+			pGameInstance->Time_Slow(0.6, 0.3);
 		}
 	}
 #pragma endregion

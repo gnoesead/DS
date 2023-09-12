@@ -1931,7 +1931,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-		pGameInstance->Time_Slow(0.3, 0.15);
+		//pGameInstance->Time_Slow(0.3, 0.15);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.6f, 0.05f, AtkDir);
 #pragma endregion
@@ -1949,12 +1949,12 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isSwamp_Deathing = true;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
-		Jumping(1.80f, 0.03f); // 1.75
+		Jumping(1.75f, 0.03f); // 1.75
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-		pGameInstance->Time_Slow(0.23, 0.3);
+		//pGameInstance->Time_Slow(0.23, 0.3);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1989,12 +1989,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_FALL);
 			Set_FallingStatus(3.0f, 0.0f);
-			//pGameInstance->Time_Slow(0.3, 0.1);
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_DMG_BOUND);
-			pGameInstance->Time_Slow(0.15, 0.1);
+			//pGameInstance->Time_Slow(0.15, 0.1);
 		}
 
 		Play_HitEffect();
@@ -2012,7 +2011,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			m_isBounding = false;
 
 			Jumping(2.25f, 0.05f); // 1.85
-			pGameInstance->Time_Slow(0.25, 0.1);
+			//pGameInstance->Time_Slow(0.25, 0.5);
 		}
 
 		Play_HitEffect();
@@ -2039,7 +2038,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-		pGameInstance->Time_Slow(0.6, 0.2);
+		//pGameInstance->Time_Slow(0.6, 0.4);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 86, 2.5f, AtkDir);
@@ -2065,7 +2064,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isSurging = true;
 
-		pGameInstance->Time_Slow(0.08, 0.15);
+		//pGameInstance->Time_Slow(0.08, 0.15);
 	}
 #pragma endregion
 
@@ -2118,6 +2117,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 1)
@@ -2130,6 +2131,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
+
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
@@ -2140,6 +2143,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				m_isDeath_Motion = true;
 
 				CMonsterManager::GetInstance()->Set_BattleOn(false);
+
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 	}
@@ -2180,6 +2185,8 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
 	{
 		m_isDeath_Motion = true;
+
+		
 	}
 
 
