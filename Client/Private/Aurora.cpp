@@ -2,6 +2,7 @@
 #include "..\Public\Aurora.h"
 
 #include "GameInstance.h"
+#include "Character.h"
 
 CAurora::CAurora(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMasterEffect(pDevice, pContext)
@@ -43,6 +44,9 @@ HRESULT CAurora::Initialize(void* pArg)
 
 void CAurora::Tick(_double TimeDelta) 
 {
+	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
+		return;
+
 	__super::Tick(TimeDelta);
 
 	m_fAccY += (_float)m_dSpeedY * (_float)TimeDelta;
@@ -54,13 +58,22 @@ void CAurora::Tick(_double TimeDelta)
 
 	Update_Frame(TimeDelta);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION)
-		+ XMVectorSet(m_fPlusX, m_fPlusY + m_fAccY, m_fPlusZ, 0.f));
-
+	if (TYPE_LOCAL == m_EffectDesc.eType)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION)
+			+ XMVectorSet(m_fPlusX, m_fPlusY + m_fAccY, m_fPlusZ, 0.f));
+	}
+	else if (TYPE_WORLD == m_EffectDesc.eType)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector(m_vInitialPos) + XMVectorSet(0.f, m_fAccY, 0.f, 0.f));
+	}
 }
 
 void CAurora::LateTick(_double TimeDelta)
 {
+	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
+		return;
+
 	__super::LateTick(TimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -170,7 +183,7 @@ HRESULT CAurora::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vColor", &m_vColor, sizeof _float3)))
 		return E_FAIL;
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -215,6 +228,21 @@ void CAurora::Reset_Data()
 	m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
 
 	m_iFrame = Random::Generate_Int(0, 10);
+
+	if (m_EffectDesc.eType == TYPE_WORLD)
+	{
+		m_dFrameSpeed = Random::Generate_Float(0.015f, 0.02f);
+		m_fAlpha = 0.05f;
+
+		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
+		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.15f);
+
+		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
+		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.2f);
+		m_fPlusY = Random::Generate_Float(0.4f, 0.8f);
+
+		XMStoreFloat4(&m_vInitialPos, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+	}
 }
 
 CAurora* CAurora::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
