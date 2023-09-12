@@ -507,7 +507,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.x = 0.01f;
 				EffectWorldDesc.vPosition.y = 0.23f;
-				EffectWorldDesc.vPosition.z = 0.15f;
+				EffectWorldDesc.vPosition.z = 0.16f;
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);

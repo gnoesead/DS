@@ -31,7 +31,6 @@ void CCameraManager::Tick(_double dTimeDelta)
 		if (m_Focus_TimeAcc > m_Focus_Time) {
 			m_Focus_TimeAcc = 0.f;
 
-			// 바로 해제 X 원래 위치로 보간해서 이동 후 false로 바꿈
 			m_Is_Focus_On = false;
 		}
 
@@ -77,6 +76,38 @@ void CCameraManager::Tick(_double dTimeDelta)
 	if (m_Is_Zoom_In == false && m_Is_Zoom_Out == false) {
 		m_Zoom = 0.f;
 	}
+
+
+	if (m_Is_Side_Zoom_In == true) {
+
+		m_Side_Zoom_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Side_Zoom_TimeAcc > m_Side_Zoom_Time) {
+			m_Side_Zoom_TimeAcc = 0.f;
+			m_Side_Zoom = 0.f;
+			m_Is_Side_Zoom_In = false;
+		}
+
+	}
+
+	if (m_Is_Side_Zoom_Out == true) {
+
+		m_Side_Zoom_TimeAcc += (_float)dTimeDelta;
+
+		if (m_Side_Zoom_TimeAcc > m_Side_Zoom_Time) {
+			m_Side_Zoom_TimeAcc = 0.f;
+			m_Side_Zoom = 0.f;
+			m_Is_Side_Zoom_Out = false;
+		}
+
+	}
+
+
+	if (m_Is_Side_Zoom_In == false && m_Is_Side_Zoom_Out == false) {
+		m_Side_Zoom = 0.f;
+	}
+
+
 	
 	Safe_Release(pGameInstance);
 }
@@ -159,6 +190,26 @@ void CCameraManager::Zoom_Out(_float Zoom, _float Time)
 	m_Zoom_Time = Time;
 }
 
+void CCameraManager::Side_Zoom_In(_float Zoom, _float Time)
+{
+	m_Is_Side_Zoom_In = true;
+	m_Is_Side_Zoom_Out = false;
+	m_Side_Zoom_TimeAcc = 0.f;
+
+	m_Side_Zoom -= Zoom;
+	m_Side_Zoom_Time = Time;
+}
+
+void CCameraManager::Side_Zoom_Out(_float Zoom, _float Time)
+{
+	m_Is_Side_Zoom_In = false;
+	m_Is_Side_Zoom_Out = true;
+	m_Side_Zoom_TimeAcc = 0.f;
+
+	m_Side_Zoom += Zoom;
+	m_Side_Zoom_Time = Time;
+}
+
 void CCameraManager::Zoom_Fix(_float Zoom)
 {
 	m_Zoom = Zoom;
@@ -167,6 +218,11 @@ void CCameraManager::Zoom_Fix(_float Zoom)
 _float CCameraManager::Get_Zoom()
 {
 	return m_Zoom;
+}
+
+_float CCameraManager::Get_Side_Zoom()
+{
+	return m_Side_Zoom;
 }
 
 void CCameraManager::Set_Is_Battle_LockFree(_bool Is)

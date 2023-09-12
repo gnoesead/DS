@@ -876,6 +876,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			}
+
 		}
 
 		if (83 == m_pModelCom->Get_iCurrentAnimIndex())	// 점프
@@ -893,12 +894,31 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
+		{
+			m_dSound_Move += dTimeDelta;
+			if (m_dSound_Move > 0.02f)
+			{
+				m_dSound_Move = 0.0;
+
+				if (m_iSound_Move_Index == 0)
+				{
+					m_iSound_Move_Index = 1;
+
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+				else if (m_iSound_Move_Index == 1)
+				{
+					m_iSound_Move_Index = 0;
+
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+				}
+			}
+		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
-			//_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-			//_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-			//CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_RUN_0);
-			//CSoundMgr::Get_Instance()->PlaySound(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.6f);
 			if (0 == m_iEvent_Index)	// 0.0
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			else if (1 == m_iEvent_Index)	// 0.12
@@ -913,6 +933,28 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+
+			m_dSound_Move += dTimeDelta;
+			if (m_dSound_Move > 0.02f)
+			{
+				m_dSound_Move = 0.0;
+
+				if (m_iSound_Move_Index == 0)
+				{
+					m_iSound_Move_Index = 1;
+
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+				else if (m_iSound_Move_Index == 1)
+				{
+					m_iSound_Move_Index = 0;
+
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+				}
+			}
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -1550,6 +1592,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		Use_Mp_Skill();
 		
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Skill_Normal.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+
 	}
 	
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 2.0f * m_fScaleChange, 0.07f * m_fScaleChange);
@@ -1573,6 +1618,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_pModelCom->Get_Animation()->Set_EarlyEnd(true);
 
 		Use_Mp_Skill();
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Skill_Move.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 	}
 	Go_Straight_Constant(dTimeDelta, ANIM_ATK_SKILL_MOVE, 1.5f * m_fScaleChange * m_fAtk_Move_Ratio);
 	Go_Straight_Constant(dTimeDelta, 40, 1.5f * m_fScaleChange * m_fAtk_Move_Ratio);
@@ -1595,6 +1643,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
 
 		Use_Mp_Skill();
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Skill_Up.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 	}
 	Ground_Animation_Play(37, 86);
 	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);

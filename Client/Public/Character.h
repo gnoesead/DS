@@ -12,6 +12,8 @@
 #include "StoneParticle.h"
 #include "EffectW_Manager.h"
 
+#include "SoundMgr.h"
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -162,6 +164,9 @@ protected:
 	_float4	Calculate_Dir_From_Pos(_float4 Pos);
 	_float	Calculate_Distance_From_Pos(_float4 Pos);
 
+	//사운드 용
+	void	Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, _float _vol);
+
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
 
@@ -188,6 +193,8 @@ protected:
 	void Shadow_House_Setting();
 	void Shadow_Train_Setting();
 	void Shadow_Final_Setting();
+
+
 
 protected:
 	CHARACTERDESC	m_CharacterDesc;
