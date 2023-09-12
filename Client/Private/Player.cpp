@@ -1494,7 +1494,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
-				vNextPos = XMVectorSet(118.f, 0.f, 136.6, 1.f);
+				vNextPos = XMVectorSet(118.f, 0.f, 136.6f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
 
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));

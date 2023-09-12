@@ -21,6 +21,7 @@ public:
 	typedef struct Effecttag
 	{
 		CTransform* pTransform;
+		CGameObject* pGameObject;
 
 	}EFFECTDESC;
 

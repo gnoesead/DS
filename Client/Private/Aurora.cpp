@@ -207,7 +207,7 @@ void CAurora::Reset_Data()
 
 	m_vColor = { Random::Generate_Float(0.4f, 0.7f) ,  Random::Generate_Float(0.4f, 0.7f) , 1.f };
 
-	m_fSizeSpeedX = Random::Generate_Float(0.5f, 0.7f);
+	m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
 	m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
 
 	m_fAccY = 0.f;
