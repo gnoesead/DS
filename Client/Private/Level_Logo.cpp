@@ -737,9 +737,33 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_SplashCircle.bin"), true, 5)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_SplashCircle.bin"), true, 50)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_SplashCircle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_SplashFall.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_SplashFall");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_ParticleFountain.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_ParticleFountain");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_ParticleFountainMain.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_ParticleFountainMain");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_WaterDrop.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_WaterDrop");
 		return E_FAIL;
 	}
 #pragma endregion
