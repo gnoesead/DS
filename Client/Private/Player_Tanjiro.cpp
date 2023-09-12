@@ -1254,6 +1254,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 			Jumping(4.0f * m_fScaleChange, 0.2f * m_fScaleChange);
 
 			m_pModelCom->Set_EarlyEnd(85, true);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 		if (m_isJump_Move)
 		{
@@ -1278,6 +1281,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Jump(_double dTimeDelta)
 			Jumping(4.0f * m_fScaleChange, 0.2f * m_fScaleChange);
 
 			m_pModelCom->Set_EarlyEnd(85, true);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 	}
 	//´ËºüÁü Á¡ÇÁ
