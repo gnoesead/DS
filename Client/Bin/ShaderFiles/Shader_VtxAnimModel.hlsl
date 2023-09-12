@@ -206,7 +206,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse.a = 1.f;
 
 	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
-	Out.vEmissive = vMtrlDiffuse * 0.6f;
+	Out.vEmissive = vMtrlDiffuse * 0.7f;
 	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
@@ -214,6 +214,35 @@ PS_OUT  PS_Main(PS_IN _In)
 
 	return Out;
 };
+
+
+PS_OUT  PS_Main_Akaza(PS_IN _In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
+
+	if (vMtrlDiffuse.r == 1.f && vMtrlDiffuse.g == 1.f && vMtrlDiffuse.b == 1.f)
+	{
+		vMtrlDiffuse.r = 1.f;
+		vMtrlDiffuse.g = 51.f / 255.f;
+		vMtrlDiffuse.b = 153.f / 255.f;
+	}
+
+	Out.vDiffuse = vMtrlDiffuse;
+
+	Out.vDiffuse.a = 1.f;
+
+	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
+	Out.vEmissive = vMtrlDiffuse * 0.7f;
+	Out.vDiffuse_Cha = vMtrlDiffuse;
+	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / 1.f, 0.f);
+	//(뷰 스페이스의 z, 투영 스페이스의 z, 0.f, 0.f)
+
+	return Out;
+};
+
 
 PS_OUT  PS_RimLight(PS_IN _In)
 {
@@ -492,6 +521,19 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_RimLight();
 	}
+	pass Akaza // 8
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Main_Akaza();
+	}
+	
 };
 
 

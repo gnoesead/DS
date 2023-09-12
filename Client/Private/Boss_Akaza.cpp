@@ -94,7 +94,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		Update_Trigger(dTimeDelta);
+		//Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -125,6 +125,12 @@ HRESULT CBoss_Akaza::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//if (pGameInstance->Get_DIKeyDown(DIK_))
+	{
+		m_iMeshNum++;
+	}
 
 	//Outline Render
 	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
@@ -3147,7 +3153,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		_vector     vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
 		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
 		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037, m_fLand_Y, 133.148, 1.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037.f, m_fLand_Y, 133.148.f, 1.f));
 		m_pRendererCom->Set_BackLight();
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
@@ -3933,8 +3939,8 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 	Safe_Release(pGameInstance);
 	// OutlineThickness
 
-	m_fOutlineThickness = 0.8f;
-	m_fOutlineFaceThickness = 0.f;
+	m_fOutlineThickness = 1.5f;
+	m_fOutlineFaceThickness = 0.6f;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

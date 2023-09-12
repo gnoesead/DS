@@ -310,8 +310,8 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	vector      vLook = vWorldPos - g_vCamPosition;
 
-	Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 30.f);
-
+	//Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 30.f);
+	Out.vSpecular.xyz = ( 0.f, 0.f, 0.f );
 	return Out;
 }
 
@@ -395,7 +395,7 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 
 	vector      vLook = vWorldPos - g_vCamPosition;
 
-	Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 30.f) * fAtt;
+	Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 2.f) * fAtt;
 
 	return Out;
 }
@@ -420,6 +420,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	if (vDiffuse_Cha.r == 0.f)
 	{
 		Out.vColor = vDiffuse * vShade;
+		if (fBrightness < 0.2f)
+			Out.vColor *= 0.5f;
 	}
 	else
 	{
@@ -433,7 +435,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	Out.vColor.rgb += vEmissive.rgb;
 
-	if ((fBrightness < 0.5f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
+	if ((fBrightness < 0.6f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
 
 	/*if ((fBrightness < 0.7f) && g_bBackLight == true)

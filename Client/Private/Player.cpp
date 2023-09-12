@@ -524,22 +524,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 #pragma region Test
-	if (pGameInstance->Get_DIKeyState(DIK_HOME) & 0x80)
-	{
-		++m_iNumAnim;
-		if (m_pModelCom->Get_NumAnims() <= m_iNumAnim)
-			m_iNumAnim = m_pModelCom->Get_NumAnims() - 1;
-		m_pModelCom->Set_Animation(m_iNumAnim);
-	}
-
-	if (pGameInstance->Get_DIKeyState(DIK_END) & 0x80)
-	{
-		if (0 < m_iNumAnim)
-			--m_iNumAnim;
-		if (0 > m_iNumAnim)
-			m_iNumAnim = 0;
-		m_pModelCom->Set_Animation(m_iNumAnim);
-	}
+	
 
 	if (pGameInstance->Get_DIKeyDown(DIK_V))
 	{
