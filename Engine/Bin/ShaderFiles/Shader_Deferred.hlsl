@@ -435,7 +435,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	Out.vColor.rgb += vEmissive.rgb;
 
-	if ((fBrightness < 0.5f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
+	if ((fBrightness < 0.5f) && (g_bBackLight == true) && (vDiffuse_Cha.r != 0.f))
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
 
 	/*if ((fBrightness < 0.7f) && g_bBackLight == true)

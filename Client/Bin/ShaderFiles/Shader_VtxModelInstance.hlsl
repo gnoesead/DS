@@ -121,7 +121,7 @@ PS_OUT  PS_MAIN(PS_IN In)
 
 	vNormal = mul(vNormal, WorldMatrix);
 
-	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vEmissive = vMtrlDiffuse;
 	Out.vDiffuse = vMtrlDiffuse;
 	//Out.vDiffuse_Cha = vector(0.f,0.f,0.f,0.f);
 	// In.vNormal xyz∞¢∞¢¿Ã -1 ~ 1

@@ -195,13 +195,35 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
-	{
-		_uint iLightSize = pGameInstance->Get_LightListSize();
+	_float fRange = 1.f;
 
-		for (_uint i = 1; i < iLightSize; ++i)
+	// Á¡±¤¿ø 1 Range Á¶Àý 
+	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_N))
 		{
-			_float4 vDiffuse_Point = pGameInstance->Get_Light(i)->vLightDiffuse;
+			_float fLightRange = pGameInstance->Get_Light(1)->fLightRange;
+
+			fLightRange -= fRange;
+
+			pGameInstance->Set_Light(1, 4, _float4(fLightRange, 0.f, 0.f, 0.f));
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_M))
+		{
+			_float fLightRange = pGameInstance->Get_Light(1)->fLightRange;
+
+			fLightRange += fRange;
+
+			pGameInstance->Set_Light(1, 4, _float4(fLightRange, 0.f, 0.f, 0.f));
+		}
+	}
+	else
+	{
+		// Á¡±¤¿ø 1 µðÇ»Áî Á¶Àý 
+		if (pGameInstance->Get_DIKeyDown(DIK_N))
+		{
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(1)->vLightDiffuse;
 
 			vDiffuse_Point.x -= 0.05f;
 			vDiffuse_Point.y -= 0.05f;
@@ -216,18 +238,12 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 			if (vDiffuse_Point.z < 0.f)
 				vDiffuse_Point.z = 0.f;
 
-			pGameInstance->Set_Light(i, 1, vDiffuse_Point);
+			pGameInstance->Set_Light(1, 1, vDiffuse_Point);
 		}
 
-	}
-
-	if (pGameInstance->Get_DIKeyDown(DIK_M))
-	{
-		_uint iLightSize = pGameInstance->Get_LightListSize();
-
-		for (_uint i = 1; i < iLightSize; ++i)
+		if (pGameInstance->Get_DIKeyDown(DIK_M))
 		{
-			_float4 vDiffuse_Point = pGameInstance->Get_Light(i)->vLightDiffuse;
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(1)->vLightDiffuse;
 
 			vDiffuse_Point.x += 0.05f;
 			vDiffuse_Point.y += 0.05f;
@@ -242,9 +258,73 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 			if (vDiffuse_Point.z > 1.f)
 				vDiffuse_Point.z = 1.f;
 
-			pGameInstance->Set_Light(i, 1, vDiffuse_Point);
+			pGameInstance->Set_Light(1, 1, vDiffuse_Point);
+		}
+	}
+
+	// Á¡±¤¿ø 2 Range Á¶Àý 
+	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	{
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+		{
+			_float fLightRange = pGameInstance->Get_Light(2)->fLightRange;
+
+			fLightRange -= fRange;
+
+			pGameInstance->Set_Light(2, 4, _float4(fLightRange, 0.f, 0.f, 0.f));
 		}
 
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+		{
+			_float fLightRange = pGameInstance->Get_Light(2)->fLightRange;
+
+			fLightRange += fRange;
+
+			pGameInstance->Set_Light(2, 4, _float4(fLightRange, 0.f, 0.f, 0.f));
+		}
+	}
+	else
+	{
+		// Á¡±¤¿ø 2 µðÇ»Áî Á¶Àý 
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
+		{
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(2)->vLightDiffuse;
+
+			vDiffuse_Point.x -= 0.05f;
+			vDiffuse_Point.y -= 0.05f;
+			vDiffuse_Point.z -= 0.05f;
+
+			if (vDiffuse_Point.x < 0.f)
+				vDiffuse_Point.x = 0.f;
+
+			if (vDiffuse_Point.y < 0.f)
+				vDiffuse_Point.y = 0.f;
+
+			if (vDiffuse_Point.z < 0.f)
+				vDiffuse_Point.z = 0.f;
+
+			pGameInstance->Set_Light(2, 1, vDiffuse_Point);
+		}
+
+		if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+		{
+			_float4 vDiffuse_Point = pGameInstance->Get_Light(2)->vLightDiffuse;
+
+			vDiffuse_Point.x += 0.05f;
+			vDiffuse_Point.y += 0.05f;
+			vDiffuse_Point.z += 0.05f;
+
+			if (vDiffuse_Point.x > 1.f)
+				vDiffuse_Point.x = 1.f;
+
+			if (vDiffuse_Point.y > 1.f)
+				vDiffuse_Point.y = 1.f;
+
+			if (vDiffuse_Point.z > 1.f)
+				vDiffuse_Point.z = 1.f;
+
+			pGameInstance->Set_Light(2, 1, vDiffuse_Point);
+		}
 	}
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {

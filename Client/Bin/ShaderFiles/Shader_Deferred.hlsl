@@ -229,8 +229,8 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	}
 	else
 	{
-		vLuminace = saturate(vLuminace);
-		vLuminace = ceil(vLuminace * 3.f) / 3.f;
+		/*vLuminace = saturate(vLuminace);
+		vLuminace = ceil(vLuminace * 3.f) / 3.f;*/
 	}
 
 
@@ -435,8 +435,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	Out.vColor.rgb += vEmissive.rgb;
 
-	if ((fBrightness < 0.5f) && g_bBackLight == true && vDiffuse_Cha.r != 0.f)
-		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
+	/*if ((fBrightness < 0.5f) && (g_bBackLight == true) && (vDiffuse_Cha.r != 0.f))
+		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	/*if ((fBrightness < 0.7f) && g_bBackLight == true)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/

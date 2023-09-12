@@ -3005,6 +3005,12 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+		m_fFar2 = 400.f;
+	else
+		m_fFar2 = 1.f;
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fFar2", &m_fFar2, sizeof(_float))))
+		return E_FAIL;
 		
 	Safe_Release(pGameInstance);
 
