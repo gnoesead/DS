@@ -159,6 +159,8 @@ private:
 private:
 	_double m_dWaterEffectAccTime = { 0.0 };	// 물에 빠졌을때 이펙트 용(안원)
 
+	_double m_dAwakenParticleAccTime = { 0.0 };
+
 
 private:
 	HRESULT Add_Components();

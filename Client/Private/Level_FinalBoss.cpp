@@ -155,6 +155,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
+	// Direction Á¶Àý
 	if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
 	{
 		_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
