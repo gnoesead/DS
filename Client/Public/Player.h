@@ -228,6 +228,12 @@ protected: //사운드 용
 	_int	m_iSound_Move_Index = { 0 };
 	_double m_dSound_Move = { 0.0 };
 
+	_int	m_iSound_Atk_Small = { 0 };
+	_int	m_iSound_Atk_Medium = { 0 };
+	_int	m_iSound_Atk_Big = { 0 };
+
+	//이벤트콜
+	_int	m_iSave_AnimIndex = { 0 };
 
 protected: // 애니메이션 제어용 변수들
 	PLAYERMOVESET  m_Moveset;
