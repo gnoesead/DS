@@ -1697,7 +1697,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 			CMonsterManager::GetInstance()->Plus_ThreeCnt();
 
-			pGameInstance->Time_Slow(0.5, 0.4);
+			pGameInstance->Time_Slow(0.6, 0.3);
 		}
 	}
 #pragma endregion
