@@ -623,7 +623,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
-				Side_Zoom_Out
+				CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 2.f);
 				
 			}
 			if (1 == m_iEvent_Index)
