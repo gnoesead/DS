@@ -216,11 +216,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 
-
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
-			return;
-		if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_SHADOWDEPTH, this)))
-			return;
 	}
 	
 	_float4 TestPos;
@@ -292,10 +287,30 @@ HRESULT CPlayer_Tanjiro::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(1);
+			{
+				if (m_isSkilling == false)
+					m_pShaderCom->Begin(1);
+				else
+				{					
+					m_pShaderCom->Begin(5);
+				}
+			}
 
 			m_pModelCom->Render(m_iMeshNum);
 		}
+		//// RimLight
+		//for (_uint i = 0; i < iNumMeshes; i++)
+		//{
+		//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+		//		return E_FAIL;
+
+		//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
+		//		return E_FAIL;
+
+		//	m_pShaderCom->Begin(7);
+
+		//	m_pModelCom->Render(i);
+		//}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
 		{
@@ -309,6 +324,7 @@ HRESULT CPlayer_Tanjiro::Render()
 
 			m_pModelCom->Render(i);
 		}
+		
 #pragma endregion
 	}
 	return S_OK;
@@ -316,54 +332,8 @@ HRESULT CPlayer_Tanjiro::Render()
 
 HRESULT CPlayer_Tanjiro::Render_ShadowDepth()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render_ShadowDepth()))
 		return E_FAIL;
-
-	
-
-	_vector vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_vector   vLightEye = vPlayerPos + XMVectorSet(-5.f, 10.f, -5.f, 1.f);
-	_vector   vLightAt = vPlayerPos;
-	//_vector   vLightAt = XMVectorSet(60.f, 0.f, 60.f, 1.f);
-	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
-
-
-	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
-	_float4x4   FloatLightViewMatrix;
-	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ViewMatrix",
-		&FloatLightViewMatrix)))
-		return E_FAIL;
-
-	_matrix      LightProjMatrix;
-	_float4x4   FloatLightProjMatrix;
-
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
-	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
-
-	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix",
-		&FloatLightProjMatrix)))
-		return E_FAIL;
-
-
-	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (_uint i = 0; i < iNumMeshes; i++)
-	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		m_pShaderCom->Begin(3);
-
-		m_pModelCom->Render(i);
-	}
 	
 	return S_OK;
 }
@@ -675,6 +645,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				m_pRendererCom->Set_BloomRatio(0.25f);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 				
@@ -713,8 +684,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+			}
+			if (1 == m_iEvent_Index)
+			{
+				m_pRendererCom->Set_BloomRatio(1.f);				
 			}
 			
 		}
@@ -3025,14 +3001,7 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-
-	
-	// 슈퍼아머 상태 넣어주셈
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_isSkilling, sizeof(_bool))))
-		return E_FAIL;
-
-
-
+		
 	Safe_Release(pGameInstance);
 
 	return S_OK;

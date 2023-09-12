@@ -23,7 +23,7 @@ matrix         g_matLightView;
 
 float g_fRadius;
 float g_fBias;
-float g_fFar = 300.f;
+float g_fFar = 400.f;
 
 float3 g_vRandom[16] =
 {
@@ -202,7 +202,7 @@ PS_OUT PS_BlurX(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 
 
@@ -228,7 +228,7 @@ PS_OUT PS_BlurY(PS_IN _In)
 		Out.vColor += Weight[12 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= Total;
+	Out.vColor /= Total * 0.5f;
 
 	if (Out.vColor.a == 0.f)
 		discard;

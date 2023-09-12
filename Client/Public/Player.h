@@ -141,7 +141,7 @@ public:
 	virtual void	Tick(_double dTimeDelta) override;
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
-	virtual HRESULT Render_ShadowDepth();
+	virtual HRESULT Render_ShadowDepth() override;
 
 
 public:
@@ -156,6 +156,7 @@ public:
 	_vector Get_Dir_To_LockOnPos();
 	_int	Get_Section() { return m_iSection; }
 	_int	Get_Section_Sub() { return m_iSection_Sub; }
+
 
 	//히트 관련 시그널 트리거
 	void	Set_Hit_SurgeCutScene(_bool Hit) { m_isHit_SurgeCutScene = Hit; }
@@ -189,7 +190,7 @@ protected:
 	void	Player_Change_Setting_Status(_double dTimeDelta);
 
 protected:
-	
+
 	_double m_dDelay_Player_Change = { 0.0 };
 
 	_double		m_dDelay_Swapping_Pos = { 0.0 };
@@ -217,7 +218,7 @@ protected:
 	//스왑시
 	_bool		m_isSwap_OnSky = { false };
 	_bool		m_isSwapping_State = { false };
-	
+
 	//공격시 거리줄임.
 	_float	m_fAtk_Move_Ratio = { 0.7f };
 	_float	m_fDmg_Move_Ratio = { 0.65f };
@@ -339,8 +340,10 @@ protected:
 
 protected:
 	// 맵 이동 변수(안원)
-	enum CHANGE_POSITONTYPE { CHANGE_POSITON_HOUSE_1A, CHANGE_POSITON_HOUSE_1B, CHANGE_POSITON_HOUSE_2A, CHANGE_POSITON_HOUSE_2B,
-							CHANGE_POSITON_VILLAGE_1A, CHANGE_POSITON_VILLAGE_1B, CHANGE_POSITON_END };
+	enum CHANGE_POSITONTYPE {
+		CHANGE_POSITON_HOUSE_1A, CHANGE_POSITON_HOUSE_1B, CHANGE_POSITON_HOUSE_2A, CHANGE_POSITON_HOUSE_2B,
+		CHANGE_POSITON_VILLAGE_1A, CHANGE_POSITON_VILLAGE_1B, CHANGE_POSITON_END
+	};
 
 	_bool	m_bChangePositionTrigger[CHANGE_POSITON_END] = { false };
 	_bool	m_bChangePosition[CHANGE_POSITON_END] = { false };
