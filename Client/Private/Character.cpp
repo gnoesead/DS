@@ -874,6 +874,12 @@ _float CCharacter::Calculate_Distance_From_Pos(_float4 Pos)
 	return fDistance;
 }
 
+void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, _float _vol)
+{
+	CSoundMgr::Get_Instance()->StopSound(eID);
+	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);

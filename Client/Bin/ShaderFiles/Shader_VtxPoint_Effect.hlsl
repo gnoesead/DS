@@ -51,6 +51,8 @@ float3			g_vAxis = { 0.f, 1.f, 0.f };
 
 float3			g_vSize;
 
+float           g_Black_Cull_Amount = { 0.3f };
+
 /* 셰이더란 무엇인가?! */
 
 /* 셰이더 : 사용자정의 렌더링 파이프 라인. */
@@ -977,10 +979,12 @@ PS_OUT PS_DIFF_CALCRED_DISSOLVE(PS_IN In)
 
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
-	if (vDiffuse.r < 0.1)
-		discard;
 
-	Out.vColor.a = vDiffuse.r;
+	float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
+
+	vDiffuse.a *= amount;
+
+	vDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vColor = vDiffuse;
 
@@ -1074,12 +1078,13 @@ PS_OUT PS_DIFF_CALCRED_DISSOLVE_SPRITE(PS_IN In)
 	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
 		g_vCurTile.y + UVY * g_vTileSize.y);
 
-	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
 
-	if (vDiffuse.r < 0.1)
-		discard;
+	float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
 
-	Out.vColor.a = vDiffuse.r;
+	vDiffuse.a *= amount;
+
+	vDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vColor = vDiffuse;
 
@@ -1163,7 +1168,7 @@ PS_OUT PS_DIFF_DISSOLVE_SPRITE(PS_IN In)
 	float2 spriteUV = float2(g_vCurTile.x + UVX * g_vTileSize.x,
 		g_vCurTile.y + UVY * g_vTileSize.y);
 
-	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
 
 	vector vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
 

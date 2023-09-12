@@ -148,6 +148,8 @@ private: //애니메이션 제어용 변수들
 
 	_bool	m_isSwampUpper = { false };
 
+	
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
@@ -156,6 +158,8 @@ private:
 
 private:
 	_double m_dWaterEffectAccTime = { 0.0 };	// 물에 빠졌을때 이펙트 용(안원)
+
+	_double m_dAwakenParticleAccTime = { 0.0 };
 
 
 private:
