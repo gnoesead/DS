@@ -443,6 +443,112 @@ PS_OUT  PS_MASKRAMPALPHA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_DIFF_RM_MAGENTA(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+
+	if (Out.vColor.g <= 0.2f && Out.vColor.r >= 0.8f && Out.vColor.b >= 0.8f)
+		discard;
+
+	Out.vColor.a *= In.vAdditional.y;
+	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT  PS_DIFF_RM_MAGENTA_DISSOLVE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+
+	if (Out.vColor.g <= 0.2f && Out.vColor.r >= 0.8f && Out.vColor.b >= 0.8f)
+		discard;
+
+	Out.vColor.a *= In.vAdditional.y;
+	Out.vColor.a *= g_fAlpha;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT  PS_DIFF_CALCRED(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+
+	Out.vColor.a = vColor.r;
+
+	Out.vColor.a *= In.vAdditional.y;
+	Out.vColor.a *= g_fAlpha;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
+PS_OUT  PPS_DIFF_CALCRED_DISSOLVE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	vector	vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	Out.vColor = vColor;
+
+	Out.vColor.a = vColor.r;
+
+	Out.vColor.a *= In.vAdditional.y;
+	Out.vColor.a *= g_fAlpha;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {		
 	pass General		// 0
@@ -551,5 +657,53 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_MASKRAMPALPHA();
+	}
+
+	pass DiffuseRemoveMagenta		// 9
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFF_RM_MAGENTA();
+	}
+
+	pass DiffuseRemoveMagentaDissolve		// 10
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFF_RM_MAGENTA_DISSOLVE();
+	}
+
+	pass DiffuseCalcRed		// 11
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_DIFF_CALCRED();
+	}
+
+	pass DiffuseCalcRedDissolve		// 12
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PPS_DIFF_CALCRED_DISSOLVE();
 	}
 }
