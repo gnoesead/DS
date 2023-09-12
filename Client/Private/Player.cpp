@@ -356,7 +356,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Big = true;
 			}
 
-			pGameInstance->Time_Slow(0.4, 0.3);
+			//pGameInstance->Time_Slow(0.4, 0.3);
 		}
 
 
@@ -380,7 +380,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Blow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			pGameInstance->Time_Slow(0.6, 0.5);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
@@ -403,7 +403,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_BigBlow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			pGameInstance->Time_Slow(0.6, 0.5);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
@@ -465,7 +465,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_isWebbing = true;
 			m_dDelay_Webbing = 0.0;
 
-			//pGameInstance->Time_Slow(0.2, 0.2);
+			
 		}
 		if (m_isWebbing)
 		{
@@ -500,7 +500,6 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_SwampUpper = true;
 			}
 
-			pGameInstance->Time_Slow(0.3, 0.5);
 		}
 		Safe_Release(pGameInstance);
 	}
