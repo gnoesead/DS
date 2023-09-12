@@ -19,12 +19,16 @@ class CAurora final : public CMasterEffect
 {
 public:
 	enum TYPE{TYPE_LOCAL , TYPE_WORLD};
+	enum CHARACTER { CHARACTER_TANJIRO, CHARACTER_KYOGAI , CHARACTER_AKAZA };
+	enum COLOR {COLOR_BLUE , COLOR_RED , COLOR_PURPLE};
 public:
 	typedef struct Effecttag
 	{
 		CTransform* pTransform;
 		class CCharacter* pGameObject;
 		TYPE eType;
+		CHARACTER eCharacter;
+		COLOR eColor;
 
 	}EFFECTDESC;
 
@@ -89,6 +93,8 @@ private:
 	_float3					m_vColor = { 0.f , 0.f , 0.f };
 
 	_float4					m_vInitialPos = { 0.f , 0.f , 0.f  , 0.f};
+
+	_float					m_fMaxAlpha = { 0.f };
 
 public:
 	static CAurora* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

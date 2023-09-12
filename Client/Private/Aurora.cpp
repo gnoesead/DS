@@ -47,6 +47,11 @@ void CAurora::Tick(_double TimeDelta)
 	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
 		return;
 
+	m_fAlpha += 0.5f * (_float)TimeDelta;
+
+	if (m_fAlpha > m_fMaxAlpha)
+		m_fAlpha = m_fMaxAlpha;
+
 	__super::Tick(TimeDelta);
 
 	m_fAccY += (_float)m_dSpeedY * (_float)TimeDelta;
@@ -137,10 +142,27 @@ HRESULT CAurora::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_RampTexture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp07"),
-		TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
-		return E_FAIL;
-
+	switch (m_EffectDesc.eColor)
+	{
+	case COLOR_BLUE:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp07"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	case COLOR_RED:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_ramp_ef_en300900110_red #3417236"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	case COLOR_PURPLE:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_ramp_ef_fire_torch_purple01 #1497231"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	default:
+		break;
+	}
+	
 	return S_OK;
 }
 
@@ -212,22 +234,51 @@ void CAurora::Reset_Data()
 
 	m_dSpeedY = (_double)Random::Generate_Float(0.1f, 0.3f);
 
-	m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
-	m_fPlusY = Random::Generate_Float(0.f, 1.f);
-	m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
-
-	m_fAlpha = 0.05f;
-
-	m_vColor = { Random::Generate_Float(0.4f, 0.7f) ,  Random::Generate_Float(0.4f, 0.7f) , 1.f };
-
-	m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
-	m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
-
 	m_fAccY = 0.f;
 
-	m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+	m_iFrame = Random::Generate_Int(8, 10);
 
-	m_iFrame = Random::Generate_Int(0, 10);
+	m_fAlpha = 0.f;
+
+	if (m_EffectDesc.eCharacter == CHARACTER_KYOGAI)
+	{
+		m_fPlusX = Random::Generate_Float(-1.f, 1.0f);
+		m_fPlusY = Random::Generate_Float(0.f, 2.5f);
+		m_fPlusZ = Random::Generate_Float(-1.0f, 1.0f);
+
+		m_fMaxAlpha = 0.2f;
+
+		m_vSize = { Random::Generate_Float(1.0f, 1.4f),Random::Generate_Float(1.0f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(1.5f, 1.8f);
+		m_fSizeSpeedY = Random::Generate_Float(1.5f, 1.7f);
+
+		
+	}
+	else if (m_EffectDesc.eCharacter == CHARACTER_AKAZA)
+	{
+		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
+		m_fPlusY = Random::Generate_Float(0.f, 1.3f);
+		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+
+		m_fMaxAlpha = 0.2f;
+
+		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+		m_fSizeSpeedY = Random::Generate_Float(0.7f, 0.9f);
+	}
+	else if (m_EffectDesc.eCharacter == CHARACTER_TANJIRO)
+	{
+		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
+		m_fPlusY = Random::Generate_Float(0.f, 1.f);
+		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+
+		m_fMaxAlpha = 0.15f;
+
+		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+		m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
+
+	}
 
 	if (m_EffectDesc.eType == TYPE_WORLD)
 	{

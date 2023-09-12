@@ -737,7 +737,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Aurora_Particle0.bin"), true, 60)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Aurora_Particle0.bin"), true, 30)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Aurora_Particle0");
 		return E_FAIL;
