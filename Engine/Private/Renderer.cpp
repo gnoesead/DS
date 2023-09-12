@@ -1407,10 +1407,10 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pEffectShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurY"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
-		return E_FAIL;
-	//if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectCombineBlur"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
-	//    return E_FAIL;
+	//if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurY"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
+	//	return E_FAIL;
+	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectCombineBlur"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
+	    return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BloomTextrue"))) // 블룸 -> 밝은 부분만 추출
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_FinalTexture"))) // 디퍼드 최종 텍스처
@@ -2247,7 +2247,7 @@ void CRenderer::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 40.f, -5.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 
@@ -2270,7 +2270,7 @@ void CRenderer::Shadow_Village_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
@@ -2284,7 +2284,7 @@ void CRenderer::Shadow_House_Setting()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"),m_iPlayerIdx, TEXT("Com_Transform")));
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), m_iPlayerIdx, TEXT("Com_Transform")));
 
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
@@ -2294,13 +2294,9 @@ void CRenderer::Shadow_House_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 3.f, -5.f, 1.f);
-		vLightAt = vPlayerPos;		
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
+		vLightAt = vPlayerPos;
 	}
-
-	// 자코방
-
-	// 쿄우가이방
 
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
@@ -2311,16 +2307,50 @@ void CRenderer::Shadow_House_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280.f) / _float(720.f), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
+
 
 	Safe_Release(pGameInstance);
 }
 
 void CRenderer::Shadow_Train_Setting()
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), m_iPlayerIdx, TEXT("Com_Transform")));
+
+	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
+	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	if (pPlayerTransformCom != nullptr)
+	{
+		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		vLightEye = vPlayerPos + XMVectorSet(-20.f, 40.f, -20.f, 1.f);
+		vLightAt = vPlayerPos;
+	}
+
+	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4   FloatLightViewMatrix;
+	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+
+	m_pShader->SetUp_Matrix("g_matLightView", &FloatLightViewMatrix);
+
+	_matrix      LightProjMatrix;
+	_float4x4   FloatLightProjMatrix;
+
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 400.f);
+	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+
+	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
+
+	Safe_Release(pGameInstance);
+
 }
 
 void CRenderer::Shadow_Final_Setting()
@@ -2338,7 +2368,7 @@ void CRenderer::Shadow_Final_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280.f) / _float(720.f), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280.f) / _float(720.f), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);

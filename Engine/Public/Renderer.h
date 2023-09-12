@@ -50,7 +50,7 @@ public:
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
 	void Set_SSAO(_bool Is) { m_bSSAOSwitch = Is; }
-	void Set_BloomRatio(_float fBloomRatio = 0.99f) {
+	void Set_BloomRatio(_float fBloomRatio = 0.90f) {
 		m_fBrigthRatio = fBloomRatio;
 	}
 	void Set_Village_Battle(_bool Is) { m_bVillage_Battle = Is; }
@@ -148,7 +148,7 @@ private:
 	//_float					m_fSSAORadius = { 0.005f };
 	_float					m_fBrigthRatio = { 0.90f };
 	_float					m_fParticle_BrightRatio = { 0.8f };
-	_float					m_fBloomPower = { 1.f };
+	_float					m_fBloomPower = { 1.75f };
 	_float					m_fBlurWeight = { 0.75f };
 
 private:

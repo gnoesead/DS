@@ -150,49 +150,19 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	/*if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-	{
-		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_BULLET)
-		{
-			_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float vPosX = XMVectorGetX(vPos);
-			_float vPosZ = XMVectorGetZ(vPos);
-			if (((147.f < vPosX) || (vPosX < 110.f)) || ((147.f < vPosZ) || (vPosZ < 110.f)))
-			{
-				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
-				Reset_Dead();				
-			}
-			if (m_pColliderCom->Get_Coll() == true)
-				Reset_Dead();
-		}
-		
-		
-	}*/
-
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
 	{
-		if (m_AtkCollDesc.bBullet == true)
-		{
-			if (m_dTimeAcc > 0.5)
-			{
-				if (m_bLineOut == false)
-				{
-					m_dEffectAcc += dTimeDelta;
-					if (m_dEffectAcc > 0.05)
-					{
-						m_dEffectAcc = 0.0;
-
- 						//Create_GroundSmoke(CGroundSmoke::SMOKE_BLADE );
-					}
-				}
-			}
-		}
-		Check_OutLine();
+		Level_House_Dead(dTimeDelta);
 	}
-
-
-	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
+	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	{
+		Level_FinalBoss_Dead(dTimeDelta);
+	}
+	else
+	{
+		if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 		Reset_Dead();
+	}
 
 	Safe_Release(pGameInstance);
 #ifdef _DEBUG
@@ -205,7 +175,7 @@ HRESULT CAtkCollider::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	
+
 
 	return S_OK;
 }
@@ -221,7 +191,7 @@ void CAtkCollider::Update_Trigger(_double dTimeDelta)
 	case CAtkCollider::TYPE_BULLET:
 		Tick_BaseBullet(dTimeDelta);
 		break;
-	case CAtkCollider::TYPE_BULLET_AKAZA:
+	case CAtkCollider::TYPE_AKAZA_BULLET_EFFECT:
 		Tick_AkazaBullet(dTimeDelta);
 		break;
 	case CAtkCollider::TYPE_KYOGAI_BULLET:
@@ -256,7 +226,7 @@ void CAtkCollider::Setting_Trigger()
 	case CAtkCollider::TYPE_BULLET:
 		Setting_BaseBullet();
 		break;
-	case CAtkCollider::TYPE_BULLET_AKAZA:
+	case CAtkCollider::TYPE_AKAZA_BULLET_EFFECT:
 		Setting_AkazaBullet();
 		break;
 	case CAtkCollider::TYPE_KYOGAI_BULLET:
@@ -296,6 +266,17 @@ void CAtkCollider::Tick_BaseBullet(_double dTimeDelta)
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
 		m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+		// 두번 째 인자에 원하는 원하는 시간(주기 넣어주면 됨)
+		if (Event_Time(dTimeDelta, 0.10, m_dTimeAcc))
+		{
+			//이펙트 추가
+
+		}
+		if (Event_Time(dTimeDelta, 0.20, m_dTimeAcc))
+		{
+			//이펙트 추가
+
+		}
 
 	}
 
@@ -562,6 +543,65 @@ void CAtkCollider::Setting_WebBullet_Full()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
 }
 
+void CAtkCollider::Level_House_Dead(_double dTimeDelta)
+{
+	if (m_AtkCollDesc.bBullet == true)
+	{
+		if (m_dTimeAcc > 0.5)
+		{
+			if (m_bLineOut == false)
+			{
+				m_dEffectAcc += dTimeDelta;
+				if (m_dEffectAcc > 0.05)
+				{
+					m_dEffectAcc = 0.0;
+
+					//Create_GroundSmoke(CGroundSmoke::SMOKE_BLADE );
+				}
+			}
+		}
+	}
+	Check_OutLine();
+
+	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
+		Reset_Dead();
+}
+
+void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta)
+{
+	if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_BULLET)
+	{
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		_float vPosX = XMVectorGetX(vPos);
+		_float vPosY = XMVectorGetY(vPos);
+		_float vPosZ = XMVectorGetZ(vPos);
+
+		if ( (157.f < vPosX) || (vPosX < 100.f) || (157.f < vPosZ) || (vPosZ < 100.f) || (vPosY < 0.f))
+		{
+			if (vPosY < 0.1f)
+			{
+				//아카자 개방 장풍 땅에 닿았을 때 이펙트 여기에 추가
+
+			}
+			CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+			Reset_Dead();
+		}
+		if (m_AtkObj.size() >= 1)
+			Reset_Dead();
+	}
+	
+	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
+	{
+		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_AKAZA_BULLET_EFFECT)
+		{
+			//아카자 와다다다패턴 이펙트 죽기전 파티클
+
+		}
+		Reset_Dead();
+	}
+}
+
 void CAtkCollider::Check_OutLine()
 {
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -646,14 +686,14 @@ void CAtkCollider::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvec
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_BLADE:
-		
+
 		EffectWDesc.vStartPosX = { -0.f,0.f }; EffectWDesc.vStartPosY = { 0.0f,0.2f }; EffectWDesc.vStartPosZ = { 5.0f,5.0 };
 		EffectWDesc.vFrameSpeed = { 0.005f , 0.010f };
 		EffectWDesc.vStartSizeX = { 0.5f ,	1.0f }; EffectWDesc.vStartSizeY = { 0.5f , 1.0f };
 		EffectWDesc.vSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.5f , 1.0f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSizeSpeedY = { 0.5f , 1.0f };
 		EffectWDesc.vStartFrame = { 0.f , 4.f };
-	
+
 		for (_uint i = 0; i < 1; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
