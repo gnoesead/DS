@@ -128,8 +128,8 @@ HRESULT CBoss_Akaza::Render()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	//if (pGameInstance->Get_DIKeyDown(DIK_))
-	{
-		m_iMeshNum++;
+	/*{
+		m_iMeshNum++;*/
 	}
 
 	//Outline Render
