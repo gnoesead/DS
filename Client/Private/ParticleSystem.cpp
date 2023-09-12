@@ -140,7 +140,8 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 
 				Safe_Release(pGameInstance);
 
-				m_WorldMatrix._42 = pPlayer->Get_LandY() + m_vPosition.y;
+				if(nullptr != pPlayer)
+					m_WorldMatrix._42 = pPlayer->Get_LandY() + m_vPosition.y;
 			}
 		}
 		else    // ±ψΕλ
