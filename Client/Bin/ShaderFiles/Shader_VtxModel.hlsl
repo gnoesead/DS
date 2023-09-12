@@ -18,6 +18,7 @@ float2			g_vPanningSpeed;
 float			g_fAlpha;
 float			g_fUVRatio;
 float			g_fDiffuseRatio;
+float2			g_vCustomUV;
 
 bool			g_bLiarColor;
 
@@ -78,6 +79,11 @@ struct PS_OUT
 	vector		vDepth : SV_TARGET2;
 	vector		vEmissive : SV_TARGET3;
 	vector		vDiffuse_Cha : SV_TARGET4;
+};
+
+struct PS_OUT_EFFECT
+{
+	vector		vDiffuse : SV_TARGET0;
 };
 
 struct PS_NONDEFERRED
@@ -337,6 +343,35 @@ PS_OUT  PS_REDRECT(PS_IN In)
 	return Out;
 }
 
+PS_OUT_EFFECT  PS_ALERTMESH(PS_IN _In)
+{
+	PS_OUT_EFFECT	Out = (PS_OUT_EFFECT)0;
+
+	_In.vTexUV.x += g_vCustomUV.x;
+	_In.vTexUV.y += g_vCustomUV.y;
+
+	float UVX = _In.vTexUV.x;
+	float UVY = _In.vTexUV.y;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
+	float fRamp = vMtrlDiffuse.r;
+	if (0.98f < fRamp)
+		fRamp = 0.98f;
+	float2 vGradientUV = float2(fRamp, _In.vTexUV.y);
+	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
+
+	if (0.9f > vMtrlDiffuse.a)
+		discard;
+
+	Out.vDiffuse = vMtrlRamp;
+	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
+	
+	if (0.1f > Out.vDiffuse.a)
+		discard;
+
+	return Out;
+};
+
 technique11 DefaultTechnique
 {
 	pass General // 0
@@ -486,6 +521,20 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_REDRECT();
 	}
+
+	pass AlertMesh // 12
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ALERTMESH();
+	}
+
 };
 
 
