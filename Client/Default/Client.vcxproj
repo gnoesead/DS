@@ -179,6 +179,8 @@
   <ItemGroup>
     <ClInclude Include="..\Public\Akaza_Awake_UI.h" />
     <ClInclude Include="..\Public\AlertCircle.h" />
+    <ClInclude Include="..\Public\AlertCircle_Akaza.h" />
+    <ClInclude Include="..\Public\AlertMesh_Akaza.h" />
     <ClInclude Include="..\Public\AlertRect.h" />
     <ClInclude Include="..\Public\AtkCollider.h" />
     <ClInclude Include="..\Public\AtkCollManager.h" />
@@ -303,6 +305,8 @@
   <ItemGroup>
     <ClCompile Include="..\Private\Akaza_Awake_UI.cpp" />
     <ClCompile Include="..\Private\AlertCircle.cpp" />
+    <ClCompile Include="..\Private\AlertCircle_Akaza.cpp" />
+    <ClCompile Include="..\Private\AlertMesh_Akaza.cpp" />
     <ClCompile Include="..\Private\AlertRect.cpp" />
     <ClCompile Include="..\Private\AtkCollider.cpp" />
     <ClCompile Include="..\Private\AtkCollManager.cpp" />

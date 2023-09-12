@@ -148,6 +148,8 @@ private: //애니메이션 제어용 변수들
 
 	_bool	m_isSwampUpper = { false };
 
+	
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };

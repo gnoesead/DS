@@ -2118,7 +2118,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
 
-				pGameInstance->Time_Slow(0.5, 0.4);
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 1)
@@ -2132,7 +2132,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				CSwampManager::GetInstance()->Set_Dead(m_CharacterDesc.SwampHorn);
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
 
-				pGameInstance->Time_Slow(0.5, 0.4);
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
@@ -2144,7 +2144,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 				CMonsterManager::GetInstance()->Set_BattleOn(false);
 
-				pGameInstance->Time_Slow(0.5, 0.4);
+				pGameInstance->Time_Slow(0.6, 0.3);
 			}
 		}
 	}

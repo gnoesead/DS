@@ -393,7 +393,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				// Side
 				if (m_bIs_Combo_On == true && m_bIs_Side_Off == false) {
 
-					m_fDistance = { 5.3f };
+					m_fDistance = { 5.3f + CCameraManager::GetInstance()->Get_Side_Zoom()};
 					m_vOffSet = { 0.f, 1.1f, 0.f, 0.f };
 					m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
 					m_fLookDamping = { 7.f };

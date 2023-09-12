@@ -17,6 +17,9 @@
 
 #include "MonsterManager.h"
 
+#include "AlertCircle_Akaza.h"
+#include "AlertMesh_Akaza.h"
+
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -306,6 +309,9 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 
 void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
 	CAnimation* pAnim = m_pModelCom->Get_Animation();
 	if (pAnim->Get_AnimationDesc().m_dTimeAcc == 0)
 	{
@@ -495,7 +501,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.x = 0.01f;
 				EffectWorldDesc.vPosition.y = 0.23f;
-				EffectWorldDesc.vPosition.z = 0.15f;
+				EffectWorldDesc.vPosition.z = 0.16f;
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
@@ -566,7 +572,39 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_COMBO_DOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
-			if (0 == m_iEvent_Index) // 0.75
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				
+				CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+				EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+				EffectCircleDesc.vScale = { 4.f, 4.f, 4.f };
+				EffectCircleDesc.vTime = { 1.5f, 5.f };
+				EffectCircleDesc.fLandY = { 0.05f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+				CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+				EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+				EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+				EffectMeshDesc.vTime = { 1.5f, 5.f };
+				EffectMeshDesc.fLandY = { 0.06f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				
+				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+				EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+				EffectMeshDesc.fLandY = { 0.07f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+				EffectMeshDesc.vScale = { 3.8f, 0.8f, 3.8f };
+				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+				EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+				EffectMeshDesc.fLandY = { -0.35f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+			}
+
+			if (1 == m_iEvent_Index) // 0.75
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
@@ -606,6 +644,79 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 
 		}
+
+		if (ANIM_SKILL_UP == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index) // 0.1
+			{
+
+			}
+			if (1 == m_iEvent_Index) // 0.6
+			{
+				if (m_bAwake == true)
+				{
+					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+					EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+					EffectCircleDesc.vScale = { 26.f, 26.f, 26.f };
+					EffectCircleDesc.vTime = { 0.2f, 5.f };
+					EffectCircleDesc.fLandY = { 0.04f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+					CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+					EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+					EffectMeshDesc.vScale = { 32.5f, 32.5f, 32.5f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+					EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+					EffectMeshDesc.vTime = { 0.2f, 5.f };
+					EffectMeshDesc.fLandY = { 0.05f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 32.5f, 32.5f, 32.5f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+					EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+					EffectMeshDesc.fLandY = { 0.07f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 24.7f, 0.8f, 24.7f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+					EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+					EffectMeshDesc.fLandY = { -0.35f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				}
+				else
+				{
+					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
+					EffectCircleDesc.pOwnerTransform = m_pTransformCom;
+					EffectCircleDesc.vScale = { 17.f, 17.f, 17.f };
+					EffectCircleDesc.vTime = { 0.2f, 5.f };
+					EffectCircleDesc.fLandY = { 0.04f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle_Akaza"), &EffectCircleDesc, false);
+
+					CAlertMesh_Akaza::EFFECTDESC EffectMeshDesc;
+					EffectMeshDesc.pOwnerTransform = m_pTransformCom;
+					EffectMeshDesc.vScale = { 21.25f, 21.25f, 21.25f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_0;
+					EffectMeshDesc.vCustomUV = { 0.2f, 0.f };
+					EffectMeshDesc.vTime = { 0.2f, 5.f };
+					EffectMeshDesc.fLandY = { 0.05f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 21.25f, 21.25f, 21.25f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
+					EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
+					EffectMeshDesc.fLandY = { 0.07f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+
+					EffectMeshDesc.vScale = { 16.15f, 0.8f, 16.15f };
+					EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
+					EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
+					EffectMeshDesc.fLandY = { -0.35f };
+					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				}
+				
+			}
+		}
+
 #pragma region ÆòÅ¸ÄÞº¸
 		if (ANIM_COMBO1 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -941,6 +1052,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		m_iEvent_Index++;
 	}
+
+	Safe_Release(pGameInstance);
 }
 void CBoss_Akaza::Update_AnimIndex(_uint iAnimIndex)
 {
@@ -2560,8 +2673,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 					{
 						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 						EffectWorldDesc.vPosition.y = 1.5f;
-						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom);
-						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Big", m_pTransformCom, &EffectWorldDesc);
+						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom, &EffectWorldDesc);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 					}
