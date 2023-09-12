@@ -106,6 +106,8 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 	CAurora::EFFECTDESC AuroraDesc;
 	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
 
 	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 	for(_uint i = 0 ; i < 35 ; ++i)
@@ -219,6 +221,21 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	_float4 TestPos;
 	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_int ak = 47;
+
+	if (m_Moveset.m_iAwaken != 0)
+	{
+		m_isAuroraOn = true;
+
+		m_dAwakenParticleAccTime += dTimeDelta;
+
+		if (m_dAwakenParticleAccTime > 0.4)
+		{
+			CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom); 
+			m_dAwakenParticleAccTime = 0.0;
+		}
+	}
+	else
+		m_isAuroraOn = false;
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)

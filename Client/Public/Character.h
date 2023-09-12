@@ -263,7 +263,7 @@ protected:
 	//zenitsu용 그라운드 공격취소
 	_bool	m_isGroundAttackFalse = { false };
 
-private:
+protected:
 	_bool	m_isAuroraOn = { false };
 	
 protected:
