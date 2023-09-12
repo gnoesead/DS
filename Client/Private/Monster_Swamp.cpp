@@ -232,6 +232,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 		Safe_AddRef(pGameInstnace);
 		_uint iCurIdx = pGameInstnace->Get_CurLevelIdx();
 
+	
 		if (3 == m_pModelCom->Get_iCurrentAnimIndex()) //jumpstomp 준비자세
 		{
 			if (0 == m_iEvent_Index)	// 0.23초
@@ -699,6 +700,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
 	{
+		CSwampManager::GetInstance()->Set_Dmg(10.0f);
 		m_eCurState = STATE_ATTACK;
 		m_eCurPattern = PATTERN_TELESHORYU;
 	}

@@ -13,6 +13,7 @@
 #include "EffectW_Manager.h"
 
 #include "SoundMgr.h"
+#include "Aurora.h"
 
 BEGIN(Engine)
 class CModel;

@@ -76,8 +76,25 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
-	return S_OK;
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+	AuroraDesc.eCharacter = CAurora::CHARACTER_AKAZA;
 
+	AuroraDesc.eColor = CAurora::COLOR_RED;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	Safe_Release(pGameInstance);
+
+
+	return S_OK;
 }
 
 void CBoss_Akaza::Tick(_double dTimeDelta)
@@ -106,6 +123,8 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
+	if(m_isAuroraOn && !m_bAwake )
+		m_isAuroraOn = false;
 }
 
 void CBoss_Akaza::LateTick(_double dTimeDelta)
@@ -511,6 +530,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
+
+				m_isAuroraOn = true;
 			}
 		}
 
@@ -2683,6 +2704,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom, &EffectWorldDesc);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
+						Camera_Shake(1.0);
+						
+
 					}
 					else
 					{
@@ -2693,9 +2717,15 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 5.f);
-					}
-					Camera_Shake();
 
+						Create_StoneParticle(CStoneParticle::STONE_AKAZA_STOMPDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI , XMVectorSet(0.f , 0.5f , 0.f , 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+						Camera_Shake(1.0);
+					}
 				}
 
 				Pos.y = m_fLand_Y;
@@ -2709,10 +2739,6 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			}
 		}
 	}
-
-
-
-
 }
 
 void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
