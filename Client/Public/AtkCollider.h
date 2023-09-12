@@ -10,7 +10,6 @@ BEGIN(Engine)
 
 #ifdef _DEBUG
 class CRenderer;
-class CNavigation;
 #endif // _DEBUG
 END
 
@@ -21,7 +20,7 @@ class CAtkCollider final : public CGameObject
 public:
 	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_WEB, TYPE_EFFECT, TYPE_END };
 	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAI_BULLET, TYPE_KYOGAI_DELAY_BULLET, TYPE_KYOGAI_VERTICAL_BULLET, TYPE_KYOGAI_HORIZON_BULLET, TYPE_KYOGAI_LIAR_BULLET,
-		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_BULLET_AKAZA, TYPE_BULLET_END };
+		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_AKAZA_BULLET_EFFECT, TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
 	{
@@ -100,10 +99,17 @@ private:
 	void	Setting_WebBullet();
 	void	Setting_WebBullet_Full();
 
+	void	Level_House_Dead(_double dTimeDelta);
+	void	Level_FinalBoss_Dead(_double dTimeDelta);
+
 private:
 	void	Check_OutLine();
 	void	Reset_Dead();
 
+private:
+	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
+		return dTime < dTimeAcc && dTimeAcc <= dTime + dTimeDelta;
+	}
 private:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f , 0.f , 0.f , 0.f });
 

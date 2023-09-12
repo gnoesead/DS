@@ -272,9 +272,9 @@ protected:
 
 protected:
 	_float	m_fFar2 = { 1.f };
-
-private:
 	_bool	m_isAuroraOn = { false };
+private:
+	
 
 
 
