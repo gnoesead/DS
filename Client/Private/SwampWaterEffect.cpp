@@ -72,7 +72,7 @@ void CSwampWaterEffect::LateTick(_double TimeDelta)
 
 	m_pTransformCom->LookAt(m_vTargetPos);
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONBLEND, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
 		return;
 
 	Compute_ViewZ(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
