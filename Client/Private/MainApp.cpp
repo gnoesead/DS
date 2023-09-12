@@ -100,8 +100,6 @@ HRESULT CMainApp::Initialize()
 		return E_FAIL;
 	}
 
-	
-
 	return S_OK;
 }
 

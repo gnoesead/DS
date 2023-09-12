@@ -1139,6 +1139,18 @@ void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fv
 		for (_uint i = 0; i < 80; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
 		break;
+	case CStoneParticle::STONE_AKAZA_STOMPDOWN:
+		EffectWDesc.vStartPosX = { -3.f,3.f }; EffectWDesc.vStartPosY = { -0.00f,2.f }; EffectWDesc.vStartPosZ = { -3.f,3.f };
+		EffectWDesc.vStartSizeX = { 0.1f , 0.5f }; EffectWDesc.vStartSizeY = { 0.1f , 0.7f };
+		EffectWDesc.vSpeedX = { -12.f , 12.f }; EffectWDesc.vSpeedY = { 3.f , 25.f }; EffectWDesc.vSpeedZ = { -12.f , 12.f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 30.0f;
+		EffectWDesc.vColor = { 0.0f , 0.2f };
+		EffectWDesc.bSizeEqual = true;
+
+		for (_uint i = 0; i < 200; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		break;
 
 	case CStoneParticle::STONE_TANJIRO_COMBODOWN:
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
