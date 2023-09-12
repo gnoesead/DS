@@ -495,7 +495,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.3f);
 
 		if(Calculate_Distance() > 1.f)
-			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.50f, true);
+			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 1.35f, true); //1.3
 		else
 		{
 			m_isFinding = false;

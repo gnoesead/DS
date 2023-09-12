@@ -921,6 +921,10 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// ´Þ¸®±â
 		{
+			//_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+			//_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+			//CSoundMgr::Get_Instance()->StopSound(CSoundMgr::PLAYER_RUN_0);
+			//CSoundMgr::Get_Instance()->PlaySound(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.6f);
 			if (0 == m_iEvent_Index)	// 0.0
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			else if (1 == m_iEvent_Index)	// 0.12

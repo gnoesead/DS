@@ -116,7 +116,6 @@ private: //애니메이션 제어용 변수들
 	PATTERN	   m_eCurPattern = { PATTERN_END };
 	
 
-
 	//Moving
 	_bool	m_isFirst_Move_0 = { true };
 	_bool	m_isFirst_Move_1 = { true };

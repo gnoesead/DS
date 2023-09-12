@@ -131,8 +131,6 @@ HRESULT CLevel_FinalBoss::Initialize()
 	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 
-	
-
 	return S_OK;
 }
 
