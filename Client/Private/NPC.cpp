@@ -351,7 +351,12 @@ _vector CNPC::Calculate_Dir_Cross()
 
 _float4 CNPC::Calculate_PlayerPos()
 {
-	return _float4();
+	Get_PlayerComponent();
+	
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
+
+	return Pos;
 }
 
 _float CNPC::Calculate_To_Spot()

@@ -34,7 +34,7 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	if (FAILED(Add_Components()))
 		return E_FAIL;
-
+	Get_PlayerComponent();
 
 
 	return S_OK;
@@ -48,6 +48,7 @@ void CMonster::Tick(_double dTimeDelta)
 		return;
 
 	Check_Player_Awake();
+	Check_Player_Surge();
 }
 
 void CMonster::LateTick(_double dTimeDelta)
@@ -60,13 +61,13 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
-
+	__super::Render();
 	return S_OK;
 }
 
 HRESULT CMonster::Render_ShadowDepth()
 {
-
+	__super::Render_ShadowDepth();
 	return S_OK;
 }
 
@@ -95,10 +96,25 @@ void CMonster::Check_Player_Awake()
 		m_bTanjiroAwake = true;
 	else
 		m_bTanjiroAwake = false;
+
+
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
 		m_bZenitsuAwake = true;
 	else
 		m_bZenitsuAwake = false;
+}
+
+void CMonster::Check_Player_Surge()
+{
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 28) //ÄÆ¾À
+	{
+		if(m_isSurging)
+			m_bTanjiroSurge = false;
+		else
+			m_bTanjiroSurge = true;
+	}
+	else
+		m_bTanjiroSurge = false;
 }
 
 void CMonster::Calculate_To_Player()

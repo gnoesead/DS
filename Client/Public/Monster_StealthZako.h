@@ -130,6 +130,10 @@ private:
 	_double m_dDelay_Dead_Stealth = { 0.0 };
 	
 
+	_bool	m_isFirst_SlowMotion = { true };
+	_bool m_isSlowMotion = { false };
+	_double m_dDelay_SlowMotion = { 0.0 };
+
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
 	PATTERN	   m_eCurPattern = { PATTERN_END };

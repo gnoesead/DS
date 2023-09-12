@@ -138,7 +138,8 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isHekireki_End_ForDir = { false };
 	
 	
-
+	//차지 공격용
+	_double		m_dDelay_Charge = { 0.0 };
 
 	//오의 용
 	_double		m_dTime_Special_Ready = { 0.0 };
@@ -156,15 +157,6 @@ private:
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
-
-
-
-private:
-	// Outline Default
-	_float	m_fOutlineThickness = 0.9f;
-	// Outline Face
-	_float	m_fOutlineFaceThickness = 0.3f;
-
 
 
 private:

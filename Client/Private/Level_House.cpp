@@ -171,26 +171,44 @@ void CLevel_House::Tick(_double dTimeDelta)
     CGameInstance* pGameInstance = CGameInstance::GetInstance();
     Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyState(DIK_PGUP))
+	if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
 	{
-		_float4 vAmbient = pGameInstance->Get_Light(0)->vLightAmbient;
+		_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
-		vAmbient.x += 0.05f;
-		vAmbient.y += 0.05f;
-		vAmbient.z += 0.05f;
+		vDiffuse.x += 0.05f;
+		vDiffuse.y += 0.05f;
+		vDiffuse.z += 0.05f;
 
-		pGameInstance->Set_Light(0, 2, vAmbient);
+		if (vDiffuse.x > 1.f)
+			vDiffuse.x = 1.f;
+
+		if (vDiffuse.y > 1.f)
+			vDiffuse.y = 1.f;
+
+		if (vDiffuse.z > 1.f)
+			vDiffuse.z = 1.f;
+
+		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-	if (pGameInstance->Get_DIKeyState(DIK_PGDN))
+	if (pGameInstance->Get_DIKeyDown(DIK_PGDN))
 	{
-		_float4 vAmbient = pGameInstance->Get_Light(0)->vLightDiffuse;
+		_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
-		vAmbient.x -= 0.05f;
-		vAmbient.y -= 0.05f;
-		vAmbient.y -= 0.05f;
+		vDiffuse.x -= 0.05f;
+		vDiffuse.y -= 0.05f;
+		vDiffuse.z -= 0.05f;
 
-		pGameInstance->Set_Light(0, 2, vAmbient);
+		if (vDiffuse.x < 0.f)
+			vDiffuse.x = 0.f;
+
+		if (vDiffuse.y < 0.f)
+			vDiffuse.y = 0.f;
+
+		if (vDiffuse.z < 0.f)
+			vDiffuse.z = 0.f;
+
+		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
@@ -271,7 +289,7 @@ HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.fFovY = XMConvertToRadians(50.f);
     CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
     CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 300.f;
+    CameraDesc.fFarZ = 400.f;
 
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
