@@ -1643,7 +1643,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_iHekirekiHit_Index = 0;
 		}
 
-		pGameInstance->Time_Slow(0.2, 0.1);
+		//pGameInstance->Time_Slow(0.2, 0.1);
 	}
 
 
