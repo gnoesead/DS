@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CAurora final : public CGameObject
+class CAurora final : public CMasterEffect
 {
 public:
 	typedef struct Effecttag
@@ -42,6 +42,8 @@ private:
 
 	void	Update_Frame(_double TimeDelta);
 
+	void	Reset_Data();
+
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
@@ -49,9 +51,11 @@ private:
 	CTransform* m_pTransformCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
+	CTexture* m_pRampTextureCom = { nullptr };
+
 private:
-	_uint					m_iNumX = 4;
-	_uint					m_iNumY = 4;
+	_uint					m_iNumX = 6;
+	_uint					m_iNumY = 6;
 
 private:
 	_double					m_FrameAccTime = { 0.0 };
@@ -73,9 +77,12 @@ private:
 
 	EFFECTDESC				m_EffectDesc;
 
-	_float					m_fAlpha = { 1.f };
-	_float					m_fAlphaDecreseSpeed = { 0.f };
-	_float					m_fColor = { 0.f };
+	_float					m_fAlpha = { 0.f };
+
+
+	_float					m_fAccY = { 0.f };
+
+	_float3					m_vColor = { 0.f , 0.f , 0.f };
 
 public:
 	static CAurora* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

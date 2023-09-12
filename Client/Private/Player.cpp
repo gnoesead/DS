@@ -298,7 +298,10 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_dDelay_ComboReset_2 = 0.0;
 
 			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
+			{
 				m_isGuardHit = true;
+				
+			}
 			else
 			{
 				m_StatusDesc.iHitCombo++;

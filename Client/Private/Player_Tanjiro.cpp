@@ -28,6 +28,7 @@
 #include "ParticleManager.h"
 
 #include "WebManager.h"
+#include "Aurora.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -89,7 +90,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 		m_pTransformCom->Set_Look(_float4{ 0.0f, 0.0f, 1.0f, 0.0f });
 
 
-	Safe_Release(pGameInstance);
+	
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 150.f,0.f,150.f,1.f });
 
@@ -102,6 +103,15 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 
 	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
+
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+	for(_uint i = 0 ; i < 35 ; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -171,22 +181,10 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
-	/*if (pGameInstance->Get_DIKeyDown(DIK_N))
+	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		CEffectW::EFFECTWDESC EffectWDesc;
-		EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_SWAMPWATER;
-		EffectWDesc.iNumX = 4; EffectWDesc.iNumY = 4;
-
-		EffectWDesc.vStartPosX = { -0.4f,0.4f };  EffectWDesc.vStartPosZ = { -0.4f,0.4f };
-		EffectWDesc.vFrameSpeed = { 0.03f , 0.05f };
-		EffectWDesc.vStartSizeX = { 0.7f , 1.1f }; EffectWDesc.vStartSizeY = { 1.1f , 1.5f };
-		EffectWDesc.vSpeedX = { -2.0f , 2.0f }; EffectWDesc.vSpeedY = { 3.5f , 6.5f };
-		EffectWDesc.vStartFrame = { 0.f ,5.f };
-
-		
-		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
-	}*/
+		Create_GroundSmoke(CGroundSmoke::SMOKE_TEST);
+	}
 
 	Safe_Release(pGameInstance); 
 
@@ -1908,6 +1906,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iGuardHit_Index = 0;
 			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_BIG);
 		}
+
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.fScale = 1.4f;
+		EffectWorldDesc.vPosition.y += 0.4f;
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom , &EffectWorldDesc);
 	}
 #pragma endregion
 

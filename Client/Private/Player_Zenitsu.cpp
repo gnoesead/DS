@@ -1952,6 +1952,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iGuardHit_Index = 0;
 			m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD_HIT_BIG);
 		}
+
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.fScale = 1.4f;
+		EffectWorldDesc.vPosition.y += 0.2f;
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
 	}
 #pragma endregion
 

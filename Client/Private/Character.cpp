@@ -1010,6 +1010,17 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType , _fvect
 		 for (_uint i = 0; i < 5; ++i)
 			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		 break;
+	 case CGroundSmoke::SMOKE_TEST:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		 EffectWDesc.vStartPosX = { -0.15f,0.15f }; EffectWDesc.vStartPosY = { 0.00f,1.15f }; EffectWDesc.vStartPosZ = { -0.15f,0.15f };
+		 EffectWDesc.vFrameSpeed = { 0.02f , 0.02f };
+		 EffectWDesc.vStartSizeX = { 0.9f , 1.4f }; EffectWDesc.vStartSizeY = { 0.8f , 1.4f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.01f , 0.02f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		 EffectWDesc.vSizeSpeedX = { 0.0f , 0.0f }; EffectWDesc.vSizeSpeedY = { 0.0f , 0.0f };
+
+		 for (_uint i = 0; i < 2; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
 	default:
 		break;
 	}
