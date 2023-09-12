@@ -129,11 +129,11 @@ HRESULT CBoss_Akaza::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	//if (pGameInstance->Get_DIKeyDown(DIK_))
 	/*{
 		m_iMeshNum++;*/
-	}
+	//}
 
 	//Outline Render
 	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
@@ -3266,7 +3266,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		_vector     vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
 		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
 		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037.f, m_fLand_Y, 133.148.f, 1.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037f, m_fLand_Y, 133.148f, 1.f));
 		m_pRendererCom->Set_BackLight();
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)

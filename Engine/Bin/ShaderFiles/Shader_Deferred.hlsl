@@ -364,8 +364,8 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	}
 	else
 	{
-		vLuminace = saturate(vLuminace);
-		vLuminace = ceil(vLuminace * 3.f) / 3.f;
+		//vLuminace = saturate(vLuminace);
+		//vLuminace = ceil(vLuminace * 3.f) / 3.f;
 	}
 
 	if (g_bSSAOSwitch == false)
