@@ -18,10 +18,13 @@ BEGIN(Client)
 class CAurora final : public CMasterEffect
 {
 public:
+	enum TYPE{TYPE_LOCAL , TYPE_WORLD};
+public:
 	typedef struct Effecttag
 	{
 		CTransform* pTransform;
-		CGameObject* pGameObject;
+		class CCharacter* pGameObject;
+		TYPE eType;
 
 	}EFFECTDESC;
 
@@ -84,6 +87,8 @@ private:
 	_float					m_fAccY = { 0.f };
 
 	_float3					m_vColor = { 0.f , 0.f , 0.f };
+
+	_float4					m_vInitialPos = { 0.f , 0.f , 0.f  , 0.f};
 
 public:
 	static CAurora* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
