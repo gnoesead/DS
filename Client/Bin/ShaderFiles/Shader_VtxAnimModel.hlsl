@@ -200,7 +200,9 @@ PS_OUT  PS_Main(PS_IN _In)
 	PS_OUT	Out = (PS_OUT)0;
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
-				
+
+	
+
 	Out.vDiffuse = vMtrlDiffuse;
 	
 	Out.vDiffuse.a = 1.f;
@@ -228,7 +230,9 @@ PS_OUT  PS_Main_Akaza(PS_IN _In)
 		vMtrlDiffuse.g = 51.f / 255.f;
 		vMtrlDiffuse.b = 153.f / 255.f;
 	}
-
+	vMtrlDiffuse.r = 1.f;
+	vMtrlDiffuse.g = 1.f;
+	vMtrlDiffuse.b = 128.f / 255.f;
 	Out.vDiffuse = vMtrlDiffuse;
 
 	Out.vDiffuse.a = 1.f;

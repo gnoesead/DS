@@ -364,29 +364,14 @@ PS_OUT_LIGHT PS_MAIN_POINT(PS_IN In)
 	}
 	else
 	{
-		//vLuminace = saturate(vLuminace);
-		//vLuminace = ceil(vLuminace * 3.f) / 3.f;
+		vLuminace = saturate(vLuminace);
+		vLuminace = ceil(vLuminace * 3.f) / 3.f;
 	}
 
 	if (g_bSSAOSwitch == false)
 		Out.vShade = g_vLightDiffuse * vLuminace * fAtt;
 	else if (g_bSSAOSwitch == true)
 		Out.vShade = g_vLightDiffuse * vLuminace * fAtt;
-
-
-
-	/*if (vDiffuse_Cha.r == 0.f)
-	{
-		Out.vShade = Out.vShade;
-	}
-	else
-	{
-		Out.vShade = saturate(Out.vShade);
-		Out.vShade = ceil(Out.vShade * 3.f) / 3.f;
-
-		Out.vShade = Out.vShade;
-	}*/
-
 
 
 	Out.vShade.a = 1.f;
@@ -415,13 +400,13 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	if (vDiffuse.a == 0.f)
 		discard;
+
 	float fBrightness = dot(vShade.rgb, float3(0.299, 0.587, 0.114)); // ¹à±â °è»ê (RGB -> grayscale)
 
 	if (vDiffuse_Cha.r == 0.f)
 	{
 		Out.vColor = vDiffuse * vShade;
-		if (fBrightness < 0.2f)
-			Out.vColor *= 0.5f;
+		
 	}
 	else
 	{
@@ -435,15 +420,17 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
 	Out.vColor.rgb += vEmissive.rgb;
 
-	if ((fBrightness < 0.5f) && (g_bBackLight == true) && (vDiffuse_Cha.r != 0.f))
+	if ((fBrightness < 0.4f) && (g_bBackLight == true) && (vDiffuse_Cha.r != 0.f))
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);
 
 	/*if ((fBrightness < 0.7f) && g_bBackLight == true)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
+	
 	float3 grayColor = { grayValue , grayValue ,grayValue };
 
+	if (vDiffuse_Cha.r == 0.f)
 	Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
 
 	if (true == g_bInvert)
