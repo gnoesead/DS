@@ -91,12 +91,15 @@ HRESULT CMonster_StealthZako::Initialize(void* pArg)
 
 void CMonster_StealthZako::Tick(_double dTimeDelta)
 {
+	if (CMonsterManager::GetInstance()->Get_StealthEnd_Delete())
+		m_isDead = true;
+
+	if (m_isDead)
+		return;
+
 	if (CMonsterManager::GetInstance()->Get_BattleOn() == false)
 	{
 		__super::Tick(dTimeDelta);
-
-		if (m_isDead)
-			return;
 
 		if (ANIM_ATK_CLAWS != m_pModelCom->Get_iCurrentAnimIndex()) {
 
@@ -517,10 +520,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				m_dDelay_BattleStart_Stealth = 0.0;
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG_BACK);
 
-				CGameInstance* pGameInstance = CGameInstance::GetInstance();
-				Safe_AddRef(pGameInstance);
-				pGameInstance->Time_Slow(0.3, 0.3);
-				Safe_Release(pGameInstance);
+				
 			}
 		}
 	}

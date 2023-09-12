@@ -159,6 +159,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 			{
 				m_isFirst_BattleOn = false;
 				CMonsterManager::GetInstance()->Set_BattleOn(true);
+				CMonsterManager::GetInstance()->Set_StealthEnd_Delete(true);
 			}
 
 			Trigger();
@@ -166,6 +167,8 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 			{
 				Animation_Control(dTimeDelta);
 			}
+
+			
 		}
 
 		//局聪皋捞记 贸府
