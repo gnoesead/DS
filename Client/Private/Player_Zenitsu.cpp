@@ -327,6 +327,28 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_1", m_pTransformCom);
 
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			
+				if (m_Moveset.m_iAwaken == 0) {
+					EffectWorldDesc.fScale = 0.6f;
+					EffectWorldDesc.vPosition.x = -2.15f;
+					EffectWorldDesc.vPosition.y = -0.04f;
+					EffectWorldDesc.vPosition.z = 1.f;
+					EffectWorldDesc.vRotation.y = -25.f;
+
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 0.f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.f;
+					EffectWorldDesc.vRotation.y = 0.f;
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
+					
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
@@ -343,6 +365,26 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				if (m_Moveset.m_iAwaken == 0) {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 2.2f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.6f;
+					EffectWorldDesc.vRotation.y = 0.f;
+
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 2.f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.f;
+					EffectWorldDesc.vRotation.y = 0.f;
+
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -357,6 +399,24 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_2", m_pTransformCom);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				if (m_Moveset.m_iAwaken == 0) {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = -2.f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.6f;
+					EffectWorldDesc.vRotation.y = 0.f;
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 0.f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.f;
+					EffectWorldDesc.vRotation.y = 0.f;
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
@@ -370,6 +430,25 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_2_3", m_pTransformCom);
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_3", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				if (m_Moveset.m_iAwaken == 0) {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 0.8f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 1.6f;
+					EffectWorldDesc.vRotation.y = 0.f;
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
+				else {
+					EffectWorldDesc.fScale = 1.f;
+					EffectWorldDesc.vPosition.x = 0.f;
+					EffectWorldDesc.vPosition.y = 0.f;
+					EffectWorldDesc.vPosition.z = 0.f;
+					EffectWorldDesc.vRotation.y = 0.f;
+					//CEffectPlayer::Get_Instance()->Play("Zen_Crack", m_pTransformCom, &EffectWorldDesc);
+				}
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
