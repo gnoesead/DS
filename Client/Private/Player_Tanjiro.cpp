@@ -28,7 +28,6 @@
 #include "ParticleManager.h"
 
 #include "WebManager.h"
-#include "Aurora.h"
 
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
@@ -104,12 +103,15 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 	//CWebManager::GetInstance()->Set_TransformCom(m_pTransformCom);
 
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
 	CAurora::EFFECTDESC AuroraDesc;
 	AuroraDesc.pTransform = m_pTransformCom;
 	AuroraDesc.pGameObject = this;
 	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	AuroraDesc.eCharacter = CAurora::CHARACTER_TANJIRO;
+	AuroraDesc.eColor = CAurora::COLOR_BLUE;
 
-	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 	for(_uint i = 0 ; i < 35 ; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
 
