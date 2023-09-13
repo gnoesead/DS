@@ -306,7 +306,10 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_dDelay_ComboReset_2 = 0.0;
 
 			if (m_Moveset.m_State_Battle_Guard && !m_isSkilling)
+			{
 				m_isGuardHit = true;
+				
+			}
 			else
 			{
 				m_StatusDesc.iHitCombo++;
@@ -356,7 +359,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Big = true;
 			}
 
-			pGameInstance->Time_Slow(0.4, 0.3);
+			//pGameInstance->Time_Slow(0.4, 0.3);
 		}
 
 
@@ -380,7 +383,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_Blow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			//pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_BigBlow())
@@ -403,7 +406,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_BigBlow = true;
 			}
 
-			pGameInstance->Time_Slow(0.6, 0.3);
+			//pGameInstance->Time_Slow(0.6, 0.3);
 		}
 
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
@@ -461,11 +464,10 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			m_Moveset.m_Down_Dmg_Web = true;
 
-			//CBattle_UI_Manager::GetInstance()->Set_Web_UI_On( Random::Generate_Int(0, 3) );
 			m_isWebbing = true;
 			m_dDelay_Webbing = 0.0;
 
-			//pGameInstance->Time_Slow(0.2, 0.2);
+			
 		}
 		if (m_isWebbing)
 		{
@@ -474,7 +476,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			{
 				m_dDelay_Webbing = 0.0;
 				m_isWebbing = false;
-				CBattle_UI_Manager::GetInstance()->Set_Web_UI_On(Random::Generate_Int(0, 3));
+				CBattle_UI_Manager::GetInstance()->Set_Web_UI_On(0);
 			}
 		}
 
@@ -500,7 +502,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				m_Moveset.m_Down_Dmg_SwampUpper = true;
 			}
 
-			pGameInstance->Time_Slow(0.3, 0.5);
+			//pGameInstance->Time_Slow(0.3, 0.5);
 		}
 		Safe_Release(pGameInstance);
 	}
@@ -525,22 +527,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 #pragma region Test
-	if (pGameInstance->Get_DIKeyState(DIK_HOME) & 0x80)
-	{
-		++m_iNumAnim;
-		if (m_pModelCom->Get_NumAnims() <= m_iNumAnim)
-			m_iNumAnim = m_pModelCom->Get_NumAnims() - 1;
-		m_pModelCom->Set_Animation(m_iNumAnim);
-	}
-
-	if (pGameInstance->Get_DIKeyState(DIK_END) & 0x80)
-	{
-		if (0 < m_iNumAnim)
-			--m_iNumAnim;
-		if (0 > m_iNumAnim)
-			m_iNumAnim = 0;
-		m_pModelCom->Set_Animation(m_iNumAnim);
-	}
+	
 
 	if (pGameInstance->Get_DIKeyDown(DIK_V))
 	{
@@ -1492,7 +1479,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
-				vNextPos = XMVectorSet(118.f, 0.f, 136.6, 1.f);
+				vNextPos = XMVectorSet(118.f, 0.f, 136.6f, 1.f);
 				Change_NaviMesh(CLandObject::NAVI_HOUSE_4_0);
 
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));

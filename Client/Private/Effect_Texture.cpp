@@ -258,6 +258,23 @@ void CEffect_Texture::Check_PassIndex(void)
 	{
 		m_iPassIndex = 6;
 
+		if (m_eEffectDesc.isTextureSheetAnimation)
+		{
+			m_iPassIndex = 8;
+
+			if (OPT_ALPHATEST == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
+				m_iPassIndex = 8;
+		}
+
+		if (OPT_BY_ALPHA == m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE])
+			m_iPassIndex = 14;		// WaterSprite Àü¿ë
+
+		if (nullptr != m_pTextures[TEX_DISTORTION])
+			m_iPassIndex = 5;
+
+		if (nullptr != m_pTextures[TEX_NOISE])
+			m_iPassIndex = 10;
+
 		if (nullptr != m_pTextures[TEX_RAMP])
 		{
 			m_iPassIndex = 3;
@@ -265,15 +282,6 @@ void CEffect_Texture::Check_PassIndex(void)
 			if (m_eEffectDesc.isTextureSheetAnimation)
 				m_iPassIndex = 9;
 		}
-		else
-		{
-			if (m_eEffectDesc.isTextureSheetAnimation)
-				m_iPassIndex = 8;
-		}
-
-		if (nullptr != m_pTextures[TEX_DISTORTION])
-			m_iPassIndex = 5;
-
 	}
 }
 

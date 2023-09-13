@@ -12,6 +12,9 @@
 #include "StoneParticle.h"
 #include "EffectW_Manager.h"
 
+#include "SoundMgr.h"
+#include "Aurora.h"
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -114,7 +117,9 @@ public:
 	CHAR_STATUS Get_Status() {
 		return m_StatusDesc;
 	}
-	
+
+	_bool	Get_IsAuroraOn() { return m_isAuroraOn; }
+
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
 	void	RootAnimation(_double dTimeDelta);
@@ -160,6 +165,9 @@ protected:
 	_float4	Calculate_Dir_From_Pos(_float4 Pos);
 	_float	Calculate_Distance_From_Pos(_float4 Pos);
 
+	//사운드 용
+	void	Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, _float _vol);
+
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
 
@@ -173,7 +181,7 @@ public:
 	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
-	
+
 protected:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
@@ -186,6 +194,8 @@ protected:
 	void Shadow_House_Setting();
 	void Shadow_Train_Setting();
 	void Shadow_Final_Setting();
+
+
 
 protected:
 	CHARACTERDESC	m_CharacterDesc;
@@ -260,7 +270,15 @@ protected:
 
 	//zenitsu용 그라운드 공격취소
 	_bool	m_isGroundAttackFalse = { false };
+
+protected:
+	_float	m_fFar2 = { 1.f };
+	_bool	m_isAuroraOn = { false };
+private:
 	
+
+
+
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();

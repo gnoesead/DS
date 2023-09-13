@@ -100,7 +100,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar, 0.f);
 	Out.vEmissive = vEmissive;
 
 	return Out;

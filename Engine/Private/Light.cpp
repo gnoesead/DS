@@ -30,6 +30,9 @@ void CLight::Set_LightDesc(_uint iOption, _float4 vLightValue)
 	case 3:
 		m_LightDesc.vLightSpecular = vLightValue;
 		break;
+	case 4:
+		m_LightDesc.fLightRange = vLightValue.x;
+		break;
 	}
 }
 

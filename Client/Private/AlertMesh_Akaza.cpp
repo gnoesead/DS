@@ -83,8 +83,8 @@ void CAlertMesh_Akaza::Tick(_double TimeDelta)
 	vPos = XMVectorSetY(vPos, m_EffectDesc.fLandY);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_vCustomUV.x = m_EffectDesc.vCustomUV.x * m_dAccTime;
-	m_vCustomUV.y = m_EffectDesc.vCustomUV.y * m_dAccTime;
+	m_vCustomUV.x = m_EffectDesc.vCustomUV.x * (_float)m_dAccTime;
+	m_vCustomUV.y = m_EffectDesc.vCustomUV.y * (_float)m_dAccTime;
 
 	m_dAccTime += TimeDelta;
 }

@@ -205,11 +205,38 @@ void CEffect_Particle::Check_PassIndex(void)
 
 		if (m_eEffectDesc.isTextureSheetAnimation)
 			m_iPassIndex = 2;
+
+		if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_BY_RED)
+		{
+			m_iPassIndex = 11;
+
+			if (nullptr != m_pTextures[TEX_NOISE])
+				m_iPassIndex = 12;
+		}
+
+		if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_BY_BLUE)
+		{
+			m_iPassIndex = 15;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 16;
+		}
+
+		if (m_eEffectDesc.eTextureShaderOption[TEX_MASK] == OPT_RM_MAGENTA)
+		{
+			m_iPassIndex = 9;
+
+			if (nullptr != m_pTextures[TEX_NOISE])
+				m_iPassIndex = 10;
+		}
 	}
 
 	if (nullptr != m_pTextures[TEX_MASK])
 	{
 		m_iPassIndex = 3;
+
+		if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+			m_iPassIndex = 13;
 
 		if (m_eEffectDesc.isTextureSheetAnimation)
 			m_iPassIndex = 4;
@@ -217,6 +244,9 @@ void CEffect_Particle::Check_PassIndex(void)
 		if (nullptr != m_pTextures[TEX_NOISE])
 		{
 			m_iPassIndex = 7;
+
+			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+				m_iPassIndex = 14;
 		}
 
 		if (nullptr != m_pTextures[TEX_RAMP])

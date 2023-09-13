@@ -46,9 +46,13 @@ public:
 	void Zoom_In(_float Zoom, _float Time);
 	void Zoom_Out(_float Zoom, _float Time);
 
+	void Side_Zoom_In(_float Zoom, _float Time);
+	void Side_Zoom_Out(_float Zoom, _float Time);
+
 	void Zoom_Fix(_float Zoom);
 
 	_float Get_Zoom();
+	_float Get_Side_Zoom();
 
 // Special_View
 public:
@@ -99,6 +103,14 @@ private: // Zoom_In/Out
 	_float m_Zoom = { 0.f };
 	_float m_Zoom_Time = { 0.f };
 	_float m_Zoom_TimeAcc = { 0.f };
+
+	     // Side_Zoom_In/Out
+	_bool m_Is_Side_Zoom_In = { false };
+	_bool m_Is_Side_Zoom_Out = { false };
+
+	_float m_Side_Zoom = { 0.f };
+	_float m_Side_Zoom_Time = { 0.f };
+	_float m_Side_Zoom_TimeAcc = { 0.f };
 
 	
 private: // Battle

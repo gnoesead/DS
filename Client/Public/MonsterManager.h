@@ -59,6 +59,9 @@ public:
 	_bool	Get_StealthEnd_BattleStart_Fade() { return m_isStealthEnd_BattleStart_Fade; }
 	void	Set_StealthEnd_BattleStart_Fade(_bool start) { m_isStealthEnd_BattleStart_Fade = start; }
 
+	_bool	Get_StealthEnd_Delete() { return m_isStealthEnd_Delete; }
+	void	Set_StealthEnd_Delete(_bool isDelete) { m_isStealthEnd_Delete = isDelete; }
+
 
 	_bool	Get_Zenitsu_IndexPlus() { return m_isZenitsu_IndexPlus; }
 	void	Set_Zenitsu_IndexPlus(_bool up) { m_isZenitsu_IndexPlus = up; }
@@ -94,6 +97,7 @@ private:
 
 	_bool	m_isStealthEnd_BattleStart = { false };
 	_bool	m_isStealthEnd_BattleStart_Fade = { false };
+	_bool	m_isStealthEnd_Delete = { false };
 
 	_bool	m_isZenitsu_IndexPlus = { false };
 

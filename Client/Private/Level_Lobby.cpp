@@ -1602,9 +1602,20 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : SmellBundle_Disappear");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Effect_Guard.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Effect_Guard");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Effect_Guard_Zenitsu.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Effect_Guard");
+		return E_FAIL;
+	}
+
 #pragma endregion
-
-
 
 #pragma region ZENITSU
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_0.bin"))))
@@ -1798,6 +1809,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Revolution.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Revolution");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Shock.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Shock");
 		return E_FAIL;
 	}
 

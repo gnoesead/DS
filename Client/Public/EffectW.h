@@ -56,6 +56,8 @@ public:
 
 		_float2	vColor = { 0.f , 0.f };
 
+		_bool	bSizeEqual = { false };
+
 	}EFFECTWDESC;
 
 protected:

@@ -736,6 +736,42 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_SplashCircle.bin"), true, 50)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_SplashCircle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_SplashFall.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_SplashFall");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_ParticleFountain.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_ParticleFountain");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_ParticleFountainMain.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_ParticleFountainMain");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Particle_WaterDrop.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Particle_WaterDrop");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Aurora_Particle0.bin"), true, 30)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Aurora_Particle0");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region AKAZA
@@ -759,9 +795,14 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_2_1");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3.bin"), true, 22)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3.bin"), true, 10)))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3_1.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3_1");
 		return E_FAIL;
 	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Upper.bin"), true, 2)))
@@ -769,6 +810,57 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Upper");
 		return E_FAIL;
 	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Punch_0.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Punch_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Punch_1.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Punch_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_0.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_1.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_2.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_3.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_3");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_0.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_1.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_2.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_3.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_3");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_SkillUp_0.bin"), true, 6)))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Part_SkillUp_0");
