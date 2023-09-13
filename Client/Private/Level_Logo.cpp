@@ -825,6 +825,25 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle2");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle2.bin"), true, 4)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle3.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle3");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region SWAMP

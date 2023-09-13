@@ -347,9 +347,64 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		if (0 == m_pModelCom->Get_iCurrentAnimIndex()) // ÄÆ½Å
 		{
-			if (0 == m_iEvent_Index)
+			if (0 == m_iEvent_Index) // 0.1
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.5f;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Effect0", m_pTransformCom , &EffectWorldDesc);
+			}
+
+			else if (1 == m_iEvent_Index) // 0.2
 			{
 				m_isAuroraOn = true;
+
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+			}
+			else if (2 == m_iEvent_Index) // 0.34
+			{
+				m_isAuroraOn = true;
+			}
+			else if(3 == m_iEvent_Index) // 0.7
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom , &EffectWorldDesc);
+				Camera_Shake(1.0 , 40);
+				m_pRendererCom->Set_RadialBlur();
+			}
+			else if (4 == m_iEvent_Index) // 1.2
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+			}
+			else if (5 == m_iEvent_Index) // 1.7
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+				m_pRendererCom->Set_RadialBlur(); 
+				
+			}
+			else if (6 == m_iEvent_Index) // 2.2
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Explosion", m_pTransformCom);
+				Camera_Shake(1.6, 150);
+				m_pRendererCom->Set_RadialBlur();
+				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle3", m_pTransformCom);
+
+			}
+			else if (7 == m_iEvent_Index) // 2.7
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+				
+			}
+			else if (8 == m_iEvent_Index) // 3.2
+			{
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
+				m_pRendererCom->Set_RadialBlur();
 			}
 		}
 

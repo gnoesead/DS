@@ -35,8 +35,6 @@ HRESULT CStoneParticle::Initialize(void* pArg)
 
 	m_fAlpha = 1.f;
 
-	m_fColor = Random::Generate_Float(0.4f, 0.6f);
-
 	m_pTransformCom->Rotation(_float3((_float)Random::Generate_Int(0, 360), (_float)Random::Generate_Int(0, 360), (_float)Random::Generate_Int(0, 360)));
 
 	m_iFrame = Random::Generate_Int(0, 3);
