@@ -66,6 +66,22 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
+
+	// ¾Æ¿ì¶ó
+
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	CZen_Aurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CZen_Aurora::TYPE_LOCAL;
+	AuroraDesc.eColor = CZen_Aurora::COLOR_YELLOW;
+
+	for (_uint i = 0; i < 50; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Zen_Aurora"), &AuroraDesc);
+
+
+
 	Safe_Release(pGameInstance);
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
@@ -125,6 +141,14 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 
 	}
+
+
+	if (m_Moveset.m_iAwaken != 0)
+	{
+		m_isAuroraOn = true;
+	}
+	else
+		m_isAuroraOn = false;
 
 }
 
@@ -819,7 +843,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 0.6f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				
-				m_pRendererCom->Set_BloomRatio(1.1f);
+				m_pRendererCom->Set_BloomRatio(1.5f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom, &EffectWorldDesc);
 
 				
@@ -832,7 +856,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
 
-				m_pRendererCom->Set_BloomRatio(1.1f);
+				m_pRendererCom->Set_BloomRatio(1.5f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Revolution", m_pTransformCom, &EffectWorldDesc);
 
 				EffectWorldDesc.fScale = 3.3f;
@@ -851,7 +875,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.f;
 
-				m_pRendererCom->Set_BloomRatio(1.1f);
+				m_pRendererCom->Set_BloomRatio(1.5f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
 			}
 		}

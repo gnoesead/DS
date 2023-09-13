@@ -457,6 +457,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza\Alert">
       <UniqueIdentifier>{019c38c0-48e5-4b0d-a8fc-04a479abbb67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Environment\Zen_Aurora">
+      <UniqueIdentifier>{1f83102f-fc07-4bd9-ac40-0ea98d24f02a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -822,6 +825,9 @@
     <ClInclude Include="..\Public\AlertMesh_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Alert</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Zen_Aurora.h">
+      <Filter>02. GameObjects\Environment\Zen_Aurora</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1177,6 +1183,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AlertMesh_Akaza.cpp">
       <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Alert</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Zen_Aurora.cpp">
+      <Filter>02. GameObjects\Environment\Zen_Aurora</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

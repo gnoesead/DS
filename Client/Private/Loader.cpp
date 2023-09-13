@@ -79,6 +79,8 @@
 #include "AlertCircle.h"
 #include "AlertRect.h"
 #include "SmellBundle.h"
+#include "Zen_Aurora.h"
+
 
 #include "Swamp.h"
 #include "SwampWaterEffect.h"
@@ -923,6 +925,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* For.Prototype_GameObject_Aurora*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Aurora"),
 		CAurora::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_GameObject_Zen_Aurora*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zen_Aurora"),
+		CZen_Aurora::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
