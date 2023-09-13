@@ -2223,7 +2223,17 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkBack");
 		return E_FAIL;
 	}
-	
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Effect0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Effect0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Explosion.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Explosion");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 

@@ -890,7 +890,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 						CAtkCollider::TYPE_SMALL, vDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 				}
 			}
-
 		}
 #pragma endregion 공중장풍 끝
 
