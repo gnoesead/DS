@@ -2223,7 +2223,17 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_AtkBack");
 		return E_FAIL;
 	}
-	
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Effect0.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Effect0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Explosion.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Explosion");
+		return E_FAIL;
+	}
 	return S_OK;
 }
 
@@ -2477,8 +2487,8 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
 
 			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAttachedToBone), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vUVStart), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
 
 			// Size over Lifetime

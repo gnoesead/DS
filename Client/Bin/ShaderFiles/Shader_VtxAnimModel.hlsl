@@ -6,12 +6,13 @@ matrix		g_BoneMatrices[295];
 float4		g_vCamPosition;
 
 texture2D	g_DiffuseTexture;
-
+texture2D   g_DisolveTexture;
 bool		g_bMotionBlur;
 
 
 float		g_fFar = 400.f;
 float		g_fFar2;
+float		g_Disolve;
 //OutLineColor_JH
 float4			g_lineColor = float4(0.f, 0.f, 0.f, 1.f);
 float4			g_HitlineColor = float4(1.f, 0.f, 0.f, 1.f);
@@ -136,6 +137,7 @@ VS_OUT VS_OutlineFace(VS_IN In)
 
 	return Out;
 }
+
 
 VS_OUT VS_MAIN_SHADOW(VS_IN In)
 {
@@ -408,6 +410,43 @@ PS_OUT  PS_Outline_Yello(PS_IN In)
 	return Out;
 }
 
+
+PS_OUT  PS_Dead_Disolve(PS_IN _In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
+	vector  vMtrlDisolve = g_DisolveTexture.Sample(LinearSampler, _In.vTexUV);
+
+	if (vMtrlDisolve.r <= g_Disolve * 0.25f)
+		discard;
+
+	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.05f && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.05f)
+		vMtrlDiffuse = float4(1.f, 0.f, 0.f, g_Disolve * 0.35f); // »¡
+
+
+	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.03 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.03)
+		vMtrlDiffuse = float4(1.f, 1.f, 0.f, g_Disolve * 0.35f); // ³ë
+
+
+	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.025 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.025)
+		vMtrlDiffuse = float4(1.f, 1.f, 1.f, g_Disolve * 0.35f); // Èò
+	
+
+	Out.vDiffuse = vMtrlDiffuse;
+	//Out.vDiffuse = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vDiffuse.a = 1.f;
+
+	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
+	Out.vEmissive = vMtrlDiffuse * 0.7f;
+	Out.vDiffuse_Cha = Out.vDiffuse;
+	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar2, 0.f);
+	//(ºä ½ºÆäÀÌ½ºÀÇ z, Åõ¿µ ½ºÆäÀÌ½ºÀÇ z, 0.f, 0.f)
+
+	return Out;
+};
+
 PS_OUT_DEFERRED PS_MAIN_SHADOW(PS_IN In)
 {
 	PS_OUT_DEFERRED		Out = (PS_OUT_DEFERRED)0;
@@ -525,7 +564,8 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_RimLight();
 	}
-	pass Akaza // 8
+
+	pass Dead_Disolve // 8
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -535,7 +575,7 @@ technique11 DefaultTechnique
 		GeometryShader = NULL;
 		HullShader = NULL;
 		DomainShader = NULL;
-		PixelShader = compile ps_5_0 PS_Main_Akaza();
+		PixelShader = compile ps_5_0 PS_Dead_Disolve();
 	}
 	
 };

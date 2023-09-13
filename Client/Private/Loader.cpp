@@ -97,6 +97,8 @@
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
 
+#include "EffectPartsObject.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{ pContext }
@@ -238,7 +240,13 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
 #pragma region Texture
-
+	/* Prototype_Component_Texture_Monster_Disolve */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Monster_Disolve/Monster_Disolve.dds")))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_Monster_Disolve");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Model..."));
@@ -415,6 +423,8 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxPointInstance");
 		return E_FAIL;
 	}
+
+
 #pragma endregion
 
 #pragma region UITexture
@@ -1119,7 +1129,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma endregion
 
 #pragma region Effect
-
+	/* Prototype_GameObject_Sword */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_EffectPartsObject"),
+		CEffectPartsObject::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_EffectPartsObject");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma endregion

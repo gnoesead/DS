@@ -196,6 +196,9 @@ HRESULT CMapObject::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
+
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;*/
 	
 	Safe_Release(pGameInstance);
 	return S_OK;

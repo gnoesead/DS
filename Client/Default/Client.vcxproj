@@ -207,6 +207,7 @@
     <ClInclude Include="..\Public\Dialog.h" />
     <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
+    <ClInclude Include="..\Public\EffectPartsObject.h" />
     <ClInclude Include="..\Public\EffectPlayer.h" />
     <ClInclude Include="..\Public\EffectW.h" />
     <ClInclude Include="..\Public\EffectW_Manager.h" />
@@ -333,6 +334,7 @@
     <ClCompile Include="..\Private\Dialog.cpp" />
     <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
+    <ClCompile Include="..\Private\EffectPartsObject.cpp" />
     <ClCompile Include="..\Private\EffectPlayer.cpp" />
     <ClCompile Include="..\Private\EffectW.cpp" />
     <ClCompile Include="..\Private\EffectW_Manager.cpp" />

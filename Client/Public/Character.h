@@ -19,6 +19,7 @@ BEGIN(Engine)
 class CModel;
 class CShader;
 class CRenderer;
+class CTexture;
 END
 
 BEGIN(Client)
@@ -207,6 +208,7 @@ protected:
 	CRenderer* m_pRendererCom = { nullptr };
 	CCollider* m_pColliderCom[CCollider::TYPE_END] = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
 
 
 protected: //status 게이지 관련

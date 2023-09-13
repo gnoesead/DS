@@ -72,7 +72,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	_float4 vColor_ShadowDepth = { 1.f, 1.f, 1.f, 1.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_ShadowDepth"), iShadowMapCX, iShadowMapCY, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_ShadowDepth)))
 		return E_FAIL;
-	
+
 
 	///* For.Target_SSAO */
 	_float4 vColor_SSAO = { 1.f, 1.f, 1.f, 1.f };
@@ -115,7 +115,7 @@ HRESULT CRenderer::Initialize_Prototype()
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_SSAOBlur")
 		, (_uint)m_VP.Width, (_uint)m_VP.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, vColor_SSAOBlur)))
 		return E_FAIL;
-	
+
 	/* For.Target_ShadowBlurX */
 	_float4 vColor_ShadowBlurX = { 0.f, 0.f, 0.f, 0.f };
 	if (FAILED(m_pTarget_Manager->Add_RenderTarget(m_pDevice, m_pContext, TEXT("Target_ShadowBlurX")
@@ -357,7 +357,7 @@ HRESULT CRenderer::Initialize_Prototype()
 		return E_FAIL;
 #endif // _DEBUG
 
-	
+
 
 	return S_OK;
 }
@@ -526,7 +526,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_NonLights");
 		return E_FAIL;
 	}
-		
+
 	if (FAILED(Render_Effect_Particle()))
 	{
 		MSG_BOX("Failed to Render_Particle");
@@ -750,7 +750,7 @@ HRESULT CRenderer::Render_ShadowBlurY()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_ShadowBlurY"))))
 		return E_FAIL;
 
-	
+
 
 	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -758,7 +758,7 @@ HRESULT CRenderer::Render_ShadowBlurY()
 		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlurX"), m_pShader, "g_BlurTexture")))
 		return E_FAIL;
 
@@ -780,7 +780,7 @@ HRESULT CRenderer::Render_ShadowBlur()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_ShadowBlur"))))
 		return E_FAIL;
 
-	
+
 
 	if (FAILED(m_pShader->SetUp_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1230,7 +1230,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	if (FAILED(m_pTarget_Manager->Begin_MRT(TEXT("MRT_Effect"))))
 		return E_FAIL;
 
-	
+
 
 	for (auto& pGameObject : m_RenderObjects[RENDER_EffectBloom])
 	{
@@ -1284,23 +1284,27 @@ HRESULT CRenderer::Render_EffectBloom()
 		return E_FAIL;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	if (pGameInstance->Get_DIKeyDown(DIK_UP))
+	Safe_AddRef(pGameInstance);
+	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 	{
-		m_fBloomPower += 0.1f;
+		if (pGameInstance->Get_DIKeyDown(DIK_UP))
+		{
+			m_fBloomPower += 0.1f;
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_DOWN))
+		{
+			m_fBloomPower -= 0.1f;
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_RIGHT))
+		{
+			m_fBlurWeight += 0.05f;
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_LEFT))
+		{
+			m_fBlurWeight -= 0.05f;
+		}
 	}
-	if (pGameInstance->Get_DIKeyDown(DIK_DOWN))
-	{
-		m_fBloomPower -= 0.1f;
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_RIGHT))
-	{
-		m_fBlurWeight += 0.05f;
-	}
-	if (pGameInstance->Get_DIKeyDown(DIK_LEFT))
-	{
-		m_fBlurWeight -= 0.05f;
-	}
-
+	Safe_Release(pGameInstance);
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBloomPower", &m_fBloomPower, sizeof(_float))))
@@ -1410,7 +1414,7 @@ HRESULT CRenderer::Render_EffectBloom()
 	//if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBlurY"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
 	//	return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectCombineBlur"), m_pEffectShader, "g_HDRTexture"))) // 블룸 + 블러 
-	    return E_FAIL;
+		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectBloom"), m_pEffectShader, "g_BloomTextrue"))) // 블룸 -> 밝은 부분만 추출
 		return E_FAIL;
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_EffectColor"), m_pEffectShader, "g_FinalTexture"))) // 디퍼드 최종 텍스처
@@ -2102,7 +2106,7 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAOSwitch", &m_bSSAOSwitch, sizeof(_bool))))
 		return E_FAIL;
 
-	
+
 	Safe_Release(pGameInstance);
 
 
@@ -2138,9 +2142,9 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Depth"), m_pShader, "g_DepthTexture")))
 		return E_FAIL;
 
-	
-	   /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlurX"), m_pShader, "g_ShadowDepthTexture")))
-		  return E_FAIL;*/
+
+	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlurX"), m_pShader, "g_ShadowDepthTexture")))
+	   return E_FAIL;*/
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowDepth"), m_pShader, "g_ShadowDepthTexture")))
 		return E_FAIL;
@@ -2158,7 +2162,7 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
-	
+
 	static _float fGrayRatio = 1.f;
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_fGrayRatio", &fGrayRatio, sizeof(_float))))
@@ -2189,7 +2193,7 @@ HRESULT CRenderer::Render_Deferred()
 
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
 	Safe_AddRef(pPipeLine);
-	
+
 	_float4x4 matViewInv = pPipeLine->Get_TransformFloat4x4_Inverse(CPipeLine::D3DTS_VIEW);
 	if (FAILED(m_pShader->SetUp_Matrix("g_matViewInv", &matViewInv)))
 		return E_FAIL;
@@ -2241,7 +2245,7 @@ void CRenderer::Shadow_Village_Setting()
 	{
 		vLightEye = XMVectorSet(424.f, 50.f, 311.f, 1.f);
 		vLightAt = XMVectorSet(377.f, 0.f, 311.f, 1.f);
-	}			
+	}
 
 	if (pPlayerTransformCom != nullptr)
 	{
@@ -2266,7 +2270,7 @@ void CRenderer::Shadow_Village_Setting()
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
 
 	m_pShader->SetUp_Matrix("g_matLightView", &FloatLightViewMatrix);
-		
+
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
@@ -2274,7 +2278,7 @@ void CRenderer::Shadow_Village_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
-		
+
 
 	Safe_Release(pGameInstance);
 }
@@ -2294,7 +2298,7 @@ void CRenderer::Shadow_House_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 
@@ -2372,7 +2376,7 @@ void CRenderer::Shadow_Final_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
-		
+
 }
 
 
