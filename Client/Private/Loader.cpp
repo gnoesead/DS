@@ -96,6 +96,8 @@
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
 
+#include "EffectPartsObject.h"
+
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
 	, m_pContext{ pContext }
@@ -1116,7 +1118,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma endregion
 
 #pragma region Effect
-
+	/* Prototype_GameObject_Sword */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_EffectPartsObject"),
+		CEffectPartsObject::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_EffectPartsObject");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma endregion
