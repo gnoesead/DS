@@ -19,6 +19,7 @@
 
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
+#include "HandAura_Akaza.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -414,6 +415,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.4f;
 				EffectWorldDesc.dSpeed = 1.5;
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+				Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 			}
 			if (m_bMove == false)
 			{
@@ -423,6 +426,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectWorldDesc.fScale = 1.2f;
 					EffectWorldDesc.dSpeed = 1.3;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 			if (2 == m_iEvent_Index)
@@ -439,6 +444,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectWorldDesc.fScale = 1.1f;
 					EffectWorldDesc.dSpeed = 1.2;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 
@@ -447,6 +454,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				if (4 == m_iEvent_Index)
 				{//0.3
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 		}
@@ -532,8 +541,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_AIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			// 이펙트 추가 난 없음
+			if (0 == m_iEvent_Index) // 0.85
+			{
+				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
+				EffectAuraDesc.pOwnerTransform = m_pTransformCom;
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("R_Hand_1_Lct");
+				EffectAuraDesc.vScale = { 1.f, 1.f, 1.f };
+				EffectAuraDesc.vTime = { 1.5f, 2.f };
+				EffectAuraDesc.vPos = { 0.f, 0.f, 0.f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
 
-
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("L_Hand_1_Lct");
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+			}
 		}
 		if (ANIM_AIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -649,10 +669,34 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.1
 			{
-
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.f;
+				CEffectPlayer::Get_Instance()->Play("Akaza_SkillUp_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index) // 0.6
+			if (1 == m_iEvent_Index) // 0.27
 			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+			if (2 == m_iEvent_Index) // 0.37
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (3 == m_iEvent_Index) // 0.48
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (4 == m_iEvent_Index) // 0.52
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (5 == m_iEvent_Index) // 0.56
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (6 == m_iEvent_Index) // 0.6
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+
 				if (m_bAwake == true)
 				{
 					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
@@ -831,6 +875,22 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 #pragma endregion 평타콤보 끝
 #pragma region 공중장풍
+		if (ANIM_JUMPAIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.5
+				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
+				EffectAuraDesc.pOwnerTransform = m_pTransformCom;
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("R_Hand_1_Lct");
+				EffectAuraDesc.vScale = { 1.f, 1.f, 1.f };
+				EffectAuraDesc.vTime = { 1.5f, 2.f };
+				EffectAuraDesc.vPos = { 0.f, 0.f, 0.f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("L_Hand_1_Lct");
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+			}
+		}
 		if (ANIM_JUMPAIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (m_bAwake == true)
@@ -2655,7 +2715,11 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			if (Check_Distance_FixY(5.f) == false)
 				m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
 		}
-
+		if (Event_Time(dTimeDelta, 3.40, m_dJumpStompTime))
+		{
+			//코드추가
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Skill_Stomp", m_pTransformCom);
+		}
 		if (m_dJumpStompTime > 3.10)
 		{
 			m_pTransformCom->Go_Down(dTimeDelta * 15.0);
