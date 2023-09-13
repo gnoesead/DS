@@ -239,7 +239,13 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
 #pragma region Texture
-
+	/* Prototype_Component_Texture_Monster_Disolve */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Monster_Disolve/Monster_Disolve.dds")))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_Monster_Disolve");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Model..."));
@@ -411,6 +417,8 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxPointInstance");
 		return E_FAIL;
 	}
+
+
 #pragma endregion
 
 #pragma region UITexture

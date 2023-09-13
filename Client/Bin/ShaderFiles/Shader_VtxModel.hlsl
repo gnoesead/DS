@@ -12,6 +12,7 @@ texture2D	g_EmissiveTexture;
 
 
 float		g_fFar = 400.f;
+float		g_fFar2;
 
 float			g_fTimeAcc;
 float2			g_vPanningSpeed;

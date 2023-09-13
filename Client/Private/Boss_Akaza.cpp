@@ -123,7 +123,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
-	if(m_isAuroraOn && !m_bAwake )
+	if (m_isAuroraOn && !m_bAwake)
 		m_isAuroraOn = false;
 }
 
@@ -148,35 +148,31 @@ HRESULT CBoss_Akaza::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	//CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	//if (pGameInstance->Get_DIKeyDown(DIK_))
-	/*{
-		m_iMeshNum++;*/
-	//}
-
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+	if (m_bMonsterDead == false)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
 		{
-			if (m_bSuperArmor == false)
-				m_pShaderCom->Begin(1);
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
+
+
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(4);
+			{
+				if (m_bSuperArmor == false)
+					m_pShaderCom->Begin(1);
+				else
+					m_pShaderCom->Begin(4);
+			}
+
+			m_pModelCom->Render(m_iMeshNum);
 		}
-
-		m_pModelCom->Render(m_iMeshNum);
 	}
-
 	// Default Render
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
@@ -186,7 +182,10 @@ HRESULT CBoss_Akaza::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (m_bMonsterDead == true)
+			m_pShaderCom->Begin(8);
+		else
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}
@@ -216,7 +215,8 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.75f);
+		//m_pRendererCom->Set_BloomRatio(0.75f);
+		Trigger_Hit_Dead();
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -492,9 +492,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_AWAKE_START == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index) 
+			if (0 == m_iEvent_Index)
 			{// 2.07
-				
+
 			}
 			if (1 == m_iEvent_Index)
 			{// 2.10
@@ -601,7 +601,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.2
 			{
-				
+
 				CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
 				EffectCircleDesc.pOwnerTransform = m_pTransformCom;
 				EffectCircleDesc.vScale = { 4.f, 4.f, 4.f };
@@ -617,7 +617,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectMeshDesc.vTime = { 1.5f, 5.f };
 				EffectMeshDesc.fLandY = { 0.06f };
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
-				
+
 				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
 				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
 				EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
@@ -740,7 +740,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectMeshDesc.fLandY = { -0.35f };
 					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
 				}
-				
+
 			}
 		}
 
@@ -1417,6 +1417,9 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_TRAIN_JUMPSTOMP:
 		Update_Train_JumpStomp(dTimeDelta);
 		break;
+	case CBoss_Akaza::STATE_DEAD:
+		Update_Hit_Dead(dTimeDelta);
+		break;
 
 	}
 
@@ -1452,7 +1455,7 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 	CMonsterManager::GetInstance()->Set_Akaza_On(true);
 	if (m_dTriggerTime > 11.0) //11
 	{
-		
+
 		if (m_bAnimFinish == false)
 		{
 			m_bAnimFinish = true;
@@ -1584,7 +1587,12 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	{
 		m_bNoDmg = true;
 		m_StatusDesc.fHp = 0.f;
-		m_eCurPhase = PHASE_3;
+		if (m_bDead_Trigger == false)
+		{
+			m_bDead_Trigger = true;
+			Trigger_Hit_Dead();
+		}
+		//m_eCurPhase = PHASE_3;
 
 	}
 	if (m_bAwake == true)
@@ -2418,6 +2426,18 @@ void CBoss_Akaza::Tirgger_Hit_Hekireki()
 	m_eCurstate = STATE_HIT_HEKIREKI;
 }
 
+void CBoss_Akaza::Trigger_Hit_Dead()
+{	
+	m_pModelCom->Set_AnimisFinish(ANIM_DEATH);
+	m_bNoDmg = true;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bMonsterDead = false;
+	m_fDeadTime = 0.0F;
+
+	m_eCurstate = STATE_DEAD;
+}
+
 void CBoss_Akaza::Update_Escape(_double dTimeDelta)
 {
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -2705,7 +2725,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 						Camera_Shake(1.0);
-						
+
 
 					}
 					else
@@ -2720,7 +2740,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 						Create_StoneParticle(CStoneParticle::STONE_AKAZA_STOMPDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
-						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI , XMVectorSet(0.f , 0.5f , 0.f , 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 0.5f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
@@ -3951,6 +3971,25 @@ void CBoss_Akaza::Update_Hit_Hekireki(_double dTimeDelta)
 		Land_Anim_Play(ANIM_HIT_BLOW_LOOP, ANIM_HIT_BLOW_END);
 }
 
+void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_DEATH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
+	{
+		m_bMonsterDead = true;		
+		m_eCurAnimIndex = ANIM_HIT_GETUP;
+		m_fDeadTime += (_float)dTimeDelta;
+
+		if (m_fDeadTime > 5.0f)
+			m_isDead = true;
+	}
+
+}
+
 void CBoss_Akaza::Land_Anim_Play(ANIM CurAnim, ANIM LandAnim)
 {
 	if (m_pModelCom->Get_iCurrentAnimIndex() == CurAnim)
@@ -3986,7 +4025,6 @@ HRESULT CBoss_Akaza::Add_Components()
 		MSG_BOX("Failed to Add_Com_Shader : CBoss_Akaza_Akaza");
 		return E_FAIL;
 	}
-
 
 	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -4073,7 +4111,7 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
-		return E_FAIL;
+		return E_FAIL;	
 
 	Safe_Release(pGameInstance);
 	// OutlineThickness
@@ -4089,6 +4127,9 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bSuperArmor, sizeof(_bool))))
 		return E_FAIL;
+
+	
+	
 
 	return S_OK;
 }

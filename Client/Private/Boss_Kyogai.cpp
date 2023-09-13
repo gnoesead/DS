@@ -107,7 +107,7 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 	if (true == m_isDead)
 		return;
 
-	
+
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Debug_State(dTimeDelta);
@@ -115,8 +115,12 @@ void CBoss_Kyogai::Tick(_double dTimeDelta)
 		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
-		m_pModelCom->Set_Animation(m_eCurAnimIndex);
-		m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+		if (m_bStopAnim == false)
+		{
+			m_pModelCom->Set_Animation(m_eCurAnimIndex);
+			m_pModelCom->Play_Animation_For_Boss(dTimeDelta);
+		}
+
 
 		EventCall_Control(dTimeDelta);
 	}
@@ -159,30 +163,31 @@ HRESULT CBoss_Kyogai::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+	if (m_bMonsterDead == false)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
 		{
-			if (m_bSuperArmor == false)
-				m_pShaderCom->Begin(1);
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
+
+
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(4);
+			{
+				if (m_bSuperArmor == false)
+					m_pShaderCom->Begin(1);
+				else
+					m_pShaderCom->Begin(4);
+			}
+
+			m_pModelCom->Render(m_iMeshNum);
 		}
-
-		m_pModelCom->Render(m_iMeshNum);
 	}
-
 	// Default Render
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
@@ -192,7 +197,10 @@ HRESULT CBoss_Kyogai::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (m_bMonsterDead == true)
+			m_pShaderCom->Begin(8);
+		else
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}
@@ -302,7 +310,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_3))
 		{
-
+			Trigger_Hit_Dead();
 		}
 		if (pGameInstance->Get_DIKeyDown(DIK_4))
 		{
@@ -617,7 +625,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 					EffectDesc.vPosition.x += 0.6f;
 					EffectDesc.vPosition.y += 0.5f;
-					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom , &EffectDesc);
+					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom, &EffectDesc);
 				}
 			}
 
@@ -1305,7 +1313,9 @@ void CBoss_Kyogai::Update_State(_double dTimeDelta)
 	case CBoss_Kyogai::STATE_HIT_HEKIREKI:
 		Update_Hit_Hekireki(dTimeDelta);
 		break;
-
+	case CBoss_Kyogai::STATE_HIT_DEAD:
+		Update_Hit_Dead(dTimeDelta);
+		break;
 
 	}
 
@@ -1425,6 +1435,18 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
+	}
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
+	{
+		m_bNoDmg = true;
+		m_StatusDesc.fHp = 0.f;
+		if (m_bDead_Trigger == false)
+		{
+			m_bDead_Trigger = true;
+			Trigger_Hit_Dead();
+		}
+		//m_eCurPhase = PHASE_3;
+
 	}
 
 	if (m_bAwake == true)
@@ -1932,6 +1954,21 @@ void CBoss_Kyogai::Trigger_Hit_Hekireki()
 	m_bAnimFinish = false;
 	m_dTimeAcc = 0.0;
 	m_eCurstate = STATE_HIT_HEKIREKI;
+}
+
+void CBoss_Kyogai::Trigger_Hit_Dead()
+{
+	m_pModelCom->Set_AnimisFinish(ANIM_DEATH);
+	m_pModelCom->Set_AnimisFinish(ANIM_DEATH_GETUP);
+
+	m_bNoDmg = true;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bMonsterDead = false;
+	m_bStopAnim = false;
+	m_fDeadTime = 0.0F;
+
+	m_eCurstate = STATE_HIT_DEAD;
 }
 
 void CBoss_Kyogai::Update_Guard(_double dTimeDelta)
@@ -2641,6 +2678,27 @@ void CBoss_Kyogai::Update_Hit_Hekireki(_double dTimeDelta)
 	if (m_dTimeAcc >= 0.150)
 		Land_Anim_Play(ANIM_SPIN_LOOP, ANIM_SPIN_END);
 
+}
+
+void CBoss_Kyogai::Update_Hit_Dead(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_DEATH;
+	}
+	if (m_bAnimFinish == true)
+	{
+		m_bMonsterDead = true;
+		m_fDeadTime += (_float)dTimeDelta;
+
+		if (m_pModelCom->Check_PickAnimRatio(ANIM_DEATH, 0.950, dTimeDelta))
+			m_bStopAnim = true;
+
+		if (m_fDeadTime > 4.f)
+			m_isDead = true;
+
+	}
 }
 
 void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
@@ -4210,8 +4268,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	{
 		MSG_BOX("Failed to Add_Com_Shader : CBoss_Kyogai");
 		return E_FAIL;
-	}
-
+	}	
 
 	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -4291,7 +4348,7 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
-		return E_FAIL;
+		return E_FAIL;	
 
 	Safe_Release(pGameInstance);
 	// OutlineThickness
@@ -4300,7 +4357,7 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 

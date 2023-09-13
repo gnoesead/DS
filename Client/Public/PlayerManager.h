@@ -53,6 +53,7 @@ public:
 	_int	Get_PlayerIndex() { return iPlayerIndex; }
 	_bool	Get_First_Player_Change() { return isFirst_Player_Change; }
 	_bool	Get_First_Setting_Status() { return isFirst_Setting_Status; }
+	_bool	Get_KyogaiMpa() { return m_isKyogaiMap; }
 
 	_float4 Get_PlayerPos_Change() { return PlayerPos_Change; }
 	_float4 Get_Swaping_Pos() { return Swaping_Pos; }
@@ -69,6 +70,8 @@ public:
 
 	void	Set_Swaping_Pos(_float4 Pos) { Swaping_Pos = Pos; }
 	void	Set_Swaping_Pos(_vector vPos) { XMStoreFloat4(&Swaping_Pos, vPos); }
+
+	void	Set_KyogaiMap(_bool Is) { m_isKyogaiMap = Is; }
 
 	void Reset_PlayerManager() {
 		iPlayerIndex =  0 ; 
@@ -112,7 +115,7 @@ public:
 
 private:
 	_bool	m_isHit_WebShot = { false };
-
+	_bool	m_isKyogaiMap = { false };
 public:
 	_bool	Get_Hit_WebShot() { return m_isHit_WebShot; }
 	void	Set_Hit_WebShot(_bool hit) { m_isHit_WebShot = hit; }
