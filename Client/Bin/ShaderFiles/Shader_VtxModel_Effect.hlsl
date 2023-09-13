@@ -594,7 +594,7 @@ PS_OUT  PS_MASKCOLOR(PS_IN In)
 	//Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, 0.f, 1.f);
 	//Out.vAdditional = vector(1.f, 0.f, 0.f, 0.f);
 
-	if (Out.vDiffuse.a < 0.01f)
+	if (Out.vDiffuse.a < 0.1f)
 		discard;
 
 	return Out;
@@ -1416,6 +1416,9 @@ PS_OUT PS_MASKRAMPSPRITE(PS_IN In)
 
 	Out.vDiffuse = vRamp;
 	Out.vDiffuse.a = vMask.r * g_fAlpha;
+
+	if (0.1f > Out.vDiffuse.a)
+		discard;
 
 	return Out;
 }
