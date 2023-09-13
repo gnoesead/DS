@@ -824,7 +824,7 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_DIKeyState(DIK_INSERT))
 	{
@@ -842,13 +842,15 @@ HRESULT CRenderer::Render_SSAO()
 	{
 		m_fSSAOBias -= 0.0001f;
 	}
+	Safe_Release(pGameInstance);
+	*/
 	//m_fSSAORadius = 0.000005f;
 
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fRadius", &m_fSSAORadius, sizeof(_float))))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fBias", &m_fSSAOBias, sizeof(_float))))
 		return E_FAIL;
-	Safe_Release(pGameInstance);
+	
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Normal"), m_pSSAOShader, "g_NormalTexture")))
 		return E_FAIL;
