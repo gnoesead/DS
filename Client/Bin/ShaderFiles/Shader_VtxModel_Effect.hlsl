@@ -251,6 +251,10 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 		}
 	}
 
+	if (UVX < 0 || UVX > 1) {
+		discard;
+	}
+
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
 	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;

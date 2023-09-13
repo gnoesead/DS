@@ -691,23 +691,22 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATK_CHARGE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			// 기모으기
+			if (0 == m_iEvent_Index) {
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.5f;
+				EffectWorldDesc.fScale = 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge", m_pTransformCom, &EffectWorldDesc);
+
+			}
 		}
 		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
 			{
 
-				// 검기발사
-				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.vPosition.z += 1.5f;
-				EffectWorldDesc.vPosition.y += 1.4f;
-
-
-				if (m_Moveset.m_iAwaken == 0)
-					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
-				else
-					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+				
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
@@ -1519,7 +1518,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Charge(_double dTimeDelta)
 		m_Moveset.m_Up_Battle_Charge = false;
 	
 		m_dDelay_Charge += dTimeDelta;
-		if (m_dDelay_Charge > 1.0f)
+		if (m_dDelay_Charge > 0.4f)
 		{
 			m_dDelay_Charge = 0.0;
 			if (CCameraManager::GetInstance()->Get_Is_Battle_LockFree() == false)
