@@ -102,6 +102,12 @@ public:
 	void Set_Tag(const char* pTag) {
 		m_pTag = pTag;
 	}
+	void Set_IsParts(_bool isParts) {
+		m_isParts = isParts;
+	}
+	void Set_ParentPartsObject(class CEffectPartsObject* pObj) {
+		m_pParentObject = pObj;
+	}
 
 
 public:
@@ -119,8 +125,9 @@ public:
 	void Clear(void);
 
 private:
-	class CTransform*	m_pTransformCom = { nullptr };
-	class CTransform*	m_pParentTransform = { nullptr };
+	class CTransform*			m_pTransformCom = { nullptr };
+	class CTransform*			m_pParentTransform = { nullptr };
+	class CEffectPartsObject*	m_pParentObject = { nullptr };
 	_float4x4			m_WorldMatrix;
 	_float4x4			m_ParentWorldMatrix;
 	CParticleSystem*	m_pParent = { nullptr };
@@ -148,6 +155,8 @@ private:
 
 	_bool					m_isParticle = { false };
 	const char*				m_pTag = { nullptr };
+
+	_bool					m_isParts = { false };
 
 private:
 	HRESULT Add_Components(void);

@@ -457,6 +457,12 @@
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza\Alert">
       <UniqueIdentifier>{019c38c0-48e5-4b0d-a8fc-04a479abbb67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza\Effect">
+      <UniqueIdentifier>{6ea13a27-93e7-49f9-96d8-58f6f1d6d865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. GameObjects\Effect\EffectPartsObject">
+      <UniqueIdentifier>{e1b319a1-2944-4553-b0c5-912a33f0fa52}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02. GameObjects\Environment\Zen_Aurora">
       <UniqueIdentifier>{1f83102f-fc07-4bd9-ac40-0ea98d24f02a}</UniqueIdentifier>
     </Filter>
@@ -828,6 +834,12 @@
     <ClInclude Include="..\Public\Zen_Aurora.h">
       <Filter>02. GameObjects\Environment\Zen_Aurora</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\HandAura_Akaza.h">
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EffectPartsObject.h">
+      <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1186,6 +1198,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Zen_Aurora.cpp">
       <Filter>02. GameObjects\Environment\Zen_Aurora</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HandAura_Akaza.cpp">
+      <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectPartsObject.cpp">
+      <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

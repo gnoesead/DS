@@ -99,8 +99,8 @@ HRESULT CMapObject::Render()
 			m_pShaderCom->Begin(7);
 		else if (8 == m_MapObject_Info.iRenderGroup)
 			m_pShaderCom->Begin(8);
-		else if (9 == m_MapObject_Info.iRenderGroup)		// 안개
-			m_pShaderCom->Begin(9);
+		//else if (9 == m_MapObject_Info.iRenderGroup)		// 안개
+		//	m_pShaderCom->Begin(9);
 		else if (m_pModelCom->Get_IsNormalTexture(i))
 			m_pShaderCom->Begin(1);
 		else
@@ -196,6 +196,9 @@ HRESULT CMapObject::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
 		return E_FAIL;
+
+	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
+		return E_FAIL;*/
 	
 	Safe_Release(pGameInstance);
 	return S_OK;

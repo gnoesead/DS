@@ -499,7 +499,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_Up.bin"), true, 20)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_Up.bin"), true, 50)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_Up");
 		return E_FAIL;
@@ -795,14 +795,75 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_2_1");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3.bin"), true, 22)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3.bin"), true, 10)))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_3_1.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_3_1");
 		return E_FAIL;
 	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Upper.bin"), true, 2)))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Upper");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Punch_0.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Punch_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_Punch_1.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_Punch_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_0.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_1.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_2.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchLine_3.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchLine_3");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_0.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_1.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_1");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_2.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_2");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Combo_PunchEnd_3.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Combo_PunchEnd_3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_SkillUp_0.bin"), true, 6)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_SkillUp_0");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -825,6 +886,25 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_Swing_Particle2");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle2.bin"), true, 4)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Particle3.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Particle3");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region SWAMP
@@ -1128,8 +1208,8 @@ HRESULT CLevel_Logo::LoadEffects(const _tchar* pPath, _bool isParticle, _int iCn
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
 
 			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAttachedToBone), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vUVStart), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
 
 			// Size over Lifetime

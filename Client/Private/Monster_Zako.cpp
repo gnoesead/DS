@@ -50,7 +50,7 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : Zako_0");
 		return E_FAIL;
 	}
-	
+
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 
@@ -168,7 +168,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 				Animation_Control(dTimeDelta);
 			}
 
-			
+
 		}
 
 		//애니메이션 처리
@@ -181,7 +181,7 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 		//이벤트 콜
 		EventCall_Control(dTimeDelta);
 	}
-	
+
 }
 
 void CMonster_Zako::LateTick(_double dTimeDelta)
@@ -226,21 +226,24 @@ HRESULT CMonster_Zako::Render()
 
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+	if (m_bMonsterDead == false)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		{
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
 
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
 
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
-			m_pShaderCom->Begin(1);
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
+			else
+				m_pShaderCom->Begin(1);
 
-		m_pModelCom->Render(m_iMeshNum);
+			m_pModelCom->Render(m_iMeshNum);
+		}
 	}
 	// Default Render
 	for (_uint i = 0; i < iNumMeshes; i++)
@@ -251,7 +254,10 @@ HRESULT CMonster_Zako::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (m_bMonsterDead == true)
+			m_pShaderCom->Begin(8);
+		else
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}
@@ -719,7 +725,7 @@ void CMonster_Zako::Trigger()
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
-			
+
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
 
 			pPlayer->Set_Hit_Success_Hekireki(true);
@@ -739,11 +745,12 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		m_dDelay_Die += dTimeDelta;
-		if (m_dDelay_Die > 10.0f)
-			m_isDead = true;
+		m_bMonsterDead = true;
+		m_fDeadTime += (_float)dTimeDelta;
 
-		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
+		if (m_fDeadTime > 4.0f)
+			m_isDead = true;
+				
 	}
 	else
 	{
@@ -1753,7 +1760,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 				m_iAttackIndex = 5;
 		}
 
-		
+
 	}
 
 	Safe_Release(pGameInstance);
@@ -1762,8 +1769,6 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 {
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
-
-
 
 	if (iCurAnim == ANIM_DEATH && m_StatusDesc.fHp <= 0.0f)
 	{

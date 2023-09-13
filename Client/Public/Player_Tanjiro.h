@@ -100,9 +100,14 @@ private: //애니메이션 제어용 함수들
 private:
 	void	Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
 
+	//사운드용
+	void	Play_Sound_Atk(_int iType, _double vol); // 0:small, 1:medium, 2:big
+	void	Play_Sound_Dmg(_int iType, _double vol);
+
 private:
 	CSword* m_pSword = { nullptr };
 	CSwordHome* m_pSwordHome = { nullptr };
+	class CEffectPartsObject* m_pSwordEffect = { nullptr };
 
 	//스케일 조정
 	_float m_fScaleChange = { 0.8f };
@@ -112,6 +117,12 @@ private:
 	_bool	m_isStealthMode = { false };
 	_bool	m_isPlayerBack_Tanjiro = { false };
 	_double m_dDelay_PlayerBack_Tanjiro = { 0.0 };
+
+
+private: //사운드
+	_bool	m_isSound_Awaken = { false };
+	_double m_dSound_Awaken_Complete = { 0.0 };
+
 
 private: //애니메이션 제어용 변수들
 	//Move
@@ -148,7 +159,8 @@ private: //애니메이션 제어용 변수들
 
 	_bool	m_isSwampUpper = { false };
 
-	
+
+
 
 private:
 	/* 임시 코드 */

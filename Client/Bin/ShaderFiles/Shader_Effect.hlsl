@@ -235,8 +235,8 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 
 	vector vOut = (vHDRColor);
 
-	vOut = pow(abs(vOut), 1.8f);
-	vBloom = pow(abs(vBloom), 1.8f);
+	vOut = pow(abs(vOut), 1.7f);
+	vBloom = pow(abs(vBloom), 1.7f);
 
 	vOut += vBloom * g_fBloomPower;
 	Out.vColor = pow(abs(vOut), 1 / 2.2f);

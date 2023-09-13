@@ -91,6 +91,10 @@ private: //애니메이션 제어용 함수들
 	void	Moving_Restrict();
 
 
+	//사운드용
+	void	Player_Sound_Atk(_int iType, _double vol); // 0:small, 1:medium, 2:big
+	void	Player_Sound_Dmg(_int iType, _double vol); 
+
 private:
 	CSword* m_pSword = { nullptr };
 	CSwordHome* m_pSwordHome = { nullptr };
@@ -104,6 +108,10 @@ private:
 
 	//벽력일섬 카메라용
 	_bool m_isHekireki_Camera_On = { false };
+
+	//사운드
+	_bool	m_isSound_Awaken = { false };
+	_double m_dSound_Awaken_Complete = { 0.0 };
 	
 
 private: //애니메이션 제어용 변수들
@@ -138,6 +146,10 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isFirst_Hekireki_AirEnd = { false };
 
 	_bool	m_isHekireki_End_ForDir = { false };
+
+	//벽력일섬 첫 동작 확인용
+	_bool	m_isFirst_HekirekiAct = { true };
+	_double m_dDelay_First_HekirekiAct = { 0.0 };
 	
 	
 	//차지 공격용

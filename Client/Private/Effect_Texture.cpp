@@ -232,6 +232,9 @@ void CEffect_Texture::Check_PassIndex(void)
 	{
 		m_iPassIndex = 1;
 
+		if (m_eEffectDesc.isTextureSheetAnimation)
+			m_iPassIndex = 7;
+
 		if (nullptr != m_pTextures[TEX_NOISE])
 		{
 			m_iPassIndex = 2;
@@ -251,8 +254,7 @@ void CEffect_Texture::Check_PassIndex(void)
 		if (nullptr != m_pTextures[TEX_DISTORTION])
 			m_iPassIndex = 4;
 
-		if (m_eEffectDesc.isTextureSheetAnimation)
-			m_iPassIndex = 7;
+		
 	}
 	else if (nullptr != m_pTextures[TEX_MASK])
 	{

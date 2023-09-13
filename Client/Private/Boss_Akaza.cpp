@@ -19,6 +19,7 @@
 
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
+#include "HandAura_Akaza.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -114,7 +115,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		//Update_Trigger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -123,7 +124,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 		EventCall_Control(dTimeDelta);
 	}
 
-	if(m_isAuroraOn && !m_bAwake )
+	if (m_isAuroraOn && !m_bAwake)
 		m_isAuroraOn = false;
 }
 
@@ -148,29 +149,31 @@ HRESULT CBoss_Akaza::Render()
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
 
-	//Outline Render
-	for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+	if (m_bMonsterDead == false)
 	{
-		if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-			return E_FAIL;
-
-
-		if (m_iMeshNum == 2)
-			m_pShaderCom->Begin(2);
-		else
+		//Outline Render
+		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
 		{
-			if (m_bSuperArmor == false)
-				m_pShaderCom->Begin(1);
+			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+				return E_FAIL;
+
+
+			if (m_iMeshNum == 2)
+				m_pShaderCom->Begin(2);
 			else
-				m_pShaderCom->Begin(4);
+			{
+				if (m_bSuperArmor == false)
+					m_pShaderCom->Begin(1);
+				else
+					m_pShaderCom->Begin(4);
+			}
+
+			m_pModelCom->Render(m_iMeshNum);
 		}
-
-		m_pModelCom->Render(m_iMeshNum);
 	}
-
 	// Default Render
 	for (_uint i = 0; i < iNumMeshes; i++)
 	{
@@ -180,7 +183,10 @@ HRESULT CBoss_Akaza::Render()
 		if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 			return E_FAIL;
 
-		m_pShaderCom->Begin(0);
+		if (m_bMonsterDead == true)
+			m_pShaderCom->Begin(8);
+		else
+			m_pShaderCom->Begin(0);
 
 		m_pModelCom->Render(i);
 	}
@@ -210,7 +216,8 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
 	{
-		m_pRendererCom->Set_BloomRatio(0.75f);
+		//m_pRendererCom->Set_BloomRatio(0.75f);
+		Trigger_Hit_Dead();
 
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
@@ -361,12 +368,26 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 				}
+
+				if (0 == (m_iEvent_Index % 6))
+				{
+					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_0", m_pTransformCom);
+				}
+				else if (3 == (m_iEvent_Index % 6))
+				{
+					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_1", m_pTransformCom);
+				}
+				/*else if (4 == (m_iEvent_Index % 6))
+				{
+					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_2", m_pTransformCom);
+				}*/
+
 				//이펙트용 콜라이더
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 0.75f;
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.f), 0.3,
-					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 2.5, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
+					CAtkCollider::TYPE_EFFECT, vRandomDir, m_fSmallDmg, m_pTransformCom, 2.5, CAtkCollider::TYPE_AKAZA_BULLET_EFFECT, "Akaza_ATK_BulletPunch", &EffectWorldDesc);
 			}
 			if (32 == m_iEvent_Index)
 			{
@@ -376,12 +397,12 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_AWAKE_COMBOPUNCH_END == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{//0.25
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.x = -1.f;
 				EffectWorldDesc.fScale = 1.5f;
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
-					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 3.0, CAtkCollider::TYPE_AKAZA_BULLET_EFFECT, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
 
 				EffectWorldDesc.fScale = 1.f;
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
@@ -396,8 +417,21 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, m_fBigBlowDmg); // 빅블로우
 			}
-
-
+			if (1 == m_iEvent_Index)
+			{//0.35
+				//Line
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchLine_0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchLine_1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchLine_2", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
+			{//0.4
+				//End_Part
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_3", m_pTransformCom);
+			}
 		}
 #pragma endregion // AWAKE_ComboPunch
 
@@ -433,6 +467,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.4f;
 				EffectWorldDesc.dSpeed = 1.5;
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+				Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 			}
 			if (m_bMove == false)
 			{
@@ -442,6 +478,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectWorldDesc.fScale = 1.2f;
 					EffectWorldDesc.dSpeed = 1.3;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 			if (2 == m_iEvent_Index)
@@ -458,6 +496,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectWorldDesc.fScale = 1.1f;
 					EffectWorldDesc.dSpeed = 1.2;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 
@@ -466,6 +506,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				if (4 == m_iEvent_Index)
 				{//0.3
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom);
+
+					Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
 				}
 			}
 		}
@@ -480,15 +522,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.0f, 0.0f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);
-				m_pRendererCom->Set_BloomRatio(0.5f);
+				m_pRendererCom->Set_BloomRatio(0.1f);
 			}
 
 		}
 		if (ANIM_AWAKE_START == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index) 
+			if (0 == m_iEvent_Index)
 			{// 2.07
-				
+
 			}
 			if (1 == m_iEvent_Index)
 			{// 2.10
@@ -553,8 +595,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_AIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			// 이펙트 추가 난 없음
+			if (0 == m_iEvent_Index) // 0.85
+			{
+				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
+				EffectAuraDesc.pOwnerTransform = m_pTransformCom;
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("R_Hand_1_Lct");
+				EffectAuraDesc.vScale = { 1.f, 1.f, 1.f };
+				EffectAuraDesc.vTime = { 1.5f, 2.f };
+				EffectAuraDesc.vPos = { 0.f, 0.f, 0.f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
 
-
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("L_Hand_1_Lct");
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+			}
 		}
 		if (ANIM_AIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -566,7 +619,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 			}
 			if (1 == m_iEvent_Index) // 0.3
@@ -576,7 +629,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 
 			}
@@ -595,7 +648,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (0 == m_iEvent_Index) // 0.2
 			{
-				
+
 				CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
 				EffectCircleDesc.pOwnerTransform = m_pTransformCom;
 				EffectCircleDesc.vScale = { 4.f, 4.f, 4.f };
@@ -611,7 +664,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectMeshDesc.vTime = { 1.5f, 5.f };
 				EffectMeshDesc.fLandY = { 0.06f };
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
-				
+
 				EffectMeshDesc.vScale = { 5.f, 5.f, 5.f };
 				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_INNER_1;
 				EffectMeshDesc.vCustomUV = { 0.4f, 0.f };
@@ -670,10 +723,34 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.1
 			{
-
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.f;
+				CEffectPlayer::Get_Instance()->Play("Akaza_SkillUp_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (1 == m_iEvent_Index) // 0.6
+			if (1 == m_iEvent_Index) // 0.27
 			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+			if (2 == m_iEvent_Index) // 0.37
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (3 == m_iEvent_Index) // 0.48
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (4 == m_iEvent_Index) // 0.52
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (5 == m_iEvent_Index) // 0.56
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+			}
+			if (6 == m_iEvent_Index) // 0.6
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_SkillUp_0", m_pTransformCom);
+
 				if (m_bAwake == true)
 				{
 					CAlertCircle_Akaza::EFFECTDESC EffectCircleDesc;
@@ -734,7 +811,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectMeshDesc.fLandY = { -0.35f };
 					pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
 				}
-				
+
 			}
 		}
 
@@ -800,10 +877,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_COMBO_PIST == m_pModelCom->Get_iCurrentAnimIndex()) // 기본평타
 		{
-			if (0 <= m_iEvent_Index && 10 >= m_iEvent_Index)
+			if (0 <= m_iEvent_Index && 6 >= m_iEvent_Index)
 			{
-				if (0 == m_iEvent_Index || 2 == m_iEvent_Index ||
-					5 == m_iEvent_Index || 10 == m_iEvent_Index)
+				if (0 == m_iEvent_Index || 1 == m_iEvent_Index ||
+					3 == m_iEvent_Index || 6 == m_iEvent_Index)
 				{//피격 콜라이더
 					//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
@@ -823,12 +900,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Atk_Combo_3", m_pTransformCom, &EffectWorldDesc);
 
-				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_3_1", m_pTransformCom, &EffectWorldDesc);
 			}
 
-
-
-			if (11 == m_iEvent_Index)
+			if (7 == m_iEvent_Index)
 			{//0.7
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
@@ -838,7 +913,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x = -1.f;
 				EffectWorldDesc.fScale = 1.5f;
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.0f, 0.5f), 0.5,
-					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_BULLET, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
+					CAtkCollider::TYPE_EFFECT, vMonsterDir, m_fSmallDmg, m_pTransformCom, 4.0, CAtkCollider::TYPE_AKAZA_BULLET_EFFECT, "Akaza_ATK_BulletPunch_Long", &EffectWorldDesc);
 
 				EffectWorldDesc.fScale = 1.f;
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
@@ -849,9 +924,37 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
 			}
+
+			if (8 == m_iEvent_Index)
+			{//0.8
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchLine_0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchLine_1", m_pTransformCom);
+			}
+			if (9 == m_iEvent_Index)
+			{//0.85
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_PunchEnd_2", m_pTransformCom);
+			}
 		}
 #pragma endregion 평타콤보 끝
 #pragma region 공중장풍
+		if (ANIM_JUMPAIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.5
+				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
+				EffectAuraDesc.pOwnerTransform = m_pTransformCom;
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("R_Hand_1_Lct");
+				EffectAuraDesc.vScale = { 1.f, 1.f, 1.f };
+				EffectAuraDesc.vTime = { 1.5f, 2.f };
+				EffectAuraDesc.vPos = { 0.f, 0.f, 0.f };
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+
+				EffectAuraDesc.pBone = m_pModelCom->Get_Bone("L_Hand_1_Lct");
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_HandAura_Akaza"), &EffectAuraDesc, false);
+			}
+		}
 		if (ANIM_JUMPAIRGUN2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (m_bAwake == true)
@@ -884,7 +987,6 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 						CAtkCollider::TYPE_SMALL, vDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 				}
 			}
-
 		}
 #pragma endregion 공중장풍 끝
 
@@ -1411,6 +1513,9 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 	case CBoss_Akaza::STATE_TRAIN_JUMPSTOMP:
 		Update_Train_JumpStomp(dTimeDelta);
 		break;
+	case CBoss_Akaza::STATE_DEAD:
+		Update_Hit_Dead(dTimeDelta);
+		break;
 
 	}
 
@@ -1446,7 +1551,7 @@ void CBoss_Akaza::Update_Begin(_double dTimeDelta)
 	CMonsterManager::GetInstance()->Set_Akaza_On(true);
 	if (m_dTriggerTime > 11.0) //11
 	{
-		
+
 		if (m_bAnimFinish == false)
 		{
 			m_bAnimFinish = true;
@@ -1578,7 +1683,12 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 	{
 		m_bNoDmg = true;
 		m_StatusDesc.fHp = 0.f;
-		m_eCurPhase = PHASE_3;
+		if (m_bDead_Trigger == false)
+		{
+			m_bDead_Trigger = true;
+			Trigger_Hit_Dead();
+		}
+		//m_eCurPhase = PHASE_3;
 
 	}
 	if (m_bAwake == true)
@@ -2412,6 +2522,18 @@ void CBoss_Akaza::Tirgger_Hit_Hekireki()
 	m_eCurstate = STATE_HIT_HEKIREKI;
 }
 
+void CBoss_Akaza::Trigger_Hit_Dead()
+{	
+	m_pModelCom->Set_AnimisFinish(ANIM_DEATH);
+	m_bNoDmg = true;
+	m_bTrigger = true;
+	m_bAnimFinish = false;
+	m_bMonsterDead = false;
+	m_fDeadTime = 0.0F;
+
+	m_eCurstate = STATE_DEAD;
+}
+
 void CBoss_Akaza::Update_Escape(_double dTimeDelta)
 {
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -2676,7 +2798,11 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 			if (Check_Distance_FixY(5.f) == false)
 				m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
 		}
-
+		if (Event_Time(dTimeDelta, 3.40, m_dJumpStompTime))
+		{
+			//코드추가
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Skill_Stomp", m_pTransformCom);
+		}
 		if (m_dJumpStompTime > 3.10)
 		{
 			m_pTransformCom->Go_Down(dTimeDelta * 15.0);
@@ -2699,7 +2825,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 						Camera_Shake(1.0);
-						
+
 
 					}
 					else
@@ -2714,7 +2840,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 
 						Create_StoneParticle(CStoneParticle::STONE_AKAZA_STOMPDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
-						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI , XMVectorSet(0.f , 0.5f , 0.f , 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 0.5f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
@@ -3277,32 +3403,38 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 	{
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
+		//m_vSavePos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_PUSHAWAY, 0.950, dTimeDelta))
 	{
 		_vector   vLightEye = XMVectorSet(0.f, 0.f, 0.f, 1.f);
 		_vector   vLightAt = { 1.f, 0.f, 1.f, 1.f };
-		_vector	  vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
+		_vector     vBackLightDir = XMVector3Normalize(vLightAt - vLightEye);
 		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
 		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037f, m_fLand_Y, 133.148f, 1.f));
 		m_pRendererCom->Set_BackLight();
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_PUSHAWAY);
 		m_eCurAnimIndex = ANIM_AWAKE_START;
-		
+
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.950, dTimeDelta))
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.970, dTimeDelta))
+	{
+		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vSavePos);
+		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		m_pRendererCom->Set_BackLight();
+	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
 		m_pModelCom->Set_AnimResetTimeAcc(ANIM_AWAKE_START);
 		m_eCurAnimIndex = ANIM_AWAKE_END;
-		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-		
+
+
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_END) == true)
 	{
@@ -3939,6 +4071,25 @@ void CBoss_Akaza::Update_Hit_Hekireki(_double dTimeDelta)
 		Land_Anim_Play(ANIM_HIT_BLOW_LOOP, ANIM_HIT_BLOW_END);
 }
 
+void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
+{
+	if (m_bAnimFinish == false)
+	{
+		m_bAnimFinish = true;
+		m_eCurAnimIndex = ANIM_DEATH;
+	}
+	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
+	{
+		m_bMonsterDead = true;		
+		m_eCurAnimIndex = ANIM_HIT_GETUP;
+		m_fDeadTime += (_float)dTimeDelta;
+
+		if (m_fDeadTime > 5.0f)
+			m_isDead = true;
+	}
+
+}
+
 void CBoss_Akaza::Land_Anim_Play(ANIM CurAnim, ANIM LandAnim)
 {
 	if (m_pModelCom->Get_iCurrentAnimIndex() == CurAnim)
@@ -3974,7 +4125,6 @@ HRESULT CBoss_Akaza::Add_Components()
 		MSG_BOX("Failed to Add_Com_Shader : CBoss_Akaza_Akaza");
 		return E_FAIL;
 	}
-
 
 	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -4061,13 +4211,13 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
-		return E_FAIL;
+		return E_FAIL;	
 
 	Safe_Release(pGameInstance);
 	// OutlineThickness
 
-	m_fOutlineThickness = 0.8f;
-	m_fOutlineFaceThickness = 0.f;
+	m_fOutlineThickness = 1.5f;
+	m_fOutlineFaceThickness = 0.6f;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;
@@ -4077,6 +4227,9 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_bSuperArmor", &m_bSuperArmor, sizeof(_bool))))
 		return E_FAIL;
+
+	
+	
 
 	return S_OK;
 }

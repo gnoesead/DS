@@ -980,13 +980,11 @@ PS_OUT PS_DIFF_CALCRED_DISSOLVE(PS_IN In)
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
 
-	/*float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
+	float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
 
 	vDiffuse.a *= amount;
 
-	vDiffuse.a += amount * g_Black_Cull_Amount;*/
-
-	vDiffuse.a *= vDiffuse.b;
+	vDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vColor = vDiffuse;
 
@@ -1082,13 +1080,11 @@ PS_OUT PS_DIFF_CALCRED_DISSOLVE_SPRITE(PS_IN In)
 
 	vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, spriteUV);
 
-	/*float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
+	float amount = (vDiffuse.r + vDiffuse.g + vDiffuse.b) / 3.f;
 
 	vDiffuse.a *= amount;
 
-	vDiffuse.a += amount * g_Black_Cull_Amount;*/
-
-	vDiffuse.a *= vDiffuse.b;
+	vDiffuse.a += amount * g_Black_Cull_Amount;
 
 	Out.vColor = vDiffuse;
 

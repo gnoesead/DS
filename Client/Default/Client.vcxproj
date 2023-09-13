@@ -207,6 +207,7 @@
     <ClInclude Include="..\Public\Dialog.h" />
     <ClInclude Include="..\Public\DialogManager.h" />
     <ClInclude Include="..\Public\Effect.h" />
+    <ClInclude Include="..\Public\EffectPartsObject.h" />
     <ClInclude Include="..\Public\EffectPlayer.h" />
     <ClInclude Include="..\Public\EffectW.h" />
     <ClInclude Include="..\Public\EffectW_Manager.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\Public\Fade.h" />
     <ClInclude Include="..\Public\Fade_Manager.h" />
     <ClInclude Include="..\Public\FIcon.h" />
+    <ClInclude Include="..\Public\HandAura_Akaza.h" />
     <ClInclude Include="..\Public\SmeshStone.h" />
     <ClInclude Include="..\Public\StoneParticle.h" />
     <ClInclude Include="..\Public\GroundSmoke.h" />
@@ -333,6 +335,7 @@
     <ClCompile Include="..\Private\Dialog.cpp" />
     <ClCompile Include="..\Private\DialogManager.cpp" />
     <ClCompile Include="..\Private\Effect.cpp" />
+    <ClCompile Include="..\Private\EffectPartsObject.cpp" />
     <ClCompile Include="..\Private\EffectPlayer.cpp" />
     <ClCompile Include="..\Private\EffectW.cpp" />
     <ClCompile Include="..\Private\EffectW_Manager.cpp" />
@@ -342,6 +345,7 @@
     <ClCompile Include="..\Private\Fade.cpp" />
     <ClCompile Include="..\Private\Fade_Manager.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
+    <ClCompile Include="..\Private\HandAura_Akaza.cpp" />
     <ClCompile Include="..\Private\SmeshStone.cpp" />
     <ClCompile Include="..\Private\StoneParticle.cpp" />
     <ClCompile Include="..\Private\GroundSmoke.cpp" />

@@ -77,11 +77,19 @@ HRESULT CTerrainMapObject::Render()
 				return E_FAIL;
 		}
 
-		
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
-		m_pShaderCom->Begin(0);
+		if(LEVEL_FINALBOSS != iCurIdx)
+			m_pShaderCom->Begin(0);
+		else
+			m_pShaderCom->Begin(2);
+
 
 		m_pModelCom->Render(i);
+
+		Safe_Release(pGameInstance);
 	}
 
 	return S_OK;

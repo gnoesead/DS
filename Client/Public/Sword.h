@@ -3,6 +3,8 @@
 #include "Client_Defines.h"
 #include "GameObject.h"
 
+#include "EffectPlayer.h"
+
 BEGIN(Engine)
 class CBone;
 class CModel;

@@ -196,7 +196,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-	_float fRange = 0.5f;
+	_float fRange = 1.f;
 
 	// Á¡±¤¿ø 1 Range Á¶Àý 
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -327,7 +327,6 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 			pGameInstance->Set_Light(2, 1, vDiffuse_Point);
 		}
 	}
-
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -1754,6 +1753,21 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Wind");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Line.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Line");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Skill_Stomp.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Skill_Stomp");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Eye.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Awake_Eye");
@@ -1830,8 +1844,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Shoot_Projectile");
 		return E_FAIL;
 	}
-
-		
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
 	{
@@ -2122,8 +2134,8 @@ HRESULT CLevel_FinalBoss::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
 
 			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAttachedToBone), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vUVStart), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
 
 			// Size over Lifetime

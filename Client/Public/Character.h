@@ -20,6 +20,7 @@ BEGIN(Engine)
 class CModel;
 class CShader;
 class CRenderer;
+class CTexture;
 END
 
 BEGIN(Client)
@@ -118,7 +119,7 @@ public:
 	CHAR_STATUS Get_Status() {
 		return m_StatusDesc;
 	}
-	
+
 	_bool	Get_IsAuroraOn() { return m_isAuroraOn; }
 
 protected:
@@ -182,7 +183,7 @@ public:
 	}
 protected: // 카메라 쉐이크
 	void Camera_Shake(_double dShakeTime = 0.5, _uint iShakePower = 100);
-	
+
 protected:
 	void Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
 	void Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fvector vOffsetPos = { 0.f,0.f ,0.f,0.f });
@@ -208,6 +209,7 @@ protected:
 	CRenderer* m_pRendererCom = { nullptr };
 	CCollider* m_pColliderCom[CCollider::TYPE_END] = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
 
 
 protected: //status 게이지 관련
@@ -273,8 +275,13 @@ protected:
 	_bool	m_isGroundAttackFalse = { false };
 
 protected:
+	_float	m_fFar2 = { 1.f };
 	_bool	m_isAuroraOn = { false };
+private:
 	
+
+
+
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();

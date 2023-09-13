@@ -97,6 +97,9 @@
 #include "CustomParticle.h"
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
+#include "HandAura_Akaza.h"
+
+#include "EffectPartsObject.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -239,7 +242,13 @@ HRESULT CLoader::LoadingForLogo()
 
 	SetWindowText(g_hWnd, TEXT("Loading Texture..."));
 #pragma region Texture
-
+	/* Prototype_Component_Texture_Monster_Disolve */
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Monster_Disolve/Monster_Disolve.dds")))))
+	{
+		MSG_BOX("Failed to Add_Prototype_Component_Texture_Monster_Disolve");
+		return E_FAIL;
+	}
 #pragma endregion
 
 	SetWindowText(g_hWnd, TEXT("Loading Model..."));
@@ -252,18 +261,23 @@ HRESULT CLoader::LoadingForLogo()
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Akaza_Inner_00*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_00"),
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_Inner_00"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_Inner_00.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Akaza_Inner_01*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_01"),
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_Inner_01"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_Inner_01.bin", PivotMatrix))))
 		return E_FAIL;
 
 	/* For.Prototype_Component_Model_Akaza_OuterWave*/
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_OuterWave"),
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_OuterWave"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_OuterWave.bin", PivotMatrix))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Model_Akaza_HandAura*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_HandAura"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/CustomEffect/Akaza_HandAura.bin", PivotMatrix))))
 		return E_FAIL;
 
 	Load_MapObjectModel_AllStage(pGameInstance);
@@ -411,6 +425,8 @@ HRESULT CLoader::LoadingForLobby()
 		MSG_BOX("Failed to Add_Prototype_Component_Shader_VtxPointInstance");
 		return E_FAIL;
 	}
+
+
 #pragma endregion
 
 #pragma region UITexture
@@ -887,6 +903,11 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 	}
 
+	/* For.Prototype_GameObject_HandAura_Akaza*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_HandAura_Akaza"),
+		CHandAura_Akaza::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For.Prototype_GameObject_AlertCircle_Akaza*/
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AlertCircle_Akaza"),
 		CAlertCircle_Akaza::Create(m_pDevice, m_pContext))))
@@ -1115,7 +1136,13 @@ HRESULT CLoader::LoadingForLobby()
 #pragma endregion
 
 #pragma region Effect
-
+	/* Prototype_GameObject_Sword */
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_EffectPartsObject"),
+		CEffectPartsObject::Create(m_pDevice, m_pContext))))
+	{
+		MSG_BOX("Failed to Add_Prototype_GameObject_EffectPartsObject");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma endregion

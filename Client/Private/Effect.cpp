@@ -413,7 +413,10 @@ void CEffect::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParent->Get_WorldMatrix());
+	//if(!m_isPartObj)
+		XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParent->Get_WorldMatrix());
+	//else
+	//	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_ParentDesc.pParent->Get_WorldMatrix());
 
 	Check_PassIndex();
 

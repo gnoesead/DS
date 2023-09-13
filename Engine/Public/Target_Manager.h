@@ -20,6 +20,7 @@ public:
 
 	HRESULT Begin_DefaultRT();
 	HRESULT Begin_MRT(const _tchar* pMRTTag);
+	HRESULT Begin_MRT_Blend(const _tchar* pMRTTag);
 	HRESULT Begin_MRT_NoneClear(const _tchar* pMRTTag);
 	HRESULT Begin_MRT_LightDepth(ID3D11DeviceContext* pContext, const _tchar* pMRTTag); // Shadow
 	HRESULT End_DefaultRT();

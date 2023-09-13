@@ -1439,6 +1439,23 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Wind2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Wind2");
+		return E_FAIL;
+	}
+	
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Sword.bin"))))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Sword");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
@@ -1830,6 +1847,30 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Helix");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Dash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Dash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Step_Shock.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Step_Shock");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Step_Shock_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Step_Shock_Rev");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 
@@ -2134,8 +2175,8 @@ HRESULT CLevel_Lobby::LoadEffects(const _tchar* pPath, _bool isParticle, _int iC
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
 
 			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAttachedToBone), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vUVStart), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
 
 			// Size over Lifetime

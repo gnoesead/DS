@@ -12,6 +12,7 @@ texture2D	g_EmissiveTexture;
 
 
 float		g_fFar = 400.f;
+float		g_fFar2;
 
 float			g_fTimeAcc;
 float2			g_vPanningSpeed;
@@ -81,11 +82,6 @@ struct PS_OUT
 	vector		vDiffuse_Cha : SV_TARGET4;
 };
 
-struct PS_OUT_EFFECT
-{
-	vector		vDiffuse : SV_TARGET0;
-};
-
 struct PS_NONDEFERRED
 {
 	vector		vColor : SV_TARGET0;
@@ -105,7 +101,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vDiffuse.a = 1.f;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar, 0.f);
 	Out.vEmissive = vEmissive;
 
 	return Out;
@@ -343,9 +339,9 @@ PS_OUT  PS_REDRECT(PS_IN In)
 	return Out;
 }
 
-PS_OUT_EFFECT  PS_ALERTMESH(PS_IN _In)
+PS_NONDEFERRED  PS_ALERTMESH(PS_IN _In)
 {
-	PS_OUT_EFFECT	Out = (PS_OUT_EFFECT)0;
+	PS_NONDEFERRED	Out = (PS_NONDEFERRED)0;
 
 	_In.vTexUV.x += g_vCustomUV.x;
 	_In.vTexUV.y += g_vCustomUV.y;
@@ -363,10 +359,25 @@ PS_OUT_EFFECT  PS_ALERTMESH(PS_IN _In)
 	if (0.9f > vMtrlDiffuse.a)
 		discard;
 
-	Out.vDiffuse = vMtrlRamp;
-	Out.vDiffuse.a = vMtrlDiffuse.r * g_fAlpha;
+	Out.vColor = vMtrlRamp;
+	Out.vColor.a = vMtrlDiffuse.r * g_fAlpha;
 	
-	if (0.1f > Out.vDiffuse.a)
+	if (0.1f > Out.vColor.a)
+		discard;
+
+	return Out;
+};
+
+PS_NONDEFERRED  PS_HANDAURA(PS_IN _In)
+{
+	PS_NONDEFERRED	Out = (PS_NONDEFERRED)0;
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV);
+
+	Out.vColor = vMtrlDiffuse * 2.f;
+	Out.vColor.a = vMtrlDiffuse.b * g_fAlpha;
+
+	if (0.1f > Out.vColor.a)
 		discard;
 
 	return Out;
@@ -535,6 +546,18 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_ALERTMESH();
 	}
 
+	pass HandAura // 13
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_HANDAURA();
+	}
 };
 
 
