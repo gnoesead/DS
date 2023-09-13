@@ -457,6 +457,9 @@
     <Filter Include="02. GameObjects\Character\Monster\Boss_Akaza\Alert">
       <UniqueIdentifier>{019c38c0-48e5-4b0d-a8fc-04a479abbb67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\Effect\EffectPartsObject">
+      <UniqueIdentifier>{e1b319a1-2944-4553-b0c5-912a33f0fa52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -822,6 +825,9 @@
     <ClInclude Include="..\Public\AlertMesh_Akaza.h">
       <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Alert</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EffectPartsObject.h">
+      <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1177,6 +1183,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AlertMesh_Akaza.cpp">
       <Filter>02. GameObjects\Character\Monster\Boss_Akaza\Alert</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectPartsObject.cpp">
+      <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
