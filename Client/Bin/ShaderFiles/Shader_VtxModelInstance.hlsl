@@ -121,13 +121,13 @@ PS_OUT  PS_MAIN(PS_IN In)
 
 	vNormal = mul(vNormal, WorldMatrix);
 
-	//Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	//Out.vEmissive = vMtrlDiffuse;
 	Out.vDiffuse = vMtrlDiffuse;
 	//Out.vDiffuse_Cha = vector(0.f,0.f,0.f,0.f);
 	// In.vNormal xyz각각이 -1 ~ 1
 	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f);
 
 	return Out;
 }

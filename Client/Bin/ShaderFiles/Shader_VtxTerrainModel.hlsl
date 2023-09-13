@@ -138,9 +138,42 @@ PS_OUT  PS_SKY(PS_IN _In)
 	return Out;
 };
 
+PS_OUT  PS_FINALBOSSTERRAIN(PS_IN _In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV * g_fUVRatio);
+	vector	vSplatingDiffuse = g_SplatingTexture.Sample(LinearSampler, _In.vTexUV * g_fUVRatio);
+	vector	vMask = g_MaskTexture.Sample(LinearSampler, _In.vTexUV * g_fUVRatio);
+	/*vector	vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, _In.vTexUV * 0.1f);
+	vector	vSplatingDiffuse = g_SplatingTexture.Sample(LinearSampler, _In.vTexUV * 0.1f);
+	vector	vMask = g_MaskTexture.Sample(LinearSampler, _In.vTexUV * 0.1f);*/
+
+	/* 이 노멀아르 정의하기위한 로컬스페이스(x:Tangent, y:biNormal, z:Normal)에 정의되어있는 상태이다. */
+	vector	vNormalDesc = g_NormalTexture.Sample(LinearSampler, _In.vTexUV);
+
+	float3	vNormal = vNormalDesc.xyz * 2.f - 1.f;
+
+	float3x3	WorldMatrix = float3x3(_In.vTangent.xyz, _In.vBinormal.xyz, _In.vNormal.xyz);
+
+	vNormal = mul(vNormal, WorldMatrix);
+
+	Out.vDiffuse = vMtrlDiffuse * (vMask.r) + vSplatingDiffuse * (1.f - vMask.r);
+
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
+	//Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, 0.f, 0.f);
+	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar, 0.f);
+	Out.vDiffuse_Cha = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Out.vDiffuse * 0.25f;
+	return Out;
+};
+
+
 technique11 DefaultTechnique
 {
-	pass General
+	pass General	//0
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -153,7 +186,7 @@ technique11 DefaultTechnique
 		PixelShader = compile ps_5_0 PS_Main();
 	}
 
-	pass Sky
+	pass Sky	// 1
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
@@ -163,6 +196,19 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_SKY();
+	}
+
+	pass FinalBossTerrain	// 2
+	{
+		SetRasterizerState(RS_Default);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_FINALBOSSTERRAIN();
 	}
 };
 

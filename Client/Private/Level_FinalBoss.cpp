@@ -196,7 +196,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-	_float fRange = 0.5f;
+	_float fRange = 1.f;
 
 	// Á¡±¤¿ø 1 Range Á¶Àý 
 	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
@@ -327,7 +327,6 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 			pGameInstance->Set_Light(2, 1, vDiffuse_Point);
 		}
 	}
-
 
 	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 

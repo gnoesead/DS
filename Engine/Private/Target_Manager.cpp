@@ -98,6 +98,36 @@ HRESULT CTarget_Manager::Begin_MRT(const _tchar* pMRTTag)
 	
 
 	m_pContext->OMGetRenderTargets(1, &m_pDefaultRTV, &m_pDSV);
+	
+	_uint		iNumRenderTargets = { 0 };
+
+	ID3D11RenderTargetView* pRTVs[8] = { nullptr };
+
+	for (auto& pRenderTarget : *pMRTList)
+	{
+		pRenderTarget->Clear();
+		pRTVs[iNumRenderTargets++] = pRenderTarget->Get_RTV();
+	}
+
+	m_pContext->OMSetRenderTargets(iNumRenderTargets, pRTVs, m_pDSV);
+
+	return S_OK;
+}
+
+HRESULT CTarget_Manager::Begin_MRT_Blend(const _tchar* pMRTTag)
+{
+	ID3D11ShaderResourceView* pSRVs[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+
+	m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pSRVs);
+
+	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
+	if (nullptr == pMRTList)
+		return E_FAIL;
+
+
+
+	m_pContext->OMGetRenderTargets(1, &m_pDefaultRTV, &m_pDSV);
+	//m_pContext->OMGetBlendState(,)
 
 	_uint		iNumRenderTargets = { 0 };
 
@@ -116,6 +146,10 @@ HRESULT CTarget_Manager::Begin_MRT(const _tchar* pMRTTag)
 
 HRESULT CTarget_Manager::Begin_MRT_NoneClear(const _tchar* pMRTTag)
 {
+	ID3D11ShaderResourceView* pSRVs[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = { nullptr };
+
+	m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, pSRVs);
+
 	list<CRenderTarget*>* pMRTList = Find_MRT(pMRTTag);
 	if (nullptr == pMRTList)
 		return E_FAIL;
@@ -128,7 +162,7 @@ HRESULT CTarget_Manager::Begin_MRT_NoneClear(const _tchar* pMRTTag)
 
 	for (auto& pRenderTarget : *pMRTList)
 	{
-		//pRenderTarget->Clear();
+		pRenderTarget->Clear();
 		pRTVs[iNumRenderTargets++] = pRenderTarget->Get_RTV();
 	}
 
@@ -178,7 +212,7 @@ HRESULT CTarget_Manager::End_DefaultRT()
 HRESULT CTarget_Manager::End_MRT()
 {
 	m_pContext->OMSetRenderTargets(1, &m_pDefaultRTV, m_pDSV);
-
+	
 	Safe_Release(m_pDefaultRTV);
 	Safe_Release(m_pDSV);
 

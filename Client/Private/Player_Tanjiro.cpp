@@ -120,6 +120,11 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	for(_uint i = 0 ; i < 35 ; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
 
+	/*if (iCurIdx == LEVEL_TRAIN || iCurIdx == LEVEL_HOUSE)
+		m_fFar2 = 400.f;
+	else*/
+		m_fFar2 = 1.f;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -3145,6 +3150,9 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
+		return E_FAIL;
+	
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fFar2", &m_fFar2, sizeof(_float))))
 		return E_FAIL;
 		
 	Safe_Release(pGameInstance);
