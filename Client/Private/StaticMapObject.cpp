@@ -34,6 +34,8 @@ HRESULT CStaticMapObject::Initialize(void* pArg)
 
 	if (7 == m_MapObject_Info.iRenderGroup)
 		m_fAlpha = 0.f;
+	
+	
 
 	return S_OK;
 }

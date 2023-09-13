@@ -727,13 +727,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATK_SKILL_HEKIREKI == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
-			{
+			{				
 				CCameraManager::GetInstance()->Set_Is_Dist_Update(false, 1.3f);
 
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
 				m_pRendererCom->Set_BloomRatio(1.1f);
+				m_pRendererCom->Set_RadialBlur();
+				m_pRendererCom->Set_Invert();
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
@@ -745,7 +747,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.2f;
 				EffectWorldDesc.vPosition.y += 0.3f;
-
+				m_pRendererCom->Set_RadialBlur();
+				m_pRendererCom->Set_Invert();
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom , &EffectWorldDesc);
 
@@ -758,7 +761,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				EffectWorldDesc.vPosition.z += -0.3f;
-
+				
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 
@@ -773,7 +776,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
 				EffectWorldDesc.vPosition.y += 0.f;
-
+				
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Delay_Elc", m_pTransformCom, &EffectWorldDesc);
 			}
@@ -789,6 +792,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
+				
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
@@ -801,6 +805,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 
+			
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom, &EffectWorldDesc);
 
@@ -812,7 +817,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y += 0.4f;
 				EffectWorldDesc.vPosition.z += -0.3f;
 
-
+				
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Elc", m_pTransformCom, &EffectWorldDesc);
 

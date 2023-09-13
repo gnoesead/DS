@@ -126,8 +126,10 @@ public:
 		bool			isInheritVelocity = { false };
 		int				eInheritMode = { INITIAL };			//INHERITMODE
 		// Force over Lifetime
-		bool			isForceOverLifetime = { false };
-		_float3			vForce = { 0.f, 0.f, 0.f };
+		//bool			isForceOverLifetime = { false };
+		bool			isAttachedToBone = { false };
+		//_float3			vForce = { 0.f, 0.f, 0.f };
+		_float3			vUVStart = { 0.f, 0.f, 0.f };
 		int				eSpaceForce = { SPACE_LOCAL };		//SPACE
 		// Size over Lifetime
 		bool			isSizeOverLifetime = { false };
