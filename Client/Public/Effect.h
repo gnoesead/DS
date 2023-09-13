@@ -116,6 +116,9 @@ public:
 	void Set_Alpha(_float fAlpha) {
 		m_fAlpha = fAlpha;
 	}
+	void Set_IsPartsObj(_bool bParts) {
+		m_isPartObj = bParts;
+	}
 
 public:
 	HRESULT Add_Component_Texture(_uint iLevelIndex, const _tchar* pComponentTag, int eType);
@@ -243,6 +246,8 @@ protected:
 	_double					m_dPlaySpeed = { 1.0 };
 
 	_float3					m_vStartSize = { 1.f, 1.f, 1.f };
+
+	_bool					m_isPartObj = { false };
 
 public:
 	//static CEffect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

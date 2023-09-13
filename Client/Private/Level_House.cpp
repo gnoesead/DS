@@ -2477,8 +2477,8 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eInheritMode), sizeof(int));
 
 			// Force over Lifetime
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isForceOverLifetime), sizeof(bool));
-			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vForce), sizeof(_float3));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.isAttachedToBone), sizeof(bool));
+			inputFile.read(reinterpret_cast<char*>(&EffectDesc.vUVStart), sizeof(_float3));
 			inputFile.read(reinterpret_cast<char*>(&EffectDesc.eSpaceForce), sizeof(int));
 
 			// Size over Lifetime

@@ -15,57 +15,47 @@ END
 
 BEGIN(Client)
 
-class CSword final : public CGameObject
+class CEffectPartsObject final : public CGameObject
 {
 public:
-	enum PlayerName {PLAYER_TANJIRO, PLAYER_ZENITSU, PLAYER_RENGOKU, PLAYER_END};
-	
-	typedef struct tagSwordDesc
+	typedef struct tagPartsEffectDesc
 	{
-		_float4		vPos;
-
-		PlayerName	m_PlayerName = { PLAYER_END };
-
 		CBone* pBone = { nullptr };
 		CTransform* pParentTransform = { nullptr };
-
-	}SWORDDESC;
+	}PARTSEFFECTDESC;
 
 protected:
-	CSword(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CSword(const CSword& rhs);
-	virtual ~CSword() = default;
+	CEffectPartsObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CEffectPartsObject(const CEffectPartsObject& rhs);
+	virtual ~CEffectPartsObject() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Tick(_double TimeDelta) override;
 	virtual void LateTick(_double TimeDelta) override;
-	virtual HRESULT Render() override;
 
-	_matrix Remove_Scale(_fmatrix TransformMatrix);
+	void	Play_Effect(const char* pEffectTag, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
 
-	void	Set_SwordIn(_bool In) { m_isSwordIn = In; }
+	_matrix Get_WorldMatrix() {
+		return Convert::ToMatrix(m_WorldMatrix);
+	}
 
 protected:
 	HRESULT Add_Components();
-	HRESULT SetUp_ShaderResources( );
 
 
 protected:
-	CShader*	 m_pShaderCom = { nullptr };
-	CRenderer*	 m_pRendererCom = { nullptr };
 	CTransform*  m_pTransformCom = { nullptr };
-	CModel*		 m_pModelCom = { nullptr };
 
 protected:
 	_bool		m_isSwordIn = { false };
 
-	SWORDDESC			m_SwordDesc;
+	PARTSEFFECTDESC			m_PartsDesc;
 	_float4x4				m_WorldMatrix;
 
 public:
-	static  CSword* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static  CEffectPartsObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg) override;
 	virtual void Free() override;
 };
