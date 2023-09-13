@@ -1753,6 +1753,21 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Wind");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Line.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Line");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Skill_Stomp.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Skill_Stomp");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Eye.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Awake_Eye");
@@ -1829,8 +1844,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Shoot_Projectile");
 		return E_FAIL;
 	}
-
-		
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
 	{

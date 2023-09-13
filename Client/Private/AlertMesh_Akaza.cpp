@@ -27,6 +27,7 @@ HRESULT CAlertMesh_Akaza::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_EffectDesc, pArg, sizeof m_EffectDesc);
+	Safe_AddRef(m_EffectDesc.pOwnerTransform);
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -38,38 +39,35 @@ HRESULT CAlertMesh_Akaza::Initialize(void* pArg)
 	{
 	case TYPE_INNER_0:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_00"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_Inner_00"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
-
 		m_pTransformCom->Rotation(_float3(0.f, 0.f, -90.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 
 		break;
 	case TYPE_INNER_1:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_Inner_01"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_Inner_01"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
-		 
 		m_pTransformCom->Rotation(_float3(0.f, 0.f, -90.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 
 		break;
 	case TYPE_OUTWAVE:
 		/* For.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Akaza_OuterWave"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Akaza_OuterWave"),
 			TEXT("Com_Model"), (CComponent**)&m_pModelCom)))
 			return E_FAIL;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 		m_pTransformCom->Scaling(m_EffectDesc.vScale);
-
 		m_pTransformCom->Rotation(_float3(0.f, 0.f, 0.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 
 		break;
 	}
@@ -81,12 +79,12 @@ void CAlertMesh_Akaza::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 
-	_vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION) + XMVector3Normalize(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_LOOK)) * 0.8f;
+	_vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION);
 	vPos = XMVectorSetY(vPos, m_EffectDesc.fLandY);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_vCustomUV.x = m_EffectDesc.vCustomUV.x * m_dAccTime;
-	m_vCustomUV.y = m_EffectDesc.vCustomUV.y * m_dAccTime;
+	m_vCustomUV.x = m_EffectDesc.vCustomUV.x * (_float)m_dAccTime;
+	m_vCustomUV.y = m_EffectDesc.vCustomUV.y * (_float)m_dAccTime;
 
 	m_dAccTime += TimeDelta;
 }
@@ -183,9 +181,6 @@ HRESULT CAlertMesh_Akaza::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_DiffuseTexture")))
-		return E_FAIL;
-
 	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture")))
 		return E_FAIL;
 
@@ -228,6 +223,8 @@ CGameObject* CAlertMesh_Akaza::Clone(void* pArg)
 void CAlertMesh_Akaza::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_EffectDesc.pOwnerTransform);
 
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pShaderCom);
