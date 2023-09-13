@@ -58,8 +58,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 200.f;
-		m_StatusDesc.fHp_Max = 200.f;
+		m_StatusDesc.fHp = 2000.f;
+		m_StatusDesc.fHp_Max = 2000.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
