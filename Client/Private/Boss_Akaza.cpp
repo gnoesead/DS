@@ -1264,10 +1264,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 			m_pPlayer_Zenitsu->Set_Hit_Success_Hekireki(true);
-		}
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 	}
 
 }

@@ -1005,7 +1005,6 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_26", m_pTransformCom, &EffectWorldDesc);
-
 			}
 
 			if (1 == m_iEvent_Index)	// 0.28
@@ -1209,10 +1208,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Spin(false);
 		m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
-		{
-			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
 			m_pPlayer_Zenitsu->Set_Hit_Success_Hekireki(true);
-		}
+		m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+
 	}
 }
 
@@ -4268,7 +4266,7 @@ HRESULT CBoss_Kyogai::Add_Components()
 	{
 		MSG_BOX("Failed to Add_Com_Shader : CBoss_Kyogai");
 		return E_FAIL;
-	}	
+	}
 
 	m_CharacterDesc.TransformDesc.dSpeedPerSec = 5.0;
 	m_CharacterDesc.TransformDesc.dRadianRotationPerSec = (_double)XMConvertToRadians(90.f);
@@ -4348,7 +4346,7 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 
 	_float4x4 ProjMatrix = pGameInstance->Get_TransformFloat4x4(CPipeLine::D3DTS_PROJ);
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
-		return E_FAIL;	
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 	// OutlineThickness
@@ -4357,7 +4355,7 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 
