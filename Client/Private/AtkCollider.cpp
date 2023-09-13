@@ -265,19 +265,44 @@ void CAtkCollider::Tick_BaseBullet(_double dTimeDelta)
 
 		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
 
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.fScale = 0.5f;
+
 		m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
 		// 두번 째 인자에 원하는 원하는 시간(주기 넣어주면 됨)
+
 		if (Event_Time(dTimeDelta, 0.10, m_dTimeAcc))
 		{
-			//이펙트 추가
-
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
 		}
-		if (Event_Time(dTimeDelta, 0.20, m_dTimeAcc))
+		if (Event_Time(dTimeDelta, 0.25, m_dTimeAcc))
 		{
-			//이펙트 추가
-
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
 		}
-
+		if (Event_Time(dTimeDelta, 0.40, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
+		if (Event_Time(dTimeDelta, 0.55, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
+		if (Event_Time(dTimeDelta, 0.60, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
+		if (Event_Time(dTimeDelta, 0.75, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
+		if (Event_Time(dTimeDelta, 0.9, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
+		if (Event_Time(dTimeDelta, 1.05, m_dTimeAcc))
+		{
+			CEffectPlayer::Get_Instance()->Play("Akaza_ATK_SuperArmor_2_Wind", m_pTransformCom, &EffectWorldDesc);
+		}
 	}
 
 }
@@ -583,6 +608,13 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta)
 			{
 				//아카자 개방 장풍 땅에 닿았을 때 이펙트 여기에 추가
 
+				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
+				EffectDesc.fScale = 0.5f;
+
+				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom, &EffectDesc);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 			}
 			CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
 			Reset_Dead();
@@ -596,7 +628,6 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta)
 		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_AKAZA_BULLET_EFFECT)
 		{
 			//아카자 와다다다패턴 이펙트 죽기전 파티클
-
 		}
 		Reset_Dead();
 	}
