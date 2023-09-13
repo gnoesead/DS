@@ -232,6 +232,10 @@ protected: //사운드 용
 	_int	m_iSound_Atk_Medium = { 0 };
 	_int	m_iSound_Atk_Big = { 0 };
 
+	_int	m_iSound_Dmg_Small = { 0 };
+	_int	m_iSound_Dmg_Medium = { 0 };
+	_int	m_iSound_Dmg_Big = { 0 };
+
 	//이벤트콜
 	_int	m_iSave_AnimIndex = { 0 };
 

@@ -2,6 +2,7 @@
 #include "..\Public\Aurora.h"
 
 #include "GameInstance.h"
+#include "Character.h"
 
 CAurora::CAurora(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMasterEffect(pDevice, pContext)
@@ -43,6 +44,14 @@ HRESULT CAurora::Initialize(void* pArg)
 
 void CAurora::Tick(_double TimeDelta) 
 {
+	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
+		return;
+
+	m_fAlpha += 0.5f * (_float)TimeDelta;
+
+	if (m_fAlpha > m_fMaxAlpha)
+		m_fAlpha = m_fMaxAlpha;
+
 	__super::Tick(TimeDelta);
 
 	m_fAccY += (_float)m_dSpeedY * (_float)TimeDelta;
@@ -54,13 +63,22 @@ void CAurora::Tick(_double TimeDelta)
 
 	Update_Frame(TimeDelta);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION)
-		+ XMVectorSet(m_fPlusX, m_fPlusY + m_fAccY, m_fPlusZ, 0.f));
-
+	if (TYPE_LOCAL == m_EffectDesc.eType)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION)
+			+ XMVectorSet(m_fPlusX, m_fPlusY + m_fAccY, m_fPlusZ, 0.f));
+	}
+	else if (TYPE_WORLD == m_EffectDesc.eType)
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector(m_vInitialPos) + XMVectorSet(0.f, m_fAccY, 0.f, 0.f));
+	}
 }
 
 void CAurora::LateTick(_double TimeDelta)
 {
+	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
+		return;
+
 	__super::LateTick(TimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -124,10 +142,27 @@ HRESULT CAurora::Add_Components()
 		return E_FAIL;
 
 	/* For.Com_RampTexture */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp07"),
-		TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
-		return E_FAIL;
-
+	switch (m_EffectDesc.eColor)
+	{
+	case COLOR_BLUE:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ramp07"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	case COLOR_RED:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_ramp_ef_en300900110_red #3417236"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	case COLOR_PURPLE:
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_ramp_ef_fire_torch_purple01 #1497231"),
+			TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+			return E_FAIL;
+		break;
+	default:
+		break;
+	}
+	
 	return S_OK;
 }
 
@@ -170,7 +205,7 @@ HRESULT CAurora::SetUp_ShaderResources()
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vColor", &m_vColor, sizeof _float3)))
 		return E_FAIL;
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -199,22 +234,66 @@ void CAurora::Reset_Data()
 
 	m_dSpeedY = (_double)Random::Generate_Float(0.1f, 0.3f);
 
-	m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
-	m_fPlusY = Random::Generate_Float(0.f, 1.f);
-	m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
-
-	m_fAlpha = 0.05f;
-
-	m_vColor = { Random::Generate_Float(0.4f, 0.7f) ,  Random::Generate_Float(0.4f, 0.7f) , 1.f };
-
-	m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
-	m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
-
 	m_fAccY = 0.f;
 
-	m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+	m_iFrame = Random::Generate_Int(8, 10);
 
-	m_iFrame = Random::Generate_Int(0, 10);
+	m_fAlpha = 0.f;
+
+	if (m_EffectDesc.eCharacter == CHARACTER_KYOGAI)
+	{
+		m_fPlusX = Random::Generate_Float(-1.f, 1.0f);
+		m_fPlusY = Random::Generate_Float(0.f, 2.5f);
+		m_fPlusZ = Random::Generate_Float(-1.0f, 1.0f);
+
+		m_fMaxAlpha = 0.2f;
+
+		m_vSize = { Random::Generate_Float(1.0f, 1.4f),Random::Generate_Float(1.0f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(1.5f, 1.8f);
+		m_fSizeSpeedY = Random::Generate_Float(1.5f, 1.7f);
+
+		
+	}
+	else if (m_EffectDesc.eCharacter == CHARACTER_AKAZA)
+	{
+		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
+		m_fPlusY = Random::Generate_Float(0.f, 1.3f);
+		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+
+		m_fMaxAlpha = 0.2f;
+
+		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+		m_fSizeSpeedY = Random::Generate_Float(0.7f, 0.9f);
+	}
+	else if (m_EffectDesc.eCharacter == CHARACTER_TANJIRO)
+	{
+		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
+		m_fPlusY = Random::Generate_Float(0.f, 1.f);
+		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+
+		m_fMaxAlpha = 0.15f;
+
+		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+		m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
+
+	}
+
+	if (m_EffectDesc.eType == TYPE_WORLD)
+	{
+		m_dFrameSpeed = Random::Generate_Float(0.015f, 0.02f);
+		m_fAlpha = 0.05f;
+
+		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
+		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.15f);
+
+		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
+		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.2f);
+		m_fPlusY = Random::Generate_Float(0.4f, 0.8f);
+
+		XMStoreFloat4(&m_vInitialPos, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+	}
 }
 
 CAurora* CAurora::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

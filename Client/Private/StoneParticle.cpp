@@ -37,7 +37,9 @@ HRESULT CStoneParticle::Initialize(void* pArg)
 
 	m_fColor = Random::Generate_Float(0.4f, 0.6f);
 
-	m_pTransformCom->Rotation(_float3((_float)Random::Generate_Int(0, 360), (_float)Random::Generate_Int(0, 360), 0.f));
+	m_pTransformCom->Rotation(_float3((_float)Random::Generate_Int(0, 360), (_float)Random::Generate_Int(0, 360), (_float)Random::Generate_Int(0, 360)));
+
+	m_iFrame = Random::Generate_Int(0, 3);
 
 	return S_OK;
 }
@@ -59,6 +61,11 @@ void CStoneParticle::Tick(_double TimeDelta)
 	m_vSize.y += m_fSizeSpeedX * (_float)TimeDelta;
 
 	m_pTransformCom->Scaling(m_vSize);
+
+	if(m_EffectWDesc.bSizeEqual)
+		m_pTransformCom->Scaling(_float3(m_vSize.x , m_vSize.x, m_vSize.x));
+	else
+		m_pTransformCom->Scaling(m_vSize);
 
 	m_dLifeAccTime += TimeDelta;
 

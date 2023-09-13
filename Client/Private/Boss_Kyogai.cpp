@@ -62,6 +62,26 @@ HRESULT CBoss_Kyogai::Initialize(void* pArg)
 	m_StatusDesc.fHp = 200.f;
 	m_StatusDesc.fHp_Max = 200.f;
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+	AuroraDesc.eCharacter = CAurora::CHARACTER_KYOGAI;
+
+	AuroraDesc.eColor = CAurora::COLOR_RED;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -324,6 +344,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		_double dLifeTime = 0.20;
 		_double dLongLifeTime = 1.0;
 		_double dSpeed = 5.0;
+
+		if (0 == m_pModelCom->Get_iCurrentAnimIndex()) // ÄÆ½Å
+		{
+			if (0 == m_iEvent_Index)
+			{
+				m_isAuroraOn = true;
+			}
+		}
+
 
 #pragma region AWAKE_ComboPunch
 		if (ANIM_ATKCMB2 == m_pModelCom->Get_iCurrentAnimIndex())

@@ -1139,6 +1139,18 @@ void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fv
 		for (_uint i = 0; i < 80; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
 		break;
+	case CStoneParticle::STONE_AKAZA_STOMPDOWN:
+		EffectWDesc.vStartPosX = { -3.f,3.f }; EffectWDesc.vStartPosY = { -0.00f,2.f }; EffectWDesc.vStartPosZ = { -3.f,3.f };
+		EffectWDesc.vStartSizeX = { 0.1f , 0.5f }; EffectWDesc.vStartSizeY = { 0.1f , 0.7f };
+		EffectWDesc.vSpeedX = { -12.f , 12.f }; EffectWDesc.vSpeedY = { 3.f , 25.f }; EffectWDesc.vSpeedZ = { -12.f , 12.f };
+		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+		EffectWDesc.fGravity = 30.0f;
+		EffectWDesc.vColor = { 0.0f , 0.2f };
+		EffectWDesc.bSizeEqual = true;
+
+		for (_uint i = 0; i < 200; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+		break;
 
 	case CStoneParticle::STONE_TANJIRO_COMBODOWN:
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
@@ -1263,7 +1275,7 @@ void CCharacter::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 40.f, -5.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
@@ -1275,7 +1287,7 @@ void CCharacter::Shadow_Village_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
@@ -1287,42 +1299,71 @@ void CCharacter::Shadow_House_Setting()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"),CPlayerManager::GetInstance()->Get_PlayerIndex(), TEXT("Com_Transform")));
 
-	_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
+		
 	if (pPlayerTransformCom != nullptr)
 	{
-		vLightEye = vPlayerPos + XMVectorSet(-5.f, 3.f, -5.f, 1.f);
-		vLightAt = vPlayerPos;		
-	}
-	// 磊内规
+		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	// 撵快啊捞规
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
+		vLightAt = vPlayerPos;
+	}
 
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
 
-	m_pShaderCom->SetUp_Matrix("g_matLightView", &FloatLightViewMatrix);
+	m_pShaderCom->SetUp_Matrix("g_ViewMatrix", &FloatLightViewMatrix);
 
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
-	m_pShaderCom->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);
-
+	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
 	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Shadow_Train_Setting()
 {
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+
+	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
+	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
+	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	
+	if (pPlayerTransformCom != nullptr)
+	{
+		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		vLightEye = vPlayerPos + XMVectorSet(-20.f, 40.f, -20.f, 1.f);
+		vLightAt = vPlayerPos;
+	}
+	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
+	_float4x4   FloatLightViewMatrix;
+	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ViewMatrix", &FloatLightViewMatrix);
+
+	_matrix      LightProjMatrix;
+	_float4x4   FloatLightProjMatrix;
+
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 400.f);
+	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
+
+	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
+	Safe_Release(pGameInstance);
+
 }
 
 void CCharacter::Shadow_Final_Setting()
@@ -1340,7 +1381,7 @@ void CCharacter::Shadow_Final_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280) / _float(720), 0.2f, 300.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(20.f), _float(1280) / _float(720), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);

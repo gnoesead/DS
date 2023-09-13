@@ -136,14 +136,16 @@ void CNPC::LateTick(_double dTimeDelta)
 
 HRESULT CNPC::Render()
 {
-	
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CNPC::Render_ShadowDepth()
 {
-
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
 	return S_OK;
 }
 
