@@ -148,8 +148,8 @@ private:
 	//_float					m_fSSAORadius = { 0.005f };
 	_float					m_fBrigthRatio = { 0.90f };
 	_float					m_fParticle_BrightRatio = { 0.8f };
-	_float					m_fBloomPower = { 1.75f };
-	_float					m_fBlurWeight = { 0.75f };
+	_float					m_fBloomPower = { 1.25f };
+	_float					m_fBlurWeight = { 1.f };
 
 private:
 	_uint					m_iPlayerIdx = { 0 };

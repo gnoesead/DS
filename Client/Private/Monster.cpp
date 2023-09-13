@@ -61,13 +61,18 @@ void CMonster::LateTick(_double dTimeDelta)
 
 HRESULT CMonster::Render()
 {
-	__super::Render();
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+	if (FAILED(SetUp_ShaderResources()))
+		return E_FAIL;
 	return S_OK;
 }
 
 HRESULT CMonster::Render_ShadowDepth()
 {
-	__super::Render_ShadowDepth();
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -108,7 +113,7 @@ void CMonster::Check_Player_Surge()
 {
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 28) //ÄÆ¾À
 	{
-		if(m_isSurging)
+		if (m_isSurging)
 			m_bTanjiroSurge = false;
 		else
 			m_bTanjiroSurge = true;
@@ -352,12 +357,30 @@ void CMonster::Pos_FixY()
 
 HRESULT CMonster::Add_Components()
 {
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
+		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	{
+		MSG_BOX("Failed to Add_Com_Texture : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
 
 HRESULT CMonster::SetUp_ShaderResources()
 {
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_DisolveTexture", 0)))
+		return E_FAIL;
+
+	if (m_bMonsterDead == true)
+	{
+		if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &m_fDeadTime, sizeof(_float))))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

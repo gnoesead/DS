@@ -28,7 +28,7 @@ public:
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER, STATE_HIT_CUTSCENE, STATE_HIT_HEKIREKI
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE, STATE_HIT_HEKIREKI, STATE_HIT_DEAD
 
 	};
 	enum TURN
@@ -185,19 +185,17 @@ public:
 	void Trigger_Awake_AtkskCmb();
 	void Trigger_AtkSk();
 	void Trigger_AtkPangPang();
-	
+
 
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
 	void Trigger_Hit_Upper();
 	void Trigger_Hit_Big();
 	void Trigger_Hit_Blow();
-	
 	void Trigger_Hit_CutScene();
 	void Trigger_Hit_GetUp();
-	
 	void Trigger_Hit_Hekireki();
-	
+	void Trigger_Hit_Dead();
 
 #pragma endregion
 
@@ -232,6 +230,7 @@ private: //패턴 함수들
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 	void Update_Hit_Hekireki(_double dTimeDelta);
+	void Update_Hit_Dead(_double dTimeDelta);
 
 	void Update_RoomChange(_double dTimeDelta);
 	void Update_RoomChange_2(_double dTimeDelta);
@@ -276,6 +275,8 @@ private: // _bool
 	_bool	m_bLoop = { true };
 
 	_bool	m_bHit = { true };
+
+	_bool	m_bStopAnim = { false };
 
 private: // time
 	_double m_dTimeAcc = { 0.0 };

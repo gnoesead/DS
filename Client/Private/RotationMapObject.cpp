@@ -29,6 +29,7 @@ HRESULT CRotationMapObject::Initialize(void* pArg)
 
     m_MapObject_Info.iMapObjectType = MAPOBJECT_ROTATION;
 
+
     return S_OK;
 }
 

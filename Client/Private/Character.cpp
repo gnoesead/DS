@@ -1310,7 +1310,7 @@ void CCharacter::Shadow_House_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 
@@ -1424,10 +1424,12 @@ void CCharacter::Free()
 	for (_uint i = 0; i < COLL_END; i++)
 		Safe_Release(m_pColliderCom[i]);
 
+	Safe_Release(m_pTextureCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	
 
 
 }
