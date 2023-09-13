@@ -103,6 +103,7 @@ private:
 private:
 	CSword* m_pSword = { nullptr };
 	CSwordHome* m_pSwordHome = { nullptr };
+	class CEffectPartsObject* m_pSwordEffect = { nullptr };
 
 	//스케일 조정
 	_float m_fScaleChange = { 0.8f };
