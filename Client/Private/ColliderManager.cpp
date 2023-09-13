@@ -546,6 +546,8 @@ HRESULT CColliderManager::Check_BossAtkToPlayer(_uint iLevelIndex, _double dTime
 
 	list<CGameObject*>* pPlayers = pGameInstance->Get_GameObjects(iLevelIndex, TEXT("Layer_Player"));
 
+	_int iCollCount = { 0 };
+
 	if (nullptr != pMonsterAtkColls && nullptr != pPlayers)
 	{
 		for (auto& pMonsterAtkColls : (*pMonsterAtkColls))
@@ -562,6 +564,9 @@ HRESULT CColliderManager::Check_BossAtkToPlayer(_uint iLevelIndex, _double dTime
 						pAtkCollider->Intersect(pPlayerCollider);
 
 						if (true == pPlayerCollider->Get_Coll())
+							iCollCount++;
+
+						if (true == pPlayerCollider->Get_Coll())
 						{
 							dynamic_cast<CCharacter*>(pPlayers)->Add_HitCollider(pMonsterAtkColls);
 
@@ -571,12 +576,16 @@ HRESULT CColliderManager::Check_BossAtkToPlayer(_uint iLevelIndex, _double dTime
 
 
 						}
+						if (0 < iCollCount)
+							pPlayerCollider->Set_Coll(true);
+						else
+							pPlayerCollider->Set_Coll(false);
 					}
 				}
 			}
 		}
 	}
-
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
