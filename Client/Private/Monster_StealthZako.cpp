@@ -370,7 +370,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		if (m_isFirst_SlowMotion)
 		{
 			m_isFirst_SlowMotion = false;
-			m_pRendererCom->Set_GrayScale_On(true);
+			m_pRendererCom->Set_RadialBlur_On(true);
 		}
 
 		m_dDelay_SlowMotion += dTimeDelta;
@@ -378,7 +378,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		{
 			m_isSlowMotion = false;
 			m_dDelay_SlowMotion = 0.0;
-			m_pRendererCom->Set_GrayScale_On(false);
+			m_pRendererCom->Set_RadialBlur_On(false);
 		}
 	}
 

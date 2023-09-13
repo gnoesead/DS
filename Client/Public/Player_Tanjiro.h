@@ -116,6 +116,12 @@ private:
 	_bool	m_isPlayerBack_Tanjiro = { false };
 	_double m_dDelay_PlayerBack_Tanjiro = { 0.0 };
 
+
+private: //사운드
+	_bool	m_isSound_Awaken = { false };
+	_double m_dSound_Awaken_Complete = { 0.0 };
+
+
 private: //애니메이션 제어용 변수들
 	//Move
 	_float	m_fMove_Speed = { 20.0f  }; 
