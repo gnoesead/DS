@@ -2868,9 +2868,13 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom, &EffectWorldDesc);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
-						Camera_Shake(1.0);
-
-
+						Camera_Shake(1.0 , 120);
+						Create_StoneParticle(CStoneParticle::STONE_AKAZA_STOMPDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 0.5f, 0.f, 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 					}
 					else
 					{
@@ -2888,7 +2892,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
-						Camera_Shake(1.0);
+						Camera_Shake(1.0 , 120);
 					}
 				}
 
