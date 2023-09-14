@@ -29,8 +29,6 @@
 
 #include "WebManager.h"
 
-#include "EffectPartsObject.h"
-
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -78,12 +76,6 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
 	m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
 
-	CEffectPartsObject::PARTSEFFECTDESC PartsDesc;
-	ZeroMemory(&PartsDesc, sizeof PartsDesc);
-	PartsDesc.pParentTransform = m_pTransformCom;
-	PartsDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
-	m_pSwordEffect = dynamic_cast<CEffectPartsObject*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectPartsObject"), &PartsDesc));
-
 	CSwordHome::SWORDDESC SwordHomeDesc;
 	ZeroMemory(&SwordHomeDesc, sizeof SwordHomeDesc);
 	SwordHomeDesc.m_PlayerName = CSwordHome::PLAYER_TANJIRO;
@@ -115,7 +107,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	AuroraDesc.pGameObject = this;
 	AuroraDesc.eType = CAurora::TYPE_LOCAL;
 	AuroraDesc.eCharacter = CAurora::CHARACTER_TANJIRO;
-	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	AuroraDesc.eColor = CAurora::COLOR_SKY;
 
 	for(_uint i = 0 ; i < 35 ; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
@@ -138,7 +130,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pSword->Tick(dTimeDelta);
 		m_pSwordHome->Tick(dTimeDelta);
-		m_pSwordEffect->Tick(dTimeDelta);
 	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -146,8 +137,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
+		m_bSmell_Detection = true;
 		m_pRendererCom->Set_GrayScale();
 	}
+	Smell_Detection(dTimeDelta);
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
 		//m_pRendererCom->Set_RadialBlur();
@@ -196,11 +190,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
-	{
-		
-	}
-
 	Safe_Release(pGameInstance); 
 
 	if (true == m_isDead)
@@ -237,18 +226,24 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (m_Moveset.m_iAwaken != 0)
 	{
-		m_isAuroraOn = true;
+		
 
-		m_dAwakenParticleAccTime += dTimeDelta;
-
-		if (m_dAwakenParticleAccTime > 0.4)
+		if (55 == m_pModelCom->Get_iCurrentAnimIndex())
+			m_isAuroraOn[0] = false;
+		else
 		{
-			CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom); 
-			m_dAwakenParticleAccTime = 0.0;
+			m_isAuroraOn[0] = true; 
+			m_dAwakenParticleAccTime += dTimeDelta;
+
+			if (m_dAwakenParticleAccTime > 0.2)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom);
+				m_dAwakenParticleAccTime = 0.0;
+			}
 		}
 	}
 	else
-		m_isAuroraOn = false;
+		m_isAuroraOn[0] = false;
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -257,7 +252,6 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		m_pSword->LateTick(dTimeDelta);
 		m_pSwordHome->LateTick(dTimeDelta);
-		m_pSwordEffect->LateTick(dTimeDelta);
 	}
 
 	//playerswap
@@ -941,6 +935,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+
+				m_pRendererCom->Set_BloomRatio();
 			}
 			
 			
@@ -1077,10 +1073,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			//if (0 == m_iEvent_Index)
-			//{
-			//	m_pSwordEffect->Play_Effect("Tanjiro_Awake_Cutscene_Sword");
-			//}
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.2f;
+				EffectWorldDesc.vPosition.x -= 0.1f;
+				EffectWorldDesc.vPosition.z -= 0.1f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Awake_Cutscene_Breath", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
 #pragma endregion
@@ -3618,7 +3618,6 @@ void CPlayer_Tanjiro::Free()
 {
 	Safe_Release(m_pSword);
 	Safe_Release(m_pSwordHome);
-	Safe_Release(m_pSwordEffect);
 
 	__super::Free();
 }

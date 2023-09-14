@@ -42,15 +42,34 @@ HRESULT CZen_Aurora::Initialize(void* pArg)
 
 	Reset_Data();
 
-	m_iFrame = Random::Generate_Int(0, m_iNumX * m_iNumY);
+	m_iFrame = Random::Generate_Int(0, 63);
 
 	return S_OK;
 }
 
 void CZen_Aurora::Tick(_double TimeDelta) 
 {
-	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
-		return;
+	switch (m_EffectDesc.eGroup)
+	{
+	case GROUP_0:
+		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_0))
+		{
+			m_fAlpha -= 0.4f * (_float)TimeDelta;
+			if (m_fAlpha < 0.f)
+				m_fAlpha = 0.f;
+			return;
+		}
+		break;
+	case GROUP_1:
+		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_1))
+		{
+			m_fAlpha -= 0.2f * (_float)TimeDelta;
+			if (m_fAlpha < 0.f)
+				m_fAlpha = 0.f;
+			return;
+		}
+		break;
+	}
 
 	m_fAlpha += 0.5f * (_float)TimeDelta;
 
@@ -81,7 +100,7 @@ void CZen_Aurora::Tick(_double TimeDelta)
 
 void CZen_Aurora::LateTick(_double TimeDelta)
 {
-	if (!m_EffectDesc.pGameObject->Get_IsAuroraOn())
+	if (m_fAlpha == 0.f)
 		return;
 
 	__super::LateTick(TimeDelta);
@@ -146,7 +165,10 @@ HRESULT CZen_Aurora::Add_Components()
 		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
-	
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_ramp_ef_yellow #2844303"),
+		TEXT("Com_RampTexture"), (CComponent**)&m_pRampTextureCom)))
+		return E_FAIL;
 	
 	return S_OK;
 }
@@ -173,8 +195,11 @@ HRESULT CZen_Aurora::SetUp_ShaderResources()
 	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
-	_float fUVRatioX = (1.f / m_iNumX) * (m_iFrame % m_iNumX);
-	_float fUVRatioY = (1.f / m_iNumY) * (m_iFrame / m_iNumY);
+	if (FAILED(m_pRampTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_RampTexture", 0)))
+		return E_FAIL;
+
+	_float fUVRatioX = (1.f / 8.f) * (m_iFrame % 8);
+	_float fUVRatioY = (1.f / 8.f) * (m_iFrame / 8);
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_NumX", &m_iNumX, sizeof _float)))
 		return E_FAIL;
@@ -207,7 +232,7 @@ void CZen_Aurora::Update_Frame(_double TimeDelta)
 	{
 		++m_iFrame;
 		m_FrameAccTime = 0.0;
-		if (m_iFrame >= m_iNumX * m_iNumY - 20)
+		if (m_iFrame >= m_iNumX * m_iNumY - 1)
 		{
 			Reset_Data();
 		}
@@ -220,7 +245,7 @@ void CZen_Aurora::Reset_Data()
 {
 	m_dFrameSpeed = Random::Generate_Float(0.04f, 0.06f);
 
-	m_dSpeedY = (_double)Random::Generate_Float(0.1f, 0.3f);
+	m_dSpeedY = (_double)Random::Generate_Float(0.1f, 0.2f);
 
 	m_fAccY = 0.2f;
 
@@ -228,30 +253,16 @@ void CZen_Aurora::Reset_Data()
 
 	m_fAlpha = 0.f;
 
-	m_fPlusX = Random::Generate_Float(-0.35f, 0.3f);
-	m_fPlusY = Random::Generate_Float(0.f, 1.f);
-	m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+	m_fPlusX = Random::Generate_Float(-0.02f, 0.02f);
+	m_fPlusY = Random::Generate_Float(0.f, 0.7f);
+	m_fPlusZ = Random::Generate_Float(-0.2f, 0.2f);
 
-	m_fMaxAlpha = 1.f;
+	m_fMaxAlpha = 0.1f;
 
-	m_vSize = { Random::Generate_Float(1.f, 1.6f),Random::Generate_Float(1.f, 1.6f),1.f };
-	m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+	m_vSize = { Random::Generate_Float(1.f, 1.4f) , Random::Generate_Float(1.f, 1.4f) , 1.f };
+	m_fSizeSpeedX = Random::Generate_Float(0.3f, 0.5f);
 	m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
 
-	if (m_EffectDesc.eType == TYPE_WORLD)
-	{
-		m_dFrameSpeed = Random::Generate_Float(0.015f, 0.02f);
-		m_fAlpha = 0.05f;
-
-		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
-		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.15f);
-
-		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
-		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.2f);
-		m_fPlusY = Random::Generate_Float(0.4f, 0.8f);
-
-		XMStoreFloat4(&m_vInitialPos, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
-	}
 }
 
 CZen_Aurora* CZen_Aurora::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -288,5 +299,5 @@ void CZen_Aurora::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pTextureCom);
-
+	Safe_Release(m_pRampTextureCom);
 }

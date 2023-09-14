@@ -121,10 +121,10 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 		{
 			if (m_pEffect->Get_SimulationSpace() == CEffect::SPACE_LOCAL)
 			{
-				if (!m_isParts)
+				//if (!m_isParts)
 					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
-				else
-					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_WorldMatrix));
+				//else
+				//	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_WorldMatrix));
 			}
 			else
 			{
@@ -152,42 +152,42 @@ void CParticleSystem::LateTick(_double dTimeDelta)
 		}
 		else    // 條鱔
 		{
-			if(!m_isParts)
+			//if(!m_isParts)
 				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentTransform->Get_WorldMatrix());
-			else
-				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentObject->Get_WorldMatrix());
+			//else
+			//	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentObject->Get_WorldMatrix());
 		}
 	}
-	else
-	{
-		if (m_isParts)
-		{
-			if (nullptr != m_pEffect)     // 條鱔 X
-			{
-				if (m_pEffect->Get_SimulationSpace() == CEffect::SPACE_LOCAL)
-					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_WorldMatrix));
-				else
-					XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_ParentWorldMatrix));
+	//else
+	//{
+	//	if (m_isParts)
+	//	{
+	//		if (nullptr != m_pEffect)     // 條鱔 X
+	//		{
+	//			if (m_pEffect->Get_SimulationSpace() == CEffect::SPACE_LOCAL)
+	//				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_WorldMatrix));
+	//			else
+	//				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * Convert::ToMatrix(m_pParent->m_ParentWorldMatrix));
 
-				if (m_pEffect->Get_IsSetYToGround())
-				{
-					CGameInstance* pGameInstance = CGameInstance::GetInstance();
-					Safe_AddRef(pGameInstance);
+	//			if (m_pEffect->Get_IsSetYToGround())
+	//			{
+	//				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	//				Safe_AddRef(pGameInstance);
 
-					CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+	//				CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
 
-					Safe_Release(pGameInstance);
+	//				Safe_Release(pGameInstance);
 
-					if (nullptr != pPlayer)
-						m_WorldMatrix._42 = pPlayer->Get_LandY() + m_vPosition.y;
-				}
-			}
-			else    // 條鱔
-			{
-				XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentObject->Get_WorldMatrix());
-			}
-		}
-	}
+	//				if (nullptr != pPlayer)
+	//					m_WorldMatrix._42 = pPlayer->Get_LandY() + m_vPosition.y;
+	//			}
+	//		}
+	//		else    // 條鱔
+	//		{
+	//			XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() * m_pParentObject->Get_WorldMatrix());
+	//		}
+	//	}
+	//}
 
 	//for (auto Parts : m_PartEffects)
 	//	Parts->LateTick(dTimeDelta);

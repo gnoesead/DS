@@ -20,6 +20,7 @@ class CZen_Aurora final : public CMasterEffect
 public:
 	enum TYPE{TYPE_LOCAL , TYPE_WORLD};
 	enum COLOR {COLOR_YELLOW , COLOR_WHITE};
+	enum GROUP { GROUP_0, GROUP_1 };
 public:
 	typedef struct Effecttag
 	{
@@ -27,7 +28,7 @@ public:
 		class CCharacter* pGameObject;
 		TYPE eType;
 		COLOR eColor;
-
+		GROUP eGroup;
 	}EFFECTDESC;
 
 private:
@@ -56,6 +57,7 @@ private:
 	CRenderer* m_pRendererCom = { nullptr };
 	CTransform* m_pTransformCom = { nullptr };
 	CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	CTexture* m_pRampTextureCom = { nullptr };
 
 private:
 	_uint					m_iNumX = 0;

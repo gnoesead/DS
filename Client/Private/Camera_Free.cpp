@@ -284,8 +284,12 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 		_int PlayerIndex = CPlayerManager::GetInstance()->Get_PlayerIndex();
 		CCharacter* pPlayer = dynamic_cast<CCharacter*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), PlayerIndex));
 
-		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 1) {
-			m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
+		_float Dist = Convert::GetLength(m_vTargetPos - m_vBattleTargetPos);
+
+		if (pPlayer->Get_Status().iAttackCombo > 2 || pPlayer->Get_Status().iHitCombo > 2) {
+			if (Dist < 3.f) {
+				m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			}
 		}
 		else {
 			m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
@@ -295,9 +299,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Combo_On = false;
 		}
 
-		_float Dist = Convert::GetLength(m_vTargetPos - m_vBattleTargetPos);
-
-		if (Dist > 7) {
+		if (Dist > 7.f) {
 			m_bIs_Side_Off = true;
 		}
 		else {

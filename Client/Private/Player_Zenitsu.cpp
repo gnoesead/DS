@@ -51,6 +51,7 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	CSword::SWORDDESC SwordDesc;
 	ZeroMemory(&SwordDesc, sizeof SwordDesc);
@@ -66,25 +67,32 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
+	
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 
-	// 아우라
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	AuroraDesc.eCharacter = CAurora::CHARACTER_ZENITSU;
+	AuroraDesc.eColor = CAurora::COLOR_YELLOW;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
 
-	/*_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+	for (_uint i = 0; i < 35; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
-	CZen_Aurora::EFFECTDESC AuroraDesc;
+
+	/*CZen_Aurora::EFFECTDESC AuroraDesc;
 	AuroraDesc.pTransform = m_pTransformCom;
 	AuroraDesc.pGameObject = this;
 	AuroraDesc.eType = CZen_Aurora::TYPE_LOCAL;
 	AuroraDesc.eColor = CZen_Aurora::COLOR_YELLOW;
+	AuroraDesc.eGroup = CZen_Aurora::GROUP_0;
 
-	for (_uint i = 0; i < 50; ++i)
+	for (_uint i = 0; i < 35; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Zen_Aurora"), &AuroraDesc);*/
 
-
-
 	Safe_Release(pGameInstance);
-
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
 
 	return S_OK;
 }
@@ -142,15 +150,15 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 	}
 
-
+	// 아우라
 	if (m_Moveset.m_iAwaken != 0)
 	{
-		m_isAuroraOn = true;
+		m_isAuroraOn[0] = true;
 	}
 	else
-		m_isAuroraOn = false;
-
+		m_isAuroraOn[0] = false;
 }
+
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 {
@@ -789,6 +797,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) {
 
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
+
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.f;
 				EffectWorldDesc.fScale = 0.7f;
@@ -810,12 +821,78 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vRotation.x = 0.f;
+				EffectWorldDesc.fScale = 1.f;
+			
 
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Slash", m_pTransformCom, &EffectWorldDesc);
 				
+			}
+			else if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.6f;
+				EffectWorldDesc.vPosition.z += 3.7f;
+				EffectWorldDesc.vPosition.x += 0.f;
+				EffectWorldDesc.fScale = 1.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
-					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f * fDmg);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 4.0f), 0.5,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+			}
+			else if (2 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.6f;
+				EffectWorldDesc.vPosition.z += 6.f;
+				EffectWorldDesc.vPosition.x += Random::Generate_Float(-2.3f, -1.5f);
+				EffectWorldDesc.fScale = 1.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f) , _float3(EffectWorldDesc.vPosition.x, 1.0f, 6.0f), 0.5,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+				
+			}
+			else if (3 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.6f;
+				EffectWorldDesc.vPosition.z += 8.f;
+				EffectWorldDesc.vPosition.x += Random::Generate_Float(1.5f, 2.3f);
+				EffectWorldDesc.fScale = 1.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 8.0f), 0.5,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+				
+			}
+			else if (4 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 1.6f;
+				EffectWorldDesc.vPosition.z += 10.f;
+				EffectWorldDesc.vPosition.x += Random::Generate_Float(-2.3f, -1.5f);
+				EffectWorldDesc.fScale = 1.f;
+
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+
+				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 10.0f), 0.5,
+					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 			}
 		}
 #pragma endregion
@@ -1005,8 +1082,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.z += 2.1f;
 				EffectWorldDesc.vRotation.y = 180.f;
 
-				m_pRendererCom->Set_BloomRatio(1.1f);
-				CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
+				//m_pRendererCom->Set_BloomRatio(1.1f);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
 
 
 
@@ -1027,8 +1104,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				EffectWorldDesc.vRotation.y = 0.f;
 
-				m_pRendererCom->Set_BloomRatio(1.1f);
-				CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
+				//m_pRendererCom->Set_BloomRatio(1.1f);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -1047,7 +1124,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vRotation.y = -90.f;
 
 				m_pRendererCom->Set_BloomRatio(1.1f);
-				CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 			}
 
 		}
@@ -1057,10 +1134,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.f;
-				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
 				
-				CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock_Rev", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				EffectWorldDesc.vPosition.z += 0.f;
+
+			
+				//CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock_Rev", m_pTransformCom, &EffectWorldDesc);
 				
 			}
 		}
@@ -1080,7 +1164,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vRotation.y = 90.f;
 
 				m_pRendererCom->Set_BloomRatio(1.1f);
-				CEffectPlayer::Get_Instance()->Play("Zen_Dash", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 		else if (73 == m_pModelCom->Get_iCurrentAnimIndex())	// 73
@@ -1089,10 +1173,18 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.6f;
+				EffectWorldDesc.vPosition.z += 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
+				
+
+				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.f;
 				EffectWorldDesc.vPosition.z += 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock", m_pTransformCom, &EffectWorldDesc);
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 

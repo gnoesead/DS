@@ -1451,11 +1451,11 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 	
-	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Sword.bin"))))
-	//{
-	//	MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Sword");
-	//	return E_FAIL;
-	//}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Breath.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Breath");
+		return E_FAIL;
+	}
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
@@ -1859,6 +1859,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Dash_New.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Dash_New");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Step_Shock.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Step_Shock");
@@ -1882,6 +1888,43 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_1");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Small_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Small_3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_Dash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_Dash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_Dash_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_Dash_Rev");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Slash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Slash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Elc");
+		return E_FAIL;
+	}
+
 
 #pragma endregion
 

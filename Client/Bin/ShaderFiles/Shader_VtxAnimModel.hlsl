@@ -418,18 +418,18 @@ PS_OUT  PS_Dead_Disolve(PS_IN _In)
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
 	vector  vMtrlDisolve = g_DisolveTexture.Sample(LinearSampler, _In.vTexUV);
 
-	if (vMtrlDisolve.r <= g_Disolve * 0.25f)
+	if (vMtrlDisolve.r <= g_Disolve * 0.1f)
 		discard;
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.05f && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.05f)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.05f && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.05f)
 		vMtrlDiffuse = float4(1.f, 0.f, 0.f, g_Disolve * 0.35f); // »¡
 
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.03 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.03)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.03 && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.03)
 		vMtrlDiffuse = float4(1.f, 1.f, 0.f, g_Disolve * 0.35f); // ³ë
 
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.025 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.025)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.025 && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.025)
 		vMtrlDiffuse = float4(1.f, 1.f, 1.f, g_Disolve * 0.35f); // Èò
 	
 

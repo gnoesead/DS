@@ -120,7 +120,7 @@ public:
 		return m_StatusDesc;
 	}
 
-	_bool	Get_IsAuroraOn() { return m_isAuroraOn; }
+	_bool	Get_IsAuroraOn(_uint iIdx) { return m_isAuroraOn[iIdx]; }
 
 protected:
 	HRESULT	Read_Animation_Control_File(const char* szBinfilename);
@@ -276,7 +276,7 @@ protected:
 
 protected:
 	_float	m_fFar2 = { 1.f };
-	_bool	m_isAuroraOn = { false };
+	_bool	m_isAuroraOn[2] = { false };
 private:
 	
 
