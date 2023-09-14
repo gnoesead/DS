@@ -1438,16 +1438,22 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Charge_Effect");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Wind2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super1_Wind2");
+		return E_FAIL;
+	}
 	
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Breath.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Breath");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Sword.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Sword");
 		return E_FAIL;
 	}
 #pragma endregion

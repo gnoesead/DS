@@ -56,7 +56,7 @@ HRESULT CMonster_Swamp::Initialize(void* pArg)
 		MSG_BOX("Failed to AnimData Read : SwampHorn3");
 		return E_FAIL;
 	}
-	
+
 	m_pTransformCom->Scaling(_float3{ m_fScale, m_fScale, m_fScale });
 
 
@@ -172,21 +172,24 @@ HRESULT CMonster_Swamp::Render()
 			return E_FAIL;
 
 		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-		//Outline Render
-		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+		if (m_bMonsterDead == false)
 		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-				return E_FAIL;
+			//Outline Render
+			for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
 
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-				return E_FAIL;
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
 
-			if (m_iMeshNum == 2)
-				m_pShaderCom->Begin(2);
-			else
-				m_pShaderCom->Begin(1);
+				if (m_iMeshNum == 2)
+					m_pShaderCom->Begin(2);
+				else
+					m_pShaderCom->Begin(1);
 
-			m_pModelCom->Render(m_iMeshNum);
+				m_pModelCom->Render(m_iMeshNum);
+			}
 		}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
@@ -197,7 +200,10 @@ HRESULT CMonster_Swamp::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 				return E_FAIL;
 
-			m_pShaderCom->Begin(0);
+			if (m_bMonsterDead == true)
+				m_pShaderCom->Begin(8);
+			else
+				m_pShaderCom->Begin(0);
 
 			m_pModelCom->Render(i);
 		}
@@ -232,7 +238,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 		Safe_AddRef(pGameInstnace);
 		_uint iCurIdx = pGameInstnace->Get_CurLevelIdx();
 
-	
+
 		if (3 == m_pModelCom->Get_iCurrentAnimIndex()) //jumpstomp 준비자세
 		{
 			if (0 == m_iEvent_Index)	// 0.23초
@@ -346,7 +352,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.8f;
 
-				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_10", m_pTransformCom, &EffectWorldDesc);  
+				CEffectPlayer::Get_Instance()->Play("Swamp_Atk_10", m_pTransformCom, &EffectWorldDesc);
 			}
 			else if (1 == m_iEvent_Index)	// 0.38
 			{
@@ -425,7 +431,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD, vPlusPos);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_UPDOWN, vPlusPos);
-	
+
 				Create_StoneParticle(CStoneParticle::STONE_SWAMP, vPlusPos);
 				Create_SmeshStone(vPlusPos);
 				Camera_Shake();
@@ -531,7 +537,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
-				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -542,7 +548,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
-				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -650,11 +656,11 @@ void CMonster_Swamp::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		m_dDelay_Die += dTimeDelta;
-		if (m_dDelay_Die > 10.0f)
-			m_isDead = true;
+		m_bMonsterDead = true;
+		m_fDeadTime += (_float)dTimeDelta;
 
-		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
+		if (m_fDeadTime > 4.0f)
+			m_isDead = true;
 	}
 	else
 	{
@@ -2188,7 +2194,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 	{
 		m_isDeath_Motion = true;
 
-		
+
 	}
 
 

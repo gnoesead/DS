@@ -1389,11 +1389,13 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			if (NAVI_HOUSE_0_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F3))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
+				CPlayerManager::GetInstance()->Set_KyogaiMap(m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A]);
 				m_dChangePositionAccTime = 0.0;
 			}
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
+				CPlayerManager::GetInstance()->Set_KyogaiMap(m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A]);
 				m_dChangePositionAccTime = 0.0;
 			}
 		}

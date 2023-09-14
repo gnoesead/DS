@@ -38,10 +38,9 @@ HRESULT CAlertCircle_Akaza::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 	m_pTransformCom->Scaling(m_EffectDesc.vScale);
-
 	m_pTransformCom->Rotation(_float3(90.f, 0.f, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION));
 
 	return S_OK;
 }
@@ -50,7 +49,7 @@ void CAlertCircle_Akaza::Tick(_double TimeDelta)
 {
 	__super::Tick(TimeDelta);
 	 
-	 _vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION) + XMVector3Normalize(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_LOOK)) * 0.8f;
+	 _vector vPos = m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION);
 	 vPos = XMVectorSetY(vPos, m_EffectDesc.fLandY);
 	 m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }

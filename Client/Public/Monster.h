@@ -26,6 +26,7 @@ public:
 	virtual void	LateTick(_double dTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_ShadowDepth() override;
+	
 public:
 	void Set_Attack_Success(_bool bHit) { m_bAttack = bHit; }
 
@@ -102,6 +103,8 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bNoDmg = { false };
 	_bool	m_bSuperArmor = { false };
 	_bool	m_bMove = { false };
+	_bool	m_bMonsterDead = { false };
+	_bool	m_bDead_Trigger = { false };
 	
 	_bool	m_bTanjiroAwake = { false };
 	_bool	m_bZenitsuAwake = { false };
@@ -109,7 +112,7 @@ protected: // 애니메이션 제어용 변수들
 protected:
 	_double m_dAwakeTime = { 0.0 };
 	_double m_dTriggerTime = { 0.0 };
-
+	_float	m_fDeadTime = { 0.0 };
 
 protected:
 	_uint	m_iSmallHit_Index = { 0 };

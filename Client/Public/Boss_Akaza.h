@@ -31,7 +31,7 @@ public:
 
 		STATE_HIT_SMALL, STATE_HIT_CONNECTSMALL, STATE_HIT_BIG, STATE_HIT_BLOW, STATE_HIT_BIGBLOW,
 		STATE_HIT_BOUND, STATE_SPIN, STATE_GETUP, STATE_BIGGETUP, STATE_ROLLGETUP,
-		STATE_HIT_UPPER, STATE_HIT_CUTSCENE,STATE_HIT_HEKIREKI,
+		STATE_HIT_UPPER, STATE_HIT_CUTSCENE,STATE_HIT_HEKIREKI, STATE_DEAD,
 
 		STATE_TRAIN_JUMPSTOMP
 
@@ -258,6 +258,7 @@ public:
 	void Trigger_Hit_RollGetUp();
 	void Trigger_Hit_BigGetUp();
 	void Tirgger_Hit_Hekireki();
+	void Trigger_Hit_Dead();
 
 #pragma endregion
 
@@ -302,6 +303,7 @@ private: //패턴 함수들
 	void Update_Hit_RollGetUp(_double dTimeDelta);
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 	void Update_Hit_Hekireki(_double dTimeDelta);
+	void Update_Hit_Dead(_double dTimeDelta);
 
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
@@ -325,6 +327,7 @@ private: // _bool
 private: // time
 	_double	m_dJumpStompTime = { 0.0 };
 	_double m_dTimeAcc = { 0.0 };
+	
 
 private:
 
