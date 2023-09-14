@@ -20,6 +20,7 @@
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
+#include "Fade_Manager.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -59,8 +60,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 200.f;
-		m_StatusDesc.fHp_Max = 200.f;
+		m_StatusDesc.fHp = 400.f;
+		m_StatusDesc.fHp_Max = 400.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -1661,6 +1662,11 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_bNoDmg = true;
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		pGameInstance->Time_Slow(0.5, 0.5);
+		Safe_Release(pGameInstance);
 		
 	}
 	if ((m_StatusDesc.fHp > 0.f) && ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.5f))
@@ -1766,8 +1772,12 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		{
 			m_bDead_Trigger = true;
 			Trigger_Hit_Dead();
-		}
-		//m_eCurPhase = PHASE_3;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.5, 0.5);
+			Safe_Release(pGameInstance);
+		}		
 
 	}
 	if (m_bAwake == true)
@@ -3434,6 +3444,7 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 			m_iTriggerCnt = 0;
 			m_dAwakeTime = 0.0;
 			m_eCurPhase = PHASE_2;
+			CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
 		}
 		m_bNoDmg = false;
 

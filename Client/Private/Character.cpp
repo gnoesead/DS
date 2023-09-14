@@ -1379,12 +1379,25 @@ void CCharacter::Shadow_House_Setting()
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	_float	  fAngle = 30.f;
 		
 	if (pPlayerTransformCom != nullptr)
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		m_pRendererCom->Set_RoomTurn(CMonsterManager::GetInstance()->Get_RoomTurn());
+
+		if (CMonsterManager::GetInstance()->Get_RoomTurn() == true)
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			fAngle = 20.f;
+		}
+		else
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+			fAngle = 30.f;
+		}
 		vLightAt = vPlayerPos;
 	}
 
@@ -1397,7 +1410,7 @@ void CCharacter::Shadow_House_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 400.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(fAngle), _float(1280) / _float(720), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
