@@ -882,7 +882,7 @@ technique11 DefaultTechnique
 	// 20
 	pass Swamp // (안원)
 	{
-		SetRasterizerState(RS_None);
+		SetRasterizerState(RS_Default);
 		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 		/* 버텍스 쉐이더는 5.0버젼으로 번역하고 VS_MAIN이라는 이름을 가진 함수를 호출해라. */

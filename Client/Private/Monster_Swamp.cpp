@@ -2184,8 +2184,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_IDLE;
-
 	}
+
 
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END)
 	{
@@ -2195,7 +2195,6 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_eCurState = STATE_DOWN;
 	}
-
 	Safe_Release(pGameInstance);
 }
 

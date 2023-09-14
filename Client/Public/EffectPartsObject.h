@@ -15,7 +15,7 @@ END
 
 BEGIN(Client)
 
-class CEffectPartsObject final : public CGameObject
+class CEffectPartsObject : public CGameObject
 {
 public:
 	typedef struct tagPartsEffectDesc

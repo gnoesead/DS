@@ -51,6 +51,7 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	CSword::SWORDDESC SwordDesc;
 	ZeroMemory(&SwordDesc, sizeof SwordDesc);
@@ -66,9 +67,23 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
-	Safe_Release(pGameInstance);
-
+	
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	AuroraDesc.eCharacter = CAurora::CHARACTER_ZENITSU;
+	AuroraDesc.eColor = CAurora::COLOR_YELLOW;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
+
+	for (_uint i = 0; i < 35; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -126,6 +141,13 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 	}
 
+	// ¾Æ¿ì¶ó
+	if (m_Moveset.m_iAwaken != 0)
+	{
+		m_isAuroraOn[0] = true;
+	}
+	else
+		m_isAuroraOn[0] = false;
 }
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
@@ -349,7 +371,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_02.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
 				}
 			}
@@ -397,7 +419,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_02.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
 				}
 			}
@@ -416,7 +438,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
 				}
 			}
@@ -457,7 +479,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
 				}
 			}
@@ -532,7 +554,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_02.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
 				}
 			}
@@ -652,7 +674,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
 				if (m_Moveset.m_iAwaken >= 1)
 				{
-					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
 				}
 			}
@@ -700,11 +722,23 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Zen_Air_1", m_pTransformCom, &EffectWorldDesc);
 				else
+				{
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.7f);
+				}
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.5,
 					CAtkCollider::TYPE_BLOW, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword09.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.7f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("Zenitsu_Talk_ShinSok.mp3");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::PLAYER_VOICE, 0.8f);
 			}
 		}
 #pragma endregion
@@ -1099,6 +1133,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			else if (2 == m_iEvent_Index) // 0.38
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
+			/*
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
 
@@ -1144,7 +1179,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					}
 				}
 			}
-			Safe_Release(pGameInstance);
+			Safe_Release(pGameInstance);*/
 		}
 
 		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
@@ -1292,6 +1327,57 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 			}
 		}
 	}
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.16f)
+		{
+			m_dSound_Move = 0.0;
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+
+
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+			}
+		}
+		Safe_Release(pGameInstance);
+	}
+
 
 	if (m_Moveset.m_Up_Battle_Run)
 	{
@@ -1870,6 +1956,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 
 		Use_Mp_Skill();
+
+		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_07.ogg");
+		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
+
+		_tchar szSoundFile3[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
+		Play_Sound_Channel(szSoundFile3, CSoundMgr::SWORD_0, 0.7f);
+
+		_tchar szSoundFile4[MAX_PATH] = TEXT("spark_03.ogg");
+		Play_Sound_Channel(szSoundFile4, CSoundMgr::SKILL_EFFECT, 0.6f);
+
+		Jumping(0.01f, 0.02f);
 	}
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 0.f * m_fScaleChange, 0.18f * m_fScaleChange);
 
@@ -1960,8 +2057,60 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 		}
 		else
 			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+
+		_tchar szRun_0[MAX_PATH] = TEXT("awk_eff_wind.ogg");
+		Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_JUMP, 0.4f);
 	}
 	Go_Straight_Constant(dTimeDelta, 46, 4.5f * m_fScaleChange);
+
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 46)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.1f)
+		{
+			m_dSound_Move = 0.0;
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+			}
+		}
+		Safe_Release(pGameInstance);
+	}
 
 
 	if (m_isAirDashing)
@@ -2044,6 +2193,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 				}
 			}
 		}
+		Player_Sound_Atk(0, 0.7);
 	}
 	_vector vDir = XMLoadFloat4(&m_Moveset.m_Input_Dir);
 	_float4 fDir;
@@ -2193,6 +2343,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
 
+		Play_Sound_Metal(0.5);
 	}
 #pragma endregion
 

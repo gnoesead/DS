@@ -880,6 +880,45 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
+void CCharacter::Play_Sound_Metal(_double vol)
+{
+	if (m_iSound_Metal_Index == 0)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_01.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 1)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_02.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 2)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_03.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 3)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_04.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 4)
+	{
+		m_iSound_Metal_Index = 0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_05.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
@@ -1037,6 +1076,19 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		EffectWDesc.vStartFrame = { 0.f , 2.f };
 
 		for (_uint i = 0; i < 10; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
+	case CGroundSmoke::SMOKE_KYOGAI_PUSH:
+		EffectWDesc.vPos = XMVectorSetY(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 0.f);
+
+		EffectWDesc.vStartPosX = { -1.0f,1.0f }; EffectWDesc.vStartPosY = { -0.0f,0.2f }; EffectWDesc.vStartPosZ = { -1.0f,1.0f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.035f };
+		EffectWDesc.vStartSizeX = { 2.5f , 3.5f }; EffectWDesc.vStartSizeY = { 2.5f , 3.0f };
+		EffectWDesc.vSpeedX = { -20.0f , 20.0f };	EffectWDesc.vSpeedY = { 0.1f , 0.2f }; 	EffectWDesc.vSpeedZ = { -20.0f , 20.f };
+		EffectWDesc.vSizeSpeedX = { 4.0f , 4.5f }; EffectWDesc.vSizeSpeedY = { 4.0f , 4.5f };
+		EffectWDesc.vStartFrame = { 0.f , 2.f };
+
+		for (_uint i = 0; i < 40; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
 	case CGroundSmoke::SMOKE_JENITSU_HIKI:

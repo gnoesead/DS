@@ -29,8 +29,6 @@
 
 #include "WebManager.h"
 
-#include "EffectPartsObject.h"
-
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -78,12 +76,6 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
 	m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
 
-	CEffectPartsObject::PARTSEFFECTDESC PartsDesc;
-	ZeroMemory(&PartsDesc, sizeof PartsDesc);
-	PartsDesc.pParentTransform = m_pTransformCom;
-	PartsDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
-	m_pSwordEffect = dynamic_cast<CEffectPartsObject*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectPartsObject"), &PartsDesc));
-
 	CSwordHome::SWORDDESC SwordHomeDesc;
 	ZeroMemory(&SwordHomeDesc, sizeof SwordHomeDesc);
 	SwordHomeDesc.m_PlayerName = CSwordHome::PLAYER_TANJIRO;
@@ -115,7 +107,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	AuroraDesc.pGameObject = this;
 	AuroraDesc.eType = CAurora::TYPE_LOCAL;
 	AuroraDesc.eCharacter = CAurora::CHARACTER_TANJIRO;
-	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	AuroraDesc.eColor = CAurora::COLOR_SKY;
 
 	for(_uint i = 0 ; i < 35 ; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
@@ -138,7 +130,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pSword->Tick(dTimeDelta);
 		m_pSwordHome->Tick(dTimeDelta);
-		m_pSwordEffect->Tick(dTimeDelta);
 	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -237,18 +228,24 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (m_Moveset.m_iAwaken != 0)
 	{
-		m_isAuroraOn = true;
+		
 
-		m_dAwakenParticleAccTime += dTimeDelta;
-
-		if (m_dAwakenParticleAccTime > 0.4)
+		if (55 == m_pModelCom->Get_iCurrentAnimIndex())
+			m_isAuroraOn[0] = false;
+		else
 		{
-			CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom); 
-			m_dAwakenParticleAccTime = 0.0;
+			m_isAuroraOn[0] = true; 
+			m_dAwakenParticleAccTime += dTimeDelta;
+
+			if (m_dAwakenParticleAccTime > 0.2)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom);
+				m_dAwakenParticleAccTime = 0.0;
+			}
 		}
 	}
 	else
-		m_isAuroraOn = false;
+		m_isAuroraOn[0] = false;
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -257,7 +254,6 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		m_pSword->LateTick(dTimeDelta);
 		m_pSwordHome->LateTick(dTimeDelta);
-		m_pSwordEffect->LateTick(dTimeDelta);
 	}
 
 	//playerswap
@@ -1019,6 +1015,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				}
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -1027,11 +1026,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.7f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword07.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -1052,6 +1057,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Effect", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Particle", m_pTransformCom);
 				Camera_Shake(0.05);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("flash_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 		}
 
@@ -1077,10 +1085,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			//if (0 == m_iEvent_Index)
-			//{
-			//	m_pSwordEffect->Play_Effect("Tanjiro_Awake_Cutscene_Sword");
-			//}
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.2f;
+				EffectWorldDesc.vPosition.x -= 0.1f;
+				EffectWorldDesc.vPosition.z -= 0.1f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Awake_Cutscene_Breath", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
 #pragma endregion
@@ -1183,7 +1195,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-
+			/*
 			m_dSound_Move += dTimeDelta;
 			if (m_dSound_Move > 0.02f)
 			{
@@ -1226,7 +1238,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					}
 				}
 				Safe_Release(pGameInstance);
-			}
+			}*/
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// ´Þ¸®±â Stop
@@ -1485,6 +1497,53 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 			}
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+	}
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
+	{
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.16f)
+		{
+			m_dSound_Move = 0.0;
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+				}
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+				}
+			}
+			Safe_Release(pGameInstance);
+		}
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -2022,8 +2081,61 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 		}
 		else
 			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+
+		_tchar szRun_0[MAX_PATH] = TEXT("awk_eff_wind.ogg");
+		Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_JUMP, 0.4f);
 	}
 	Go_Straight_Constant(dTimeDelta, 80, 4.5f * m_fScaleChange);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.1f)
+		{
+			m_dSound_Move = 0.0;
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+
+
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+			}
+		}
+		Safe_Release(pGameInstance);
+	}
+
 
 	if (m_isAirDashing)
 	{
@@ -2110,6 +2222,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				}
 			}
 		}
+		Play_Sound_Atk(0, 0.7);
+		
 	}
 	
 
@@ -2262,6 +2376,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		EffectWorldDesc.vPosition.y += 0.4f;
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom , &EffectWorldDesc);
+
+		Play_Sound_Metal(0.5);
 	}
 #pragma endregion
 
@@ -3293,9 +3409,16 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
 		}
 		else if (m_iSound_Atk_Small == 1)
 		{
-			m_iSound_Atk_Small = 0;
+			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Kya.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 2)
+		{
+			m_iSound_Atk_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
 		}
 	}
@@ -3628,7 +3751,6 @@ void CPlayer_Tanjiro::Free()
 {
 	Safe_Release(m_pSword);
 	Safe_Release(m_pSwordHome);
-	Safe_Release(m_pSwordEffect);
 
 	__super::Free();
 }
