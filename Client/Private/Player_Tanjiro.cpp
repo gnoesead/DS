@@ -29,8 +29,6 @@
 
 #include "WebManager.h"
 
-#include "EffectPartsObject.h"
-
 CPlayer_Tanjiro::CPlayer_Tanjiro(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPlayer(pDevice, pContext)
 {
@@ -77,12 +75,6 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	SwordDesc.pParentTransform = m_pTransformCom;
 	SwordDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
 	m_pSword = dynamic_cast<CSword*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Sword"), &SwordDesc));
-
-	CEffectPartsObject::PARTSEFFECTDESC PartsDesc;
-	ZeroMemory(&PartsDesc, sizeof PartsDesc);
-	PartsDesc.pParentTransform = m_pTransformCom;
-	PartsDesc.pBone = m_pModelCom->Get_Bone("R_HandCommon_1_Lct");
-	m_pSwordEffect = dynamic_cast<CEffectPartsObject*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_EffectPartsObject"), &PartsDesc));
 
 	CSwordHome::SWORDDESC SwordHomeDesc;
 	ZeroMemory(&SwordHomeDesc, sizeof SwordHomeDesc);
@@ -138,7 +130,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		m_pSword->Tick(dTimeDelta);
 		m_pSwordHome->Tick(dTimeDelta);
-		m_pSwordEffect->Tick(dTimeDelta);
 	}
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -261,7 +252,6 @@ void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
 	{
 		m_pSword->LateTick(dTimeDelta);
 		m_pSwordHome->LateTick(dTimeDelta);
-		m_pSwordEffect->LateTick(dTimeDelta);
 	}
 
 	//playerswap
@@ -1081,10 +1071,14 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			//if (0 == m_iEvent_Index)
-			//{
-			//	m_pSwordEffect->Play_Effect("Tanjiro_Awake_Cutscene_Sword");
-			//}
+			if (0 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.2f;
+				EffectWorldDesc.vPosition.x -= 0.1f;
+				EffectWorldDesc.vPosition.z -= 0.1f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Awake_Cutscene_Breath", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 
 #pragma endregion
@@ -3622,7 +3616,6 @@ void CPlayer_Tanjiro::Free()
 {
 	Safe_Release(m_pSword);
 	Safe_Release(m_pSwordHome);
-	Safe_Release(m_pSwordEffect);
 
 	__super::Free();
 }

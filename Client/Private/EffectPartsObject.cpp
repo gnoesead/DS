@@ -51,14 +51,14 @@ void CEffectPartsObject::LateTick(_double TimeDelta)
 
 	XMStoreFloat4x4(&m_WorldMatrix, m_pTransformCom->Get_WorldMatrix() *
 		m_PartsDesc.pBone->Get_OffsetMatrix() *
-		m_PartsDesc.pBone->Get_CombinedTransformationMatrix() *
+		Remove::Scale(m_PartsDesc.pBone->Get_CombinedTransformationMatrix()) *
 		m_PartsDesc.pBone->Get_PivotMatrix() *
 		m_PartsDesc.pParentTransform->Get_WorldMatrix());
 }
 
 void CEffectPartsObject::Play_Effect(const char* pEffectTag, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc)
 {
-	CEffectPlayer::Get_Instance()->PlayPartsEffect(pEffectTag, this, pEffectWorldDesc);
+	//CEffectPlayer::Get_Instance()->PlayPartsEffect(pEffectTag, this, pEffectWorldDesc);
 }
 
 HRESULT CEffectPartsObject::Add_Components()
