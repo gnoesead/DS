@@ -3546,6 +3546,10 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 		_float fDistance = Calculate_Distance() - 2.f;
 		_vector vChangePos = vMonsterPos + (vDir * fDistance);
 
+		CEffectPlayer::EFFECTWORLDDESC EffectDesc;
+		EffectDesc.vPosition.y += 0.5f;
+		CEffectPlayer::Get_Instance()->Play("Akaza_Teleport", m_pTransformCom, &EffectDesc);
+
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vChangePos);
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_READY;
 
