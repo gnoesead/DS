@@ -168,6 +168,7 @@ protected:
 
 	//사운드 용
 	void	Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, _float _vol);
+	void	Play_Sound_Metal(_double vol);
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -210,6 +211,9 @@ protected:
 	CTransform* m_pTransformCom = { nullptr };
 	CTexture* m_pTextureCom = { nullptr };
 
+protected:
+	//사운드
+	_int	m_iSound_Metal_Index = { 0 };
 
 protected: //status 게이지 관련
 	CHAR_STATUS  m_StatusDesc;

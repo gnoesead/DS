@@ -87,6 +87,16 @@ protected: //애니메이션 제어용 함수들
 	void	Pos_FixY();
 
 
+protected:
+	//사운드용
+	_int	m_iSound_Atk_Small = { 0 };
+	_int	m_iSound_Atk_Medium = { 0 };
+	_int	m_iSound_Atk_Big = { 0 };
+
+	_int	m_iSound_Dmg_Small = { 0 };
+	_int	m_iSound_Dmg_Medium = { 0 };
+	_int	m_iSound_Dmg_Big = { 0 };
+
 protected: // 애니메이션 제어용 변수들
 	_bool	m_isDeath_Motion = { false };
 	_bool	m_bAir_Motion = { false };

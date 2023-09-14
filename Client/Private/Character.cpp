@@ -880,6 +880,45 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
+void CCharacter::Play_Sound_Metal(_double vol)
+{
+	if (m_iSound_Metal_Index == 0)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_01.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 1)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_02.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 2)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_03.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 3)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_04.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 4)
+	{
+		m_iSound_Metal_Index = 0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_05.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
