@@ -225,7 +225,9 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 
 	if (vDiffuse_Cha.r == 0.f)
 	{
-		vLuminace = vLuminace;
+		//vLuminace = vLuminace;
+		vLuminace = saturate(vLuminace);
+		vLuminace = ceil(vLuminace * 3.f) / 3.f;
 	}
 	else
 	{
@@ -410,7 +412,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	}
 	else
 	{
-		Out.vColor = vDiffuse_Cha * vShade;
+		Out.vColor = vDiffuse_Cha * vShade;		
 	}
 
 
@@ -569,7 +571,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.90f)
+	if (fBrightness > 0.70f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -622,7 +624,7 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 		vOut = pow(abs(vOut), 1.8f);
 		vBloom = pow(abs(vBloom), 1.8f);
 
-		vOut += vBloom;
+		vOut += vBloom * 2.f;
 		Out.vColor = pow(abs(vOut), 1 / 2.2f);
 		if (Out.vColor.a == 0.f)
 			discard;
@@ -790,9 +792,9 @@ PS_OUT PS_BlurY(PS_IN _In)
 	}
 
 	if (g_bSSAO == true)
-		Out.vColor /= Total;
+		Out.vColor /= Total * 0.5f;
 	else
-		Out.vColor /= FinalTotal;
+		Out.vColor /= FinalTotal * 0.5f;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;
@@ -824,7 +826,7 @@ PS_OUT PS_BlurX_3(PS_IN _In)
 	}
 
 
-	Out.vColor /= FinalTotal;
+	Out.vColor /= FinalTotal * 0.5f;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;
@@ -853,7 +855,7 @@ PS_OUT PS_BlurY_3(PS_IN _In)
 		Out.vColor += FinalWeight[3 + i] * g_BlurTexture.Sample(BlurSampler, uv);
 	}
 
-	Out.vColor /= FinalTotal;
+	Out.vColor /= FinalTotal * 0.5f;
 
 	/*if (Out.vColor.a == 0.f)
 		discard;
