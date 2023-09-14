@@ -49,6 +49,15 @@ void CGroundSmoke::Tick(_double TimeDelta)
 	else
 		m_fAlpha = 0.45f;
 	Safe_Release(pGameInstance);
+
+	if (m_EffectWDesc.bSpecial)
+	{
+		if (LEVEL_HOUSE == iCurIdx)
+			m_fAlpha = 0.3f;
+		else
+			m_fAlpha = 0.5f;
+	}
+
 	
 	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * (TimeDelta);
 

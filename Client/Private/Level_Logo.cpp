@@ -553,7 +553,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}*/
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 15)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 40)))
 	{
 		MSG_BOX("Failed to Load Effect : Death_Particle");
 		return E_FAIL;

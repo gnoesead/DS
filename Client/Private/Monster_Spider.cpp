@@ -263,7 +263,23 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 		m_bMonsterDead = true;
 		m_fDeadTime += (_float)dTimeDelta;
 
-		if (m_fDeadTime > 4.0f)
+		m_dDeadParticleAccTime += dTimeDelta;
+		m_dDeadSmokeAccTime += dTimeDelta;
+
+		if (m_fDeadTime > 1.8f && m_fDeadTime < 4.f)
+		{
+			if (m_fDeadTime > 2.2f)
+			{
+				if (m_dDeadParticleAccTime > 1.4)
+				{
+					m_dDeadParticleAccTime = 0.0;
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
+		}
+
+		if (m_fDeadTime > 5.0f) // Á×´Â ½Ã°£ Á¶Àý ÇØµµ µÊ
 			m_isDead = true;
 	}
 	else
