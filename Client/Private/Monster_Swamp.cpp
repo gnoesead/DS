@@ -1926,6 +1926,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				m_iSmallHit_Index = 0;
 			}
 		}
+
+		Play_Sound_Dmg(0, 0.7);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -1964,6 +1966,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 		//pGameInstance->Time_Slow(0.3, 0.15);
+
+		Play_Sound_Dmg(0, 0.7);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 1.6f, 0.05f, AtkDir);
 #pragma endregion
@@ -1987,6 +1991,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 		//pGameInstance->Time_Slow(0.23, 0.3);
+
+		Play_Sound_Dmg(0, 0.7);
 	}
 
 	//어퍼시 수직상승 여부
@@ -2030,6 +2036,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+		Play_Sound_Dmg(1, 0.7);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 91, 0.3f, AtkDir);
@@ -2071,6 +2079,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 		//pGameInstance->Time_Slow(0.6, 0.4);
+		Play_Sound_Dmg(1, 0.7);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 86, 2.5f, AtkDir);
@@ -2097,6 +2106,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isSurging = true;
 
 		//pGameInstance->Time_Slow(0.08, 0.15);
+
 	}
 #pragma endregion
 
@@ -2129,6 +2139,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
 		pGameInstance->Time_Slow(0.2, 0.1);
+
+		Play_Sound_Dmg(0, 0.7);
 	}
 #pragma endregion
 
@@ -2151,6 +2163,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
 
 				pGameInstance->Time_Slow(0.6, 0.3);
+				Play_Sound_Dmg(1, 0.7);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 1)
@@ -2165,6 +2178,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				CSwampManager::GetInstance()->Set_Phase1_MainIndex(CSwampManager::GetInstance()->Find_Alive());
 
 				pGameInstance->Time_Slow(0.6, 0.3);
+				Play_Sound_Dmg(1, 0.7);
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
@@ -2177,6 +2191,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 				CMonsterManager::GetInstance()->Set_BattleOn(false);
 
 				pGameInstance->Time_Slow(0.6, 0.3);
+				Play_Sound_Dmg(1, 0.7);
 			}
 		}
 	}
@@ -2193,8 +2208,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isFirst_Anim = true;
 
 		m_eCurState = STATE_IDLE;
-
 	}
+
 
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH || iCurAnim == ANIM_DMG_FALL_END)
 	{
@@ -2204,7 +2219,6 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		m_eCurState = STATE_DOWN;
 	}
-
 	Safe_Release(pGameInstance);
 }
 
@@ -2457,6 +2471,85 @@ void CMonster_Swamp::Create_SwampAlertRect()
 		Safe_Release(pGameInstance);
 
 		m_bMakeSwampAlertRect = true;
+	}
+}
+
+void CMonster_Swamp::Play_Sound_Dmg(_int iType, _double vol)
+{
+	//small
+	if (iType == 0)
+	{
+		if (m_iSound_Dmg_Small == 0)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 1)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 2)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 3)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_3.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 4)
+		{
+			m_iSound_Dmg_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_4.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+	}
+	// Medium
+	else if (iType == 1)
+	{
+		if (m_iSound_Dmg_Medium == 0)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 1)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 2)
+		{
+			m_iSound_Dmg_Medium = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+	}
+	// Big
+	else if (iType == 2)
+	{
+		if (m_iSound_Dmg_Big == 0)
+		{
+			m_iSound_Dmg_Big = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Big_0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
 	}
 }
 

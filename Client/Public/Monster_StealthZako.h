@@ -88,6 +88,14 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Move(_double dTimeDelta);
 	void	Animation_Control_Search(_double dTimeDelta);
 
+
+private:
+	_bool		m_isSound_Questioning = { false };
+	_bool		m_isSound_Finding = { false };
+
+	_double		m_dSound_Questioning = { 0.0 };
+	_double		m_dSound_Finding = { 0.0 };
+
 private:
 	_float	m_fScale = { 0.8f };
 
