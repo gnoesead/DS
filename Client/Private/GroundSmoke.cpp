@@ -49,7 +49,6 @@ void CGroundSmoke::Tick(_double TimeDelta)
 	else
 		m_fAlpha = 0.45f;
 	Safe_Release(pGameInstance);
-
 	
 	m_dSpeedY -= (_double)m_EffectWDesc.fGravity * (TimeDelta);
 
@@ -170,6 +169,9 @@ HRESULT CGroundSmoke::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fColor", &m_fColor, sizeof _float)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_IsBlack", &m_EffectWDesc.bSpecial, sizeof _bool)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

@@ -517,7 +517,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
+	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_0_X");
 		return E_FAIL;
@@ -550,6 +550,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_2_Z.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_2_Z");
+		return E_FAIL;
+	}*/
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 15)))
+	{
+		MSG_BOX("Failed to Load Effect : Death_Particle");
 		return E_FAIL;
 	}
 #pragma endregion

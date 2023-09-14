@@ -189,7 +189,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_N))
 	{
-		
+		CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom);
+		Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD);
 	}
 
 	Safe_Release(pGameInstance); 
