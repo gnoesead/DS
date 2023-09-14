@@ -92,6 +92,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
+	
+
 	Safe_Release(pGameInstance);
 
 
@@ -512,6 +514,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 		}
 #pragma endregion 대시펀치 끝
+		if (ANIM_HEAL == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (0 == m_iEvent_Index)
+			{//0.2
+				//Aura On
+
+			}
+			if (1 == m_iEvent_Index)
+			{//1.5
+				//Aura Off
+				CEffectPlayer::Get_Instance()->Play("Akaza_Heal_Wind", m_pTransformCom);
+			}
+		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 
@@ -589,12 +604,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.0f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 0.0f);
+
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+				
 			}
 
 		}
 		if (ANIM_AIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			// 이펙트 추가 난 없음
+			if (0 == m_iEvent_Index) // 0.2
+			{
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shoot_Aura", m_pTransformCom);
+			}
+
 			if (0 == m_iEvent_Index) // 0.85
 			{
 				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
@@ -942,6 +964,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		if (ANIM_JUMPAIRGUN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
+			{//0
+				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+			}
+			if (1 == m_iEvent_Index)
+			{//0.2
+				CEffectPlayer::Get_Instance()->Play("Akaza_Shoot_Aura", m_pTransformCom);
+			}
+			if (2 == m_iEvent_Index)
 			{//0.5
 				CHandAura_Akaza::EFFECTDESC EffectAuraDesc;
 				EffectAuraDesc.pOwnerTransform = m_pTransformCom;
