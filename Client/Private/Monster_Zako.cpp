@@ -750,18 +750,28 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 		m_bMonsterDead = true;
 		m_fDeadTime += (_float)dTimeDelta;
 
-		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
-		if (Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		m_dDeadParticleAccTime += dTimeDelta;
+		m_dDeadSmokeAccTime += dTimeDelta;
+
+		if (m_fDeadTime > 1.8f && m_fDeadTime < 7.5f)
 		{
-			// 이펙트 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
-		{
-			// 이펙트 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
-		{
-			// 이펙트 추가
+			if (m_fDeadTime > 2.2f)
+			{
+				if (m_dDeadParticleAccTime > 1.4)
+				{
+					m_dDeadParticleAccTime = 0.0;
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.vPosition.x += Random::Generate_Float(-0.3f, 0.3f);
+					EffectWorldDesc.vPosition.z += Random::Generate_Float(-0.3f, 0.3f);
+					CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
+
+			if (m_dDeadSmokeAccTime > 1.0)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD_NORMAL);
+				m_dDeadSmokeAccTime = 0.0;
+			}
 		}
 
 		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨

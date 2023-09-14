@@ -2234,11 +2234,6 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Explosion");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Push.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Kyogai_Push");
-		return E_FAIL;
-	}
 	
 	return S_OK;
 }

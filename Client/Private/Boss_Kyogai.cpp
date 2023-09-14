@@ -1101,6 +1101,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (66 == m_pModelCom->Get_iCurrentAnimIndex()) // DEAD
+		{
+			if (0 == m_iEvent_Index) // 1.85
+			{
+				Play_FallDownEffect();
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+			}
+		}
+
 
 		m_iEvent_Index++;
 	}
@@ -2710,18 +2719,28 @@ void CBoss_Kyogai::Update_Hit_Dead(_double dTimeDelta)
 	{
 		m_bMonsterDead = true;
 		m_fDeadTime += (_float)dTimeDelta;
-		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
-		if(Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		m_dDeadParticleAccTime += dTimeDelta;
+		m_dDeadSmokeAccTime += dTimeDelta;
+
+		if (m_fDeadTime > 1.8f && m_fDeadTime < 7.5f)
 		{
-			//파티클 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
-		{
-			//파티클 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
-		{
-			//파티클 추가
+			if (m_fDeadTime > 2.2f)
+			{
+				if (m_dDeadParticleAccTime > 1.4)
+				{
+					m_dDeadParticleAccTime = 0.0;
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.vPosition.x += Random::Generate_Float(-0.5f, 0.5f);
+					EffectWorldDesc.vPosition.z += Random::Generate_Float(-0.5f, 0.5f);
+					CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
+
+			if (m_dDeadSmokeAccTime > 0.5)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD);
+				m_dDeadSmokeAccTime = 0.0;
+			}
 		}
 
 		if (m_fDeadTime > 10.f) // 죽는 시간도 형이 조절해도 됨
