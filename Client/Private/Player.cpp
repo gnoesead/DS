@@ -79,6 +79,7 @@ void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	//m_pRendererCom->Set_BloomRatio(0.5f);
 
 	if (COptionManager::GetInstance()->Get_Graphic_Option(1) == 0) {
 		m_pRendererCom->Set_SSAO(true);
@@ -149,13 +150,17 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	__super::Render();
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_ShadowDepth()
 {
-	__super::Render_ShadowDepth();
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+	
 	return S_OK;
 }
 

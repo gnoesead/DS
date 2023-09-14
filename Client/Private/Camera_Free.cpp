@@ -288,11 +288,11 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		if (pPlayer->Get_Status().iAttackCombo > 2 || pPlayer->Get_Status().iHitCombo > 2) {
 			if (Dist < 3.f) {
-				m_bIs_Combo_On = true;	//사이드 캠 이펙트 작업 시 주석 걸 것
+				m_bIs_Combo_On = true;	
 			}
 		}
 		else {
-			m_bIs_Combo_On = false;	//사이드 캠 이펙트 작업 시 주석 걸 것
+			m_bIs_Combo_On = false;	
 		}
 
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) {

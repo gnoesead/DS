@@ -1632,6 +1632,12 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Push.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_Push");
+		return E_FAIL;
+	}
+
 #pragma endregion
 
 #pragma region ZENITSU

@@ -28,6 +28,7 @@ float			g_fWebAlpha;
 
 float3			g_vColor;
 
+bool			g_IsBlack = false;
 float			g_NumX, g_NumY;
 
 float           g_Black_Cull_Amount = { 0.7f };
@@ -556,7 +557,11 @@ PS_OUT  PS_GROUNDSMOKE(PS_IN In)
 	vector vDiffuse = g_Texture.Sample(LinearSampler, spriteUV);
 	vDiffuse.a = vDiffuse.r;
 
-	vDiffuse.rgb = (g_fColor, g_fColor, g_fColor);
+	
+	if(true == g_IsBlack)
+		vDiffuse.rgb = (0.f, 0.f, 0.f);
+	else
+		vDiffuse.rgb = (g_fColor, g_fColor, g_fColor);
 
 	Out.vColor = vDiffuse * g_Alpha;
 
