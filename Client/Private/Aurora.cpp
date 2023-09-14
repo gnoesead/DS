@@ -48,11 +48,21 @@ void CAurora::Tick(_double TimeDelta)
 	{
 	case GROUP_0:
 		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_0))
+		{
+			m_fAlpha -= 0.2f * (_float)TimeDelta;
+			if (m_fAlpha < 0.f)
+				m_fAlpha = 0.f;
 			return;
+		}
 		break;
 	case GROUP_1:
 		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_1))
+		{
+			m_fAlpha -= 0.2f * (_float)TimeDelta;
+			if (m_fAlpha < 0.f)
+				m_fAlpha = 0.f;
 			return;
+		}
 		break;
 	}
 
@@ -85,17 +95,8 @@ void CAurora::Tick(_double TimeDelta)
 
 void CAurora::LateTick(_double TimeDelta)
 {
-	switch (m_EffectDesc.eGroup)
-	{
-	case GROUP_0:
-		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_0))
-			return;
-		break;
-	case GROUP_1:
-		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_1))
-			return;
-		break;
-	}
+	if (m_fAlpha == 0.f)
+		return;
 	
 	__super::LateTick(TimeDelta);
 

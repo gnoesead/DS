@@ -1146,7 +1146,7 @@ void CCharacter::Create_StoneParticle(CStoneParticle::STONE_TYPE eStoneType, _fv
 		EffectWDesc.vSpeedX = { -5.f , 5.f }; EffectWDesc.vSpeedY = { 3.f , 15.f }; EffectWDesc.vSpeedZ = { -5.f , 5.f };
 		EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
 		EffectWDesc.fGravity = 20.0f;
-		EffectWDesc.vColor = { 0.1f , 0.2f };
+		EffectWDesc.vColor = { 0.4f , 0.5f };
 		
 
 		for (_uint i = 0; i < 80; ++i)

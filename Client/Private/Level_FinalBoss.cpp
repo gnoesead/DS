@@ -360,7 +360,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		// PoolTag, BufferTag, TextureTag, 
 		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
 		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-		CParticleManager::GetInstance()->PlayParticle("Test",
+		CParticleManager::GetInstance()->PlayParticle("FinalBoss_Grass",
 			TEXT("Prototype_Component_VIBuffer_500_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grass001C")
 			, vPos, 30.f, 0.3f, .5f, 0.5f, 1.5f, vMinRange, vMaxRange , -0.01f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_NONBLEND, 25.f, _int2(4, 4));
 
@@ -1753,6 +1753,27 @@ HRESULT CLevel_FinalBoss::Load_Lights_Info(const _tchar* pPath)
 
 HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 {
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Heal_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Heal_Wind");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Wind.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Wind");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_SkillUp_Line.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_SkillUp_Line");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_ATK_Skill_Stomp.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_ATK_Skill_Stomp");
+		return E_FAIL;
+	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Eye.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Awake_Eye");
@@ -1829,8 +1850,6 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Akaza_ATK_Shoot_Projectile");
 		return E_FAIL;
 	}
-
-		
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/ATK_Combo_Up.bin"))))
 	{

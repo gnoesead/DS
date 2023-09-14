@@ -336,6 +336,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 0.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
+
+				Player_Sound_Atk(0, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_S.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.6f);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 		}
 		if (4 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -352,6 +363,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
+
+				Player_Sound_Atk(0, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
+				}
 			}
 		}
 		if (5 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -369,6 +391,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+
+				Player_Sound_Atk(1, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword07.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.3f);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -383,6 +416,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
+				}
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -396,6 +435,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 		}
 		if (7 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -426,6 +471,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.2f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f * fDmg);
+
+				Player_Sound_Atk(1, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword09.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
+				}
 			}
 			
 
@@ -490,6 +546,17 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f * fDmg);
+
+				Player_Sound_Atk(2, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_L.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
+
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 			else if (1 == m_iEvent_Index) {
 				m_pRendererCom->Set_BloomRatio(1.f);
@@ -538,6 +605,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
+
+				Player_Sound_Atk(1, 0.8);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -569,6 +638,16 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f * fDmg);
+
+				Player_Sound_Atk(0, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.3f);
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 
 			
@@ -589,6 +668,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
 
+				Player_Sound_Atk(1, 0.8);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_1, 0.4f);
+				}
 			}
 			// Big
 			if (1 == m_iEvent_Index)
@@ -604,6 +692,14 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_BOUND, vPlayerDir, 4.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.3f);
+				if (m_Moveset.m_iAwaken >= 1)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_AWAKEN_0, 0.4f);
+				}
 			}
 		}
 
@@ -1193,6 +1289,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Jumping(4.0f, 0.2f);
 
 		m_pModelCom->Set_EarlyEnd(58, true);
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Heut.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.8f);
 	}
 	if (m_isJump_Move)
 	{
@@ -1217,6 +1316,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Jump(_double dTimeDelta)
 		Jumping(4.0f * m_fScaleChange, 0.2f * m_fScaleChange);
 
 		m_pModelCom->Set_EarlyEnd(58, true);
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Heut.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.8f);
 	}
 
 
@@ -1597,6 +1699,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 					}
 				}
 				m_isHekireki_End_ForDir = true;
+
+
 			}
 			else
 			{
@@ -1618,6 +1722,31 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 					m_StatusDesc.fMp -= 12.0f;
 				m_dDelay_Mp_Used = 0.0;
 			}
+
+			//첫 벽력일섬 판단
+			if (m_isFirst_HekirekiAct)
+			{
+				m_isFirst_HekirekiAct = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Skill_Full.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 1.0f);
+			}
+			// 둘째 이상의 벽력일섬
+			else
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Skill.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.8f);
+			}
+			m_dDelay_First_HekirekiAct = 0.0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_0, 0.6f);
+
+			_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_07.ogg");
+			Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
+
+			_tchar szSoundFile3[MAX_PATH] = TEXT("st_sword04.ogg");
+			Play_Sound_Channel(szSoundFile3, CSoundMgr::SWORD_0, 0.3f);
 		}
 	}
 	else
@@ -1625,6 +1754,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_Moveset.m_Down_Skill_Normal = false;
 		m_Moveset.m_Down_Skill_Move = false;
 	}
+
+	if (m_isFirst_HekirekiAct == false)
+	{
+		m_dDelay_First_HekirekiAct += dTimeDelta;
+		if (m_dDelay_First_HekirekiAct > 1.5f)
+		{
+			m_dDelay_First_HekirekiAct = 0.0;
+			m_isFirst_HekirekiAct = true;
+		}
+	}
+
 
 	if (CurAnim == ANIM_JUMP_IDLE)
 	{
@@ -1886,10 +2026,30 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
 		if (m_Moveset.m_iAwaken == 1)
 		{
 			m_pModelCom->Set_Animation(ANIM_BATTLE_AWAKEN);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Awaken_Miseteyaru.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.6f);
 		}
 		else if (m_Moveset.m_iAwaken == 2)
 		{
 			m_pModelCom->Set_Animation(ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Awaken_Complete_Breath.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.7f);
+			m_dSound_Awaken_Complete = 0.0;
+			m_isSound_Awaken = true;
+		}
+	}
+	if (m_isSound_Awaken)
+	{
+		m_dSound_Awaken_Complete += dTimeDelta;
+		if (m_dSound_Awaken_Complete > 1.0f)
+		{
+			m_dSound_Awaken_Complete = 0.0;
+			m_isSound_Awaken = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Awaken_Complete.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.8f);
 		}
 	}
 }
@@ -1991,6 +2151,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		EffectWorldDesc.vPosition.y += 0.2f;
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard_Zenitsu", m_pTransformCom, &EffectWorldDesc);
+
 	}
 #pragma endregion
 
@@ -2064,6 +2225,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				}
 			}
 		}
+		Player_Sound_Dmg(0, 0.8);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2095,6 +2257,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			}
 		}
+		Player_Sound_Dmg(1, 0.8);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f , 0.035f, AtkDir);
 
@@ -2116,6 +2279,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			Jumping(1.2f, 0.05f);
 			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		}
+		Player_Sound_Dmg(2, 0.8);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -2139,6 +2303,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			m_pTransformCom->Set_Look(reverseAtkDir);
 		}
+		Player_Sound_Dmg(2, 0.8);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -2162,6 +2327,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		}
+		Player_Sound_Dmg(1, 0.8);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2183,6 +2349,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		}
+		Player_Sound_Dmg(1, 0.75);
 	}
 
 #pragma endregion
@@ -2219,6 +2386,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				m_iSmallHit_Index = 0;
 			}
 		}
+		Player_Sound_Dmg(0, 0.75);
 	}
 #pragma endregion
 
@@ -2530,6 +2698,255 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_isSkilling = false;
 
 		
+	}
+}
+
+void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _double vol)
+{
+	//small
+	if (iType == 0)
+	{
+		if (m_iSound_Atk_Small == 0)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Heut.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 1)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Thyaa.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 2)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Hh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 3)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Tehh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 4)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Hut.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 5)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Sehht.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 6)
+		{
+			m_iSound_Atk_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Seyy.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 7)
+		{
+			m_iSound_Atk_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Hot.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+	}
+	//medium
+	else if (iType == 1)
+	{
+		if (m_iSound_Atk_Medium == 0)
+		{
+			m_iSound_Atk_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Huuu.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Medium == 1)
+		{
+			m_iSound_Atk_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Heaaaat.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Medium == 2)
+		{
+			m_iSound_Atk_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Ddullh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Medium == 3)
+		{
+			m_iSound_Atk_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_heeut.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Medium == 4)
+		{
+			m_iSound_Atk_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Heuhh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Medium == 5)
+		{
+			m_iSound_Atk_Medium = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Heyyh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+	}
+	//big
+	else if (iType == 2)
+	{
+		if (m_iSound_Atk_Big == 0)
+		{
+			m_iSound_Atk_Big++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Big_Haaaat.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Big == 1)
+		{
+			m_iSound_Atk_Big++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Big_Heuuuh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Big == 2)
+		{
+			m_iSound_Atk_Big = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Big_Huuuuu.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+	}
+}
+
+void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _double vol)
+{
+	//small
+	if (iType == 0)
+	{
+		if (m_iSound_Dmg_Small == 0)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_0.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 1)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_1.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 2)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_2.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 3)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_3.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 4)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_4.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 5)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_5.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 6)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_6.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 7)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_7.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 8)
+		{
+			m_iSound_Dmg_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_8.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+	}
+	// Medium
+	else if (iType == 1)
+	{
+		if (m_iSound_Dmg_Medium == 0)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Medium_0.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 1)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Medium_1.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 2)
+		{
+			m_iSound_Dmg_Medium = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Medium_2.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+	}
+	// Big
+	else if (iType == 2)
+	{
+		if (m_iSound_Dmg_Big == 0)
+		{
+			m_iSound_Dmg_Big++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Big_0.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Big == 1)
+		{
+			m_iSound_Dmg_Big = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Big_1.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
 	}
 }
 
