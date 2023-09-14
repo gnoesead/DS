@@ -246,6 +246,40 @@ void CEffect::Tick(_double dTimeDelta)
 							}
 						}
 					}
+					else
+					{
+						size_t iSize = m_RotOverLifeTimes[0].size();
+
+						if (0 < iSize)
+						{
+							_float	fCurRot = 0.f;
+							if (m_iCurRotIndex[0] < iSize)
+							{
+								while (true)
+								{
+									if (m_iCurRotIndex[0] >= iSize - 1)
+										m_iCurRotIndex[0] = iSize - 2;
+
+									if (m_fLifeTime >= m_RotOverLifeTimes[0][m_iCurRotIndex[0] + 1].fLifetime)
+										break;
+
+									++m_iCurRotIndex[0];
+
+									if (m_iCurRotIndex[0] >= iSize - 1)
+										m_iCurRotIndex[0] = iSize - 2;
+								}
+
+								_float y = fabs(m_RotOverLifeTimes[0][m_iCurRotIndex[0] + 1].fValue - m_RotOverLifeTimes[0][m_iCurRotIndex[0]].fValue);
+								_float fWeight = fabs(m_fLifeTime - m_RotOverLifeTimes[0][m_iCurRotIndex[0]].fLifetime)
+									/ fabs(m_RotOverLifeTimes[0][m_iCurRotIndex[0] + 1].fLifetime - m_RotOverLifeTimes[0][m_iCurRotIndex[0]].fLifetime);
+
+								if (m_RotOverLifeTimes[0][m_iCurRotIndex[0] + 1].fValue < m_RotOverLifeTimes[0][m_iCurRotIndex[0]].fValue)
+									y *= -1;
+
+								m_eEffectDesc.vStartRotationMin.x = fWeight * y + m_RotOverLifeTimes[0][m_iCurRotIndex[0]].fValue;
+							}
+						}
+					}
 				}
 
 				if (OP_CURVE == m_eEffectDesc.ePosOverLifetimeOption)
@@ -616,6 +650,7 @@ void CEffect::Reset_Data(void)
 	m_fDissolveTimeAcc = 0.f;
 	m_fPaddingTimeStartAcc = 0.f;
 	m_fPaddingTimeEndAcc = 0.f;
+	m_eEffectDesc.vStartRotationMin.x = 0.f;
 
 	m_BurstList.clear();
 

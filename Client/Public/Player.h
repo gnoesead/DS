@@ -190,6 +190,9 @@ protected:
 	void	Player_Change_Setting_Status(_double dTimeDelta);
 
 protected:
+	void	Smell_Detection(_double dTimeDelta);
+
+protected:
 
 	_double m_dDelay_Player_Change = { 0.0 };
 
@@ -346,6 +349,10 @@ protected:
 
 	//Npc
 	_bool m_Is_Npc_Near = { false };
+
+protected:
+	_double m_dSmellTime = { 0.0 };
+	_bool	m_bSmell_Detection = { false };
 
 protected:
 	// Outline Default

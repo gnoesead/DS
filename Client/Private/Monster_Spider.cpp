@@ -263,7 +263,21 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 		m_bMonsterDead = true;
 		m_fDeadTime += (_float)dTimeDelta;
 
-		if (m_fDeadTime > 4.0f)
+		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
+		if (Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+
+		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
 			m_isDead = true;
 	}
 	else

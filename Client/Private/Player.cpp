@@ -1607,6 +1607,20 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
+void CPlayer::Smell_Detection(_double dTimeDelta)
+{
+	if (m_bSmell_Detection == true)
+	{
+		m_dSmellTime += dTimeDelta;
+		if (m_dSmellTime > 3.0)
+		{
+			m_bSmell_Detection = false;
+			m_dSmellTime = 0.0;
+			m_pRendererCom->Set_GrayScale();
+		}
+	}
+}
+
 HRESULT CPlayer::Add_Components()
 {
 	m_CharacterDesc.NaviDesc.iCurrentIndex = 0;

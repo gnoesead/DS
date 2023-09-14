@@ -72,6 +72,9 @@ public:
 	_bool	Get_Akaza_On() { return m_isAkaza_On; }
 	void	Set_Akaza_On(_bool on) { m_isAkaza_On = on; }
 
+	_bool	Get_RoomTurn() { return m_bRoomTurn; }
+	void	Set_RoomTurn(_bool Is) { m_bRoomTurn = Is; }
+
 private:
 	//다수 몬스터 어택관련
 	_int	m_iCnt_AttackOn = { 0 };
@@ -101,14 +104,13 @@ private:
 
 	_bool	m_isZenitsu_IndexPlus = { false };
 
-
 	_float4		m_PlayerPrePos = { 0.0f, 0.0f ,0.0f ,1.0f };
-
 
 	//보스몹의 시작을 알리는
 	_bool	m_isKyogai_On = { false };
 	_bool	m_isAkaza_On = { false };
 
+	_bool	m_bRoomTurn = { false };
 public:
 	virtual void Free() override;
 };
