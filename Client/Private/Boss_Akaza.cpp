@@ -85,10 +85,22 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	AuroraDesc.eCharacter = CAurora::CHARACTER_AKAZA;
 
 	AuroraDesc.eColor = CAurora::COLOR_RED;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
 	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_CHACRA;
+	AuroraDesc.eGroup = CAurora::GROUP_1;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_SKY;
+	AuroraDesc.eGroup = CAurora::GROUP_1;
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
@@ -127,7 +139,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	}
 
 	if (m_isAuroraOn && !m_bAwake)
-		m_isAuroraOn = false;
+		m_isAuroraOn[0] = false;
 }
 
 void CBoss_Akaza::LateTick(_double dTimeDelta)
@@ -519,12 +531,13 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.2
 				//Aura On
-
+				m_isAuroraOn[1] = true;
 			}
 			if (1 == m_iEvent_Index)
 			{//1.5
 				//Aura Off
 				CEffectPlayer::Get_Instance()->Play("Akaza_Heal_Wind", m_pTransformCom);
+				m_isAuroraOn[1] = false;
 			}
 		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
@@ -582,7 +595,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
 
-				m_isAuroraOn = true;
+				m_isAuroraOn[0] = true;
 			}
 		}
 
@@ -1731,6 +1744,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 			m_pRendererCom->Set_Invert();
 			m_fOutlineThickness = 2.0f;
 
+			m_isAuroraOn[0] = false;
 		}
 	}
 
@@ -2854,9 +2868,13 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_Big", m_pTransformCom, &EffectWorldDesc);
 						Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(15.0f, 15.0f, 15.0f), _float3(0.f, 0.0f, 0.0f), 0.2,
 							CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
-						Camera_Shake(1.0);
-
-
+						Camera_Shake(1.0 , 120);
+						Create_StoneParticle(CStoneParticle::STONE_AKAZA_STOMPDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 0.5f, 0.f, 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 					}
 					else
 					{
@@ -2874,7 +2892,7 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
-						Camera_Shake(1.0);
+						Camera_Shake(1.0 , 120);
 					}
 				}
 

@@ -115,7 +115,7 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	AuroraDesc.pGameObject = this;
 	AuroraDesc.eType = CAurora::TYPE_LOCAL;
 	AuroraDesc.eCharacter = CAurora::CHARACTER_TANJIRO;
-	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	AuroraDesc.eColor = CAurora::COLOR_SKY;
 
 	for(_uint i = 0 ; i < 35 ; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora") , &AuroraDesc);
@@ -235,18 +235,24 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (m_Moveset.m_iAwaken != 0)
 	{
-		m_isAuroraOn = true;
+		
 
-		m_dAwakenParticleAccTime += dTimeDelta;
-
-		if (m_dAwakenParticleAccTime > 0.4)
+		if (55 == m_pModelCom->Get_iCurrentAnimIndex())
+			m_isAuroraOn[0] = false;
+		else
 		{
-			CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom); 
-			m_dAwakenParticleAccTime = 0.0;
+			m_isAuroraOn[0] = true; 
+			m_dAwakenParticleAccTime += dTimeDelta;
+
+			if (m_dAwakenParticleAccTime > 0.2)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Aurora_Particle0", m_pTransformCom);
+				m_dAwakenParticleAccTime = 0.0;
+			}
 		}
 	}
 	else
-		m_isAuroraOn = false;
+		m_isAuroraOn[0] = false;
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
