@@ -2520,7 +2520,7 @@ void CBoss_Akaza::Trigger_Hit_GetUp()
 	m_bAir_Motion = false;
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_GETUP_DIZZY);
 	m_pModelCom->Set_AnimisFinish(ANIM_HIT_RETURN_BIG);
-
+	Pos_FixY();
 	m_eCurstate = STATE_GETUP;
 }
 
@@ -4018,6 +4018,7 @@ void CBoss_Akaza::Update_Hit_GetUp(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_AWAKE_PUSHAWAY;
 		Trigger_PushAway();
 	}
+	Pos_FixY();
 
 }
 
