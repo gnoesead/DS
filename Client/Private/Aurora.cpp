@@ -58,22 +58,31 @@ void CAurora::Tick(_double TimeDelta)
 	case GROUP_1:
 		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_1))
 		{
-			m_fAlpha -= 0.2f * (_float)TimeDelta;
-			if (m_fAlpha < 0.f)
-				m_fAlpha = 0.f;
+			m_fAlpha = 0.f;
 			return;
 		}
-		break;
 	}
 
-	m_fAlpha += 0.5f * (_float)TimeDelta;
+	if (m_isSpreadDead)
+		m_fAlpha -= 0.1f * (_float)TimeDelta;
+	else
+		m_fAlpha += 0.5f * (_float)TimeDelta;
 
+	if (m_fAlpha < 0.f)
+	{
+		m_fAlpha = 0.f;
+		m_isDead = true;
+	}
+
+	
 	if (m_fAlpha > m_fMaxAlpha)
 		m_fAlpha = m_fMaxAlpha;
 
 	__super::Tick(TimeDelta);
 
+	m_fAccX += (_float)m_dSpeedX * (_float)TimeDelta;
 	m_fAccY += (_float)m_dSpeedY * (_float)TimeDelta;
+	m_fAccZ += (_float)m_dSpeedZ * (_float)TimeDelta;
 
 	m_vSize.x += m_fSizeSpeedX * (_float)TimeDelta;
 	m_vSize.y += m_fSizeSpeedY * (_float)TimeDelta;
@@ -89,7 +98,7 @@ void CAurora::Tick(_double TimeDelta)
 	}
 	else if (TYPE_WORLD == m_EffectDesc.eType)
 	{
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector(m_vInitialPos) + XMVectorSet(0.f, m_fAccY, 0.f, 0.f));
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector(m_vInitialPos) + XMVectorSet(m_fAccX, m_fAccY, m_fAccZ, 0.f));
 	}
 }
 
@@ -255,7 +264,13 @@ void CAurora::Update_Frame(_double TimeDelta)
 		m_FrameAccTime = 0.0;
 		if (m_iFrame >= m_iNumX * m_iNumY - 1)
 		{
-			Reset_Data();
+			if (m_EffectDesc.eGroup != 2)
+				Reset_Data();
+			else
+			{
+				m_iFrame = m_iNumX * m_iNumY - 1;
+				m_isSpreadDead = true;
+			}
 		}
 	}
 	
@@ -329,17 +344,25 @@ void CAurora::Reset_Data()
 
 	if (m_EffectDesc.eType == TYPE_WORLD)
 	{
-		m_dFrameSpeed = Random::Generate_Float(0.015f, 0.02f);
-		m_fAlpha = 0.05f;
 
-		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
-		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.15f);
+		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
+		m_fPlusY = Random::Generate_Float(0.f, 1.3f);
+		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
 
-		m_fSizeSpeedX = Random::Generate_Float(0.1f, 0.2f);
-		m_fSizeSpeedY = Random::Generate_Float(0.1f, 0.2f);
-		m_fPlusY = Random::Generate_Float(0.4f, 0.8f);
+		m_fMaxAlpha = 0.2f;
+		m_fAlpha = m_fMaxAlpha;
+
+		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
+		m_fSizeSpeedX = Random::Generate_Float(2.7f, 3.0f);
+		m_fSizeSpeedY = Random::Generate_Float(2.7f, 3.0f);
+
+		m_dFrameSpeed = Random::Generate_Float(0.018f, 0.022f);
 
 		XMStoreFloat4(&m_vInitialPos, m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) + XMVectorSet(m_fPlusX, m_fPlusY, m_fPlusZ, 0.f));
+
+		m_dSpeedX = Random::Generate_Float(-3.f, 3.f);
+		m_dSpeedY = Random::Generate_Float(-1.f, 3.f);
+		m_dSpeedZ = Random::Generate_Float(-3.f, 3.f);
 	}
 }
 

@@ -947,7 +947,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
-				Play_Sound_Atk(2, 0.75f);
+				
 			}
 
 		}
@@ -961,6 +961,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 
+				Play_Sound_Atk(2, 0.75f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.5f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_sword03.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.5f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -1011,6 +1018,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				}
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeTilt", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -1019,11 +1029,17 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.7f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 0.5f, 1.5f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword07.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -1044,6 +1060,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Effect", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Charge_Particle", m_pTransformCom);
 				Camera_Shake(0.05);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("flash_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.7f);
 			}
 		}
 
@@ -1159,20 +1178,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				m_dSound_Move = 0.0;
 
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
+				
 			}
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
@@ -1192,27 +1198,50 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-
+			/*
 			m_dSound_Move += dTimeDelta;
 			if (m_dSound_Move > 0.02f)
 			{
 				m_dSound_Move = 0.0;
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
 
 				if (m_iSound_Move_Index == 0)
 				{
 					m_iSound_Move_Index = 1;
 
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+					}
 				}
 				else if (m_iSound_Move_Index == 1)
 				{
 					m_iSound_Move_Index = 0;
 
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+					{
+						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+					}
 				}
-			}
+				Safe_Release(pGameInstance);
+			}*/
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -1471,6 +1500,53 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 			}
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
+	}
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
+	{
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.16f)
+		{
+			m_dSound_Move = 0.0;
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+				}
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+				}
+			}
+			Safe_Release(pGameInstance);
+		}
 	}
 
 	if (m_Moveset.m_Up_Battle_Run)
@@ -2008,8 +2084,61 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 		}
 		else
 			m_pModelCom->Set_Animation(ANIM_BATTLE_DASH);
+
+		_tchar szRun_0[MAX_PATH] = TEXT("awk_eff_wind.ogg");
+		Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_JUMP, 0.4f);
 	}
 	Go_Straight_Constant(dTimeDelta, 80, 4.5f * m_fScaleChange);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
+	{
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		m_dSound_Move += dTimeDelta;
+		if (m_dSound_Move > 0.1f)
+		{
+			m_dSound_Move = 0.0;
+
+			if (m_iSound_Move_Index == 0)
+			{
+				m_iSound_Move_Index = 1;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+
+
+			}
+			else if (m_iSound_Move_Index == 1)
+			{
+				m_iSound_Move_Index = 0;
+
+				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
+				}
+				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+				{
+					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
+					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
+				}
+			}
+		}
+		Safe_Release(pGameInstance);
+	}
+
 
 	if (m_isAirDashing)
 	{
@@ -2096,6 +2225,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				}
 			}
 		}
+		Play_Sound_Atk(0, 0.7);
+		
 	}
 
 
@@ -2247,7 +2378,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		EffectWorldDesc.fScale = 1.4f;
 		EffectWorldDesc.vPosition.y += 0.4f;
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
-		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom , &EffectWorldDesc);
+
+		Play_Sound_Metal(0.5);
 	}
 #pragma endregion
 
@@ -3279,9 +3412,16 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
 		}
 		else if (m_iSound_Atk_Small == 1)
 		{
-			m_iSound_Atk_Small = 0;
+			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Kya.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+		}
+		else if (m_iSound_Atk_Small == 2)
+		{
+			m_iSound_Atk_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
 		}
 	}

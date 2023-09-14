@@ -58,6 +58,8 @@ public:
 
 		_bool	bSizeEqual = { false };
 
+		_bool bSpecial = { false };
+
 	}EFFECTWDESC;
 
 protected:

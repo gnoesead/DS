@@ -153,6 +153,9 @@ private:
 	void	Create_SwampAlertRect();
 
 private:
+	void	Play_Sound_Dmg(_int iType, _double vol); // 0:small, 1:medium, 2:big
+
+private:
 	_float	m_fScale = { 0.8f };
 
 	_bool	m_isTeleporting = { false };

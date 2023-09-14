@@ -576,19 +576,10 @@ void CAtkCollider::Level_House_Dead(_double dTimeDelta)
 	{
 		if (m_dTimeAcc > 0.5)
 		{
-			if (m_bLineOut == false)
-			{
-				m_dEffectAcc += dTimeDelta;
-				if (m_dEffectAcc > 0.05)
-				{
-					m_dEffectAcc = 0.0;
-
-					//Create_GroundSmoke(CGroundSmoke::SMOKE_BLADE );
-				}
-			}
+			Check_OutLine();
 		}
 	}
-	Check_OutLine();
+	
 
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 		Reset_Dead();

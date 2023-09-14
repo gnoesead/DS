@@ -571,7 +571,7 @@ PS_OUT PS_Bloom(PS_IN In)
 
 	float fBrightness = dot(vFragColor.rgb, float3(0.2126f, 0.7152f, 0.0722f));
 	//float fBrightness = dot(vFragColor.rgb, float3(0.1126f, 0.9152f, 0.1222f));
-	if (fBrightness > 0.70f)
+	if (fBrightness > 0.90f)
 		fBrightColor = vector(vFragColor.rgb, 1.f);
 
 	Out.vColor = fBrightColor;
@@ -624,7 +624,7 @@ PS_OUT PS_Apply_Bloom(PS_IN In)
 		vOut = pow(abs(vOut), 1.8f);
 		vBloom = pow(abs(vBloom), 1.8f);
 
-		vOut += vBloom * 2.f;
+		vOut += vBloom * 1.f;
 		Out.vColor = pow(abs(vOut), 1 / 2.2f);
 		if (Out.vColor.a == 0.f)
 			discard;
