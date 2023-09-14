@@ -1039,6 +1039,19 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		for (_uint i = 0; i < 10; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		break;
+	case CGroundSmoke::SMOKE_KYOGAI_PUSH:
+		EffectWDesc.vPos = XMVectorSetY(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 0.f);
+
+		EffectWDesc.vStartPosX = { -1.0f,1.0f }; EffectWDesc.vStartPosY = { -0.0f,0.2f }; EffectWDesc.vStartPosZ = { -1.0f,1.0f };
+		EffectWDesc.vFrameSpeed = { 0.03f , 0.035f };
+		EffectWDesc.vStartSizeX = { 2.5f , 3.5f }; EffectWDesc.vStartSizeY = { 2.5f , 3.0f };
+		EffectWDesc.vSpeedX = { -20.0f , 20.0f };	EffectWDesc.vSpeedY = { 0.1f , 0.2f }; 	EffectWDesc.vSpeedZ = { -20.0f , 20.f };
+		EffectWDesc.vSizeSpeedX = { 4.0f , 4.5f }; EffectWDesc.vSizeSpeedY = { 4.0f , 4.5f };
+		EffectWDesc.vStartFrame = { 0.f , 2.f };
+
+		for (_uint i = 0; i < 40; ++i)
+			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		break;
 	case CGroundSmoke::SMOKE_JENITSU_HIKI:
 		EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
 		EffectWDesc.vStartPosX = { -1.5f,1.5f }; EffectWDesc.vStartPosY = { -0.0f,0.5f }; EffectWDesc.vStartPosZ = { -1.5f,1.5f };

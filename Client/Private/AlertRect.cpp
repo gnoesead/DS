@@ -50,7 +50,19 @@ HRESULT CAlertRect::Initialize(void* pArg)
 	if (FAILED(Add_Components()))
 		return E_FAIL;
 
-	_vector vPos = XMVectorSetY(m_EffectDesc.vPos, 0.1f);
+	static _float fOffsetY = 0.f;
+	static _uint iNum = 0;
+
+	fOffsetY += 0.001f;
+	++iNum = 0;
+
+	if (iNum > 50)
+	{
+		iNum = 0;
+		fOffsetY = 0.f;
+	}
+
+	_vector vPos = XMVectorSetY(m_EffectDesc.vPos, 0.1f + fOffsetY);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 

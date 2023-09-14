@@ -365,13 +365,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 			else if (1 == m_iEvent_Index) // 0.2
 			{
-				m_isAuroraOn = true;
+				m_isAuroraOn[0] = true;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
 			}
 			else if (2 == m_iEvent_Index) // 0.34
 			{
-				m_isAuroraOn = true;
+				m_isAuroraOn[0] = true;
 			}
 			else if(3 == m_iEvent_Index) // 0.7
 			{
@@ -754,7 +754,18 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.f, 0.0f), dLongLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.f);
 
-				CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_Push", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_Push", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Push", m_pTransformCom , &EffectWorldDesc);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_PUSH);
+				Camera_Shake(1.0);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
+				m_pRendererCom->Set_RadialBlur();
+			}
+			else if (1 == m_iEvent_Index) // 0.8
+			{
+				m_pRendererCom->Set_RadialBlur();
 			}
 
 		}

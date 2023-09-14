@@ -84,10 +84,22 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	AuroraDesc.eCharacter = CAurora::CHARACTER_AKAZA;
 
 	AuroraDesc.eColor = CAurora::COLOR_RED;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
 	AuroraDesc.eColor = CAurora::COLOR_BLUE;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_CHACRA;
+	AuroraDesc.eGroup = CAurora::GROUP_1;
+	for (_uint i = 0; i < 20; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+	AuroraDesc.eColor = CAurora::COLOR_SKY;
+	AuroraDesc.eGroup = CAurora::GROUP_1;
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
@@ -124,7 +136,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	}
 
 	if (m_isAuroraOn && !m_bAwake)
-		m_isAuroraOn = false;
+		m_isAuroraOn[0] = false;
 }
 
 void CBoss_Akaza::LateTick(_double dTimeDelta)
@@ -531,7 +543,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
 
-				m_isAuroraOn = true;
+				m_isAuroraOn[0] = true;
 			}
 		}
 

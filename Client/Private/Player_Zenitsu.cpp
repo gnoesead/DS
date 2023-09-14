@@ -51,6 +51,7 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 	CSword::SWORDDESC SwordDesc;
 	ZeroMemory(&SwordDesc, sizeof SwordDesc);
@@ -66,9 +67,23 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 	SwordHomeDesc.pBone = m_pModelCom->Get_Bone("L_Weapon_1");
 	m_pSwordHome = dynamic_cast<CSwordHome*>(pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_SwordHome"), &SwordHomeDesc));
 
-	Safe_Release(pGameInstance);
-
+	
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+
+	CAurora::EFFECTDESC AuroraDesc;
+	AuroraDesc.pTransform = m_pTransformCom;
+	AuroraDesc.pGameObject = this;
+	AuroraDesc.eType = CAurora::TYPE_LOCAL;
+	AuroraDesc.eCharacter = CAurora::CHARACTER_ZENITSU;
+	AuroraDesc.eColor = CAurora::COLOR_YELLOW;
+	AuroraDesc.eGroup = CAurora::GROUP_0;
+
+	for (_uint i = 0; i < 35; ++i)
+		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
@@ -126,6 +141,13 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 	}
 
+	// ¾Æ¿ì¶ó
+	if (m_Moveset.m_iAwaken != 0)
+	{
+		m_isAuroraOn[0] = true;
+	}
+	else
+		m_isAuroraOn[0] = false;
 }
 
 void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
