@@ -1321,7 +1321,16 @@ void CCharacter::Shadow_House_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		m_pRendererCom->Set_RoomTurn(CMonsterManager::GetInstance()->Get_RoomTurn());
+
+		if (CMonsterManager::GetInstance()->Get_RoomTurn() == true)
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-3.f, 5.f, -3.f, 1.f);
+		}
+		else
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		}
 		vLightAt = vPlayerPos;
 	}
 

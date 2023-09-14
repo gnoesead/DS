@@ -352,7 +352,7 @@ PS_OUT  PS_Outline_Blue(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float4 outlineColor = { 0.f, 0.f, 1.f, 0.f };
+	float4 outlineColor = { 0.f, 0.85f, 1.f, 0.f };
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -399,7 +399,7 @@ PS_OUT  PS_Outline_Yello(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
 	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz∞¢∞¢¿Ã -1 ~ 1
@@ -415,7 +415,7 @@ PS_OUT  PS_Outline_AwakeYello(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float4 outlineColor = { 1.f, 1.f, 0.f, 0.f };
+	float4 outlineColor = { 1.f, 1.f, 1.f, 0.f };
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 

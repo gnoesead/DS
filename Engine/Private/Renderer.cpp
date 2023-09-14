@@ -850,7 +850,7 @@ HRESULT CRenderer::Render_SSAO()
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fBias", &m_fSSAOBias, sizeof(_float))))
 		return E_FAIL;
-	
+
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Normal"), m_pSSAOShader, "g_NormalTexture")))
 		return E_FAIL;
@@ -1307,6 +1307,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		}
 	}
 	Safe_Release(pGameInstance);
+
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBloomPower", &m_fBloomPower, sizeof(_float))))
@@ -2158,7 +2159,7 @@ HRESULT CRenderer::Render_Deferred()
 	   return E_FAIL;*/
 
 
-	   
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -2291,8 +2292,14 @@ void CRenderer::Shadow_House_Setting()
 	if (pPlayerTransformCom != nullptr)
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		if (m_bRoomTurn == true)
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-3.f, 5.f, -3.f, 1.f);
+		}
+		else
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		}
 		vLightAt = vPlayerPos;
 	}
 

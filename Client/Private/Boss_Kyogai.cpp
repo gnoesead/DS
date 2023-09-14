@@ -2375,6 +2375,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 		Update_RoomChange_2(dTimeDelta);
 		break;
 	}
+	CMonsterManager::GetInstance()->Set_RoomTurn(m_bTurn);
 }
 
 void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
@@ -2401,6 +2402,7 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 				m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
 			}
 		}
+		CMonsterManager::GetInstance()->Set_RoomTurn(m_bTurn);
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_END))
@@ -2461,7 +2463,6 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	Grid_Bullet(dTimeDelta, 38.5, vMonstervRight); // ¿Ã ∑Ë¿Ã πÆ¡¶µ  
 	//Liar_Bullet(dTimeDelta, 44.0, vMonsterLook);
 	Wave_Bullet(dTimeDelta, 44.0, vMonsterLook);
-
 
 	Turn_Trigger(dTimeDelta);
 	TurnRoom();

@@ -240,23 +240,22 @@ HRESULT CPlayer_Zenitsu::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
 				return E_FAIL;
 
-			/*if (m_iMeshNum == 2)
+			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
-			else*/
+			else
 			{
 				if ((m_isSkilling == false) && (m_Moveset.m_iAwaken == 0)) { // 기본상태
 					m_pShaderCom->Begin(1);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken == 0)) { // 노 개방 스킬 썻을 때
-					m_pShaderCom->Begin(9);
+					m_pShaderCom->Begin(6);
 				}
 				else if ((m_isSkilling == false) && (m_Moveset.m_iAwaken != 0)) { // 개방 했을 때
-					m_pShaderCom->Begin(9);
+					m_pShaderCom->Begin(6);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken != 0)) { // 개방하고 스킬 썻을 때
 					m_pShaderCom->Begin(9);
 				}
-
 			}
 
 			m_pModelCom->Render(m_iMeshNum);
@@ -274,20 +273,7 @@ HRESULT CPlayer_Zenitsu::Render()
 
 			m_pModelCom->Render(i);
 		}
-
-		//// RimLight
-		//for (_uint i = 0; i < iNumMeshes; i++)
-		//{
-		//	if (FAILED(m_pModelCom->Bind_ShaderResource(i, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-		//		return E_FAIL;
-
-		//	if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
-		//		return E_FAIL;
-
-		//	m_pShaderCom->Begin(7);
-
-		//	m_pModelCom->Render(i);
-		//}
+		
 #pragma endregion
 
 #ifdef _DEBUG

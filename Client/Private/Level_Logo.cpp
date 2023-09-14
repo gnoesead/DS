@@ -886,7 +886,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region KYOGAI
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 3)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;
