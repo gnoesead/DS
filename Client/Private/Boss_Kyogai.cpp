@@ -1522,8 +1522,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			m_dAwakeTime = 0.0;
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
-			m_isAuroraOn = false;
-
+			
 			m_isAuroraOn[0] = false;
 		}
 	}
