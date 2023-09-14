@@ -45,6 +45,7 @@ public:
 #endif // _DEBUG
 public:
 	void Set_RadialBlur() { m_bRadialBlur = !m_bRadialBlur; }
+	void Set_RadialBlur_On(_bool on) { m_bRadialBlur = on; }
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
 	void Set_GrayScale_On(_bool on) { m_bGrayScale = on; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
