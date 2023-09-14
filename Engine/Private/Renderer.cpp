@@ -2158,9 +2158,9 @@ HRESULT CRenderer::Render_Deferred()
 	   return E_FAIL;*/
 
 
-	   // 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
+	   
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	///Safe_AddRef(pGameInstance);
+	Safe_AddRef(pGameInstance);
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
@@ -2184,14 +2184,6 @@ HRESULT CRenderer::Render_Deferred()
 		if (fGrayRatio < 0.f)
 			fGrayRatio = 0.f;
 	}
-
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_DepthTexture")))
-	   return E_FAIL;*/
-	   /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_ShadowDepthTexture")))
-		  return E_FAIL;*/
-		  /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_SSAOTexture")))
-			 return E_FAIL;*/
-
 
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
 	Safe_AddRef(pPipeLine);
@@ -2221,7 +2213,7 @@ HRESULT CRenderer::Render_Deferred()
 		break;
 	}
 
-	//Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
 	m_pShader->Begin(3);
 
@@ -2253,7 +2245,7 @@ void CRenderer::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 

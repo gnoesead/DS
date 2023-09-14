@@ -1498,9 +1498,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		{
 			m_bDead_Trigger = true;
 			Trigger_Hit_Dead();
-		}
-		//m_eCurPhase = PHASE_3;
-
+		}		
 	}
 
 	if (m_bAwake == true)
@@ -1551,8 +1549,6 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			case 9:
 				Trigger_AtkSkCmb();
 				break;
-
-
 			}
 		}
 		if (m_bAwake == true)
@@ -1566,7 +1562,6 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			case 2:
 				Trigger_Awake_AtkskCmb();
 				break;
-
 			}
 		}
 
@@ -1577,11 +1572,10 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
 
-
 	if (m_bPatternStart == false)
 	{
 		m_dTriggerTime += dTimeDelta;
-		if (0.3 < m_dTriggerTime && m_dTriggerTime <= 0.3 + dTimeDelta)
+		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 			m_iIdleCnt++;
 
 		if (m_iIdleCnt == 1)
@@ -1602,7 +1596,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 	{
 		_float fDistance = Calculate_Distance();
 		m_dTriggerTime += dTimeDelta;
-		if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
+		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 			m_iIdleCnt++;
 
 		if (m_iIdleCnt == 1)
@@ -1661,12 +1655,11 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		if (m_bPatternStart == false)
 		{
 			m_dTriggerTime += dTimeDelta;
-			if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
+			if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
 			{
-
 				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
@@ -1684,7 +1677,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (Event_Time(dTimeDelta, 0.30, m_dTriggerTime))
+			if (Event_Time(dTimeDelta, 0.20, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1789,9 +1782,6 @@ void CBoss_Kyogai::Trigger_Heal()
 
 void CBoss_Kyogai::Trigger_Awake()
 {
-
-
-
 	m_bTrigger = true;
 	m_bAnimFinish = false;
 	m_eCurstate = STATE_AWAKE;
@@ -2079,15 +2069,11 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 			else
 				m_StatusDesc.fHp = m_StatusDesc.fHp_Max * (_float)m_dTimeAcc * 0.5f;
 		}
-
 	}
-
-
 }
 
 void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 {
-
 	if (m_bAnimFinish == false)
 	{
 		m_bAnimFinish = true;
@@ -2105,7 +2091,6 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE);
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Awake_AtkskCmb();
-
 	}
 }
 
@@ -2126,12 +2111,10 @@ void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.01) && !m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.538))
 	{
 		Go_Dir_Constant(dTimeDelta, ANIM_STEP_FRONT2, 3.f, Convert::ToFloat4(m_vDir));
-
 	}
 
 	_vector vDir = Calculate_Dir_FixY();
 	m_pTransformCom->LerpVector(vDir, 0.3f);
-
 }
 
 void CBoss_Kyogai::Update_AtkCmb(_double dTimeDelta)
@@ -2303,10 +2286,10 @@ void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Interact();
 	}
+
 	_vector vDir = Calculate_Dir_FixY();
 	m_pTransformCom->LerpVector(vDir, 0.7f);
 	Go_Dir_Constant(dTimeDelta, DIR_UP, ANIM_ATKPUNCH, 1.5f, 0.50, 0.60);
-
 }
 
 void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
@@ -2327,12 +2310,10 @@ void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
 		if (m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.01) && !m_pModelCom->Get_AnimRatio(ANIM_STEP_FRONT2, 0.538))
 		{
 			Go_Dir_Constant(dTimeDelta, ANIM_STEP_FRONT2, 3.f, Convert::ToFloat4(m_vDir));
-
 		}
 
 		_vector vDir = Calculate_Dir_FixY();
 		m_pTransformCom->LerpVector(vDir, 0.3f);
-
 	}
 	//if(m_bMove == true)
 	{

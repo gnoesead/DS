@@ -146,8 +146,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
+		m_bSmell_Detection = true;
 		m_pRendererCom->Set_GrayScale();
 	}
+	Smell_Detection(dTimeDelta);
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
 		//m_pRendererCom->Set_RadialBlur();
@@ -194,11 +197,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		//CSwampManager::GetInstance()->Set_Dmg(10.0f);
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
-	}
-
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
-	{
-		
 	}
 
 	Safe_Release(pGameInstance); 

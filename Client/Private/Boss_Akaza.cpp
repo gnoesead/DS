@@ -1582,7 +1582,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_dTriggerTime = 0.0;
 		m_iIdleCnt = 0;
 	}
-	if ((m_StatusDesc.fHp > 0.f) && (m_StatusDesc.fHp / m_StatusDesc.fHp_Max < 0.5f))
+	if ((m_StatusDesc.fHp > 0.f) && ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.5f))
 	{
 		if (m_iTriggerCnt == 5)
 			m_iTriggerCnt = 0;
@@ -1778,20 +1778,23 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
 
-	if (m_StatusDesc.fHp > 50.f)
+	if (m_StatusDesc.fHp / m_StatusDesc.fHp_Max > 0.5f)
 	{
 		if (m_bPatternStart == false)
 		{
-			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDLE, 0.30, dTimeDelta))
+			m_dTriggerTime += dTimeDelta;
+			if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
 			{
+				m_dTriggerTime = 0.0;
 				m_iIdleCnt = 0;
 				m_bTrigger = false;
 				m_iTriggerCnt++;
 				if (m_iTriggerCnt >= 6)
 				{
+					m_dTriggerTime = 0.0;
 					m_iTriggerCnt = 0;
 					m_bPatternStart = true;
 				}
@@ -1801,7 +1804,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.00 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1845,11 +1848,12 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			}
 		}
 	}
-	if (m_StatusDesc.fHp <= 50.f && m_StatusDesc.fHp > 0.f)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_StatusDesc.fHp > 0.f)
 	{
 		if (m_bPatternStart == true)
 		{
-			if (m_pModelCom->Check_PickAnimRatio(ANIM_IDLE, 0.30, dTimeDelta))
+			m_dTriggerTime += dTimeDelta;
+			if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1866,7 +1870,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (1.0 < m_dTriggerTime && m_dTriggerTime <= 1.00 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1932,7 +1936,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 		if (m_bPatternStart == false)
 		{
 			m_dTriggerTime += dTimeDelta;
-			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -1955,7 +1959,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (0.60 < m_dTriggerTime && m_dTriggerTime <= 0.60 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
@@ -2030,14 +2034,12 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 			m_bPatternStart = false;
 			m_dTriggerTime = 0.0;
 			m_iIdleCnt = 0;
-			//m_bTrigger = false;
-
 		}
 		if (m_bPatternStart == false)
 		{
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
-			if (0.30 < m_dTriggerTime && m_dTriggerTime <= 0.30 + dTimeDelta)
+			if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 				m_iIdleCnt++;
 
 			if (m_iIdleCnt == 1)
