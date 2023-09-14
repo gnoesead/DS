@@ -1339,6 +1339,9 @@ PS_OUT PS_MASKCOLORSPRITE(PS_IN In)
 
 	Out.vDiffuse.a = vMask.r * g_fAlpha;
 
+	if (0.1f > Out.vDiffuse.a)
+		discard;
+
 	return Out;
 }
 

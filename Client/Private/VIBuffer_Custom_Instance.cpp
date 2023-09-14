@@ -155,6 +155,12 @@ void CVIBuffer_CustomParticle::Tick_Size(_double dTimeDelta)
 			if (0.0 != m_CustomPartDesc.dSpriteSpeed)
 				iCount = _int(_double(m_pSpeed[i]) * (m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed)));
 
+			if (1.0 == m_CustomPartDesc.dSpriteSpeed)
+			{
+				if (m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y <= iCount)
+					iCount = m_CustomPartDesc.vSpriteCount.x * m_CustomPartDesc.vSpriteCount.y - 1;
+			}
+
 			if (m_CustomPartDesc.bSpriteRandomStart)
 			{
 				iCount += m_iStartSprite;
