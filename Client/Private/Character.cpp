@@ -1313,7 +1313,6 @@ void CCharacter::Shadow_Village_Setting()
 
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 	
-
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
@@ -1327,7 +1326,7 @@ void CCharacter::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
@@ -1352,7 +1351,6 @@ void CCharacter::Shadow_House_Setting()
 	Safe_AddRef(pGameInstance);
 
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"),CPlayerManager::GetInstance()->Get_PlayerIndex(), TEXT("Com_Transform")));
-
 
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
@@ -1379,6 +1377,7 @@ void CCharacter::Shadow_House_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -1392,7 +1391,6 @@ void CCharacter::Shadow_Train_Setting()
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
 	
 	if (pPlayerTransformCom != nullptr)
 	{
@@ -1401,6 +1399,7 @@ void CCharacter::Shadow_Train_Setting()
 		vLightEye = vPlayerPos + XMVectorSet(-20.f, 40.f, -20.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
+
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
@@ -1414,8 +1413,8 @@ void CCharacter::Shadow_Train_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
-	Safe_Release(pGameInstance);
 
+	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Shadow_Final_Setting()
@@ -1448,8 +1447,6 @@ HRESULT CCharacter::Add_Components()
 		MSG_BOX("Failed to Add_Com_Renderer : CCharacter");
 		return E_FAIL;
 	}
-
-
 
 	return S_OK;
 }

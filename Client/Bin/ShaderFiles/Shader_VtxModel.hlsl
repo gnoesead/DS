@@ -383,6 +383,28 @@ PS_NONDEFERRED  PS_HANDAURA(PS_IN _In)
 	return Out;
 };
 
+PS_NONDEFERRED  PS_BULLETHIT(PS_IN _In)
+{
+	PS_NONDEFERRED	Out = (PS_NONDEFERRED)0;
+
+	float2 vTexUV = float2(g_vCustomUV.x + (_In.vTexUV.x * (1.f / 6.f)), g_vCustomUV.y + (_In.vTexUV.y * (1.f / 6.f)));
+
+	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexUV);
+	float fRamp = vMtrlDiffuse.r;
+	if (0.98f < fRamp)
+		fRamp = 0.98f;
+	float2 vGradientUV = float2(fRamp, _In.vTexUV.y);
+	vector vMtrlRamp = g_RampTexture.Sample(LinearSampler, vGradientUV);
+
+	Out.vColor.rgb = saturate(vMtrlRamp.xyz + 0.3f);
+	Out.vColor.a = vMtrlDiffuse.r * g_fAlpha;
+
+	if (0.1f > Out.vColor.a)
+		discard;
+
+	return Out;
+};
+
 technique11 DefaultTechnique
 {
 	pass General // 0
@@ -557,6 +579,19 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_HANDAURA();
+	}
+
+	pass BulletHit // 14
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Main();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_BULLETHIT();
 	}
 };
 

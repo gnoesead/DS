@@ -137,8 +137,11 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
+		m_bSmell_Detection = true;
 		m_pRendererCom->Set_GrayScale();
 	}
+	Smell_Detection(dTimeDelta);
+	
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
 		//m_pRendererCom->Set_RadialBlur();
@@ -185,11 +188,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	{
 		//CSwampManager::GetInstance()->Set_Dmg(10.0f);
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
-	}
-
-	if (pGameInstance->Get_DIKeyDown(DIK_N))
-	{
-		
 	}
 
 	Safe_Release(pGameInstance); 
@@ -937,6 +935,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+
+				m_pRendererCom->Set_BloomRatio();
 			}
 			
 			
@@ -951,7 +951,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
-				Play_Sound_Atk(2, 0.75f);
+				
 			}
 			
 		}
@@ -965,6 +965,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo_Air3", m_pTransformCom);
 
+				Play_Sound_Atk(2, 0.75f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.5f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_sword03.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.5f);
 			}
 			else if (1 == m_iEvent_Index)
 			{

@@ -10,6 +10,7 @@ BEGIN(Engine)
 
 #ifdef _DEBUG
 class CRenderer;
+class CGameInstance;
 #endif // _DEBUG
 END
 
@@ -100,7 +101,7 @@ private:
 	void	Setting_WebBullet_Full();
 
 	void	Level_House_Dead(_double dTimeDelta);
-	void	Level_FinalBoss_Dead(_double dTimeDelta);
+	void	Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGameInstance);
 
 private:
 	void	Check_OutLine();
