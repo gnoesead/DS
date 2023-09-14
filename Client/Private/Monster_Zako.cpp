@@ -1402,6 +1402,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
@@ -1411,6 +1417,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom,&EffectWorldDesc);
 			}
 		}
 
@@ -1478,7 +1490,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
-		//pGameInstance->Time_Slow(0.3, 0.15);
+		else {
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.fScale = 1.f;
+			EffectWorldDesc.vPosition.y += 0.f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+		}
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1496,10 +1513,16 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_FALL);
 		Jumping(1.5f, 0.03f); // 1.5
 
-		Play_HitEffect();
-		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-
-		//pGameInstance->Time_Slow(0.23, 0.3);
+		if (PlayerIndex == 0) {
+			Play_HitEffect();
+			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		}
+		else {
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.fScale = 1.f;
+			EffectWorldDesc.vPosition.y += 0.f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+		}
 	}
 
 	//어퍼시 수직상승 여부
@@ -1544,6 +1567,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
+		else {
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.fScale = 1.f;
+			EffectWorldDesc.vPosition.y += 0.f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1579,7 +1608,12 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
-		//pGameInstance->Time_Slow(0.6, 0.4);
+		else {
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.fScale = 1.f;
+			EffectWorldDesc.vPosition.y += 0.f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+		}
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1630,6 +1664,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 		}
+		
 
 		if (m_isJumpOn == false)
 		{

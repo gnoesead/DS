@@ -1057,7 +1057,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.f;
-				EffectWorldDesc.vPosition.y += -0.2f;
+				EffectWorldDesc.vPosition.y += 0.f;
 				EffectWorldDesc.vPosition.z += 0.f;
 				
 				CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock_Rev", m_pTransformCom, &EffectWorldDesc);
@@ -1089,7 +1089,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.f;
-				EffectWorldDesc.vPosition.y += -0.2f;
+				EffectWorldDesc.vPosition.y += 0.f;
 				EffectWorldDesc.vPosition.z += 0.f;
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Step_Shock", m_pTransformCom, &EffectWorldDesc);
