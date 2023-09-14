@@ -116,8 +116,7 @@ protected:
 
 protected:
 	_uint	m_iSmallHit_Index = { 0 };
-	_uint	m_iHekirekiHit_Index = { 0 };
-	_uint	m_iIdleCnt = { 0 };
+	_uint	m_iHekirekiHit_Index = { 0 };	
 	_uint	m_iTriggerCnt = { 0 };
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iRandomDirNum = { 0 };

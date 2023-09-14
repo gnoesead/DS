@@ -935,6 +935,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+
+				m_pRendererCom->Set_BloomRatio();
 			}
 			
 			

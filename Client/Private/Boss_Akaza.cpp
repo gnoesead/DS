@@ -225,7 +225,7 @@ void CBoss_Akaza::Debug_State(_double dTimeDelta)
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(140.f, 0.f, 130.f, 1.f));
 		m_iTriggerCnt = 0;
-		m_iIdleCnt = 0;
+		m_dTriggerTime = 0.0;
 		Trigger_Interact();
 	}
 	if (pGameInstance->Get_DIKeyState(DIK_F2))
@@ -1623,7 +1623,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_bNoDmg = true;
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		
 	}
 	if ((m_StatusDesc.fHp > 0.f) && ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.5f))
 	{
@@ -1701,7 +1701,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		
 
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
@@ -1717,7 +1717,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		
 
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
@@ -1822,7 +1822,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
 
-	if (m_StatusDesc.fHp / m_StatusDesc.fHp_Max > 0.5f)
+	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) > 0.5f)
 	{
 		if (m_bPatternStart == false)
 		{
@@ -1830,12 +1830,10 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			if (Event_Time(dTimeDelta, 0.3, m_dTriggerTime))
 			{
 				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
 				m_bTrigger = false;
 				m_iTriggerCnt++;
 				if (m_iTriggerCnt >= 6)
 				{
-					m_dTriggerTime = 0.0;
 					m_iTriggerCnt = 0;
 					m_bPatternStart = true;
 				}
@@ -1848,7 +1846,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 			{
 				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
+				m_bTrigger = false;
 				m_iRandomPatternNum = Random::Generate_Int(1, 10);
 
 				if (fDistance <= 5.f)
@@ -1856,12 +1854,10 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
 					{
 						m_iTriggerCnt = 5;
-						m_bTrigger = false;
 					}
 					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
 					{
 						m_iTriggerCnt = 2;
-						m_bTrigger = false;
 					}
 				}
 				if (fDistance > 5.f)
@@ -1869,17 +1865,14 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 5)
 					{
 						m_iTriggerCnt = 2;
-						m_bTrigger = false;
 					}
 					if (5 <= m_iRandomPatternNum && m_iRandomPatternNum < 8)
 					{
 						m_iTriggerCnt = 3;
-						m_bTrigger = false;
 					}
 					if (8 <= m_iRandomPatternNum && m_iRandomPatternNum <= 10)
 					{
 						m_iTriggerCnt = 4;
-						m_bTrigger = false;
 					}
 				}
 
@@ -1908,6 +1901,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 			if (Event_Time(dTimeDelta, 0.5, m_dTriggerTime))
 			{
 				m_dTriggerTime = 0.0;
+				m_bTrigger = false;
 				m_iRandomPatternNum = Random::Generate_Int(1, 12);
 
 				if (fDistance <= 5.f)
@@ -1915,17 +1909,14 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
 					{
 						m_iTriggerCnt = 4;
-						m_bTrigger = false;
 					}
 					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
 					{
 						m_iTriggerCnt = 1;
-						m_bTrigger = false;
 					}
 					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum < 12)
 					{
 						m_iTriggerCnt = 3;
-						m_bTrigger = false;
 					}
 				}
 				if (fDistance > 5.f)
@@ -1933,32 +1924,26 @@ void CBoss_Akaza::Trigger_Interact_Phase_1(_double dTimeDelta)
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 4)
 					{
 						m_iTriggerCnt = 1;
-						m_bTrigger = false;
 					}
 					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
 					{
 						m_iTriggerCnt = 2;
-						m_bTrigger = false;
 					}
 					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
 					{
 						m_iTriggerCnt = 3;
-						m_bTrigger = false;
 					}
 					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
 					{
 						m_iTriggerCnt = 4;
-						m_bTrigger = false;
 					}
 				}
+
 			}
-
-
 		}
+
 	}
-
 }
-
 void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 {
 	m_eCurAnimIndex = ANIM_IDLE;
@@ -2047,6 +2032,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 						m_bTrigger = false;
 					}
 				}
+
 			}
 		}
 	}
@@ -2123,6 +2109,7 @@ void CBoss_Akaza::Trigger_Interact()
 	m_bTrigger = true;
 	m_bAir_Motion = false;
 	m_bSuperArmor = false;
+	m_dTriggerTime = 0.0;
 	m_pRendererCom->Set_BloomRatio();
 	m_eCurstate = STATE_IDLE;
 }
@@ -4106,7 +4093,21 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_HIT_GETUP;
 		m_fDeadTime += (_float)dTimeDelta;
 
-		if (m_fDeadTime > 5.0f)
+		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
+		if (Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
+		{
+			// 이펙트 추가
+		}
+
+		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
 			m_isDead = true;
 	}
 

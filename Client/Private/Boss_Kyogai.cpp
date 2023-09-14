@@ -225,8 +225,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_F2))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
-		m_iTriggerCnt = 0;
-		m_iIdleCnt = 0;
+		m_iTriggerCnt = 0;		
 		m_dTimeAcc = 0.0;
 		m_eCurstate = STATE_INTERACT;
 	}
@@ -1426,8 +1425,7 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_bNoDmg = true;
 		m_iTriggerCnt = 8;
-		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		m_dTriggerTime = 0.0;		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_bFirstAwake == false)
 	{
@@ -1487,19 +1485,17 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_dAwakeTime = 0.0;
 
 		m_bPatternStart = false;
-		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		m_dTriggerTime = 0.0;		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bFirstAwake == false)
 	{
 		m_bFirstAwake = true;
 		m_bTrigger = false;
-		m_iTriggerCnt = 9;
-
-
 		m_bPatternStart = false;
+
+		m_iTriggerCnt = 9;				
 		m_dTriggerTime = 0.0;
-		m_iIdleCnt = 0;
+		
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1587,12 +1583,8 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 	{
 		m_dTriggerTime += dTimeDelta;
 		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
-			m_iIdleCnt++;
-
-		if (m_iIdleCnt == 1)
 		{
-			m_dTriggerTime = 0.0;
-			m_iIdleCnt = 0;
+			m_dTriggerTime = 0.0;			
 			m_bTrigger = false;
 			m_iTriggerCnt++;
 
@@ -1602,54 +1594,44 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 				m_bPatternStart = true;
 			}
 		}
+		
 	}
 	if (m_bPatternStart == true)
 	{
 		_float fDistance = Calculate_Distance();
 		m_dTriggerTime += dTimeDelta;
 		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
-			m_iIdleCnt++;
-
-		if (m_iIdleCnt == 1)
 		{
-			m_dTriggerTime = 0.0;
-			m_iIdleCnt = 0;
-
+			m_dTriggerTime = 0.0;			
+			m_bTrigger = false;
 			m_iRandomPatternNum = Random::Generate_Int(2, 7);
-
 
 			if (fDistance > 7.f) //멀 때
 			{
-				m_iTriggerCnt = 3;
-				m_bTrigger = false;
+				m_iTriggerCnt = 3;			
 
 			}
 			if (fDistance <= 7.f) // 가까울 때
 			{
 				if (m_iRandomPatternNum == 2)
 				{
-					m_iTriggerCnt = 2;
-					m_bTrigger = false;
+					m_iTriggerCnt = 2;					
 				}
 				if (m_iRandomPatternNum == 4)
 				{
-					m_iTriggerCnt = 5;
-					m_bTrigger = false;
+					m_iTriggerCnt = 5;					
 				}
 				if (m_iRandomPatternNum == 5)
 				{
-					m_iTriggerCnt = 6;
-					m_bTrigger = false;
+					m_iTriggerCnt = 6;					
 				}
 				if (m_iRandomPatternNum == 6)
 				{
-					m_iTriggerCnt = 7;
-					m_bTrigger = false;
+					m_iTriggerCnt = 7;					
 				}
-
-
 			}
 		}
+
 	}
 
 
@@ -1667,19 +1649,15 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 		{
 			m_dTriggerTime += dTimeDelta;
 			if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
 			{
-				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
+				m_dTriggerTime = 0.0;				
 				m_bTrigger = false;
 				m_iTriggerCnt++;
+
 				if (m_iTriggerCnt >= 9)
 				{
 					m_iTriggerCnt = 1;
-					m_dTriggerTime = 0.0;
-					m_iIdleCnt = 0;
+					m_dTriggerTime = 0.0;					
 					m_bPatternStart = true;
 				}
 			}
@@ -1689,58 +1667,45 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 			_float fDistance = Calculate_Distance();
 			m_dTriggerTime += dTimeDelta;
 			if (Event_Time(dTimeDelta, 0.20, m_dTriggerTime))
-				m_iIdleCnt++;
-
-			if (m_iIdleCnt == 1)
 			{
 				m_dTriggerTime = 0.0;
-				m_iIdleCnt = 0;
+				m_bTrigger = false;
 
 				m_iRandomPatternNum = Random::Generate_Int(2, 8);
-
 
 				if (fDistance > 7.f) //멀 때
 				{
 					m_iTriggerCnt = 3;
-					m_bTrigger = false;
-
 				}
 				if (fDistance <= 7.f) // 가까울 때
 				{
 					if (m_iRandomPatternNum == 2)
 					{
-						m_iTriggerCnt = 2;
-						m_bTrigger = false;
+						m_iTriggerCnt = 2;						
 					}
 					if (m_iRandomPatternNum == 3)
 					{
-						m_iTriggerCnt = 4;
-						m_bTrigger = false;
+						m_iTriggerCnt = 4;						
 					}
 					if (m_iRandomPatternNum == 4)
 					{
-						m_iTriggerCnt = 5;
-						m_bTrigger = false;
+						m_iTriggerCnt = 5;						
 					}
 					if (m_iRandomPatternNum == 5)
 					{
-						m_iTriggerCnt = 6;
-						m_bTrigger = false;
+						m_iTriggerCnt = 6;						
 					}
 					if (m_iRandomPatternNum == 6)
 					{
-						m_iTriggerCnt = 7;
-						m_bTrigger = false;
+						m_iTriggerCnt = 7;						
 					}
 					if (m_iRandomPatternNum == 7)
 					{
-						m_iTriggerCnt = 8;
-						m_bTrigger = false;
+						m_iTriggerCnt = 8;						
 					}
-
-
 				}
 			}
+
 		}
 	}
 
@@ -1755,6 +1720,8 @@ void CBoss_Kyogai::Trigger_Interact()
 	m_bSuperArmor = false;
 	m_bNoDmg = false;
 	m_bHit = false;
+	m_dTriggerTime = 0.0;
+	m_pRendererCom->Set_BloomRatio();
 	m_eCurstate = STATE_INTERACT;
 }
 
@@ -2306,12 +2273,11 @@ void CBoss_Kyogai::Update_AtkPunch(_double dTimeDelta)
 void CBoss_Kyogai::Update_LinkerCmb(_double dTimeDelta)
 {
 	//거리가 멀다면 스텝으로 다가가 주먹 발차기 스텝북
-	if (Check_Distance_FixY(5.f) == true)
+	if (Check_Distance_FixY(2.f) == true)
 		m_bMove = true;
 
-	if (false == Check_Distance_FixY(5.f) && false == m_bMove)
+	if (false == Check_Distance_FixY(2.f) && false == m_bMove)
 	{
-
 		if (m_bAnimFinish == false)
 		{
 			m_bAnimFinish = true;
@@ -2734,15 +2700,31 @@ void CBoss_Kyogai::Update_Hit_Dead(_double dTimeDelta)
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_DEATH;
 	}
-	if (m_bAnimFinish == true)
+
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_DEATH, 0.90, dTimeDelta))
+	{
+		m_bStopAnim = true;
+	}
+
+	if (m_bStopAnim == true)
 	{
 		m_bMonsterDead = true;
 		m_fDeadTime += (_float)dTimeDelta;
+		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
+		if(Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		{
+			//파티클 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
+		{
+			//파티클 추가
+		}
+		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
+		{
+			//파티클 추가
+		}
 
-		if (m_pModelCom->Check_PickAnimRatio(ANIM_DEATH, 0.950, dTimeDelta))
-			m_bStopAnim = true;
-
-		if (m_fDeadTime > 4.f)
+		if (m_fDeadTime > 10.f) // 죽는 시간도 형이 조절해도 됨
 			m_isDead = true;
 
 	}
