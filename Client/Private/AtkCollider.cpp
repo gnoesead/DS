@@ -7,6 +7,8 @@
 #include "Player_Battle_Combo.h"
 #include "GroundSmoke.h"
 
+#include "ParticleManager.h"
+
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -156,7 +158,7 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	}
 	else if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		Level_FinalBoss_Dead(dTimeDelta);
+		Level_FinalBoss_Dead(dTimeDelta, pGameInstance);
 	}
 	else
 	{
@@ -583,7 +585,7 @@ void CAtkCollider::Level_House_Dead(_double dTimeDelta)
 		Reset_Dead();
 }
 
-void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta)
+void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGameInstance)
 {
 	if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_BULLET)
 	{
@@ -611,15 +613,32 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta)
 			Reset_Dead();
 		}
 		if (m_AtkObj.size() >= 1)
+		{
+			_float3 vPos = Convert::ToFloat3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+			vPos.y += 1.f;
+			_float3 vMinRange = { -0.2f, 0.2f,  -0.2f };
+			_float3 vMaxRange = { 0.2f, 0.4f, 0.2f };
+			_float3 vTPerD = { 0.5f, 0.5f, 0.5f };
+			_int3	vDirOption = { 1, 0, 1 };
+			// PoolTag, BufferTag, TextureTag, 
+			// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+			// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+			CParticleManager::GetInstance()->PlayParticle("Bullet_Hit",
+				TEXT("Prototype_Component_VIBuffer_5_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P1002_Atk_Aura007")
+				, vPos, 0.5f, 1.5f, 2.0f, 0.5f, 1.0f, vMinRange, vMaxRange, -0.1f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4), false,
+				TEXT("Prototype_Component_Texture_Ramp08"), 0.98f);
+
+
 			Reset_Dead();
+		}
 	}
 	
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
-		if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_AKAZA_BULLET_EFFECT)
-		{
+		//if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_AKAZA_BULLET_EFFECT)
+		//{
 			//아카자 와다다다패턴 이펙트 죽기전 파티클
-		}
+		//}
 		Reset_Dead();
 	}
 }
