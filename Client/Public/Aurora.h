@@ -19,8 +19,9 @@ class CAurora final : public CMasterEffect
 {
 public:
 	enum TYPE{TYPE_LOCAL , TYPE_WORLD};
-	enum CHARACTER { CHARACTER_TANJIRO, CHARACTER_KYOGAI , CHARACTER_AKAZA };
-	enum COLOR {COLOR_BLUE , COLOR_RED , COLOR_PURPLE};
+	enum CHARACTER { CHARACTER_TANJIRO, CHARACTER_KYOGAI , CHARACTER_AKAZA , CHARACTER_ZENITSU,};
+	enum COLOR {COLOR_BLUE , COLOR_RED , COLOR_PURPLE  , COLOR_CHACRA , COLOR_SKY , COLOR_YELLOW};
+	enum GROUP{GROUP_0 , GROUP_1};
 public:
 	typedef struct Effecttag
 	{
@@ -29,7 +30,7 @@ public:
 		TYPE eType;
 		CHARACTER eCharacter;
 		COLOR eColor;
-
+		GROUP eGroup = GROUP_0;
 	}EFFECTDESC;
 
 private:
