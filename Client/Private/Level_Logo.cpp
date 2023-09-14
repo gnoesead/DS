@@ -867,6 +867,17 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Heal_0.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Heal_0");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Part_Heal_1.bin"), true, 2)))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Part_Heal_1");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Shoot_Aura.bin"), true, 4)))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Shoot_Aura");

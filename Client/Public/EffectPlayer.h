@@ -43,7 +43,7 @@ private:
 
 public:
 	class CParticleSystem* Reuse_Effect(const char* pTag, class CTransform* pTransformCom = nullptr);
-	class CParticleSystem* Reuse_PartsEffect(const char* pTag, class CEffectPartsObject* pPartsObj = nullptr);
+	//class CParticleSystem* Reuse_PartsEffect(const char* pTag, class CEffectPartsObject* pPartsObj = nullptr);
 
 	void Collect_ParticleSystem(class CParticleSystem* pParticleSystem);
 	class CParticleSystem* Reuse_ParticleSystem();
@@ -56,7 +56,7 @@ public:
 
 	void Collect_EffectParticle(const char* pTag, class CParticleSystem* pParticleSystem);
 	class CParticleSystem* Reuse_EffectParticle(const char* pTag, class CTransform* pParentTransformCom);
-	class CParticleSystem* Reuse_PartsEffectParticle(const char* pTag, class CEffectPartsObject* pPartsObj);
+	//class CParticleSystem* Reuse_PartsEffectParticle(const char* pTag, class CEffectPartsObject* pPartsObj);
 
 public:
 	void Set_NumParticleSystem(_uint iNum) {
@@ -80,7 +80,7 @@ public:
 
 public:
 	void	Play(const char* pEffectTag, class CTransform* pTransformCom = nullptr, EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
-	void	PlayPartsEffect(const char* pEffectTag, class CEffectPartsObject* pPartsObj = nullptr, EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
+	//void	PlayPartsEffect(const char* pEffectTag, class CEffectPartsObject* pPartsObj = nullptr, EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
 	void	Stop(const char* pEffectTag);
 	_bool	Find_ModelKey(const _tchar* pModelKey);
 	_bool	Find_TextureKey(int iTextureIndex, const _tchar* pTextureKey);
