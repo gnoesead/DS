@@ -1163,20 +1163,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				m_dSound_Move = 0.0;
 
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
+				
 			}
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// ´Þ¸®±â
@@ -1201,21 +1188,44 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			if (m_dSound_Move > 0.02f)
 			{
 				m_dSound_Move = 0.0;
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
 
 				if (m_iSound_Move_Index == 0)
 				{
 					m_iSound_Move_Index = 1;
 
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+					}
 				}
 				else if (m_iSound_Move_Index == 1)
 				{
 					m_iSound_Move_Index = 0;
 
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+					{
+						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+					}
 				}
+				Safe_Release(pGameInstance);
 			}
 		}
 

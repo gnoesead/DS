@@ -1098,6 +1098,53 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 			else if (2 == m_iEvent_Index) // 0.38
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			m_dSound_Move += dTimeDelta;
+			if (m_dSound_Move > 0.02f)
+			{
+				m_dSound_Move = 0.0;
+
+				if (m_iSound_Move_Index == 0)
+				{
+					m_iSound_Move_Index = 1;
+
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) 
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) 
+					{
+						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					}
+					
+					
+				}
+				else if (m_iSound_Move_Index == 1)
+				{
+					m_iSound_Move_Index = 0;
+
+					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY 
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+					{
+						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+					}
+					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+					{
+						_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
+						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
+					}
+				}
+			}
+			Safe_Release(pGameInstance);
 		}
 
 		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
@@ -1717,8 +1764,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 			}
 			m_dDelay_First_HekirekiAct = 0.0;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_0, 0.6f);
+			//_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+			//Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_0, 0.6f);
+			m_isDelay_Sound_Hekireki = true;
+			m_dDelay_Sound_Hekireki = 0.0;
 
 			_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_07.ogg");
 			Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
@@ -1732,6 +1781,20 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 		m_Moveset.m_Down_Skill_Normal = false;
 		m_Moveset.m_Down_Skill_Move = false;
 	}
+
+	if (m_isDelay_Sound_Hekireki)
+	{
+		m_dDelay_Sound_Hekireki += dTimeDelta;
+		if (m_dDelay_Sound_Hekireki > 0.25f)
+		{
+			m_dDelay_Sound_Hekireki = 0.0;
+			m_isDelay_Sound_Hekireki = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_0, 0.6f);
+		}
+	}
+
 
 	if (m_isFirst_HekirekiAct == false)
 	{
