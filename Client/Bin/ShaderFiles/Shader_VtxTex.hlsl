@@ -29,7 +29,9 @@ float			g_fWebAlpha;
 float3			g_vColor;
 
 bool			g_IsBlack = false;
+float			g_NumX, g_NumY;
 
+float           g_Black_Cull_Amount = { 0.7f };
 
 struct VS_IN
 {
@@ -640,6 +642,30 @@ PS_OUT  PS_AURORA(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_ZEN_AURORA(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float spriteWidth = 1.0f / 8.f;
+	float spriteHeight = 1.0f / 8.f;
+
+	float2 spriteUV = float2(g_fUVRatioX + In.vTexUV.x * spriteWidth,
+		g_fUVRatioY + In.vTexUV.y * spriteHeight);
+
+	vector vMask = g_Texture.Sample(LinearSampler, spriteUV);
+
+	vector vRamp;
+
+	vRamp = g_RampTexture.Sample(LinearSampler, float2(vMask.r - 0.1f, 0.f));
+
+	Out.vColor = vRamp;
+	Out.vColor.a = vMask.r * g_Alpha;
+
+
+	
+	return Out;
+}
+
 technique11 DefaultTechnique
 {
 	// 0
@@ -1022,5 +1048,19 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_AURORA();
+	}
+
+	// 30
+	pass Zen_Aurora 
+	{
+		SetRasterizerState(RS_None);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Not_ZWrite, 0);
+		/* 버텍스 쉐이더는 5.0버젼으로 번역하고 VS_MAIN이라는 이름을 가진 함수를 호출해라. */
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_ZEN_AURORA();
 	}
 }

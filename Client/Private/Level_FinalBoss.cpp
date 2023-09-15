@@ -383,6 +383,24 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 {
 	Load_Lights_Info(TEXT("../../Data/Light/Acaza/Light_Acaza.dat"));
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
+
+	vDiffuse.x = 0.f;
+	vDiffuse.y = 0.f;
+	vDiffuse.z = 0.f;
+
+	pGameInstance->Set_Light(0, 1, vDiffuse);
+
+	_float fLightRange = pGameInstance->Get_Light(1)->fLightRange;
+
+	fLightRange -= 2.f;
+
+	pGameInstance->Set_Light(1, 4, _float4(fLightRange, 0.f, 0.f, 0.f));
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 

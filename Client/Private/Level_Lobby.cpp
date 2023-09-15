@@ -1841,6 +1841,96 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Crack.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Crack");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Helix");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Dash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Dash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Dash_New.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Dash_New");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Step_Shock.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Step_Shock");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Step_Shock_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Step_Shock_Rev");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Big_Hit.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Big_Hit");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Small_1.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Small_2.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Small_3.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Small_3");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_Dash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_Dash");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Air_Dash_Rev.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Air_Dash_Rev");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Slash.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Slash");
+		return E_FAIL;
+	}
+
+	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Elc");
+		return E_FAIL;
+	}
 #pragma endregion
 
 

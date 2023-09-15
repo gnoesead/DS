@@ -1437,7 +1437,12 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_bNoDmg = true;
 		m_iTriggerCnt = 8;
-		m_dTriggerTime = 0.0;		
+		m_dTriggerTime = 0.0;
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		pGameInstance->Time_Slow(0.5, 0.5);
+		Safe_Release(pGameInstance);
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_bFirstAwake == false)
 	{
@@ -1515,6 +1520,11 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_StatusDesc.fHp = 0.f;
 		if (m_bDead_Trigger == false)
 		{
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.5, 0.5);
+			Safe_Release(pGameInstance);
+
 			m_bDead_Trigger = true;
 			Trigger_Hit_Dead();
 		}		
@@ -2050,6 +2060,7 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 			m_eCurPhase = PHASE_2;
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
+			CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
 		}
 
 		if (m_StatusDesc.fHp <= m_StatusDesc.fHp_Max)
@@ -2082,6 +2093,7 @@ void CBoss_Kyogai::Update_Awake(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_Awake_AtkskCmb();
 	}
+	Pos_FixY();
 }
 
 void CBoss_Kyogai::Update_JumpStep(_double dTimeDelta)
@@ -2387,6 +2399,7 @@ void CBoss_Kyogai::Update_AtkSkCmb(_double dTimeDelta)
 		Update_RoomChange_2(dTimeDelta);
 		break;
 	}
+	CMonsterManager::GetInstance()->Set_RoomTurn(m_bTurn);
 }
 
 void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
@@ -2413,6 +2426,7 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 				m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
 			}
 		}
+		CMonsterManager::GetInstance()->Set_RoomTurn(m_bTurn);
 	}
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_ROOMCHANGE_END))
@@ -2421,7 +2435,6 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_IDLE;
 		Trigger_AtkSk();
 		CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
-
 	}
 
 	if (Event_Time(dTimeDelta, 0.5, m_dTurnTime)) // 맨처음
@@ -2460,7 +2473,9 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 		m_bTurnLF = true;
 	}
 	if (Event_Time(dTimeDelta, 53.0, m_dTurnTime)) // 맨 마지막
-		m_bTurnRB = true;
+	{
+		m_bTurnRB = true;		
+	}
 
 	_vector vMonsterLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 	_vector vMonstervRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
@@ -2474,9 +2489,10 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	//Liar_Bullet(dTimeDelta, 44.0, vMonsterLook);
 	Wave_Bullet(dTimeDelta, 44.0, vMonsterLook);
 
-
 	Turn_Trigger(dTimeDelta);
 	TurnRoom();
+
+	
 }
 
 void CBoss_Kyogai::Update_AtkSk(_double dTimeDelta)
@@ -2760,7 +2776,8 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 		{
 			if (m_bAnimFinish == false)
 			{
-				m_bAnimFinish = true;
+				Pos_FixY();
+				m_bAnimFinish = true;				
 				m_eCurAnimIndex = ANIM_PUSHAWAY;
 			}
 		}
@@ -2789,7 +2806,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			m_eCurAnimIndex = ANIM_ATKSK_RF;
 			m_bTurn = true;
 			m_bTurnRF = true;
-			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;			
 		}
 	}
 	else
@@ -2832,12 +2849,11 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			}
 			if (m_fCurAngleX == 0.f && m_fCurANgleZ == 0.f)
 			{
-
 				if (m_bAnimFinish3 == false)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
-					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);					
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{
@@ -2869,6 +2885,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 		{
 			if (m_bAnimFinish == false)
 			{
+				Pos_FixY();
 				m_bAnimFinish = true;
 				m_eCurAnimIndex = ANIM_PUSHAWAY;
 			}
@@ -2898,7 +2915,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 			m_eCurAnimIndex = ANIM_ATKSK_RF;
 			m_bTurn = true;
 			m_bTurnRF = true;
-			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;			
 		}
 	}
 	else
@@ -2959,7 +2976,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
-					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);					
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{

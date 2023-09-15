@@ -315,6 +315,18 @@ HRESULT CLevel_Village::Ready_Lights()
 {
     Load_Lights_Info(TEXT("../../Data/Light/Village/Light_Village.dat"));
 
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+    _float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
+
+    vDiffuse.x -= 0.1f;
+    vDiffuse.y -= 0.1f;
+    vDiffuse.z -= 0.1f;   
+
+    pGameInstance->Set_Light(0, 1, vDiffuse);
+
+    Safe_Release(pGameInstance);
+
     return S_OK;
 }
 

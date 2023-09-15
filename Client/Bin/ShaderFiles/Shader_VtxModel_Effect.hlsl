@@ -44,6 +44,8 @@ float2			g_vPaddingEnd = { 0.f, 0.f };
 float2			g_vTileSize = { 1.f, 1.f };			// Width, Height
 float2			g_vCurTile = { 0.f, 0.f };			// ї­, За
 
+float3			g_vUVStart = { 0.f, 0.f, 0.f };
+
 float           g_Black_Cull_Amount = { 0.5f };
 
 struct VS_IN
@@ -250,6 +252,15 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 			UVY += g_vDiscardedPixelMin.y;
 		}
 	}
+
+
+	if (g_vPanningSpeed.x != 0) {
+
+		if (UVX < 0 || UVX > 1) {
+			discard;
+		}
+	}
+
 
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
@@ -533,6 +544,9 @@ PS_OUT  PS_MASKCOLOR(PS_IN In)
 
 	In.vTexUV.x += g_vPaddingEnd.x;
 	In.vTexUV.y += g_vPaddingEnd.y;
+
+	In.vTexUV.x += g_vUVStart.x;
+	In.vTexUV.y += g_vUVStart.y;
 
 	float UVX = In.vTexUV.x;
 	float UVY = In.vTexUV.y;
@@ -1854,7 +1868,7 @@ technique11 DefaultTechnique
 	pass MaskRampDissolve	// 13
 	{
 		SetRasterizerState(RS_CULL_NONE);
-		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_AlphaBlendingOne, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -1920,7 +1934,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_Default, 0);
+		SetDepthStencilState(DS_None_ZEnable, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
