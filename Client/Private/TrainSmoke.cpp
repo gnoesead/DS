@@ -72,7 +72,7 @@ void CTrainSmoke::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT_ENVIRONMENT, this)))
 		return;
 
 	Compute_ViewZ(m_pTransformCom->Get_State(CTransform::STATE_POSITION));

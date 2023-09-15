@@ -2106,13 +2106,7 @@ HRESULT CRenderer::Render_Lights()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_TAB))
-	{
-		if (m_bSSAOSwitch == false)
-			m_bSSAOSwitch = true;
-		else if (m_bSSAOSwitch == true)
-			m_bSSAOSwitch = false;
-	}
+	
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAOSwitch", &m_bSSAOSwitch, sizeof(_bool))))
 		return E_FAIL;
 
