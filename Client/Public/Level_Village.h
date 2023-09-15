@@ -40,8 +40,6 @@ private:
 	HRESULT	Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag);
 	HRESULT	Ready_Layer_SmellBundle(const _tchar* pLayerTag);
 
-	HRESULT	Ready_Layer_Character_Dialog(const _tchar* pLayerTag);
-
 private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
 	HRESULT Load_CollisionBox_Info(const _tchar* pPath, const _tchar* pLayerTag);
