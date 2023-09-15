@@ -81,6 +81,10 @@ protected:
 	_float		m_fBoundDmg = { 1.f };
 	_float		m_fSpeed = { 5.f };
 
+protected:
+	_double		m_dDeadParticleAccTime = { 2.0 };
+	_double		m_dDeadSmokeAccTime = { 2.0 };
+
 
 protected: //애니메이션 제어용 함수들
 	void	Dir_Setting(_bool Reverse);

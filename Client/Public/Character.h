@@ -15,6 +15,7 @@
 #include "SoundMgr.h"
 #include "Aurora.h"
 
+
 BEGIN(Engine)
 class CModel;
 class CShader;
@@ -279,7 +280,7 @@ protected:
 
 protected:
 	_float	m_fFar2 = { 1.f };
-	_bool	m_isAuroraOn[2] = { false };
+	_bool	m_isAuroraOn[3] = { false };
 private:
 	
 

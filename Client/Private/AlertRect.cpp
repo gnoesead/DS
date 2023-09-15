@@ -54,7 +54,7 @@ HRESULT CAlertRect::Initialize(void* pArg)
 	static _uint iNum = 0;
 
 	fOffsetY += 0.001f;
-	++iNum = 0;
+	++iNum;
 
 	if (iNum > 50)
 	{

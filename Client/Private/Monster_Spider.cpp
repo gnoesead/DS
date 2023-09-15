@@ -260,25 +260,14 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		m_bMonsterDead = true;
-		m_fDeadTime += (_float)dTimeDelta;
-
-		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
-		if (Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		m_dDelay_Die += dTimeDelta;
+		if (m_dDelay_Die > m_fDeadTime)
 		{
-			// 이펙트 추가
+			m_isSpiderDead = true;
+			m_dDelay_Die = 0.0;
+			m_isDeath_Motion = false;
 		}
-		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
-		{
-			// 이펙트 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
-		{
-			// 이펙트 추가
-		}
-
-		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
-			m_isDead = true;
+		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
 	}
 	else
 	{
@@ -304,7 +293,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 {
 	m_pModelCom->Set_Animation(ANIM_RUN);
 
-	if (Calculate_Distance() < 20.0f)
+	if (Calculate_Distance() < 22.0f)
 		m_isSpider_Start = true;
 
 	if (m_isSpider_Start)
