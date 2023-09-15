@@ -1459,7 +1459,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 #pragma endregion
 	
 #pragma region RENGOKU_BASICCOMBO
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1.bin"))))
+	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1");
 		return E_FAIL;
@@ -1553,16 +1553,16 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 	{
 		MSG_BOX("Failed to Load Effect : Rengoku_Tilt");
 		return E_FAIL;
-	}
+	}*/
 #pragma endregion
 
 
 #pragma region RENGOKU_SURGECOMBO
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_SurgeCombo1.bin"))))
+	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_SurgeCombo1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Rengoku_SurgeCombo1");
 		return E_FAIL;
-	}
+	}*/
 #pragma endregion
 
 #pragma region COMMON
@@ -1847,18 +1847,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Zen_Charge");
-		return E_FAIL;
-	}
-
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Zen_Charge_Helix");
-		return E_FAIL;
-	}
-
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Dash.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Dash");
@@ -1919,13 +1907,24 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Helix");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge");
+		return E_FAIL;
+	}
+
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Slash.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Charge_Slash");
 		return E_FAIL;
 	}
 
-	
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Charge_Elc");
