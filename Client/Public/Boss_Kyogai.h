@@ -186,7 +186,6 @@ public:
 	void Trigger_AtkSk();
 	void Trigger_AtkPangPang();
 
-
 	void Trigger_Hit_Small();
 	void Trigger_Hit_ConnectSmall();
 	void Trigger_Hit_Upper();
@@ -289,10 +288,12 @@ private:
 	_float  m_fCurAngleX = { 0.f };
 	_float  m_fCurANgleZ = { 0.f };
 	_float	m_fDist = { 0.f };
+
 private:
 	_vector m_vPos = { 0.f, 0.f, 0.f, 0.f };
 	_vector m_vDir = { 0.f, 0.f, 0.f, 0.f };
 	_vector	m_vRotDir = { 0.f, 0.f, 0.f, 0.f };
+
 private:
 	_uint	m_iLinkerNum = { 0 };
 	_uint	m_iAtkStepTypeNum = { 0 };

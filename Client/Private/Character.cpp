@@ -880,6 +880,45 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
+void CCharacter::Play_Sound_Metal(_double vol)
+{
+	if (m_iSound_Metal_Index == 0)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_01.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 1)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_02.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 2)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_03.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+	else if (m_iSound_Metal_Index == 3)
+	{
+		m_iSound_Metal_Index++;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_04.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_1, vol);
+	}
+	else if (m_iSound_Metal_Index == 4)
+	{
+		m_iSound_Metal_Index = 0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_05.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::METAL_0, vol);
+	}
+}
+
 void CCharacter::Set_Height()
 {
 	m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom);
@@ -1108,6 +1147,30 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 		 for (_uint i = 0; i < 2; ++i)
 			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
 		 break;
+	 case CGroundSmoke::SMOKE_DEAD:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		 EffectWDesc.vStartPosX = { -1.0f,1.0f }; EffectWDesc.vStartPosY = { 0.00f,0.1f }; EffectWDesc.vStartPosZ = { -1.0f,1.0f };
+		 EffectWDesc.vFrameSpeed = { 0.10f , 0.11f };
+		 EffectWDesc.vStartSizeX = { 1.0f , 1.2f }; EffectWDesc.vStartSizeY = { 1.0f , 1.4f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.25f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		 EffectWDesc.vSizeSpeedX = { 0.2f , 0.4f }; EffectWDesc.vSizeSpeedY = { 0.2f , 0.4f };
+		 EffectWDesc.bSpecial = true;
+
+		 for (_uint i = 0; i < 1; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
+	 case CGroundSmoke::SMOKE_DEAD_NORMAL:
+		 EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
+		 EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { 0.00f,0.06f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
+		 EffectWDesc.vFrameSpeed = { 0.11f , 0.12f };
+		 EffectWDesc.vStartSizeX = { 1.0f , 1.2f }; EffectWDesc.vStartSizeY = { 1.0f , 1.4f };
+		 EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.25f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		 EffectWDesc.vSizeSpeedX = { 0.2f , 0.4f }; EffectWDesc.vSizeSpeedY = { 0.2f , 0.4f };
+		 EffectWDesc.bSpecial = true;
+
+		 for (_uint i = 0; i < 1; ++i)
+			 CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_GROUNDSMOKE, &EffectWDesc);
+		 break;
 	default:
 		break;
 	}
@@ -1274,7 +1337,6 @@ void CCharacter::Shadow_Village_Setting()
 
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
 	
-
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
@@ -1288,7 +1350,7 @@ void CCharacter::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
@@ -1314,16 +1376,28 @@ void CCharacter::Shadow_House_Setting()
 
 	CTransform* pPlayerTransformCom = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"),CPlayerManager::GetInstance()->Get_PlayerIndex(), TEXT("Com_Transform")));
 
-
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
+
+	_float	  fAngle = 30.f;
 		
 	if (pPlayerTransformCom != nullptr)
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		m_pRendererCom->Set_RoomTurn(CMonsterManager::GetInstance()->Get_RoomTurn());
+
+		if (CMonsterManager::GetInstance()->Get_RoomTurn() == true)
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			fAngle = 20.f;
+		}
+		else
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+			fAngle = 30.f;
+		}
 		vLightAt = vPlayerPos;
 	}
 
@@ -1336,10 +1410,11 @@ void CCharacter::Shadow_House_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280) / _float(720), 0.2f, 400.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(fAngle), _float(1280) / _float(720), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -1353,7 +1428,6 @@ void CCharacter::Shadow_Train_Setting()
 	_vector   vLightEye = XMVectorSet(530.f, 50.f, 292.f, 1.f);
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
-
 	
 	if (pPlayerTransformCom != nullptr)
 	{
@@ -1362,6 +1436,7 @@ void CCharacter::Shadow_Train_Setting()
 		vLightEye = vPlayerPos + XMVectorSet(-20.f, 40.f, -20.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
+
 	_matrix      LightViewMatrix = XMMatrixLookAtLH(vLightEye, vLightAt, vLightUp);
 	_float4x4   FloatLightViewMatrix;
 	XMStoreFloat4x4(&FloatLightViewMatrix, LightViewMatrix);
@@ -1375,8 +1450,8 @@ void CCharacter::Shadow_Train_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
-	Safe_Release(pGameInstance);
 
+	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Shadow_Final_Setting()
@@ -1409,8 +1484,6 @@ HRESULT CCharacter::Add_Components()
 		MSG_BOX("Failed to Add_Com_Renderer : CCharacter");
 		return E_FAIL;
 	}
-
-
 
 	return S_OK;
 }

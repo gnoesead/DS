@@ -210,7 +210,7 @@ PS_OUT  PS_Main(PS_IN _In)
 	Out.vDiffuse.a = 1.f;
 
 	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
-	Out.vEmissive = vMtrlDiffuse * 0.7f;
+	Out.vEmissive = vMtrlDiffuse * 0.85f;
 	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar2, 0.f);
@@ -240,7 +240,7 @@ PS_OUT  PS_Main_Akaza(PS_IN _In)
 	Out.vDiffuse.a = 1.f;
 
 	//Out.vEmissive = vector( 0.f,0.f,0.f,0.f );
-	Out.vEmissive = vMtrlDiffuse * 0.7f;
+	Out.vEmissive = vMtrlDiffuse * 0.8f;
 	Out.vDiffuse_Cha = vMtrlDiffuse;
 	Out.vNormal = vector(_In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(_In.vProjPos.w / g_fFar, _In.vProjPos.z / _In.vProjPos.w, _In.vProjPos.w / g_fFar2, 0.f);
@@ -352,7 +352,7 @@ PS_OUT  PS_Outline_Blue(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float4 outlineColor = { 0.f, 0.f, 1.f, 0.f };
+	float4 outlineColor = { 0.f, 0.85f, 1.f, 0.f };
 
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -383,7 +383,7 @@ PS_OUT  PS_Outline_Yello(PS_IN In)
 {
 	PS_OUT	Out = (PS_OUT)0;
 
-	float4 outlineColor = { 1.f, 1.f, 0.f, 0.f };
+	float4 outlineColor = { 1.f, 1.f, 0.35f, 0.f };
 	
 	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
 
@@ -399,7 +399,39 @@ PS_OUT  PS_Outline_Yello(PS_IN In)
 
 	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
 
-	Out.vEmissive = vector(0.f, 0.f, 0.f, 0.f);
+	Out.vEmissive = Color;
+	Out.vDiffuse = Color;
+	Out.vDiffuse_Cha = Color;
+	// In.vNormal xyz각각이 -1 ~ 1
+	// Out.vNormal 저장받을 수 있는 xyz각각 0 ~ 1
+	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+	Out.vDepth = vector(In.vProjPos.w / g_fFar, In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar2, 0.f);
+
+	return Out;
+}
+
+
+PS_OUT  PS_Outline_AwakeYello(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	float4 outlineColor = { 1.f, 1.f, 1.f, 0.f };
+
+	float4 diffuseColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexUV);
+
+	if (diffuseColor.a < 0.1f)
+		discard;
+
+	// 외곽선 색상을 덮어씌우기 위해 Alpha 값을 1로 설정
+	outlineColor.a = 1.0f;
+
+	// 외곽선 두께를 적용하여 외곽선 색상과 일반 렌더링 결과를 합성
+	float outlineFactor = saturate(length(In.vNormal.xyz) * g_OutlineThickness);
+	float blendFactor = smoothstep(0.f, 1.f, outlineFactor); // smoothstep(float edge0, float edge1, float x); edge 0 : 보간시작 edge 1 : 보간 끝나느 값 x: 보간대상
+
+	vector Color = lerp(diffuseColor, outlineColor, blendFactor);
+
+	Out.vEmissive = Color;
 	Out.vDiffuse = Color;
 	Out.vDiffuse_Cha = Color;
 	// In.vNormal xyz각각이 -1 ~ 1
@@ -418,18 +450,18 @@ PS_OUT  PS_Dead_Disolve(PS_IN _In)
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, _In.vTexUV);
 	vector  vMtrlDisolve = g_DisolveTexture.Sample(LinearSampler, _In.vTexUV);
 
-	if (vMtrlDisolve.r <= g_Disolve * 0.25f)
+	if (vMtrlDisolve.r <= g_Disolve * 0.1f)
 		discard;
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.05f && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.05f)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.05f && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.05f)
 		vMtrlDiffuse = float4(1.f, 0.f, 0.f, g_Disolve * 0.35f); // 빨
 
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.03 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.03)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.03 && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.03)
 		vMtrlDiffuse = float4(1.f, 1.f, 0.f, g_Disolve * 0.35f); // 노
 
 
-	if (vMtrlDisolve.r >= g_Disolve * 0.25f - 0.025 && vMtrlDisolve.r <= g_Disolve * 0.25f + 0.025)
+	if (vMtrlDisolve.r >= g_Disolve * 0.1f - 0.025 && vMtrlDisolve.r <= g_Disolve * 0.1f + 0.025)
 		vMtrlDiffuse = float4(1.f, 1.f, 1.f, g_Disolve * 0.35f); // 흰
 	
 
@@ -577,7 +609,19 @@ technique11 DefaultTechnique
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_Dead_Disolve();
 	}
-	
+
+	pass Outline_AwakeYello // 9
+	{
+		SetRasterizerState(RS_CULL_CW);
+		SetBlendState(BS_Default, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+
+		VertexShader = compile vs_5_0 VS_Outline();
+		GeometryShader = NULL;
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_Outline_AwakeYello();
+	}
 };
 
 

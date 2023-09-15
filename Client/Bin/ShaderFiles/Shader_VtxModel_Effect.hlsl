@@ -253,6 +253,15 @@ PS_OUT  PS_DIFFUSE_CALC_RED(PS_IN In)
 		}
 	}
 
+
+	if (g_vPanningSpeed.x != 0) {
+
+		if (UVX < 0 || UVX > 1) {
+			discard;
+		}
+	}
+
+
 	vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, float2(UVX, UVY));
 
 	float amount = (vMtrlDiffuse.r + vMtrlDiffuse.g + vMtrlDiffuse.b) / 3.f;
@@ -1344,6 +1353,9 @@ PS_OUT PS_MASKCOLORSPRITE(PS_IN In)
 
 	Out.vDiffuse.a = vMask.r * g_fAlpha;
 
+	if (0.1f > Out.vDiffuse.a)
+		discard;
+
 	return Out;
 }
 
@@ -1856,7 +1868,7 @@ technique11 DefaultTechnique
 	pass MaskRampDissolve	// 13
 	{
 		SetRasterizerState(RS_CULL_NONE);
-		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_AlphaBlendingOne, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
@@ -1922,7 +1934,7 @@ technique11 DefaultTechnique
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_Default, 0);
+		SetDepthStencilState(DS_None_ZEnable, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;

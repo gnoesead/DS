@@ -79,6 +79,7 @@ void CPlayer::Tick(_double dTimeDelta)
 {
 	__super::Tick(dTimeDelta);
 
+	//m_pRendererCom->Set_BloomRatio(0.5f);
 
 	if (COptionManager::GetInstance()->Get_Graphic_Option(1) == 0) {
 		m_pRendererCom->Set_SSAO(true);
@@ -149,13 +150,17 @@ void CPlayer::LateTick(_double dTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	__super::Render();
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_ShadowDepth()
 {
-	__super::Render_ShadowDepth();
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
+	
 	return S_OK;
 }
 
@@ -1605,6 +1610,20 @@ void CPlayer::Player_Change_Setting_Status(_double dTimeDelta)
 		}
 	}
 	Safe_Release(pGameInstance);
+}
+
+void CPlayer::Smell_Detection(_double dTimeDelta)
+{
+	if (m_bSmell_Detection == true)
+	{
+		m_dSmellTime += dTimeDelta;
+		if (m_dSmellTime > 3.0)
+		{
+			m_bSmell_Detection = false;
+			m_dSmellTime = 0.0;
+			m_pRendererCom->Set_GrayScale();
+		}
+	}
 }
 
 HRESULT CPlayer::Add_Components()

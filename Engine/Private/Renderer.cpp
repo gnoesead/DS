@@ -824,7 +824,7 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pSSAOShader->SetUp_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	/*CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 	if (pGameInstance->Get_DIKeyState(DIK_INSERT))
 	{
@@ -842,13 +842,15 @@ HRESULT CRenderer::Render_SSAO()
 	{
 		m_fSSAOBias -= 0.0001f;
 	}
+	Safe_Release(pGameInstance);
+	*/
 	//m_fSSAORadius = 0.000005f;
 
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fRadius", &m_fSSAORadius, sizeof(_float))))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->SetUp_RawValue("g_fBias", &m_fSSAOBias, sizeof(_float))))
 		return E_FAIL;
-	Safe_Release(pGameInstance);
+
 
 	if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_Normal"), m_pSSAOShader, "g_NormalTexture")))
 		return E_FAIL;
@@ -1305,6 +1307,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		}
 	}
 	Safe_Release(pGameInstance);
+
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))
 		return E_FAIL;
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_fBloomPower", &m_fBloomPower, sizeof(_float))))
@@ -2156,9 +2159,9 @@ HRESULT CRenderer::Render_Deferred()
 	   return E_FAIL;*/
 
 
-	   // 임시로 만들어 두겠음 -> 이거 나중에 플레이어에서 불변수 넘겨주는 방식으로 합시다.
+
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
-	///Safe_AddRef(pGameInstance);
+	Safe_AddRef(pGameInstance);
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_bInvert", &m_bInvert, sizeof(_bool))))
 		return E_FAIL;
@@ -2182,14 +2185,6 @@ HRESULT CRenderer::Render_Deferred()
 		if (fGrayRatio < 0.f)
 			fGrayRatio = 0.f;
 	}
-
-	/*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_DepthTexture")))
-	   return E_FAIL;*/
-	   /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_ShadowBlur"), m_pShader, "g_ShadowDepthTexture")))
-		  return E_FAIL;*/
-		  /*if (FAILED(m_pTarget_Manager->Bind_ShaderResourceView(TEXT("Target_SSAO"), m_pShader, "g_SSAOTexture")))
-			 return E_FAIL;*/
-
 
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
 	Safe_AddRef(pPipeLine);
@@ -2219,7 +2214,7 @@ HRESULT CRenderer::Render_Deferred()
 		break;
 	}
 
-	//Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
 	m_pShader->Begin(3);
 
@@ -2251,7 +2246,7 @@ void CRenderer::Shadow_Village_Setting()
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		vLightEye = vPlayerPos + XMVectorSet(-15.f, 40.f, -15.f, 1.f);
+		vLightEye = vPlayerPos + XMVectorSet(-25.f, 50.f, -25.f, 1.f);
 		vLightAt = vPlayerPos;
 	}
 
@@ -2294,11 +2289,21 @@ void CRenderer::Shadow_House_Setting()
 	_vector   vLightAt = { 585.f, 0.f, 278.f, 1.f };
 	_vector   vLightUp = XMVectorSet(0.f, 1.f, 0.f, 1.f);
 
+	_float	  fAngle = 30.f;
+
 	if (pPlayerTransformCom != nullptr)
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-
-		vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+		if (m_bRoomTurn == true)
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			fAngle = 20.f;
+		}
+		else
+		{
+			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
+			fAngle = 30.f;
+		}
 		vLightAt = vPlayerPos;
 	}
 
@@ -2311,7 +2316,7 @@ void CRenderer::Shadow_House_Setting()
 	_matrix      LightProjMatrix;
 	_float4x4   FloatLightProjMatrix;
 
-	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(30.f), _float(1280.f) / _float(720.f), 0.2f, 400.f);
+	LightProjMatrix = XMMatrixPerspectiveFovLH(XMConvertToRadians(fAngle), _float(1280.f) / _float(720.f), 0.2f, 400.f);
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShader->SetUp_Matrix("g_matProj", &FloatLightProjMatrix);

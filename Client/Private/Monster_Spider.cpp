@@ -260,11 +260,14 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		m_bMonsterDead = true;
-		m_fDeadTime += (_float)dTimeDelta;
-
-		if (m_fDeadTime > 4.0f)
-			m_isDead = true;
+		m_dDelay_Die += dTimeDelta;
+		if (m_dDelay_Die > m_fDeadTime)
+		{
+			m_isSpiderDead = true;
+			m_dDelay_Die = 0.0;
+			m_isDeath_Motion = false;
+		}
+		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
 	}
 	else
 	{
@@ -290,7 +293,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 {
 	m_pModelCom->Set_Animation(ANIM_RUN);
 
-	if (Calculate_Distance() < 20.0f)
+	if (Calculate_Distance() < 22.0f)
 		m_isSpider_Start = true;
 
 	if (m_isSpider_Start)
