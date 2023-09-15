@@ -521,6 +521,13 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_RadialBlur");
 		return E_FAIL;
 	}
+
+	if (FAILED(Render_Effect_Envrionment()))
+	{
+		MSG_BOX("Failed to Render_Blend");
+		return E_FAIL;
+	}
+
 	if (FAILED(Render_EffectBloom()))
 	{
 		MSG_BOX("Failed to Render_NonLights");
@@ -537,11 +544,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
 	}
-	if (FAILED(Render_Effect_Envrionment()))
-	{
-		MSG_BOX("Failed to Render_Blend");
-		return E_FAIL;
-	}
+	
 	/*if (FAILED(Render_Effect()))
 	{
 	   MSG_BOX("Failed to Render_Effect");
