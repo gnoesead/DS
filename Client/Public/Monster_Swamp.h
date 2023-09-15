@@ -256,6 +256,8 @@ private:
 	// 착지 이펙트
 	_bool	m_bLandEffect[3] = { false };
 
+	// 사운드
+	_bool	m_bRiverSound = { false };
 
 private:
 	HRESULT Add_Components();

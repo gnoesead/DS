@@ -258,7 +258,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)	// 0.9
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_12.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.4f);
 				_tchar szSoundFile2[MAX_PATH] = TEXT("swing_04.ogg");
 				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.4f);
@@ -280,8 +280,18 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
 
-				_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
+				static _uint idx = Random::Generate_Int(0, 1);
+
+				if (idx == 0)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.3f);
+				}
+				else
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Iyenaeei.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.3f);
+				}
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -354,6 +364,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Swamp_Land", m_pTransformCom, &EffectWorldDesc);
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_clothing51.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.5f);
 			}
 		}
 
@@ -512,7 +524,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)	// 0.31
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_02.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
 			}
 
@@ -549,7 +561,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)	// 0.13
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_02.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
 			}
 			else if (2 == m_iEvent_Index) // 0.23
@@ -1410,17 +1422,28 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
 
+		
 		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
 		{
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SWIM);
 			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 			Swamp_Create(1, 2);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 	Safe_Release(pGameInstance);
@@ -1451,6 +1474,14 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 2.0f, Dir);
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
@@ -1458,6 +1489,9 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			Jumping(1.1f, 0.03f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
 			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 4.0f;
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 
@@ -1590,10 +1624,20 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SCREW);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 	//Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
@@ -2456,6 +2500,8 @@ void CMonster_Swamp::Create_SwampWaterEffect(_double dTimeDelta)
 
 		for (_uint i = 0; i < 5; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
+
+		
 
 		m_dWaterEffectAccTime = 0.0;
 	}
