@@ -517,6 +517,18 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Particle.bin"),true,10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Hit_Particle.bin"),true,100)))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Hit_Particle");
+		return E_FAIL;
+	}
+
 	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_0_X");

@@ -262,9 +262,17 @@ void CStaticMapObject::LateTick(_double TimeDelta)
 				return;
 			}
 		}
-		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7 || m_MapObject_Info.iRenderGroup == 8 || m_MapObject_Info.iRenderGroup == 9)
+		else if (m_MapObject_Info.iRenderGroup == 6 || m_MapObject_Info.iRenderGroup == 7 || m_MapObject_Info.iRenderGroup == 8 )
 		{
 			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+			{
+				Safe_Release(pGameInstance);
+				return;
+			}
+		}
+		else if (m_MapObject_Info.iRenderGroup == 9)
+		{
+			if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT_ENVIRONMENT, this)))
 			{
 				Safe_Release(pGameInstance);
 				return;

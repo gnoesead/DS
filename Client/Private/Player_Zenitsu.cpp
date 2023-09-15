@@ -1087,7 +1087,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
 
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Particle", m_pTransformCom);
+				// 어웨이크 파티클
+				EffectWorldDesc.vPosition.y += 0.2f;
+				//CEffectPlayer::Get_Instance()->Play("Zen_Particle", m_pTransformCom, &EffectWorldDesc);
 
 
 			}

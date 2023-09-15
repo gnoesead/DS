@@ -248,7 +248,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 // Lock_On_Change
-	if (pGameInstance->Get_DIKeyDown(DIK_RSHIFT)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_TAB)) {
 		m_Battle_Target_Num++;
 
 		if (m_Battle_Target_Num > (_uint)m_Battle_Target_MaxNum) {
@@ -257,12 +257,6 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 // Zoom
-	if (m_Is_Battle == false) {
-		if (pGameInstance->Get_DIKeyState(DIK_S)) {
-			//CCameraManager::GetInstance()->Zoom_Fix(2.f);
-		}
-	}
-
 	m_Zoom = CCameraManager::GetInstance()->Get_Zoom();
 
 // Focus
@@ -286,8 +280,8 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 
 		_float Dist = Convert::GetLength(m_vTargetPos - m_vBattleTargetPos);
 
-		if (pPlayer->Get_Status().iAttackCombo > 2 || pPlayer->Get_Status().iHitCombo > 2) {
-			if (Dist < 3.f) {
+		if (pPlayer->Get_Status().iAttackCombo > 1 || pPlayer->Get_Status().iHitCombo > 1) {
+			if (Dist < 2.5f) {
 				m_bIs_Combo_On = true;	
 			}
 		}

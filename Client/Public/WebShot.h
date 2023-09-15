@@ -11,7 +11,7 @@ END
 
 BEGIN(Client)
 
-class CWebShot final : public CMasterEffect
+class CWebShot final : public CGameObject
 {
 public:
 	typedef struct tagWebDesc
