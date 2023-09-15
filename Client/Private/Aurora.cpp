@@ -49,7 +49,7 @@ void CAurora::Tick(_double TimeDelta)
 	case GROUP_0:
 		if (!m_EffectDesc.pGameObject->Get_IsAuroraOn(GROUP_0))
 		{
-			m_fAlpha -= 0.2f * (_float)TimeDelta;
+			m_fAlpha -= 0.4f * (_float)TimeDelta;
 			if (m_fAlpha < 0.f)
 				m_fAlpha = 0.f;
 			return;
@@ -330,14 +330,16 @@ void CAurora::Reset_Data()
 	}
 	else if (m_EffectDesc.eCharacter == CHARACTER_ZENITSU)
 	{
-		m_fPlusX = Random::Generate_Float(-0.3f, 0.3f);
-		m_fPlusY = Random::Generate_Float(0.f, 1.f);
-		m_fPlusZ = Random::Generate_Float(-0.3f, 0.3f);
+		m_dSpeedY = (_double)Random::Generate_Float(0.1f, 0.2f);
 
-		m_fMaxAlpha = 0.10f;
+		m_fPlusX = Random::Generate_Float(-0.2f, 0.2f);
+		m_fPlusY = Random::Generate_Float(0.3f, 0.8f);
+		m_fPlusZ = Random::Generate_Float(-0.2f, 0.2f);
+
+		m_fMaxAlpha = 0.1f;
 
 		m_vSize = { Random::Generate_Float(0.9f, 1.4f),Random::Generate_Float(0.9f, 1.4f),1.f };
-		m_fSizeSpeedX = Random::Generate_Float(0.7f, 0.9f);
+		m_fSizeSpeedX = Random::Generate_Float(0.6f, 0.8f);
 		m_fSizeSpeedY = Random::Generate_Float(0.5f, 0.7f);
 
 	}
