@@ -8,6 +8,7 @@
 #include "SmeshStone.h"
 #include "MonsterManager.h"
 #include "PlayerManager.h"
+#include "Character_Dialog.h"
 
 
 CCharacter::CCharacter(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1473,6 +1474,45 @@ void CCharacter::Shadow_Final_Setting()
 	XMStoreFloat4x4(&FloatLightProjMatrix, LightProjMatrix);
 
 	m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &FloatLightProjMatrix);
+}
+
+void CCharacter::Play_Sound_BodyFall()
+{
+	static _uint iIdx = 0;
+
+	switch (iIdx)
+	{
+	case 0:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("bodyfall_01.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_FALLDOWN, 0.6f);
+		break;
+	}
+		
+	case 1:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("bodyfall_02.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_FALLDOWN, 0.6f);
+		break;
+	}
+	}
+
+	++iIdx;
+
+	if (2 == iIdx)
+		iIdx = 0;
+}
+
+void CCharacter::Set_CharacterDialog(_double dTime, const _tchar* pName, const _tchar* pDialog1, const _tchar* pDialog2)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+	CCharacter_Dialog* pCharacterDialog = dynamic_cast<CCharacter_Dialog*>( pGameInstance->Get_GameObject(iCurIdx, TEXT("Layer_Character_Dialog")));
+	pCharacterDialog->Set_Dialog(dTime, pName, pDialog1, pDialog2);
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CCharacter::Add_Components()

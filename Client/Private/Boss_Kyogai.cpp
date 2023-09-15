@@ -1098,6 +1098,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				Play_FallDownEffect();
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1107,6 +1108,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				Play_FallDownEffect();
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				_tchar szSoundFile[MAX_PATH] = TEXT("bodyfall_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_FALLDOWN, 0.7f);
 			}
 		}
 

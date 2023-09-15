@@ -6,6 +6,7 @@
 #include "EffectPlayer.h"
 #include "WaterParticleEffect.h"
 #include "Swamp_SmokeEffect.h"
+#include "SoundMgr.h"
 
 static _uint g_iNum = 0;
 
@@ -295,6 +296,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLIN);
 		}
 
 		if (m_fSize > 3.5f)
@@ -314,6 +316,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		if (m_fSize < 0.001f)
@@ -341,6 +344,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		m_eCurState = STATE_DECREASING;
@@ -361,6 +365,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		m_eCurState = STATE_DECREASING;
@@ -450,6 +455,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			Create_WatterEffect();
 			m_bWaterEffect = true;
 			m_eCurPattern = PATTERN_SHORYU;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 		break;
 	case PATTERN_DISAPPEAR:
@@ -527,7 +533,6 @@ void CSwamp::Create_WatterEffect()
 	for (_uint i = 0; i < 20; ++i)
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
-	
 	Safe_Release(pGameInstance);
 }
 
@@ -554,7 +559,45 @@ void CSwamp::Create_WatterParticleEffect(_uint iNum)
 	Safe_Release(pGameInstance);
 }
 
+void CSwamp::Play_WaterSound(SOUNDTYPE eSoundType)
+{
+	static _uint iIdx = 0;
 
+	CSoundMgr::CHANNELID eID = (CSoundMgr::CHANNELID)0;
+
+	if (iIdx == 0)
+		 eID = CSoundMgr::MONSTER_SUBEFFECT_0;
+	else if (iIdx == 1)
+		 eID = CSoundMgr::MONSTER_SUBEFFECT_1;
+	else if (iIdx == 2)
+		eID = CSoundMgr::MONSTER_SUBEFFECT_2;
+
+	++iIdx;
+
+	if (iIdx == 3)
+		iIdx = 0;
+
+	CSoundMgr::Get_Instance()->StopSound(eID);
+
+	switch (eSoundType)
+	{
+	case SOUND_FALLOUT:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_water.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, eID, 0.3f);
+		break; 
+	}
+		
+	case SOUND_FALLIN:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_water_1.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, eID, 0.3f);
+		break;
+	}
+	}
+
+	
+}
 
 CSwamp* CSwamp::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

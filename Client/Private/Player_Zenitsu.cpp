@@ -1276,6 +1276,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1285,11 +1286,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index) // 0.5
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 			else if (2 == m_iEvent_Index) // 0.95
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
+			}
 		}
 
 		if (101 == m_pModelCom->Get_iCurrentAnimIndex())	// Dmg Fall
@@ -1298,6 +1303,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1307,6 +1313,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1316,6 +1323,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
