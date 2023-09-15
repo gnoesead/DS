@@ -277,7 +277,12 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 		if (7 == m_pModelCom->Get_iCurrentAnimIndex()) //screw
 		{
 			if (0 == m_iEvent_Index)	// 0ÃÊ
+			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
+			}
 			else if (1 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(0.8f, 0.8f, 0.8f), _float3(0.f, 1.0f, 1.7f), 0.4, CAtkCollider::TYPE_SMALL, AtkDir, 0.5f);

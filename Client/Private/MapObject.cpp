@@ -99,8 +99,8 @@ HRESULT CMapObject::Render()
 			m_pShaderCom->Begin(7);
 		else if (8 == m_MapObject_Info.iRenderGroup)
 			m_pShaderCom->Begin(8);
-		//else if (9 == m_MapObject_Info.iRenderGroup)		// 안개
-		//	m_pShaderCom->Begin(9);
+		else if (9 == m_MapObject_Info.iRenderGroup)		// 안개
+			m_pShaderCom->Begin(9);
 		else if (m_pModelCom->Get_IsNormalTexture(i))
 			m_pShaderCom->Begin(1);
 		else
