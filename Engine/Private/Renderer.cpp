@@ -525,6 +525,13 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_RadialBlur");
 		return E_FAIL;
 	}
+
+	if (FAILED(Render_Effect_Envrionment()))
+	{
+		MSG_BOX("Failed to Render_Blend");
+		return E_FAIL;
+	}
+
 	if (FAILED(Render_EffectBloom()))
 	{
 		MSG_BOX("Failed to Render_NonLights");
@@ -1287,7 +1294,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	/*if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_UP))
 		{
@@ -1305,7 +1312,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		{
 			m_fBlurWeight -= 0.05f;
 		}
-	}
+	}*/
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))

@@ -362,26 +362,25 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	//CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
-	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
+	CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	//{
-	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-	//	return E_FAIL;
-	//}
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
+	}
 
-	//CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
-	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
+	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
+	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
 
-	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	//{
-	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-	//	return E_FAIL;
-	//}
-
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
 
@@ -2081,24 +2080,24 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Down");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_L.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_L");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Left.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_R.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Left");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_R");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up_L.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up_L");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up_Right.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Claws_Up_R.bin"))))
 	{
-		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up_Right");
+		MSG_BOX("Failed to Load Effect : Zako_Atk_Claws_Up_R");
 		return E_FAIL;
 	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Atk_Spin.bin"))))

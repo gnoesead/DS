@@ -100,6 +100,7 @@
 #include "HandAura_Akaza.h"
 
 #include "EffectPartsObject.h"
+#include "Character_Dialog.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -521,37 +522,37 @@ HRESULT CLoader::LoadingForLobby()
 	}
 
 
-	/* Prototype_Component_Model_Rengoku */
-	PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Rengoku/Rengoku.bin", PivotMatrix))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Model_Rengoku");
-		return E_FAIL;
-	}
-	// Prototype_Component_Model_Rengoku_Sword
-	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword");
-		return E_FAIL;
-	}
-	// Prototype_Component_Model_Rengoku_Sword_In
-	PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword_In"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword_In");
-		return E_FAIL;
-	}
-	// Prototype_Component_Model_Rengoku_SwordHome 
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_SwordHome"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_SwordHome.bin", PivotMatrix))))
-	{
-		MSG_BOX("Failed to Add_Prototype_Model_Rengoku_SwordHome");
-		return E_FAIL;
-	}
+	///* Prototype_Component_Model_Rengoku */
+	//PivotMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Character/Rengoku/Rengoku.bin", PivotMatrix))))
+	//{
+	//	MSG_BOX("Failed to Add_Prototype_Model_Rengoku");
+	//	return E_FAIL;
+	//}
+	//// Prototype_Component_Model_Rengoku_Sword
+	//PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
+	//{
+	//	MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword");
+	//	return E_FAIL;
+	//}
+	//// Prototype_Component_Model_Rengoku_Sword_In
+	//PivotMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(270.0f));
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_Sword_In"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_Sword.bin", PivotMatrix))))
+	//{
+	//	MSG_BOX("Failed to Add_Prototype_Model_Rengoku_Sword_In");
+	//	return E_FAIL;
+	//}
+	//// Prototype_Component_Model_Rengoku_SwordHome 
+	//if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rengoku_SwordHome"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Character/Rengoku_Sword/Rengoku_SwordHome.bin", PivotMatrix))))
+	//{
+	//	MSG_BOX("Failed to Add_Prototype_Model_Rengoku_SwordHome");
+	//	return E_FAIL;
+	//}
 
 
 	// Prototype_Component_Model_Akaza
@@ -949,9 +950,9 @@ HRESULT CLoader::LoadingForLobby()
 		return E_FAIL;
 
 	/* For.Prototype_GameObject_Zen_Aurora*/
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zen_Aurora"),
+	/*if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Zen_Aurora"),
 		CZen_Aurora::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
+		return E_FAIL;*/
 
 
 	/* Prototype_GameObject_SmeshStone */
@@ -1127,6 +1128,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Akaza_Awake_UI */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Akaza_Awake_UI"),
 		Akaza_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Character_Dialog*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Character_Dialog"),
+		CCharacter_Dialog::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
