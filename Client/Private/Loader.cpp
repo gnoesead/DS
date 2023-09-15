@@ -100,6 +100,7 @@
 #include "HandAura_Akaza.h"
 
 #include "EffectPartsObject.h"
+#include "Character_Dialog.h"
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -1127,6 +1128,11 @@ HRESULT CLoader::LoadingForLobby()
 	/* Prototype_GameObject_Akaza_Awake_UI */
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Akaza_Awake_UI"),
 		Akaza_Awake_UI::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* Prototype_GameObject_Character_Dialog*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Character_Dialog"),
+		CCharacter_Dialog::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
