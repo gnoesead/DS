@@ -1443,6 +1443,9 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
 				else if (n == 2)
 					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom);
 			}
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())

@@ -1006,7 +1006,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += 1.9f;
+				EffectWorldDesc.vPosition.x += 1.5f;
 
 				EffectWorldDesc.vRotation.y = -90.f;
 
@@ -1037,7 +1037,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += -1.9f;
+				EffectWorldDesc.vPosition.x += -1.5f;
 
 				EffectWorldDesc.vRotation.y = 90.f;
 
@@ -1053,6 +1053,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += -0.3f;
+
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
 				
@@ -1083,6 +1085,11 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				m_pRendererCom->Set_BloomRatio(1.55f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
+
+
+				//CEffectPlayer::Get_Instance()->Play("Zen_Particle", m_pTransformCom);
+
+
 			}
 		}
 
