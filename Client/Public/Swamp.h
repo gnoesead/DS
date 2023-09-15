@@ -23,8 +23,6 @@ public:
 	};
 	enum STATE { STATE_WAIT, STATE_INCREASING, STATE_DECREASING };
 
-	enum SOUNDTYPE {SOUND_FALLOUT , SOUND_FALLIN};
-
 public:
 	typedef struct tagSwampDesc
 	{
@@ -60,9 +58,6 @@ private:
 	void	State_Setting(_double TimeDelta);
 	void	Create_WatterEffect();
 	void	Create_WatterParticleEffect(_uint iNum);
-
-private:
-	void	Play_WaterSound(SOUNDTYPE eSoundType);
 
 private:
 	CShader* m_pShaderCom = { nullptr };

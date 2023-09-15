@@ -198,11 +198,7 @@ protected:
 	void Shadow_Train_Setting();
 	void Shadow_Final_Setting();
 
-protected:
-	void Play_Sound_BodyFall();
 
-protected:
-	void Set_CharacterDialog(_double dTime, const _tchar* pName, const _tchar* pDialog1, const _tchar* pDialog2 = TEXT(""));
 
 protected:
 	CHARACTERDESC	m_CharacterDesc;
@@ -285,8 +281,10 @@ protected:
 protected:
 	_float	m_fFar2 = { 1.f };
 	_bool	m_isAuroraOn[3] = { false };
+private:
+	
 
-	_double	m_dDialogAccTime = { 0.0 };
+
 
 protected:
 	HRESULT Add_Components();

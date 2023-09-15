@@ -635,7 +635,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.04
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -644,7 +643,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{// 0.25
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
-				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index)
 			{// 0.52
@@ -657,7 +655,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			else if (3 == m_iEvent_Index)
 			{// 1.75
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -667,7 +664,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.45
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -677,7 +673,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.04
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -688,7 +683,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.05
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -699,7 +693,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.00
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
-				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1898,7 +1891,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 
 }
 
-void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
+void CMonster_Zako::Play_Sound_Dmg(_int iType, _double vol)
 {
 	//small
 	if (iType == 0)
