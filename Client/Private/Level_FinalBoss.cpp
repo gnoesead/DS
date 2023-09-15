@@ -106,11 +106,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 		return E_FAIL;
 	}
 
-	/*if (FAILED(Ready_Layer_Effect()))
+	if (FAILED(Ready_Layer_Effect()))
 	{
 		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
 		return E_FAIL;
-	}*/
+	}
 
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
