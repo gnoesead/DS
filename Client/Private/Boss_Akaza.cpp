@@ -1314,7 +1314,20 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					Jumping(0.2f, 0.030f);
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				Play_HitEffect();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				//Play_HitEffect();
 
 			}
 			else
@@ -1342,7 +1355,19 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				//Play_HitEffect();
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1359,9 +1384,14 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			if (PlayerIndex == 0) {
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-				Play_HitEffect();
+				//Play_HitEffect();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
