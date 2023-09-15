@@ -360,11 +360,14 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				//Find
 				m_isQuestioning = true;
 				m_pModelCom->Set_Animation(70);
+
+				_tchar szRun_0[MAX_PATH] = TEXT("Zako_Questioning.mp3");
+				Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.65f);
 			}
 		}
 		m_isFirst_Questioning = true;
 	}
-
+	
 	if (m_isSlowMotion)
 	{
 		if (m_isFirst_SlowMotion)
@@ -390,17 +393,16 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_POSE_MUT);
 
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-			pGameInstance->Time_Slow(0.1, 0.4);
-			Safe_Release(pGameInstance);
+			//CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			//Safe_AddRef(pGameInstance);
+			//pGameInstance->Time_Slow(0.1, 0.4);
+			//Safe_Release(pGameInstance);
 
 			m_isSlowMotion = true;
 			m_dDelay_SlowMotion = 0.0;
 			m_isFirst_SlowMotion = true;
 
-			_tchar szRun_0[MAX_PATH] = TEXT("Zako_Questioning.ogg");
-			Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.5f);
+			
 		}
 
 
@@ -449,6 +451,8 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 			m_isSound_Finding = true;
 			m_dSound_Finding = 0.0;
+			m_isFirst_Sound_Finding_0 = true;
+			m_isFirst_Sound_Finding_1 = true;
 		}
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
@@ -471,14 +475,23 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 	if (m_isSound_Finding)
 	{
 		m_dSound_Finding += dTimeDelta;
-		if (m_dSound_Finding > 0.5f)
+		if (m_dSound_Finding > 0.5f && m_isFirst_Sound_Finding_0)
+		{
+			m_isFirst_Sound_Finding_0 = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Finding.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, 0.65f);
+		}
+		if (m_dSound_Finding > 1.4f && m_isFirst_Sound_Finding_1)
 		{
 			m_isSound_Finding = false;
 			m_dSound_Finding = 0.0;
+			m_isFirst_Sound_Finding_1 = false;
 
-			_tchar szRun_0[MAX_PATH] = TEXT("Zako_Finding.ogg");
-			Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.5f);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_YuruSene.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE_SUB, 0.7f);
 		}
+
 	}
 
 

@@ -731,6 +731,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Charge", m_pTransformCom, &EffectWorldDesc);
 
+				_tchar szSoundFile0[MAX_PATH] = TEXT("flash_01.ogg");
+				Play_Sound_Channel(szSoundFile0, CSoundMgr::SKILL_0, 0.7f);
+
 			}
 		}
 		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -744,6 +747,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 			
 				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Slash", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile0[MAX_PATH] = TEXT("st_sword09.ogg");
+				Play_Sound_Channel(szSoundFile0, CSoundMgr::SWORD_0, 0.7f);
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.7f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("Zenitsu_Talk_ShinSok.mp3");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::PLAYER_VOICE, 0.99f);
 				
 			}
 			else if (1 == m_iEvent_Index)
@@ -759,6 +769,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 4.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_04.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_1, 0.85f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -774,6 +790,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f) , _float3(EffectWorldDesc.vPosition.x, 1.0f, 6.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT_0, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_03.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.85f);
 				
 			}
 			else if (3 == m_iEvent_Index)
@@ -790,6 +812,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 8.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT_1, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_02.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_1, 0.85f);
 				
 			}
 			else if (4 == m_iEvent_Index)
@@ -807,14 +835,11 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 				
 				_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.7f);
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.6f);
 
-				_tchar szSoundFile0[MAX_PATH] = TEXT("st_sword09.ogg");
-				Play_Sound_Channel(szSoundFile0, CSoundMgr::SWORD_0, 0.7f);
-				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
-				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.7f);
-				_tchar szSoundFile2[MAX_PATH] = TEXT("Zenitsu_Talk_ShinSok.mp3");
-				Play_Sound_Channel(szSoundFile2, CSoundMgr::PLAYER_VOICE, 0.8f);
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_01.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.85f);
+
 			}
 		}
 #pragma endregion

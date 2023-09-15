@@ -1995,7 +1995,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
-		Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
+		//Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
+		Jumping(2.0f * m_fScaleChange, 0.04f * m_fScaleChange);
 
 		Use_Mp_Skill();
 
@@ -2008,7 +2009,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_06.ogg");
 		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
 	}
-	Ground_Animation_Play(37, 86);
+	Ground_Animation_Play(36, 37);
+	//Ground_Animation_Play(37, 86);
 	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
 }
 

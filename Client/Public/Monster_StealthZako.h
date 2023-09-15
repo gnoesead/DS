@@ -93,6 +93,9 @@ private:
 	_bool		m_isSound_Questioning = { false };
 	_bool		m_isSound_Finding = { false };
 
+	_bool		m_isFirst_Sound_Finding_0 = { true };
+	_bool		m_isFirst_Sound_Finding_1 = { true };
+
 	_double		m_dSound_Questioning = { 0.0 };
 	_double		m_dSound_Finding = { 0.0 };
 
