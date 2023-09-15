@@ -3048,7 +3048,6 @@ HRESULT CLevel_Village::Ready_Layer_Effect()
         MSG_BOX("Failed to Load Effect : Swamp_Land");
         return E_FAIL;
     }
-
     return S_OK;
 }
 
