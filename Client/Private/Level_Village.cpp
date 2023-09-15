@@ -144,6 +144,12 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_Character_Dialog(TEXT("Layer_Character_Dialog"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Character_Dialog : CLevel_Village");
+        return E_FAIL;
+    }
+
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(false);
 
@@ -2808,6 +2814,22 @@ HRESULT CLevel_Village::Ready_Layer_SmellBundle(const _tchar* pLayerTag)
         return E_FAIL;
 
     Safe_Release(pGameInstance);
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_Character_Dialog"))))
+        return E_FAIL;
+
+    Safe_Release(pGameInstance);
+
     return S_OK;
 }
 

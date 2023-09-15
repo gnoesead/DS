@@ -463,6 +463,9 @@
     <Filter Include="02. GameObjects\Effect\EffectPartsObject">
       <UniqueIdentifier>{e1b319a1-2944-4553-b0c5-912a33f0fa52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\13.Character_Dialog">
+      <UniqueIdentifier>{2dd15d7f-e904-400d-a3bc-8a41f77ce06d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -834,6 +837,9 @@
     <ClInclude Include="..\Public\EffectPartsObject.h">
       <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Character_Dialog.h">
+      <Filter>02. GameObjects\UI\13.Character_Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1195,6 +1201,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\EffectPartsObject.cpp">
       <Filter>02. GameObjects\Effect\EffectPartsObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Character_Dialog.cpp">
+      <Filter>02. GameObjects\UI\13.Character_Dialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

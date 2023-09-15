@@ -5,6 +5,7 @@
 #include "Collider.h"
 #include "EffectPlayer.h"
 #include "GroundSmoke.h"
+#include "GameInstance.h"
 
 BEGIN(Engine)
 
