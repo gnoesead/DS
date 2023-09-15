@@ -1174,6 +1174,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("bodyfall_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_FALLDOWN, 0.7f);
 			}
 		}
 
@@ -1183,6 +1186,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1191,6 +1195,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -1204,6 +1209,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			else if (3 == m_iEvent_Index)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1213,6 +1219,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1222,6 +1229,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1231,6 +1239,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1240,6 +1249,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1249,6 +1259,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1350,7 +1361,19 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				//Play_HitEffect();
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1378,9 +1401,14 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			if (PlayerIndex == 0) {
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-				Play_HitEffect();
+				//Play_HitEffect();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1742,7 +1770,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		Safe_AddRef(pGameInstance);
 		pGameInstance->Time_Slow(0.5, 0.5);
 		Safe_Release(pGameInstance);
-		
+
 	}
 	if ((m_StatusDesc.fHp > 0.f) && ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.5f))
 	{
@@ -1820,7 +1848,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
-		
+
 
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
@@ -1836,7 +1864,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
-		
+
 
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
@@ -1852,7 +1880,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 			Safe_AddRef(pGameInstance);
 			pGameInstance->Time_Slow(0.5, 0.5);
 			Safe_Release(pGameInstance);
-		}		
+		}
 
 	}
 	if (m_bAwake == true)

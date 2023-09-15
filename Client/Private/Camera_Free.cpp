@@ -248,7 +248,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 	}
 
 // Lock_On_Change
-	if (pGameInstance->Get_DIKeyDown(DIK_TAB)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_LSHIFT)) {
 		m_Battle_Target_Num++;
 
 		if (m_Battle_Target_Num > (_uint)m_Battle_Target_MaxNum) {

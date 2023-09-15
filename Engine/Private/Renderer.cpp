@@ -1290,7 +1290,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	/*if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_UP))
 		{
@@ -1308,7 +1308,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		{
 			m_fBlurWeight -= 0.05f;
 		}
-	}
+	}*/
 	Safe_Release(pGameInstance);
 
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))
@@ -2102,13 +2102,7 @@ HRESULT CRenderer::Render_Lights()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_TAB))
-	{
-		if (m_bSSAOSwitch == false)
-			m_bSSAOSwitch = true;
-		else if (m_bSSAOSwitch == true)
-			m_bSSAOSwitch = false;
-	}
+	
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAOSwitch", &m_bSSAOSwitch, sizeof(_bool))))
 		return E_FAIL;
 

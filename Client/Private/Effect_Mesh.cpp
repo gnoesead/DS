@@ -224,6 +224,9 @@ HRESULT CEffect_Mesh::SetUp_ShaderResources(void)
 			return E_FAIL;
 	}
 
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vUVStart", (void*)&m_eEffectDesc.vUVStart, sizeof(_float3))))
+		return E_FAIL;
+
 	return S_OK;
 }
 

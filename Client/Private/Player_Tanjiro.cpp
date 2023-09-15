@@ -171,6 +171,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_swamp02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.8f);
 			}
 		}
 	}
@@ -329,7 +332,7 @@ HRESULT CPlayer_Tanjiro::Render()
 			}
 
 			m_pModelCom->Render(m_iMeshNum);
-		}		
+		}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
 		{
@@ -393,9 +396,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo1", m_pTransformCom);
 
-				//CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom);
-
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_ParticleFountainMain", m_pTransformCom);
 				Play_Sound_Atk(0, 0.75); // 0:small , 1:medium
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
@@ -510,7 +510,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down", m_pTransformCom);
 				else
+				{
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Down", m_pTransformCom);
+
+					CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 2.f);
+				}
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.6f;
@@ -583,7 +587,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Normal", m_pTransformCom);
 				else
-					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom);
+				{
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.fScale = 0.8f;
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4", m_pTransformCom, &EffectWorldDesc);
+
+					CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 1.5f);
+				}
 
 				Play_Sound_Atk(1, 0.75f); // 0:small , 1:medium
 			}
@@ -615,7 +625,11 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				if (m_Moveset.m_iAwaken == 0)
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up", m_pTransformCom);
 				else
+				{
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_SurgeCombo4_Up", m_pTransformCom);
+
+					CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 1.5f);
+				}
 
 				Play_Sound_Atk(1, 0.75f); // 0:small , 1:medium
 			}
@@ -729,9 +743,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 2.f);
 
 			}
-			if (1 == m_iEvent_Index)
+			else if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 
@@ -739,7 +753,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
-			if (2 == m_iEvent_Index)
+			else if (2 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashFall", m_pTransformCom);
 
@@ -754,7 +768,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind2", m_pTransformCom, &EffectWorldDesc);
 
 			}
-			if (3 == m_iEvent_Index)
+			else if (3 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashFall", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
@@ -769,7 +783,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 6.3f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (4 == m_iEvent_Index)
+			else if (4 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_WaterDrop", m_pTransformCom);
 
@@ -783,7 +797,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 5.4f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (5 == m_iEvent_Index)
+			else if (5 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 
@@ -797,7 +811,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 6.5f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind2", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (6 == m_iEvent_Index)
+			else if (6 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
@@ -809,7 +823,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 5.5f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (7 == m_iEvent_Index)
+			else if (7 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_ParticleFountain", m_pTransformCom);
@@ -824,7 +838,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 4.3f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind2", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (8 == m_iEvent_Index)
+			else if (8 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
@@ -836,7 +850,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 3.0f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind2", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (9 == m_iEvent_Index)
+			else if (9 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 
@@ -850,13 +864,13 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 5.5f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind", m_pTransformCom, &EffectWorldDesc);
 			}
-			if (10 == m_iEvent_Index)
+			else if (10 == m_iEvent_Index)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.5f, 2.5f, 2.5f), _float3(0.f, 1.0f, 1.7f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
-			if (11 == m_iEvent_Index)
+			else if (11 == m_iEvent_Index)
 			{
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_ParticleFountainMain", m_pTransformCom);
 
@@ -925,17 +939,110 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_Particle", m_pTransformCom);
+
+				CCameraManager::GetInstance()->Zoom_Out(2.f, 2.f);
+
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+
+				m_pRendererCom->Set_BloomRatio();
+			}
+			if (1 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y -= 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle0", m_pTransformCom, &EffectSideStepDesc);
+
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+			}
+			if (2 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle1", m_pTransformCom);
+
+				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
+				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 11.0f * fDmg);
+			}
+			if (3 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y += 2.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle2", m_pTransformCom, &EffectSideStepDesc);
+
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
-
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3", m_pTransformCom);
-
-				m_pRendererCom->Set_BloomRatio();
 			}
+			if (4 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y -= 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle0", m_pTransformCom, &EffectSideStepDesc);
+			}
+			if (5 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle1", m_pTransformCom);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc2;
+				EffectSideStepDesc2.vPosition.y += 4.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle3", m_pTransformCom, &EffectSideStepDesc2);
+			}
+			if (6 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y += 2.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle2", m_pTransformCom, &EffectSideStepDesc);
+			}
+			if (7 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y -= 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle0", m_pTransformCom, &EffectSideStepDesc);
+			}
+			if (8 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle1", m_pTransformCom);
 
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc2;
+				EffectSideStepDesc2.vPosition.y += 4.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle3", m_pTransformCom, &EffectSideStepDesc2);
+			}
+			if (9 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y += 2.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle2", m_pTransformCom, &EffectSideStepDesc);
+
+			}
+			if (10 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y -= 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle0", m_pTransformCom, &EffectSideStepDesc);
+			}
+			if (11 == m_iEvent_Index)
+			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle1", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc2;
+				EffectSideStepDesc2.vPosition.y += 4.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle3", m_pTransformCom, &EffectSideStepDesc2);
+			}
+			if (12 == m_iEvent_Index)
+			{
+				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
+				EffectSideStepDesc.vPosition.y += 2.f;
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super3_ParticleCircle2", m_pTransformCom, &EffectSideStepDesc);
+			}
 		}
 #pragma endregion
 
@@ -947,7 +1054,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 0.0f, 0.5f), 0.6,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
-				
+
 			}
 
 		}
@@ -1178,7 +1285,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				m_dSound_Move = 0.0;
 
-				
+
 			}
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
@@ -1341,6 +1448,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1352,15 +1460,22 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index)	// 0.58
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
+			}
 		}
 
 		if (128 == m_pModelCom->Get_iCurrentAnimIndex())	// 맞고 떼구르르 구름
 		{
 			if (0 == m_iEvent_Index)	// 0.2
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
+			}
 			else if (1 == m_iEvent_Index)	// 0.5
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 			else if (2 == m_iEvent_Index)	// 0.93
@@ -1379,6 +1494,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 
 		}
@@ -1501,6 +1617,15 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 		}
 		//m_pTransformCom->Go_Straight(dTimeDelta * m_fMove_Speed);
 	}
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_IDLE)
+	{
+		if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_D))
+		{
+			m_Moveset.m_Down_Battle_Run = true;
+		}
+	}
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
 	{
@@ -1508,8 +1633,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 		if (m_dSound_Move > 0.16f)
 		{
 			m_dSound_Move = 0.0;
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
 
 			if (m_iSound_Move_Index == 0)
 			{
@@ -1545,9 +1668,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
 				}
 			}
-			Safe_Release(pGameInstance);
 		}
 	}
+	Safe_Release(pGameInstance);
 
 	if (m_Moveset.m_Up_Battle_Run)
 	{
@@ -2226,7 +2349,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 			}
 		}
 		Play_Sound_Atk(0, 0.7);
-		
+
 	}
 
 
@@ -2378,7 +2501,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 		EffectWorldDesc.fScale = 1.4f;
 		EffectWorldDesc.vPosition.y += 0.4f;
 		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
-		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom , &EffectWorldDesc);
+		CEffectPlayer::Get_Instance()->Play("Effect_Guard", m_pTransformCom, &EffectWorldDesc);
 
 		Play_Sound_Metal(0.5);
 	}
@@ -2623,6 +2746,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isFirst_SwampHit = true;
 		}
 		Play_Sound_Dmg(1, 0.8);
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("st_swamp01.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.8f);
 	}
 
 	if (m_isSwampHit)
