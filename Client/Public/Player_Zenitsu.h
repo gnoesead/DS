@@ -5,6 +5,8 @@
 
 #include "Sword.h"
 #include "SwordHome.h"
+#include "Zen_Aurora.h"
+
 
 BEGIN(Engine)
 
