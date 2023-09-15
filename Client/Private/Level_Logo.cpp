@@ -517,7 +517,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
+	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_0_X.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_0_X");
 		return E_FAIL;
@@ -550,6 +550,12 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Hit_Particle_2_Z.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Hit_Particle_2_Z");
+		return E_FAIL;
+	}*/
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 40)))
+	{
+		MSG_BOX("Failed to Load Effect : Death_Particle");
 		return E_FAIL;
 	}
 #pragma endregion
@@ -886,7 +892,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region KYOGAI
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 1)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Explosion_Particle.bin"), true, 3)))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_Explosion_Particle");
 		return E_FAIL;

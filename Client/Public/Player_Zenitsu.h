@@ -5,6 +5,8 @@
 
 #include "Sword.h"
 #include "SwordHome.h"
+#include "Zen_Aurora.h"
+
 
 BEGIN(Engine)
 
@@ -144,6 +146,9 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isFirst_Hekireki_AirEnd = { false };
 
 	_bool	m_isHekireki_End_ForDir = { false };
+
+	_bool	m_isDelay_Sound_Hekireki = { false };
+	_double m_dDelay_Sound_Hekireki = { 0.0 };
 
 	//벽력일섬 첫 동작 확인용
 	_bool	m_isFirst_HekirekiAct = { true };

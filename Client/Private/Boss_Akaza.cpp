@@ -20,6 +20,7 @@
 #include "AlertCircle_Akaza.h"
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
+#include "Fade_Manager.h"
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -59,8 +60,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 200.f;
-		m_StatusDesc.fHp_Max = 200.f;
+		m_StatusDesc.fHp = 400.f;
+		m_StatusDesc.fHp_Max = 400.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -538,6 +539,24 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//Aura Off
 				CEffectPlayer::Get_Instance()->Play("Akaza_Heal_Wind", m_pTransformCom);
 				m_isAuroraOn[1] = false;
+
+				CAurora::EFFECTDESC AuroraDesc;
+				AuroraDesc.pTransform = m_pTransformCom;
+				AuroraDesc.pGameObject = this;
+				AuroraDesc.eType = CAurora::TYPE_WORLD;
+				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+				AuroraDesc.eCharacter = CAurora::CHARACTER_AKAZA;
+
+				AuroraDesc.eColor = CAurora::COLOR_CHACRA;
+				AuroraDesc.eGroup = CAurora::GROUP_2;
+				for (_uint i = 0; i < 40; ++i)
+					pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
+				AuroraDesc.eColor = CAurora::COLOR_SKY;
+				AuroraDesc.eGroup = CAurora::GROUP_2;
+				for (_uint i = 0; i < 40; ++i)
+					pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
+
 			}
 		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
@@ -551,6 +570,17 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.0f, 0.0f), dLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.0f);
 				m_pRendererCom->Set_BloomRatio(0.1f);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 2.5f;
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Push", m_pTransformCom, &EffectWorldDesc);
+				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
+				Camera_Shake(1.0);
+				m_pRendererCom->Set_RadialBlur();
+			}
+			else if (1 == m_iEvent_Index) // 0.23
+			{
+				m_pRendererCom->Set_RadialBlur();
 			}
 
 		}
@@ -1138,6 +1168,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			}
 		}
 
+		if (78 == m_pModelCom->Get_iCurrentAnimIndex()) // Dead
+		{
+			if (0 == m_iEvent_Index) // 1.85
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_FallDownEffect();
+			}
+		}
+
 		if (81 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (0 == m_iEvent_Index)
@@ -1264,7 +1303,20 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					Jumping(0.2f, 0.030f);
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				Play_HitEffect();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				//Play_HitEffect();
 
 			}
 			else
@@ -1292,7 +1344,19 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				//Play_HitEffect();
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1309,9 +1373,14 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			if (PlayerIndex == 0) {
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-				Play_HitEffect();
+				//Play_HitEffect();
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1623,6 +1692,11 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 		m_bNoDmg = true;
 		m_iTriggerCnt = 5;
 		m_dTriggerTime = 0.0;
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+		pGameInstance->Time_Slow(0.5, 0.5);
+		Safe_Release(pGameInstance);
 		
 	}
 	if ((m_StatusDesc.fHp > 0.f) && ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) < 0.5f))
@@ -1728,8 +1802,12 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		{
 			m_bDead_Trigger = true;
 			Trigger_Hit_Dead();
-		}
-		//m_eCurPhase = PHASE_3;
+
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			pGameInstance->Time_Slow(0.5, 0.5);
+			Safe_Release(pGameInstance);
+		}		
 
 	}
 	if (m_bAwake == true)
@@ -3396,6 +3474,7 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 			m_iTriggerCnt = 0;
 			m_dAwakeTime = 0.0;
 			m_eCurPhase = PHASE_2;
+			CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
 		}
 		m_bNoDmg = false;
 
@@ -4097,18 +4176,28 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_HIT_GETUP;
 		m_fDeadTime += (_float)dTimeDelta;
 
-		// 1.dTimeDelta, 2.원하는 시간, 3.누적시간
-		if (Event_Time((_float)dTimeDelta, 0.1f, m_fDeadTime))
+		m_dDeadParticleAccTime += dTimeDelta;
+		m_dDeadSmokeAccTime += dTimeDelta;
+
+		if (m_fDeadTime > 1.8f && m_fDeadTime < 7.5f)
 		{
-			// 이펙트 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.2f, m_fDeadTime))
-		{
-			// 이펙트 추가
-		}
-		else if (Event_Time((_float)dTimeDelta, 0.3f, m_fDeadTime))
-		{
-			// 이펙트 추가
+			if (m_fDeadTime > 2.2f)
+			{
+				if (m_dDeadParticleAccTime > 1.4)
+				{
+					m_dDeadParticleAccTime = 0.0;
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.vPosition.x += Random::Generate_Float(-0.3f, 0.3f);
+					EffectWorldDesc.vPosition.z += Random::Generate_Float(-0.3f, 0.3f);
+					CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
+				}
+			}
+
+			if (m_dDeadSmokeAccTime > 1.0)
+			{
+				Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD_NORMAL);
+				m_dDeadSmokeAccTime = 0.0;
+			}
 		}
 
 		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨

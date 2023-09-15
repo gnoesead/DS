@@ -1283,7 +1283,7 @@ technique11 DefaultTechnique {
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_Default, 0);
+		SetDepthStencilState(DS_None_ZEnable, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = compile gs_5_0 GS_DEFAULT();
@@ -1361,7 +1361,7 @@ technique11 DefaultTechnique {
 	{
 		SetRasterizerState(RS_Default);
 		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
-		SetDepthStencilState(DS_Default, 0);
+		SetDepthStencilState(DS_None_ZEnable, 0);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = compile gs_5_0 GS_DEFAULT();

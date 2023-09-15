@@ -362,25 +362,25 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
-	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
+	//CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-		return E_FAIL;
-	}
+	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	return E_FAIL;
+	//}
 
-	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
-	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
+	//CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
+	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
 
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-		TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
-	{
-		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
-		return E_FAIL;
-	}
+	//if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	//	TEXT("Prototype_GameObject_Monster_Zako_0"), &CharacterDesc)))
+	//{
+	//	MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
+	//	return E_FAIL;
+	//}
 
 
 	Safe_Release(pGameInstance);
@@ -2232,11 +2232,6 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_CutScene_Explosion.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Explosion");
-		return E_FAIL;
-	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_Push.bin"))))
-	{
-		MSG_BOX("Failed to Load Effect : Kyogai_Push");
 		return E_FAIL;
 	}
 	

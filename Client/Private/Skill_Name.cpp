@@ -69,8 +69,9 @@ HRESULT CSkill_Name::Initialize(void * pArg)
 	m_szTanjiro_Skill.push_back(L"제2형 물방아");
 	m_szTanjiro_Skill.push_back(L"제6형 비틀린 소용돌이");
 
-	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬 극의");
-	m_szZenitsu_Skill.push_back(L"공전");
+	m_szZenitsu_Skill.push_back(L"제1형 벽력일섬");
+	m_szZenitsu_Skill.push_back(L"제3형 공전");
+	m_szZenitsu_Skill.push_back(L"제7형 화뢰신");
 
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
