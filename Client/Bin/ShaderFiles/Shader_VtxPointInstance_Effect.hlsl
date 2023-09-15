@@ -596,6 +596,39 @@ PS_OUT  PS_DIFF_CALCBLUE_SPRITE(PS_IN In)
 	return Out;
 }
 
+PS_OUT  PS_MASK_COLOR_DISSOLVE_SPRITE(PS_IN In)
+{
+	PS_OUT	Out = (PS_OUT)0;
+
+	In.vTexUV.x *= g_vFlip.x;
+	In.vTexUV.y *= g_vFlip.y;
+
+	float2 spriteUV = float2(In.vCurTile.x + In.vTexUV.x * g_vTileSize.x,
+		In.vCurTile.y + In.vTexUV.y * g_vTileSize.y);
+
+	vector	vMask = g_MaskTexture.Sample(LinearSampler, spriteUV);
+
+	Out.vColor = g_vColor;
+
+	Out.vColor.a = vMask.r;
+	Out.vColor.a *= In.vAdditional.y;
+
+	Out.vColor.a *= g_fAlpha;
+
+	vector	vNoise = g_NoiseTexture1.Sample(LinearSampler, In.vTexUV);
+
+	float fDissolveFactor = vNoise.r;
+	float fDissolveAmount = saturate((fDissolveFactor - g_fDissolveAmount) * 10.f);
+
+	if (fDissolveAmount <= 0 && g_fDissolveAmount != 0)
+		discard;
+
+	if (Out.vColor.a < 0.1f)
+		discard;
+
+	return Out;
+}
+
 technique11 DefaultTechnique
 {		
 	pass General		// 0
@@ -801,5 +834,29 @@ technique11 DefaultTechnique
 		HullShader = NULL;
 		DomainShader = NULL;
 		PixelShader = compile ps_5_0 PS_DIFF_CALCBLUE_SPRITE();
+	}
+
+	pass MaskColorDissolveSprite		// 17
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_Default, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASK_COLOR_DISSOLVE_SPRITE();
+	}
+
+	pass MaskColorSpriteNoZWrite		// 18
+	{
+		SetRasterizerState(RS_CULL_NONE);
+		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetDepthStencilState(DS_None_ZEnable, 0);
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		HullShader = NULL;
+		DomainShader = NULL;
+		PixelShader = compile ps_5_0 PS_MASKCOLORSPRITE();
 	}
 }

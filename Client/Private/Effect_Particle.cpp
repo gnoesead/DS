@@ -235,15 +235,23 @@ void CEffect_Particle::Check_PassIndex(void)
 	{
 		m_iPassIndex = 3;
 
-		if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
-			m_iPassIndex = 13;
-
 		if (m_eEffectDesc.isTextureSheetAnimation)
 			m_iPassIndex = 4;
+
+		if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
+		{
+			m_iPassIndex = 13;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 18;
+		}
 
 		if (nullptr != m_pTextures[TEX_NOISE])
 		{
 			m_iPassIndex = 7;
+
+			if (m_eEffectDesc.isTextureSheetAnimation)
+				m_iPassIndex = 17;
 
 			if (m_eEffectDesc.eTextureShaderOption[TEX_DIFFUSE] == OPT_NO_ZWRITE)
 				m_iPassIndex = 14;

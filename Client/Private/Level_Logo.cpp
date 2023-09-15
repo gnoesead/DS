@@ -772,6 +772,36 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Tanjiro_Aurora_Particle0");
 		return E_FAIL;
 	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle0.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle1.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle2.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle3.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle3");
+		return E_FAIL;
+	}
 #pragma endregion
 
 #pragma region AKAZA
