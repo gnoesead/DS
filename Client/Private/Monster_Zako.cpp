@@ -635,6 +635,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.04
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -643,6 +644,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{// 0.25
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index)
 			{// 0.52
@@ -655,6 +657,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			else if (3 == m_iEvent_Index)
 			{// 1.75
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -664,6 +667,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.45
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -673,6 +677,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.04
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -683,6 +688,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.05
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -693,6 +699,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{// 0.00
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -779,7 +786,7 @@ void CMonster_Zako::Animation_Control(_double dTimeDelta)
 
 		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
 			m_isDead = true;
-				
+
 	}
 	else
 	{
@@ -1434,7 +1441,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.3f;
-				
+
 				int n = Random::Generate_Int(0, 2);
 
 				if (n == 0)
@@ -1497,7 +1504,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 				m_iSmallHit_Index = 0;
 			}
 		}
-		Play_Sound_Dmg(0, 0.7);
+		Play_Sound_Dmg(0, 0.7f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -1541,7 +1548,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 		}
 		//pGameInstance->Time_Slow(0.3, 0.15);
-		Play_Sound_Dmg(0, 0.7);
+		Play_Sound_Dmg(0, 0.7f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1570,7 +1577,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 		}
 		//pGameInstance->Time_Slow(0.23, 0.3);
-		Play_Sound_Dmg(0, 0.7);
+		Play_Sound_Dmg(0, 0.7f);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1622,7 +1629,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 		}
 
-		Play_Sound_Dmg(1, 0.7);
+		Play_Sound_Dmg(1, 0.7f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1666,7 +1673,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 		//pGameInstance->Time_Slow(0.6, 0.4);
 
-		Play_Sound_Dmg(1, 0.7);
+		Play_Sound_Dmg(1, 0.7f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1693,7 +1700,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isSurging = true;
 
 
-		Play_Sound_Dmg(1, 0.7);
+		Play_Sound_Dmg(1, 0.7f);
 	}
 #pragma endregion
 
@@ -1715,13 +1722,13 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isHekireki_Hit = true;
 		m_dHekireki_Hit = 0.0;
 
-		
-		
+
+
 		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 		EffectWorldDesc.fScale = 1.f;
 		EffectWorldDesc.vPosition.y += 0.3f;
 		CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
-		
+
 
 		if (m_isJumpOn == false)
 		{
@@ -1743,7 +1750,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		//pGameInstance->Time_Slow(0.2, 0.1);
-		Play_Sound_Dmg(0, 0.7);
+		Play_Sound_Dmg(0, 0.7f);
 	}
 
 
@@ -1891,7 +1898,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 
 }
 
-void CMonster_Zako::Play_Sound_Dmg(_int iType, _double vol)
+void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
 {
 	//small
 	if (iType == 0)
