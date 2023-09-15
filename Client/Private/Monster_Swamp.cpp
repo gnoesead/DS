@@ -501,6 +501,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_BIG);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("whoosh_08.ogg");	
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.4f);
 			}
 		}
 
@@ -1732,6 +1735,8 @@ void CMonster_Swamp::Animation_Control_Piohyo(_double dTimeDelta)
 		m_isFrist_Atk_Pattern = false;
 
 		m_pModelCom->Set_Animation(ANIM_ANGRY_CUTSCENE);
+
+		m_bPart2 = true;
 	}
 }
 
@@ -2655,6 +2660,7 @@ void CMonster_Swamp::Play_Sound_Dmg(_int iType, _float vol)
 
 void CMonster_Swamp::Dialog_Update(_double dTimeDelta)
 {
+
 	m_dDialogAccTime += dTimeDelta;
 
 	if (Event_Time(dTimeDelta, 7.f, m_dDialogAccTime))
@@ -2739,6 +2745,20 @@ void CMonster_Swamp::Dialog_Update(_double dTimeDelta)
 		Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("(다음에 뭘 할지 예측해! 그리고 반응하는 거야!)"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp2.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+
+		m_dDialogAccTime = 0.0;
+	}
+
+	if (m_bPart2)
+	{
+		m_dDialogAccTime2 += dTimeDelta;
+
+		if (Event_Time(dTimeDelta, 0.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("크으으으읔으읔으으..."));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_kkkkkggh.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
 	}
 
 }

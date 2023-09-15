@@ -259,6 +259,8 @@ private:
 	// »ç¿îµå
 	_bool	m_bRiverSound = { false };
 
+	_bool	m_bPart2 = { false };
+
 private:
 	HRESULT Add_Components();
 	HRESULT Add_Components_Model();
