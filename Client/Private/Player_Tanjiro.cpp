@@ -138,14 +138,14 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_bSmell_Detection = true;
-		m_pRendererCom->Set_GrayScale();
+		m_pRendererCom->Set_GrayScale_On(true);
 	}
 	Smell_Detection(dTimeDelta);
 
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
 		//m_pRendererCom->Set_RadialBlur();
-		m_pRendererCom->Set_RadialBlur();
+		m_pRendererCom->Set_GrayScale_On(false);
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)

@@ -60,7 +60,7 @@ HRESULT CWebShot::Initialize(void* pArg)
 		m_pTransformCom->Set_Look(m_WebDesc.vDir);
 	}
 
-	m_fTextureOrder = 999.f;
+	
 
 	//Jik
 	if (m_WebDesc.iWebTexIndex == 32)
@@ -82,7 +82,7 @@ void CWebShot::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-	m_fTextureOrder = 999.f;
+	
 	Tick_For_Index(dTimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
