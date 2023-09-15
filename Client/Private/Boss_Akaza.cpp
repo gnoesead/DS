@@ -60,8 +60,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
-		m_StatusDesc.fHp = 400.f;
-		m_StatusDesc.fHp_Max = 400.f;
+		m_StatusDesc.fHp = 100.f;
+		m_StatusDesc.fHp_Max = 100.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -1665,7 +1665,7 @@ void CBoss_Akaza::Update_Phase_1(_double dTimeDelta)
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-		pGameInstance->Time_Slow(0.5, 0.5);
+		pGameInstance->Time_Slow(1.0, 0.1);
 		Safe_Release(pGameInstance);
 		
 	}
@@ -1775,7 +1775,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
-			pGameInstance->Time_Slow(0.5, 0.5);
+			pGameInstance->Time_Slow(1.0, 0.05);
 			Safe_Release(pGameInstance);
 		}		
 
@@ -2104,7 +2104,7 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 				{
 					if (1 <= m_iRandomPatternNum && m_iRandomPatternNum < 9)
 					{
-						m_iTriggerCnt = 8;
+						m_iTriggerCnt = 2;
 						m_bTrigger = false;
 					}
 					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
@@ -2125,17 +2125,17 @@ void CBoss_Akaza::Trigger_Interact_Phase_2(_double dTimeDelta)
 						m_iTriggerCnt = 2;
 						m_bTrigger = false;
 					}
-					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 7)
+					if (4 <= m_iRandomPatternNum && m_iRandomPatternNum < 5)
 					{
 						m_iTriggerCnt = 3;
 						m_bTrigger = false;
 					}
-					if (7 <= m_iRandomPatternNum && m_iRandomPatternNum < 10)
+					if (5 <= m_iRandomPatternNum && m_iRandomPatternNum < 9)
 					{
 						m_iTriggerCnt = 4;
 						m_bTrigger = false;
 					}
-					if (10 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
+					if (9 <= m_iRandomPatternNum && m_iRandomPatternNum <= 12)
 					{
 						m_iTriggerCnt = 5;
 						m_bTrigger = false;
@@ -3444,7 +3444,7 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 			m_iTriggerCnt = 0;
 			m_dAwakeTime = 0.0;
 			m_eCurPhase = PHASE_2;
-			CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
+			//CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
 		}
 		m_bNoDmg = false;
 
@@ -3771,9 +3771,13 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 						CAtkCollider::TYPE_BLOW, m_pTransformCom->Get_State(CTransform::STATE_LOOK), 10.f);
 
 					Camera_Shake(1.0, 1000);
+					m_pRendererCom->Set_RadialBlur();
 
 				}
-
+				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.70, dTimeDelta))
+				{
+					m_pRendererCom->Set_RadialBlur();
+				}
 				Pos.y = m_fLand_Y;
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
 

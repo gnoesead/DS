@@ -1438,7 +1438,7 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-		pGameInstance->Time_Slow(0.5, 0.5);
+		pGameInstance->Time_Slow(1.0, 0.1);
 		Safe_Release(pGameInstance);
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_bFirstAwake == false)
@@ -1519,7 +1519,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
-			pGameInstance->Time_Slow(0.5, 0.5);
+			pGameInstance->Time_Slow(1.0, 0.1);
 			Safe_Release(pGameInstance);
 
 			m_bDead_Trigger = true;
@@ -2675,6 +2675,7 @@ void CBoss_Kyogai::Update_Hit_GetUp(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_STEP_FRONT2;
 		Trigger_JumpStep();
 	}
+	Pos_FixY();
 
 }
 
