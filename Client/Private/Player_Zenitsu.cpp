@@ -253,7 +253,7 @@ HRESULT CPlayer_Zenitsu::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-			{
+			{				
 				if ((m_isSkilling == false) && (m_Moveset.m_iAwaken == 0)) { // 기본상태
 					m_pShaderCom->Begin(1);
 				}

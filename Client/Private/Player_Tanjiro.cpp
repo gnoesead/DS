@@ -734,7 +734,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 

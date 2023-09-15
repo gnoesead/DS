@@ -1744,7 +1744,7 @@ technique11 DefaultTechnique
 	pass MaskRamp	// 4
 	{
 		SetRasterizerState(RS_CULL_NONE);
-		SetBlendState(BS_AlphaBlending, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
+		SetBlendState(BS_AlphaBlendingOne, float4(0.f, 0.f, 0.f, 1.f), 0xffffffff);
 		SetDepthStencilState(DS_Default, 0);
 		
 		SetDepthStencilState(DS_None_ZEnable, 0);

@@ -448,7 +448,11 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_ShadowBlur");
 		return E_FAIL;
 	}*/
-
+	if (FAILED(Render_Effect_Envrionment()))
+	{
+		MSG_BOX("Failed to Render_Blend");
+		return E_FAIL;
+	}
 	if (FAILED(Render_NonBlend()))
 	{
 		MSG_BOX("Failed to Render_NonBlend");
@@ -537,11 +541,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
 	}
-	if (FAILED(Render_Effect_Envrionment()))
-	{
-		MSG_BOX("Failed to Render_Blend");
-		return E_FAIL;
-	}
+	
 	/*if (FAILED(Render_Effect()))
 	{
 	   MSG_BOX("Failed to Render_Effect");

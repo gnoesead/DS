@@ -745,6 +745,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 			if (1 == m_iEvent_Index) // 0.75
 			{
+				dLongLifeTime = 0.30;
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
