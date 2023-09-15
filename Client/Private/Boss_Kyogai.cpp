@@ -4423,6 +4423,9 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
+	
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fFar2", &m_fFar2, sizeof(_float))))
+		return E_FAIL;
 	return S_OK;
 }
 

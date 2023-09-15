@@ -2296,7 +2296,7 @@ void CRenderer::Shadow_House_Setting()
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 		if (m_bRoomTurn == true)
 		{
-			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			vLightEye = vPlayerPos + XMVectorSet(-1.f, 4.f, -1.f, 1.f);
 			fAngle = 20.f;
 		}
 		else
