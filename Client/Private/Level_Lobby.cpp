@@ -1934,8 +1934,6 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 #pragma endregion
 
 
-
-
 #pragma region DS_SHAREEFFECT
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Stomp_Big.bin"))))
 	{
