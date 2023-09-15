@@ -317,7 +317,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0.10
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 			}
@@ -328,7 +328,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 			if (2 == m_iEvent_Index)
 			{//0.30
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 			}
@@ -339,7 +339,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 			if (4 == m_iEvent_Index)
 			{//0.50
-				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws_R", m_pTransformCom);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 			}
@@ -350,7 +350,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			}
 			if (6 == m_iEvent_Index)
 			{//0.80
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 			}
@@ -365,10 +365,10 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x = 0.2f;
 				EffectWorldDesc.fScale = 1.2f;
 
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectWorldDesc);
 
 				EffectWorldDesc.vPosition.x = -0.2f;
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectWorldDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 
@@ -383,7 +383,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.1
@@ -439,7 +439,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0.1
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_L", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.24
@@ -452,7 +452,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0.1
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_Right", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_R", m_pTransformCom);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.28
@@ -490,10 +490,10 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x = 0.2f;
 				EffectWorldDesc.fScale = 1.2f;
 
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectWorldDesc);
 
 				EffectWorldDesc.vPosition.x = -0.2f;
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 
@@ -501,7 +501,6 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{//0.45
-
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin_Wind", m_pTransformCom);
 			}
@@ -893,78 +892,87 @@ void CMonster_Zako::Idle_ATK_Pattern_Controler(_double dTimeDelta)
 		PATTERN_BUTTERFLY, PATTERN_CLAWCROSS,
 		PATTERN_SPINMOVE, PATTERN_MOVE,
 		PATTERN_END };*/
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
+
+	if (pGameInstance->Get_DIKeyState(DIK_SPACE))
 	{
-		m_iAttackIndex = 10;
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
+		{
+			m_iAttackIndex = 10;
 
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_CLAWS;
+			m_eCurPattern = PATTERN_CLAWS;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_2))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_TACKLE;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_3))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_SPINKICK;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_4))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_JUMPKICK;
+		}
 	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5))
+	
+	if (pGameInstance->Get_DIKeyState(DIK_LSHIFT))
 	{
-		m_iAttackIndex = 10;
+		if (pGameInstance->Get_DIKeyDown(DIK_1))
+		{
+			m_iAttackIndex = 10;
 
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
 
-		m_eCurPattern = PATTERN_TACKLE;
+			m_eCurPattern = PATTERN_BUTTERFLY;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_2))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_CLAWCROSS;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_3))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_SPINMOVE;
+		}
+		else if (pGameInstance->Get_DIKeyDown(DIK_4))
+		{
+			m_iAttackIndex = 10;
+
+			m_eCurState = STATE_ATTACK;
+			m_isFirst_AtkPattern = true;
+
+			m_eCurPattern = PATTERN_MOVE;
+		}
 	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_SPINKICK;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_JUMPKICK;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_BUTTERFLY;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD9))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_CLAWCROSS;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPADSLASH))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_SPINMOVE;
-	}
-	else if (pGameInstance->Get_DIKeyDown(DIK_NUMPADSTAR))
-	{
-		m_iAttackIndex = 10;
-
-		m_eCurState = STATE_ATTACK;
-		m_isFirst_AtkPattern = true;
-
-		m_eCurPattern = PATTERN_MOVE;
-	}
+	
 	Safe_Release(pGameInstance);
 #pragma endregion
 

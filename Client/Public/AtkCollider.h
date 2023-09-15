@@ -8,9 +8,9 @@
 
 BEGIN(Engine)
 
-#ifdef _DEBUG
 class CRenderer;
 class CGameInstance;
+#ifdef _DEBUG
 #endif // _DEBUG
 END
 

@@ -1287,7 +1287,7 @@ HRESULT CRenderer::Render_EffectBloom()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
+	/*if (pGameInstance->Get_DIKeyState(DIK_LCONTROL))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_UP))
 		{
@@ -1305,7 +1305,7 @@ HRESULT CRenderer::Render_EffectBloom()
 		{
 			m_fBlurWeight -= 0.05f;
 		}
-	}
+	}*/
 	Safe_Release(pGameInstance);
 	if (FAILED(m_pEffectShader->SetUp_RawValue("g_BlurWeight", &m_fBlurWeight, sizeof(_float))))
 		return E_FAIL;
