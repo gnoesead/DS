@@ -1407,11 +1407,19 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 		}
 	}
 
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_IDLE)
+	{
+		if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_S) || pGameInstance->Get_DIKeyState(DIK_D))
+		{
+			m_Moveset.m_Down_Battle_Run = true;
+		}
+	}
+
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN)
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
 		m_dSound_Move += dTimeDelta;
 		if (m_dSound_Move > 0.16f)
 		{
@@ -1454,9 +1462,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 				}
 			}
 		}
-		Safe_Release(pGameInstance);
 	}
-
+	Safe_Release(pGameInstance);
 
 	if (m_Moveset.m_Up_Battle_Run)
 	{
