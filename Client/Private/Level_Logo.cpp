@@ -553,7 +553,7 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}*/
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 40)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Death_Particle.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Death_Particle");
 		return E_FAIL;
@@ -776,6 +776,36 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Aurora_Particle0.bin"), true, 30)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Aurora_Particle0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_Particle.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle0.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle0");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle1.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle2.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super3_ParticleCircle3.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super3_ParticleCircle3");
 		return E_FAIL;
 	}
 #pragma endregion

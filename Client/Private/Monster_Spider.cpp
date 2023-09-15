@@ -260,27 +260,14 @@ void CMonster_Spider::Animation_Control(_double dTimeDelta)
 {
 	if (m_isDeath_Motion)
 	{
-		m_bMonsterDead = true;
-		m_fDeadTime += (_float)dTimeDelta;
-
-		m_dDeadParticleAccTime += dTimeDelta;
-		m_dDeadSmokeAccTime += dTimeDelta;
-
-		if (m_fDeadTime > 1.8f && m_fDeadTime < 4.f)
+		m_dDelay_Die += dTimeDelta;
+		if (m_dDelay_Die > m_fDeadTime)
 		{
-			if (m_fDeadTime > 2.2f)
-			{
-				if (m_dDeadParticleAccTime > 1.4)
-				{
-					m_dDeadParticleAccTime = 0.0;
-					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-					CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
-				}
-			}
+			m_isSpiderDead = true;
+			m_dDelay_Die = 0.0;
+			m_isDeath_Motion = false;
 		}
-
-		if (m_fDeadTime > 5.0f) // Á×´Â ½Ã°£ Á¶Àý ÇØµµ µÊ
-			m_isDead = true;
+		m_pColliderCom[COLL_SPHERE]->Set_Death(true);
 	}
 	else
 	{
@@ -306,7 +293,7 @@ void CMonster_Spider::Animation_Control_Crawling(_double dTimeDelta)
 {
 	m_pModelCom->Set_Animation(ANIM_RUN);
 
-	if (Calculate_Distance() < 20.0f)
+	if (Calculate_Distance() < 22.0f)
 		m_isSpider_Start = true;
 
 	if (m_isSpider_Start)
