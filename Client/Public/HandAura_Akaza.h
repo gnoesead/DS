@@ -46,6 +46,8 @@ private:
 
 	_double		m_dAccTime = { 0.0 };
 
+	_int		m_Test = { 0 };
+
 private:
 	CModel* m_pModelCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
