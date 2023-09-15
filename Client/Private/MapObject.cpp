@@ -2,7 +2,6 @@
 #include "..\Public\MapObject.h"
 
 #include "GameInstance.h"
-#include "MonsterManager.h"
 
 CMapObject::CMapObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMasterEffect(pDevice, pContext)
@@ -196,13 +195,6 @@ HRESULT CMapObject::SetUp_ShaderResources()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))
-		return E_FAIL;
-
-	if (CMonsterManager::GetInstance()->Get_RoomTurn())
-		m_fFar2 = 0.f;
-	else
-		m_fFar2 = 400.f;
-	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fFar2", &m_fFar2, sizeof _float)))
 		return E_FAIL;
 
 	/*if (FAILED(m_pShaderCom->SetUp_RawValue("g_fAlpha", &m_fAlpha, sizeof _float)))

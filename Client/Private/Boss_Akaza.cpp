@@ -588,7 +588,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{// 2.07
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.x = 0.01f;
+				EffectWorldDesc.vPosition.y = 0.23f;
+				EffectWorldDesc.vPosition.z = 0.16f;
+				EffectWorldDesc.fScale = 1.2f;
 
+				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye_Black", m_pTransformCom, &EffectWorldDesc);
+				m_pRendererCom->Set_BackLight();
 			}
 			if (1 == m_iEvent_Index)
 			{// 2.10
@@ -624,6 +631,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye_Black", m_pTransformCom, &EffectWorldDesc);
 
 				m_isAuroraOn[0] = true;
 			}
@@ -3574,7 +3582,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		vBackLightDir = Compute::Dir_FixY(vLightAt, vLightEye);
 		m_pTransformCom->LerpVector(vBackLightDir, 1.f);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(129.037f, m_fLand_Y, 133.148f, 1.f));
-		m_pRendererCom->Set_BackLight();
+		//m_pRendererCom->Set_BackLight();
 	}
 	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_PUSHAWAY) == true)
 	{
@@ -3584,11 +3592,14 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.65, dTimeDelta))
+	{
+		m_pRendererCom->Set_BackLight();
+	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.970, dTimeDelta))
 	{
 		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vSavePos);
-		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
-		m_pRendererCom->Set_BackLight();
+		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));		
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
