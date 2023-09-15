@@ -112,8 +112,6 @@ void CWebShot::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT_ENVIRONMENT, this)))
 		return;
 
