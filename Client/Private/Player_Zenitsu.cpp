@@ -934,8 +934,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 
-				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
-				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+				//CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				//CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 0.6f;
