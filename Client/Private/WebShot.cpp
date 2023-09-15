@@ -20,12 +20,12 @@
 #include "CustomParticle.h"
 
 CWebShot::CWebShot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CMasterEffect(pDevice, pContext)
+	: CGameObject(pDevice, pContext)
 {
 }
 
 CWebShot::CWebShot(const CWebShot& rhs)
-	: CMasterEffect(rhs)
+	: CGameObject(rhs)
 {
 }
 
@@ -112,7 +112,9 @@ void CWebShot::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
-	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EffectNoBloom, this)))
+	
+
+	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_EFFECT_ENVIRONMENT, this)))
 		return;
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

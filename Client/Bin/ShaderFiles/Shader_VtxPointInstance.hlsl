@@ -202,7 +202,7 @@ PS_OUT  PS_Sprite_Ramp(PS_IN _In)
 
 	return Out;
 };
-
+	
 technique11 DefaultTechnique
 {
 	pass General
