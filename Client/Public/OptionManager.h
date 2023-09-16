@@ -34,6 +34,9 @@ public:
 	void Set_Select_Num(_int num);
 	_int Get_Select_Num();
 
+	void Set_Is_Go_Lobby(_bool Is);
+	_bool Get_Is_Go_Lobby();
+
 public: // 可记 楷悼
 	void Set_Camera_Option(_uint i, _int num);
 	_int Get_Camera_Option(_uint i);
@@ -54,6 +57,9 @@ private:
 	_bool  m_Is_Reset = { false };
 
 	_int   m_Select_Num = { 0 };
+
+	_bool m_Is_Go_Lobby = { false };
+
 
 
 private: // 可记 楷悼

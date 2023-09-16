@@ -156,7 +156,7 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 // Battle_Target
 	m_Is_Battle = CFadeManager::GetInstance()->Get_Is_Battle();
 
-	if (pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster"), 0) != nullptr) {
+	if ((_int)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) != 0) {
 
 		m_Battle_Target_MaxNum = (_int)pGameInstance->Get_GameObject_ListSize(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Monster")) - 1;
 
@@ -300,6 +300,15 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 			m_bIs_Side_Off = false;
 		}
 
+		if (m_Lock_On_Is_Boss == false && m_Battle_Target_MaxNum > 0) {
+			m_bIs_Monster_Solo = false;
+		}
+		
+		if (m_Lock_On_Is_Boss == false && m_Battle_Target_MaxNum <= 0) {
+			m_bIs_Monster_Solo = true;
+		}
+
+
 		if (PlayerIndex == 0 && m_bIs_Combo_On == true && m_bIs_Side_Off == false) {
 			m_Hekireki_Dir = 1.f;
 		}
@@ -389,13 +398,25 @@ void CCamera_Free::LateTick(_double dTimeDelta)
 				// Side
 				if (m_bIs_Combo_On == true && m_bIs_Side_Off == false) {
 
-					m_fDistance = { 5.3f + CCameraManager::GetInstance()->Get_Side_Zoom()};
-					m_vOffSet = { 0.f, 1.1f, 0.f, 0.f };
-					m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
-					m_fLookDamping = { 7.f };
-					m_fDamping = { 6.f };
+					if (m_Lock_On_Is_Boss == false && m_bIs_Monster_Solo == false) {
+						m_fDistance = { 6.f + m_Zoom };
+						m_vOffSet = { 0.f, 1.8f, 0.f, 0.f };
+						m_vLookOffSet = { 0.f, 1.f, 0.f, 0.f };
+						m_fLookDamping = { 7.f };
+						m_fDamping = { 5.f };
 
-					SideCamera(dTimeDelta);
+						BattleCamera(dTimeDelta);
+					}
+					else {
+						m_fDistance = { 5.3f + CCameraManager::GetInstance()->Get_Side_Zoom() };
+						m_vOffSet = { 0.f, 1.1f, 0.f, 0.f };
+						m_vLookOffSet = { 0.f, 0.f, 0.f, 0.f };
+						m_fLookDamping = { 7.f };
+						m_fDamping = { 6.f };
+
+						SideCamera(dTimeDelta);
+					}
+					
 				}
 				// Origin
 				else {
