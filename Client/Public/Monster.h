@@ -135,6 +135,7 @@ protected:
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iLoopCount = { 0 };
+	_uint	m_iSoundCount = { 0 };
 
 	//서지평타컷씬 히트중
 	_bool	m_isSurging = { false };
@@ -143,7 +144,6 @@ protected:
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
-
 
 protected:
 	// Outline Default

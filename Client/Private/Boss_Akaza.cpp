@@ -1092,15 +1092,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 #pragma endregion °øÁßÀåÇ³ ³¡
 
 #pragma region ´Þ¸®±â & Á¡ÇÁ & ÂøÁö µî
-
-		if (59 == m_pModelCom->Get_iCurrentAnimIndex()) // Jump
-		{
-			if (0 == m_iEvent_Index) // 0.06
-			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
-			}
-		}
-
+				
 		if (62 == m_pModelCom->Get_iCurrentAnimIndex()) // ÂøÁö
 		{
 			if (0 == m_iEvent_Index) // 0.03
@@ -1120,40 +1112,18 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 			}
-		}
+		}		
 
-		if (67 == m_pModelCom->Get_iCurrentAnimIndex()) // Run End
-		{
-			if (0 == m_iEvent_Index) // 0.08
-			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
-				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
-			}
-		}
-
-		if (72 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		if (ANIM_STEP_BEHIND == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
 		{
 			if (0 == m_iEvent_Index) // 0.00
 			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
-				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
-				EffectSideStepDesc.fScale = 1.8f;
-				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				//Sound
+				Step_Sound(dVol);
 			}
-		}
+		}	
 
-		if (73 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
-		{
-			if (0 == m_iEvent_Index) // 0.00
-			{
-				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
-				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
-				EffectSideStepDesc.fScale = 1.8f;
-				//CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
-			}
-		}
-
-		if (74 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		if (ANIM_STEP_LEFT == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
 		{
 			if (0 == m_iEvent_Index) // 0.00
 			{
@@ -1161,10 +1131,11 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				Step_Sound(dVol);
 			}
 		}
 
-		if (75 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		if (ANIM_STEP_LEFT2 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
 		{
 			if (0 == m_iEvent_Index) // 0.00
 			{
@@ -1172,10 +1143,11 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				Step_Sound(dVol);
 			}
 		}
 
-		if (76 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		if (ANIM_STEP_RIGHT == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
 		{
 			if (0 == m_iEvent_Index) // 0.00
 			{
@@ -1183,16 +1155,19 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				Step_Sound(dVol);
 			}
 		}
 
-		if (77 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
+		if (ANIM_STEP_RIGHT2 == m_pModelCom->Get_iCurrentAnimIndex()) // Side Step
 		{
 			if (0 == m_iEvent_Index) // 0.2
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
+				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				Step_Sound(dVol);
 			}
 		}
 
@@ -1624,10 +1599,7 @@ void CBoss_Akaza::Update_State(_double dTimeDelta)
 		break;
 	case CBoss_Akaza::STATE_DASHPUNCH:
 		Update_DashPunch(dTimeDelta);
-		break;
-	case CBoss_Akaza::STATE_GUARD:
-		Update_Guard(dTimeDelta);
-		break;
+		break;	
 	case CBoss_Akaza::STATE_AIRGUN:
 		Update_AirGun(dTimeDelta);
 		break;
@@ -2848,10 +2820,6 @@ void CBoss_Akaza::Update_DashPunch(_double dTimeDelta)
 
 }
 
-void CBoss_Akaza::Update_Guard(_double dTimeDelta)
-{
-
-}
 
 void CBoss_Akaza::Update_AirGun(_double dTimeDelta)
 {
@@ -3132,6 +3100,10 @@ void CBoss_Akaza::Update_JumpAirGun(_double dTimeDelta)
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_JUMPAIRGUN, 0.25, dTimeDelta))
 	{
 		JumpStop(2.0);
+		
+	}
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_JUMPAIRGUN, 0.45, dTimeDelta))
+	{
 		//Sound
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Skill_Kusiki.mp3");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, 0.5);
@@ -4480,6 +4452,40 @@ void CBoss_Akaza::Dialog_Update(_double dTimeDelta)
 			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Onore.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
 		}
+	}
+}
+
+void CBoss_Akaza::Step_Sound(_double dSound)
+{
+	if (m_iSoundCount == 0)
+	{
+		m_iSoundCount++;
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Ha.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
+	}
+	else if (m_iSoundCount == 1)
+	{
+		m_iSoundCount++;
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_He.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
+	}
+	else if (m_iSoundCount == 2)
+	{
+		m_iSoundCount++;
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Heup.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
+	}
+	else if (m_iSoundCount == 3)
+	{
+		m_iSoundCount++;
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Hu.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
+	}
+	else if (m_iSoundCount == 4)
+	{
+		m_iSoundCount = 0;
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Hup.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
 	}
 }
 
