@@ -1503,6 +1503,54 @@ void CCharacter::Play_Sound_BodyFall()
 		iIdx = 0;
 }
 
+void CCharacter::Play_Sound_Move(_double dTimeDelta, _float loop)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	//사운드
+	m_dSound_Move += dTimeDelta;
+	if (m_dSound_Move > loop) // 0.16걷기, 0.1달리기
+	{
+		m_dSound_Move = 0.0;
+
+		if (m_iSound_Move_Index == 0)
+		{
+			m_iSound_Move_Index = 1;
+
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+			}
+			else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+			}
+		}
+		else if (m_iSound_Move_Index == 1)
+		{
+			m_iSound_Move_Index = 0;
+
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			{
+				_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+				Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+			}
+			else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+			}
+		}
+	}
+	Safe_Release(pGameInstance);
+}
+
 void CCharacter::Set_CharacterDialog(_double dTime, const _tchar* pName, const _tchar* pDialog1, const _tchar* pDialog2)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

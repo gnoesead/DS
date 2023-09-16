@@ -119,6 +119,8 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.4);
+
 	return S_OK;
 }
 
@@ -1280,13 +1282,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-
-
-			}
+			
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
@@ -1305,50 +1301,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			/*
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-				CGameInstance* pGameInstance = CGameInstance::GetInstance();
-				Safe_AddRef(pGameInstance);
-
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-					}
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-					}
-				}
-				Safe_Release(pGameInstance);
-			}*/
+			
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -1629,46 +1582,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
 	{
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.16f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-				}
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-				}
-			}
-		}
+		Play_Sound_Move(dTimeDelta, 0.16f);
 	}
 	Safe_Release(pGameInstance);
 
@@ -2216,52 +2130,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	Go_Straight_Constant(dTimeDelta, 80, 4.5f * m_fScaleChange);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.1f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-
-
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-		}
-		Safe_Release(pGameInstance);
+		Play_Sound_Move(dTimeDelta, 0.1f); // 0.1
 	}
 
 

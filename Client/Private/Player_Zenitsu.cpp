@@ -1033,7 +1033,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += 1.9f;
+				EffectWorldDesc.vPosition.x += 1.5f;
 
 				EffectWorldDesc.vRotation.y = -90.f;
 
@@ -1064,7 +1064,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += -1.9f;
+				EffectWorldDesc.vPosition.x += -1.5f;
 
 				EffectWorldDesc.vRotation.y = 90.f;
 
@@ -1080,6 +1080,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += -0.3f;
+
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
 
@@ -1110,6 +1112,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				m_pRendererCom->Set_BloomRatio(1.55f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
+
+
+				// 어웨이크 파티클
+				EffectWorldDesc.vPosition.y += 0.2f;
+				//CEffectPlayer::Get_Instance()->Play("Zen_Particle", m_pTransformCom, &EffectWorldDesc);
+
+
 			}
 		}
 
@@ -1239,53 +1248,6 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			else if (2 == m_iEvent_Index) // 0.38
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			/*
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-
-
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-				}
-			}
-			Safe_Release(pGameInstance);*/
 		}
 
 		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
@@ -1455,48 +1417,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN)
 	{
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.16f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-
-
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-			}
-		}
+		Play_Sound_Move(dTimeDelta, 0.16f);
 	}
 	Safe_Release(pGameInstance);
 
@@ -2188,50 +2109,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 46)
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.1f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-		}
-		Safe_Release(pGameInstance);
+		Play_Sound_Move(dTimeDelta, 0.1f); // 0.1
 	}
 
 
