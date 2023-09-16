@@ -268,9 +268,9 @@ private: //패턴 함수들
 	void Update_Interact(_double dTimeDelta);
 	void Update_Begin(_double dTimeDelta);
 	void Update_Escape(_double dTimeDelta);
-	void Update_DashPunch(_double dTimeDelta);
+	void Update_DashPunch(_double dTimeDelta); // 보이스
 	void Update_Guard(_double dTimeDelta);
-	void Update_AirGun(_double dTimeDelta);
+	void Update_AirGun(_double dTimeDelta); // 보이스
 	void Update_PushAway(_double dTimeDelta);
 	void Update_Nachim(_double dTimeDelta);
 	void Update_ComboPunch(_double dTimeDelta);
@@ -282,11 +282,10 @@ private: //패턴 함수들
 	void Update_NextPhase2(_double dTimeDelta);
 	void Update_NextPhase3(_double dTimeDelta);
 	void Update_Heal(_double dTimeDelta);
-	void Update_Awake(_double dTimeDelta);
+	void Update_Awake(_double dTimeDelta); // 보이스 
 	void Update_Awake_ComboPunch(_double dTimeDelta);
 
-	void Update_Nachim_ComboPunch(_double dTimeDelta);
-	void Update_Nachim_AirGun(_double dTimeDelta);
+	void Update_Nachim_ComboPunch(_double dTimeDelta);	
 	void Update_Awake_Cinematic(_double dTimeDelta);
 
 	void Update_Train_JumpStomp(_double dTimeDelta);
@@ -304,6 +303,8 @@ private: //패턴 함수들
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 	void Update_Hit_Hekireki(_double dTimeDelta);
 	void Update_Hit_Dead(_double dTimeDelta);
+
+	void	Dialog_Update(_double dTimeDelta);
 
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
