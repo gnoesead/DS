@@ -744,11 +744,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(0);
 
 				CCameraManager::GetInstance()->Side_Zoom_Out(2.f, 2.f);
-
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Mesh", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Tex", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Particle_SplashCircle", m_pTransformCom);
 
@@ -898,6 +899,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
+				//CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_Particle_rad1", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
@@ -913,11 +916,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (3 == m_iEvent_Index)
 			{
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
-			}
-			if (4 == m_iEvent_Index)
-			{
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_Particle_rad2", m_pTransformCom);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 			}
@@ -926,7 +925,6 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
 			}

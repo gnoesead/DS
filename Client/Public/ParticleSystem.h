@@ -56,6 +56,9 @@ public:
 	CTransform* Get_Transform(void) {
 		return m_pTransformCom;
 	}
+	_bool Get_isFinished(void) {
+		return m_bFinished;
+	}
 
 
 public:
@@ -108,6 +111,9 @@ public:
 	void Set_ParentPartsObject(class CEffectPartsObject* pObj) {
 		m_pParentObject = pObj;
 	}
+	void Set_isFinished(_bool isFinished) {
+		m_bFinished = isFinished;
+	}
 
 
 public:
@@ -120,6 +126,7 @@ public:
 	void Add_Parts(CParticleSystem* pParticleSystem) {
 		m_PartEffects.push_back(pParticleSystem);
 	}
+	void Collect_Parts();
 	void Play_Parts(_bool isPlaying);
 	void Stop_Parts(void);
 	void Clear(void);
@@ -152,6 +159,7 @@ private:
 	_double					m_dTimeAccCycle = { 0.0 };
 	_bool					m_bCollect = { false };
 	_bool					m_bInitialTransformSetting = { true };
+	_bool					m_bFinished = { false };
 
 	_bool					m_isParticle = { false };
 	const char*				m_pTag = { nullptr };
