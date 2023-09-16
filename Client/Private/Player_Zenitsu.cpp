@@ -157,6 +157,7 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
+	
 }
 
 
@@ -253,12 +254,12 @@ HRESULT CPlayer_Zenitsu::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-			{
+			{				
 				if ((m_isSkilling == false) && (m_Moveset.m_iAwaken == 0)) { // 기본상태
 					m_pShaderCom->Begin(1);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken == 0)) { // 노 개방 스킬 썻을 때
-					m_pShaderCom->Begin(6);
+					m_pShaderCom->Begin(9);
 				}
 				else if ((m_isSkilling == false) && (m_Moveset.m_iAwaken != 0)) { // 개방 했을 때
 					m_pShaderCom->Begin(6);
@@ -3343,6 +3344,10 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
 
+	if (m_Moveset.m_iAwaken != 0 || m_isSkilling == true)
+	{
+		m_fOutlineThickness = 2.0f;
+	}
 	// OutlineThickness
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

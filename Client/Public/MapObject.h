@@ -95,6 +95,7 @@ protected:
 	_float					m_fTimeAcc = { 0.0f };
 	_float2					m_vPanningSpeed = { 0.f , 0.f };
 	_float					m_fUVRatio = { 0.f };
+	_float					m_fFar2 = { 400.f };
 
 	_float					m_fAlpha = { 1.f };
 

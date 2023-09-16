@@ -95,7 +95,8 @@ private: //애니메이션 제어용 함수들
 
 	void	Moving_Restrict();
 
-	
+private:
+	void	Smell_Detection(_double dTimeDelta);
 
 private:
 	void	Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
