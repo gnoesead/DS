@@ -144,6 +144,12 @@ HRESULT CLevel_Village::Initialize()
         return E_FAIL;
     }
 
+    if (FAILED(Ready_Layer_Character_Dialog(TEXT("Layer_Character_Dialog"))))
+    {
+        MSG_BOX("Failed to Ready_Layer_Character_Dialog : CLevel_Village");
+        return E_FAIL;
+    }
+
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(false);
 
@@ -175,6 +181,43 @@ void CLevel_Village::Tick(_double dTimeDelta)
     Safe_AddRef(pGameInstance);
 
     CColliderManager::GetInstance()->Check_Collider(LEVEL_VILLAGE, dTimeDelta);
+
+
+
+    if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
+    {
+        COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+        CFadeManager::GetInstance()->Set_Fade_Out(true);
+    }
+
+    if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
+
+
+        if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+            CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+            HRESULT hr = 0;
+
+            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_HOUSE))
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_HOUSE), false, false);
+            }
+            else
+            {
+                pGameInstance->Clear_Light();
+                hr = pGameInstance->Swap_Level(LEVEL_HOUSE);
+            }
+
+            if (FAILED(hr)) {
+                Safe_Release(pGameInstance);
+                return;
+            }
+        }
+
+    }
+
 
     if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
     {
@@ -236,12 +279,12 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
             if (vDiffuse.z < 0.f)
                 vDiffuse.z = 0.f;
-            
+
             pGameInstance->Set_Light(i, 1, vDiffuse);
         }
-       
+
     }
-   
+
     if (pGameInstance->Get_DIKeyDown(DIK_M))
     {
         _uint iLightSize = pGameInstance->Get_LightListSize();
@@ -267,7 +310,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
         }
 
     }
-   
+
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -294,7 +337,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
     Safe_Release(pGameInstance);
 
-   
+
 }
 
 HRESULT CLevel_Village::Render()
@@ -315,7 +358,7 @@ HRESULT CLevel_Village::Ready_Lights()
 
     vDiffuse.x -= 0.1f;
     vDiffuse.y -= 0.1f;
-    vDiffuse.z -= 0.1f;   
+    vDiffuse.z -= 0.1f;
 
     pGameInstance->Set_Light(0, 1, vDiffuse);
 
@@ -362,9 +405,9 @@ HRESULT CLevel_Village::Ready_Layer_Camera(const _tchar* pLayerTag)
     CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
     CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
     CameraDesc.dSensitivity = 0.1;
- 
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
         TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : Camera_Free");
@@ -385,18 +428,18 @@ HRESULT CLevel_Village::Ready_Layer_Player(const _tchar* pLayerTag)
     ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
     CharacterDesc.WorldInfo.vPosition = _float4(573.f, 4.5f, 242.f, 1.f);
-   // CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f); // BattleMap
+    // CharacterDesc.WorldInfo.vPosition = _float4(426.55f, 3.0f, 301.92f, 1.f); // BattleMap
 
     CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_MAINROAD1;
-   // CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE;// BattleMap
- 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, 
+    // CharacterDesc.eCurNavi = CLandObject::NAVI_VILLAGE_BATTLE;// BattleMap
+
+    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
         TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : CLevel_Village");
         return E_FAIL;
     }
-   
+
 
     Safe_Release(pGameInstance);
 
@@ -424,7 +467,7 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
         return E_FAIL;
     }
     */
-    
+
     CharacterDesc.WorldInfo.vPosition = _float4(429.7f, 3.35f, 292.0f, 1.f);
     CharacterDesc.SwampHorn = 1;
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag,
@@ -449,7 +492,7 @@ HRESULT CLevel_Village::Ready_Layer_Monster(const _tchar* pLayerTag)
         MSG_BOX("Failed to Add_GameObject : Monster_Swamp");
         return E_FAIL;
     }
-    
+
 
     Safe_Release(pGameInstance);
 
@@ -552,7 +595,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_FirstStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
-    
+
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_ChildF"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : NPC_ChildF");
@@ -561,7 +604,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_FirstStreet(const _tchar* pLayerTag)
 #pragma endregion
 
 
-  
+
 #pragma region NPC
     CharacterDesc.WorldInfo.vPosition = _float4(565.6f, 4.55f, 255.37f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_SIT;
@@ -808,7 +851,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag)
 
     CharacterDesc.NPCDesc.iSection = 2;
 
-    
+
 #pragma region WalkNPC
 
     CharacterDesc.WorldInfo.vPosition = _float4(603.07f, 4.55f, 261.13f, 1.f);
@@ -822,7 +865,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
- 
+
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_ChildM"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : NPC_ChildM");
@@ -841,7 +884,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag)
     CharacterDesc.NPCDesc.Icon_Type = 99;
     CharacterDesc.NPCDesc.Dialog_Type = 99;
     CharacterDesc.NPCDesc.Interaction = false;
-    
+
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_NPC_ChildF"), &CharacterDesc)))
     {
         MSG_BOX("Failed to Add_GameObject : NPC_ChildF");
@@ -929,7 +972,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_SecondStreet(const _tchar* pLayerTag)
     }
 
 
-   
+
 #pragma endregion
 
 
@@ -1064,7 +1107,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_Inside(const _tchar* pLayerTag)
 
     CharacterDesc.NPCDesc.iSection = 4;
 
-   
+
 
     CharacterDesc.WorldInfo.vPosition = _float4(592.8f, 4.55f, 287.32f, 1.f);
     CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WORK;
@@ -1203,7 +1246,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_LastStreet(const _tchar* pLayerTag)
 
     CharacterDesc.NPCDesc.iSection = 5;
 
-    
+
 
 
 #pragma region WalkNPC
@@ -1284,7 +1327,7 @@ HRESULT CLevel_Village::Ready_Layer_NPC_LastStreet(const _tchar* pLayerTag)
 
 
     CharacterDesc.WorldInfo.vPosition = _float4(563.5f, 4.55f, 342.47f, 1.f);
-    CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_DOWN; 
+    CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_DOWN;
     XMStoreFloat4(&CharacterDesc.NPCDesc.DirNPC, XMVector4Normalize(_vector{ 0.0f, 0.0f, 1.0f, 0.0f }));
 
     CharacterDesc.NPCDesc.Icon_Type = 99;
@@ -1415,7 +1458,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     Safe_AddRef(pGameInstance);
 
 
- // Fade
+    // Fade
     CFade::UIDESC UIDesc11;
     ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
@@ -1447,7 +1490,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
-// Dialog
+    // Dialog
     CDialog::UIDESC UIDesc10;
     ZeroMemory(&UIDesc10, sizeof UIDesc10);
 
@@ -1511,7 +1554,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
-    
+
     ZeroMemory(&UIDesc, sizeof UIDesc);
 
     // Main_Icon
@@ -1573,10 +1616,10 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     }
 
 
-// Mini_Map
+    // Mini_Map
     CMini_Map::UIDESC UIDesc2;
     ZeroMemory(&UIDesc2, sizeof UIDesc2);
-   
+
     // Bg
     UIDesc2.m_Is_Reverse = false;
     UIDesc2.m_Type = 0;
@@ -1635,7 +1678,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
-// Pause
+    // Pause
     CPause::UIDESC UIDesc3;
     ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
@@ -1696,7 +1739,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
- // Option
+    // Option
     COption::UIDESC UIDesc4;
     ZeroMemory(&UIDesc4, sizeof UIDesc4);
 
@@ -1808,7 +1851,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
         UIDesc4.m_Type = 5;
         UIDesc4.m_Line_Num = i;
-     
+
         if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
             Safe_Release(pGameInstance);
             return E_FAIL;
@@ -1818,7 +1861,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
         UIDesc4.m_Type = 6;
         UIDesc4.m_Line_Num = i;
-      
+
         if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc4))) {
             Safe_Release(pGameInstance);
             return E_FAIL;
@@ -1970,7 +2013,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
- // Interaction
+    // Interaction
     CInteraction::UIDESC UIDesc5;
     ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
@@ -1994,7 +2037,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     UIDesc5.m_Up_Mount = 1.2f;
     UIDesc5.m_Is_Smell = true;
     UIDesc5.m_Dialog_Type = 12;
-   
+
     if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, TEXT("Layer_Player_UI"),
         TEXT("Prototype_GameObject_Interaction"), &UIDesc5))) {
         Safe_Release(pGameInstance);
@@ -2015,7 +2058,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
- // Icon
+    // Icon
     CFIcon::UIDESC UIDesc6;
     ZeroMemory(&UIDesc6, sizeof UIDesc6);
 
@@ -2030,7 +2073,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     }
 
 
- // Timing_UI
+    // Timing_UI
     CTiming_UI::UIDESC UIDesc7;
 
 
@@ -2046,7 +2089,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
         }
     }
 
-   
+
 
     Safe_Release(pGameInstance);
 
@@ -2597,7 +2640,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
     }
 
 
- // FIcon 
+    // FIcon 
     CFIcon::UIDESC UIDesc10;
     // 락온 아이콘
     ZeroMemory(&UIDesc10, sizeof UIDesc10);
@@ -2611,7 +2654,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
         Safe_Release(pGameInstance);
         return E_FAIL;
     }
-    
+
     // 락온 글로우
     ZeroMemory(&UIDesc10, sizeof UIDesc10);
 
@@ -2725,55 +2768,55 @@ HRESULT CLevel_Village::Ready_Layer_Boss_Battle_UI(const _tchar* pLayerTag)
         return E_FAIL;
     }
 
- // Monster_Hp
-   /* CWorld_UI_Hp::UIDESC UIDesc3;
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+    // Monster_Hp
+      /* CWorld_UI_Hp::UIDESC UIDesc3;
+       ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 0;
-    UIDesc3.m_Monster_Index = 0;
-    UIDesc3.m_Up_Mount = 1.7f;
+       UIDesc3.m_Is_Reverse = false;
+       UIDesc3.m_Type = 0;
+       UIDesc3.m_Monster_Index = 0;
+       UIDesc3.m_Up_Mount = 1.7f;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+       if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+           Safe_Release(pGameInstance);
+           return E_FAIL;
+       }
 
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+       ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 1;
-    UIDesc3.m_Monster_Index = 0;
-    UIDesc3.m_Up_Mount = 1.7f;
+       UIDesc3.m_Is_Reverse = false;
+       UIDesc3.m_Type = 1;
+       UIDesc3.m_Monster_Index = 0;
+       UIDesc3.m_Up_Mount = 1.7f;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+       if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+           Safe_Release(pGameInstance);
+           return E_FAIL;
+       }
 
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+       ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 2;
-    UIDesc3.m_Monster_Index = 0;
-    UIDesc3.m_Up_Mount = 1.7f;
+       UIDesc3.m_Is_Reverse = false;
+       UIDesc3.m_Type = 2;
+       UIDesc3.m_Monster_Index = 0;
+       UIDesc3.m_Up_Mount = 1.7f;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+       if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+           Safe_Release(pGameInstance);
+           return E_FAIL;
+       }
 
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+       ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 3;
-    UIDesc3.m_Monster_Index = 0;
-    UIDesc3.m_Up_Mount = 1.7f;
+       UIDesc3.m_Is_Reverse = false;
+       UIDesc3.m_Type = 3;
+       UIDesc3.m_Monster_Index = 0;
+       UIDesc3.m_Up_Mount = 1.7f;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }*/
+       if (FAILED(pGameInstance->Add_GameObject(LEVEL_VILLAGE, pLayerTag, TEXT("Prototype_GameObject_World_UI_Hp"), &UIDesc3))) {
+           Safe_Release(pGameInstance);
+           return E_FAIL;
+       }*/
 
 #pragma endregion
 
@@ -2820,6 +2863,22 @@ HRESULT CLevel_Village::Ready_Layer_SmellBundle(const _tchar* pLayerTag)
         return E_FAIL;
 
     Safe_Release(pGameInstance);
+    return S_OK;
+}
+
+HRESULT CLevel_Village::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
+{
+    CGameInstance* pGameInstance = CGameInstance::GetInstance();
+    Safe_AddRef(pGameInstance);
+
+    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+    if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+        TEXT("Prototype_GameObject_Character_Dialog"))))
+        return E_FAIL;
+
+    Safe_Release(pGameInstance);
+
     return S_OK;
 }
 
@@ -2933,11 +2992,11 @@ HRESULT CLevel_Village::Load_CollisionBox_Info(const _tchar* pPath, const _tchar
         ZeroMemory(&tCollisionBox_Info, sizeof tCollisionBox_Info);
 
         ReadFile(hFile, &tCollisionBox_Info.vPos, sizeof(_float4), &dwByte, nullptr);
-      
+
         ReadFile(hFile, &tCollisionBox_Info.vScale, sizeof(_float3), &dwByte, nullptr);
 
         ReadFile(hFile, &tCollisionBox_Info.iCollisionType, sizeof(_uint), &dwByte, nullptr);
-     
+
         if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_CollisionBox"),
             TEXT("Prototype_GameObject_CollisionBox"), &tCollisionBox_Info)))
             return E_FAIL;
@@ -2968,12 +3027,12 @@ HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
     for (_uint i = 0; i < iSize; ++i)
     {
         LIGHTDESC tLight;
-        ZeroMemory(&tLight, sizeof tLight); 
+        ZeroMemory(&tLight, sizeof tLight);
 
-       
+
         ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
 
-       
+
 
         ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
         ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
@@ -2984,13 +3043,13 @@ HRESULT CLevel_Village::Load_Lights_Info(const _tchar* pPath)
 
         if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
         {
-            tLight.vLightDiffuse = _float4(0.4f ,  0.4f , 0.4f , 1.f);
+            tLight.vLightDiffuse = _float4(0.4f, 0.4f, 0.4f, 1.f);
         }
-           
+
 
         if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
             return E_FAIL;
-    } 
+    }
 
     CloseHandle(hFile);
 
@@ -3048,6 +3107,7 @@ HRESULT CLevel_Village::Ready_Layer_Effect()
         MSG_BOX("Failed to Load Effect : Swamp_Land");
         return E_FAIL;
     }
+
     return S_OK;
 }
 
@@ -4148,7 +4208,7 @@ HRESULT CLevel_Village::LoadEffects(const _tchar* pPath)
 CLevel_Village* CLevel_Village::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
     CLevel_Village* pInstance = new CLevel_Village(pDevice, pContext);
-    
+
     if (FAILED(pInstance->Initialize()))
     {
         MSG_BOX("Failed to Created : CLevel_Village");

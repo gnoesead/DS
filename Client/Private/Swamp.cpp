@@ -6,6 +6,7 @@
 #include "EffectPlayer.h"
 #include "WaterParticleEffect.h"
 #include "Swamp_SmokeEffect.h"
+#include "SoundMgr.h"
 
 static _uint g_iNum = 0;
 
@@ -40,7 +41,7 @@ static _float  Get_Angle(_fvector vLook)
 	if (fAngle >= 180.f)
 		fAngle += 180.f;
 
-	return fAngle ;
+	return fAngle;
 }
 
 HRESULT CSwamp::Initialize(void* pArg)
@@ -104,7 +105,7 @@ void CSwamp::Tick(_double TimeDelta)
 	if (m_EffectDesc.eType == TYPE_TRAP)
 	{
 		m_fAccTime += (_float)TimeDelta;
-		
+
 		m_fRatio += m_fRatioSpeed * (_float)TimeDelta;
 
 		if (m_fRatio > 1.5f)
@@ -154,7 +155,7 @@ HRESULT CSwamp::Render()
 	if (FAILED(SetUp_ShaderResources()))
 		return E_FAIL;
 
-	if(m_EffectDesc.eType != TYPE_TRAP)
+	if (m_EffectDesc.eType != TYPE_TRAP)
 		m_pShaderCom->Begin(20);
 	else
 		m_pShaderCom->Begin(23);
@@ -218,7 +219,7 @@ HRESULT CSwamp::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_Matrix("g_ProjMatrix", &ProjMatrix)))
 		return E_FAIL;
 
- 	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
 		return E_FAIL;
 
 	if (FAILED(m_pNoiseTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture_Mask", 0)))
@@ -242,9 +243,9 @@ HRESULT CSwamp::SetUp_ShaderResources()
 
 void CSwamp::Position_Setting()
 {
-	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION) ,3.351f + 0.001f * m_iNum);
+	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.301f + 0.001f * m_iNum);
 
-	if( STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
+	if (STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 }
@@ -290,11 +291,12 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 	case PATTERN_STEPIN:
 		m_eCurState = STATE_INCREASING;
 		m_fScaleSpeed = 8.f;
-	
+
 		if (!m_bWaterEffect && m_fSize > 2.5f)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLIN);
 		}
 
 		if (m_fSize > 3.5f)
@@ -314,6 +316,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		if (m_fSize < 0.001f)
@@ -335,17 +338,18 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_eCurPattern = PATTERN_NONE;
 		}
 		break;
-	
+
 	case PATTERN_SHORYU:
 		if (!m_bWaterEffect)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		m_eCurState = STATE_DECREASING;
 		m_fScaleSpeed = 2.f;
-		
+
 		if (m_fSize < 0.001f)
 		{
 			m_fSize = 0.001f;
@@ -353,7 +357,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			m_bWaterEffect = false;
 			m_eCurPattern = PATTERN_NONE;
 		}
-	
+
 		break;
 
 	case PATTERN_THROWAWAY:
@@ -361,6 +365,7 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 		{
 			Create_WatterEffect();
 			m_bWaterEffect = true;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 
 		m_eCurState = STATE_DECREASING;
@@ -413,9 +418,9 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			EffectWDesc.vFrameSpeed = { 0.035f, 0.045f };
 			EffectWDesc.vStartPosX = { -3.0f,3.0f }; EffectWDesc.vStartPosY = { 0.5f,2.0f }; EffectWDesc.vStartPosZ = { -3.f,3.f };
 			EffectWDesc.vStartSizeX = { 1.f , 1.5f }; EffectWDesc.vStartSizeY = { 3.00f , 5.00f };
-			EffectWDesc.vSpeedY = { 0.5f , 1.f }; 
+			EffectWDesc.vSpeedY = { 0.5f , 1.f };
 			EffectWDesc.fAlpha = 0.f; EffectWDesc.fAlphaSpeed = 3.f;
-		
+
 			_uint iNum = Random::Generate_Int(3, 5);
 
 			for (_uint i = 0; i < iNum; ++i)
@@ -450,12 +455,13 @@ void CSwamp::Pattern_Setting(_double TimeDelta)
 			Create_WatterEffect();
 			m_bWaterEffect = true;
 			m_eCurPattern = PATTERN_SHORYU;
+			Play_WaterSound(SOUND_FALLOUT);
 		}
 		break;
 	case PATTERN_DISAPPEAR:
 		m_dBigAccTime += TimeDelta;
 
-		if(m_dBigAccTime > 0.2)
+		if (m_dBigAccTime > 0.2)
 			m_eCurState = STATE_DECREASING;
 
 		m_fScaleSpeed = 3.f;
@@ -478,11 +484,11 @@ void CSwamp::State_Setting(_double TimeDelta)
 		break;
 	case STATE_INCREASING:
 		m_fSize += m_fScaleSpeed * (_float)TimeDelta;
-	
+
 		break;
 	case STATE_DECREASING:
 		m_fSize -= m_fScaleSpeed * (_float)TimeDelta;
-		
+
 		break;
 	default:
 		break;
@@ -527,7 +533,6 @@ void CSwamp::Create_WatterEffect()
 	for (_uint i = 0; i < 20; ++i)
 		CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
-	
 	Safe_Release(pGameInstance);
 }
 
@@ -554,7 +559,45 @@ void CSwamp::Create_WatterParticleEffect(_uint iNum)
 	Safe_Release(pGameInstance);
 }
 
+void CSwamp::Play_WaterSound(SOUNDTYPE eSoundType)
+{
+	static _uint iIdx = 0;
 
+	CSoundMgr::CHANNELID eID = (CSoundMgr::CHANNELID)0;
+
+	if (iIdx == 0)
+		eID = CSoundMgr::MONSTER_SUBEFFECT_0;
+	else if (iIdx == 1)
+		eID = CSoundMgr::MONSTER_SUBEFFECT_1;
+	else if (iIdx == 2)
+		eID = CSoundMgr::MONSTER_SUBEFFECT_2;
+
+	++iIdx;
+
+	if (iIdx == 3)
+		iIdx = 0;
+
+	CSoundMgr::Get_Instance()->StopSound(eID);
+
+	switch (eSoundType)
+	{
+	case SOUND_FALLOUT:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_water.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, eID, 0.3f);
+		break;
+	}
+
+	case SOUND_FALLIN:
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_water_1.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, eID, 0.3f);
+		break;
+	}
+	}
+
+
+}
 
 CSwamp* CSwamp::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

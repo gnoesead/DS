@@ -448,7 +448,6 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 		MSG_BOX("Failed to Render_ShadowBlur");
 		return E_FAIL;
 	}*/
-
 	if (FAILED(Render_NonBlend()))
 	{
 		MSG_BOX("Failed to Render_NonBlend");
@@ -543,8 +542,7 @@ HRESULT CRenderer::Draw_RenderObjects(HRESULT(*fp)())
 	{
 		MSG_BOX("Failed to Render_Blend");
 		return E_FAIL;
-	}
-	
+	}	
 	/*if (FAILED(Render_Effect()))
 	{
 	   MSG_BOX("Failed to Render_Effect");
@@ -2102,13 +2100,7 @@ HRESULT CRenderer::Render_Lights()
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_TAB))
-	{
-		if (m_bSSAOSwitch == false)
-			m_bSSAOSwitch = true;
-		else if (m_bSSAOSwitch == true)
-			m_bSSAOSwitch = false;
-	}
+	
 	if (FAILED(m_pShader->SetUp_RawValue("g_bSSAOSwitch", &m_bSSAOSwitch, sizeof(_bool))))
 		return E_FAIL;
 
@@ -2297,12 +2289,12 @@ void CRenderer::Shadow_House_Setting()
 	if (pPlayerTransformCom != nullptr)
 	{
 		_vector	  vPlayerPos = pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-		if (m_bRoomTurn == true)
+		/*if (m_bRoomTurn == true)
 		{
-			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			vLightEye = vPlayerPos + XMVectorSet(-1.5f, 6.f, -1.5f, 1.f);
 			fAngle = 20.f;
 		}
-		else
+		else*/
 		{
 			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
 			fAngle = 30.f;

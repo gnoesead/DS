@@ -198,6 +198,13 @@ protected:
 	void Shadow_Train_Setting();
 	void Shadow_Final_Setting();
 
+protected:
+	void Play_Sound_BodyFall();
+
+	void Play_Sound_Move(_double dTimeDelta, _float loop);
+
+protected:
+	void Set_CharacterDialog(_double dTime, const _tchar* pName, const _tchar* pDialog1, const _tchar* pDialog2 = TEXT(""));
 
 
 protected:
@@ -215,6 +222,9 @@ protected:
 protected:
 	//사운드
 	_int	m_iSound_Metal_Index = { 0 };
+
+	_int	m_iSound_Move_Index = { 0 };
+	_double m_dSound_Move = { 0.0 };
 
 protected: //status 게이지 관련
 	CHAR_STATUS  m_StatusDesc;
@@ -281,11 +291,9 @@ protected:
 protected:
 	_float	m_fFar2 = { 1.f };
 	_bool	m_isAuroraOn[3] = { false };
-private:
+	_double	m_dDialogAccTime = { 0.0 };
+	_double	m_dDialogAccTime2 = { 0.0 };
 	
-
-
-
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();

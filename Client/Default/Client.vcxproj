@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\Camera_Free.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\Character.h" />
+    <ClInclude Include="..\Public\Character_Dialog.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderManager.h" />
     <ClInclude Include="..\Public\CollisionBox.h" />
@@ -329,6 +330,7 @@
     <ClCompile Include="..\Private\Camera_Free.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\Character.cpp" />
+    <ClCompile Include="..\Private\Character_Dialog.cpp" />
     <ClCompile Include="..\Private\ColliderManager.cpp" />
     <ClCompile Include="..\Private\CollisionBox.cpp" />
     <ClCompile Include="..\Private\CustomParticle.cpp" />
@@ -346,7 +348,9 @@
     <ClCompile Include="..\Private\Fade_Manager.cpp" />
     <ClCompile Include="..\Private\FIcon.cpp" />
     <ClCompile Include="..\Private\HandAura_Akaza.cpp" />
+    <ClCompile Include="..\Private\MapObject.cpp" />
     <ClCompile Include="..\Private\SmeshStone.cpp" />
+    <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\StoneParticle.cpp" />
     <ClCompile Include="..\Private\GroundSmoke.cpp" />
     <ClCompile Include="..\Private\InstanceMapObject.cpp" />
@@ -362,7 +366,6 @@
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\Loading.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
-    <ClCompile Include="..\Private\MapObject.cpp" />
     <ClCompile Include="..\Private\Mini_Map.cpp" />
     <ClCompile Include="..\Private\Mini_Map_Manager.cpp" />
     <ClCompile Include="..\Private\Mission.cpp" />
@@ -403,7 +406,6 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\SmellBundle.cpp" />
     <ClCompile Include="..\Private\SoundMgr.cpp" />
-    <ClCompile Include="..\Private\StaticMapObject.cpp" />
     <ClCompile Include="..\Private\Story_Board.cpp" />
     <ClCompile Include="..\Private\Story_Manager.cpp" />
     <ClCompile Include="..\Private\Swamp.cpp" />

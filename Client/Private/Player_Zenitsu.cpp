@@ -94,6 +94,8 @@ HRESULT CPlayer_Zenitsu::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.5);
+
 	return S_OK;
 }
 
@@ -157,6 +159,7 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
+	
 }
 
 
@@ -253,12 +256,12 @@ HRESULT CPlayer_Zenitsu::Render()
 			if (m_iMeshNum == 2)
 				m_pShaderCom->Begin(2);
 			else
-			{
+			{				
 				if ((m_isSkilling == false) && (m_Moveset.m_iAwaken == 0)) { // 기본상태
 					m_pShaderCom->Begin(1);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken == 0)) { // 노 개방 스킬 썻을 때
-					m_pShaderCom->Begin(6);
+					m_pShaderCom->Begin(9);
 				}
 				else if ((m_isSkilling == false) && (m_Moveset.m_iAwaken != 0)) { // 개방 했을 때
 					m_pShaderCom->Begin(6);
@@ -283,7 +286,7 @@ HRESULT CPlayer_Zenitsu::Render()
 
 			m_pModelCom->Render(i);
 		}
-		
+
 #pragma endregion
 
 #ifdef _DEBUG
@@ -393,7 +396,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_1", m_pTransformCom);
 
-				
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
@@ -437,7 +440,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_2_3", m_pTransformCom);
 
-				
+
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
@@ -596,7 +599,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 #pragma region Air_Attack, charge_attack
 		if (ANIM_ATK_AIRTRACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			
+
 		}
 		if (2 == m_pModelCom->Get_iCurrentAnimIndex())
 		{
@@ -731,6 +734,9 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Charge", m_pTransformCom, &EffectWorldDesc);
 
+				_tchar szSoundFile0[MAX_PATH] = TEXT("flash_01.ogg");
+				Play_Sound_Channel(szSoundFile0, CSoundMgr::SKILL_0, 0.7f);
+
 			}
 		}
 		if (21 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -742,8 +748,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.z += 0.f;
 				EffectWorldDesc.vRotation.x = 0.f;
 				EffectWorldDesc.fScale = 1.f;
-			
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Slash", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile0[MAX_PATH] = TEXT("st_sword09.ogg");
+				Play_Sound_Channel(szSoundFile0, CSoundMgr::SWORD_0, 0.7f);
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.7f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("Zenitsu_Talk_ShinSok.mp3");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::PLAYER_VOICE, 0.99f);
 				
 			}
 			else if (1 == m_iEvent_Index)
@@ -754,11 +767,18 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x += 0.f;
 				EffectWorldDesc.fScale = 1.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 4.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_04.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_1, 0.85f);
 			}
 			else if (2 == m_iEvent_Index)
 			{
@@ -769,11 +789,19 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
+
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
-				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f) , _float3(EffectWorldDesc.vPosition.x, 1.0f, 6.0f), 0.5,
+				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 6.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT_0, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_03.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.85f);
 				
 			}
 			else if (3 == m_iEvent_Index)
@@ -785,11 +813,18 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 8.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT_1, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_02.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_1, 0.85f);
 				
 			}
 			else if (4 == m_iEvent_Index)
@@ -800,21 +835,19 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x += Random::Generate_Float(-2.3f, -1.5f);
 				EffectWorldDesc.fScale = 1.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 10.0f), 0.5,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
-				
-				_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.7f);
 
-				_tchar szSoundFile0[MAX_PATH] = TEXT("st_sword09.ogg");
-				Play_Sound_Channel(szSoundFile0, CSoundMgr::SWORD_0, 0.7f);
-				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
-				Play_Sound_Channel(szSoundFile1, CSoundMgr::SWORD_1, 0.7f);
-				_tchar szSoundFile2[MAX_PATH] = TEXT("Zenitsu_Talk_ShinSok.mp3");
-				Play_Sound_Channel(szSoundFile2, CSoundMgr::PLAYER_VOICE, 0.8f);
+				_tchar szSoundFile[MAX_PATH] = TEXT("spark_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.6f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("brk_rock_01.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.85f);
+
 			}
 		}
 #pragma endregion
@@ -842,7 +875,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				m_pRendererCom->Set_RadialBlur();
-				
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.8f, 1.8f, 1.8f), _float3(0.f, 0.5f, 0.0f), 1.0,
@@ -854,7 +887,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.2f;
 				EffectWorldDesc.vPosition.y += 0.3f;
-				
+
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Head", m_pTransformCom, &EffectWorldDesc);
 
@@ -934,13 +967,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 
-				CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
-				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
+				//CBattle_UI_Manager::GetInstance()->Set_Player_Type(1);
+				//CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(1);
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 0.6f;
 				EffectWorldDesc.vPosition.y += 0.6f;
-				
+
 				m_pRendererCom->Set_BloomRatio(1.5f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Heki_Light", m_pTransformCom, &EffectWorldDesc);
 
@@ -985,7 +1018,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0초
 			{
-				
+
 			}
 		}
 
@@ -993,7 +1026,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0초
 			{
-				
+
 			}
 		}
 
@@ -1001,12 +1034,12 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0초
 			{
-				
+
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += 1.9f;
+				EffectWorldDesc.vPosition.x += 1.5f;
 
 				EffectWorldDesc.vRotation.y = -90.f;
 
@@ -1023,7 +1056,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				
+
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
 
 			}
@@ -1037,7 +1070,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.2f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += -1.9f;
+				EffectWorldDesc.vPosition.x += -1.5f;
 
 				EffectWorldDesc.vRotation.y = 90.f;
 
@@ -1053,9 +1086,11 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += -0.3f;
+
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
-				
+
 			}
 		}
 
@@ -1083,6 +1118,13 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				m_pRendererCom->Set_BloomRatio(1.55f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Awake_Aura", m_pTransformCom, &EffectWorldDesc);
+
+
+				// 어웨이크 파티클
+				EffectWorldDesc.vPosition.y += 0.2f;
+				//CEffectPlayer::Get_Instance()->Play("Zen_Particle", m_pTransformCom, &EffectWorldDesc);
+
+
 			}
 		}
 
@@ -1212,53 +1254,6 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			else if (2 == m_iEvent_Index) // 0.38
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			/*
-			CGameInstance* pGameInstance = CGameInstance::GetInstance();
-			Safe_AddRef(pGameInstance);
-
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS) 
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN) 
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-					
-					
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY 
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-				}
-			}
-			Safe_Release(pGameInstance);*/
 		}
 
 		if (ANIM_BATTLE_RUN_END == m_pModelCom->Get_iCurrentAnimIndex())	// 63
@@ -1276,6 +1271,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1285,11 +1281,15 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 			else if (1 == m_iEvent_Index) // 0.5
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 			else if (2 == m_iEvent_Index) // 0.95
+			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
+			}
 		}
 
 		if (101 == m_pModelCom->Get_iCurrentAnimIndex())	// Dmg Fall
@@ -1298,6 +1298,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1307,6 +1308,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1316,6 +1318,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
 				Play_FallDownEffect();
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1420,48 +1423,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_RUN)
 	{
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.16f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-
-
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-			}
-		}
+		Play_Sound_Move(dTimeDelta, 0.16f);
 	}
 	Safe_Release(pGameInstance);
 
@@ -1627,6 +1589,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Attack(_double dTimeDelta)
 				else if (5 == iCurAnimIndex)
 				{
 					m_pModelCom->Set_EarlyEnd(5, true, 0.45f);
+					m_pModelCom->Set_EarlyEnd(7, true, 0.99f);
 				}
 				m_pModelCom->Set_Combo_Trigger(true);
 				//콤보 분기 설정
@@ -2152,50 +2115,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 46)
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.1f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-		}
-		Safe_Release(pGameInstance);
+		Play_Sound_Move(dTimeDelta, 0.1f); // 0.1
 	}
 
 
@@ -2258,6 +2178,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Trigger(true);
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.4f);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 			else if (m_isRight)
@@ -2276,6 +2198,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Trigger(true);
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.4f);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 		}
@@ -2292,6 +2216,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	//더블스텝
 	Go_Dir_Deceleration(dTimeDelta, 71, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
 	Go_Dir_Deceleration(dTimeDelta, 73, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 71 || m_pModelCom->Get_iCurrentAnimIndex() == 73)
+	{
+		m_dDelay_DoubleStep += dTimeDelta;
+	}
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -2404,6 +2332,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
 
 #pragma region GuardHit
 	if (m_isGuardHit)
@@ -2944,7 +2873,10 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		m_Moveset.m_isRestrict_DoubleStep = true;
+		if(m_dDelay_DoubleStep < 1.0f)
+			m_Moveset.m_isRestrict_DoubleStep = true;
+		else
+			m_Moveset.m_isRestrict_DoubleStep = false;
 	}
 	//제한 해제d
 	else
@@ -3321,6 +3253,10 @@ HRESULT CPlayer_Zenitsu::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_vCamPosition", &vCamPosition, sizeof(_float4))))
 		return E_FAIL;
 
+	if (m_Moveset.m_iAwaken != 0 || m_isSkilling == true)
+	{
+		m_fOutlineThickness = 2.0f;
+	}
 	// OutlineThickness
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

@@ -151,7 +151,6 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	}
 
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
@@ -1801,6 +1800,11 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Eye.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Akaza_Awake_Eye");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Eye_Black.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Akaza_Awake_Eye_Black");
 		return E_FAIL;
 	}
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Akaza/Akaza_Awake_Cut.bin"))))

@@ -153,7 +153,9 @@ private:
 	void	Create_SwampAlertRect();
 
 private:
-	void	Play_Sound_Dmg(_int iType, _double vol); // 0:small, 1:medium, 2:big
+	void	Play_Sound_Dmg(_int iType, _float vol); // 0:small, 1:medium, 2:big
+
+	void	Dialog_Update(_double dTimeDelta);
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -254,6 +256,10 @@ private:
 	// ÂøÁö ÀÌÆåÆ®
 	_bool	m_bLandEffect[3] = { false };
 
+	// »ç¿îµå
+	_bool	m_bRiverSound = { false };
+
+	_bool	m_bPart2 = { false };
 
 private:
 	HRESULT Add_Components();

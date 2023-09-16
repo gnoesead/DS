@@ -180,7 +180,7 @@ HRESULT CBoss_Kyogai::Render()
 			else
 			{
 				if (m_bSuperArmor == false)
-					m_pShaderCom->Begin(1); 
+					m_pShaderCom->Begin(1);
 				else
 					m_pShaderCom->Begin(4);
 			}
@@ -205,7 +205,7 @@ HRESULT CBoss_Kyogai::Render()
 		m_pModelCom->Render(i);
 	}
 
-	
+
 
 	return S_OK;
 }
@@ -225,7 +225,7 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_F2))
 	{
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(114.f, 0.f, 117.f, 1.f));
-		m_iTriggerCnt = 0;		
+		m_iTriggerCnt = 0;
 		m_dTimeAcc = 0.0;
 		m_eCurstate = STATE_INTERACT;
 	}
@@ -359,7 +359,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.5f;
-				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Effect0", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Effect0", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			else if (1 == m_iEvent_Index) // 0.2
@@ -372,7 +372,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				m_isAuroraOn[0] = true;
 			}
-			else if(3 == m_iEvent_Index) // 0.7
+			else if (3 == m_iEvent_Index) // 0.7
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -380,8 +380,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
-				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom , &EffectWorldDesc);
-				Camera_Shake(1.0 , 40);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle2", m_pTransformCom, &EffectWorldDesc);
+				Camera_Shake(1.0, 40);
 				m_pRendererCom->Set_RadialBlur();
 			}
 			else if (4 == m_iEvent_Index) // 1.2
@@ -391,8 +391,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			else if (5 == m_iEvent_Index) // 1.7
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
-				m_pRendererCom->Set_RadialBlur(); 
-				
+				m_pRendererCom->Set_RadialBlur();
+
 			}
 			else if (6 == m_iEvent_Index) // 2.2
 			{
@@ -407,7 +407,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			else if (7 == m_iEvent_Index) // 2.7
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_CutScene_Particle", m_pTransformCom);
-				
+
 			}
 			else if (8 == m_iEvent_Index) // 3.2
 			{
@@ -756,7 +756,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				//CEffectPlayer::Get_Instance()->Play("Kyogai_Atk_Push", m_pTransformCom);
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 2.5f;
-				CEffectPlayer::Get_Instance()->Play("Kyogai_Push", m_pTransformCom , &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Kyogai_Push", m_pTransformCom, &EffectWorldDesc);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_PUSH);
 				Camera_Shake(1.0);
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
@@ -1098,6 +1098,7 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				Play_FallDownEffect();
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				Play_Sound_BodyFall();
 			}
 		}
 
@@ -1107,6 +1108,8 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			{
 				Play_FallDownEffect();
 				Create_GroundSmoke(CGroundSmoke::SMOKE_FALLDOWN);
+				_tchar szSoundFile[MAX_PATH] = TEXT("bodyfall_03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_FALLDOWN, 0.7f);
 			}
 		}
 
@@ -1161,6 +1164,24 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				Play_HitEffect(vKyogaiOffset);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.6f;
+
+				int n = Random::Generate_Int(0, 2);
+
+				if (n == 0)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 1)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
+				else if (n == 2)
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
@@ -1181,6 +1202,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
 			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
@@ -1199,6 +1231,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
@@ -1219,6 +1262,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
 			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
 		{
@@ -1237,6 +1291,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
 			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 
 			//Set_FallingStatus(3.0f, 0.0f);
 		}
@@ -1251,6 +1316,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
@@ -1270,6 +1346,17 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.fScale = 1.f;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 		}
 		Safe_Release(pGameInstance);
@@ -1438,7 +1525,7 @@ void CBoss_Kyogai::Update_Phase_1(_double dTimeDelta)
 
 		CGameInstance* pGameInstance = CGameInstance::GetInstance();
 		Safe_AddRef(pGameInstance);
-		pGameInstance->Time_Slow(0.5, 0.5);
+		pGameInstance->Time_Slow(1.0, 0.1);
 		Safe_Release(pGameInstance);
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.5f && m_bFirstAwake == false)
@@ -1499,7 +1586,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_dAwakeTime = 0.0;
 
 		m_bPatternStart = false;
-		m_dTriggerTime = 0.0;		
+		m_dTriggerTime = 0.0;
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bFirstAwake == false)
 	{
@@ -1507,9 +1594,9 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		m_bTrigger = false;
 		m_bPatternStart = false;
 
-		m_iTriggerCnt = 9;				
+		m_iTriggerCnt = 9;
 		m_dTriggerTime = 0.0;
-		
+
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.0f)
 	{
@@ -1519,12 +1606,12 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 		{
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
-			pGameInstance->Time_Slow(0.5, 0.5);
+			pGameInstance->Time_Slow(1.0, 0.1);
 			Safe_Release(pGameInstance);
 
 			m_bDead_Trigger = true;
 			Trigger_Hit_Dead();
-		}		
+		}
 	}
 
 	if (m_bAwake == true)
@@ -1537,7 +1624,7 @@ void CBoss_Kyogai::Update_Phase_2(_double dTimeDelta)
 			m_dAwakeTime = 0.0;
 			m_pRendererCom->Set_Invert();
 			m_bAwake = false;
-			
+
 			m_isAuroraOn[0] = false;
 		}
 	}
@@ -1603,7 +1690,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 		m_dTriggerTime += dTimeDelta;
 		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 		{
-			m_dTriggerTime = 0.0;			
+			m_dTriggerTime = 0.0;
 			m_bTrigger = false;
 			m_iTriggerCnt++;
 
@@ -1613,7 +1700,7 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 				m_bPatternStart = true;
 			}
 		}
-		
+
 	}
 	if (m_bPatternStart == true)
 	{
@@ -1621,32 +1708,32 @@ void CBoss_Kyogai::Trigger_Interact_Phase_1(_double dTimeDelta)
 		m_dTriggerTime += dTimeDelta;
 		if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 		{
-			m_dTriggerTime = 0.0;			
+			m_dTriggerTime = 0.0;
 			m_bTrigger = false;
 			m_iRandomPatternNum = Random::Generate_Int(2, 7);
 
 			if (fDistance > 7.f) //멀 때
 			{
-				m_iTriggerCnt = 3;			
+				m_iTriggerCnt = 3;
 
 			}
 			if (fDistance <= 7.f) // 가까울 때
 			{
 				if (m_iRandomPatternNum == 2)
 				{
-					m_iTriggerCnt = 2;					
+					m_iTriggerCnt = 2;
 				}
 				if (m_iRandomPatternNum == 4)
 				{
-					m_iTriggerCnt = 5;					
+					m_iTriggerCnt = 5;
 				}
 				if (m_iRandomPatternNum == 5)
 				{
-					m_iTriggerCnt = 6;					
+					m_iTriggerCnt = 6;
 				}
 				if (m_iRandomPatternNum == 6)
 				{
-					m_iTriggerCnt = 7;					
+					m_iTriggerCnt = 7;
 				}
 			}
 		}
@@ -1669,14 +1756,14 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 			m_dTriggerTime += dTimeDelta;
 			if (Event_Time(dTimeDelta, 0.2, m_dTriggerTime))
 			{
-				m_dTriggerTime = 0.0;				
+				m_dTriggerTime = 0.0;
 				m_bTrigger = false;
 				m_iTriggerCnt++;
 
 				if (m_iTriggerCnt >= 9)
 				{
 					m_iTriggerCnt = 1;
-					m_dTriggerTime = 0.0;					
+					m_dTriggerTime = 0.0;
 					m_bPatternStart = true;
 				}
 			}
@@ -1700,27 +1787,27 @@ void CBoss_Kyogai::Trigger_Interact_Phase_2(_double dTimeDelta)
 				{
 					if (m_iRandomPatternNum == 2)
 					{
-						m_iTriggerCnt = 2;						
+						m_iTriggerCnt = 2;
 					}
 					if (m_iRandomPatternNum == 3)
 					{
-						m_iTriggerCnt = 4;						
+						m_iTriggerCnt = 4;
 					}
 					if (m_iRandomPatternNum == 4)
 					{
-						m_iTriggerCnt = 5;						
+						m_iTriggerCnt = 5;
 					}
 					if (m_iRandomPatternNum == 5)
 					{
-						m_iTriggerCnt = 6;						
+						m_iTriggerCnt = 6;
 					}
 					if (m_iRandomPatternNum == 6)
 					{
-						m_iTriggerCnt = 7;						
+						m_iTriggerCnt = 7;
 					}
 					if (m_iRandomPatternNum == 7)
 					{
-						m_iTriggerCnt = 8;						
+						m_iTriggerCnt = 8;
 					}
 				}
 			}
@@ -2471,7 +2558,7 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	}
 	if (Event_Time(dTimeDelta, 53.0, m_dTurnTime)) // 맨 마지막
 	{
-		m_bTurnRB = true;		
+		m_bTurnRB = true;
 	}
 
 	_vector vMonsterLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
@@ -2489,7 +2576,7 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	Turn_Trigger(dTimeDelta);
 	TurnRoom();
 
-	
+
 }
 
 void CBoss_Kyogai::Update_AtkSk(_double dTimeDelta)
@@ -2675,6 +2762,7 @@ void CBoss_Kyogai::Update_Hit_GetUp(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_STEP_FRONT2;
 		Trigger_JumpStep();
 	}
+	Pos_FixY();
 
 }
 
@@ -2774,7 +2862,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			if (m_bAnimFinish == false)
 			{
 				Pos_FixY();
-				m_bAnimFinish = true;				
+				m_bAnimFinish = true;
 				m_eCurAnimIndex = ANIM_PUSHAWAY;
 			}
 		}
@@ -2803,7 +2891,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 			m_eCurAnimIndex = ANIM_ATKSK_RF;
 			m_bTurn = true;
 			m_bTurnRF = true;
-			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;			
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		}
 	}
 	else
@@ -2850,7 +2938,7 @@ void CBoss_Kyogai::Update_RoomChange(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
-					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);					
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{
@@ -2912,7 +3000,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 			m_eCurAnimIndex = ANIM_ATKSK_RF;
 			m_bTurn = true;
 			m_bTurnRF = true;
-			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;			
+			m_StatusDesc.fHp -= m_StatusDesc.fHp_Max * 0.05f;
 		}
 	}
 	else
@@ -2973,7 +3061,7 @@ void CBoss_Kyogai::Update_RoomChange_2(_double dTimeDelta)
 				{
 					m_bAnimFinish3 = true;
 					m_eCurAnimIndex = ANIM_ATKSK_END;
-					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);					
+					CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
 				}
 				if (m_pModelCom->Get_AnimFinish(ANIM_ATKSK_END))
 				{
@@ -4423,6 +4511,9 @@ HRESULT CBoss_Kyogai::SetUp_ShaderResources()
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineFaceThickness", &m_fOutlineFaceThickness, sizeof(_float))))
 		return E_FAIL;
 
+	
+	if (FAILED(m_pShaderCom->SetUp_RawValue("g_fFar2", &m_fFar2, sizeof(_float))))
+		return E_FAIL;
 	return S_OK;
 }
 

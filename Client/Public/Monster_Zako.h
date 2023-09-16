@@ -103,7 +103,7 @@ private: //애니메이션 제어용 함수
 	void	Animation_Control_Down(_double dTimeDelta);
 
 	//사운드용
-	void	Play_Sound_Dmg(_int iType, _double vol); // 0:small, 1:medium, 2:big
+	void	Play_Sound_Dmg(_int iType, _float vol); // 0:small, 1:medium, 2:big
 
 
 private:
@@ -160,6 +160,10 @@ private: //애니메이션 제어용 변수들
 
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
+
+
+	//사운드
+	CSoundMgr::CHANNELID m_SoundChr = { CSoundMgr::MAXCHANNEL };
 	
 private:
 	/* 임시 코드 */
