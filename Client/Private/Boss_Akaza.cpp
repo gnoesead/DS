@@ -1332,6 +1332,18 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				}
 				else {
 					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					_uint iRanNum = Random::Generate_Int(0, 1);
+					if (iRanNum == 0) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+					}
+					else if (iRanNum == 1) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+					}
+
+					EffectWorldDesc.fScale = 1.f;
 					EffectWorldDesc.vPosition.y += 0.3f;
 
 					int n = Random::Generate_Int(0, 2);
@@ -1378,6 +1390,17 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
@@ -1407,6 +1430,17 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
@@ -1443,6 +1477,17 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
@@ -1472,6 +1517,17 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
@@ -1516,6 +1572,17 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+			_uint iRanNum = Random::Generate_Int(0, 1);
+			if (iRanNum == 0) {
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+			}
+			else if (iRanNum == 1) {
+				EffectWorldDesc.fScale = 1.4f;
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+			}
+
 			EffectWorldDesc.fScale = 1.f;
 			EffectWorldDesc.vPosition.y += 0.3f;
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
