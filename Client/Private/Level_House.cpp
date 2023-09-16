@@ -358,6 +358,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
+
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; // 0, 2, 5
 
@@ -368,6 +369,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
 	CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
@@ -377,6 +379,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
 	}
+
 
 	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5

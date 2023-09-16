@@ -258,7 +258,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)	// 0.9
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_metal_12.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.4f);
 				_tchar szSoundFile2[MAX_PATH] = TEXT("swing_04.ogg");
 				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.4f);
@@ -280,8 +280,18 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_THROWAWAY);
 
-				_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
+				static _uint idx = Random::Generate_Int(0, 1);
+
+				if (idx == 0)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.3f);
+				}
+				else
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Iyenaeei.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.3f);
+				}
 			}
 			else if (1 == m_iEvent_Index)
 			{
@@ -354,6 +364,8 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Swamp_Land", m_pTransformCom, &EffectWorldDesc);
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_clothing51.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.8f);
 			}
 		}
 
@@ -489,6 +501,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.0
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_BIG);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("whoosh_08.ogg");	
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
 			}
 		}
 
@@ -497,6 +512,11 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.2
 			{
 				Create_LandSwampEffect();
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("whoosh_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.25f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("swing_04.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.25f);
 			}
 		}
 
@@ -512,7 +532,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)	// 0.31
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_02.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
 			}
 
@@ -546,10 +566,16 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_UPPER, AtkDir, 7.0f);
 
 				CEffectPlayer::Get_Instance()->Play("Swamp_AtkParticle_Upper", m_pTransformCom);
+
+				if (m_bPart2)
+				{
+					_tchar szSoundFile2[MAX_PATH] = TEXT("Swamp_Shout_Kisama.ogg");
+					Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.3f);
+				}
 			}
 			else if (1 == m_iEvent_Index)	// 0.13
 			{
-				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_02.ogg");
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_02.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
 			}
 			else if (2 == m_iEvent_Index) // 0.23
@@ -572,6 +598,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.22
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_STEPOUT);
+
 			}
 		}
 
@@ -580,6 +607,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)	// 0.45
 			{
 				m_pMySwamp->Set_Pattern(CSwamp::PATTERN_SHORYU);
+
 			}
 		}
 
@@ -591,6 +619,10 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
+
 			}
 		}
 
@@ -602,6 +634,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
 			}
 		}
 
@@ -613,6 +648,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
 			}
 		}
 
@@ -624,6 +662,9 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
 			}
 		}
 
@@ -643,10 +684,16 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index) // 0초
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("foot_dirt.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_RUN1, 0.3f);
 			}
 			else if (0 == m_iEvent_Index) // 0.2초
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("foot_dirt_1.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_RUN2, 0.3f);
 			}
 		}
 
@@ -1410,17 +1457,28 @@ void CMonster_Swamp::Animation_Control_BigSwamp(_double dTimeDelta)
 	{
 		m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.1f);
 
+		
 		if (0.4f < Calculate_Distance_From_Pos(m_ScrewPos[m_iScrewPosIndex]))
 		{
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SWIM);
 			XMStoreFloat4(&m_SaveDir, Calculate_Dir());
 			Swamp_Create(1, 2);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 	Safe_Release(pGameInstance);
@@ -1451,6 +1509,14 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 2.0f, Dir);
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
@@ -1458,6 +1524,9 @@ void CMonster_Swamp::Animation_Control_Shoryu(_double dTimeDelta)
 			Jumping(1.1f, 0.03f);
 			m_pModelCom->Set_EarlyEnd(ANIM_ATK_SHORYU_TO_SWAMP_0, true, 0.7f);
 			m_fLand_Y = m_pNavigationCom[m_eCurNavi]->Compute_Height(m_pTransformCom) - 4.0f;
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 
@@ -1590,10 +1659,20 @@ void CMonster_Swamp::Animation_Control_SwampScrew(_double dTimeDelta)
 			Go_Dir_Constant(dTimeDelta, ANIM_SWAMP_IN, 1.5f, Calculate_Dir_From_Pos(m_ScrewPos[m_iScrewPosIndex]));
 
 			Create_SwampWaterEffect(dTimeDelta);
+
+			if (!m_bRiverSound)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("amb_riverLP.ogg");
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+				m_bRiverSound = true;
+			}
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(ANIM_ATK_SWAMP_SCREW);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SPECIAL);
+			m_bRiverSound = false;
 		}
 	}
 	//Go_Dir_Constant(dTimeDelta, 7, 2.6f, m_SaveDir);
@@ -1688,6 +1767,8 @@ void CMonster_Swamp::Animation_Control_Piohyo(_double dTimeDelta)
 		m_isFrist_Atk_Pattern = false;
 
 		m_pModelCom->Set_Animation(ANIM_ANGRY_CUTSCENE);
+
+		m_bPart2 = true;
 	}
 }
 
@@ -2457,6 +2538,8 @@ void CMonster_Swamp::Create_SwampWaterEffect(_double dTimeDelta)
 		for (_uint i = 0; i < 5; ++i)
 			CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECT_SWAMPWATER, &EffectWDesc);
 
+		
+
 		m_dWaterEffectAccTime = 0.0;
 	}
 
@@ -2609,90 +2692,160 @@ void CMonster_Swamp::Play_Sound_Dmg(_int iType, _float vol)
 
 void CMonster_Swamp::Dialog_Update(_double dTimeDelta)
 {
+
 	m_dDialogAccTime += dTimeDelta;
 
-	if (Event_Time(dTimeDelta, 7.f, m_dDialogAccTime))
+	if (!m_bPart2)
 	{
-		Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("인간 주제에 날 이길 수 있을 거라고 생각하지 마라!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		if (Event_Time(dTimeDelta, 7.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("인간 주제에 날 이길 수 있을 거라고 생각하지 마라!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+
+		else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("네놈들 따윈 지금 당장 찢어발겨 주마!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_SonoTsurani.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+
+		else if (Event_Time(dTimeDelta, 20.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 1개)]"), TEXT("...이 녀석, 인간 주제에 그럭저럭 강하군"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Aitus.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+
+		else if (Event_Time(dTimeDelta, 26.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(5.f, TEXT("[카마도 탄지로]"), TEXT("(지금까지는 셋을 상대로 잘 싸우고 있어..!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Coco.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+
+		else if (Event_Time(dTimeDelta, 31.5f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("좋아! 이대로 한 번에 끝낸다..!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Yosi.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+
+		else if (Event_Time(dTimeDelta, 38.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("너희한테선 썩은 기름 같은 냄새가 나!"), TEXT("지독한 악취다!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Akchi.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 44.5f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 죽인거야?!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 49.0f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 먹은거야?!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 54.0f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("여자들은!! 그 이상 살아 있으면"), TEXT("추하고 맛없어진단 말이다!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Honna.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 60.5f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("그래서 먹어준 거다!!"), TEXT("우리 혈귀한테 감사하라고!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Kata.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 68.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(셋이 연계를 취하고 있어..!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 73.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(선수를 빼앗기면 안돼! 앞을 내다봐!!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 78.f, m_dDialogAccTime))
+		{
+			Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("(다음에 뭘 할지 예측해! 그리고 반응하는 거야!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
 	}
 
-	else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime))
+	if (m_bPart2)
 	{
-		Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("네놈들 따윈 지금 당장 찢어발겨 주마!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_SonoTsurani.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
+		m_dDialogAccTime2 += dTimeDelta;
 
-	else if (Event_Time(dTimeDelta, 20.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 1개)]"), TEXT("...이 녀석, 인간 주제에 그럭저럭 강하군"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Aitus.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-
-	else if (Event_Time(dTimeDelta, 26.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(5.f, TEXT("[카마도 탄지로]"), TEXT("(지금까지는 셋을 상대로 잘 싸우고 있어..!)"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Coco.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-
-	else if (Event_Time(dTimeDelta, 31.5f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("좋아! 이대로 한 번에 끝낸다..!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Yosi.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-
-	else if (Event_Time(dTimeDelta, 38.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("너희한테선 썩은 기름 같은 냄새가 나!"), TEXT("지독한 악취다!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Akchi.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 44.5f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 죽인거야?!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 49.0f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 먹은거야?!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai2.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 54.0f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("여자들은!! 그 이상 살아 있으면"), TEXT("추하고 맛없어진단 말이다!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Honna.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 60.5f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("그래서 먹어준 거다!!"), TEXT("우리 혈귀한테 감사하라고!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Kata.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 68.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(셋이 연계를 취하고 있어..!)"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp0.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 73.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(선수를 빼앗기면 안돼! 앞을 내다봐!!)"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp1.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 78.f, m_dDialogAccTime))
-	{
-		Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("(다음에 뭘 할지 예측해! 그리고 반응하는 거야!)"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp2.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		if (Event_Time(dTimeDelta, 0.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("으아아아아악!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Part2_0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 5.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(7.f, TEXT("[카마도 탄지로]"), TEXT("(자포자기 상태야..!"), TEXT("이 상태로는 무슨 짓을 할지 몰라.. 위험해...!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(어서 녀석의 목을 베자..!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 18.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("하하! 어디 한번 공격해봐라!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Part2_2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 23.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(어디서 튀어나올지 전혀 감이 안와!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 29.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_SonoOnna.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
+		else if (Event_Time(dTimeDelta, 33.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Yeeee.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
+		else if (Event_Time(dTimeDelta, 38.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Onore.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
+		else if (Event_Time(dTimeDelta, 41.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Laugh.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
+		else if (Event_Time(dTimeDelta, 44.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_SonoOnna.ogg.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
+		else if (Event_Time(dTimeDelta, 48.f, m_dDialogAccTime2))
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Onore.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+		}
 	}
 
 }

@@ -99,6 +99,10 @@ private:
 	_double		m_dSound_Questioning = { 0.0 };
 	_double		m_dSound_Finding = { 0.0 };
 
+
+	_bool	m_isDead_Simple = { false };
+	
+
 private:
 	_float	m_fScale = { 0.8f };
 
