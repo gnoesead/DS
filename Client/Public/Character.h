@@ -287,6 +287,7 @@ protected:
 	_float	m_fFar2 = { 1.f };
 	_bool	m_isAuroraOn[3] = { false };
 	_double	m_dDialogAccTime = { 0.0 };
+	_double	m_dDialogAccTime2 = { 0.0 };
 	
 
 
