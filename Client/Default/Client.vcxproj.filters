@@ -887,14 +887,8 @@
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02. GameObjects\Environment\Sky</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\MapObject.cpp">
-      <Filter>02. GameObjects\Environment\MapObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\RotationMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\Rotation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\StaticMapObject.cpp">
-      <Filter>02. GameObjects\Environment\MapObject\Static</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TerrainMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\Terrain</Filter>
@@ -1213,6 +1207,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Character_Dialog.cpp">
       <Filter>02. GameObjects\UI\13.Character_Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MapObject.cpp">
+      <Filter>02. GameObjects\Environment\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StaticMapObject.cpp">
+      <Filter>02. GameObjects\Environment\MapObject\Static</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

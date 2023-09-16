@@ -138,14 +138,14 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	if (pGameInstance->Get_DIKeyDown(DIK_X))
 	{
 		m_bSmell_Detection = true;
-		m_pRendererCom->Set_GrayScale();
+		m_pRendererCom->Set_GrayScale_On(true);
 	}
 	Smell_Detection(dTimeDelta);
 
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
-		//m_pRendererCom->Set_RadialBlur();
 		m_pRendererCom->Set_RadialBlur();
+		//m_pRendererCom->Set_GrayScale_On(false);
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
@@ -247,6 +247,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
+	
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -318,7 +319,7 @@ HRESULT CPlayer_Tanjiro::Render()
 					m_pShaderCom->Begin(1);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken == 0)) { // 노 개방 스킬 썻을 때
-					m_pShaderCom->Begin(5);
+					m_pShaderCom->Begin(9);
 				}
 				else if ((m_isSkilling == false) && (m_Moveset.m_iAwaken != 0)) { // 개방 했을 때
 					if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE)
@@ -3493,6 +3494,20 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	}
 }
 
+void CPlayer_Tanjiro::Smell_Detection(_double dTimeDelta)
+{
+	if (m_bSmell_Detection == true)
+	{
+		m_dSmellTime += dTimeDelta;
+		if (m_dSmellTime > 3.0)
+		{
+			m_bSmell_Detection = false;
+			m_dSmellTime = 0.0;
+			m_pRendererCom->Set_GrayScale_On(false);
+		}
+	}
+}
+
 void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
@@ -3836,6 +3851,14 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 
 	// OutlineThickness
+	if (m_Moveset.m_iAwaken != 0 || m_isSkilling == true)
+	{
+		m_fOutlineThickness = 2.0f;
+	}
+	else
+		m_fOutlineThickness = 1.5f;
+	
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;
 
