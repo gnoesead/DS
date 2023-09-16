@@ -2173,6 +2173,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Trigger(true);
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.4f);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 			else if (m_isRight)
@@ -2191,6 +2193,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 					m_pModelCom->Set_Combo_Trigger(true);
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.4f);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 		}
@@ -2207,6 +2211,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dash(_double dTimeDelta)
 	//더블스텝
 	Go_Dir_Deceleration(dTimeDelta, 71, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
 	Go_Dir_Deceleration(dTimeDelta, 73, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.2f * m_fScaleChange, m_Moveset.m_Input_Dir);
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 71 || m_pModelCom->Get_iCurrentAnimIndex() == 73)
+	{
+		m_dDelay_DoubleStep += dTimeDelta;
+	}
 }
 
 void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -2860,7 +2868,10 @@ void CPlayer_Zenitsu::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		m_Moveset.m_isRestrict_DoubleStep = true;
+		if(m_dDelay_DoubleStep < 1.0f)
+			m_Moveset.m_isRestrict_DoubleStep = true;
+		else
+			m_Moveset.m_isRestrict_DoubleStep = false;
 	}
 	//제한 해제d
 	else

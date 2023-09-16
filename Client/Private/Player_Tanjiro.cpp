@@ -2198,6 +2198,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.35f);
 					//Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 			else if (m_isRight)
@@ -2236,6 +2238,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	//더블스텝
 	Go_Dir_Deceleration(dTimeDelta, 98, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.15f * m_fScaleChange, m_Moveset.m_Input_Dir);
 	Go_Dir_Deceleration(dTimeDelta, 100, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.15f * m_fScaleChange, m_Moveset.m_Input_Dir);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 98 || m_pModelCom->Get_iCurrentAnimIndex() == 100)
+	{
+		m_dDelay_DoubleStep += dTimeDelta;
+	}
+
 }
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -3317,7 +3325,10 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		m_Moveset.m_isRestrict_DoubleStep = true;
+		if (m_dDelay_DoubleStep < 1.0f)
+			m_Moveset.m_isRestrict_DoubleStep = true;
+		else
+			m_Moveset.m_isRestrict_DoubleStep = false;
 	}
 	//어드벤처 모드 런, 기본
 	else if (ANIM_ADV_IDLE == iCurAnimIndex || ANIM_ADV_RUN == iCurAnimIndex || ANIM_ADV_RUN_END == iCurAnimIndex
