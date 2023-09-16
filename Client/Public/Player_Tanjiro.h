@@ -102,8 +102,8 @@ private:
 	void	Create_SwampWaterParticleEffect(_double dTimeDelta);	// 안원 ( 물에 빠졌을떄)
 
 	//사운드용
-	void	Play_Sound_Atk(_int iType, _double vol); // 0:small, 1:medium, 2:big
-	void	Play_Sound_Dmg(_int iType, _double vol);
+	void	Play_Sound_Atk(_int iType, _float vol); // 0:small, 1:medium, 2:big
+	void	Play_Sound_Dmg(_int iType, _float vol);
 
 private:
 	CSword* m_pSword = { nullptr };
