@@ -160,6 +160,10 @@ private: //애니메이션 제어용 변수들
 
 	//Down
 	_double		m_dDelay_Down = { 0.0 };
+
+
+	//사운드
+	CSoundMgr::CHANNELID m_SoundChr = { CSoundMgr::MAXCHANNEL };
 	
 private:
 	/* 임시 코드 */
