@@ -184,11 +184,11 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
 
 
-    if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
+    /*if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
     {
         COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
         CFadeManager::GetInstance()->Set_Fade_Out(true);
-    }
+    }*/
 
     if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
 

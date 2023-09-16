@@ -193,15 +193,15 @@ void CLevel_House::Tick(_double dTimeDelta)
 
 			HRESULT hr = 0;
 
-			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_TRAIN))
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
 			{
 				pGameInstance->Clear_Light();
-				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_TRAIN), false, false);
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
 			}
 			else
 			{
 				pGameInstance->Clear_Light();
-				hr = pGameInstance->Swap_Level(LEVEL_TRAIN);
+				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 			}
 
 			if (FAILED(hr)) {
