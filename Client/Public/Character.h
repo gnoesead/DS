@@ -289,9 +289,6 @@ protected:
 	_double	m_dDialogAccTime = { 0.0 };
 	_double	m_dDialogAccTime2 = { 0.0 };
 	
-
-
-
 protected:
 	HRESULT Add_Components();
 	void	SetUp_Height();
