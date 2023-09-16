@@ -429,9 +429,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_1", m_pTransformCom, &EffectWorldDesc);
 
-
 			}
-			if (1 == m_iEvent_Index)	// 0.25
+			else if (1 == m_iEvent_Index) // 0.15
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_3, 0.7f);
+			}
+			else if (2 == m_iEvent_Index)	// 0.25
 			{
 				dLongLifeTime = 6.0;
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -443,8 +447,20 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Create_AlertRect(BLADE_FIVE_RANDOM);
 				Create_BladeEffect(BLADE_FIVE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
+				
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.1f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_2, 0.1f);
+
 			}
-			if (2 == m_iEvent_Index)	// 1.20
+			else if (3 == m_iEvent_Index) // 1.10
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_3, 0.7f);
+			}
+			else if (4 == m_iEvent_Index)	// 1.20
 			{
 				dLongLifeTime = 6.0;
 
@@ -455,6 +471,10 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Create_AlertRect(BLADE_THREE_RANDOM);
 				Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
 
+				_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_4, 0.1f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_5, 0.1f);
 			}
 		}
 
@@ -473,7 +493,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom, &EffectWorldDesc);
 				}
-				if (1 == m_iEvent_Index)	// 0.25
+				else if (1 == m_iEvent_Index) // 0.13
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_3, 0.7f);
+				}
+				else if (2 == m_iEvent_Index)	// 0.25
 				{
 					dLongLifeTime = 3.0;
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -482,6 +507,11 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 					Create_AlertRect(BLADE_THREE_RANDOM);
 					Create_BladeEffect(BLADE_THREE_RANDOM, vRandomDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET);
+
+					_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+					Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.15f);
+					_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+					Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_2, 0.15f);
 				}
 			}
 			break;
@@ -525,6 +555,11 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 0.f), 4.0,
 						CAtkCollider::TYPE_SMALL, -vVerticalDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_BULLET, "Kyogai_BladeAtk");
 					Create_AlertRect(BLADE_ONE_RANDOM);
+
+					_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+					Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.15f);
+					_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+					Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_2, 0.15f);
 				}
 			}
 			break;
@@ -534,9 +569,16 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		}
 
+
 		if (ANIM_ATKCMB_02LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)	// 0.19
+			if (0 == m_iEvent_Index) // 0.09
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.7f);
+			}
+
+			else if (1 == m_iEvent_Index)	// 0.19
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.8f;
@@ -599,9 +641,20 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					Create_BladeEffect(BLADE_ONE_RANDOM, vHorizonDir, dLongLifeTime, dSpeed, CAtkCollider::TYPE_KYOGAI_HORIZON_BULLET);
 
 				}
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.1f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_2, 0.1f);
 			}
 
-			if (1 == m_iEvent_Index)	// 0.62
+			else if (2 == m_iEvent_Index) // 0.52
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_3, 0.7f);
+			}
+
+			else if (3 == m_iEvent_Index)	// 0.62
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.8f;
@@ -661,8 +714,14 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 		if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex() ||
 			ANIM_ATKSK_RB == m_pModelCom->Get_iCurrentAnimIndex() || ANIM_ATKSK_LB == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			if (0 == m_iEvent_Index) // 0.40  or 0.45
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("ui_taishihyo_stamp_LW.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::KYOGAI_BOOK_0, 0.5f);
 
-			if (0 == m_iEvent_Index)	// 0.5 or 0.55
+				
+			}
+			else if (1 == m_iEvent_Index)	// 0.5 or 0.55
 			{
 				CAlertCircle::EFFECTDESC EffectDesc;
 				EffectDesc.pOwnerTransform = m_pTransformCom;
@@ -673,6 +732,9 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				if (ANIM_ATKSK_LF == m_pModelCom->Get_iCurrentAnimIndex())
 				{
 					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom);
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_12.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.7f);
 				}
 
 				if (ANIM_ATKSK_RF == m_pModelCom->Get_iCurrentAnimIndex())
@@ -681,15 +743,21 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 					EffectDesc.vPosition.x += 0.6f;
 					EffectDesc.vPosition.y += 0.5f;
 					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_22", m_pTransformCom, &EffectDesc);
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_AradaTasi.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.7f);
 				}
 			}
-
-
 		}
 		if (ANIM_KICKDOWN == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			if (0 == m_iEvent_Index) // 0.5
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_firel_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.8f);
+			}
 
-			if (0 == m_iEvent_Index)	// 0.6
+			else if (1 == m_iEvent_Index)	// 0.6
 			{
 				//CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_11", m_pTransformCom);
 
@@ -697,19 +765,28 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(8.0f, 8.0f, 8.0f), _float3(0.f, 1.0f, 2.f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
-				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+				CCameraManager::GetInstance()->Camera_Shake(1.0, 200);
+				m_pRendererCom->Set_RadialBlur();
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 			}
-
+			else if (2 == m_iEvent_Index)	// 0.67
+			{
+				m_pRendererCom->Set_RadialBlur();
+			}
 
 		}
 
 		if (ANIM_STOMPKICK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			if (0 == m_iEvent_Index) // 0.34
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("teoni_foot_01W.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.2f);
+			}
 
-			if (0 == m_iEvent_Index)	// 1.1
+			else if (1 == m_iEvent_Index)	// 1.1
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.7f;
@@ -721,34 +798,36 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectDesc.iType = CAlertCircle::TYPE_KICKDOWN;
 
 				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertCircle"), &EffectDesc, false);
-
-
 			}
 
-			if (1 == m_iEvent_Index) // 1.65
+			else if (2 == m_iEvent_Index) // 1.55
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_firel_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.6f);
+			}
+			else if (3 == m_iEvent_Index) // 1.65
 			{
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(8.0f, 8.0f, 8.0f), _float3(0.f, 1.0f, 2.0f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fBigDmg);
 
-				CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
+				CCameraManager::GetInstance()->Camera_Shake(1.0 , 200);
+				m_pRendererCom->Set_RadialBlur();
 				Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 			}
 
-			if (2 == m_iEvent_Index) // 1.73
+			else if (4 == m_iEvent_Index) // 1.73
 			{
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
-
+				m_pRendererCom->Set_RadialBlur();
 			}
 
 
 		}
 		if (ANIM_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-
 			if (0 == m_iEvent_Index) // 0.0
 			{
-
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(10.0f, 10.0f, 10.0f), _float3(0.f, 5.f, 0.0f), dLongLifeTime,
 					CAtkCollider::TYPE_BIG, vMonsterDir, 0.f);
@@ -761,6 +840,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Camera_Shake(1.0);
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 				m_pRendererCom->Set_RadialBlur();
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Scream.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.6f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("amb_treeBreak_divided03.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.6f);
+				_tchar szSoundFile3[MAX_PATH] = TEXT("hit_firel_01.ogg");
+				Play_Sound_Channel(szSoundFile3, CSoundMgr::MONSTER_EFFECT_2, 0.6f);
 			}
 			else if (1 == m_iEvent_Index) // 0.8
 			{
@@ -869,7 +955,19 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_ATKSTEP_BACK == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-			if (0 == m_iEvent_Index)	// 0.77
+			if (0 == m_iEvent_Index)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Jump_Hueh.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.9f);
+			}
+
+			if (1 == m_iEvent_Index) // 0.7
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.7f);
+			}
+
+			if (2 == m_iEvent_Index)	// 0.77
 			{
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.4f;
@@ -877,13 +975,19 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkBack", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.2f);
+			
 			}
 			switch (m_eCurPhase)
 			{
 			case CBoss_Kyogai::PHASE_1:
 			{
-				if (1 == m_iEvent_Index)	// 1.0
+				if (3 == m_iEvent_Index)	// 1.0
 				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.2f);
 
 					dLongLifeTime = 5.f;
 
@@ -939,8 +1043,11 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 			break;
 			case CBoss_Kyogai::PHASE_2:
 			{
-				if (1 == m_iEvent_Index)	// 1.0
+				if (3 == m_iEvent_Index)	// 1.0
 				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.2f);
+
 
 					dLongLifeTime = 5.f;
 
@@ -1008,9 +1115,16 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 				CEffectPlayer::Get_Instance()->Play("Kyogai_AtkStepB", m_pTransformCom, &EffectWorldDesc);
+
+
 			}
 			if (1 == m_iEvent_Index)	// 1.0
 			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.2f);
+				_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_2, 0.2f);
+
 				dLongLifeTime = 5.f;
 
 				if (m_iAtkStepTypeNum == 1) // ÀÏÁ÷¼±
@@ -3283,8 +3397,24 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 	if (true == m_bTurnRF || true == m_bTurnLF || true == m_bTurnRB || true == m_bTurnLB)
 		m_dTimeAcc += dTimeDelta;
 
+	if (Event_Time(dTimeDelta, 1.0, m_dTimeAcc))
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("room_rotation_04.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.3f);
+	}
+
 	if (Event_Time(dTimeDelta, 1.5, m_dTimeAcc))
 		CBattle_UI_Manager::GetInstance()->Set_Timing_On(true);
+
+	if (Event_Time(dTimeDelta, 1.7, m_dTimeAcc))
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("room_rotation_03.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.5f);
+
+		_tchar szSoundFile2[MAX_PATH] = TEXT("ui_qte_success.ogg");
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile2, CSoundMgr::UI, 0.7f);
+	}
 
 	if (Event_Time(dTimeDelta, 2.0, m_dTimeAcc))
 	{

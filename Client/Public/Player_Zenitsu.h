@@ -92,8 +92,8 @@ private: //애니메이션 제어용 함수들
 
 
 	//사운드용
-	void	Player_Sound_Atk(_int iType, _double vol); // 0:small, 1:medium, 2:big
-	void	Player_Sound_Dmg(_int iType, _double vol); 
+	void	Player_Sound_Atk(_int iType, _float vol); // 0:small, 1:medium, 2:big
+	void	Player_Sound_Dmg(_int iType, _float vol); 
 
 private:
 	CSword* m_pSword = { nullptr };

@@ -364,7 +364,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		}
 		m_isFirst_Questioning = true;
 	}
-
+	
 	if (m_isSlowMotion)
 	{
 		if (m_isFirst_SlowMotion)
@@ -398,6 +398,15 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 			m_isSlowMotion = true;
 			m_dDelay_SlowMotion = 0.0;
 			m_isFirst_SlowMotion = true;
+
+			m_isFirst_Quest_Second = true;
+			m_dDelay_Quest_Second = 0.0;
+
+		}
+		m_dDelay_Quest_Second += dTimeDelta;
+		if (m_dDelay_Quest_Second > 0.2f && m_isFirst_Quest_Second)
+		{
+			m_isFirst_Quest_Second = false;
 
 			_tchar szRun_0[MAX_PATH] = TEXT("Zako_Questioning.ogg");
 			Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.5f);
