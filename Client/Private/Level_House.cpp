@@ -140,6 +140,12 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_Layer_Character_Dialog(TEXT("Layer_Character_Dialog"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Character_Dialog : CLevel_Village");
+		return E_FAIL;
+	}
+
     CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(false);
 
@@ -388,6 +394,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 
 	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_2_0; //abcde
 
+
 	CharacterDesc.WorldInfo.vPosition = _float4(49.f, 0.f, 112.f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; // 0, 2, 5
 
@@ -398,6 +405,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
+
 	CharacterDesc.WorldInfo.vPosition = _float4(39.07f, 0.f, 124.7f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_TALK; // 0, 2, 5
 
@@ -407,6 +415,7 @@ HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
 		MSG_BOX("Failed to Add_GameObject : Monster_Zako_0");
 		return E_FAIL;
 	}
+
 
 	CharacterDesc.WorldInfo.vPosition = _float4(63.f, 0.f, 123.f, 1.f);
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_WALKTALK; // 0, 2, 5
@@ -1974,6 +1983,22 @@ HRESULT CLevel_House::Ready_Layer_SmellBundle(const _tchar* pLayerTag)
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
+	return S_OK;
+}
+
+HRESULT CLevel_House::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_Character_Dialog"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 

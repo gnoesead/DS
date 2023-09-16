@@ -124,12 +124,20 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 	Safe_Release(pGameInstance);
 
 	if (m_CharacterDesc.NPCDesc.eNPC == NPC_QUEST)
+	{
 		m_iAttackIndex = 0; // 2,5
+		m_SoundChr = CSoundMgr::MONSTER_VOICE;
+	}
 	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_TALK)
+	{
 		m_iAttackIndex = 2; // 2,5
+		m_SoundChr = CSoundMgr::MONSTER_VOICE_SUB;
+	}
 	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_WALKTALK)
+	{
 		m_iAttackIndex = 5; // 2,5
-
+		m_SoundChr = CSoundMgr::MONSTER_VOICE_SUB2;
+	}
 	m_pModelCom->Set_LinearDuration(ANIM_IDLE, 0.6);
 
 	return S_OK;
@@ -297,11 +305,17 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.3
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.7f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.39
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 		}
 
@@ -310,6 +324,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.55
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.7f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.64
@@ -328,6 +345,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.17
@@ -339,6 +359,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 			if (3 == m_iEvent_Index)
 			{//0.35
@@ -350,6 +373,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws_R", m_pTransformCom, &EffectDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 			if (5 == m_iEvent_Index)
 			{//0.61
@@ -361,6 +387,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 			if (7 == m_iEvent_Index)
 			{//0.84
@@ -381,10 +410,17 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
-			}
 
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
+			}
 		}
 
 		if (9 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -394,6 +430,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 				EffectDesc.fScale = 0.9f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectDesc);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_slash01.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.1
@@ -410,6 +449,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.65
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_KickDown", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 		}
 		if (13 == m_pModelCom->Get_iCurrentAnimIndex()) // 길게
@@ -425,6 +467,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shockwave_XYZ_Small", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_wind.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_firel_01.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
 		}
 
@@ -433,6 +481,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.15
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinKick", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_wind_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 		}
 
@@ -442,6 +493,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_19.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 		}
 
@@ -452,6 +506,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 				EffectDesc.fScale = 0.8f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_L", m_pTransformCom, &EffectDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.24
@@ -467,6 +527,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 				EffectDesc.fScale = 0.8f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_R", m_pTransformCom, &EffectDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.28
@@ -485,6 +551,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.5
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Slam", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_L.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 		}
 
@@ -494,6 +566,9 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
 					CAtkCollider::TYPE_BLOW, AtkDir, 8.0f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_wind_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 		}
 		if (31 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -508,6 +583,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 
 				EffectWorldDesc.vPosition.x = -0.2f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword03.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
 		}
 
@@ -517,15 +598,24 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{//0.45
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin_Wind", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_09.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.59
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 			if (2 == m_iEvent_Index)
 			{//0.9
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
 			if (3 == m_iEvent_Index)
 			{//0.99
@@ -550,11 +640,17 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 				EffectDesc.fScale = 0.7f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_SpinPunch", m_pTransformCom, &EffectDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_09.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.85f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 0.4,
 					CAtkCollider::TYPE_SMALL, AtkDir, 6.0f);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_19.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
 		}
 
@@ -908,6 +1004,13 @@ void CMonster_Zako::Animation_Control_Idle(_double dTimeDelta)
 	Go_Straight_Constant(dTimeDelta, ANIM_WALK_FRONT, 0.3f);
 	Go_Straight_Constant(dTimeDelta, 69, 0.3f);
 
+	//사운드
+	/*if (iCurAnim == ANIM_WALK_LEFT || iCurAnim == ANIM_WALK_RIGHT || iCurAnim == ANIM_WALK_BACK || iCurAnim == ANIM_WALK_FRONT
+		|| iCurAnim == 72 || iCurAnim == 75 || iCurAnim == 66 || iCurAnim == 69)
+	{
+		Play_Sound_Move(dTimeDelta, 0.65f);
+	}*/
+
 
 	Idle_ATK_Pattern_Controler(dTimeDelta);
 }
@@ -1173,11 +1276,17 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 		m_isFirst_AtkPattern = false;
 
 		if (2.5f < Calculate_Distance())
+		{
 			m_pModelCom->Set_Animation(ANIM_RUN);
+		}
 		else
+		{
 			m_pModelCom->Set_Animation(ANIM_ATK_CLAWS);
-
+		}
 		m_isFirst_ATK_0 = true;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hoooooggggh.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.8f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1197,6 +1306,8 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 				m_pModelCom->Set_Animation(58);
 			}
 		}
+
+		Play_Sound_Move(dTimeDelta, 0.14f);
 	}
 	if (iCurAnim == 58)
 	{
@@ -1218,6 +1329,9 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_ATK_CLAW_FROG);
 
 		m_isFirst_ATK_0 = true;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_WasiniwaKatene.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1257,6 +1371,9 @@ void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_ATK_SPINKICK);
 
 		m_isFirst_ATK_0 = true;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_ZankokuniKorositeYarojo.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1280,6 +1397,9 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 		m_isFirst_ATK_1 = true;
 		m_isTime_ATK_0 = false;
 		m_dTime_ATK_0 = 0.0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_UHahahahaha.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1334,6 +1454,9 @@ void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
 
 		m_isTime_ATK_0 = false;
 		m_dTime_ATK_0 = 0.0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_Hehehehe.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1376,6 +1499,9 @@ void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
 
 		m_isTime_ATK_0 = true;
 		m_dTime_ATK_0 = 0.0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Sirumonoga.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1407,6 +1533,9 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 
 		m_isTime_ATK_0 = false;
 		m_dTime_ATK_0 = 0.0;
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hue.mp3");
+		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1533,7 +1662,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 				m_iSmallHit_Index = 0;
 			}
 		}
-		Play_Sound_Dmg(0, 0.7f);
+		Play_Sound_Dmg(0, 0.9f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -1582,7 +1711,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		//pGameInstance->Time_Slow(0.3, 0.15);
-		Play_Sound_Dmg(0, 0.7f);
+		Play_Sound_Dmg(0, 0.9f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_FRONT, 2.0f, 0.05f, AtkDir);
 #pragma endregion
@@ -1616,7 +1745,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		//pGameInstance->Time_Slow(0.23, 0.3);
-		Play_Sound_Dmg(0, 0.7f);
+		Play_Sound_Dmg(0, 0.9f);
 	}
 
 	//어퍼시 수직상승 여부
@@ -1673,7 +1802,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 
-		Play_Sound_Dmg(1, 0.7f);
+		Play_Sound_Dmg(1, 0.9f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BOUND, 0.3f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 97, 0.3f, AtkDir);
@@ -1722,7 +1851,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 		//pGameInstance->Time_Slow(0.6, 0.4);
 
-		Play_Sound_Dmg(1, 0.7f);
+		Play_Sound_Dmg(1, 0.9f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 92, 2.5f, AtkDir);
@@ -1749,7 +1878,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_isSurging = true;
 
 
-		Play_Sound_Dmg(1, 0.7f);
+		Play_Sound_Dmg(1, 0.9f);
 	}
 #pragma endregion
 
@@ -1803,7 +1932,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		//pGameInstance->Time_Slow(0.2, 0.1);
-		Play_Sound_Dmg(0, 0.7f);
+		Play_Sound_Dmg(0, 0.9f);
 	}
 
 
@@ -1960,36 +2089,43 @@ void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
 		{
 			m_iSound_Dmg_Small++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_0.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_Chae.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Small == 1)
 		{
 			m_iSound_Dmg_Small++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_1.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_Keh.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Small == 2)
 		{
 			m_iSound_Dmg_Small++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_2.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_Choa.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Small == 3)
 		{
 			m_iSound_Dmg_Small++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_3.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_Gk.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Small == 4)
 		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_DDeuk.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
+		}
+		else if (m_iSound_Dmg_Small == 5)
+		{
 			m_iSound_Dmg_Small = 0;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Small_4.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Small_Ggowak.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 	}
 	// Medium
@@ -1999,22 +2135,29 @@ void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
 		{
 			m_iSound_Dmg_Medium++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_0.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Middle_Juuaak.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Medium == 1)
 		{
 			m_iSound_Dmg_Medium++;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_1.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Middle_Zzum.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 		else if (m_iSound_Dmg_Medium == 2)
 		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Middle_Uuummm.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 3)
+		{
 			m_iSound_Dmg_Medium = 0;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Medium_2.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Middle_Yaaghk.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 	}
 	// Big
@@ -2022,10 +2165,17 @@ void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
 	{
 		if (m_iSound_Dmg_Big == 0)
 		{
+			m_iSound_Dmg_Big++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Big_Euak.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
+		}
+		else if (m_iSound_Dmg_Big == 1)
+		{
 			m_iSound_Dmg_Big = 0;
 
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Dmg_Big_0.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Big_Kkyahak.mp3");
+			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 	}
 }

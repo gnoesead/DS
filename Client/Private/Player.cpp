@@ -991,7 +991,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	CameraLook.w = 0.0f;
 	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
 
-	if (m_Moveset.m_isRestrict_Throw == false && m_isComboing == false && m_Moveset.m_isRestrict_KeyInput == false)
+	if (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_Moveset.m_isRestrict_KeyInput == false)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{
@@ -1016,8 +1016,16 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 		{
 			if (m_Moveset.m_isRestrict_Jump == false && m_Moveset.m_isRestrict_KeyInput == false)
 				m_Moveset.m_Up_Battle_Guard = true;
+			m_isGuarding = false;
 		}
 	}
+
+	if (m_Moveset.m_State_Battle_Guard && m_Moveset.m_Down_Battle_Guard == false && m_isGuarding == false)
+	{
+		m_Moveset.m_Down_Battle_Guard = true;
+		m_isGuarding = true;
+	}
+
 
 	if (m_Moveset.m_isRestrict_Throw == false)
 	{
