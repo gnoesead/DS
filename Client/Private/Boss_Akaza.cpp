@@ -375,6 +375,13 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		_double dVol = 0.5;
 #pragma region AWAKE_ComboPunch
+		if (ANIM_AWAKE_COMBOPUNCH_Start == m_pModelCom->Get_iCurrentAnimIndex())
+		{
+			if (m_iEvent_Index == 0)
+			{
+
+			}
+		}
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
