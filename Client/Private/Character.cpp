@@ -881,7 +881,7 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
-void CCharacter::Play_Sound_Metal(_double vol)
+void CCharacter::Play_Sound_Metal(_float vol)
 {
 	if (m_iSound_Metal_Index == 0)
 	{

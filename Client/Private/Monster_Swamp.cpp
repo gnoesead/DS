@@ -1310,7 +1310,11 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		break;
 	}
 
-	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE)
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_B || m_pModelCom->Get_iCurrentAnimIndex() == 60
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_F || m_pModelCom->Get_iCurrentAnimIndex() == 63
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_L || m_pModelCom->Get_iCurrentAnimIndex() == 66
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_R || m_pModelCom->Get_iCurrentAnimIndex() == 69)
 	{
 		m_eCurState = STATE_IDLE;
 
