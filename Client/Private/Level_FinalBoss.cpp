@@ -156,7 +156,6 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	}
 
 
-
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 

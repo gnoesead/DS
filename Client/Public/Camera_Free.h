@@ -84,6 +84,8 @@ private:
 	_bool           m_bIs_Combo_On = { false };
 	_bool           m_bIs_LockFree = { false };
 	_bool           m_bIs_Battle_LockFree = { false };
+	_bool           m_bIs_Monster_Solo = { false };
+
 
 	_bool           m_bIs_Cut_Dist_Set = { false };
 	_bool           m_bIs_Pos_Set= { false };
