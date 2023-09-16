@@ -105,7 +105,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	for (_uint i = 0; i < 20; ++i)
 		pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
-
+	m_fOutlineThickness = 1.5f;
+	m_fOutlineFaceThickness = 0.6f;
 
 	Safe_Release(pGameInstance);
 
@@ -163,8 +164,8 @@ HRESULT CBoss_Akaza::Render()
 		return E_FAIL;
 
 	_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	if (m_bMonsterDead == false)
+	_bool bAwake_Time = (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_START, 0.63) && !m_pModelCom->Get_AnimRatio(ANIM_AWAKE_START, 0.98));
+	if (m_bMonsterDead == false /*&& bAwake_Time == false*/)
 	{
 		//Outline Render
 		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
@@ -575,7 +576,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 2.5f;
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Push", m_pTransformCom, &EffectWorldDesc);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
-				Camera_Shake(1.0);
+				Camera_Shake(0.7);
 				m_pRendererCom->Set_RadialBlur();
 			}
 			else if (1 == m_iEvent_Index) // 0.23
@@ -588,13 +589,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{// 2.07
-				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.vPosition.x = 0.01f;
-				EffectWorldDesc.vPosition.y = 0.23f;
-				EffectWorldDesc.vPosition.z = 0.16f;
-				EffectWorldDesc.fScale = 1.2f;
 
-				CEffectPlayer::Get_Instance()->Play("Akaza_Awake_Eye_Black", m_pTransformCom, &EffectWorldDesc);
 				m_pRendererCom->Set_BackLight();
 			}
 			if (1 == m_iEvent_Index)
@@ -780,10 +775,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
 			}
 			if (1 == m_iEvent_Index) // 0.65
-			{
+			{				
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Combo_Upper", m_pTransformCom);
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLongLifeTime,
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
 			}
 			if (2 == m_iEvent_Index) // 0.75
@@ -1041,7 +1036,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (m_bAwake == true)
 			{
-				vRandomDir = Random_Dir(vMonsterDir, 15.f, 60.f, -20.f, 20.f); // 조절 하면 될듯~
+				 // 조절 하면 될듯~
 				// -> Rotation_Dir() 이건 원하는 방향으로 
 
 				if (0 <= m_iEvent_Index && 5 >= m_iEvent_Index)
@@ -1050,7 +1045,16 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					EffectWorldDesc.vPosition.z = 0.5f;
 					CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Shoot_Projectile", m_pTransformCom, &EffectWorldDesc);
 
+					vRandomDir = Random_Dir(vMonsterDir, 10.f, 20.f, -30.f, 0.f);
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
+						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
+
+					vRandomDir = Random_Dir(vMonsterDir, 20.f, 30.f, 0.f, 30.f);
+					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
+						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
+
+					vRandomDir = Random_Dir(vMonsterDir, 30.f, 40.f, -30.f, 30.f);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 				}
@@ -1410,14 +1414,8 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			if (PlayerIndex == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
-				//Play_HitEffect();
-
-				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.fScale = 1.f;
-				EffectWorldDesc.vPosition.y += 0.3f;
-				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);				
+				Play_HitEffect();				
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1529,7 +1527,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			pPlayer->Set_Hit_Success_Hekireki(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
-		
+
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 			EffectWorldDesc.fScale = 1.f;
 			EffectWorldDesc.vPosition.y += 0.3f;
@@ -1539,7 +1537,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			EffectWorldDesc.vPosition.z -= 1.f;
 
 			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
-		
+
 
 		}
 
@@ -2960,7 +2958,12 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 		if (m_dJumpStompTime <= 3.0)
 		{
 			if (Check_Distance_FixY(5.f) == false)
-				m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
+			{
+				if (m_bAwake == false)
+					m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 1.50);
+				else
+					m_pTransformCom->Chase_Target_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION), dTimeDelta, 0.90);
+			}
 		}
 		if (Event_Time(dTimeDelta, 3.40, m_dJumpStompTime))
 		{
@@ -3012,7 +3015,8 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
-						Camera_Shake(1.0, 120);
+
+						Camera_Shake(1.0, 200);
 					}
 				}
 
@@ -3591,15 +3595,20 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
+
 	}
-	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.65, dTimeDelta))
+	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.64, dTimeDelta))
 	{
+		m_pRendererCom->Set_RadialBlur_On(true);
 		m_pRendererCom->Set_BackLight();
+		Camera_Shake(1.2, 30);
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.970, dTimeDelta))
 	{
 		//m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vSavePos);
-		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));		
+		m_pRendererCom->Set_RadialBlur_On(false);
+
+		m_pTransformCom->LookAt(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.990, dTimeDelta))
 	{
@@ -4421,8 +4430,19 @@ HRESULT CBoss_Akaza::SetUp_ShaderResources()
 	Safe_Release(pGameInstance);
 	// OutlineThickness
 
-	m_fOutlineThickness = 1.5f;
-	m_fOutlineFaceThickness = 0.6f;
+	_bool bAwake_Time = (m_pModelCom->Get_AnimRatio(ANIM_AWAKE_START, 0.63) && !m_pModelCom->Get_AnimRatio(ANIM_AWAKE_START, 0.98));
+
+	if (bAwake_Time == true)
+	{
+		m_fOutlineThickness = 0.9f;
+		m_fOutlineFaceThickness = 0.f;
+	}
+	else if (m_bSuperArmor == true)
+	{
+		m_fOutlineThickness = 2.0f;
+	}
+	else
+		m_fOutlineThickness = 1.5f;
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

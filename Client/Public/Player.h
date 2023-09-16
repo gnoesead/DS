@@ -189,8 +189,7 @@ protected:
 	//캐릭 변경
 	void	Player_Change_Setting_Status(_double dTimeDelta);
 
-protected:
-	void	Smell_Detection(_double dTimeDelta);
+
 
 protected:
 
