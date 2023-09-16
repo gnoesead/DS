@@ -1913,7 +1913,7 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Helix.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Charge_Helix");
 		return E_FAIL;
@@ -1925,13 +1925,17 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc_Mesh.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Zen_Charge_Elc_Mesh");
 		return E_FAIL;
-	}*/
+	}
 
-	
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zenitsu/Zen_Charge_Elc_Tex.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Zen_Charge_Elc_Tex");
+		return E_FAIL;
+	}
 
 	
 

@@ -755,8 +755,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x += 0.f;
 				EffectWorldDesc.fScale = 1.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 4.0f), 0.5,
@@ -771,8 +771,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
@@ -789,8 +789,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 8.0f), 0.5,
@@ -805,8 +805,8 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.vPosition.x += Random::Generate_Float(-2.3f, -1.5f);
 				EffectWorldDesc.fScale = 1.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
-				//CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Tex", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Charge_Elc_Mesh", m_pTransformCom, &EffectWorldDesc);
 
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.f, 2.f, 2.f), _float3(EffectWorldDesc.vPosition.x, 1.0f, 10.0f), 0.5,
