@@ -519,7 +519,8 @@ CParticleSystem* CEffectPlayer::Reuse_ParticleSystem()
 		return nullptr;
 
 	pParticleSystem->Set_Collect(false);
-	pParticleSystem->Set_IsParts(false);
+	//pParticleSystem->Set_IsParts(false);
+	pParticleSystem->Set_isFinished(false);
 
 	return pParticleSystem;
 }
@@ -929,6 +930,7 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 			pParticleSystem->Set_Scale(vFloat3);
 
 			pParticleSystem->Set_Collect(false);
+			pParticleSystem->Set_isFinished(false);
 
 			pGameInstance->Add_GameObject(LEVEL_STATIC, TEXT("Layer_ParticleSystem_EffectParticle"), pParticleSystem);
 
@@ -956,7 +958,8 @@ CParticleSystem* CEffectPlayer::Reuse_EffectParticle(const char* pTag, CTransfor
 		return nullptr;
 
 	pParentParticleSystem->Set_Collect(false);
-	pParentParticleSystem->Set_IsParts(false);
+	pParentParticleSystem->Set_isFinished(false);
+	//pParentParticleSystem->Set_IsParts(false);
 	pParentParticleSystem->Set_ParentPartsObject(nullptr);
 
 	pParentParticleSystem->Set_ParentMatrix(pParentTransformCom->Get_WorldFloat4x4());			// 이거 해줘야 함

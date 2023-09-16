@@ -68,7 +68,7 @@ void CEffect_Texture::Tick(_double _dTimeDelta)
 
 	__super::Tick(dTimeDelta);
 
-	if (m_ParentDesc.pParent->Get_isPlaying())
+	if (m_ParentDesc.pParent->Get_isPlaying() && !m_ParentDesc.pParent->Get_isFinished())
 	{
 		if (m_fDelayTimeAcc > m_fStartDelay)
 		{

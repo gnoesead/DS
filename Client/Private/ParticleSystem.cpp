@@ -70,6 +70,7 @@ void CParticleSystem::Tick(_double dTimeDelta)
 			if (!m_pParent)
 				CEffectPlayer::Get_Instance()->Collect_EffectParticle(m_pTag, this);
 		}
+
 		m_isCollect = true;
 
 		m_bStop = true;
@@ -94,6 +95,34 @@ void CParticleSystem::Tick(_double dTimeDelta)
 			{
 				if (m_dTimeAccCycle > m_pEffect->Get_Duration() + m_pEffect->Get_StartLifeTimeMax())
 					m_dTimeAccCycle = 0.0;
+			}
+		}
+	}
+	else if (m_bPlay && nullptr == m_pEffect)
+	{
+		if (m_PartEffects.size() > 0)
+		{
+			int iFinished = 0;
+			for (auto Parts : m_PartEffects)
+			{
+				if (Parts->m_bFinished == true)
+					iFinished += 0;
+				else
+					iFinished += 1;
+			}
+
+			if (iFinished == 0)
+				m_bFinished = true;
+
+			if (m_bFinished == true)
+			{
+				Collect_Parts();
+				m_isCollect = true;
+
+				CEffectPlayer::Get_Instance()->Collect_ParticleSystem(this);
+
+				m_bStop = true;
+				m_bPlay = false;
 			}
 		}
 	}
@@ -298,6 +327,26 @@ HRESULT CParticleSystem::Add_Component_Texture(_uint iLevelIndex, const _tchar* 
 HRESULT CParticleSystem::Add_Component_Model(_uint iLevelIndex, const _tchar* pComponentTag)
 {
 	return dynamic_cast<CEffect_Mesh*>(m_pEffect)->Add_Component_Model(iLevelIndex, pComponentTag);
+}
+
+void CParticleSystem::Collect_Parts()
+{
+	for (auto Parts : m_PartEffects)
+	{
+		CEffect* pEffect = Parts->Get_Effect();
+		switch (pEffect->Get_EffectType())
+		{
+		case 0:
+			CEffectPlayer::Get_Instance()->Collect_EffectTexture(pEffect);
+			break;
+		case 1:
+			CEffectPlayer::Get_Instance()->Collect_EffectMesh(pEffect);
+			break;
+		}
+
+		pEffect->Set_Collect(true);
+		m_isCollect = true;
+	}
 }
 
 void CParticleSystem::Play_Parts(_bool isPlaying)
