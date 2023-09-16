@@ -242,6 +242,7 @@ void CPause::LateTick(_double TimeDelta)
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 			{
 				if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
+					COptionManager::GetInstance()->Set_Is_Go_Lobby(true);
 					CFadeManager::GetInstance()->Set_Fade_Out(true);
 					pGameInstance->Time_Stop_Off();
 				}

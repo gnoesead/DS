@@ -98,6 +98,16 @@ _int COptionManager::Get_Select_Num()
 	return m_Select_Num;
 }
 
+void COptionManager::Set_Is_Go_Lobby(_bool Is)
+{
+	m_Is_Go_Lobby = Is;
+}
+
+_bool COptionManager::Get_Is_Go_Lobby()
+{
+	return m_Is_Go_Lobby;
+}
+
 void COptionManager::Set_Camera_Option(_uint i , _int num)
 {
 	m_Camera_Option[i] = num;

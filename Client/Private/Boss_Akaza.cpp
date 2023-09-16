@@ -131,7 +131,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		//Update_Trigger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -1374,19 +1374,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
-				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				EffectWorldDesc.vPosition.y += 0.3f;
-
-				int n = Random::Generate_Int(0, 2);
-
-				if (n == 0)
-					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_1", m_pTransformCom, &EffectWorldDesc);
-				else if (n == 1)
-					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_2", m_pTransformCom, &EffectWorldDesc);
-				else if (n == 2)
-					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Small_3", m_pTransformCom, &EffectWorldDesc);
-
-				//Play_HitEffect();
+				Play_HitEffect();
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1494,8 +1482,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);*/
+			
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 

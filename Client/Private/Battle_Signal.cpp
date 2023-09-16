@@ -96,7 +96,6 @@ void CBattle_Signal::Tick(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
-
 	if (CFadeManager::GetInstance()->Get_Is_Village_Battle_Start() == true && m_Village_Battle_Start == false) {
 		m_Village_Battle_Start = true;
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
@@ -123,12 +122,12 @@ void CBattle_Signal::Tick(_double TimeDelta)
 	}
 
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD2)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5)) {
 
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6)) {
 
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Finish_On(true);
 	}
