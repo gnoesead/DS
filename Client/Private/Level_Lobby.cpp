@@ -1389,11 +1389,11 @@ HRESULT CLevel_Lobby::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region TANJIRO_SUPERSKILL
-	/*if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1.bin"))))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Super1");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super1_Mesh.bin"))))
 	{
