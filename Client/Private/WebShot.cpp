@@ -60,6 +60,7 @@ HRESULT CWebShot::Initialize(void* pArg)
 		m_pTransformCom->Set_Look(m_WebDesc.vDir);
 	}
 
+	
 
 	//Jik
 	if (m_WebDesc.iWebTexIndex == 32)
@@ -81,7 +82,7 @@ void CWebShot::Tick(_double dTimeDelta)
 
 	if (true == m_isDead)
 		return;
-
+	
 	Tick_For_Index(dTimeDelta);
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

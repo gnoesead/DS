@@ -118,7 +118,43 @@ void CMonster_StealthZako::Tick(_double dTimeDelta)
 			if (m_dDelay_Dead_Stealth > 5.f)
 				return;
 		}
-		Animation_Control(dTimeDelta);
+
+		if (m_isDead_Simple)
+		{
+			m_bMonsterDead = true;
+			m_fDeadTime += (_float)dTimeDelta;
+
+			m_dDeadParticleAccTime += dTimeDelta;
+			m_dDeadSmokeAccTime += dTimeDelta;
+
+			if (m_fDeadTime > 1.8f && m_fDeadTime < 7.5f)
+			{
+				if (m_fDeadTime > 2.2f)
+				{
+					if (m_dDeadParticleAccTime > 1.4)
+					{
+						m_dDeadParticleAccTime = 0.0;
+						CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+						EffectWorldDesc.vPosition.x += Random::Generate_Float(-0.3f, 0.3f);
+						EffectWorldDesc.vPosition.z += Random::Generate_Float(-0.3f, 0.3f);
+						CEffectPlayer::Get_Instance()->Play("Death_Particle", m_pTransformCom, &EffectWorldDesc);
+					}
+				}
+
+				if (m_dDeadSmokeAccTime > 1.0)
+				{
+					Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD_NORMAL);
+					m_dDeadSmokeAccTime = 0.0;
+				}
+			}
+
+			if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
+				m_isDead = true;
+
+
+		}
+		else
+			Animation_Control(dTimeDelta);
 
 		//애니메이션 처리
 		m_pModelCom->Play_Animation(dTimeDelta);
@@ -168,21 +204,25 @@ HRESULT CMonster_StealthZako::Render()
 
 
 		_uint iNumMeshes = m_pModelCom->Get_NumMeshes();
-		//Outline Render
-		for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+
+		if (m_bMonsterDead == false)
 		{
-			if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
-				return E_FAIL;
+			//Outline Render
+			for (m_iMeshNum = 0; m_iMeshNum < iNumMeshes; m_iMeshNum++)
+			{
+				if (FAILED(m_pModelCom->Bind_ShaderResource(m_iMeshNum, m_pShaderCom, "g_DiffuseTexture", MESHMATERIALS::TextureType_DIFFUSE)))
+					return E_FAIL;
 
-			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
-				return E_FAIL;
+				if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(m_iMeshNum, m_pShaderCom, "g_BoneMatrices")))
+					return E_FAIL;
 
-			if (m_iMeshNum == 2)
-				m_pShaderCom->Begin(2);
-			else
-				m_pShaderCom->Begin(1);
+				if (m_iMeshNum == 2)
+					m_pShaderCom->Begin(2);
+				else
+					m_pShaderCom->Begin(1);
 
-			m_pModelCom->Render(m_iMeshNum);
+				m_pModelCom->Render(m_iMeshNum);
+			}
 		}
 		// Default Render
 		for (_uint i = 0; i < iNumMeshes; i++)
@@ -193,7 +233,10 @@ HRESULT CMonster_StealthZako::Render()
 			if (FAILED(m_pModelCom->Bind_ShaderBoneMatrices(i, m_pShaderCom, "g_BoneMatrices")))
 				return E_FAIL;
 
-			m_pShaderCom->Begin(0);
+			if (m_bMonsterDead == true)
+				m_pShaderCom->Begin(8);
+			else
+				m_pShaderCom->Begin(0);
 
 			m_pModelCom->Render(i);
 		}
@@ -235,37 +278,91 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 	{
 		if (ANIM_ATK_CLAWS == m_pModelCom->Get_iCurrentAnimIndex())
 		{
+			CEffectPlayer::EFFECTWORLDDESC EffectDesc;
+			EffectDesc.fScale = 0.85f;
+
 			if (0 == m_iEvent_Index)
 			{//0.10
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
-			
+			if (1 == m_iEvent_Index)
+			{//0.17
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
 			if (2 == m_iEvent_Index)
 			{//0.30
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
-			
+			if (3 == m_iEvent_Index)
+			{//0.35
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
 			if (4 == m_iEvent_Index)
 			{//0.50
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_ Atk_Claws_R", m_pTransformCom, &EffectDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
-			
+			if (5 == m_iEvent_Index)
+			{//0.61
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
 			if (6 == m_iEvent_Index)
 			{//0.80
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_01.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
 			}
-			
+			if (7 == m_iEvent_Index)
+			{//0.84
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+			}
 			if (8 == m_iEvent_Index)
 			{//1.30
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.x = 0.2f;
 				EffectWorldDesc.fScale = 1.2f;
 
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectWorldDesc);
 
 				EffectWorldDesc.vPosition.x = -0.2f;
-				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Left", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
+
+				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
+					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
+
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("hit_sword_S.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
+
 			
 		}
 
@@ -360,6 +457,9 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				//Find
 				m_isQuestioning = true;
 				m_pModelCom->Set_Animation(70);
+
+				_tchar szRun_0[MAX_PATH] = TEXT("Zako_Questioning.mp3");
+				Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.65f);
 			}
 		}
 		m_isFirst_Questioning = true;
@@ -374,7 +474,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 		}
 
 		m_dDelay_SlowMotion += dTimeDelta;
-		if (m_dDelay_SlowMotion > 0.1)
+		if (m_dDelay_SlowMotion > 2.0)
 		{
 			m_isSlowMotion = false;
 			m_dDelay_SlowMotion = 0.0;
@@ -392,30 +492,20 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 			CGameInstance* pGameInstance = CGameInstance::GetInstance();
 			Safe_AddRef(pGameInstance);
-			pGameInstance->Time_Slow(0.1, 0.4);
+			pGameInstance->Time_Slow(2.0, 0.5);
 			Safe_Release(pGameInstance);
 
 			m_isSlowMotion = true;
 			m_dDelay_SlowMotion = 0.0;
 			m_isFirst_SlowMotion = true;
 
-			m_isFirst_Quest_Second = true;
-			m_dDelay_Quest_Second = 0.0;
-
-		}
-		m_dDelay_Quest_Second += dTimeDelta;
-		if (m_dDelay_Quest_Second > 0.2f && m_isFirst_Quest_Second)
-		{
-			m_isFirst_Quest_Second = false;
-
-			_tchar szRun_0[MAX_PATH] = TEXT("Zako_Questioning.ogg");
-			Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.5f);
+			Set_CharacterDialog(5.f, TEXT("[혈귀]"), TEXT("음....거기 누구냐?!"));
 		}
 
 
 		//안걸리는거
 		_float fAngle = Calculate_Angle(m_pTransformCom->Get_State(CTransform::STATE_LOOK), Calculate_Dir_FixY());
-		if (Calculate_Distance() > 6.0f || fAngle > 45.0f)
+		if (Calculate_Distance() > 8.1f || fAngle > 45.0f)
 		{
 			m_dDelay_Questioning = 0.0;
 			m_isQuestioning = false;
@@ -428,7 +518,7 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 		//걸리는거
 		m_dDelay_Questioning += dTimeDelta;
-		if (m_dDelay_Questioning > 0.9f)
+		if (m_dDelay_Questioning > 2.0f)
 		{
 			m_dDelay_Questioning = 0.0;
 			m_isQuestioning = false;
@@ -458,6 +548,10 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 			m_isSound_Finding = true;
 			m_dSound_Finding = 0.0;
+			m_isFirst_Sound_Finding_0 = true;
+			m_isFirst_Sound_Finding_1 = true;
+
+			Set_CharacterDialog(5.f, TEXT("[혈귀]"), TEXT("우워어어어어어어어어어!!"), TEXT("용서 못해!!!  용서 못해!!!!"));
 		}
 
 		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE)
@@ -480,14 +574,23 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 	if (m_isSound_Finding)
 	{
 		m_dSound_Finding += dTimeDelta;
-		if (m_dSound_Finding > 0.5f)
+		if (m_dSound_Finding > 0.5f && m_isFirst_Sound_Finding_0)
+		{
+			m_isFirst_Sound_Finding_0 = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Finding.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, 0.65f);
+		}
+		if (m_dSound_Finding > 1.9f && m_isFirst_Sound_Finding_1)
 		{
 			m_isSound_Finding = false;
 			m_dSound_Finding = 0.0;
+			m_isFirst_Sound_Finding_1 = false;
 
-			_tchar szRun_0[MAX_PATH] = TEXT("Zako_Finding.ogg");
-			Play_Sound_Channel(szRun_0, CSoundMgr::MONSTER_VOICE, 0.5f);
+			_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_YuruSene.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE_SUB, 0.7f);
 		}
+
 	}
 
 
@@ -551,10 +654,29 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 				m_dDelay_BattleStart_Stealth = 0.0;
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG_BACK);
 
-				
+				_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Dmg_Big_Kkyahak.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, 0.65f);
 			}
 		}
 	}
+	else if (m_CharacterDesc.NPCDesc.eNPC == NPC_LISTEN) //그냥 죽는 애들
+	{
+		if (CMonsterManager::GetInstance()->Get_StealthAttack())
+		{
+			CMonsterManager::GetInstance()->Set_StealthAttack(false);
+
+			if (Calculate_Distance() < 1.4f)
+			{
+				m_isDead_Simple = true;
+				
+				m_pModelCom->Set_Animation(ANIM_DEATH);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Death_0.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, 0.55f);
+			}
+		}
+	}
+	
 	
 	_float4 HitDir = CMonsterManager::GetInstance()->Get_DirStealthAtk();
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG_BACK, 1.3f, 0.09f, HitDir, true);

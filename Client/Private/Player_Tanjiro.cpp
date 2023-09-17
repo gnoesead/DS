@@ -119,6 +119,8 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 
 	Safe_Release(pGameInstance);
 
+	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.4);
+
 	return S_OK;
 }
 
@@ -151,8 +153,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
-		//m_pRendererCom->Set_RadialBlur();
 		m_pRendererCom->Set_RadialBlur();
+		//m_pRendererCom->Set_GrayScale_On(false);
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
@@ -254,6 +256,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
+	
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -325,7 +328,7 @@ HRESULT CPlayer_Tanjiro::Render()
 					m_pShaderCom->Begin(1);
 				}
 				else if ((m_isSkilling == true) && (m_Moveset.m_iAwaken == 0)) { // 노 개방 스킬 썻을 때
-					m_pShaderCom->Begin(5);
+					m_pShaderCom->Begin(9);
 				}
 				else if ((m_isSkilling == false) && (m_Moveset.m_iAwaken != 0)) { // 개방 했을 때
 					if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE)
@@ -1287,13 +1290,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-
-
-			}
+			
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
@@ -1312,50 +1309,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			/*
-			m_dSound_Move += dTimeDelta;
-			if (m_dSound_Move > 0.02f)
-			{
-				m_dSound_Move = 0.0;
-				CGameInstance* pGameInstance = CGameInstance::GetInstance();
-				Safe_AddRef(pGameInstance);
-
-				if (m_iSound_Move_Index == 0)
-				{
-					m_iSound_Move_Index = 1;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-					}
-				}
-				else if (m_iSound_Move_Index == 1)
-				{
-					m_iSound_Move_Index = 0;
-
-					if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-						|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-					{
-						_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-						Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-					}
-					else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-					{
-						_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
-						Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-					}
-				}
-				Safe_Release(pGameInstance);
-			}*/
+			
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -1636,46 +1590,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Move(_double dTimeDelta)
 
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 88)
 	{
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.16f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-				}
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
-				}
-			}
-		}
+		Play_Sound_Move(dTimeDelta, 0.16f);
 	}
 	Safe_Release(pGameInstance);
 
@@ -2115,7 +2030,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		}
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
-		Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
+		//Jumping(1.25f * m_fScaleChange, 0.02f * m_fScaleChange);
+		Jumping(2.0f * m_fScaleChange, 0.04f * m_fScaleChange);
 
 		Use_Mp_Skill();
 
@@ -2128,7 +2044,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_06.ogg");
 		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
 	}
-	Ground_Animation_Play(37, 86);
+	Ground_Animation_Play(36, 37);
+	//Ground_Animation_Play(37, 86);
 	//Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_GUARD, 5.f * m_fScaleChange, 0.25f * m_fScaleChange);
 }
 
@@ -2221,52 +2138,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	Go_Straight_Constant(dTimeDelta, 80, 4.5f * m_fScaleChange);
 	if (m_pModelCom->Get_iCurrentAnimIndex() == 80)
 	{
-		CGameInstance* pGameInstance = CGameInstance::GetInstance();
-		Safe_AddRef(pGameInstance);
-
-		m_dSound_Move += dTimeDelta;
-		if (m_dSound_Move > 0.1f)
-		{
-			m_dSound_Move = 0.0;
-
-			if (m_iSound_Move_Index == 0)
-			{
-				m_iSound_Move_Index = 1;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
-					Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-
-
-			}
-			else if (m_iSound_Move_Index == 1)
-			{
-				m_iSound_Move_Index = 0;
-
-				if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
-					|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.35f);
-				}
-				else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
-				{
-					_tchar szRun_1[MAX_PATH] = TEXT("foot_board_1.ogg");
-					Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_0, 0.35f);
-				}
-			}
-		}
-		Safe_Release(pGameInstance);
+		Play_Sound_Move(dTimeDelta, 0.1f); // 0.1
 	}
 
 
@@ -2333,6 +2205,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_L, true, 0.35f);
 					//Jumping(3.0f * m_fScaleChange, 0.25f * m_fScaleChange);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 			else if (m_isRight)
@@ -2371,6 +2245,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 	//더블스텝
 	Go_Dir_Deceleration(dTimeDelta, 98, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.15f * m_fScaleChange, m_Moveset.m_Input_Dir);
 	Go_Dir_Deceleration(dTimeDelta, 100, 5.5f * m_fScaleChange * m_fMoving_Ratio, 0.15f * m_fScaleChange, m_Moveset.m_Input_Dir);
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 98 || m_pModelCom->Get_iCurrentAnimIndex() == 100)
+	{
+		m_dDelay_DoubleStep += dTimeDelta;
+	}
+
 }
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Awaken(_double dTimeDelta)
@@ -3452,7 +3332,10 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		m_Moveset.m_isRestrict_DoubleStep = true;
+		if (m_dDelay_DoubleStep < 1.0)
+			m_Moveset.m_isRestrict_DoubleStep = true;
+		else
+			m_Moveset.m_isRestrict_DoubleStep = false;
 	}
 	//어드벤처 모드 런, 기본
 	else if (ANIM_ADV_IDLE == iCurAnimIndex || ANIM_ADV_RUN == iCurAnimIndex || ANIM_ADV_RUN_END == iCurAnimIndex
@@ -3497,6 +3380,20 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_isSkilling = false;
 
 		m_isSwampBinding = false;
+	}
+}
+
+void CPlayer_Tanjiro::Smell_Detection(_double dTimeDelta)
+{
+	if (m_bSmell_Detection == true)
+	{
+		m_dSmellTime += dTimeDelta;
+		if (m_dSmellTime > 3.0)
+		{
+			m_bSmell_Detection = false;
+			m_dSmellTime = 0.0;
+			m_pRendererCom->Set_GrayScale_On(false);
+		}
 	}
 }
 
@@ -3843,6 +3740,14 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 
 
 	// OutlineThickness
+	if (m_Moveset.m_iAwaken != 0 || m_isSkilling == true)
+	{
+		m_fOutlineThickness = 2.0f;
+	}
+	else
+		m_fOutlineThickness = 1.5f;
+	
+
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;
 

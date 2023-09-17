@@ -53,7 +53,7 @@ void CGroundSmoke::Tick(_double TimeDelta)
 	if (m_EffectWDesc.bSpecial)
 	{
 		if (LEVEL_HOUSE == iCurIdx)
-			m_fAlpha = 0.3f;
+			m_fAlpha = 0.2f;
 		else
 			m_fAlpha = 0.5f;
 	}

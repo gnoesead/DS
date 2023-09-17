@@ -881,7 +881,7 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
-void CCharacter::Play_Sound_Metal(_double vol)
+void CCharacter::Play_Sound_Metal(_float vol)
 {
 	if (m_iSound_Metal_Index == 0)
 	{
@@ -1163,9 +1163,9 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 	case CGroundSmoke::SMOKE_DEAD_NORMAL:
 		EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { 0.00f,0.06f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectWDesc.vFrameSpeed = { 0.11f , 0.12f };
-		EffectWDesc.vStartSizeX = { 1.0f , 1.2f }; EffectWDesc.vStartSizeY = { 1.0f , 1.4f };
-		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.25f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vFrameSpeed = { 0.12f , 0.13f };
+		EffectWDesc.vStartSizeX = { 1.4f , 1.6f }; EffectWDesc.vStartSizeY = { 1.4f , 1.8f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.21f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 0.2f , 0.4f }; EffectWDesc.vSizeSpeedY = { 0.2f , 0.4f };
 		EffectWDesc.bSpecial = true;
 
@@ -1389,12 +1389,12 @@ void CCharacter::Shadow_House_Setting()
 
 		m_pRendererCom->Set_RoomTurn(CMonsterManager::GetInstance()->Get_RoomTurn());
 
-		if (CMonsterManager::GetInstance()->Get_RoomTurn() == true)
+		/*if (CMonsterManager::GetInstance()->Get_RoomTurn() == true)
 		{
-			vLightEye = vPlayerPos + XMVectorSet(-2.f, 3.f, -2.f, 1.f);
+			vLightEye = vPlayerPos + XMVectorSet(-1.5f, 6.f, -1.5f, 1.f);
 			fAngle = 20.f;
 		}
-		else
+		else*/
 		{
 			vLightEye = vPlayerPos + XMVectorSet(-25.f, 60.f, -25.f, 1.f);
 			fAngle = 30.f;
@@ -1501,6 +1501,54 @@ void CCharacter::Play_Sound_BodyFall()
 
 	if (2 == iIdx)
 		iIdx = 0;
+}
+
+void CCharacter::Play_Sound_Move(_double dTimeDelta, _float loop)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+	//사운드
+	m_dSound_Move += dTimeDelta;
+	if (m_dSound_Move > loop) // 0.16걷기, 0.1달리기
+	{
+		m_dSound_Move = 0.0;
+
+		if (m_iSound_Move_Index == 0)
+		{
+			m_iSound_Move_Index = 1;
+
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_grass.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.2f);
+			}
+			else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_board.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+			}
+		}
+		else if (m_iSound_Move_Index == 1)
+		{
+			m_iSound_Move_Index = 0;
+
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE
+				|| pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+			{
+				_tchar szRun_1[MAX_PATH] = TEXT("foot_grass_1.ogg");
+				Play_Sound_Channel(szRun_1, CSoundMgr::PLAYER_RUN_1, 0.2f);
+			}
+			else if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE || pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
+			{
+				_tchar szRun_0[MAX_PATH] = TEXT("foot_board_1.ogg");
+				Play_Sound_Channel(szRun_0, CSoundMgr::PLAYER_RUN_0, 0.5f);
+			}
+		}
+	}
+	Safe_Release(pGameInstance);
 }
 
 void CCharacter::Set_CharacterDialog(_double dTime, const _tchar* pName, const _tchar* pDialog1, const _tchar* pDialog2)

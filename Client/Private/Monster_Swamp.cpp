@@ -812,6 +812,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 
 	m_pTransformCom->LerpVector(Calculate_Dir_FixY(), 0.05f);
 
+#pragma region KeyInput_Cheat
 	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD7))
 	{
 		m_eCurState = STATE_ATTACK;
@@ -871,6 +872,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		m_eCurState = STATE_ATTACK;
 		m_eCurPattern = PATTERN_BIGSWAMP;
 	}
+#pragma endregion
 
 	//레이지 모드
 	if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
@@ -1108,19 +1110,20 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 				//실제 패턴
 				if (m_iIndex_Swamping == 0)
 				{
-					if (m_dCooltime_Atk_Pattern > 0.85f)
+					if (m_dCooltime_Atk_Pattern > 0.35f) // 0.85
 					{
 						m_dCooltime_Atk_Pattern = 0.0;
 
 						m_eCurState = STATE_ATTACK;
-						m_eCurPattern = PATTERN_SHORYU;
+						//m_eCurPattern = PATTERN_SHORYU;
+						m_eCurPattern = PATTERN_BIGSWAMP;
 
 						m_iIndex_Swamping++;
 					}
 				}
 				else if (m_iIndex_Swamping == 1)
 				{
-					if (m_dCooltime_Atk_Pattern > 0.1f)
+					if (m_dCooltime_Atk_Pattern > 0.15f)
 					{
 						m_dCooltime_Atk_Pattern = 0.0;
 

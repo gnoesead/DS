@@ -189,8 +189,7 @@ protected:
 	//캐릭 변경
 	void	Player_Change_Setting_Status(_double dTimeDelta);
 
-protected:
-	void	Smell_Detection(_double dTimeDelta);
+
 
 protected:
 
@@ -214,6 +213,8 @@ protected:
 	_bool	m_isJump_Room_X = { false };
 	_bool	m_isJump_Room_Z = { false };
 
+
+
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
 	PLAYERTYPE		m_ePlayerType = { PLAYERTYPE_END };
@@ -228,8 +229,6 @@ protected:
 	_float	m_fMoving_Ratio = { 0.85f };
 
 protected: //사운드 용
-	_int	m_iSound_Move_Index = { 0 };
-	_double m_dSound_Move = { 0.0 };
 
 	_int	m_iSound_Atk_Small = { 0 };
 	_int	m_iSound_Atk_Medium = { 0 };
@@ -262,6 +261,8 @@ protected: // 애니메이션 제어용 변수들
 	//가드 히트모션
 	_bool	m_isGuardHit = { false };
 	_int	m_iGuardHit_Index = { 0 };
+
+	_bool	m_isGuarding = { false };
 
 	//hit swamp
 	_bool m_isSwampHit = { false };
@@ -299,6 +300,8 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_isBack = { false };
 	_bool	m_isLeft = { false };
 	_bool	m_isRight = { false };
+
+	_double	m_dDelay_DoubleStep = { 0.0 };
 
 	//젠이츠 벽력용
 	_bool	m_isCan_Air_Hekireki = { false };
