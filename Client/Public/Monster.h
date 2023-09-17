@@ -119,6 +119,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bMove = { false };
 	_bool	m_bMonsterDead = { false };
 	_bool	m_bDead_Trigger = { false };
+	_bool	m_bPushAway = { false };
 	
 	_bool	m_bTanjiroAwake = { false };
 	_bool	m_bZenitsuAwake = { false };
@@ -135,6 +136,7 @@ protected:
 	_uint	m_iRandomPatternNum = { 0 };
 	_uint	m_iRandomDirNum = { 0 };
 	_uint	m_iLoopCount = { 0 };
+	_uint	m_iSoundCount = { 0 };
 
 	//서지평타컷씬 히트중
 	_bool	m_isSurging = { false };
@@ -143,7 +145,6 @@ protected:
 	_uint	m_iNumAnim = { 0 };
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
-
 
 protected:
 	// Outline Default

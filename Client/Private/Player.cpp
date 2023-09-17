@@ -1556,7 +1556,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 	_vector vNextPos = { 0.f, 0.f , 0.f , 1.f };
 	_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
-	_tchar szBGM[MAX_PATH] = TEXT("");
+	_tchar szBGM1[MAX_PATH] = TEXT("");
+	_tchar szBGM2[MAX_PATH] = TEXT("");
 
 	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
@@ -1581,8 +1582,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
-				wsprintf(szBGM, TEXT("BGM_House.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM, 0.6f);
+				wsprintf(szBGM1, TEXT("BGM_House.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM1, 0.6f);
 
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
@@ -1610,8 +1611,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
-				wsprintf(szBGM, TEXT("BGM_Village.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM, 0.6f);
+				wsprintf(szBGM2, TEXT("BGM_Village.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM2, 0.6f);
 
 				break;
 			default:
