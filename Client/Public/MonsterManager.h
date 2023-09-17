@@ -75,6 +75,9 @@ public:
 	_bool	Get_RoomTurn() { return m_bRoomTurn; }
 	void	Set_RoomTurn(_bool Is) { m_bRoomTurn = Is; }
 
+	_bool	Get_Monster_PushAway() { return m_bMonster_PushAway; }
+	void	Set_Monster_PushAway(_bool Is) { m_bMonster_PushAway = Is; }
+
 private:
 	//다수 몬스터 어택관련
 	_int	m_iCnt_AttackOn = { 0 };
@@ -111,6 +114,7 @@ private:
 	_bool	m_isAkaza_On = { false };
 
 	_bool	m_bRoomTurn = { false };
+	_bool	m_bMonster_PushAway = { false };
 public:
 	virtual void Free() override;
 };

@@ -111,7 +111,12 @@ HRESULT CLevel_FinalBoss::Initialize()
 		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
 		return E_FAIL;
 	}
-
+	if (FAILED(Ready_Layer_Character_Dialog(TEXT("Layer_Character_Dialog"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		return E_FAIL;
+	}
+	
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
@@ -127,9 +132,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 
 	m_Battle_MaxTime = { 5.5f };
 
-	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
-	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
-
+	CSoundMgr::Get_Instance()->StopAll();
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_FinalBoss_0.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 	return S_OK;
 }
@@ -1632,6 +1637,20 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss_UI(const _tchar* pLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+HRESULT CLevel_FinalBoss::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_Character_Dialog"))))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)

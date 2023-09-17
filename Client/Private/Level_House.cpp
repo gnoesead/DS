@@ -48,43 +48,43 @@
 
 
 CLevel_House::CLevel_House(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CLevel(pDevice, pContext)
+	: CLevel(pDevice, pContext)
 {
 
 }
 
 HRESULT CLevel_House::Initialize()
 {
-    if (FAILED(__super::Initialize()))
-        return E_FAIL;
+	if (FAILED(__super::Initialize()))
+		return E_FAIL;
 
 	COptionManager::GetInstance()->Set_Is_Set_Origin_Light(false);
 
 	CPlayerManager::GetInstance()->Reset_PlayerManager();
 
-    if (FAILED(Ready_Lights()))
-    {
-        MSG_BOX("Failed to Ready_Lights : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Lights()))
+	{
+		MSG_BOX("Failed to Ready_Lights : CLevel_House");
+		return E_FAIL;
+	}
 
-    if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_BackGround : CLevel_House");
+		return E_FAIL;
+	}
 
-    if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+		return E_FAIL;
+	}
 
-    if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
@@ -104,11 +104,11 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}
 
-    if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Layer_Player_UI(TEXT("Layer_Player_UI"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_House");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Layer_Player_Battle_UI(TEXT("Layer_Player_Battle_UI"))))
 	{
@@ -122,11 +122,11 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}
 
-    if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
-    {
-        MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(Ready_Layer_MapObject(TEXT("Layer_MapObject"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_MapObject : CLevel_House");
+		return E_FAIL;
+	}
 
 	if (FAILED(Ready_Layer_Effect()))
 	{
@@ -146,11 +146,11 @@ HRESULT CLevel_House::Initialize()
 		return E_FAIL;
 	}
 
-    CFadeManager::GetInstance()->Set_Fade_In(true);
+	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(false);
 
 	CDialogManager::GetInstance()->Set_Dialog_Type(99);
-	
+
 	CMissionManager::GetInstance()->Set_Main_Mission_Type(1);
 	CMissionManager::GetInstance()->Set_Main_Sub_Num(0);
 
@@ -164,18 +164,22 @@ HRESULT CLevel_House::Initialize()
 	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
-    return S_OK;
+	CSoundMgr::Get_Instance()->StopAll();
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_House.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
+	return S_OK;
 }
 
 void CLevel_House::Tick(_double dTimeDelta)
 {
-    __super::Tick(dTimeDelta);
-    SetWindowText(g_hWnd, TEXT("House"));
+	__super::Tick(dTimeDelta);
+	SetWindowText(g_hWnd, TEXT("House"));
 
 	CColliderManager::GetInstance()->Check_Collider(LEVEL_HOUSE, dTimeDelta);
 
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
 
 
@@ -253,125 +257,201 @@ void CLevel_House::Tick(_double dTimeDelta)
 		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
-        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+		CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
 
-        HRESULT hr = 0;
+		HRESULT hr = 0;
 
-        if (true == pGameInstance->Get_IsStage())
-        {
+		if (true == pGameInstance->Get_IsStage())
+		{
 
-            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-            
-                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);           
-            else
-                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+			else
+				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
 
 			pGameInstance->Clear_Light();
 
-        }
-    }
+		}
+	}
 
-    Safe_Release(pGameInstance);
+	if (true == CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() && false == bChangeBattleBGM)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Battle.mp3");
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
+		bChangeBattleBGM = true;
+	}
+
+	if (true == CFadeManager::GetInstance()->Get_Is_House_Boss_Battle_Start() && false == bChangeBossBGM)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_0.mp3");
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
+		bChangeBossBGM = true;
+	}
+
+	_float fPosZ = XMVectorGetZ(CPlayerManager::GetInstance()->Get_Player_Pos());
+	_float fPosX = XMVectorGetX(CPlayerManager::GetInstance()->Get_Player_Pos());
+	_bool bGimmick_RoomTrigger = (51.f <= fPosZ && fPosZ <= 63.f);
+	if (true == bGimmick_RoomTrigger)
+	{
+		_bool bFirst_Trigger = (170.f < fPosX && fPosX <= 182.f);
+		_bool bSecond_Trigger = (158.f < fPosX && fPosX <= 170.f);
+		_bool bThird_Trigger = (144.f < fPosX && fPosX <= 158.f);
+		_bool bFourth_Trigger = (131.f < fPosX && fPosX <= 144.f);
+
+		if (true == bFirst_Trigger)
+		{
+			if (m_bReset_TimeAcc == false)
+			{
+				m_bReset_TimeAcc = true;
+				m_dTimeAcc = 0.0;
+			}
+			m_dTimeAcc += dTimeDelta;
+			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			{
+
+			}
+
+		}
+		else if (true == bSecond_Trigger)
+		{
+			if (m_bReset_TimeAcc == true)
+			{
+				m_bReset_TimeAcc = false;
+				m_dTimeAcc = 0.0;
+			}
+			m_dTimeAcc += dTimeDelta;
+		}
+		else if (true == bThird_Trigger)
+		{
+			if (m_bReset_TimeAcc == false)
+			{
+				m_bReset_TimeAcc = true;
+				m_dTimeAcc = 0.0;
+			}
+			m_dTimeAcc += dTimeDelta;
+		}
+		else if (true == bFourth_Trigger)
+		{
+			if (m_bReset_TimeAcc == true)
+			{
+				m_bReset_TimeAcc = false;
+				m_dTimeAcc = 0.0;
+			}
+			m_dTimeAcc += dTimeDelta;
+		}
+		else
+		{
+			m_dTimeAcc = 0.0;
+			m_bReset_TimeAcc = false;
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_House::Render()
 {
-    if (FAILED(__super::Render()))
-        return E_FAIL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Lights()
 {
-    Load_Lights_Info(TEXT("../../Data/Light/Room/Light_Room.dat"));
+	Load_Lights_Info(TEXT("../../Data/Light/Room/Light_Room.dat"));
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_BackGround(const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-  /*  if (FAILED(pGameInstance->Add_GameObject(Level_House, pLayerTag, TEXT("Prototype_GameObject_Terrain"))))
-    {
-        MSG_BOX("Failed to Add_GameObject : Terrain");
-        return E_FAIL;
-    }*/
+	/*  if (FAILED(pGameInstance->Add_GameObject(Level_House, pLayerTag, TEXT("Prototype_GameObject_Terrain"))))
+	  {
+		  MSG_BOX("Failed to Add_GameObject : Terrain");
+		  return E_FAIL;
+	  }*/
 
-    ///* For.Sky */
-    //if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-    //    TEXT("Prototype_GameObject_Sky"))))
-    //{
-    //    MSG_BOX("Failed to Add_GameObject : Sky");
-    //    return E_FAIL;
-    //}
+	  ///* For.Sky */
+	  //if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+	  //    TEXT("Prototype_GameObject_Sky"))))
+	  //{
+	  //    MSG_BOX("Failed to Add_GameObject : Sky");
+	  //    return E_FAIL;
+	  //}
 
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Camera(const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    CCamera::CAMERADESC CameraDesc;
-    ZeroMemory(&CameraDesc, sizeof CameraDesc);
+	CCamera::CAMERADESC CameraDesc;
+	ZeroMemory(&CameraDesc, sizeof CameraDesc);
 
-    CameraDesc.vEye = _float4(0.f, 10.f, -7.f, 1.f);
-    CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
-    CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
+	CameraDesc.vEye = _float4(0.f, 10.f, -7.f, 1.f);
+	CameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
+	CameraDesc.vAxisY = _float4(0.f, 1.f, 0.f, 0.f);
 
-    CameraDesc.fFovY = XMConvertToRadians(50.f);
-    CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
-    CameraDesc.fNearZ = 0.3f;
-    CameraDesc.fFarZ = 400.f;
+	CameraDesc.fFovY = XMConvertToRadians(50.f);
+	CameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	CameraDesc.fNearZ = 0.3f;
+	CameraDesc.fFarZ = 400.f;
 
-    CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
-    CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
-    CameraDesc.dSensitivity = 0.1;
-    //CameraDesc.bIs_Battle = false;
+	CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
+	CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
+	CameraDesc.dSensitivity = 0.1;
+	//CameraDesc.bIs_Battle = false;
 
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-        TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : Camera_Free");
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : Camera_Free");
+		return E_FAIL;
+	}
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    CPlayer::CHARACTERDESC CharacterDesc;
-    ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
+	CPlayer::CHARACTERDESC CharacterDesc;
+	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-     CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
-    //CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
+	CharacterDesc.WorldInfo.vPosition = _float4(8.f, 0.f, 10.f, 1.f);
+	//CharacterDesc.WorldInfo.vPosition = _float4(118.f, 0.f, 117.f, 1.f);    // BattleMap
 
-    CharacterDesc.Land_Y = 0.f;
-    CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
-   // CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
+	CharacterDesc.Land_Y = 0.f;
+	CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_0_0;
+	// CharacterDesc.eCurNavi = CLandObject::NAVI_HOUSE_4_0;                   // BattleMap
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
-        TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
-    {
-        MSG_BOX("Failed to Add_GameObject : CLevel_House");
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
+		TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
+	{
+		MSG_BOX("Failed to Add_GameObject : CLevel_House");
+		return E_FAIL;
+	}
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
 	{
@@ -379,9 +459,9 @@ HRESULT CLevel_House::Ready_Layer_Player(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Monster(const _tchar* pLayerTag)
@@ -466,7 +546,7 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 
 	//CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_QUEST; //퀘스트 : 히트시 전투로 전환하는 몬스터
 	CharacterDesc.NPCDesc.eNPC = CCharacter::NPC_LISTEN; // 일반
-	
+
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_StealthZako"), &CharacterDesc)))
 	{
@@ -513,7 +593,7 @@ HRESULT CLevel_House::Ready_Layer_StealthObj(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-	
+
 
 
 	CharacterDesc.WorldInfo.vPosition = _float4(65.44f, 0.05f, 77.9f, 1.f);
@@ -585,47 +665,47 @@ HRESULT CLevel_House::Ready_Layer_Boss(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Ready_Layer_MapObject(const _tchar* pLayerTag)
 {
-    Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
+	Load_MapObject_Info(TEXT("../../Data/Object/RoomMap/Room.dat"), pLayerTag);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    // Fade
-    CFade::UIDESC UIDesc;
-    ZeroMemory(&UIDesc, sizeof UIDesc);
+	// Fade
+	CFade::UIDESC UIDesc;
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
-    UIDesc.m_Type = 0;
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 0;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc, sizeof UIDesc);
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
-    UIDesc.m_Type = 1;
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 1;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc, sizeof UIDesc);
+	ZeroMemory(&UIDesc, sizeof UIDesc);
 
-    UIDesc.m_Is_Reverse = false;
-    UIDesc.m_Type = 2;
+	UIDesc.m_Is_Reverse = false;
+	UIDesc.m_Type = 2;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Fade"), &UIDesc))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	ZeroMemory(&UIDesc, sizeof UIDesc);
 
@@ -638,95 +718,95 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
- // Mini_Map
-    CMini_Map::UIDESC UIDesc2;
-    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+	// Mini_Map
+	CMini_Map::UIDESC UIDesc2;
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
-    // Bg
-    UIDesc2.m_Is_Reverse = false;
-    UIDesc2.m_Type = 0;
+	// Bg
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 0;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
-    // Wire
-    UIDesc2.m_Is_Reverse = false;
-    UIDesc2.m_Type = 1;
+	// Wire
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 1;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
-    // Frame
-    UIDesc2.m_Is_Reverse = false;
-    UIDesc2.m_Type = 2;
+	// Frame
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 2;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
-    // Map
-    UIDesc2.m_Is_Reverse = false;
-    UIDesc2.m_Type = 3;
+	// Map
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 3;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc2, sizeof UIDesc2);
+	ZeroMemory(&UIDesc2, sizeof UIDesc2);
 
-    // Player_Icon
-    UIDesc2.m_Is_Reverse = false;
-    UIDesc2.m_Type = 4;
+	// Player_Icon
+	UIDesc2.m_Is_Reverse = false;
+	UIDesc2.m_Type = 4;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mini_Map"), &UIDesc2))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
- // Mission
+	// Mission
 
-    CMission::UIDESC UIDesc3;
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+	CMission::UIDESC UIDesc3;
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    // Main
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 0;
+	// Main
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 0;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
-    ZeroMemory(&UIDesc3, sizeof UIDesc3);
+	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
-    // Main_Icon
-    UIDesc3.m_Is_Reverse = false;
-    UIDesc3.m_Type = 2;
+	// Main_Icon
+	UIDesc3.m_Is_Reverse = false;
+	UIDesc3.m_Type = 2;
 
-    if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
-        TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
-        Safe_Release(pGameInstance);
-        return E_FAIL;
-    }
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Mission"), &UIDesc3))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 	ZeroMemory(&UIDesc3, sizeof UIDesc3);
 
@@ -743,7 +823,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 
 
-// Dialog
+	// Dialog
 	CDialog::UIDESC UIDesc4;
 	ZeroMemory(&UIDesc4, sizeof UIDesc4);
 
@@ -770,7 +850,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Icon
+	// Icon
 	CFIcon::UIDESC UIDesc5;
 	/*ZeroMemory(&UIDesc5, sizeof UIDesc5);
 
@@ -796,7 +876,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-// Interaction
+	// Interaction
 	CInteraction::UIDESC UIDesc6;
 	ZeroMemory(&UIDesc6, sizeof UIDesc6);
 
@@ -841,7 +921,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	UIDesc6.m_Up_Mount = 1.2f;
 	UIDesc6.m_Dialog_Type = 99;
 	UIDesc6.m_Is_Smell = false;
-	
+
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Interaction"), &UIDesc6))) {
 		Safe_Release(pGameInstance);
@@ -849,19 +929,19 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Paper
+	// Paper
 	CPaper::UIDESC UIDesc7;
 	ZeroMemory(&UIDesc7, sizeof UIDesc7);
 
 	UIDesc7.m_Type = 0;
-	
+
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
 		TEXT("Prototype_GameObject_Paper_UI"), &UIDesc7))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}
 
-// Zenitsu_Awake_UI
+	// Zenitsu_Awake_UI
 	Zenitsu_Awake_UI::UIDESC UIDesc8;
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
 
@@ -893,11 +973,11 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-// Timing_UI
+	// Timing_UI
 	CTiming_UI::UIDESC UIDesc9;
 
 
-    for (int i = 0; i < 7; i++) {
+	for (int i = 0; i < 7; i++) {
 		ZeroMemory(&UIDesc9, sizeof UIDesc9);
 
 		UIDesc9.m_Type = i;
@@ -910,12 +990,12 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-	
 
-	
-    Safe_Release(pGameInstance);
 
-    return S_OK;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
@@ -1414,7 +1494,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	}
 
 
-// Battle_Signal
+	// Battle_Signal
 	CBattle_Signal::UIDESC UIDesc9;
 	ZeroMemory(&UIDesc9, sizeof UIDesc9);
 
@@ -1455,7 +1535,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	// Frame
 	UIDesc9.m_Is_Reverse = false;
 	UIDesc9.m_Type = 1;
-	
+
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Battle_Signal"), &UIDesc9))) {
 		Safe_Release(pGameInstance);
 		return E_FAIL;
@@ -1463,7 +1543,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 
 
-// Pause
+	// Pause
 	CPause::UIDESC UIDesc10;
 	ZeroMemory(&UIDesc10, sizeof UIDesc10);
 
@@ -1517,7 +1597,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 
 
-// Option
+	// Option
 	COption::UIDESC UIDesc11;
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
@@ -1630,7 +1710,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 		UIDesc11.m_Type = 5;
 		UIDesc11.m_Line_Num = i;
-	
+
 		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
 			Safe_Release(pGameInstance);
 			return E_FAIL;
@@ -1640,7 +1720,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 		UIDesc11.m_Type = 6;
 		UIDesc11.m_Line_Num = i;
-	
+
 		if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc11))) {
 			Safe_Release(pGameInstance);
 			return E_FAIL;
@@ -1793,7 +1873,7 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 
 
 
-// FIcon 
+	// FIcon 
 	CFIcon::UIDESC UIDesc12;
 	// 락온 아이콘
 	ZeroMemory(&UIDesc12, sizeof UIDesc12);
@@ -2004,133 +2084,133 @@ HRESULT CLevel_House::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
 
 HRESULT CLevel_House::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-    if (INVALID_HANDLE_VALUE == hFile)
-        return E_FAIL;
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
 
-    _ulong			dwByte = 0;
-    _ulong			dwStrByte = 0;
-    _uint			iSize = 0;
+	_ulong			dwByte = 0;
+	_ulong			dwStrByte = 0;
+	_uint			iSize = 0;
 
-    CGameObject* pGameObject = { nullptr };
+	CGameObject* pGameObject = { nullptr };
 
-    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+	ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
-    _uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
 
-    for (_uint i = 0; i < iSize; ++i)
-    {
-        CMapObject::MAPOBJECT_INFO tMapObject_Info;
-        ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		CMapObject::MAPOBJECT_INFO tMapObject_Info;
+		ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
 
-        ReadFile(hFile, &tMapObject_Info.vPos, sizeof(_float4), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.vRotAngle, sizeof(_float3), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.vScale, sizeof(_float3), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.iMapObjectType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.vPos, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.vRotAngle, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.vScale, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iMapObjectType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.iNumInstance, sizeof(_uint), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.fRange, sizeof(_float), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.fMinSize, sizeof(_float), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.fMaxSize, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iNumInstance, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.fRange, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.fMinSize, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.fMaxSize, sizeof(_float), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.iInstanceType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iInstanceType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.bRandomRatationY, sizeof(_bool), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.bRandomRatationY, sizeof(_bool), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iArrangementType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iSceneType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iRenderGroup, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
+		ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
 
-        const _tchar* pMapObjectTypeTag = TEXT("");
+		const _tchar* pMapObjectTypeTag = TEXT("");
 
-        switch (tMapObject_Info.iMapObjectType)
-        {
-        case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-        default:
-            break;
-        }
-    }
+		switch (tMapObject_Info.iMapObjectType)
+		{
+		case CMapObject::MAPOBJECT_STATIC:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_TERRAIN:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_ROTATION:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_INSTANCE:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+		default:
+			break;
+		}
+	}
 
-    CloseHandle(hFile);
+	CloseHandle(hFile);
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Load_Lights_Info(const _tchar* pPath)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(pPath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-    if (INVALID_HANDLE_VALUE == hFile)
-        return E_FAIL;
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
 
-    _ulong			dwByte = 0;
-    _uint			iSize = 0;
+	_ulong			dwByte = 0;
+	_uint			iSize = 0;
 
-    ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
+	ReadFile(hFile, &iSize, sizeof(_uint), &dwByte, nullptr);
 
-    for (_uint i = 0; i < iSize; ++i)
-    {
-        LIGHTDESC tLight;
-        ZeroMemory(&tLight, sizeof tLight);
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		LIGHTDESC tLight;
+		ZeroMemory(&tLight, sizeof tLight);
 
 
-        ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.eType, sizeof(_uint), &dwByte, nullptr);
 
-        ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
-        ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
-        ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
-        ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
-        ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
-        ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.fLightRange, sizeof(_float), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightAmbient, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDiffuse, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightSpecular, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightDir, sizeof(_float4), &dwByte, nullptr);
+		ReadFile(hFile, &tLight.vLightPos, sizeof(_float4), &dwByte, nullptr);
 
-        if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
-        {
+		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
+		{
 			tLight.vLightDiffuse = _float4(0.05f, 0.05f, 0.05f, 1.f);
-        }
+		}
 
 
-        if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
-            return E_FAIL;
-    }
+		if (FAILED(pGameInstance->Add_Light(m_pDevice, m_pContext, tLight)))
+			return E_FAIL;
+	}
 
-    CloseHandle(hFile);
+	CloseHandle(hFile);
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CLevel_House::Ready_Layer_Effect()
@@ -2294,7 +2374,7 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 		MSG_BOX("Failed to Load Effect : Kyogai_CutScene_Explosion");
 		return E_FAIL;
 	}
-	
+
 	return S_OK;
 }
 
@@ -2844,18 +2924,18 @@ HRESULT CLevel_House::LoadEffects(const _tchar* pPath)
 
 CLevel_House* CLevel_House::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CLevel_House* pInstance = new CLevel_House(pDevice, pContext);
-    
-    if (FAILED(pInstance->Initialize()))
-    {
-        MSG_BOX("Failed to Created : CLevel_House");
-        Safe_Release(pInstance);
-    }
+	CLevel_House* pInstance = new CLevel_House(pDevice, pContext);
 
-    return pInstance;
+	if (FAILED(pInstance->Initialize()))
+	{
+		MSG_BOX("Failed to Created : CLevel_House");
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CLevel_House::Free()
 {
-    __super::Free();
+	__super::Free();
 }

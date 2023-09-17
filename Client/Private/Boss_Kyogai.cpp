@@ -863,10 +863,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.6f);
 				_tchar szSoundFile3[MAX_PATH] = TEXT("hit_firel_01.ogg");
 				Play_Sound_Channel(szSoundFile3, CSoundMgr::MONSTER_EFFECT_2, 0.6f);
+
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(true);
 			}
 			else if (1 == m_iEvent_Index) // 0.8
 			{
 				m_pRendererCom->Set_RadialBlur();
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(false);
 			}
 
 		}
@@ -2385,6 +2388,10 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
 			CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+			_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_1.mp3");
+			CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 		}
 
 		if (m_StatusDesc.fHp <= m_StatusDesc.fHp_Max)

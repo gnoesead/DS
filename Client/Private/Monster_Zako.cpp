@@ -110,10 +110,6 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 	m_StatusDesc.fHp_Max = 100.f;
 	m_StatusDesc.fHp = 100.f;
 
-	// 테스트용
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
-
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
 	{
 		m_isCan_Tutorial = true;

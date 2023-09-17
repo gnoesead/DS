@@ -225,7 +225,7 @@ void CNPC_Female::Animation_Control(_double dTimeDelta)
 	else
 	{
 		if(NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
-			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC)
+			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC && ANIM_SIT_LISTEN != m_CharacterDesc.NPCDesc.eNPC)
 			Sway(dTimeDelta);
 
 		if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC || NPC_TALK == m_CharacterDesc.NPCDesc.eNPC
@@ -269,6 +269,26 @@ void CNPC_Female::Animation_Control_Stand(_double dTimeDelta)
 		if (m_isFirst_Talk)
 		{
 			m_isFirst_Talk = false;
+
+
+			//ด๋ป็
+			if (m_CharacterDesc.NPCDesc.Dialog_Type == 3)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Female_2.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
+			}
+			else if (m_CharacterDesc.NPCDesc.Dialog_Type == 5)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Female_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
+			}
+			else if (m_CharacterDesc.NPCDesc.Dialog_Type == 7)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Female_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
+			}
+
+
 
 			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SIT_IDLE)
 			{
@@ -345,6 +365,9 @@ void CNPC_Female::Sway(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_STAGGER);
 			m_dCoolTime_Walk = 0.0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Female_Euak.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
 		}
 	}
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_STAGGER)
@@ -371,7 +394,6 @@ void CNPC_Female::Sway(_double dTimeDelta)
 				m_isFirst_Sway = true;
 
 				m_pModelCom->Set_Animation(36);
-				
 			}
 		}
 		else
