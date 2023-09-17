@@ -164,6 +164,10 @@ HRESULT CLevel_House::Initialize()
 	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
+	CSoundMgr::Get_Instance()->StopAll();
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_House.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
     return S_OK;
 }
 
@@ -272,6 +276,24 @@ void CLevel_House::Tick(_double dTimeDelta)
 
         }
     }
+
+	if (true == CFadeManager::GetInstance()->Get_Is_House_Monster_Battle_Start() && false == bChangeBattleBGM)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Battle.mp3");
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
+		bChangeBattleBGM = true;
+	}
+
+	if (true == CFadeManager::GetInstance()->Get_Is_House_Boss_Battle_Start() && false == bChangeBossBGM)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_0.mp3");
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
+		bChangeBossBGM = true;
+	}
 
     Safe_Release(pGameInstance);
 }

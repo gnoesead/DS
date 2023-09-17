@@ -30,10 +30,10 @@ HRESULT CLevel_Logo::Initialize()
     if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
         return E_FAIL;
 
-    //_tchar szBgm[MAX_PATH] = TEXT("Intro.mp3");
-    //CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
-
 	Ready_Layer_Effect();
+
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_Intro.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
     return S_OK;
 }
