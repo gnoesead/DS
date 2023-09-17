@@ -351,33 +351,33 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 
 			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 			}
-			else if (Event_Time(dTimeDelta, 1.1, m_dTimeAcc))
+			else if (Event_Time(dTimeDelta, 1.6, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(-3.f, 1.0f, 0.f), 4.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
 					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 			}
-			else if (Event_Time(dTimeDelta, 2.0, m_dTimeAcc))
+			else if (Event_Time(dTimeDelta, 3.0, m_dTimeAcc))
 			{
 				m_dTimeAcc = 0.0;
 			}
@@ -390,6 +390,20 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 				m_dTimeAcc = 0.0;
 			}
 			m_dTimeAcc += dTimeDelta;
+			_vector vCenterPos = { 164.6f, 0.f, 57.4f, 1.f };
+			_vector vVerticalPos = { 158.6f, 0.f, 57.4f, 1.f };
+
+			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
+
+			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+			}		
+			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
+			{
+				m_dTimeAcc = 0.0;
+			}
 		}
 		else if (true == bThird_Trigger)
 		{
@@ -399,6 +413,23 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 				m_dTimeAcc = 0.0;
 			}
 			m_dTimeAcc += dTimeDelta;
+			_vector vCenterPos = { 150.6f, 0.f, 57.4f, 1.f };
+			_vector vVerticalPos = { 144.6f, 0.f, 57.4f, 1.f };
+
+			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
+
+			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(6.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-6.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+			}
+			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
+			{
+				m_dTimeAcc = 0.0;
+			}
 		}
 		else if (true == bFourth_Trigger)
 		{
