@@ -299,6 +299,7 @@ void CTiming_UI::Tick(_double TimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE)) {
 
+				
 				if (m_Size_Param <= 0.18f) {
 
 					CBattle_UI_Manager::GetInstance()->Set_Timing_Success(true);

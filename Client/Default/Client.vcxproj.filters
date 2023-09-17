@@ -849,6 +849,9 @@
     <ClInclude Include="..\Public\Character_Dialog.h">
       <Filter>02. GameObjects\UI\13.Character_Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Ending.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1216,6 +1219,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StaticMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\Static</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ending.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

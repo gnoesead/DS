@@ -21,6 +21,8 @@
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
 #include "Fade_Manager.h"
+#include "OptionManager.h"
+
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -3893,6 +3895,7 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
+				
 				m_eCurAnimIndex = ANIM_IDLE;
 				m_bTrain_Stage = false;
 				//Trigger_Interact();
@@ -4282,6 +4285,14 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 				m_dDeadSmokeAccTime = 0.0;
 			}
 		}
+
+
+		if (m_fDeadTime > 8.0f)
+		{
+			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+			CFadeManager::GetInstance()->Set_Fade_Out(true);
+		}
+			
 
 		if (m_fDeadTime > 10.0f) // Á×´Â ½Ã°£ Á¶Àý ÇØµµ µÊ
 			m_isDead = true;

@@ -82,6 +82,12 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	if (m_Timing_Success == true) {
 
 		if (m_Timing_Sprite1 == false) {
+
+			_tchar szSoundFile2[MAX_PATH] = TEXT("ui_qte_success.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile2, CSoundMgr::UI, 0.7f);
+
+
 			m_Timing_Sprite1 = true;
 		}
 		if (m_Timing_Sprite2 == false) {
@@ -284,6 +290,16 @@ _int CBattle_UI_Manager::Get_Akaza_UI_Num()
 _int CBattle_UI_Manager::Get_Web_UI_Num()
 {
 	return m_Web_UI_Num;
+}
+
+void CBattle_UI_Manager::Set_Ending_UI_Num(_int On)
+{
+	m_Ending_UI_Num = On;
+}
+
+_int CBattle_UI_Manager::Get_Ending_UI_Num()
+{
+	return m_Ending_UI_Num;
 }
 
 void CBattle_UI_Manager::Set_Web_UI_On(_int num)

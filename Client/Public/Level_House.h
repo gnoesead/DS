@@ -45,6 +45,9 @@ private:
 	HRESULT	Ready_Layer_Effect();
 	HRESULT LoadEffects(const _tchar* pPath);
 
+private:
+	_float m_Ending_TimeAcc = { 0.f };
+
 
 public:
 	static			CLevel_House* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

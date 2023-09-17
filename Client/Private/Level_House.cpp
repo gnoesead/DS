@@ -31,6 +31,9 @@
 #include "Paper.h"
 #include "Zenitsu_Awake_UI.h"
 #include "Timing_UI.h"
+#include "Ending.h"
+#include "Battle_UI_Manager.h"
+
 
 #include "ColliderManager.h"
 #include "Effect.h"
@@ -164,6 +167,8 @@ HRESULT CLevel_House::Initialize()
 	CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
 	CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
+	m_Ending_TimeAcc = { 0.f };
+
     return S_OK;
 }
 
@@ -178,14 +183,44 @@ void CLevel_House::Tick(_double dTimeDelta)
     Safe_AddRef(pGameInstance);
 
 
-
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD2))
-	{
-		COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
-		CFadeManager::GetInstance()->Set_Fade_Out(true);
-	}
-
 	if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			// Ending UI 
+			CBattle_UI_Manager::GetInstance()->Set_Ending_UI_Num(0);
+
+			m_Ending_TimeAcc += (_float)dTimeDelta;
+
+			if (m_Ending_TimeAcc > 2.f) {
+				m_Ending_TimeAcc = 0.f;
+				CBattle_UI_Manager::GetInstance()->Set_Ending_UI_Num(2);
+				CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+				HRESULT hr = 0;
+
+				if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+				{
+					pGameInstance->Clear_Light();
+					hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+				}
+				else
+				{
+					pGameInstance->Clear_Light();
+					hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+				}
+
+				if (FAILED(hr)) {
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+
+			
+
+		}
+	}
+	else {
 
 		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
@@ -193,23 +228,21 @@ void CLevel_House::Tick(_double dTimeDelta)
 
 			HRESULT hr = 0;
 
-			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+			if (true == pGameInstance->Get_IsStage())
 			{
-				pGameInstance->Clear_Light();
-				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-			}
-			else
-			{
-				pGameInstance->Clear_Light();
-				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
-			}
 
-			if (FAILED(hr)) {
-				Safe_Release(pGameInstance);
-				return;
-			}
+				if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
 
+					hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+				else
+					hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+				pGameInstance->Clear_Light();
+
+			}
 		}
+
+
 	}
 
 
@@ -253,25 +286,7 @@ void CLevel_House::Tick(_double dTimeDelta)
 		pGameInstance->Set_Light(0, 1, vDiffuse);
 	}
 
-    if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
-
-        CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
-
-        HRESULT hr = 0;
-
-        if (true == pGameInstance->Get_IsStage())
-        {
-
-            if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-            
-                hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);           
-            else
-                hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
-
-			pGameInstance->Clear_Light();
-
-        }
-    }
+   
 
     Safe_Release(pGameInstance);
 }
@@ -1822,13 +1837,17 @@ HRESULT CLevel_House::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	}
 
 
+// Ending
+	CEnding::UIDESC UIDesc13;
+	ZeroMemory(&UIDesc13, sizeof UIDesc13);
 
+	UIDesc13.m_Type = 0;
 
-
-
-
-
-
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_HOUSE, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Ending"), &UIDesc13))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 	Safe_Release(pGameInstance);

@@ -81,6 +81,9 @@ public: // Web
 	_bool Get_Web_UI_On();
 	_int Get_Web_UI_Num();
 
+public: // Endning
+	void Set_Ending_UI_Num(_int On);
+	_int Get_Ending_UI_Num();
 	
 public: // Timing
 	
@@ -161,6 +164,8 @@ private: // Web
 	_bool m_Web_On = { false };
 	_int m_Web_UI_Num = { 0 };
 
+private: // Ending
+	_int m_Ending_UI_Num = { 2 };
 
 public:
 	virtual void Free() override;

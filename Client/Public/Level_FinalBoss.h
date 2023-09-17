@@ -44,6 +44,8 @@ private:
 
 	_double m_dGrassAcc = { 30.0 };
 
+	_float m_Ending_TimeAcc = { 0.f };
+
 public:
 	static			CLevel_FinalBoss* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void	Free() override;
