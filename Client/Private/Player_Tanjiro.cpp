@@ -2900,6 +2900,13 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
 
+
+
+		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ADV_RUN)
+			Play_Sound_Move(dTimeDelta, 0.38f);
+		else if(m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ADV_STEALTH_WALK || m_pModelCom->Get_iCurrentAnimIndex() == 145)
+			Play_Sound_Move(dTimeDelta, 0.5f);
+
 		Safe_Release(pGameInstance);
 	}
 
@@ -3013,6 +3020,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 			m_eCurNavi = m_eNextNavi;
 		}
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+
 	}
 
 	if (0.1f < m_fDistanceTo_Box)
@@ -3069,6 +3080,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			//올라가는
 			else
 				Jumping(2.15f, 0.087f);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 
 		m_dDelay_BoxJump += dTimeDelta;
@@ -3086,6 +3100,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 				m_eCurNavi = m_eNextNavi;
 			}
 		}
+
+		
 	}
 	else if (m_pModelCom->Get_iCurrentAnimIndex() == 3 && m_isPlayerStatus_OnRoof == true)
 	{
@@ -3098,6 +3114,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			//올라가는
 			else
 				Jumping(2.45f, 0.087f);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 
 	}

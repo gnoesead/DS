@@ -222,10 +222,11 @@ void CNPC_AdultM::Animation_Control(_double dTimeDelta)
 	}
 	else
 	{
-		if(NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
+		if (NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
 			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC)
+		{
 			//Sway(dTimeDelta);
-
+		}
 		if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC || NPC_TALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_SIT == m_CharacterDesc.NPCDesc.eNPC || NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
@@ -267,7 +268,15 @@ void CNPC_AdultM::Animation_Control_Stand(_double dTimeDelta)
 		if (m_isFirst_Talk)
 		{
 			m_isFirst_Talk = false;
-
+			//대사
+			if (m_CharacterDesc.NPCDesc.Dialog_Type == 4)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_AdultM_Araeta.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.8f);
+			}
+			
+			
+			//애니 변경
 			if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WORK)
 			{
 				m_pModelCom->Set_LinearDuration(ANIM_SPEAK_PALZZANG, 0.5f);
@@ -303,11 +312,42 @@ void CNPC_AdultM::Animation_Control_Stand(_double dTimeDelta)
 	}
 	else if (NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC )
 	{
-		//m_fLand_Y = 4.85f;
+		if (m_isTalking)
+		{
+			//m_fLand_Y = 4.85f;
+			if (m_isFirst_Talk)
+			{
+				m_isFirst_Talk = false;
+				//대사
+				if (m_CharacterDesc.NPCDesc.Dialog_Type == 14)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_3_Dok.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.8f);
+				}
+
+
+			}
+		}
 	}
 	else if (NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
 	{
 		//m_fLand_Y = 4.85f;
+		if (m_isTalking)
+		{
+			//m_fLand_Y = 4.85f;
+			if (m_isFirst_Talk)
+			{
+				m_isFirst_Talk = false;
+				//대사
+				if (m_CharacterDesc.NPCDesc.Dialog_Type == 14)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_3_Dok.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.8f);
+				}
+
+
+			}
+		}
 	}
 }
 
