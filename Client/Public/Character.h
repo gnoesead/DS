@@ -192,6 +192,7 @@ protected:
 
 	void Play_FallDownEffect();
 	void Play_HitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
+	void Play_SpiderHitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
 
 	void Shadow_Village_Setting();
 	void Shadow_House_Setting();

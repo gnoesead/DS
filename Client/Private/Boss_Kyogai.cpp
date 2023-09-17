@@ -1352,6 +1352,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect(vKyogaiOffset);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1392,6 +1397,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1425,6 +1435,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1458,6 +1473,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1490,6 +1510,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1551,6 +1576,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect(vKyogaiOffset);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;

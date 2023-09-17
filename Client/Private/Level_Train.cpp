@@ -213,6 +213,9 @@ void CLevel_Train::Tick(_double dTimeDelta)
 
 	CWebManager::GetInstance()->Tick(dTimeDelta);
 
+	Train_Sound(dTimeDelta);
+
+
     Safe_Release(pGameInstance);
 }
 
@@ -2049,6 +2052,20 @@ HRESULT CLevel_Train::LoadEffects(const _tchar* pPath)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CLevel_Train::Train_Sound(_double dTimeDelta)
+{
+	m_dTrainSoundAccTime += dTimeDelta;
+
+	if (m_dTrainSoundAccTime > 11.0)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::TRAIN_SOUND_0);
+		_tchar szSoundFile[MAX_PATH] = TEXT("st_train_run01LP.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::TRAIN_SOUND_0, 0.3f);
+		
+		m_dTrainSoundAccTime = 0.0;
+	}
 }
 
 CLevel_Train* CLevel_Train::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -539,6 +539,11 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 
 		}
+
+		Play_HitEffect(_float3(0.f, -0.5f , 0.f));
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y -= 0.5f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 2.3f, 0.17f, m_Hit_AtkDir);
 
@@ -566,6 +571,9 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
 
+		Play_HitEffect(_float3(0.f, -0.5f, 0.f));
+		
+
 		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.10f, m_Hit_AtkDir);
@@ -589,6 +597,8 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isSpiderBlow = true;
 
+		Play_HitEffect(_float3(0.f, -0.5f, 0.f));
+		
 		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 #pragma endregion
@@ -612,6 +622,8 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		m_isSpiderBlow = true;
 
+		Play_HitEffect(_float3(0.f, -0.5f, 0.f));
+		
 		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
 
