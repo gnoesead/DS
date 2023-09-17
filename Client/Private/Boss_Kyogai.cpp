@@ -850,8 +850,15 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Kyogai_Explosion_Particle", m_pTransformCom);
 				m_pRendererCom->Set_RadialBlur();
 
-				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Scream.ogg");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.6f);
+				if (m_StatusDesc.fHp > 0.f)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Scream.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.6f);
+				}
+				else
+				{
+					Play_Sound_Dmg(1, 0.9f);
+				}
 				_tchar szSoundFile2[MAX_PATH] = TEXT("amb_treeBreak_divided03.ogg");
 				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.6f);
 				_tchar szSoundFile3[MAX_PATH] = TEXT("hit_firel_01.ogg");
@@ -1368,6 +1375,8 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
+			if(!m_bSuperArmor)
+				Play_Sound_Dmg(0, 0.7f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Blow())
 		{
@@ -1398,6 +1407,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(1, 0.9f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Upper())
 		{
@@ -1428,6 +1440,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(0, 0.7f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Big())
 		{
@@ -1458,6 +1473,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(2, 0.7f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Bound())
 		{
@@ -1489,6 +1507,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 
 			//Set_FallingStatus(3.0f, 0.0f);
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(0, 0.9f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_CutScene())
 		{
@@ -1513,6 +1534,8 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(2, 0.7f);
 		}
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
@@ -1543,6 +1566,9 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(2, 0.7f);
 		}
 		Safe_Release(pGameInstance);
 	}
@@ -2282,6 +2308,8 @@ void CBoss_Kyogai::Trigger_Hit_Dead()
 	m_bStopAnim = false;
 	m_fDeadTime = 0.0F;
 
+	Play_Sound_Dmg(2, 0.7f);
+
 	m_eCurstate = STATE_HIT_DEAD;
 }
 
@@ -2330,6 +2358,10 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 			m_iTriggerCnt = 1;
 			Trigger_Interact();
 			CFadeManager::GetInstance()->Set_Is_House_Boss_Battle_Start(true);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+			_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_1.mp3");
+			CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 		}
 
 		if (m_StatusDesc.fHp <= m_StatusDesc.fHp_Max)
@@ -2736,7 +2768,7 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 	if (Event_Time(dTimeDelta, 19.5, m_dTurnTime))
 	{
 		Set_CharacterDialog(8.f, TEXT("[카마도 탄지로]"), TEXT("(엄청난 회전 속도야!! 손톱의 개수가 늘었어!!"), TEXT("큰일이다, 엄청난 기술이야!)"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_45_Tanjiro.ogg");
+		_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_46_Tanjiro.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 	}
 
@@ -4394,6 +4426,11 @@ void CBoss_Kyogai::Liar_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
 
 		Create_AlertRect(BLADE_ONE_RANDOM);
 
+		_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+		Play_Sound_Channel(szSoundFile1, CSoundMgr::KYOGAI_BLADE_0, 0.4f);
+		_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+		Play_Sound_Channel(szSoundFile2, CSoundMgr::KYOGAI_BLADE_1, 0.4f);
+
 	}
 	if (dTime + 2.0 < m_dTurnTime && m_dTurnTime <= dTime + 2.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
 	{
@@ -4442,6 +4479,11 @@ void CBoss_Kyogai::Liar_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
 			CAtkCollider::TYPE_SMALL, -vHorizonDir, m_fSmallDmg, m_pPlayerTransformCom, dSpeed, CAtkCollider::TYPE_KYOGAI_LIAR_BULLET, "Kyogai_BladeAtk");
 
 		Create_AlertRect(BLADE_ONE_RANDOM);
+
+		_tchar szSoundFile1[MAX_PATH] = TEXT("aura_02.ogg");
+		Play_Sound_Channel(szSoundFile1, CSoundMgr::KYOGAI_BLADE_0, 0.4f);
+		_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
+		Play_Sound_Channel(szSoundFile2, CSoundMgr::KYOGAI_BLADE_1, 0.4f);
 	}
 	if (dTime + 4.0 < m_dTurnTime && m_dTurnTime <= dTime + 4.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
 	{
@@ -4770,19 +4812,19 @@ void CBoss_Kyogai::Dialog_Update(_double dTimeDelta)
 		}
 		else if (Event_Time(dTimeDelta, 13.5f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(17.f, TEXT("[카마도 탄지로]"), TEXT("(지금 난 상태가 좋지 않아)"));
+			Set_CharacterDialog(12.f, TEXT("[카마도 탄지로]"), TEXT("(지금 난 상태가 좋지 않아)"));
 			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_15_Tanjiro.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
 		else if (Event_Time(dTimeDelta, 18.0f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(17.f, TEXT("[카마도 탄지로]"), TEXT("(간격 안으로 들어가려고 파고들 때") , TEXT("통증이 밀려와 발이 얽히거나 하면.....)"));
+			Set_CharacterDialog(12.f, TEXT("[카마도 탄지로]"), TEXT("(간격 안으로 들어가려고 파고들 때") , TEXT("통증이 밀려와 발이 얽히거나 하면.....)"));
 			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_16_Tanjiro.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
 		else if (Event_Time(dTimeDelta, 24.5f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(17.f, TEXT("[카마도 탄지로]"), TEXT("(온 몸이 조각나겠지)"));
+			Set_CharacterDialog(12.f, TEXT("[카마도 탄지로]"), TEXT("(온 몸이 조각나겠지)"));
 			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_17_Tanjiro.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
@@ -4819,7 +4861,7 @@ void CBoss_Kyogai::Dialog_Update(_double dTimeDelta)
 		else if (Event_Time(dTimeDelta, 66.5f, m_dDialogAccTime))
 		{
 			Set_CharacterDialog(6.f, TEXT("[쿄우가이]"), TEXT("젠장, 화가 치민다! 빨리 희귀혈을 먹어야 하건만!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_27.ogg");
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_28.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
 		else if (Event_Time(dTimeDelta, 73.f, m_dDialogAccTime))
@@ -4881,6 +4923,40 @@ void CBoss_Kyogai::FastBook_Update(_double dTimeDelta)
 			if (iIdx == 2)
 				iIdx = 0;
 		}
+	}
+}
+
+void CBoss_Kyogai::Play_Sound_Dmg(_int iType, _float vol)
+{
+	//small
+	if (iType == 0)
+	{
+		if (m_iSound_Dmg_Small == 0)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyo_Dmg_Small0.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+		}
+		else if (m_iSound_Dmg_Small == 1)
+		{
+			m_iSound_Dmg_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyo_Dmg_Small1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE_SUB, vol);
+		}
+	}
+	// Medium
+	else if (iType == 1)
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("Kyo_Dmg_Medium.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
+	}
+	// Big
+	else if (iType == 2)
+	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("Kyo_Dmg_Big.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_VOICE, vol);
 	}
 }
 
