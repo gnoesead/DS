@@ -1474,7 +1474,7 @@ HRESULT CLevel_Train::Load_Lights_Info(const _tchar* pPath)
 
 		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
 		{
-			tLight.vLightDiffuse = _float4(0.1f , 0.1f , 0.1f , 1.f);
+			tLight.vLightDiffuse = _float4(0.2f , 0.2f , 0.2f , 1.f);
 		}
 
 
