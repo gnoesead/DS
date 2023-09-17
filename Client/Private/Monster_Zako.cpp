@@ -110,10 +110,6 @@ HRESULT CMonster_Zako::Initialize(void* pArg)
 	m_StatusDesc.fHp_Max = 100.f;
 	m_StatusDesc.fHp = 100.f;
 
-	// 테스트용
-	m_StatusDesc.fHp_Max = 100000.f;
-	m_StatusDesc.fHp = 100000.f;
-
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_GAMEPLAY)
 	{
 		m_isCan_Tutorial = true;
@@ -312,7 +308,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.39
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 2.0f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_05.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
@@ -331,7 +327,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.64
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BIG, AtkDir, 3.0f);
+					CAtkCollider::TYPE_BIG, AtkDir, 2.0f);
 			}
 		}
 
@@ -352,7 +348,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.17
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 1.5f);
 			}
 			if (2 == m_iEvent_Index)
 			{//0.30
@@ -366,7 +362,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (3 == m_iEvent_Index)
 			{//0.35
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 1.5f);
 			}
 			if (4 == m_iEvent_Index)
 			{//0.50
@@ -380,7 +376,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (5 == m_iEvent_Index)
 			{//0.61
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 1.5f);
 			}
 			if (6 == m_iEvent_Index)
 			{//0.80
@@ -394,7 +390,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (7 == m_iEvent_Index)
 			{//0.84
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 1.5f);
 			}
 			if (8 == m_iEvent_Index)
 			{//1.30
@@ -412,7 +408,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
+					CAtkCollider::TYPE_BIG, AtkDir, 3.5f);
 
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
@@ -437,7 +433,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.1
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BIG, AtkDir, 7.0f);
+					CAtkCollider::TYPE_BIG, AtkDir, 4.0f);
 			}
 		}
 
@@ -459,7 +455,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
-					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 4.5f);
 			}
 		}
 		if (14 == m_pModelCom->Get_iCurrentAnimIndex())
@@ -492,7 +488,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
-					CAtkCollider::TYPE_BLOW, AtkDir, 9.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 4.6f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_19.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
@@ -516,7 +512,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.24
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 2.0f);
 			}
 		}
 
@@ -537,7 +533,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.28
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 4.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 2.5f);
 			}
 		}
 
@@ -546,7 +542,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{//0.4
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BLOW, AtkDir, 7.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 3.5f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.5
@@ -565,7 +561,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index)
 			{
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 1.5,
-					CAtkCollider::TYPE_BLOW, AtkDir, 8.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 4.0f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_wind_1.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
@@ -605,7 +601,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.59
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 1.5f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
@@ -620,7 +616,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (3 == m_iEvent_Index)
 			{//0.99
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 4.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 2.0f);
 			}
 			if (4 == m_iEvent_Index)
 			{//1.9
@@ -629,7 +625,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (5 == m_iEvent_Index)
 			{//1.960
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BLOW, AtkDir, 7.0f);
+					CAtkCollider::TYPE_BLOW, AtkDir, 3.5f);
 			}
 		}
 
@@ -647,7 +643,7 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.02
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.7f, 1.7f, 1.7f), _float3(0.f, 0.0f, 0.0f), 0.4,
-					CAtkCollider::TYPE_SMALL, AtkDir, 6.0f);
+					CAtkCollider::TYPE_SMALL, AtkDir, 3.0f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_19.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
@@ -1585,6 +1581,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1613,6 +1614,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1698,6 +1704,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1727,7 +1738,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
 		m_pModelCom->Set_Animation(ANIM_FALL);
-		Jumping(1.5f, 0.03f); // 1.5
+		Jumping(1.5f, 0.035f); // 1.5
 
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
@@ -1751,8 +1762,8 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 	//어퍼시 수직상승 여부
 	if (m_isStrictUpper == false)
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.5f, AtkDir);
-		Go_Dir_Deceleration(dTimeDelta, 111, 0.5f, 0.01f, AtkDir);
+		Go_Dir_Constant(dTimeDelta, ANIM_FALL, 0.35f, AtkDir);
+		Go_Dir_Deceleration(dTimeDelta, 111, 0.35f, 0.01f, AtkDir);
 	}
 
 	if (m_isBounding)
@@ -1789,6 +1800,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1814,7 +1830,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.25f, 0.05f);//2.0
+			Jumping(2.25f, 0.065f);//2.0
 
 			//pGameInstance->Time_Slow(0.25, 0.1);
 		}
@@ -1837,6 +1853,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1914,7 +1935,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 
 		if (m_isJumpOn == false)
 		{
-			Jumping(2.05f, 0.03f); // 1.85
+			Jumping(2.05f, 0.035f); // 1.85
 		}
 		else
 		{

@@ -137,10 +137,17 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	if (!m_bSmell_Detection)
 	{
-		m_bSmell_Detection = true;
-		m_pRendererCom->Set_GrayScale_On(true);
+		if (pGameInstance->Get_DIKeyDown(DIK_X))
+		{
+			m_bSmell_Detection = true;
+			m_pRendererCom->Set_GrayScale();
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("ui_smellsense.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+
+		}
 	}
 	Smell_Detection(dTimeDelta);
 
@@ -249,7 +256,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
-	
+
+	if(pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	CPlayerManager::GetInstance()->Set_Player_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -998,7 +1007,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 
 				m_pRendererCom->Set_BloomRatio();
 			}
@@ -1011,7 +1020,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 3.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
@@ -1020,7 +1029,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 11.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 5.0f * fDmg);
 
 				Camera_Shake(0.1, 50);
 			}
@@ -1033,7 +1042,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 9.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
@@ -1359,7 +1368,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
-			
+
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
@@ -1378,7 +1387,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			
+
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -1401,6 +1410,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
+
+					Play_Sound_Atk(0, 0.7f);
 				}
 			}
 		}
@@ -1414,6 +1425,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
 
 					CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
+
+					Play_Sound_Atk(0, 0.7f);
 				}
 			}
 		}
@@ -1433,6 +1446,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
 
+				Play_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1450,6 +1464,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
+
+				Play_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1467,6 +1483,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
+
+				Play_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1484,6 +1502,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Dash_Particle", m_pTransformCom);
+
+				Play_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -2311,10 +2331,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.35f);
 					//Jumping(1.0f * m_fScaleChange, 0.06f * m_fScaleChange);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 		}
-		Play_Sound_Atk(0, 0.7);
+
 
 	}
 
@@ -2549,7 +2571,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				}
 			}
 		}
-		Play_Sound_Dmg(0, 0.8);
+		Play_Sound_Dmg(0, 0.8f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2582,7 +2604,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			}
 		}
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
 
@@ -2603,7 +2625,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pTransformCom->Set_Look(reverseAtkDir);
 			Jumping(1.2f, 0.05f);
 		}
-		Play_Sound_Dmg(2, 0.8);
+		Play_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 120, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -2626,7 +2648,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 			Jumping(1.2f, 0.05f);
 		}
-		Play_Sound_Dmg(2, 0.8);
+		Play_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 132, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -2653,7 +2675,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 			Jumping(1.7f, 0.03f);
 		}
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 	}
 
 	if (m_isConnectHitting == false)
@@ -2690,7 +2712,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_isSwampUpper = true;
 		}
 
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 	}
 
 #pragma endregion
@@ -2717,7 +2739,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_dSwampHit = 0.0;
 			m_isFirst_SwampHit = true;
 		}
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("st_swamp01.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::SKILL_EFFECT, 0.8f);
@@ -2974,6 +2996,13 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 			CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(true);
 		}
 
+
+
+		if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ADV_RUN)
+			Play_Sound_Move(dTimeDelta, 0.38f);
+		else if(m_pModelCom->Get_iCurrentAnimIndex() == ANIM_ADV_STEALTH_WALK || m_pModelCom->Get_iCurrentAnimIndex() == 145)
+			Play_Sound_Move(dTimeDelta, 0.5f);
+
 		Safe_Release(pGameInstance);
 	}
 
@@ -3087,6 +3116,10 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 
 			m_eCurNavi = m_eNextNavi;
 		}
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+
 	}
 
 	if (0.1f < m_fDistanceTo_Box)
@@ -3143,6 +3176,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			//올라가는
 			else
 				Jumping(2.15f, 0.087f);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 
 		m_dDelay_BoxJump += dTimeDelta;
@@ -3160,6 +3196,8 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 				m_eCurNavi = m_eNextNavi;
 			}
 		}
+
+		
 	}
 	else if (m_pModelCom->Get_iCurrentAnimIndex() == 3 && m_isPlayerStatus_OnRoof == true)
 	{
@@ -3172,6 +3210,9 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 			//올라가는
 			else
 				Jumping(2.45f, 0.087f);
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
 		}
 
 	}
@@ -3300,6 +3341,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 
+		m_isCan_GuardCancel = true;
+
 		if (27 == iCurAnimIndex || 28 == iCurAnimIndex)
 		{
 			m_Moveset.m_isRestrict_KeyInput = true;
@@ -3330,8 +3373,12 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
+		_bool bMonster_PushAway = CMonsterManager::GetInstance()->Get_Monster_PushAway();
 
 		m_isSkilling = true;
+
+		if (bMonster_PushAway == true)
+			m_isSkilling = false;
 	}
 	//잡기 공격 시 제한
 	else if (ANIM_ATK_THROW == iCurAnimIndex)
@@ -3355,6 +3402,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Charge = true;
 		m_Moveset.m_isRestrict_Step = true;
 		m_Moveset.m_isRestrict_Dash = true;
+
+		if (ANIM_BATTLE_AWAKEN == iCurAnimIndex)
+			m_isSkilling = true;
 	}
 	//Special
 	else if (ANIM_ATK_SPECIAL_CUTSCENE == iCurAnimIndex || 102 == iCurAnimIndex || 103 == iCurAnimIndex || 104 == iCurAnimIndex || 105 == iCurAnimIndex || 106 == iCurAnimIndex
@@ -3417,7 +3467,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		if (m_dDelay_DoubleStep < 1.0f)
+		if (m_dDelay_DoubleStep < 0.35f)
 			m_Moveset.m_isRestrict_DoubleStep = true;
 		else
 			m_Moveset.m_isRestrict_DoubleStep = false;
@@ -3465,6 +3515,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_isSkilling = false;
 
 		m_isSwampBinding = false;
+
+		m_isCan_GuardCancel = false;
 	}
 }
 
@@ -3513,7 +3565,7 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
+void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 {
 	//small
 	if (iType == 0)
@@ -3614,7 +3666,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
 	}
 }
 
-void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _double vol)
+void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 {
 	//small
 	if (iType == 0)
@@ -3831,7 +3883,7 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 	}
 	else
 		m_fOutlineThickness = 1.5f;
-	
+
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

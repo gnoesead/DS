@@ -134,6 +134,10 @@ HRESULT CLevel_Train::Initialize()
 
 	CWebManager::GetInstance()->Initialize();
 
+	CSoundMgr::Get_Instance()->StopAll();
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_Train.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+
     return S_OK;
 }
 
@@ -212,6 +216,9 @@ void CLevel_Train::Tick(_double dTimeDelta)
     }
 
 	CWebManager::GetInstance()->Tick(dTimeDelta);
+
+	Train_Sound(dTimeDelta);
+
 
     Safe_Release(pGameInstance);
 }
@@ -1474,7 +1481,7 @@ HRESULT CLevel_Train::Load_Lights_Info(const _tchar* pPath)
 
 		if (tLight.eType == LIGHTDESC::TYPE_DIRECTION)
 		{
-			tLight.vLightDiffuse = _float4(0.1f , 0.1f , 0.1f , 1.f);
+			tLight.vLightDiffuse = _float4(0.2f , 0.2f , 0.2f , 1.f);
 		}
 
 
@@ -2049,6 +2056,20 @@ HRESULT CLevel_Train::LoadEffects(const _tchar* pPath)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CLevel_Train::Train_Sound(_double dTimeDelta)
+{
+	m_dTrainSoundAccTime += dTimeDelta;
+
+	if (m_dTrainSoundAccTime > 11.0)
+	{
+		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::TRAIN_SOUND_0);
+		_tchar szSoundFile[MAX_PATH] = TEXT("st_train_run01LP.ogg");
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::TRAIN_SOUND_0, 0.3f);
+		
+		m_dTrainSoundAccTime = 0.0;
+	}
 }
 
 CLevel_Train* CLevel_Train::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

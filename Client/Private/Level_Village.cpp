@@ -165,8 +165,9 @@ HRESULT CLevel_Village::Initialize()
     CFadeManager::GetInstance()->Set_Is_Train_Battle_Start(false);
     CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(false);
 
-
-
+    CSoundMgr::Get_Instance()->StopAll();
+    _tchar szBgm[MAX_PATH] = TEXT("BGM_Village.mp3");
+    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
     return S_OK;
 }
@@ -333,7 +334,14 @@ void CLevel_Village::Tick(_double dTimeDelta)
         }
     }
 
+    if (true == CFadeManager::GetInstance()->Get_Is_Village_Battle_Start() && false == bChangeBGM)
+    {
+        CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+        _tchar szBgm[MAX_PATH] = TEXT("BGM_Village_Battle_0.mp3");
+        CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
+        bChangeBGM = true;
+    }
 
     Safe_Release(pGameInstance);
 

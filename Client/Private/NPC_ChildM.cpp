@@ -273,7 +273,18 @@ void CNPC_ChildM::Animation_Control_Stand(_double dTimeDelta)
 			m_isFirst_Talk = false;
 			m_pModelCom->Set_LinearDuration(ANIM_SPEAK_NORLAM, 0.3f);
 			m_pModelCom->Set_Animation(ANIM_SPEAK_NORLAM);
+
+			//ด๋ป็
+			if (m_CharacterDesc.NPCDesc.Dialog_Type == 6)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_ChildM_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.7f);
+			}
+
+
 		}
+
+
 
 		if (m_isTalking)
 		{

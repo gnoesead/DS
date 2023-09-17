@@ -881,7 +881,7 @@ void CCharacter::Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, 
 	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
 }
 
-void CCharacter::Play_Sound_Metal(_double vol)
+void CCharacter::Play_Sound_Metal(_float vol)
 {
 	if (m_iSound_Metal_Index == 0)
 	{
@@ -1163,9 +1163,9 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 	case CGroundSmoke::SMOKE_DEAD_NORMAL:
 		EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { 0.00f,0.06f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectWDesc.vFrameSpeed = { 0.11f , 0.12f };
-		EffectWDesc.vStartSizeX = { 1.0f , 1.2f }; EffectWDesc.vStartSizeY = { 1.0f , 1.4f };
-		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.25f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vFrameSpeed = { 0.12f , 0.13f };
+		EffectWDesc.vStartSizeX = { 1.4f , 1.6f }; EffectWDesc.vStartSizeY = { 1.4f , 1.8f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.21f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 0.2f , 0.4f }; EffectWDesc.vSizeSpeedY = { 0.2f , 0.4f };
 		EffectWDesc.bSpecial = true;
 
@@ -1293,6 +1293,45 @@ void CCharacter::Play_FallDownEffect()
 }
 
 void CCharacter::Play_HitEffect(_float3 vOffset)
+{
+	_uint iRanNum = Random::Generate_Int(0, 4);
+
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	EffectWorldDesc.vPosition = vOffset;
+
+	switch (iRanNum)
+	{
+	case 0:
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		break;
+	case 1:
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+	case 2:
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+	case 3:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+		break;
+	case 4:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+}
+
+void CCharacter::Play_SpiderHitEffect(_float3 vOffset)
 {
 	_uint iRanNum = Random::Generate_Int(0, 4);
 

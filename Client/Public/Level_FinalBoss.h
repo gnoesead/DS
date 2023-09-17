@@ -30,6 +30,8 @@ private:
 	HRESULT Ready_Layer_Player_UI(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Boss_UI(const _tchar* pLayerTag);
 
+	HRESULT	Ready_Layer_Character_Dialog(const _tchar* pLayerTag);
+
 private:
 	HRESULT	Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag);	// ¸Ê ¿ÀºêÁ§Æ® ÆÄ½Ì(¾È¿ø)
 	HRESULT Load_Lights_Info(const _tchar* pPath);

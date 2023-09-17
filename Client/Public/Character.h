@@ -67,8 +67,8 @@ public:
 
 	typedef struct tagCharacterStatusDesc
 	{
-		_float  fHp = { 100.0f };
-		_float	fHp_Max = { 100.0f };
+		_float  fHp = { 200.0f };
+		_float	fHp_Max = { 200.0f };
 		_float	fMp = { 100.0f };
 		_float	fMp_Max = { 100.0f };
 
@@ -169,7 +169,7 @@ protected:
 
 	//사운드 용
 	void	Play_Sound_Channel(TCHAR* pSoundKey, CSoundMgr::CHANNELID eID, _float _vol);
-	void	Play_Sound_Metal(_double vol);
+	void	Play_Sound_Metal(_float vol);
 
 protected:
 	void	Set_FallingStatus(_float fFallSpeed, _float fGravityAcc) { m_fJump_Acc = -fFallSpeed; m_fGravity_Fall = fGravityAcc; }
@@ -192,6 +192,7 @@ protected:
 
 	void Play_FallDownEffect();
 	void Play_HitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
+	void Play_SpiderHitEffect(_float3 vOffset = { 0.f, 0.f , 0.f });
 
 	void Shadow_Village_Setting();
 	void Shadow_House_Setting();

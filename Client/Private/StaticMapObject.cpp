@@ -357,7 +357,13 @@ void CStaticMapObject::Interaction_DoorOpen_Manual(_double TimeDelta)
 
 			// 키입력하면 열림
 			if (pGameInstance->Get_DIKeyDown(DIK_F))
+			{
 				m_bOpen = true;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Door_open.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SYSTEM_EFFECT);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::SYSTEM_EFFECT, 0.8f);
+			}
 		}
 	}
 
@@ -400,7 +406,13 @@ void CStaticMapObject::Interaction_DoorOpen_Auto(_double TimeDelta)
 
 		// 문과의 거리 체크
 		if (Compute::DistCheck(vPlayerPos, vMyPos, 6.f))
+		{
 			m_bOpen = true;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Door_open.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SYSTEM_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::SYSTEM_EFFECT, 0.8f);
+		}
 	}
 
 	// 문 열림
@@ -478,6 +490,15 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		}
 
 		m_AccTime += TimeDelta;
+
+		if (!m_bBookSound && m_AccTime > 0.8)
+		{// 북소리
+			_tchar szSoundFile[MAX_PATH] = TEXT("fld_tsuzumi.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SYSTEM_EFFECT);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::SYSTEM_EFFECT, 0.8f);
+
+			m_bBookSound = true;
+		}
 
 		if (!m_bSetInvert && m_AccTime > 0.9)
 		{
@@ -568,6 +589,8 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		pCameraTransform->Set_State(CTransform::STATE_POSITION, vCameraPos + vDist);
 
 		m_bChageRoom = false;
+
+		
 	}
 
 	Safe_Release(pGameInstance);

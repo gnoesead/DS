@@ -40,6 +40,9 @@ private:
 	HRESULT	Ready_Layer_Effect();
 	HRESULT LoadEffects(const _tchar* pPath);
 
+private:
+	void	Train_Sound(_double dTimeDelta);
+
 
 
 private:
@@ -47,6 +50,8 @@ private:
 	_float	m_Battle_MaxTime = { 2.f };
 	_float	m_Battle_TimeDir = { 1.f };
 
+private:
+	_double	m_dTrainSoundAccTime = { 100.0 };
 
 	
 

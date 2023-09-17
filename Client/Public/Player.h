@@ -263,6 +263,7 @@ protected: // 애니메이션 제어용 변수들
 	_int	m_iGuardHit_Index = { 0 };
 
 	_bool	m_isGuarding = { false };
+	_bool	m_isCan_GuardCancel = { false };
 
 	//hit swamp
 	_bool m_isSwampHit = { false };
@@ -301,7 +302,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_isLeft = { false };
 	_bool	m_isRight = { false };
 
-	_bool	m_dDelay_DoubleStep = { 0.0 };
+	_double	m_dDelay_DoubleStep = { 0.0 };
 
 	//젠이츠 벽력용
 	_bool	m_isCan_Air_Hekireki = { false };

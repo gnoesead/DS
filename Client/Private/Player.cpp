@@ -326,11 +326,17 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+		
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
@@ -363,7 +369,13 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -400,10 +412,15 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+			
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
@@ -435,10 +452,15 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Blow(false);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
@@ -468,10 +490,14 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_BigBlow(false);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
@@ -501,11 +527,14 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
+				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
@@ -991,7 +1020,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	CameraLook.w = 0.0f;
 	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
 
-	if (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_Moveset.m_isRestrict_KeyInput == false)
+	if (m_isCan_GuardCancel || (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_isJumpOn == false && m_Moveset.m_isRestrict_KeyInput == false))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{
@@ -1556,6 +1585,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 	_vector vNextPos = { 0.f, 0.f , 0.f , 1.f };
 	_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
+	_tchar szBGM1[MAX_PATH] = TEXT("");
+	_tchar szBGM2[MAX_PATH] = TEXT("");
 
 	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
@@ -1578,6 +1609,11 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));
 				m_pTransformCom->Set_Look(PlayerDir);
 				m_pModelCom->Set_Animation(0); // Adv_Idle
+
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+				wsprintf(szBGM1, TEXT("BGM_House.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM1, 0.6f);
+
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
 				vNextPos = XMVectorSet(118.f, 0.f, 136.6f, 1.f);
@@ -1602,6 +1638,11 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ -1.0f, 0.0f, 0.0f, 0.0f }));
 				m_pTransformCom->Set_Look(PlayerDir);
 				m_pModelCom->Set_Animation(0); // Adv_Idle
+
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+				wsprintf(szBGM2, TEXT("BGM_Village.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM2, 0.6f);
+
 				break;
 			default:
 				break;
