@@ -1916,7 +1916,7 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		
 		if (m_isJumpOn == false)
 		{
-			Jumping(2.05f, 0.035f); // 1.85
+			Jumping(1.5f, 0.035f); // 1.85
 		}
 		else
 		{
