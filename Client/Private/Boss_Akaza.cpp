@@ -60,6 +60,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
+		m_dDialogAccTime = 0.0;
 		m_StatusDesc.fHp = 100.f;
 		m_StatusDesc.fHp_Max = 100.f;
 		m_eCurAnimIndex = ANIM_IDLE;
@@ -72,7 +73,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	{
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
 			m_bTrain_Stage = true;
-
+		m_dDialogAccTime = 0.0;
 		m_eCurNavi = NAVI_TRAIN;
 	}
 
@@ -126,7 +127,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 #endif // _DEBUG
 
-	Update_Train_Stage();
+	Update_Train_Stage(dTimeDelta);
 
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
@@ -1687,7 +1688,7 @@ void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 
 }
 
-void CBoss_Akaza::Update_Train_Stage()
+void CBoss_Akaza::Update_Train_Stage(_double dTimeDelta)
 {
 	if (m_bTrain_Stage == true)
 	{
@@ -1697,6 +1698,7 @@ void CBoss_Akaza::Update_Train_Stage()
 			Trigger_Train_JumpStomp();
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
+		Train_Dialog_Update(dTimeDelta);
 	}
 }
 
@@ -4051,7 +4053,7 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
 				m_eCurAnimIndex = ANIM_IDLE;
-				m_bTrain_Stage = false;
+				//m_bTrain_Stage = false;
 				//Trigger_Interact();
 			}
 		}
@@ -4602,6 +4604,47 @@ void CBoss_Akaza::Dialog_Update(_double dTimeDelta)
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
 		}
 	}
+}
+
+void CBoss_Akaza::Train_Dialog_Update(_double dTimeDelta)
+{
+	m_dDialogAccTime += dTimeDelta;
+	if (Event_Time(dTimeDelta, 0.5, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(2.f, TEXT("[카마도 탄지로]"), TEXT("뭐지..?!! 이 기운은?"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 4.0, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[카마도 탄지로]"), TEXT("끄어억..이건...상현의 3?"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 10.0, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("뭐냐. 이 약해 빠진 녀석은"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_NandaSorewa.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 14.0, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("나는 약해빠진 닌겐을 싫어한다. 쿄우가이는 어떤 수로 죽였지?"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 18.0, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("보여봐라!!!!!!!!!! 너의 실력을!!!!!!!!!!!!!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Misetemiro_Omaeno_Chikarao.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 22.0, m_dDialogAccTime))
+	{
+		m_bTrain_Stage = false;
+	}
+
+	
 }
 
 void CBoss_Akaza::Step_Sound(_double dSound)
