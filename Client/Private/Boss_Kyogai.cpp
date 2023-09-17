@@ -2759,6 +2759,8 @@ void CBoss_Kyogai::Update_Awake_AtkskCmb(_double dTimeDelta)
 				m_pModelCom->Set_AnimisFinish(ANIM_ROOMCHANGE_START);
 				m_eCurAnimIndex = ANIM_ROOMCHANGE_END;
 				m_bFastBook = false;
+
+				m_ePart = PART_2;
 			}
 		}
 		CMonsterManager::GetInstance()->Set_RoomTurn(m_bTurn);
@@ -4931,7 +4933,42 @@ void CBoss_Kyogai::Dialog_Update(_double dTimeDelta)
 			m_bFinishVoice = true;
 		}
 	}
-	
+
+	if (PART_2 == m_ePart)
+	{
+		m_dDialogAccTime2 += dTimeDelta;
+
+		if (Event_Time(dTimeDelta, 3.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(처음 싸울때 깨달았어)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_7_Tanjiro.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 7.5f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(10.f, TEXT("[카마도 탄지로]"), TEXT("(오른쪽 어깨 장구는 우회전 , 왼쪽은 좌회전") ,TEXT("오른쪽 다리는 앞으로 회전, 왼쪽 다리는 뒤로 회전!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_8_Tanjiro.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 18.f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(5.f, TEXT("[카마도 탄지로]"), TEXT("(북부 장구는 손톱 공격!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_9_Tanjiro.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 23.5f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(5.f, TEXT("[쿄우가이]"), TEXT("애송이 같은 녀석... 얼른 죽어라!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_10.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+		else if (Event_Time(dTimeDelta, 29.0f, m_dDialogAccTime2))
+		{
+			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(반격 못 할 속도는 아니야..") , TEXT("침착하게 저녀석의 머리를 베자!)"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_13_Tanjiro.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		}
+	}
 }
 
 void CBoss_Kyogai::FastBook_Update(_double dTimeDelta)
