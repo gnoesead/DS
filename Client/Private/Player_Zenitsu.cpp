@@ -345,7 +345,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.0f, 0.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 1.0f * fDmg);
 
-				Player_Sound_Atk(0, 0.8);
+				Player_Sound_Atk(0, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_S.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.6f);
@@ -373,7 +373,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
-				Player_Sound_Atk(0, 0.8);
+				Player_Sound_Atk(0, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
@@ -401,7 +401,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 
-				Player_Sound_Atk(1, 0.8);
+				Player_Sound_Atk(1, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword07.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.3f);
@@ -481,7 +481,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.2f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 5.0f * fDmg);
 
-				Player_Sound_Atk(1, 0.8);
+				Player_Sound_Atk(1, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword09.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
@@ -555,7 +555,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_UPPER, vPlayerDir, 6.0f * fDmg);
 
-				Player_Sound_Atk(2, 0.8);
+				Player_Sound_Atk(2, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_L.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
@@ -614,7 +614,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 1.5f), 0.5,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
-				Player_Sound_Atk(1, 0.8);
+				Player_Sound_Atk(1, 0.8f);
 			}
 			if (1 == m_iEvent_Index)
 			{
@@ -647,7 +647,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.5f, 3.5f, 3.5f), _float3(0.f, 1.0f, 2.0f), 0.1,
 					CAtkCollider::TYPE_SMALL, vPlayerDir, 3.0f * fDmg);
 
-				Player_Sound_Atk(0, 0.8);
+				Player_Sound_Atk(0, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.3f);
@@ -676,7 +676,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				else
 					CEffectPlayer::Get_Instance()->Play("Zen_Power_Air_1", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(1, 0.8);
+				Player_Sound_Atk(1, 0.8f);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_sword_S_1.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_1, 0.3f);
@@ -2441,7 +2441,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				}
 			}
 		}
-		Player_Sound_Dmg(0, 0.8);
+		Player_Sound_Dmg(0, 0.8f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2470,10 +2470,10 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			}
 			else
 			{
-				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
+				m_pModelCom->Set_Animation(ANIM_DMG_BIG); 
 			}
 		}
-		Player_Sound_Dmg(1, 0.8);
+		Player_Sound_Dmg(1, 0.8f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
 
@@ -2495,7 +2495,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			Jumping(1.2f, 0.05f);
 			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
 		}
-		Player_Sound_Dmg(2, 0.8);
+		Player_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -2519,7 +2519,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			m_pTransformCom->Set_Look(reverseAtkDir);
 		}
-		Player_Sound_Dmg(2, 0.8);
+		Player_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -2543,7 +2543,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 		}
-		Player_Sound_Dmg(1, 0.8);
+		Player_Sound_Dmg(1, 0.8f);
 	}
 	if (m_isConnectHitting == false)
 	{

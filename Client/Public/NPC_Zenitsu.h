@@ -102,6 +102,11 @@ private:
 	_bool	m_isTanjiroTalk = { false };
 	_double m_dDelay_TanjiroTalk = { 0.0 };
 
+	_bool	m_isEventTalk_Finded = { false };
+	_double	m_dDelay_EventTalk_Finded = { 0.0 };
+	_bool	m_isEventTalk_Tanjiro_Finded = { false };
+	_double m_dDelay_EventTalk_Tanjiro_Finded = { 0.0 };
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };

@@ -409,6 +409,44 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 			m_dDelay_PlayerBack = 0.0;
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
+
+			m_isEventTalk_Finded = true;
+			m_dDelay_EventTalk_Finded = 0.0;
+		}
+	}
+
+	//발각시 대사
+	if (m_isEventTalk_Finded)
+	{
+		m_dDelay_EventTalk_Finded += dTimeDelta;
+
+		if (m_dDelay_EventTalk_Finded > 1.5f)
+		{
+			m_dDelay_EventTalk_Finded = 0.0;
+			m_isEventTalk_Finded = false;
+			m_isEventTalk_Tanjiro_Finded = true;
+			m_dDelay_EventTalk_Tanjiro_Finded = 0.0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Failed.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+
+			Set_CharacterDialog(6.f, TEXT("[젠이츠]"), TEXT("하마터면 죽을뻔했잖아! 제대로 하란말이야..!!"), TEXT("적에게 발각되면 범위 밖으로 재빨리 튀란 말이야..."));
+		}
+
+	}
+	if (m_isEventTalk_Tanjiro_Finded)
+	{
+		m_dDelay_EventTalk_Tanjiro_Finded += dTimeDelta;
+		if (m_dDelay_EventTalk_Tanjiro_Finded > 6.1f)
+		{
+			m_dDelay_EventTalk_Tanjiro_Finded = 0.0;
+			m_isEventTalk_Tanjiro_Finded = false;
+
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Tanjiro_Failed.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+
+			Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("그래도 다행이야. 젠이츠 덕분에 무사할 수 있었어."), TEXT("이제 걸리지 않고 나아가자!"));
 		}
 	}
 
