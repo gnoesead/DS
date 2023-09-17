@@ -1310,7 +1310,11 @@ void CMonster_Swamp::Animation_Control_Attack(_double dTimeDelta, _int AttackInd
 		break;
 	}
 
-	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE)
+	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_IDLE || m_pModelCom->Get_iCurrentAnimIndex() == ANIM_SWAMP_IDLE
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_B || m_pModelCom->Get_iCurrentAnimIndex() == 60
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_F || m_pModelCom->Get_iCurrentAnimIndex() == 63
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_L || m_pModelCom->Get_iCurrentAnimIndex() == 66
+		|| m_pModelCom->Get_iCurrentAnimIndex() == ANIM_WALK_R || m_pModelCom->Get_iCurrentAnimIndex() == 69)
 	{
 		m_eCurState = STATE_IDLE;
 
@@ -2123,7 +2127,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 		m_isSwamp_Deathing = true;
 
 		m_pModelCom->Set_Animation(ANIM_DMG_FALL);
-		Jumping(1.75f, 0.03f); // 1.75
+		Jumping(1.75f, 0.036f); // 1.75
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
@@ -2188,7 +2192,7 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			m_isFirst_Anim = false;
 			m_isBounding = false;
 
-			Jumping(2.25f, 0.05f); // 1.85
+			Jumping(2.25f, 0.065f); // 1.85
 			//pGameInstance->Time_Slow(0.25, 0.5);
 		}
 

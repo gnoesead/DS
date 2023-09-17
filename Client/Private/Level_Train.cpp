@@ -156,6 +156,39 @@ void CLevel_Train::Tick(_double dTimeDelta)
     Safe_AddRef(pGameInstance);
 
    
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3))
+	{
+		COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+		CFadeManager::GetInstance()->Set_Fade_Out(true);
+	}
+
+	if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+			HRESULT hr = 0;
+
+			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_FINALBOSS))
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_FINALBOSS), false, false);
+			}
+			else
+			{
+				pGameInstance->Clear_Light();
+				hr = pGameInstance->Swap_Level(LEVEL_FINALBOSS);
+			}
+
+			if (FAILED(hr)) {
+				Safe_Release(pGameInstance);
+				return;
+			}
+
+		}
+
+	}
 
     if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 

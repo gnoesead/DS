@@ -263,6 +263,7 @@ protected: // 애니메이션 제어용 변수들
 	_int	m_iGuardHit_Index = { 0 };
 
 	_bool	m_isGuarding = { false };
+	_bool	m_isCan_GuardCancel = { false };
 
 	//hit swamp
 	_bool m_isSwampHit = { false };

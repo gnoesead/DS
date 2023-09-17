@@ -332,6 +332,16 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 			}
+			else {
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -352,10 +362,27 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_ConnectSmall(false);
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
+			}
+			else {
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				_int n = Random::Generate_Int(0, 1);
+
+				if (n == 0) {
+					EffectWorldDesc.vPosition.y += 1.1f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+				}
+				else {
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				}
+				
+				
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -378,6 +405,17 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
 			}
+			else {
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
+			
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -402,6 +440,16 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 			}
+			else {
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -424,6 +472,16 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+			}
+			else {
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -449,6 +507,17 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
 			}
+			else {
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
+
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.f;
+
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+			}
 
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -467,8 +536,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+				
 			}
 
 			m_Moveset.m_Down_Dmg_Swamp = true;
@@ -479,8 +547,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-				//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
+				
 			}
 
 			m_Moveset.m_Down_Dmg_Web = true;
@@ -514,13 +581,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom);
-			//CEffectPlayer::Get_Instance()->Play("Hit_Shock", m_pTransformCom);
-
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-			CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
-
+			
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -930,7 +991,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	CameraLook.w = 0.0f;
 	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
 
-	if (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_Moveset.m_isRestrict_KeyInput == false)
+	if (m_isCan_GuardCancel || (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_isJumpOn == false && m_Moveset.m_isRestrict_KeyInput == false))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{

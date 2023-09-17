@@ -67,8 +67,8 @@ public:
 
 	typedef struct tagCharacterStatusDesc
 	{
-		_float  fHp = { 100.0f };
-		_float	fHp_Max = { 100.0f };
+		_float  fHp = { 200.0f };
+		_float	fHp_Max = { 200.0f };
 		_float	fMp = { 100.0f };
 		_float	fMp_Max = { 100.0f };
 
