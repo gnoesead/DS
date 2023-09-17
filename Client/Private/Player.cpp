@@ -339,14 +339,22 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-				
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -380,21 +388,21 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 
-				_int n = Random::Generate_Int(0, 1);
-
-				if (n == 0) {
-					EffectWorldDesc.vPosition.y += 1.1f;
-					CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
 				}
-				else {
-					CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
 				}
 				
-				
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -423,14 +431,23 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &Effect3WorldDesc);
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			
 
@@ -463,14 +480,23 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -500,14 +526,23 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -537,15 +572,22 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
-				CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &Effect3WorldDesc);
-
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 

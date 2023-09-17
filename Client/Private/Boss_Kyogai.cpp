@@ -15,6 +15,7 @@
 #include "Fade_Manager.h"
 #include "MonsterManager.h"
 #include "Battle_UI_Manager.h"
+#include "OptionManager.h"
 
 
 CBoss_Kyogai::CBoss_Kyogai(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -1370,6 +1371,18 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.vPosition.y += 0.6f;
 
+				_uint iRanNum = Random::Generate_Int(0, 1);
+				if (iRanNum == 0) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+				}
+				else if (iRanNum == 1) {
+					EffectWorldDesc.fScale = 1.4f;
+					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+				}
+
+				EffectWorldDesc.fScale = 1.f;
+				
 				int n = Random::Generate_Int(0, 2);
 
 				if (n == 0)
@@ -1413,14 +1426,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			if (!m_bSuperArmor)
@@ -1451,14 +1461,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			if (!m_bSuperArmor)
@@ -1489,14 +1496,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			if (!m_bSuperArmor)
@@ -1526,14 +1530,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			//Set_FallingStatus(3.0f, 0.0f);
@@ -1555,14 +1556,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			if (!m_bSuperArmor)
 				Play_Sound_Dmg(2, 0.7f);
@@ -1592,14 +1590,11 @@ void CBoss_Kyogai::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.4f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			if (!m_bSuperArmor)
@@ -3162,8 +3157,17 @@ void CBoss_Kyogai::Update_Hit_Dead(_double dTimeDelta)
 			}
 		}
 
-		if (m_fDeadTime > 25.f) // 죽는 시간도 형이 조절해도 됨
+		if (m_fDeadTime > 28.f) 
+		{
+			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+			CFadeManager::GetInstance()->Set_Fade_Out(true);
+		}
+
+		if (m_fDeadTime > 30.f) // 죽는 시간도 형이 조절해도 됨
+		{
 			m_isDead = true;
+		}
+			
 
 	}
 }
@@ -3612,9 +3616,9 @@ void CBoss_Kyogai::Turn_Trigger(_double dTimeDelta)
 		_tchar szSoundFile[MAX_PATH] = TEXT("room_rotation_03.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.5f);
 
-		_tchar szSoundFile2[MAX_PATH] = TEXT("ui_qte_success.ogg");
+		/*_tchar szSoundFile2[MAX_PATH] = TEXT("ui_qte_success.ogg");
 		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
-		CSoundMgr::Get_Instance()->PlaySound(szSoundFile2, CSoundMgr::UI, 0.7f);
+		CSoundMgr::Get_Instance()->PlaySound(szSoundFile2, CSoundMgr::UI, 0.7f);*/
 	}
 
 	if (Event_Time(dTimeDelta, 2.0, m_dTimeAcc))
