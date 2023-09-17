@@ -94,6 +94,14 @@ private:
 	_float4 m_ResetPos[4];
 	_int	m_iResetIndex = {0}; // 3이 자코방 앞
 
+
+	//이벤트 talk
+	_bool	m_isEventTalk = { true };
+	_double m_dDelay_EventTalk = { 0.0 };
+
+	_bool	m_isTanjiroTalk = { false };
+	_double m_dDelay_TanjiroTalk = { 0.0 };
+
 private:
 	/* 임시 코드 */
 	_uint	m_iNumAnim = { 0 };
