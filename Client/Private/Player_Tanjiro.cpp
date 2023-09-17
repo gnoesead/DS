@@ -257,6 +257,8 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	else
 		m_isAuroraOn[0] = false;
 
+	if(pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	CPlayerManager::GetInstance()->Set_Player_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
