@@ -7,7 +7,8 @@
 #include "Player.h"
 #include "DialogManager.h"
 #include "MissionManager.h"
-
+#include "OptionManager.h"
+#include "Fade_Manager.h"
 
 CDialog::CDialog(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CUI(pDevice, pContext)
@@ -312,6 +313,9 @@ void CDialog::LateTick(_double TimeDelta)
 				m_Is_Out = true;
 				m_Is_Font_Render = false;
 				m_Name_Type = 1;
+
+				COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+				CFadeManager::GetInstance()->Set_Fade_Out(true);
 			}
 		}
 		else if (m_Dialog_Type == 10) {

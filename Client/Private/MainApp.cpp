@@ -659,6 +659,21 @@ HRESULT CMainApp::Ready_Prototype_Component_For_Static()
 
 #pragma endregion	
 
+#pragma region Ending	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ending"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Ending/Ending_%d.png"),2))))
+		return E_FAIL;
+
+#pragma endregion	
+
+#pragma region Failed
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Failed"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/UI/Timing/Failed.png")))))
+		return E_FAIL;
+
+#pragma endregion	
 
 
 

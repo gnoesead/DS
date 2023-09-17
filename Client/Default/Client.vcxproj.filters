@@ -469,6 +469,9 @@
     <Filter Include="02. GameObjects\UI\13.Character_Dialog">
       <UniqueIdentifier>{994b0ba4-645d-4948-b93d-c0aad6576162}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Ending">
+      <UniqueIdentifier>{caecc15f-3080-4e41-a7cd-d4102e375419}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -846,6 +849,9 @@
     <ClInclude Include="..\Public\Character_Dialog.h">
       <Filter>02. GameObjects\UI\13.Character_Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Ending.h">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1213,6 +1219,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StaticMapObject.cpp">
       <Filter>02. GameObjects\Environment\MapObject\Static</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ending.cpp">
+      <Filter>02. GameObjects\UI\09.Main_UI\Loading\Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

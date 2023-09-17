@@ -1346,6 +1346,45 @@ void CCharacter::Play_HitEffect(_float3 vOffset)
 	}
 }
 
+void CCharacter::Play_SpiderHitEffect(_float3 vOffset)
+{
+	_uint iRanNum = Random::Generate_Int(0, 4);
+
+	CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+	EffectWorldDesc.vPosition = vOffset;
+
+	switch (iRanNum)
+	{
+	case 0:
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		break;
+	case 1:
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+	case 2:
+	{
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom, &EffectWorldDesc);
+		EffectWorldDesc.vPosition.y += 0.8f;
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect4", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+	case 3:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+		break;
+	case 4:
+		EffectWorldDesc.fScale = 1.4f;
+		CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+		break;
+	}
+}
+
 void CCharacter::Shadow_Village_Setting()
 {
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();

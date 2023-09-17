@@ -52,6 +52,7 @@
 #include "Akaza_Awake_UI.h"
 #include "Timing_UI.h"
 #include "Web_UI.h"
+#include "Ending.h"
 
 
 
@@ -1135,6 +1136,10 @@ HRESULT CLoader::LoadingForLobby()
 		CCharacter_Dialog::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* Prototype_GameObject_Ending*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ending"),
+		CEnding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Particale

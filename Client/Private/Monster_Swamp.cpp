@@ -2018,9 +2018,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 
-			/*CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-			EffectWorldDesc.vPosition.y += 0.5f;
-			CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom , &EffectWorldDesc);*/
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else if (m_pColliderCom[COLL_SPHERE]->Get_Hit_ConnectSmall())
 		{
@@ -2029,7 +2031,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
-			/*CEffectPlayer::Get_Instance()->Play("Hit_Particle0", m_pTransformCom);*/
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 		}
 
@@ -2106,6 +2112,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.3f;
+		EffectWorldDesc.vPosition.y -= 2.5f;
+		EffectWorldDesc.vPosition.z -= 0.7f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 		//pGameInstance->Time_Slow(0.3, 0.15);
 
@@ -2131,6 +2142,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.3f;
+		EffectWorldDesc.vPosition.y -= 2.5f;
+		EffectWorldDesc.vPosition.z -= 0.7f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 		//pGameInstance->Time_Slow(0.23, 0.3);
 
@@ -2178,6 +2194,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.3f;
+		EffectWorldDesc.vPosition.y -= 2.5f;
+		EffectWorldDesc.vPosition.z -= 0.7f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 		Play_Sound_Dmg(1, 0.7f);
 	}
@@ -2198,6 +2219,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.3f;
+		EffectWorldDesc.vPosition.y -= 2.5f;
+		EffectWorldDesc.vPosition.z -= 0.7f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 	}
 #pragma endregion
@@ -2219,6 +2245,11 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 		Play_HitEffect();
 		CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+		EffectWorldDesc.vPosition.y += 0.3f;
+		EffectWorldDesc.vPosition.y -= 2.5f;
+		EffectWorldDesc.vPosition.z -= 0.7f;
+		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 		//pGameInstance->Time_Slow(0.6, 0.4);
 		Play_Sound_Dmg(1, 0.7f);

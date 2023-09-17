@@ -171,6 +171,17 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		m_pSwordHome->LateTick(dTimeDelta);
 	}
 
+	if (m_isKyoRoomSuccess)
+	{
+		m_isKyoRoomSuccess = false;
+		Player_Sound_Atk(1, 0.75f);
+	}
+	if (m_isKyoRoomDmg)
+	{
+		m_isKyoRoomDmg = false;
+		Player_Sound_Dmg(1, 0.75f);
+	}
+
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃ÷
 	{
@@ -1058,6 +1069,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += -0.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
 
@@ -1092,7 +1104,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += -0.3f;
+				EffectWorldDesc.vPosition.x += -0.2f;
 
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);

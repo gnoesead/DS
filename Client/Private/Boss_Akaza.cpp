@@ -21,6 +21,8 @@
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
 #include "Fade_Manager.h"
+#include "OptionManager.h"
+
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -131,7 +133,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		//Update_Trigger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -396,16 +398,21 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg
 					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
-
 				}
 
 				if (0 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_0", m_pTransformCom);
+					
+					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 				}
 				else if (3 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_1", m_pTransformCom);
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT_2, 0.4f);
 				}
 				/*else if (4 == (m_iEvent_Index % 6))
 				{
@@ -446,6 +453,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_BIGBLOW, vMonsterDir, m_fBigBlowDmg); // ºòºí·Î¿ì
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.35
@@ -506,6 +516,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//Sound
 				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Shine.mp3");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("swingL_07.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (m_bMove == false)
 			{
@@ -579,6 +592,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				for (_uint i = 0; i < 40; ++i)
 					pGameInstance->Add_GameObject(iCurIdx, TEXT("Layer_Effect_Aurora"), TEXT("Prototype_GameObject_Aurora"), &AuroraDesc);
 
+				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
@@ -603,6 +618,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 				Camera_Shake(0.7);
 				m_pRendererCom->Set_RadialBlur();
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("hit_L.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 			else if (2 == m_iEvent_Index) // 0.23
 			{
@@ -669,6 +687,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 2.f;
 				CEffectPlayer::Get_Instance()->Play("Akaza_Compass", m_pTransformCom, &EffectWorldDesc);
 
+				_tchar szSoundFile[MAX_PATH] = TEXT("hit_L.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
+
 				_uint iSoundNum = Random::Generate_Int(1, 2);
 				if (iSoundNum == 1)
 				{
@@ -697,8 +718,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 				
 				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Seeh.mp3");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
-
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);				
 			}
 
 		}
@@ -707,6 +727,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (0 == m_iEvent_Index) // 0.2
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shoot_Aura", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 
 			if (0 == m_iEvent_Index) // 0.85
@@ -735,6 +758,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 			if (1 == m_iEvent_Index) // 0.3
 			{
@@ -746,6 +772,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.f, 1.f, 1.f), _float3(0.f, 1.5f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
 
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 
 
@@ -810,6 +838,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Heu.mp3");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, 0.5f);
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("hit_firel_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 
 		}
@@ -826,6 +857,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//Sound
 				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Sora.mp3");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (1 == m_iEvent_Index) // 0.65
 			{
@@ -833,6 +867,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.750f, 0.750f), dLifeTime,
 					CAtkCollider::TYPE_UPPER, vMonsterDir, m_fUpperDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (2 == m_iEvent_Index) // 0.75
 			{
@@ -852,6 +889,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index) // 0.27
 			{
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JUMP);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (2 == m_iEvent_Index) // 0.37
 			{
@@ -949,6 +989,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 
 		}
@@ -961,6 +1004,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_14.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.45
@@ -978,6 +1024,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 			if (1 == m_iEvent_Index)
 			{//0.57
@@ -994,6 +1043,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 					CAtkCollider::TYPE_SMALL, vMonsterDir, m_fSmallDmg);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 
 		}
@@ -1007,6 +1059,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 					Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.5f, 1.5f), dLifeTime,
 						CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("swing_06.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 				}
 
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1045,6 +1100,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.dSpeed = 0.8;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_WindRing", m_pTransformCom, &EffectWorldDesc);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 			}
 
 			if (8 == m_iEvent_Index)
@@ -1070,6 +1128,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 			if (1 == m_iEvent_Index)
 			{//0.2
 				CEffectPlayer::Get_Instance()->Play("Akaza_Shoot_Aura", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 			}
 			if (2 == m_iEvent_Index)
 			{//0.5
@@ -1110,6 +1171,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					vRandomDir = Random_Dir(vMonsterDir, 30.f, 40.f, -30.f, 30.f);
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vRandomDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 				}
 			}
 			else
@@ -1124,6 +1188,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, vSetDir, Dmg, Transform, speed, BulletType, EffTag
 					Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.5f), dLongLifeTime,
 						CAtkCollider::TYPE_SMALL, vDir, m_fSmallDmg, m_pTransformCom, dSpeed, CAtkCollider::TYPE_BULLET, "Akaza_ATK_Projectile");
+
+					_tchar szSoundFile[MAX_PATH] = TEXT("swingL_06.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.6f);
 				}
 			}
 		}
@@ -1355,11 +1422,30 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 					Jumping(0.2f, 0.030f);
 
 				if (PlayerIndex == 0) {
-					//CEffectPlayer::Get_Instance()->Play("Hit_Effect0", m_pTransformCom);
+					
 					Play_HitEffect();
+					CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+
+					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+					EffectWorldDesc.vPosition.y += 0.3f;
+					EffectWorldDesc.vPosition.y -= 2.5f;
+					EffectWorldDesc.vPosition.z -= 0.7f;
+					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 				}
 				else {
 					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					_uint iRanNum = Random::Generate_Int(0, 1);
+					if (iRanNum == 0) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+					}
+					else if (iRanNum == 1) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+					}
+
+					EffectWorldDesc.fScale = 1.f;
 					EffectWorldDesc.vPosition.y += 0.3f;
 
 					int n = Random::Generate_Int(0, 2);
@@ -1403,17 +1489,20 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				//CEffectPlayer::Get_Instance()->Play("Hit_Spark", m_pTransformCom, &EffectWorldDescParticle1);
 
 				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1430,19 +1519,21 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Upper(false);
 
 			if (PlayerIndex == 0) {
-				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);				
 				Play_HitEffect();
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.4f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1468,17 +1559,19 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y += 0.8f;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Hit_Effect3", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc2;
+				EffectWorldDesc2.vPosition.y += 0.4f;
+				EffectWorldDesc2.vPosition.y -= 2.5f;
+				EffectWorldDesc2.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc2);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1497,17 +1590,20 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
+				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc2;
+				EffectWorldDesc2.vPosition.y += 0.4f;
+				EffectWorldDesc2.vPosition.y -= 2.5f;
+				EffectWorldDesc2.vPosition.z -= 1.0f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc2);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			
@@ -1544,14 +1640,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 			EffectWorldDesc.fScale = 1.f;
 			EffectWorldDesc.vPosition.y += 0.3f;
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-			EffectWorldDesc.vPosition.y -= 2.5f;
-			EffectWorldDesc.vPosition.z -= 1.f;
-
-			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 
 		}
@@ -3011,6 +3104,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI, XMVectorSet(0.f, 1.0f, 0.f, 0.f));
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
+
+						_tchar szSoundFile[MAX_PATH] = TEXT("brk_rock_03.ogg");
+						Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 					}
 					else
 					{
@@ -3030,6 +3126,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 						Create_GroundSmoke(CGroundSmoke::SMOKE_KYOGAI_KICKDOWN);
 
 						Camera_Shake(1.0, 200);
+
+						_tchar szSoundFile[MAX_PATH] = TEXT("brk_rock_03.ogg");
+						Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 					}
 				}
 
@@ -3937,6 +4036,9 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 					Camera_Shake(1.0, 1000);
 					m_pRendererCom->Set_RadialBlur();
 
+					_tchar szSoundFile[MAX_PATH] = TEXT("brk_rock_03.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
+
 				}
 				if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_DOWNEND, 0.70, dTimeDelta))
 				{
@@ -3948,6 +4050,7 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
+				
 				m_eCurAnimIndex = ANIM_IDLE;
 				m_bTrain_Stage = false;
 				//Trigger_Interact();
@@ -4337,6 +4440,14 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 				m_dDeadSmokeAccTime = 0.0;
 			}
 		}
+
+
+		if (m_fDeadTime > 8.0f)
+		{
+			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+			CFadeManager::GetInstance()->Set_Fade_Out(true);
+		}
+			
 
 		if (m_fDeadTime > 10.0f) // Á×´Â ½Ã°£ Á¶Àý ÇØµµ µÊ
 			m_isDead = true;
