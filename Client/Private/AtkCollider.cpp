@@ -6,6 +6,7 @@
 #include "AtkCollManager.h"
 #include "Player_Battle_Combo.h"
 #include "GroundSmoke.h"
+#include "PlayerManager.h"
 
 #include "ParticleManager.h"
 #include "SoundMgr.h"
@@ -218,6 +219,19 @@ void CAtkCollider::Update_Trigger(_double dTimeDelta)
 	case CAtkCollider::TYPE_BULLET_WEB_FULL:
 		Tick_WebBullet(dTimeDelta);
 		break;
+	case CAtkCollider::TYPE_GIMMICK_FIRST:
+		Tick_Gimmick_Bullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_GIMMICK_SECOND:
+		Tick_Gimmick_Bullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_GIMMICK_THIRD:
+		Tick_Gimmick_Bullet(dTimeDelta);
+		break;
+	case CAtkCollider::TYPE_GIMMICK_FOURTH:
+		Tick_Gimmick_Bullet(dTimeDelta);
+		break;
+
 	}
 }
 
@@ -252,6 +266,18 @@ void CAtkCollider::Setting_Trigger()
 		break;
 	case CAtkCollider::TYPE_BULLET_WEB_FULL:
 		Setting_WebBullet_Full();
+		break;
+	case CAtkCollider::TYPE_GIMMICK_FIRST:
+		Setting_First_Gimmick_Bullet();
+		break;
+	case CAtkCollider::TYPE_GIMMICK_SECOND:
+		Setting_Second_Gimmick_Bullet();
+		break;
+	case CAtkCollider::TYPE_GIMMICK_THIRD:
+		Setting_Third_Gimmick_Bullet();
+		break;
+	case CAtkCollider::TYPE_GIMMICK_FOURTH:
+		Setting_Fourth_Gimmick_Bullet();
 		break;
 	}
 }
@@ -418,6 +444,16 @@ void CAtkCollider::Tick_WebBullet(_double dTimeDelta)
 	}
 }
 
+void CAtkCollider::Tick_Gimmick_Bullet(_double dTimeDelta)
+{
+	if (true == m_AtkCollDesc.bBullet)
+	{
+		m_pColliderCom->Tick(m_pTransformCom->Get_WorldMatrix(), dTimeDelta);
+
+		if (m_dTimeAcc > 0.5)
+			m_pTransformCom->Go_Straight(dTimeDelta * m_AtkCollDesc.Speed);
+	}
+}
 
 void CAtkCollider::Setting_BaseBullet()
 {
@@ -571,6 +607,38 @@ void CAtkCollider::Setting_WebBullet_Full()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vOriginPos);
 }
 
+void CAtkCollider::Setting_First_Gimmick_Bullet()
+{
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vCenterPos = { 176.6f, 0.f, 57.4f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCenterPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 6.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vCenterPos);
+
+	m_vDir = vCenterPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
+}
+
+void CAtkCollider::Setting_Second_Gimmick_Bullet()
+{
+}
+
+void CAtkCollider::Setting_Third_Gimmick_Bullet()
+{
+}
+
+void CAtkCollider::Setting_Fourth_Gimmick_Bullet()
+{
+}
+
 void CAtkCollider::Level_House_Dead(_double dTimeDelta)
 {
 	if (m_AtkCollDesc.bBullet == true)
@@ -671,6 +739,11 @@ void CAtkCollider::Check_OutLine()
 				Safe_AddRef(pGameInstance);
 				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
+				_float fPosZ = XMVectorGetZ(CPlayerManager::GetInstance()->Get_Player_Pos());
+				_float fPosX = XMVectorGetX(CPlayerManager::GetInstance()->Get_Player_Pos());
+
+				_bool bGimmick_RoomTrigger = (51.f <= fPosZ && fPosZ <= 63.f);
+				if(bGimmick_RoomTrigger == false)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_BLADEDISAPPEAR, vPos);
 
 				static _uint iIdx = 0;

@@ -4762,7 +4762,6 @@ _vector CBoss_Kyogai::Vertical_Dir()
 	_vector vRoomPos = { 126.536f, 0.f, 123.840f, 1.f };
 	_vector vVerticalPos = { 143.536f, 0.f, 123.840f, 1.f };
 
-
 	return XMVector3Normalize(vVerticalPos - vRoomPos);
 
 }
