@@ -573,41 +573,41 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region RENGOKU
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1_DecalParticle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1_DecalParticle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo1_DecalParticle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo1_DecalParticle");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo2_DecalParticle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2_DecalParticle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo2_DecalParticle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo2_DecalParticle");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3_DecalParticle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3_DecalParticle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo3_DecalParticle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo3_DecalParticle");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal1Particle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal1Particle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal1Particle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal1Particle");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal2Particle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal2Particle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Down_Decal2Particle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Down_Decal2Particle");
+	//	return E_FAIL;
+	//}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up_DecalParticle.bin"), true, 5)))
-	{
-		MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up_DecalParticle");
-		return E_FAIL;
-	}
+	//if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Rengoku/Rengoku_BasicCombo4_Up_DecalParticle.bin"), true, 5)))
+	//{
+	//	MSG_BOX("Failed to Load Effect : Rengoku_BasicCombo4_Up_DecalParticle");
+	//	return E_FAIL;
+	//}
 #pragma endregion
 
 #pragma region TANJIRO
@@ -824,6 +824,24 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_Particle_rad2.bin"), true, 60)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Super2_Particle_rad2");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Awake_Cutscene_Particle.bin"), true, 3)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Awake_Cutscene_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Dash_Particle.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Dash_Particle");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_ParticleSmoke.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super2_ParticleSmoke");
 		return E_FAIL;
 	}
 #pragma endregion

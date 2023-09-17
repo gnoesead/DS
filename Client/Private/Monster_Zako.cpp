@@ -1581,6 +1581,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1609,6 +1614,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 			if (PlayerIndex == 0) {
 				Play_HitEffect();
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+				EffectWorldDesc.vPosition.y += 0.3f;
+				EffectWorldDesc.vPosition.y -= 2.5f;
+				EffectWorldDesc.vPosition.z -= 0.7f;
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1706,6 +1716,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1791,6 +1806,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -1838,6 +1858,11 @@ void CMonster_Zako::Animation_Control_Hit(_double dTimeDelta)
 		if (PlayerIndex == 0) {
 			Play_HitEffect();
 			CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
+			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+			EffectWorldDesc.vPosition.y += 0.3f;
+			EffectWorldDesc.vPosition.y -= 2.5f;
+			EffectWorldDesc.vPosition.z -= 0.7f;
+			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 		}
 		else {
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
