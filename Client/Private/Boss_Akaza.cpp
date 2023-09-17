@@ -3548,6 +3548,10 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 			m_dAwakeTime = 0.0;
 			m_eCurPhase = PHASE_2;
 			//CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+			_tchar szBgm[MAX_PATH] = TEXT("BGM_FinalBoss_1.mp3");
+			CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 		}
 		m_bNoDmg = false;
 
