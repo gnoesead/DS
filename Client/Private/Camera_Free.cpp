@@ -64,7 +64,7 @@ void CCamera_Free::Tick(_double dTimeDelta)
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 205.57f, 7.38f, 224.0f, 1.f });
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 136.f,0.f,136.f,1.f });
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, { 120.6f, 0.f, 139.2f, 1.f });
 	}
 	
 	if (pGameInstance->Get_DIKeyDown(DIK_0))

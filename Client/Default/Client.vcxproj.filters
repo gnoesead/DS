@@ -469,6 +469,9 @@
     <Filter Include="02. GameObjects\UI\13.Character_Dialog">
       <UniqueIdentifier>{994b0ba4-645d-4948-b93d-c0aad6576162}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. GameObjects\UI\09.Main_UI\Loading\Ending">
+      <UniqueIdentifier>{caecc15f-3080-4e41-a7cd-d4102e375419}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

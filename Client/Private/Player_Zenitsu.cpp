@@ -1058,6 +1058,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
+				EffectWorldDesc.vPosition.x += -0.2f;
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
 
@@ -1092,7 +1093,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.6f;
 				EffectWorldDesc.vPosition.z += 0.f;
-				EffectWorldDesc.vPosition.x += -0.3f;
+				EffectWorldDesc.vPosition.x += -0.2f;
 
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
@@ -1885,7 +1886,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_isHekireki_End_ForDir = true;
 			}
 
-			Use_Mp_Skill();
+			//Use_Mp_Skill();
 			if (m_isCan_Mp_Skill)
 			{
 				if (m_StatusDesc.iAwaken < 2)
