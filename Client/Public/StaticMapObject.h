@@ -53,6 +53,8 @@ private:
 	// 晨货
 	_bool	m_bSmellOn = { false };
 
+	// 合家府
+	_bool	m_bBookSound = { false };
 	
 };
 
