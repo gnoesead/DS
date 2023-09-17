@@ -2243,6 +2243,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Awaken_Miseteyaru.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.6f);
+
+
+			_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+			//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.7,
+				CAtkCollider::TYPE_BIG, vPlayerDir, 0.0f);
 		}
 		else if (m_Moveset.m_iAwaken == 2)
 		{

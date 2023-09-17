@@ -663,6 +663,7 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		//쿄우가이 돌아가는 룸
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE && CMonsterManager::GetInstance()->Get_Kyogai_On())
 		{
+			//성공시
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
 			{
 				m_isJump_TurnRoom = true;
@@ -677,6 +678,23 @@ void CPlayer::Key_Input(_double dTimeDelta)
 				else if (m_ePlayerType == PLAYER_ZENITSU)
 				{
 					m_pModelCom->Set_Animation(56);
+				}
+			}
+			//실패시
+			if (pGameInstance->Get_DIKeyDown(DIK_N))
+			{
+				m_isJump_TurnRoom = true;
+				m_isJump_Room_X = false;
+				m_isJump_Room_Z = false;
+				Jumping(3.0f, 0.07f);
+
+				if (m_ePlayerType == PLAYER_TANJIRO)
+				{
+					m_pModelCom->Set_Animation(124);
+				}
+				else if (m_ePlayerType == PLAYER_ZENITSU)
+				{
+					m_pModelCom->Set_Animation(99);
 				}
 			}
 		}

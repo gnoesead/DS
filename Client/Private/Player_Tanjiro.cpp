@@ -202,6 +202,12 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		CEffectPlayer::Get_Instance()->Play("Swamp_Explosion", m_pTransformCom);
 	}
 
+	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD4))
+	{
+		m_StatusDesc.fHp -= 50.0f;
+	}
+	_int ak = m_pModelCom->Get_iCurrentAnimIndex();
+
 	Safe_Release(pGameInstance);
 
 	if (true == m_isDead)
@@ -232,10 +238,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	}
 
-	_float4 TestPos;
-	XMStoreFloat4(&TestPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-	_int ak = 47;
-
+	
 	if (m_Moveset.m_iAwaken != 0)
 	{
 
@@ -1506,29 +1509,42 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 
 	if (m_ePlayerState == PLAYER_BATTLE)
 	{
-		Animation_Control_Battle_Dmg(dTimeDelta);
-
-		if (m_Moveset.m_isHitMotion == false)
+		//»ç¸Á½Ã
+		if (m_StatusDesc.fHp <= 0.0f && m_isPlayerTanjiroDead == false)
 		{
-			Animation_Control_Battle_Jump(dTimeDelta);
+			m_isPlayerTanjiroDead = true;
+		}
 
-			Animation_Control_Battle_Move(dTimeDelta);
+		if (m_isPlayerTanjiroDead)
+		{
+			Event_Tanjiro_Death(dTimeDelta);
+		}
+		else
+		{
+			Animation_Control_Battle_Dmg(dTimeDelta);
+
+			if (m_Moveset.m_isHitMotion == false)
+			{
+				Animation_Control_Battle_Jump(dTimeDelta);
+
+				Animation_Control_Battle_Move(dTimeDelta);
 
 
-			Animation_Control_Battle_Attack(dTimeDelta);
+				Animation_Control_Battle_Attack(dTimeDelta);
 
-			Animation_Control_Battle_Charge(dTimeDelta);
+				Animation_Control_Battle_Charge(dTimeDelta);
 
-			Animation_Control_Battle_Skill(dTimeDelta);
+				Animation_Control_Battle_Skill(dTimeDelta);
 
-			Animation_Control_Battle_Guard(dTimeDelta);
+				Animation_Control_Battle_Guard(dTimeDelta);
 
-			Animation_Control_Battle_Dash(dTimeDelta);
+				Animation_Control_Battle_Dash(dTimeDelta);
 
-			Animation_Control_Battle_Awaken(dTimeDelta);
+				Animation_Control_Battle_Awaken(dTimeDelta);
 
-			Animation_Control_Battle_Special(dTimeDelta);
+				Animation_Control_Battle_Special(dTimeDelta);
 
+			}
 		}
 	}
 	else if (m_ePlayerState == PLAYER_ADVENTURE)
@@ -2276,6 +2292,11 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Awaken(_double dTimeDelta)
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Awkaen_0.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.9f);
+
+			_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+			//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.7,
+				CAtkCollider::TYPE_BIG, vPlayerDir, 0.0f);
 		}
 		else if (m_Moveset.m_iAwaken == 2)
 		{
@@ -3203,7 +3224,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		|| ANIM_DOWN == iCurAnimIndex || ANIM_DOWN_GETUP_MOVE == iCurAnimIndex || 138 == iCurAnimIndex
 		|| ANIM_DOWN_GETUP == iCurAnimIndex || 135 == iCurAnimIndex
 		|| 139 == iCurAnimIndex || 140 == iCurAnimIndex || 141 == iCurAnimIndex || 142 == iCurAnimIndex || ANIM_DMG_SWAMPBIND == iCurAnimIndex
-		|| ANIM_DMG_AIR_SMALL_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_1 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_2 == iCurAnimIndex)
+		|| ANIM_DMG_AIR_SMALL_CONNECT_0 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_1 == iCurAnimIndex || ANIM_DMG_AIR_SMALL_CONNECT_2 == iCurAnimIndex
+		)
 	{
 		m_Moveset.m_isHitMotion = true;
 
@@ -3418,6 +3440,49 @@ void CPlayer_Tanjiro::Moving_Restrict()
 
 		m_isCan_GuardCancel = false;
 	}
+}
+
+void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
+{
+	if (m_isFirst_Event_Death)
+	{
+		m_isFirst_Event_Death = false;
+
+		m_pModelCom->Set_Animation(ANIM_GBLOW);
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_0_Spak.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+
+		Set_CharacterDialog(3.3f, TEXT("[ÅºÁö·Î]"), TEXT("²ô¾Æ¾Æ¾Æ¾Æ¾Ç... "));
+	}
+
+	Go_Backward_Deceleration(dTimeDelta, ANIM_GBLOW, 6.0f, 0.05f);
+
+	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
+
+	if (iCurAnim == ANIM_DOWN)
+	{
+		m_dDelay_TanjiroDead += dTimeDelta;
+
+		if (m_dDelay_TanjiroDead > 3.0f && m_isFirst_Dead_0)
+		{
+			m_isFirst_Dead_0 = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+
+			Set_CharacterDialog(6.f, TEXT("[ÅºÁö·Î]"), TEXT("¸öÀÌ.....  ¿òÁ÷ÀÌÁö ¾Ê¾Æ..... "));
+		}
+		else if (m_dDelay_TanjiroDead > 5.0f && m_isFirst_Dead_1)
+		{
+			m_isFirst_Dead_1 = false;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_2.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+		}
+	}
+
+
 }
 
 void CPlayer_Tanjiro::Smell_Detection(_double dTimeDelta)
