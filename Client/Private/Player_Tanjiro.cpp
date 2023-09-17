@@ -256,7 +256,9 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 	else
 		m_isAuroraOn[0] = false;
-	
+
+	if(pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE)
+	CPlayerManager::GetInstance()->Set_Player_Pos(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
 void CPlayer_Tanjiro::LateTick(_double dTimeDelta)
@@ -1288,7 +1290,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 		if (ANIM_BATTLE_RUN == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
-			
+
 		}
 		if (88 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기
 		{
@@ -1307,7 +1309,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			else if (6 == m_iEvent_Index)	// 0.72
 				Create_GroundSmoke(CGroundSmoke::SMOKE_RUN);
 
-			
+
 		}
 
 		if (89 == m_pModelCom->Get_iCurrentAnimIndex())	// 달리기 Stop
@@ -2240,7 +2242,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 				}
 			}
 		}
-		
+
 
 	}
 
@@ -3277,8 +3279,12 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
+		_bool bMonster_PushAway = CMonsterManager::GetInstance()->Get_Monster_PushAway();
 
 		m_isSkilling = true;
+
+		if (bMonster_PushAway == true)
+			m_isSkilling = false;
 	}
 	//잡기 공격 시 제한
 	else if (ANIM_ATK_THROW == iCurAnimIndex)
@@ -3303,7 +3309,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Step = true;
 		m_Moveset.m_isRestrict_Dash = true;
 
-		if(ANIM_BATTLE_AWAKEN == iCurAnimIndex)
+		if (ANIM_BATTLE_AWAKEN == iCurAnimIndex)
 			m_isSkilling = true;
 	}
 	//Special
@@ -3783,7 +3789,7 @@ HRESULT CPlayer_Tanjiro::SetUp_ShaderResources()
 	}
 	else
 		m_fOutlineThickness = 1.5f;
-	
+
 
 	if (FAILED(m_pShaderCom->SetUp_RawValue("g_OutlineThickness", &m_fOutlineThickness, sizeof(_float))))
 		return E_FAIL;

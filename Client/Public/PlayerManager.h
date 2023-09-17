@@ -25,18 +25,23 @@ private: // 스탯관련 공유
 	_int	iSpecial_Cnt = { 0 };
 	_float	fSpecial = { 0.0f };
 	_float	fSupport = { 100.0f };
+	_vector vPlayerPos = { 0.f, 0.f, 0.f, 1.f };
 public:
 	_float	Get_Hp() { return fHp; }
 	_float	Get_Mp() { return fMp; }
 	_int	Get_Special_Cnt() { return iSpecial_Cnt; }
 	_float	Get_Special() { return fSpecial; }
 	_float	Get_Support() { return fSupport; }
+	_vector Get_Player_Pos() {
+		return vPlayerPos;
+	}
 
 	void	Set_Hp(_float hp) { fHp = hp; }
 	void	Set_Mp(_float mp) { fMp = mp; }
 	void	Set_Special_Cnt(_int cnt) { iSpecial_Cnt = cnt; }
 	void	Set_Special(_float special) { fSpecial = special; }
 	void	Set_Support(_float support) { fSupport = support; }
+	void	Set_Player_Pos(_fvector vPos) { vPlayerPos = vPos; }
 
 private: //캐릭터 스왑 체인지 관련 변수
 	_int	iPlayerIndex = { 0 }; // 0 : 탄지로, 1: 젠이츠, 2:렌고쿠'
