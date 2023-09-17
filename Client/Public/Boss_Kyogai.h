@@ -265,6 +265,9 @@ private:
 
 	void	FastBook_Update(_double dTimeDelta);
 
+	void	Play_Sound_Dmg(_int iType, _float vol); // 0:small, 1:medium, 2:big
+
+
 #pragma endregion
 private: // _bool
 	_bool	m_bAtkStepType = { false };

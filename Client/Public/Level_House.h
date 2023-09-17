@@ -21,6 +21,10 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	_bool bChangeBattleBGM = { false };
+	_bool bChangeBossBGM = { false };
+
+private:
 	HRESULT	Ready_Lights();
 	HRESULT	Ready_Layer_BackGround(const _tchar* pLayerTag);
 	HRESULT	Ready_Layer_Camera(const _tchar* pLayerTag);

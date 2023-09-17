@@ -300,6 +300,14 @@ void CDialog::LateTick(_double TimeDelta)
 			}
 		}
 		else if (m_Dialog_Type == 9) {
+			if (m_isNPC_Zenitsu_Sub)
+			{
+				m_isNPC_Zenitsu_Sub = false;
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_3.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
+			}
+
 			if (m_Cur_Num > m_szTalk_2.size() - 1) {
 				m_Cur_Num = 0;
 				m_Is_Out = true;
@@ -345,6 +353,7 @@ void CDialog::LateTick(_double TimeDelta)
 		}
 		// House Smell
 		else if (m_Dialog_Type == 14) {
+			
 			if (m_Cur_Num > m_szHouseSmell_1.size() - 1) {
 				m_Cur_Num = 0;
 				m_Is_Out = true;
@@ -353,6 +362,8 @@ void CDialog::LateTick(_double TimeDelta)
 			}
 		}
 		else if (m_Dialog_Type == 15) {
+			
+
 			if (m_Cur_Num > m_szHouseSmell_2.size() - 1) {
 				m_Cur_Num = 0;
 				m_Is_Out = true;
@@ -372,6 +383,59 @@ void CDialog::LateTick(_double TimeDelta)
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false && m_Dialog_Type != 99) {
+
+		//Á¨ÀÌÃ÷
+		if (m_Dialog_Type == 9)
+		{
+			if (m_isNPC_Zenitsu)
+			{
+				m_isNPC_Zenitsu = false;
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_2.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
+			}
+		}
+
+		//µ¶¹é ÇÇÃ£±â
+		else if (m_Dialog_Type == 11)
+		{
+			if (m_isFirst_DokBack_0)
+			{
+				m_isFirst_DokBack_0 = false;
+				_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_4_Dok.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+			}
+		}
+		else if (m_Dialog_Type == 12)
+		{
+			if (m_isFirst_DokBack_1)
+			{
+				m_isFirst_DokBack_1 = false;
+				_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_5_Dok.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+			}
+		}
+		else if (m_Dialog_Type == 13)
+		{
+			if (m_isFirst_DokBack_2)
+			{
+				m_isFirst_DokBack_2 = false;
+				_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_2_Dok.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+			}
+		}
+
+		//³²ÀÚ
+		else if(m_Dialog_Type == 14)
+		{
+			_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_3_Dok.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::NPC_TALK);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+		}
+
 		m_Is_In = true;
 		m_Is_Font_Render = true;
 	}

@@ -129,10 +129,9 @@ HRESULT CLevel_FinalBoss::Initialize()
 
 	m_Battle_MaxTime = { 5.5f };
 
-	//_tchar szBgm[MAX_PATH] = TEXT("BGM_Gurenge.mp3");
-	//CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
-
-	m_Ending_TimeAcc = { 0.f };
+	CSoundMgr::Get_Instance()->StopAll();
+	_tchar szBgm[MAX_PATH] = TEXT("BGM_FinalBoss_0.mp3");
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
 	return S_OK;
 }

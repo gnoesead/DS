@@ -409,6 +409,44 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 			m_dDelay_PlayerBack = 0.0;
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&m_ResetPos[m_iResetIndex]));
+
+			m_isEventTalk_Finded = true;
+			m_dDelay_EventTalk_Finded = 0.0;
+		}
+	}
+
+	//발각시 대사
+	if (m_isEventTalk_Finded)
+	{
+		m_dDelay_EventTalk_Finded += dTimeDelta;
+
+		if (m_dDelay_EventTalk_Finded > 1.5f)
+		{
+			m_dDelay_EventTalk_Finded = 0.0;
+			m_isEventTalk_Finded = false;
+			m_isEventTalk_Tanjiro_Finded = true;
+			m_dDelay_EventTalk_Tanjiro_Finded = 0.0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Failed.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+
+			Set_CharacterDialog(6.f, TEXT("[젠이츠]"), TEXT("하마터면 죽을뻔했잖아! 제대로 하란말이야..!!"), TEXT("적에게 발각되면 범위 밖으로 재빨리 튀란 말이야..."));
+		}
+
+	}
+	if (m_isEventTalk_Tanjiro_Finded)
+	{
+		m_dDelay_EventTalk_Tanjiro_Finded += dTimeDelta;
+		if (m_dDelay_EventTalk_Tanjiro_Finded > 6.1f)
+		{
+			m_dDelay_EventTalk_Tanjiro_Finded = 0.0;
+			m_isEventTalk_Tanjiro_Finded = false;
+
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Tanjiro_Failed.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.85f);
+
+			Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("그래도 다행이야. 젠이츠 덕분에 무사할 수 있었어."), TEXT("이제 걸리지 않고 나아가자!"));
 		}
 	}
 
@@ -430,6 +468,136 @@ void CNPC_Zenitsu::Animation_Control_House(_double dTimeDelta)
 		_vector newPos = XMVectorAdd(XMLoadFloat4(&RealPlayerPos), XMVectorScale(vFromPlayerDir, DistanceToPlayer));
 		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, newPos);
+
+		m_isEventTalk = true;
+		m_dDelay_EventTalk = 0.0;
+	}
+
+	//이벤트 토크
+	if (m_isEventTalk)
+	{
+		m_dDelay_EventTalk += dTimeDelta;
+
+		if (m_iResetIndex == 0)
+		{
+			if (m_dDelay_EventTalk > 5.0f)
+			{
+				m_dDelay_EventTalk = 0.0;
+				m_isEventTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
+
+				Set_CharacterDialog(4.f, TEXT("[젠이츠]"), TEXT("으악?!....혈귀!!!"));
+
+				m_isTanjiroTalk = true;
+			}
+		}
+		else if (m_iResetIndex == 1)
+		{
+			if (m_dDelay_EventTalk > 1.5f)
+			{
+				m_dDelay_EventTalk = 0.0;
+				m_isEventTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_7.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 1.f);
+
+				Set_CharacterDialog(5.f, TEXT("[젠이츠]"), TEXT("에?... 이게 어떻게 된거야?..."), TEXT("우리가 방을 이동한 건가..?"));
+
+				m_isTanjiroTalk = true;
+			}
+		}
+		else if (m_iResetIndex == 2)
+		{
+			if (m_dDelay_EventTalk > 1.5f)
+			{
+				m_dDelay_EventTalk = 0.0;
+				m_isEventTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_9.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.8f);
+
+				Set_CharacterDialog(4.f, TEXT("[젠이츠]"), TEXT("또...또야아아아???!!!"));
+
+				m_isTanjiroTalk = true;
+			}
+		}
+		else if (m_iResetIndex == 3)
+		{
+			if (m_dDelay_EventTalk > 1.5f)
+			{
+				m_dDelay_EventTalk = 0.0;
+				m_isEventTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_4.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.8f);
+
+				Set_CharacterDialog(5.f, TEXT("[젠이츠]"), TEXT("이제 뭐가 나올까나...?"));
+
+				m_isTanjiroTalk = true;
+			}
+		}
+	}
+
+
+	if (m_isTanjiroTalk)
+	{
+		m_dDelay_TanjiroTalk += dTimeDelta;
+
+		if (m_iResetIndex == 0)
+		{
+			if (m_dDelay_TanjiroTalk > 4.1f)
+			{
+				m_dDelay_TanjiroTalk = 0.0;
+				m_isTanjiroTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Tanjiro_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
+
+				Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("젠이츠! 부탁이니까 조용히 좀 해!"), TEXT("여기서는 조심스럽게 잠입해서 지나가야 한다고..."));
+
+			}
+		}
+		else if (m_iResetIndex == 1)
+		{
+			if (m_dDelay_TanjiroTalk > 5.1f)
+			{
+				m_dDelay_TanjiroTalk = 0.0;
+				m_isTanjiroTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Tanjiro_2.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
+
+				Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("젠이츠.. 그런것 같아... 아마도 혈귀의 혈귀술일거야."));
+			}
+		}
+		else if (m_iResetIndex == 2)
+		{
+			if (m_dDelay_TanjiroTalk > 4.1f)
+			{
+				m_dDelay_TanjiroTalk = 0.0;
+				m_isTanjiroTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_Zenitsu_Tanjiro_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.75f);
+
+				Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("젠이츠! 그만 좀 해. "));
+			}
+		}
+		else if (m_iResetIndex == 3)
+		{
+			if (m_dDelay_TanjiroTalk > 5.1f)
+			{
+				m_dDelay_TanjiroTalk = 0.0;
+				m_isTanjiroTalk = false;
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("ADV_Tanjiro_3_Dok.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.95f);
+
+				Set_CharacterDialog(6.f, TEXT("[탄지로]"), TEXT("요 근처에 오니가 있는게 틀림없어."), TEXT("계속 가보자."));
+			}
+		}
 	}
 }
 

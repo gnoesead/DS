@@ -121,6 +121,14 @@ private:
 
 	_bool m_Is_Fix = { true };
 
+private:
+	_int	m_iNPC_TalkIndex = { 0 };
+	_bool	m_isNPC_Zenitsu = { true };
+	_bool	m_isNPC_Zenitsu_Sub = { true };
+
+	_bool	m_isFirst_DokBack_0 = { true };
+	_bool	m_isFirst_DokBack_1 = { true };
+	_bool	m_isFirst_DokBack_2 = { true };
 
 private:
 	HRESULT Add_Components();
