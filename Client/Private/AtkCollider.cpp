@@ -8,6 +8,7 @@
 #include "GroundSmoke.h"
 
 #include "ParticleManager.h"
+#include "SoundMgr.h"
 
 
 CAtkCollider::CAtkCollider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -671,6 +672,32 @@ void CAtkCollider::Check_OutLine()
 				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_BLADEDISAPPEAR, vPos);
+
+				static _uint iIdx = 0;
+
+				if (0 == iIdx)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("aura_03.ogg");
+					CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
+					CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.05f);
+				}
+				else if (1 == iIdx)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("aura_03.ogg");
+					CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_1);
+					CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_1, 0.05f);
+				}
+				else if (2 == iIdx)
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("aura_03.ogg");
+					CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_2);
+					CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_2, 0.05f);
+				}
+
+				++iIdx;
+				if (iIdx >= 3)
+					iIdx = 0;
+				
 				Safe_Release(pGameInstance);
 			}
 		}

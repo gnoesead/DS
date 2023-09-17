@@ -36,6 +36,11 @@ public:
 		TURN_IDLE, TURN_PLUSX, TURN_MINUSX, TURN_PLUSZ, TURN_MINUSZ, TURN_END
 	};
 
+	enum PART
+	{
+		PART_1 , PART_2 , PART_NONE
+	};
+
 #pragma region AnimIndex
 	enum  ANIM {
 		////////////////// ±âº» MOVE///////////////////
@@ -255,6 +260,12 @@ private:
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);
 
+private:
+	void	Dialog_Update(_double dTimeDelta);
+
+	void	FastBook_Update(_double dTimeDelta);
+
+	void	Play_Sound_Dmg(_int iType, _float vol); // 0:small, 1:medium, 2:big
 
 
 #pragma endregion
@@ -304,6 +315,14 @@ private:
 	TURN	m_eCurTurn = TURN_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDLE;
 	ANIM	m_ePreAnimIndex = ANIM_IDLE;
+
+private:
+	PART	m_ePart = PART_NONE;
+
+	_bool	m_bFastBook = { false };
+	_double m_dFastBoolAccTime = { 1.0 };
+
+	_bool	m_bFinishVoice = { false };
 
 private:
 	HRESULT Add_Components();

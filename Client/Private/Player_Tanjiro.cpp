@@ -137,10 +137,17 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	if (!m_bSmell_Detection)
 	{
-		m_bSmell_Detection = true;
-		m_pRendererCom->Set_GrayScale_On(true);
+		if (pGameInstance->Get_DIKeyDown(DIK_X))
+		{
+			m_bSmell_Detection = true;
+			m_pRendererCom->Set_GrayScale();
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("ui_smellsense.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+
+		}
 	}
 	Smell_Detection(dTimeDelta);
 

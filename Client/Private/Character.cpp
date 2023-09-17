@@ -1163,9 +1163,9 @@ void CCharacter::Create_GroundSmoke(CGroundSmoke::SMOKE_TYPE eSmokeType, _fvecto
 	case CGroundSmoke::SMOKE_DEAD_NORMAL:
 		EffectWDesc.vPos = XMVectorSetY(EffectWDesc.vPos, m_fLand_Y);
 		EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { 0.00f,0.06f }; EffectWDesc.vStartPosZ = { -0.5f,0.5f };
-		EffectWDesc.vFrameSpeed = { 0.11f , 0.12f };
-		EffectWDesc.vStartSizeX = { 1.0f , 1.2f }; EffectWDesc.vStartSizeY = { 1.0f , 1.4f };
-		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.25f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
+		EffectWDesc.vFrameSpeed = { 0.12f , 0.13f };
+		EffectWDesc.vStartSizeX = { 1.4f , 1.6f }; EffectWDesc.vStartSizeY = { 1.4f , 1.8f };
+		EffectWDesc.vSpeedX = { -0.0f , 0.0f }; EffectWDesc.vSpeedY = { 0.2f , 0.21f }; EffectWDesc.vSpeedZ = { 0.0f , 0.f };
 		EffectWDesc.vSizeSpeedX = { 0.2f , 0.4f }; EffectWDesc.vSizeSpeedY = { 0.2f , 0.4f };
 		EffectWDesc.bSpecial = true;
 
