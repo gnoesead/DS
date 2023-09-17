@@ -171,6 +171,17 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		m_pSwordHome->LateTick(dTimeDelta);
 	}
 
+	if (m_isKyoRoomSuccess)
+	{
+		m_isKyoRoomSuccess = false;
+		Player_Sound_Atk(1, 0.75f);
+	}
+	if (m_isKyoRoomDmg)
+	{
+		m_isKyoRoomDmg = false;
+		Player_Sound_Dmg(1, 0.75f);
+	}
+
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃק
 	{
@@ -1886,7 +1897,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_isHekireki_End_ForDir = true;
 			}
 
-			//Use_Mp_Skill();
+			
 			if (m_isCan_Mp_Skill)
 			{
 				if (m_StatusDesc.iAwaken < 2)
@@ -2015,7 +2026,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 
-		//Use_Mp_Skill();
+	
 
 		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_07.ogg");
 		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
@@ -2244,6 +2255,12 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Awaken(_double dTimeDelta)
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Awaken_Miseteyaru.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, 0.6f);
+
+
+			_vector vPlayerDir = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+			//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
+			Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.7,
+				CAtkCollider::TYPE_BIG, vPlayerDir, 0.0f);
 		}
 		else if (m_Moveset.m_iAwaken == 2)
 		{

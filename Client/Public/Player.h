@@ -193,6 +193,7 @@ protected:
 
 protected:
 
+
 	_double m_dDelay_Player_Change = { 0.0 };
 
 	_double		m_dDelay_Swapping_Pos = { 0.0 };
@@ -212,6 +213,10 @@ protected:
 	_bool	m_isJump_TurnRoom = { false };
 	_bool	m_isJump_Room_X = { false };
 	_bool	m_isJump_Room_Z = { false };
+
+	//소리용 데미지용
+	_bool	m_isKyoRoomSuccess = { false };
+	_bool	m_isKyoRoomDmg = { false };
 
 
 

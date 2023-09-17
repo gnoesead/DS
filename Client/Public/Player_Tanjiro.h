@@ -32,6 +32,7 @@ public:
 		ANIM_ATK_AIRTRACK = 49, // 49~51
 		ANIM_BATTLE_AWAKEN = 54, ANIM_BATTLE_AWAKEN_COMPLETE_CUTSCENE = 55,
 		ANIM_BATTLE_GUARD = 63, ANIM_BATTLE_GUARD_HIT_BIG = 66, ANIM_BATTLE_GUARD_HIT_SMALL = 67, ANIM_BATTLE_GUARD_PUSH = 68,
+		ANIM_DEATH = 75,
 		ANIM_BATTLE_DASH = 79, // 79~80, 81end
 		ANIM_BATTLE_IDLE = 82,
 		ANIM_BATTLE_JUMP = 83,
@@ -46,6 +47,7 @@ public:
 		ANIM_DMG_SWAMPBIND = 118,
 		ANIM_DMG_BLOW = 119, // 119~121
 		ANIM_FALL = 124, //124,125idle, 126착지
+		ANIM_GBLOW = 128,
 		ANIM_DMG_SPIN = 131, // 131~133
 		ANIM_DOWN = 136,
 		ANIM_DOWN_GETUP_MOVE = 137, // 137~138, 82
@@ -94,6 +96,8 @@ private: //애니메이션 제어용 함수들
 	void	Player_Change(_double dTimeDelta);
 
 	void	Moving_Restrict();
+
+	void	Event_Tanjiro_Death(_double dTimeDelta);
 
 private:
 	void	Smell_Detection(_double dTimeDelta);
@@ -160,7 +164,25 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isSwampUpper = { false };
 
 
+	//사망 이벤트
+	_bool	m_isPlayerTanjiroDead = { false };
+	
+	_bool	m_isFirst_Event_Death = { true };
+	
+	_double		m_dDelay_TanjiroDead = { 0.0 };
 
+	_bool	m_isFirst_Dead_0 = { true };
+	_bool	m_isFirst_Dead_1 = { true };
+	_bool	m_isFirst_Dead_2 = { true };
+	_bool	m_isFirst_Dead_3 = { true };
+	_bool	m_isFirst_Dead_4 = { true };
+	_bool	m_isFirst_Dead_5 = { true };
+	_bool	m_isFirst_Dead_6 = { true };
+	_bool	m_isFirst_Dead_7 = { true };
+	_bool	m_isFirst_Dead_8 = { true };
+	_bool	m_isFirst_Dead_9 = { true };
+	_bool	m_isFirst_Dead_10 = { true }; 
+	
 
 private:
 	/* 임시 코드 */

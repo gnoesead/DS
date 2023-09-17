@@ -734,8 +734,12 @@ void CPlayer::Key_Input(_double dTimeDelta)
 		//쿄우가이 돌아가는 룸
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_HOUSE && CMonsterManager::GetInstance()->Get_Kyogai_On())
 		{
-			if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
+			//성공시
+			//if (pGameInstance->Get_DIKeyDown(DIK_SPACE))
+			if (CBattle_UI_Manager::GetInstance()->Get_Timing_Success())
 			{
+				CBattle_UI_Manager::GetInstance()->Set_Timing_Success(false);
+
 				m_isJump_TurnRoom = true;
 				m_isJump_Room_X = false;
 				m_isJump_Room_Z = false;
@@ -749,6 +753,32 @@ void CPlayer::Key_Input(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Animation(56);
 				}
+
+				m_isKyoRoomSuccess = true;
+			}
+			//실패시
+			//if (pGameInstance->Get_DIKeyDown(DIK_N))
+			if (CBattle_UI_Manager::GetInstance()->Get_Timing_Failed())
+			{
+				CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(false);
+
+				m_isJump_TurnRoom = true;
+				m_isJump_Room_X = false;
+				m_isJump_Room_Z = false;
+				Jumping(3.0f, 0.07f);
+
+				if (m_ePlayerType == PLAYER_TANJIRO)
+				{
+					m_pModelCom->Set_Animation(124);
+				}
+				else if (m_ePlayerType == PLAYER_ZENITSU)
+				{
+					m_pModelCom->Set_Animation(99);
+				}
+
+				m_StatusDesc.fHp -= 6.0f;
+
+				m_isKyoRoomDmg = true;
 			}
 		}
 		// 125.11f, 0.05f, 121.95f, 1.0f

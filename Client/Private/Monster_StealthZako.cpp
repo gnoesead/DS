@@ -292,8 +292,7 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{//0.17
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+				
 			}
 			if (2 == m_iEvent_Index)
 			{//0.30
@@ -306,8 +305,7 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 			}
 			if (3 == m_iEvent_Index)
 			{//0.35
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+				
 			}
 			if (4 == m_iEvent_Index)
 			{//0.50
@@ -320,8 +318,7 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 			}
 			if (5 == m_iEvent_Index)
 			{//0.61
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+				
 			}
 			if (6 == m_iEvent_Index)
 			{//0.80
@@ -334,8 +331,7 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 			}
 			if (7 == m_iEvent_Index)
 			{//0.84
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_CONNECTSMALL, AtkDir, 2.0f);
+				
 			}
 			if (8 == m_iEvent_Index)
 			{//1.30
@@ -352,8 +348,7 @@ void CMonster_StealthZako::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 
-				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.0f, 1.0f, 1.0f), _float3(0.f, 1.0f, 1.7f), 0.4,
-					CAtkCollider::TYPE_BIG, AtkDir, 6.0f);
+			
 
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword04.ogg");
