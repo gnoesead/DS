@@ -7,6 +7,7 @@
 
 #include "Player.h"
 #include "PlayerManager.h"
+#include "MonsterManager.h"
 
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -380,6 +381,19 @@ HRESULT CMonster::SetUp_ShaderResources()
 	{
 		if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &m_fDeadTime, sizeof(_float))))
 			return E_FAIL;
+
+		_bool bKyogai = CMonsterManager::GetInstance()->Get_Kyogai_On();
+
+		if (bKyogai == true)
+		{
+			_float fKyogai_DeadTime = m_fDeadTime;
+			fKyogai_DeadTime *= 0.5f;
+
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &fKyogai_DeadTime, sizeof(_float))))
+				return E_FAIL;
+		}
+
+
 	}
 
 	return S_OK;

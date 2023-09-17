@@ -273,11 +273,11 @@ private: //패턴 함수들
 	void Update_PushAway(_double dTimeDelta);
 	void Update_Nachim(_double dTimeDelta);
 	void Update_ComboPunch(_double dTimeDelta);
-	void Update_JumpStomp(_double dTimeDelta);
-	void Update_DashKick(_double dTimeDelta);
+	void Update_JumpStomp(_double dTimeDelta); // 보이스
+	void Update_DashKick(_double dTimeDelta); // 보이스
 	void Update_JumpAirGun(_double dTimeDelta); // 보이스
 	void Update_Dash_ComboPunch(_double dTimeDelta);
-	void Update_UpperKick(_double dTimeDelta);
+	void Update_UpperKick(_double dTimeDelta); // 보이스
 	void Update_NextPhase2(_double dTimeDelta);
 	void Update_NextPhase3(_double dTimeDelta);
 	void Update_Heal(_double dTimeDelta);
@@ -285,7 +285,7 @@ private: //패턴 함수들
 	void Update_Awake_ComboPunch(_double dTimeDelta);
 
 	void Update_Nachim_ComboPunch(_double dTimeDelta);	
-	void Update_Awake_Cinematic(_double dTimeDelta);
+	void Update_Awake_Cinematic(_double dTimeDelta); // 없음
 
 	void Update_Train_JumpStomp(_double dTimeDelta);
 

@@ -131,7 +131,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		Update_Trigger(dTimeDelta);
+		//Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
@@ -375,13 +375,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 		_double dVol = 0.5;
 #pragma region AWAKE_ComboPunch
-		if (ANIM_AWAKE_COMBOPUNCH_Start == m_pModelCom->Get_iCurrentAnimIndex())
+		if (ANIM_AWAKE_COMBOPUNCH_READY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			if (m_iEvent_Index == 0)
 			{
-
+				//Sound
+				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Skill_Mesiki.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
 			}
-		}
+		}		
 		if (ANIM_AWAKE_COMBOPUNCH_LOOP == m_pModelCom->Get_iCurrentAnimIndex())
 		{
 			vRandomDir = Random_Dir(vMonsterDir, -30.f, 5.f, -25.f, 25.f);
@@ -658,6 +660,20 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 2.f;
 				CEffectPlayer::Get_Instance()->Play("Akaza_Compass", m_pTransformCom, &EffectWorldDesc);
+
+				_uint iSoundNum = Random::Generate_Int(1, 2);
+				if (iSoundNum == 1)
+				{
+					//Sound
+					_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Skill_HakaiSal.mp3");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
+				}
+				else
+				{
+					//Sound
+					_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Skill_Nachim.mp3");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
+				}
 			}
 
 		}
@@ -671,9 +687,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, 0.0f);
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
-
-				/*_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Hooooogggggh.mp3");
-				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);*/
+				
+				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Seeh.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
 
 			}
 
@@ -765,7 +781,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				EffectMeshDesc.eType = CAlertMesh_Akaza::TYPE_OUTWAVE;
 				EffectMeshDesc.vCustomUV = { 0.1f, 0.f };
 				EffectMeshDesc.fLandY = { -0.35f };
-				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);
+				pGameInstance->Add_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Effect"), TEXT("Prototype_GameObject_AlertMesh_Akaza"), &EffectMeshDesc, false);								
 			}
 
 			if (1 == m_iEvent_Index) // 0.75
@@ -783,6 +799,9 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
 
 				Create_StoneParticle(CStoneParticle::STONE_AKAZA_COMBODOWN);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Heu.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, 0.5f);
 			}
 
 		}
@@ -795,6 +814,10 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				//tag, size3, Pos3(left, up, front), duration , vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_MonsterAtk"), _float3(1.5f, 1.5f, 1.5f), _float3(0.f, 0.75f, 0.75f), dLongLifeTime,
 					CAtkCollider::TYPE_CONNECTSMALL, vMonsterDir, m_fSmallDmg);
+
+				//Sound
+				_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Sora.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dVol);
 			}
 			if (1 == m_iEvent_Index) // 0.65
 			{
@@ -2917,6 +2940,9 @@ void CBoss_Akaza::Update_JumpStomp(_double dTimeDelta)
 	{
 		m_bAnimFinish = true;
 		m_eCurAnimIndex = ANIM_SKILL_UP;
+		//Sound
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Euuuuh.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, 0.5);
 	}
 
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_SKILL_UP, 0.65f, dTimeDelta))
@@ -3022,7 +3048,7 @@ void CBoss_Akaza::Update_DashKick(_double dTimeDelta)
 	if (m_pModelCom->Get_AnimFinish(ANIM_DASH) == true)
 	{
 		m_bSuperArmor = true;
-		m_eCurAnimIndex = ANIM_COMBO_DOWN;
+		m_eCurAnimIndex = ANIM_COMBO_DOWN;		
 	}
 
 	if (Check_Player_Y() == true)
@@ -3548,6 +3574,7 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 			m_iTriggerCnt = 0;
 			m_dAwakeTime = 0.0;
 			m_eCurPhase = PHASE_2;
+			
 			//CFadeManager::GetInstance()->Set_Is_Final_Battle_Start(true);
 		}
 		m_bNoDmg = false;
@@ -3584,16 +3611,30 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		CCameraManager::GetInstance()->Set_Is_Cut_In_On(true);
 		CCameraManager::GetInstance()->Set_Cut_In_Finish_Type(CCamera_Free::AKAZA_AWAKE);
 
-		//Sound
-		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Special_0.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_TALK, 0.5);
-
+		if (m_bFirstAwake == true)
+		{
+			//Sound
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Special_1.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_TALK, 0.5);
+		}
+		else
+		{
+			//Sound
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Misetemiro_Omaeno_Chikarao.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_TALK, 0.5);
+		}
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.64, dTimeDelta))
 	{
 		m_pRendererCom->Set_RadialBlur_On(true);
 		m_pRendererCom->Set_BackLight();
 		Camera_Shake(1.2, 30);
+		if (m_bSecondAwake == true)
+		{
+			//Sound
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Hehahahaha.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_TALK, 0.5);
+		}
 	}
 	if (m_pModelCom->Check_PickAnimRatio(ANIM_AWAKE_START, 0.970, dTimeDelta))
 	{
@@ -3643,13 +3684,13 @@ void CBoss_Akaza::Update_Awake_ComboPunch(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
 	}
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
+	/*if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH;
-	}
+	}*/
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
 	{
 
 		if (m_iLoopCount < 3)
@@ -3725,13 +3766,13 @@ void CBoss_Akaza::Update_Nachim_ComboPunch(_double dTimeDelta)
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH_Start;
 	}
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
+	/*if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
 	{
 		m_pModelCom->Set_AnimisFinish(ANIM_AWAKE_COMBOPUNCH_Start);
 		m_eCurAnimIndex = ANIM_AWAKE_COMBOPUNCH;
-	}
+	}*/
 
-	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH) == true)
+	if (m_pModelCom->Get_AnimFinish(ANIM_AWAKE_COMBOPUNCH_Start) == true)
 	{
 
 		if (m_iLoopCount < 3)
