@@ -693,6 +693,10 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGame
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("brk_rock_02.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BULLET_HIT);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::BULLET_HIT, 0.5f);
 			}
 			CCameraManager::GetInstance()->Camera_Shake(0.5, 150);
 			Reset_Dead();
@@ -713,6 +717,9 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGame
 				, vPos, 0.5f, 1.5f, 2.0f, 0.5f, 1.0f, vMinRange, vMaxRange, -0.1f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_RAMP, 1.f, _int2(4, 4), false,
 				TEXT("Prototype_Component_Texture_Ramp08"), 0.98f);
 
+			_tchar szSoundFile[MAX_PATH] = TEXT("fire_01.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BULLET_HIT);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::BULLET_HIT, 0.6f);
 
 			Reset_Dead();
 		}

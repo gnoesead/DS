@@ -1648,9 +1648,14 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
 		TEXT("Prototype_GameObject_Character_Dialog"))))
+	{
+		Safe_Release(pGameInstance);
 		return E_FAIL;
+	}
 
 	Safe_Release(pGameInstance);
+
+	return S_OK;
 }
 
 HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar* pLayerTag)
