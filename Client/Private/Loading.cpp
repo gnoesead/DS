@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Title_Manager.h"
+#include "Battle_UI_Manager.h"
 
 
 CLoading::CLoading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -51,6 +52,11 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Origin_Y = 720.f;
 		m_Size_Param = 1.f;
 		m_UI_Layer = 0;
+
+
+		CBattle_UI_Manager::GetInstance()->Set_Loading_Num(0);
+
+
 	}
 
 	// Circle
@@ -179,11 +185,36 @@ HRESULT CLoading::Initialize(void* pArg)
 		m_Alpha = 1.f;
 	}
 
-	m_szTitle.push_back(L"시련돌파");
-	m_szContent.push_back(L"로딩중");
+	m_szTitle.push_back(L"귀멸의 칼날");
+	m_szTitle.push_back(L"북서쪽 마을");
+	m_szTitle.push_back(L"의문의 저택");
+	m_szTitle.push_back(L"무한열차");
+	m_szTitle.push_back(L"아카자");
+
+
+	m_szContent_0.push_back(L"수백년전, 무잔에 의해 탄생된 혈귀들은");
+	m_szContent_0.push_back(L"오랜 세월동안 인간들을 잡아먹었고");
+	m_szContent_0.push_back(L"인간들은 이에 맞서기 위한 귀살대를 창설했다.");
+
+	m_szContent_1.push_back(L"귀살대가 된 탄지로와 젠이츠는");
+	m_szContent_1.push_back(L"북서쪽 마을에 이상한 현상이 있다는 정보를 듣고");
+	m_szContent_1.push_back(L"처음으로 혈귀 토벌에 나섰다.");
+
+	m_szContent_2.push_back(L"혈귀의 냄새로 가득찬 이 집은");
+	m_szContent_2.push_back(L"희귀혈에 미친 혈귀가 산다는 소문이 있다.");
+	m_szContent_2.push_back(L"또 집의 구조가 복잡한 것인지 한번 들어간 사람은");
+	m_szContent_2.push_back(L"길을 잃어 나오지 못한다고 한다.");
+
+	m_szContent_3.push_back(L"성공적으로 혈귀를 처치한 탄지로와 젠이츠");
+	m_szContent_3.push_back(L"이번에는 열차를 타고 임무지역으로 이동한다.");
+	m_szContent_3.push_back(L"이동 중 열차 위에서 수상한 기운을 느끼는데...");
+	
+	m_szContent_4.push_back(L"십이귀월중에서도 높은 급인 상현의 3");
+	m_szContent_4.push_back(L"무예가로서 강자를 매우 좋아하며");
+	m_szContent_4.push_back(L"무약자는 혐오하는 경향이 있다.");
+
 
 	m_Is_TimeFree = true;
-
 
 	XMStoreFloat4x4(&m_ViewMatrix, XMMatrixIdentity());
 	XMStoreFloat4x4(&m_ProjMatrix, XMMatrixOrthographicLH((_float)g_iWinSizeX, (_float)g_iWinSizeY, 0.f, 1.f));
@@ -316,6 +347,8 @@ void CLoading::LateTick(_double dTimeDelta)
 {
 	__super::LateTick(dTimeDelta);
 
+	m_Loading_Index = CBattle_UI_Manager::GetInstance()->Get_Loading_Num();
+
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this)))
 		return;
 
@@ -352,14 +385,56 @@ HRESULT CLoading::Render()
 
 	if (m_UI_Desc.m_Type == 8) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Loading_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
-			return E_FAIL;
+		if (m_Loading_Index >= 0 && m_Loading_Index < 5) {
+
+			if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szTitle[m_Loading_Index].c_str(), _float2((_float)m_fX - 43.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(0.6f, 0.6f, 0.f, 1.f))))
+				return E_FAIL;
+		}
 	}
 
 	if (m_UI_Desc.m_Type == 2) {
+	
+		if (m_Loading_Index == 0) {
 
-		if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent[m_Loading_Index].c_str(), _float2((_float)m_fX - 30.f, (_float)m_fY - 16.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
-			return E_FAIL;
+			for (int i = 0; i < m_szContent_0.size(); i++) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent_0[i].c_str(), _float2((_float)m_fX - 200.f, (_float)m_fY - 160.f + i * 30.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+
+		}
+		else if (m_Loading_Index == 1) {
+
+			for (int i = 0; i < m_szContent_1.size(); i++) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent_1[i].c_str(), _float2((_float)m_fX - 200.f, (_float)m_fY - 160.f + i * 30.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+
+		}
+		else if (m_Loading_Index == 2) {
+
+			for (int i = 0; i < m_szContent_2.size(); i++) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent_2[i].c_str(), _float2((_float)m_fX - 200.f, (_float)m_fY - 160.f + i * 30.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+
+		}
+		else if (m_Loading_Index == 3) {
+
+			for (int i = 0; i < m_szContent_3.size(); i++) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent_3[i].c_str(), _float2((_float)m_fX - 200.f, (_float)m_fY - 160.f + i * 30.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+
+		}
+		else if (m_Loading_Index == 4) {
+
+			for (int i = 0; i < m_szContent_4.size(); i++) {
+				if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szContent_4[i].c_str(), _float2((_float)m_fX - 200.f, (_float)m_fY - 160.f + i * 30.f), _float2(0.5f, 0.5f), XMVectorSet(1.f, 1.f, 1.f, 1.f))))
+					return E_FAIL;
+			}
+
+		}
+		
 	}
 
 	Safe_Release(pGameInstance);

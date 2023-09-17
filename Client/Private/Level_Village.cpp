@@ -2085,7 +2085,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     CTiming_UI::UIDESC UIDesc7;
 
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         ZeroMemory(&UIDesc7, sizeof UIDesc7);
 
         UIDesc7.m_Type = i;

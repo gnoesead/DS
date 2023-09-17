@@ -933,7 +933,7 @@ HRESULT CLevel_House::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	CTiming_UI::UIDESC UIDesc9;
 
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
 		ZeroMemory(&UIDesc9, sizeof UIDesc9);
 
 		UIDesc9.m_Type = i;

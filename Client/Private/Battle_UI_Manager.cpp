@@ -102,7 +102,13 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	}
 
 	
-	
+	if (m_Timing_Failed == true) {
+
+		if (m_Timing_Failed_UI == false) {
+			m_Timing_Failed_UI = true;
+		}
+
+	}
 
 
 	Safe_Release(pGameInstance);
@@ -302,6 +308,16 @@ _int CBattle_UI_Manager::Get_Ending_UI_Num()
 	return m_Ending_UI_Num;
 }
 
+void CBattle_UI_Manager::Set_Loading_Num(_int num)
+{
+	m_Loading_Num++;
+}
+
+_int CBattle_UI_Manager::Get_Loading_Num()
+{
+	return m_Loading_Num;
+}
+
 void CBattle_UI_Manager::Set_Web_UI_On(_int num)
 {
 
@@ -352,6 +368,17 @@ void CBattle_UI_Manager::Set_Timing_Failed(_bool Is)
 _bool CBattle_UI_Manager::Get_Timing_Failed()
 {
 	return m_Timing_Failed;
+}
+
+void CBattle_UI_Manager::Set_Timing_Failed_UI(_bool Is)
+{
+	m_Timing_Failed_UI = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Failed_UI()
+{
+
+	return m_Timing_Failed_UI;
 }
 
 void CBattle_UI_Manager::Set_Timing_Sprite1(_bool Is)

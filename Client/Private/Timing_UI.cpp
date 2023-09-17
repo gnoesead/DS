@@ -144,11 +144,11 @@ HRESULT CTiming_UI::Initialize(void * pArg)
 
 		m_fX = 640;
 		m_fY = 360;
-		m_Origin_X = 92.f;
-		m_Origin_Y = 92.f;
+		m_Origin_X = 336.f;
+		m_Origin_Y = 336.f;
 		m_Size_Param = 0.5f;
-		m_UI_Layer = 2;
-
+		m_UI_Layer = 3;
+		m_Alpha = 0.f;
 
 	}
 
@@ -299,7 +299,6 @@ void CTiming_UI::Tick(_double TimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(DIK_SPACE)) {
 
-				
 				if (m_Size_Param <= 0.18f) {
 
 					CBattle_UI_Manager::GetInstance()->Set_Timing_Success(true);
@@ -307,7 +306,7 @@ void CTiming_UI::Tick(_double TimeDelta)
 					CBattle_UI_Manager::GetInstance()->Set_Timing_On(false);
 				}
 				else {
-					//CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(true);
+					CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(true);
 					m_Size_Param = 0.4f;
 					CBattle_UI_Manager::GetInstance()->Set_Timing_On(false);
 				}
@@ -316,7 +315,7 @@ void CTiming_UI::Tick(_double TimeDelta)
 			if (m_Size_Param < 0.05f) {
 				m_Size_Param = 0.4f;
 				CBattle_UI_Manager::GetInstance()->Set_Timing_On(false);
-				//CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(true);
+				CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(true);
 			}
 		}
 
@@ -342,7 +341,24 @@ void CTiming_UI::Tick(_double TimeDelta)
 			m_Alpha = 0;
 		}
 	}
+	else if (m_UI_Desc.m_Type == 7) {
 
+		if (CBattle_UI_Manager::GetInstance()->Get_Timing_Failed_UI() == true) {
+			m_Alpha += (_float)TimeDelta * 3.f;
+			if (m_Alpha > 1.f) {
+				m_Alpha = 1.f;
+				CBattle_UI_Manager::GetInstance()->Set_Timing_Failed_UI(false);
+				CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(false);
+			}
+		}
+		else {
+			m_Alpha -= (_float)TimeDelta * 3.f;
+
+			if (m_Alpha < 0.f) {
+				m_Alpha = 0.f;
+			}
+		}
+	}
 	
 
 	Safe_Release(pGameInstance);
@@ -456,6 +472,14 @@ HRESULT CTiming_UI::Add_Components()
 			return E_FAIL;
 
 	}
+	else if (m_UI_Desc.m_Type == 7) {
+
+		/* For.Com_Texture */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Timing_Failed"),
+			TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+
+	}
 
 	return S_OK;
 }
@@ -507,7 +531,10 @@ HRESULT CTiming_UI::SetUp_ShaderResources()
 		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 2)))
 			return E_FAIL;
 	}
-	
+	else if (m_UI_Desc.m_Type == 7) {
+		if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
