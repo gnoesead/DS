@@ -63,7 +63,7 @@ HRESULT CSwamp::Initialize(void* pArg)
 
 	if (TYPE_REMAIN == m_EffectDesc.eType)
 	{
-		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.401f + 0.001f * m_iNum);
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.381f + 0.001f * m_iNum);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		m_eCurPattern = PATTERN_DISAPPEAR;
@@ -73,7 +73,7 @@ HRESULT CSwamp::Initialize(void* pArg)
 
 	else if (TYPE_LAND == m_EffectDesc.eType)
 	{
-		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.401f + 0.001f * m_iNum);
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.381f + 0.001f * m_iNum);
 		_vector vLook = m_EffectDesc.pTransform->Get_State(CTransform::STATE_LOOK);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vLook * 1.4f);
@@ -83,7 +83,7 @@ HRESULT CSwamp::Initialize(void* pArg)
 	}
 	else if (TYPE_TRAP == m_EffectDesc.eType)
 	{
-		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.401f + 0.001f * m_iNum);
+		_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.381f + 0.001f * m_iNum);
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 		m_eCurPattern = PATTERN_INCREASE_TRAP;
@@ -243,7 +243,7 @@ HRESULT CSwamp::SetUp_ShaderResources()
 
 void CSwamp::Position_Setting()
 {
-	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.301f + 0.001f * m_iNum);
+	_vector vPos = XMVectorSetY(m_EffectDesc.pTransform->Get_State(CTransform::STATE_POSITION), 3.381f + 0.001f * m_iNum);
 
 	if (STATE_INCREASING != m_eCurState && STATE_DECREASING != m_eCurState)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
