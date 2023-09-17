@@ -137,10 +137,17 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Get_DIKeyDown(DIK_X))
+	if (!m_bSmell_Detection)
 	{
-		m_bSmell_Detection = true;
-		m_pRendererCom->Set_GrayScale_On(true);
+		if (pGameInstance->Get_DIKeyDown(DIK_X))
+		{
+			m_bSmell_Detection = true;
+			m_pRendererCom->Set_GrayScale();
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("ui_smellsense.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
+
+		}
 	}
 	Smell_Detection(dTimeDelta);
 
@@ -948,7 +955,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 
 				m_pRendererCom->Set_BloomRatio();
 			}
@@ -961,7 +968,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 3.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
@@ -970,7 +977,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 11.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 5.0f * fDmg);
 			}
 			if (3 == m_iEvent_Index)
 			{
@@ -981,7 +988,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 15.0f * fDmg);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 9.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
@@ -1320,6 +1327,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -1329,6 +1338,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				if (0 == m_iEvent_Index)	// 0.0
 					Create_GroundSmoke(CGroundSmoke::SMOKE_SIDESTEP);
+
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -1345,6 +1356,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectSideStepDesc.vPosition.y -= 0.01f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -1360,6 +1372,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 				EffectSideStepDesc.vPosition.y -= 0.01f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -1375,6 +1389,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 				EffectSideStepDesc.vPosition.y -= 0.01f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -1390,6 +1406,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
 				EffectSideStepDesc.vPosition.y -= 0.01f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_SideStep", m_pTransformCom, &EffectSideStepDesc);
+
+				Play_Sound_Atk(0, 0.7);
 			}
 		}
 
@@ -2217,10 +2235,12 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dash(_double dTimeDelta)
 
 					m_pModelCom->Set_EarlyEnd(ANIM_BATTLE_STEP_R, true, 0.35f);
 					//Jumping(1.0f * m_fScaleChange, 0.06f * m_fScaleChange);
+
+					m_dDelay_DoubleStep = 0.0;
 				}
 			}
 		}
-		Play_Sound_Atk(0, 0.7);
+		
 
 	}
 
@@ -3206,6 +3226,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 	{
 		m_Moveset.m_isRestrict_Move = true;
 
+		m_isCan_GuardCancel = true;
+
 		if (27 == iCurAnimIndex || 28 == iCurAnimIndex)
 		{
 			m_Moveset.m_isRestrict_KeyInput = true;
@@ -3261,6 +3283,9 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Charge = true;
 		m_Moveset.m_isRestrict_Step = true;
 		m_Moveset.m_isRestrict_Dash = true;
+
+		if(ANIM_BATTLE_AWAKEN == iCurAnimIndex)
+			m_isSkilling = true;
 	}
 	//Special
 	else if (ANIM_ATK_SPECIAL_CUTSCENE == iCurAnimIndex || 102 == iCurAnimIndex || 103 == iCurAnimIndex || 104 == iCurAnimIndex || 105 == iCurAnimIndex || 106 == iCurAnimIndex
@@ -3323,7 +3348,7 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_Moveset.m_isRestrict_Move = true;
 		m_Moveset.m_isRestrict_KeyInput = true;
 
-		if (m_dDelay_DoubleStep < 1.0f)
+		if (m_dDelay_DoubleStep < 0.35f)
 			m_Moveset.m_isRestrict_DoubleStep = true;
 		else
 			m_Moveset.m_isRestrict_DoubleStep = false;
@@ -3371,6 +3396,8 @@ void CPlayer_Tanjiro::Moving_Restrict()
 		m_isSkilling = false;
 
 		m_isSwampBinding = false;
+
+		m_isCan_GuardCancel = false;
 	}
 }
 
@@ -3419,7 +3446,7 @@ void CPlayer_Tanjiro::Create_SwampWaterParticleEffect(_double dTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
+void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 {
 	//small
 	if (iType == 0)
@@ -3520,7 +3547,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _double vol)
 	}
 }
 
-void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _double vol)
+void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 {
 	//small
 	if (iType == 0)
