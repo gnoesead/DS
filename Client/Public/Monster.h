@@ -119,6 +119,7 @@ protected: // 애니메이션 제어용 변수들
 	_bool	m_bMove = { false };
 	_bool	m_bMonsterDead = { false };
 	_bool	m_bDead_Trigger = { false };
+	_bool	m_bPushAway = { false };
 	
 	_bool	m_bTanjiroAwake = { false };
 	_bool	m_bZenitsuAwake = { false };

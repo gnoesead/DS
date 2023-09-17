@@ -583,8 +583,12 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
 		{
-
-			if (0 == m_iEvent_Index) // 0.15
+			if (0 == m_iEvent_Index) // 0.00
+			{
+				//m_bPushAway = true;
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(true);
+			}
+			else if (1 == m_iEvent_Index) // 0.15
 			{
 				CEffectPlayer::Get_Instance()->Play("Akaza_ATK_Push", m_pTransformCom);
 
@@ -600,9 +604,13 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				Camera_Shake(0.7);
 				m_pRendererCom->Set_RadialBlur();
 			}
-			else if (1 == m_iEvent_Index) // 0.23
+			else if (2 == m_iEvent_Index) // 0.23
 			{
 				m_pRendererCom->Set_RadialBlur();
+			}
+			else if (3 == m_iEvent_Index) // 0.8
+			{
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(false);
 			}
 
 		}
