@@ -530,7 +530,12 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 
 					CEffectPlayer::Get_Instance()->Play("Kyogai_AtkCmb_1_2", m_pTransformCom, &EffectWorldDesc);
 				}
-				if (1 == m_iEvent_Index)	// 0.25
+				else if (1 == m_iEvent_Index) // 0.13
+				{
+					_tchar szSoundFile[MAX_PATH] = TEXT("tsuzumi_01.ogg");
+					Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_3, 0.7f);
+				}
+				else if (2 == m_iEvent_Index)	// 0.25
 				{
 					dLongLifeTime = 5.0;
 					//tag, size3, Pos3(left, up, front), duration, atktype, vDir, fDmg

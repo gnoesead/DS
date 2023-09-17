@@ -466,6 +466,30 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && Compute::DistCheck(vPlayerPos, vMyPos, 2.f))
 	{
 		m_bChageRoomRealTrigger = true;
+
+		if (!m_bKyoSound)
+		{
+			if (iInteractionType == INTERACTION_ROOMCHANGE0)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_2.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+			}
+			else if (iInteractionType == INTERACTION_ROOMCHANGE1)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_18.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+			}
+			else if (iInteractionType == INTERACTION_ROOMCHANGE2)
+			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_59.ogg");
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+			}
+
+			m_bKyoSound = true;
+		}
 	}
 
 	if (m_bChageRoomRealTrigger)
