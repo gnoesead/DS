@@ -302,6 +302,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{//0.3
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
 
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_D", m_pTransformCom);
+
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.7f);
 			}
@@ -503,6 +505,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				EffectDesc.fScale = 0.8f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_L", m_pTransformCom, &EffectDesc);
 
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_04.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 
@@ -523,6 +527,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectDesc;
 				EffectDesc.fScale = 0.8f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Up_R", m_pTransformCom, &EffectDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
@@ -577,8 +583,12 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_R", m_pTransformCom, &EffectWorldDesc);
 
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_R", m_pTransformCom);
+
 				EffectWorldDesc.vPosition.x = -0.2f;
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_L", m_pTransformCom, &EffectWorldDesc);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_L", m_pTransformCom);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("st_sword03.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_1, 0.55f);
@@ -595,6 +605,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin_Wind", m_pTransformCom);
 
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_Spin", m_pTransformCom);
+
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_09.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_0, 0.55f);
 			}
@@ -610,6 +622,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			{//0.9
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Spin", m_pTransformCom);
 
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_Spin", m_pTransformCom);
+
 				_tchar szSoundFile[MAX_PATH] = TEXT("swing_05.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_EFFECT_2, 0.55f);
 			}
@@ -621,6 +635,8 @@ void CMonster_Zako::EventCall_Control(_double dTimeDelta)
 			if (4 == m_iEvent_Index)
 			{//1.9
 				CEffectPlayer::Get_Instance()->Play("Zako_Atk_Claws_Down", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Zako_Claws_Particle_D", m_pTransformCom);
 			}
 			if (5 == m_iEvent_Index)
 			{//1.960

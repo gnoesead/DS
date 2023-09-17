@@ -1014,14 +1014,24 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 #pragma endregion
 
 #pragma region Zako
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_L.bin"), true, 10)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_L.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_L");
 		return E_FAIL;
 	}
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_R.bin"), true, 10)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_R.bin"), true, 20)))
 	{
 		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_R");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_D.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_D");
+		return E_FAIL;
+	}
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Zako/Zako_Claws_Particle_Spin.bin"), true, 10)))
+	{
+		MSG_BOX("Failed to Load Effect : Zako_Claws_Particle_Spin");
 		return E_FAIL;
 	}
 #pragma endregion
