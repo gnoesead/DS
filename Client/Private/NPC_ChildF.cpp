@@ -326,6 +326,9 @@ void CNPC_ChildF::Sway(_double dTimeDelta)
 
 			m_pModelCom->Set_Animation(ANIM_STAGGER_F);
 			m_dCoolTime_Walk = 0.0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("NPC_ChildF_1.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.65f);
 		}
 	}
 	if (m_pModelCom->Get_iCurrentAnimIndex() == ANIM_STAGGER_F)
@@ -353,6 +356,9 @@ void CNPC_ChildF::Sway(_double dTimeDelta)
 
 				m_pModelCom->Set_LinearDuration(29, 0.5f);
 				m_pModelCom->Set_Animation(29); // walk Áß°£
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_ChildF_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
 				
 			}
 		}
@@ -365,6 +371,9 @@ void CNPC_ChildF::Sway(_double dTimeDelta)
 
 				m_pModelCom->Set_LinearDuration(ANIM_STAND, 0.5f);
 				m_pModelCom->Set_Animation(ANIM_STAND);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("NPC_ChildF_0.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::NPC_TALK, 0.6f);
 			}
 		}
 	}

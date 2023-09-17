@@ -83,6 +83,7 @@ void CNPC::Tick(_double dTimeDelta)
 				CMissionManager::GetInstance()->Plus_Sub_Num();
 
 				m_isTalking = true;
+				m_isFirst_Talk = true;
 			}
 				
 
