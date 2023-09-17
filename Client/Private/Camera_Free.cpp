@@ -922,8 +922,8 @@ void CCamera_Free::Ready_CutInFinish()
 {
 	
 	// ÅºÁö·Î °¢¼º
-	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, 3.f, 0.f, 0.67f, 2.f , false , {0.f, -0.2f,0.f} , {0.f, -0.8f,0.f} };
-	CutInCamDesc Tanjiro_Awake_Cam2 = { true,true, 10.f, 0.f, 1.9f, 1.5f , true, {0.f,-0.7f,0.f} };
+	CutInCamDesc Tanjiro_Awake_Cam1 = { true,true, 3.f, 0.f, 0.67f, 1.8f , false , {0.f, -0.2f,0.f} , {0.f, -0.8f,0.f} };
+	CutInCamDesc Tanjiro_Awake_Cam2 = { true,true, 10.f, 0.f, 2.f, 1.7f , true, {0.f,-0.7f,0.f} };
 	
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam1);
 	m_Cut_In_Finish[TANJIRO_AWAKE].push_back(Tanjiro_Awake_Cam2);
