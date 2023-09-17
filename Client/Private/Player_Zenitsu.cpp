@@ -1885,7 +1885,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 				m_isHekireki_End_ForDir = true;
 			}
 
-			Use_Mp_Skill();
+			
 			if (m_isCan_Mp_Skill)
 			{
 				if (m_StatusDesc.iAwaken < 2)
@@ -2014,7 +2014,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Skill(_double dTimeDelta)
 
 		m_pModelCom->Set_Animation(ANIM_ATK_SKILL_GUARD);
 
-		//Use_Mp_Skill();
+	
 
 		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_07.ogg");
 		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);

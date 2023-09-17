@@ -182,8 +182,7 @@ private: //애니메이션 제어용 변수들
 	_bool	m_isFirst_Dead_8 = { true };
 	_bool	m_isFirst_Dead_9 = { true };
 	_bool	m_isFirst_Dead_10 = { true }; 
-	_bool	m_isFirst_Dead_11 = { true }; 
-	_bool	m_isFirst_Dead_12 = { true };
+	
 
 private:
 	/* 임시 코드 */

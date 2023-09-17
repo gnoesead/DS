@@ -696,6 +696,8 @@ void CPlayer::Key_Input(_double dTimeDelta)
 				{
 					m_pModelCom->Set_Animation(99);
 				}
+
+				m_StatusDesc.fHp -= 6.0f;
 			}
 		}
 		// 125.11f, 0.05f, 121.95f, 1.0f

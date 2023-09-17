@@ -859,6 +859,21 @@ _float4 CCharacter::Calculate_Dir_From_Pos(_float4 Pos)
 	return Dir;
 }
 
+_vector CCharacter::Calculate_Dir_From_Pos_Vec(_float4 Pos)
+{
+	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_float4 MyPos;
+	XMStoreFloat4(&MyPos, vMyPos);
+
+	Pos.y = MyPos.y;
+	_vector vTarget = XMLoadFloat4(&Pos);
+
+	
+
+	return XMVector3Normalize(vTarget - vMyPos);
+}
+
 _float CCharacter::Calculate_Distance_From_Pos(_float4 Pos)
 {
 	_vector vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

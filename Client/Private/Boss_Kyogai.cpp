@@ -863,10 +863,13 @@ void CBoss_Kyogai::EventCall_Control(_double dTimeDelta)
 				Play_Sound_Channel(szSoundFile2, CSoundMgr::MONSTER_EFFECT_1, 0.6f);
 				_tchar szSoundFile3[MAX_PATH] = TEXT("hit_firel_01.ogg");
 				Play_Sound_Channel(szSoundFile3, CSoundMgr::MONSTER_EFFECT_2, 0.6f);
+
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(true);
 			}
 			else if (1 == m_iEvent_Index) // 0.8
 			{
 				m_pRendererCom->Set_RadialBlur();
+				CMonsterManager::GetInstance()->Set_Monster_PushAway(false);
 			}
 
 		}

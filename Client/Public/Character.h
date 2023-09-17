@@ -165,6 +165,7 @@ protected:
 
 	//calculate
 	_float4	Calculate_Dir_From_Pos(_float4 Pos);
+	_vector Calculate_Dir_From_Pos_Vec(_float4 Pos);
 	_float	Calculate_Distance_From_Pos(_float4 Pos);
 
 	//사운드 용

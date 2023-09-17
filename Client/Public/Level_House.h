@@ -21,8 +21,18 @@ public:
 	virtual HRESULT		Render() override;
 
 private:
+	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
+		return dTime < dTimeAcc&& dTimeAcc <= dTime + dTimeDelta;
+	}
+	
+
+private:
 	_bool bChangeBattleBGM = { false };
 	_bool bChangeBossBGM = { false };
+
+	_bool m_bReset_TimeAcc = { false };
+	_double m_dTimeAcc = { 0.0 };
+
 
 private:
 	HRESULT	Ready_Lights();
