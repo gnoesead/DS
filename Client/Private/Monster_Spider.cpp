@@ -541,9 +541,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		Play_HitEffect(_float3(0.f, -0.5f , 0.f));
-		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-		EffectWorldDesc.vPosition.y -= 0.5f;
-		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 2.3f, 0.17f, m_Hit_AtkDir);
 
