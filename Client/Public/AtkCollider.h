@@ -22,7 +22,7 @@ class CAtkCollider final : public CGameObject
 public:
 	enum ATK_TYPE { TYPE_SMALL, TYPE_CONNECTSMALL, TYPE_BIG, TYPE_BLOW, TYPE_BIGBLOW, TYPE_SPIN, TYPE_UPPER, TYPE_BOUND, TYPE_CUTSCENE, TYPE_HEKIREKI, TYPE_SWAMP, TYPE_WEB, TYPE_EFFECT, TYPE_END };
 	enum BULLET_TYPE { TYPE_DEFAULT, TYPE_BULLET, TYPE_KYOGAI_BULLET, TYPE_KYOGAI_DELAY_BULLET, TYPE_KYOGAI_VERTICAL_BULLET, TYPE_KYOGAI_HORIZON_BULLET, TYPE_KYOGAI_LIAR_BULLET,
-		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_AKAZA_BULLET_EFFECT, TYPE_BULLET_END };
+		TYPE_BULLET_WEB, TYPE_BULLET_WEB_FULL, TYPE_AKAZA_BULLET_EFFECT, TYPE_GIMMICK_FIRST, TYPE_GIMMICK_SECOND, TYPE_GIMMICK_THIRD, TYPE_GIMMICK_FOURTH,TYPE_BULLET_END };
 	
 	typedef struct tagAtkCollDesc
 	{
@@ -89,7 +89,7 @@ private:
 	void	Tick_KyogaiHorizonBullet(_double dTimeDelta);
 	void	Tick_KyogaiLiarBullet(_double dTimeDelta);
 	void	Tick_WebBullet(_double dTimeDelta);
-
+	void	Tick_Gimmick_Bullet(_double dTimeDelta);
 
 	void	Setting_BaseBullet();
 	void	Setting_AkazaBullet();
@@ -100,6 +100,10 @@ private:
 	void	Setting_KyogaiLiarBullet();
 	void	Setting_WebBullet();
 	void	Setting_WebBullet_Full();
+	void	Setting_First_Gimmick_Bullet();
+	void	Setting_Second_Gimmick_Bullet();
+	void	Setting_Third_Gimmick_Bullet();
+	void	Setting_Fourth_Gimmick_Bullet();
 
 	void	Level_House_Dead(_double dTimeDelta);
 	void	Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGameInstance);

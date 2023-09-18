@@ -2057,13 +2057,13 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Guard(_double dTimeDelta)
 			if (Get_LockOn_MonPos() && m_iLevelCur != LEVEL_TRAIN)
 				m_pTransformCom->LookAt_FixY(XMLoadFloat4(&m_LockOnPos));
 		}
-		m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
+		//m_pTransformCom->Set_Look(m_Moveset.m_Input_Dir);
 		//m_pTransformCom->LerpVector(XMLoadFloat4(&m_Moveset.m_Input_Dir), 0.8f);
 		m_pModelCom->Set_Animation(ANIM_BATTLE_GUARD);
 	}
 
 	//가드 도중
-
+	
 
 	//가드 내리기
 	if (m_Moveset.m_Up_Battle_Guard)
@@ -2941,7 +2941,10 @@ void CPlayer_Zenitsu::Moving_Restrict()
 
 		m_isSkilling = false;
 
-		m_isCan_GuardCancel = false;
+		if (iCurAnimIndex == 62 || iCurAnimIndex == 63 )
+			m_isCan_GuardCancel = true;
+		else
+			m_isCan_GuardCancel = false;
 	}
 }
 

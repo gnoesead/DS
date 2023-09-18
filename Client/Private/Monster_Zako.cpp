@@ -1303,7 +1303,7 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 			}
 		}
 
-		Play_Sound_Move(dTimeDelta, 0.14f);
+		//Play_Sound_Move(dTimeDelta, 0.14f);
 	}
 	if (iCurAnim == 58)
 	{
