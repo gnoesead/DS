@@ -23,11 +23,12 @@ void CTitleManager::Tick()
 
 
 	if (pGameInstance->Get_DIKeyDown(DIK_UP)) {
-
+		
 		m_Select = 0;
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_DOWN)) {
+		
 		m_Select = 1;
 	}
 

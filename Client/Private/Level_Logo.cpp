@@ -15,6 +15,8 @@
 #include "ParticleSystem.h"
 #include "Effect_Texture.h"
 #include "Effect_Particle.h"
+#include "SoundMgr.h"
+
 
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CLevel(pDevice, pContext)
@@ -49,12 +51,19 @@ void CLevel_Logo::Tick(_double dTimeDelta)
 
     if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
     {
+
         if (CTitleManager::GetInstance()->Get_Select_Type() == 0) {
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Select.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
 
             if (COptionManager::GetInstance()->Get_Is_Option_On() == false)
                 CFadeManager::GetInstance()->Set_Ink_In(true);
         }
         else {
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Menu_Select.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+
             if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
                 COptionManager::GetInstance()->Set_Is_Option_On(true);
                 COptionManager::GetInstance()->Set_Is_Reset(false);
