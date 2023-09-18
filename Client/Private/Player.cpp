@@ -1062,11 +1062,12 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_I) /* && m_isCan_Air_Hekireki == false */)
 		{
+			/*
 			if (pGameInstance->Get_DIKeyState(DIK_O))
 			{
 				m_Moveset.m_Down_Skill_Guard = true;
-			}
-			else if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)
+			}*/
+			if (pGameInstance->Get_DIKeyState(DIK_W) || pGameInstance->Get_DIKeyState(DIK_S)
 				|| pGameInstance->Get_DIKeyState(DIK_A) || pGameInstance->Get_DIKeyState(DIK_D))
 			{
 				m_Moveset.m_Down_Skill_Move = true;
@@ -1075,6 +1076,10 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 			{
 				m_Moveset.m_Down_Skill_Normal = true;
 			}
+		}
+		if (pGameInstance->Get_DIKeyDown(DIK_P) /* && m_isCan_Air_Hekireki == false */)
+		{
+			m_Moveset.m_Down_Skill_Guard = true;
 		}
 	}
 	Safe_Release(pGameInstance);
@@ -1579,6 +1584,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B] = true;
 				m_dChangePositionAccTime = 0.0;
+
+				m_isZakoAfterBattle = true;
 			}
 		}
 
@@ -1591,12 +1598,16 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
 				CPlayerManager::GetInstance()->Set_KyogaiMap(m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A]);
 				m_dChangePositionAccTime = 0.0;
+
+				m_StatusDesc.fHp = m_StatusDesc.fHp_Max;
 			}
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A] = true;
 				CPlayerManager::GetInstance()->Set_KyogaiMap(m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_2A]);
 				m_dChangePositionAccTime = 0.0;
+
+				m_StatusDesc.fHp = m_StatusDesc.fHp_Max;
 			}
 		}
 	}

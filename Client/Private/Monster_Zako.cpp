@@ -1308,7 +1308,7 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 			}
 		}
 
-		Play_Sound_Move(dTimeDelta, 0.14f);
+		//Play_Sound_Move(dTimeDelta, 0.14f);
 	}
 	if (iCurAnim == 58)
 	{
@@ -2108,7 +2108,7 @@ void CMonster_Zako::Animation_Control_Down(_double dTimeDelta)
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH_IDLE)
 	{
 		m_dDelay_Down += dTimeDelta;
-		if (m_dDelay_Down > 1.7f)
+		if (m_dDelay_Down > 0.6f)
 		{
 			m_dDelay_Down = 0.0;
 
