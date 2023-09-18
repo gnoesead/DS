@@ -1285,7 +1285,7 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hoooooggggh.mp3");
 		if(!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.8f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1333,7 +1333,7 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_WasiniwaKatene.mp3");
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1378,7 +1378,7 @@ void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_ZankokuniKorositeYarojo.mp3");
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1408,7 +1408,7 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_UHahahahaha.mp3");
 
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1468,7 +1468,7 @@ void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_Hehehehe.mp3");
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1516,7 +1516,7 @@ void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Sirumonoga.mp3");
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
@@ -1553,7 +1553,7 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hue.mp3");
 		if (!m_bDialog)
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.5f);
 		else
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
