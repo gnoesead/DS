@@ -2391,7 +2391,7 @@ void CBoss_Kyogai::Update_NextPhase(_double dTimeDelta)
 
 			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 			_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_1.mp3");
-			CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+			CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 		}
 
 		if (m_StatusDesc.fHp <= m_StatusDesc.fHp_Max)

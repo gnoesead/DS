@@ -2936,7 +2936,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iSmallHit_Index = 0;
 		}
 
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 	}
 #pragma endregion
 
