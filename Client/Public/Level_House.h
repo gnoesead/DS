@@ -1,6 +1,7 @@
 #pragma once
 #include "Client_Defines.h"
 #include "Level.h"
+#include "AtkCollider.h"
 
 BEGIN(Client)
 
@@ -24,7 +25,8 @@ private:
 	_bool	Event_Time(_double dTimeDelta, _double dTime, _double dTimeAcc) {
 		return dTime < dTimeAcc&& dTimeAcc <= dTime + dTimeDelta;
 	}
-	
+	void	House_Gimmick(_double dTimeDelta);
+	void	Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform, _double Speed = 5.f, CAtkCollider::BULLET_TYPE eBulletType = CAtkCollider::TYPE_BULLET, const char* pEffectTag = { "" }, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc = nullptr);
 
 private:
 	_bool bChangeBattleBGM = { false };

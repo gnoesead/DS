@@ -839,9 +839,21 @@ HRESULT CLevel_Logo::Ready_Layer_Effect()
 		return E_FAIL;
 	}
 
-	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_ParticleSmoke.bin"), true, 60)))
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_ParticleSmokeStone.bin"), true, 60)))
 	{
 		MSG_BOX("Failed to Load Effect : Tanjiro_Super2_ParticleSmoke");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_DecalParticle1.bin"), true, 5)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super2_DecalParticle1");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Tanjiro/Tanjiro_Super2_DecalParticle2.bin"), true, 60)))
+	{
+		MSG_BOX("Failed to Load Effect : Tanjiro_Super2_DecalParticle2");
 		return E_FAIL;
 	}
 #pragma endregion
