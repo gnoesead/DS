@@ -189,6 +189,8 @@ void CMonster_Zako::Tick(_double dTimeDelta)
 
 		//ÀÌº¥Æ® ÄÝ
 		EventCall_Control(dTimeDelta);
+
+		Dialog_Update(dTimeDelta);
 	}
 
 }
@@ -1282,7 +1284,10 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 		m_isFirst_ATK_0 = true;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hoooooggggh.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.8f);
+		if(!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.8f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1327,7 +1332,10 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 		m_isFirst_ATK_0 = true;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_WasiniwaKatene.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1369,7 +1377,10 @@ void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
 		m_isFirst_ATK_0 = true;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_ZankokuniKorositeYarojo.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1395,7 +1406,11 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 		m_dTime_ATK_0 = 0.0;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_UHahahahaha.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1452,7 +1467,10 @@ void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
 		m_dTime_ATK_0 = 0.0;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Talk_Hehehehe.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1497,7 +1515,10 @@ void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
 		m_dTime_ATK_0 = 0.0;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Sirumonoga.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1531,7 +1552,10 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 		m_dTime_ATK_0 = 0.0;
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Zako_Shout_Hue.mp3");
-		Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		if (!m_bDialog)
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
+		else
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -2201,6 +2225,78 @@ void CMonster_Zako::Play_Sound_Dmg(_int iType, _float vol)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, vol);
 		}
 	}
+}
+
+void CMonster_Zako::Dialog_Update(_double dTimeDelta)
+{
+	m_dDialogAccTime += dTimeDelta;
+
+	if (Event_Time(dTimeDelta, 5.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(4.f, TEXT("[Ç÷±Í]"), TEXT("¹¹¾ß,³× ³à¼®! À¸ÇÏÇÏ!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#385.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 9.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[¾Æ°¡Ã÷¸¶ Á¨ÀÌÃ÷]"), TEXT("½¬ÀÌÀÌÀÌÀÍ"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#386.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(7.f, TEXT("[Ç÷±Í]"), TEXT("(...ÀÌ ³à¼®, ÀÚ´Â Ã´ÇÏ´Â°Ô ¾Æ´Ï¶ó"),TEXT("ÁøÂ¥·Î °ô¾Æ¶³¾îÁ³ÀÝ¾Æ)"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#387.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 20.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(6.f, TEXT("[Ç÷±Í]"), TEXT("(±×·±µ¥µµ... ³¯·ÆÇØ!"), TEXT("°¡, °­ÇØ!)"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#388.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 27.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(5.f, TEXT("[¾Æ°¡Ã÷¸¶ Á¨ÀÌÃ÷]"), TEXT("½¬ÀÌÀÌÀÌÀÌÀÌÀÌÀÌÀÍ"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#389.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 33.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(2.f, TEXT("[Ç÷±Í]"), TEXT("Á¨Àå! ½Ã²ô·¯¿ö!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#390.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
+	else if (Event_Time(dTimeDelta, 35.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(5.f, TEXT("[Ç÷±Í]"), TEXT("±×¸¸ÇØ! È£Èí ¼Ò¸®°¡ ±Í¿¡ °Å½½¸°´Ù°í!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#391.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+
+	}
+	else if (Event_Time(dTimeDelta, 41.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[¾Æ°¡Ã÷¸¶ Á¨ÀÌÃ÷]"), TEXT("(Ä®³¡¿¡ È£ÈíÀ» ÁýÁßÇÑ´Ù..)"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_BATTLE#412.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+
+	}
+	else if (Event_Time(dTimeDelta, 44.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(5.f, TEXT("[¾Æ°¡Ã÷¸¶ Á¨ÀÌÃ÷]"), TEXT("(ÀÌ Ç÷±Í¸¦ Á×¿©¾ß ³ª¿Í Ä£±¸¸¦ ÁöÅ³¼ö ÀÖ´Ù)"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_BATTLE#415.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+
+	}
+	else if (Event_Time(dTimeDelta, 50.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(5.f, TEXT("[¾Æ°¡Ã÷¸¶ Á¨ÀÌÃ÷]"), TEXT("³» Ä£±¸¸¦ ÁöÅ°±âÀ§ÇØ, ³Ê¸¦ ¹°¸®Ä¡°Ú´Ù!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_BATTLE#487.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+
+		m_bDialog = false;
+	}
+	
 }
 
 HRESULT CMonster_Zako::Add_Components()

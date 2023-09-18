@@ -1067,9 +1067,6 @@
     <ClCompile Include="..\Private\CollisionBox.cpp">
       <Filter>02. GameObjects\Character\CollisionBox</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Monster_Zako.cpp">
-      <Filter>02. GameObjects\Character\Monster\Zako</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Camera_Manager.cpp">
       <Filter>02. GameObjects\Camera\Free\Manager</Filter>
     </ClCompile>
@@ -1222,6 +1219,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Ending.cpp">
       <Filter>02. GameObjects\UI\09.Main_UI\Loading\Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Zako.cpp">
+      <Filter>02. GameObjects\Character\Monster\Zako</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
