@@ -21,6 +21,8 @@
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
 #include "Fade_Manager.h"
+#include "OptionManager.h"
+
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -60,6 +62,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
+		m_dDialogAccTime = 0.0;
 		m_StatusDesc.fHp = 100.f;
 		m_StatusDesc.fHp_Max = 100.f;
 		m_eCurAnimIndex = ANIM_IDLE;
@@ -72,7 +75,7 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	{
 		if (pGameInstance->Get_CurLevelIdx() == LEVEL_TRAIN)
 			m_bTrain_Stage = true;
-
+		m_dDialogAccTime = 0.0;
 		m_eCurNavi = NAVI_TRAIN;
 	}
 
@@ -126,7 +129,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 #endif // _DEBUG
 
-	Update_Train_Stage();
+	Update_Train_Stage(dTimeDelta);
 
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
@@ -1434,6 +1437,18 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				}
 				else {
 					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					_uint iRanNum = Random::Generate_Int(0, 1);
+					if (iRanNum == 0) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+					}
+					else if (iRanNum == 1) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+					}
+
+					EffectWorldDesc.fScale = 1.f;
 					EffectWorldDesc.vPosition.y += 0.3f;
 
 					int n = Random::Generate_Int(0, 2);
@@ -1485,14 +1500,12 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1519,14 +1532,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1560,14 +1570,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1595,14 +1602,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			
@@ -1639,14 +1643,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 			EffectWorldDesc.fScale = 1.f;
 			EffectWorldDesc.vPosition.y += 0.3f;
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-			EffectWorldDesc.vPosition.y -= 2.5f;
-			EffectWorldDesc.vPosition.z -= 1.f;
-
-			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 
 		}
@@ -1689,7 +1690,7 @@ void CBoss_Akaza::Update_Trigger(_double dTimeDelta)
 
 }
 
-void CBoss_Akaza::Update_Train_Stage()
+void CBoss_Akaza::Update_Train_Stage(_double dTimeDelta)
 {
 	if (m_bTrain_Stage == true)
 	{
@@ -1699,6 +1700,7 @@ void CBoss_Akaza::Update_Train_Stage()
 			Trigger_Train_JumpStomp();
 			m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
+		Train_Dialog_Update(dTimeDelta);
 	}
 }
 
@@ -4053,8 +4055,9 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
+				
 				m_eCurAnimIndex = ANIM_IDLE;
-				m_bTrain_Stage = false;
+				//m_bTrain_Stage = false;
 				//Trigger_Interact();
 			}
 		}
@@ -4411,13 +4414,21 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 	if (m_bAnimFinish == false)
 	{
 		m_bAnimFinish = true;
+		m_dTimeAcc = 0.0;
+		m_eCurAnimIndex = ANIM_IDLE;
+		//m_eCurAnimIndex = ANIM_DEATH;
+	}
+	m_dTimeAcc += dTimeDelta;
+	if (Event_Time(dTimeDelta, 13.5, m_dTimeAcc))
+	{
 		m_eCurAnimIndex = ANIM_DEATH;
 	}
+	
 	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
 	{
 		m_bMonsterDead = true;
 		m_eCurAnimIndex = ANIM_HIT_GETUP;
-		m_fDeadTime += (_float)dTimeDelta;
+		m_fDeadTime += (_float)dTimeDelta;			
 
 		m_dDeadParticleAccTime += dTimeDelta;
 		m_dDeadSmokeAccTime += dTimeDelta;
@@ -4443,10 +4454,20 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 			}
 		}
 
-		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
-			m_isDead = true;
-	}
 
+		if (m_fDeadTime > 8.0f)
+		{
+			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+			CFadeManager::GetInstance()->Set_Fade_Out(true);
+		}
+
+		if (m_fDeadTime > 20.0f) // 죽는 시간 조절 해도 됨
+			m_isDead = true;
+
+		
+	}
+	Dead_Dialog_Update(dTimeDelta, m_dTimeAcc);
+	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
 void CBoss_Akaza::Dialog_Update(_double dTimeDelta)
@@ -4565,6 +4586,94 @@ void CBoss_Akaza::Dialog_Update(_double dTimeDelta)
 			_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN09#64.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
+	}
+}
+
+void CBoss_Akaza::Train_Dialog_Update(_double dTimeDelta)
+{
+	m_dDialogAccTime += dTimeDelta;
+	if (Event_Time(dTimeDelta, 0.5, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("뭐.. 뭐지..?!! 이 기분 나쁜 기운은?"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Tangiro_Voice_Giun.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 4.5, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[카마도 탄지로]"), TEXT("끄어억..이건...상현의 3?"));		
+	}
+	else if (Event_Time(dTimeDelta, 9.0, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("뭐냐. 이 약해 빠진 녀석은"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_NandaSorewa.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 12.5, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(5.f, TEXT("[아카자]"), TEXT("나는 혐오스럽단다 약한 닌겐이."), TEXT("@정보@ 맵 담당자 안원은 JDCR을 닮았다."));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_OrewaYowaiNingen.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 18.5, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("보여봐라!!!!!!!!!! 너의 실력을!!!!!!!!!!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Misetemiro_Omaeno_Chikarao.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 23.0, m_dDialogAccTime))
+	{
+		m_dDialogAccTime = 0.0;
+		//m_bTrain_Stage = false;
+	}
+	if(m_dDialogAccTime > 23.0)
+		m_dDialogAccTime = 0.0;
+	
+}
+
+void CBoss_Akaza::Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc)
+{
+	_double dDialogAcc = dTimeAcc;
+	if (Event_Time(dTimeDelta, 0.5, dDialogAcc))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자(실성)]"), TEXT("하하하하하하하하하하하하하하하하!!!!!!!!!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Hehahahaha.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 3.5, dDialogAcc))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자(감동받음)]"), TEXT("대단하구나!! 정말 대단해!!!!!!!!!!!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Subarashi_Hontoni_Subarashi.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 7.0, dDialogAcc))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자(상황파악 못함)]"), TEXT("어떠냐!! 너도 즐겁지 않느냐ㅎㅎ"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Doda_Omaeno_Tanoshidaro.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 10.5, dDialogAcc))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자(아직도 파악 못함)]"), TEXT("좀 더 놀아보자꾸나!"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Ja_Moto_Yariyauzo.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 13.5, dDialogAcc))
+	{
+		Set_CharacterDialog(2.f, TEXT("[아카자(아픈)]"), TEXT("어...?"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Death_2.mp3");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 16.0, dDialogAcc))
+	{
+		Set_CharacterDialog(4.f, TEXT("[아카자(쓰러지며)]"), TEXT("젠장. 몸이 움직이지 않아..."));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Kshow.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+	}
+	else if (Event_Time(dTimeDelta, 21.0, dDialogAcc))
+	{
+		Set_CharacterDialog(3.f, TEXT("[아카자(독백)]"), TEXT("(그렇군. 약자는 나였나...)"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Mosi_Yowai.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 	}
 }
 

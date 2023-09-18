@@ -46,10 +46,13 @@ public: // 겟셋
 
 	_bool	Get_Trigger_Akaza() { return m_isTrigger_Akaza; }
 	
+	
 
 private: // 변수
 	CTransform* m_pTransformCom = { nullptr }; // 플레이어의 트랜스폼임.
 
+	//주기적 생성
+	_bool	m_isJugi = { true };
 
 	//공용 제어용
 	_bool	m_isFirst_All = { true };
@@ -78,6 +81,7 @@ private: // 변수
 	_bool	m_isTrigger_Akaza = { false };
 	_double m_dDelay_Akaza = { 0.0 };
 	_bool	m_isFirst_Akaza = { true };
+	
 
 private:
 	//웹볼

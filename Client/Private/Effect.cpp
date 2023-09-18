@@ -463,7 +463,7 @@ void CEffect::LateTick(_double dTimeDelta)
 
 	Check_PassIndex();
 
-	if (!m_isCollect)
+	if (!m_isCollect && !m_ParentDesc.pParent->Get_isFinished())
 	{
 		if (m_fDelayTimeAcc > m_fStartDelay)	// 이거 확인
 		{

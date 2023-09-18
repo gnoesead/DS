@@ -11,252 +11,252 @@
 
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CCharacter(pDevice, pContext)
+	: CCharacter(pDevice, pContext)
 {
 }
 
 CMonster::CMonster(const CMonster& rhs)
-    : CCharacter(rhs)
+	: CCharacter(rhs)
 {
 }
 
 HRESULT CMonster::Initialize_Prototype()
 {
-    if (FAILED(__super::Initialize_Prototype()))
-        return E_FAIL;
+	if (FAILED(__super::Initialize_Prototype()))
+		return E_FAIL;
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CMonster::Initialize(void* pArg)
 {
-    if (FAILED(__super::Initialize(pArg)))
-        return E_FAIL;
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
 
-    if (FAILED(Add_Components()))
-        return E_FAIL;
-    Get_PlayerComponent();
+	if (FAILED(Add_Components()))
+		return E_FAIL;
+	Get_PlayerComponent();
 
 
-    return S_OK;
+	return S_OK;
 }
 
 void CMonster::Tick(_double dTimeDelta)
 {
-    __super::Tick(dTimeDelta);
+	__super::Tick(dTimeDelta);
 
-    if (true == m_isDead)
-        return;
+	if (true == m_isDead)
+		return;
 
-    Check_Player_Awake();
-    Check_Player_Surge();
+	Check_Player_Awake();
+	Check_Player_Surge();
 }
 
 void CMonster::LateTick(_double dTimeDelta)
 {
-    __super::LateTick(dTimeDelta);
+	__super::LateTick(dTimeDelta);
 
-    if (m_isNavi_Y_Off == false)
-        Set_Height();
+	if (m_isNavi_Y_Off == false)
+		Set_Height();
 }
 
 HRESULT CMonster::Render()
 {
-    if (FAILED(__super::Render()))
-        return E_FAIL;
-    if (FAILED(SetUp_ShaderResources()))
-        return E_FAIL;
-    return S_OK;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+	if (FAILED(SetUp_ShaderResources()))
+		return E_FAIL;
+	return S_OK;
 }
 
 HRESULT CMonster::Render_ShadowDepth()
 {
-    if (FAILED(__super::Render_ShadowDepth()))
-        return E_FAIL;
+	if (FAILED(__super::Render_ShadowDepth()))
+		return E_FAIL;
 
-    return S_OK;
+	return S_OK;
 }
 
 void CMonster::Get_PlayerComponent()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-    m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
-    m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
-    m_pPlayerTransformCom = pPlayer->Get_TransformCom();
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+	m_pPlayer_Tanjiro = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 0));
+	m_pPlayer_Zenitsu = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), 1));
+	m_pPlayerTransformCom = pPlayer->Get_TransformCom();
 
-    if (m_pPlayerTransformCom == nullptr || m_pPlayer_Tanjiro == nullptr || m_pPlayer_Zenitsu == nullptr)
-    {
-        Safe_Release(pGameInstance);
-        return;
-    }
+	if (m_pPlayerTransformCom == nullptr || m_pPlayer_Tanjiro == nullptr || m_pPlayer_Zenitsu == nullptr)
+	{
+		Safe_Release(pGameInstance);
+		return;
+	}
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 }
 
 void CMonster::Check_Player_Awake()
 {
-    if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
-        m_bTanjiroAwake = true;
-    else
-        m_bTanjiroAwake = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 55)
+		m_bTanjiroAwake = true;
+	else
+		m_bTanjiroAwake = false;
 
 
-    if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
-        m_bZenitsuAwake = true;
-    else
-        m_bZenitsuAwake = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_pPlayer_Zenitsu->Get_ModelCom()->Get_iCurrentAnimIndex() == 40)
+		m_bZenitsuAwake = true;
+	else
+		m_bZenitsuAwake = false;
 }
 
 void CMonster::Check_Player_Surge()
 {
-    if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 28) //컷씬
-    {
-        if (m_isSurging)
-            m_bTanjiroSurge = false;
-        else
-            m_bTanjiroSurge = true;
-    }
-    else
-        m_bTanjiroSurge = false;
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_pPlayer_Tanjiro->Get_ModelCom()->Get_iCurrentAnimIndex() == 28) //컷씬
+	{
+		if (m_isSurging)
+			m_bTanjiroSurge = false;
+		else
+			m_bTanjiroSurge = true;
+	}
+	else
+		m_bTanjiroSurge = false;
 }
 
 void CMonster::Calculate_To_Player()
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
 
-    //CTransform* pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
-    CTransform* pTransform = pPlayer->Get_TransformCom();
+	//CTransform* pTransform = dynamic_cast<CTransform*>(pGameInstance->Get_Component(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), TEXT("Com_Transform")));
+	CTransform* pTransform = pPlayer->Get_TransformCom();
 
-    _vector vPlayerPos = pTransform->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = pTransform->Get_State(CTransform::STATE_POSITION);
 
-    _vector vDistance = XMVectorSubtract(m_pTransformCom->Get_State(CTransform::STATE_POSITION), vPlayerPos);
-    _vector vDir_To_Player = XMVector3Normalize(vDistance);
+	_vector vDistance = XMVectorSubtract(m_pTransformCom->Get_State(CTransform::STATE_POSITION), vPlayerPos);
+	_vector vDir_To_Player = XMVector3Normalize(vDistance);
 
-    //FixY
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vTargetPosition = XMVectorSetY(vPlayerPos, XMVectorGetY(vMonsterPos));
-    _vector vDir_FixY = XMVector3Normalize(vTargetPosition - vMonsterPos);
+	//FixY
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vTargetPosition = XMVectorSetY(vPlayerPos, XMVectorGetY(vMonsterPos));
+	_vector vDir_FixY = XMVector3Normalize(vTargetPosition - vMonsterPos);
 
-    m_fDistance_To_Player = XMVectorGetX(XMVector3Length(vDistance));
-    XMStoreFloat4(&m_PlayerPos, vPlayerPos);
-    XMStoreFloat4(&m_Dir_To_Monster, vDir_To_Player);
-    XMStoreFloat4(&m_Dir_To_Player, -vDir_To_Player);
-    XMStoreFloat4(&m_Dir_To_Player_FixY, vDir_FixY);
+	m_fDistance_To_Player = XMVectorGetX(XMVector3Length(vDistance));
+	XMStoreFloat4(&m_PlayerPos, vPlayerPos);
+	XMStoreFloat4(&m_Dir_To_Monster, vDir_To_Player);
+	XMStoreFloat4(&m_Dir_To_Player, -vDir_To_Player);
+	XMStoreFloat4(&m_Dir_To_Player_FixY, vDir_FixY);
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 }
 
 
 _bool CMonster::Check_Distance(_float fDistance)
 {
-    // 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
-    Get_PlayerComponent();
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
 _bool CMonster::Check_Distance_FixY(_float fDistance)
 {
-    // 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
-    Get_PlayerComponent();
+	// 내가 설정한 Distance보다 가깝거나 같으면 true 멀면 false
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    vPlayerPos = XMVectorSetY(vPlayerPos, 0.f);
-    vMonsterPos = XMVectorSetY(vMonsterPos, 0.f);
+	vPlayerPos = XMVectorSetY(vPlayerPos, 0.f);
+	vMonsterPos = XMVectorSetY(vMonsterPos, 0.f);
 
-    return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
+	return Compute::DistCheck(vPlayerPos, vMonsterPos, fDistance);
 }
 
 _bool CMonster::Check_Player_Y()
 {
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _float vPlayerY = XMVectorGetY(vPlayerPos);
-    if (vPlayerY > m_fLand_Y)
-    {
-        return true;
-    }
-    else
-        return false;
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float vPlayerY = XMVectorGetY(vPlayerPos);
+	if (vPlayerY > m_fLand_Y)
+	{
+		return true;
+	}
+	else
+		return false;
 
 
 }
 
 _vector CMonster::Calculate_PlayerPos()
 {
-    Get_PlayerComponent();
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	Get_PlayerComponent();
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    return vPlayerPos;
+	return vPlayerPos;
 }
 
 _float CMonster::Calculate_Distance()
 {
-    Get_PlayerComponent();
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
-    _float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_float fDistance = Convert::GetLength(vPlayerPos - vMonsterPos);
 
-    return fDistance;
+	return fDistance;
 }
 
 _vector CMonster::Calculate_Dir()
 {
-    Get_PlayerComponent();
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    _vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
 
-    return vDir;
+	return vDir;
 }
 
 _vector CMonster::Calculate_Dir_FixY()
 {
-    Get_PlayerComponent();
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
+	return Compute::Dir_FixY(vPlayerPos, vMonsterPos);
 }
 _vector CMonster::Calculate_Dir_ZeroY()
 {
-    Get_PlayerComponent();
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    return Compute::Dir_ZeroY(vPlayerPos, vMonsterPos);
+	return Compute::Dir_ZeroY(vPlayerPos, vMonsterPos);
 }
 
 _vector CMonster::Calculate_Dir_Cross()
 {
-    Get_PlayerComponent();
+	Get_PlayerComponent();
 
-    _vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-    _vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vPlayerPos = m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vMonsterPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-    _vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
+	_vector vDir = XMVector3Normalize(vPlayerPos - vMonsterPos);
 
-    _vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
-    _vector vCross = XMVector3Normalize(XMVector3Cross(vDir, vUp));
+	_vector vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+	_vector vCross = XMVector3Normalize(XMVector3Cross(vDir, vUp));
 
 
-    return vCross;
+	return vCross;
 }
 /*
 static _bool   AngleCheck(_fvector vSourDir, _fvector vSourPos, _fvector vDestPos, _float fMaxAngle)
@@ -266,165 +266,172 @@ static _bool   AngleCheck(_fvector vSourDir, _fvector vSourPos, _fvector vDestPo
    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vSourDir, vDestDir))));
 
    if (fAngle < fMaxAngle)
-      return true;
+	  return true;
    else
-      return false;
+	  return false;
 }*/
 
 _float CMonster::Calculate_Angle(_fvector vSourDir, _fvector vDestDir)
 {
-    _vector vSoDir = XMVector4Normalize(vSourDir);
-    _vector vDeDir = XMVector4Normalize(vDestDir);
+	_vector vSoDir = XMVector4Normalize(vSourDir);
+	_vector vDeDir = XMVector4Normalize(vDestDir);
 
-    _float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vSoDir, vDeDir))));
+	_float fAngle = XMConvertToDegrees(acosf(XMVectorGetX(XMVector3Dot(vSoDir, vDeDir))));
 
-    return fAngle;
+	return fAngle;
 }
 
 _vector CMonster::Random_Dir(_fvector vDir, _float fMinY, _float fMaxY, _float fMinX, _float fMaxX)
 {
-    _vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
 
-    _float3 vCheck = Convert::ToFloat3(vRight);
-    if (0.f == vCheck.x && 0.f == vCheck.y && 0.f == vCheck.z)
-        return vDir;
+	_float3 vCheck = Convert::ToFloat3(vRight);
+	if (0.f == vCheck.x && 0.f == vCheck.y && 0.f == vCheck.z)
+		return vDir;
 
-    _float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
-    _matrix RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(RandomAngle));
+	_float RandomAngle = Random::Generate_Float(fMinY, fMaxY);
+	_matrix RotationMatrix = XMMatrixRotationAxis(vRight, XMConvertToRadians(RandomAngle));
 
-    _vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
+	_vector vRandomDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
-    RandomAngle = Random::Generate_Float(fMinX, fMaxX);
-    RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
-    return vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
+	RandomAngle = Random::Generate_Float(fMinX, fMaxX);
+	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(RandomAngle));
+	return vRandomDir = XMVector3TransformNormal(vRandomDir, RotationMatrix);
 }
 
 _vector CMonster::Rotation_Dir(_fvector vDir, _float fAngleX, _float fAngleY)
 {
-    _float fAngle = fAngleX;
-    _matrix RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(fAngle));
-    _vector vRotationDir = XMVector3TransformNormal(vDir, RotationMatrix);
+	_float fAngle = fAngleX;
+	_matrix RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(fAngle));
+	_vector vRotationDir = XMVector3TransformNormal(vDir, RotationMatrix);
 
-    fAngle = fAngleY;
+	fAngle = fAngleY;
 
-    RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(fAngle));
-    return vRotationDir = XMVector3TransformNormal(vRotationDir, RotationMatrix);
+	RotationMatrix = XMMatrixRotationAxis(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), XMConvertToRadians(fAngle));
+	return vRotationDir = XMVector3TransformNormal(vRotationDir, RotationMatrix);
 }
 
 void CMonster::Dir_Setting(_bool Reverse)
 {
-    CGameInstance* pGameInstance = CGameInstance::GetInstance();
-    Safe_AddRef(pGameInstance);
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
 
-    //카메라 방향 구해놓기
-    CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
-    _float4 CameraLook = pCamera->Get_CameraLook();
-    CameraLook.y = 0.0f;
-    CameraLook.w = 0.0f;
-    _vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
-    _vector   vUp = { 0.0f, 1.0f, 0.0f , 0.0f };
-    _vector crossLeft = XMVector3Cross(vLook, vUp);
+	//카메라 방향 구해놓기
+	CCamera_Free* pCamera = dynamic_cast<CCamera_Free*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Camera"), 0));
+	_float4 CameraLook = pCamera->Get_CameraLook();
+	CameraLook.y = 0.0f;
+	CameraLook.w = 0.0f;
+	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
+	_vector   vUp = { 0.0f, 1.0f, 0.0f , 0.0f };
+	_vector crossLeft = XMVector3Cross(vLook, vUp);
 
-    //45degree look
-    _vector quaternionRotation = XMQuaternionRotationAxis(vUp, XMConvertToRadians(45.0f));
-    _vector v45Rotate = XMVector3Rotate(vLook, quaternionRotation);
+	//45degree look
+	_vector quaternionRotation = XMQuaternionRotationAxis(vUp, XMConvertToRadians(45.0f));
+	_vector v45Rotate = XMVector3Rotate(vLook, quaternionRotation);
 
-    //135degree look
-    _vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
-    _vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
+	//135degree look
+	_vector quaternionRotation2 = XMQuaternionRotationAxis(vUp, XMConvertToRadians(135.0f));
+	_vector v135Rotate = XMVector3Rotate(vLook, quaternionRotation2);
 
 
-    if (Reverse)
-    {
-        v45Rotate = -v45Rotate;
-        v135Rotate = -v135Rotate;
-    }
+	if (Reverse)
+	{
+		v45Rotate = -v45Rotate;
+		v135Rotate = -v135Rotate;
+	}
 
-    Safe_Release(pGameInstance);
+	Safe_Release(pGameInstance);
 }
 
 void CMonster::Pos_FixY()
 {
-    _float4 Pos;
-    XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	_float4 Pos;
+	XMStoreFloat4(&Pos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-    if (Pos.y >= m_fLand_Y)
-    {
-        m_bAir_Motion = false;
-        Pos.y = m_fLand_Y;
-        m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
-    }
+	if (Pos.y >= m_fLand_Y)
+	{
+		m_bAir_Motion = false;
+		Pos.y = m_fLand_Y;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&Pos));
+	}
 }
 
 HRESULT CMonster::Add_Components()
 {
-    /* For.Com_Texture */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
-        TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
-    {
-        MSG_BOX("Failed to Add_Com_Texture : CBoss_Akaza_Akaza");
-        return E_FAIL;
-    }
+	/* For.Com_Texture */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster_Disolve"),
+		TEXT("Com_Texture"), (CComponent**)&m_pTextureCom)))
+	{
+		MSG_BOX("Failed to Add_Com_Texture : CBoss_Akaza_Akaza");
+		return E_FAIL;
+	}
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CMonster::SetUp_ShaderResources()
 {
-    if (nullptr == m_pShaderCom)
-        return E_FAIL;
+	if (nullptr == m_pShaderCom)
+		return E_FAIL;
 
-    if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_DisolveTexture", 0)))
-        return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_ShaderResourceView(m_pShaderCom, "g_DisolveTexture", 0)))
+		return E_FAIL;
 
-    if (m_bMonsterDead == true)
-    {
-        _bool bKyogai = CMonsterManager::GetInstance()->Get_Kyogai_On();
-       
-        if (bKyogai == true)
-        {
-            _float fDeadTime = m_fDeadTime * 0.35f;
+	if (m_bMonsterDead == true)
+	{
+		_bool bKyogai = CMonsterManager::GetInstance()->Get_Kyogai_On();
+		_bool bAkaza = CMonsterManager::GetInstance()->Get_Akaza_On();
+		if (bKyogai == true)
+		{
+			_float fDeadTime = m_fDeadTime * 0.35f;
 
-            if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &fDeadTime, sizeof(_float))))
-                return E_FAIL;
-        }
-        else
-        {
-            if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &m_fDeadTime, sizeof(_float))))
-                return E_FAIL;
-        }
-    }
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &fDeadTime, sizeof(_float))))
+				return E_FAIL;
+		}
+		else if (bAkaza == true)
+		{
+			_float fDeadTime = m_fDeadTime * 0.5f;
 
-    return S_OK;
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &fDeadTime, sizeof(_float))))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pShaderCom->SetUp_RawValue("g_Disolve", &m_fDeadTime, sizeof(_float))))
+				return E_FAIL;
+		}
+	}
+
+	return S_OK;
 }
 
 CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CMonster* pInstance = new CMonster(pDevice, pContext);
+	CMonster* pInstance = new CMonster(pDevice, pContext);
 
-    if (FAILED(pInstance->Initialize_Prototype()))
-    {
-        MSG_BOX("Failed to Created : CMonster");
-        Safe_Release(pInstance);
-    }
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX("Failed to Created : CMonster");
+		Safe_Release(pInstance);
+	}
 
-    return pInstance;
+	return pInstance;
 }
 
 CGameObject* CMonster::Clone(void* pArg)
 {
-    CMonster* pInstance = new CMonster(*this);
+	CMonster* pInstance = new CMonster(*this);
 
-    if (FAILED(pInstance->Initialize(pArg)))
-    {
-        MSG_BOX("Failed to Cloned : CMonster");
-        Safe_Release(pInstance);
-    }
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX("Failed to Cloned : CMonster");
+		Safe_Release(pInstance);
+	}
 
-    return pInstance;
+	return pInstance;
 }
 
 void CMonster::Free()
 {
-    __super::Free();
+	__super::Free();
 }
