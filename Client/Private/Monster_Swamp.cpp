@@ -619,10 +619,10 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom, &EffectWorldDesc);
 
 				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
 				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
-
 			}
 		}
 
@@ -634,6 +634,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom, &EffectWorldDesc);
 
 				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
 				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
@@ -648,6 +649,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom, &EffectWorldDesc);
 
 				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
 				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
@@ -662,6 +664,7 @@ void CMonster_Swamp::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
 				EffectWorldDesc.fScale = 1.4f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom, &EffectWorldDesc);
 
 				_tchar szSoundFile1[MAX_PATH] = TEXT("swing_08.ogg");
 				Play_Sound_Channel(szSoundFile1, CSoundMgr::MONSTER_SIDESTEP, 0.3f);
@@ -2412,7 +2415,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH_IDLE)
 	{
 		m_dDelay_Down += dTimeDelta;
-		if (m_dDelay_Down > 1.7f)
+		if (m_dDelay_Down > 0.5f)
 		{
 			m_dDelay_Down = 0.0;
 

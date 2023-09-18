@@ -105,6 +105,8 @@ private: //애니메이션 제어용 함수
 	//사운드용
 	void	Play_Sound_Dmg(_int iType, _float vol); // 0:small, 1:medium, 2:big
 
+	void	Dialog_Update(_double dTimeDelta);
+
 
 private:
 	_float	m_fScale = { 0.8f };
@@ -171,7 +173,9 @@ private:
 	// 렌더 확인용
 	_uint	m_iMeshNum = { 0 };
 
-
+private:
+	_bool	m_bDialog = { true };
+	
 private:
 	// Outline Default
 	_float	m_fOutlineThickness = 0.9f;

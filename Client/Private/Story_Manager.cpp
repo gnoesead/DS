@@ -24,6 +24,9 @@ void CStoryManager::Tick()
 
 	if (pGameInstance->Get_DIKeyDown(DIK_LEFT)) {
 
+		_tchar szSoundFile[MAX_PATH] = TEXT("UI_Story.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.7f);
+
 		if (m_Select >= 1)
 			m_Select--;
 
@@ -33,6 +36,10 @@ void CStoryManager::Tick()
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_RIGHT)) {
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("UI_Story.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.7f);
+
 		m_Select++;
 
 		if (m_Select >= 4) {

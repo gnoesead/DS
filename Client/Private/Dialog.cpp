@@ -211,10 +211,12 @@ void CDialog::LateTick(_double TimeDelta)
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
 
-	
 	m_Dialog_Type = CDialogManager::GetInstance()->Get_Dialog_Type();
 
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_Font_Render == true && m_Dialog_Type != 99) {
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("ui_cancel.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.4f);
 
 		m_Cur_Num++;
 		m_Name_Type *= -1;
@@ -383,6 +385,10 @@ void CDialog::LateTick(_double TimeDelta)
 	}
 
 	if (pGameInstance->Get_DIKeyDown(DIK_F) && m_Is_In == false && m_Is_Out == false && m_Dialog_Type != 99) {
+
+		_tchar szSoundFile[MAX_PATH] = TEXT("ui_cancel.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.4f);
+
 
 		//Á¨ÀÌÃק
 		if (m_Dialog_Type == 9)
