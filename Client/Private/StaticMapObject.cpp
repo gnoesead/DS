@@ -473,19 +473,19 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 			{
 				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_2.ogg");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
-				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
 			}
 			else if (iInteractionType == INTERACTION_ROOMCHANGE1)
 			{
 				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_18.ogg");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
-				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
 			}
 			else if (iInteractionType == INTERACTION_ROOMCHANGE2)
 			{
 				_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_59.ogg");
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::MONSTER_SUBEFFECT_0);
-				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.15f);
+				CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::MONSTER_SUBEFFECT_0, 0.4f);
 			}
 
 			m_bKyoSound = true;
@@ -511,6 +511,10 @@ void CStaticMapObject::Room_Change(_double TimeDelta, _uint iInteractionType)
 		{
 			CCameraManager::GetInstance()->Camera_Shake(1.2, 30);
 			m_pRendererCom->Set_RadialBlur();
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("st_room_roll02.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::SYSTEM_EFFECT3);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile, CSoundMgr::SYSTEM_EFFECT3, 0.8f);
 		}
 
 		m_AccTime += TimeDelta;
