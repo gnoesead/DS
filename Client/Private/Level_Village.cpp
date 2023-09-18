@@ -167,7 +167,7 @@ HRESULT CLevel_Village::Initialize()
 
     CSoundMgr::Get_Instance()->StopAll();
     _tchar szBgm[MAX_PATH] = TEXT("BGM_Village.mp3");
-    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+    CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
     return S_OK;
 }
@@ -338,7 +338,7 @@ void CLevel_Village::Tick(_double dTimeDelta)
     {
         CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
         _tchar szBgm[MAX_PATH] = TEXT("BGM_Village_Battle_0.mp3");
-        CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+        CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
         bChangeBGM = true;
     }

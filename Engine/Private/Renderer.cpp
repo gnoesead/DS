@@ -2162,10 +2162,20 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;
 
 	static _float fGrayRatio = 1.f;
+	static _float fCha_GrayRatio = 1.f;
+	static _float fBackGround_GrayRatio = 1.f;
 
 	if (FAILED(m_pShader->SetUp_RawValue("g_fGrayRatio", &fGrayRatio, sizeof(_float))))
 		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_RawValue("g_fCha_GrayRatio", &fCha_GrayRatio, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_RawValue("g_fBackGround_GrayRatio", &fBackGround_GrayRatio, sizeof(_float))))
+		return E_FAIL;
 	if (FAILED(m_pShader->SetUp_RawValue("g_bBackLight", &m_bBakcLight, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_RawValue("g_bChaGrayScale", &m_bCha_grayScale, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShader->SetUp_RawValue("g_bBackGround_GrayScale", &m_bBackGround_GrayScale, sizeof(_bool))))
 		return E_FAIL;
 
 	if (m_bGrayScale)
@@ -2179,6 +2189,30 @@ HRESULT CRenderer::Render_Deferred()
 		fGrayRatio -= 0.03f;
 		if (fGrayRatio < 0.f)
 			fGrayRatio = 0.f;
+	}
+	/*if (m_bBackGround_GrayScale)
+	{
+		fGrayRatio += 0.005f;
+		if (fGrayRatio > 1.f)
+			fGrayRatio = 1.f;
+	}
+	else
+	{
+		fGrayRatio -= 0.005f;
+		if (fGrayRatio < 0.f)
+			fGrayRatio = 0.f;
+	}*/
+	if (m_bCha_grayScale)
+	{
+		fCha_GrayRatio += 0.005f;
+		if (fCha_GrayRatio > 1.f)
+			fCha_GrayRatio = 1.f;
+	}
+	else
+	{
+		fCha_GrayRatio -= 0.005f;
+		if (fCha_GrayRatio < 0.f)
+			fCha_GrayRatio = 0.f;
 	}
 
 	CPipeLine* pPipeLine = CPipeLine::GetInstance();
