@@ -26,6 +26,8 @@
 #include "Option.h"
 #include "Zenitsu_Awake_UI.h"
 #include "Akaza_Awake_UI.h"
+#include "Ending.h"
+#include "Battle_UI_Manager.h"
 
 #include "ColliderManager.h"
 #include "Fade.h"
@@ -158,6 +160,67 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
+
+	if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			// Ending UI 
+			CBattle_UI_Manager::GetInstance()->Set_Ending_UI_Num(1);
+
+			m_Ending_TimeAcc += (_float)dTimeDelta;
+
+			if (m_Ending_TimeAcc > 4.f) {
+				m_Ending_TimeAcc = 0.f;
+				CBattle_UI_Manager::GetInstance()->Set_Ending_UI_Num(2);
+				CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+				HRESULT hr = 0;
+
+				if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+				{
+					pGameInstance->Clear_Light();
+					hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+				}
+				else
+				{
+					pGameInstance->Clear_Light();
+					hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+				}
+
+				if (FAILED(hr)) {
+					Safe_Release(pGameInstance);
+					return;
+				}
+			}
+
+
+
+		}
+	}
+	else {
+
+		if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
+
+			CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
+
+			HRESULT hr = 0;
+
+			if (true == pGameInstance->Get_IsStage())
+			{
+
+				if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
+
+					hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
+				else
+					hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
+
+				pGameInstance->Clear_Light();
+
+			}
+		}
+	}
+
 
 	// Direction Á¶Àý
 	if (pGameInstance->Get_DIKeyDown(DIK_PGUP))
@@ -332,25 +395,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 		}
 	}
 
-	if (CFadeManager::GetInstance()->Get_Fade_Out_Done() == true) {
 
-		CFadeManager::GetInstance()->Set_Fade_Out_Done(false);
-
-		HRESULT hr = 0;
-
-		if (true == pGameInstance->Get_IsStage())
-		{
-
-			if (nullptr == pGameInstance->Get_LoadedStage(LEVEL_LOBBY))
-
-				hr = pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_LOBBY), false, false);
-			else
-				hr = pGameInstance->Swap_Level(LEVEL_LOBBY);
-
-			pGameInstance->Clear_Light();
-
-		}
-	}
 
 	m_dGrassAcc += dTimeDelta;
 
@@ -1516,7 +1561,17 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
+// Ending
+	CEnding::UIDESC UIDesc18;
+	ZeroMemory(&UIDesc18, sizeof UIDesc18);
 
+	UIDesc18.m_Type = 0;
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, TEXT("Layer_Player_UI"),
+		TEXT("Prototype_GameObject_Ending"), &UIDesc18))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
 
 
 

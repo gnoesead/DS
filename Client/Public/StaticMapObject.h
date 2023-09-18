@@ -55,7 +55,7 @@ private:
 
 	// ºÏ¼Ò¸®
 	_bool	m_bBookSound = { false };
-	
+	_bool	m_bKyoSound = { false };
 };
 
 END
