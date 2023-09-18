@@ -122,7 +122,9 @@ void CPlayer_Zenitsu::Tick(_double dTimeDelta)
 
 
 	//playerswap
-	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃ÷
+	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // 
+
+
 	{
 		Player_Change_Setting_Status(dTimeDelta);
 
