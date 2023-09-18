@@ -20,7 +20,7 @@ private:
 	virtual ~CPlayerManager() = default;
 	
 private: // 스탯관련 공유
-	_float	fHp = { 100.0f };
+	_float	fHp = { 200.0f };
 	_float	fMp = { 100.0f };
 	_int	iSpecial_Cnt = { 0 };
 	_float	fSpecial = { 0.0f };
@@ -36,6 +36,8 @@ public:
 		return vPlayerPos;
 	}
 	_bool	Get_Player_Death() { return m_isPlayer_Death; }
+
+
 
 	void	Set_Hp(_float hp) { fHp = hp; }
 	void	Set_Mp(_float mp) { fMp = mp; }
@@ -124,9 +126,14 @@ private:
 	_bool	m_isHit_WebShot = { false };
 	_bool	m_isKyogaiMap = { false };
 	_bool	m_isPlayer_Death = { false };
+
+	_bool	m_isHpMaxChange_300 = { false };
 public:
 	_bool	Get_Hit_WebShot() { return m_isHit_WebShot; }
 	void	Set_Hit_WebShot(_bool hit) { m_isHit_WebShot = hit; }
+
+	_bool	Get_HpMaxChange_300() { return m_isHpMaxChange_300; }
+	void	Set_HpMaxChange_300(_bool change) { m_isHpMaxChange_300 = change; }
 
 public:
 	virtual void Free() override;

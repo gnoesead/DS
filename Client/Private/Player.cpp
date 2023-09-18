@@ -67,7 +67,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);*/
 
 	//levelÆÇ¸í
-	m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+	//m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+
+	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	{
+		m_StatusDesc.fHp = 20.0f;
+		m_StatusDesc.fHp_Max = 20.0f;
+	}
+	
 
 	Safe_Release(pGameInstance);
 

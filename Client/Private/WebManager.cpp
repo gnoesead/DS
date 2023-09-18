@@ -95,8 +95,8 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_iTrigger_Index++;
 		m_isTrigger_Third = true;
 
-		//	m_isFirst_All = true;
-		//	m_dDelay_All = 0.0;
+		m_isFirst_All = true;
+		m_dDelay_All = 0.0;
 	}
 	else if (m_iTrigger_Index == 4 && PlayerPos.z >= 364.2f)
 	{
