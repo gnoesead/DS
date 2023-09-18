@@ -129,6 +129,16 @@ void CMainApp::Tick(_double dTimeDelta)
 		CFadeManager::GetInstance()->Set_Fade_OutIn(true, 2.4f);
 	}
 
+	if (m_pGameInstance->Get_DIKeyDown(DIK_UP)) {
+		_tchar szSoundFile[MAX_PATH] = TEXT("UI_Change.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.7f);
+	}
+
+	if (m_pGameInstance->Get_DIKeyDown(DIK_DOWN)) {
+		_tchar szSoundFile[MAX_PATH] = TEXT("UI_Change.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_CHANGE, 0.7f);
+	}
+
 	m_TimeAcc += dTimeDelta;
 
 

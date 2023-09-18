@@ -122,6 +122,20 @@ private:
 	_bool	m_isPlayerBack_Tanjiro = { false };
 	_double m_dDelay_PlayerBack_Tanjiro = { 0.0 };
 
+	
+
+	//자코 전투 직후,
+	_double m_dDelay_ZakoBattle_After = { 0.0 };
+	_bool	m_isFirst_ZakoBattle_After = { true };
+	_bool	m_isFirst_ZakoBattle_After_0 = { true };
+	_bool	m_isFirst_ZakoBattle_After_1 = { true };
+
+	_bool	m_isZakoBeforeBattle = { false };
+	_double m_dDelay_ZakoBattle_Before = { 0.0 };
+
+	_bool	m_isFirst_ZakoBattle_Before_0 = { true };
+	_bool	m_isFirst_ZakoBattle_Before_1 = { true };
+
 
 private: //사운드
 	_bool	m_isSound_Awaken = { false };

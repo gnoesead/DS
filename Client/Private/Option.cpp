@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Title_Manager.h"
 #include "OptionManager.h"
+#include "SoundMgr.h"
 
 
 COption::COption(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -319,6 +320,12 @@ void COption::Tick(_double dTimeDelta)
 
 	// 옵션 나가기
 	if (pGameInstance->Get_DIKeyDown(DIK_B)) {
+
+		if (COptionManager::GetInstance()->Get_Is_Option_On() == true) {
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Menu_Select.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+		}
 
 		COptionManager::GetInstance()->Set_Is_Option_On(false);
 		m_Is_Font_Render = false;
