@@ -4411,6 +4411,7 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 	if (m_bAnimFinish == false)
 	{
 		m_bAnimFinish = true;
+		m_dTimeAcc = 0.0;
 		m_eCurAnimIndex = ANIM_IDLE;
 		//m_eCurAnimIndex = ANIM_DEATH;
 	}
@@ -4629,7 +4630,7 @@ void CBoss_Akaza::Train_Dialog_Update(_double dTimeDelta)
 	m_dDialogAccTime += dTimeDelta;
 	if (Event_Time(dTimeDelta, 0.5, m_dDialogAccTime))
 	{
-		Set_CharacterDialog(2.f, TEXT("[Ä«¸¶µµ ÅºÁö·Î]"), TEXT("¹¹.. ¹¹Áö..?!! ÀÌ ±âºÐ ³ª»Û ±â¿îÀº?"));
+		Set_CharacterDialog(4.f, TEXT("[Ä«¸¶µµ ÅºÁö·Î]"), TEXT("¹¹.. ¹¹Áö..?!! ÀÌ ±âºÐ ³ª»Û ±â¿îÀº?"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Tangiro_Voice_Giun.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 	}

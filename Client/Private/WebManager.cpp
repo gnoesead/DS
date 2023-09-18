@@ -21,27 +21,27 @@ CWebManager::CWebManager()
 void CWebManager::Initialize()
 {
 	//공용 제어용
-	m_isFirst_All =  true;
-	m_dDelay_All =  0.0;
+	m_isFirst_All = true;
+	m_dDelay_All = 0.0;
 
 	//트리거 제어용
 	m_iTrigger_Index = 1;
 
-	m_isTrigger_First =  false;
-	m_dDelay_First =  0.0;
-	m_fLimit_First =  0.0f;
+	m_isTrigger_First = false;
+	m_dDelay_First = 0.0;
+	m_fLimit_First = 0.0f;
 
-	m_isTrigger_Second =  false;
-	m_dDelay_Second =  0.0;
+	m_isTrigger_Second = false;
+	m_dDelay_Second = 0.0;
 
-	m_isTrigger_Third =  false;
+	m_isTrigger_Third = false;
 	m_dDelay_Third = 0.0;
 
 	m_isTrigger_Akaza = false;
 	m_dDelay_Akaza = 0.0;
 	m_isFirst_Akaza = true;
 
-	
+
 
 	m_WebBallPos[0] = { 199.07f, 7.44f, 404.06f, 1.0f };
 	m_WebBallPos[1] = { 200.1f, 7.6f, 404.06f, 1.0f };
@@ -61,7 +61,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-	
+
 	if (pPlayer != nullptr)
 	{
 		m_pTransformCom = pPlayer->Get_TransformCom();
@@ -69,7 +69,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
-	
+
 	Safe_Release(pGameInstance);
 
 #pragma region TriggerSet
@@ -95,22 +95,10 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_iTrigger_Index++;
 		m_isTrigger_Third = true;
 
-	//	m_isFirst_All = true;
-	//	m_dDelay_All = 0.0;
-	//}
-	////아카자 만남
-	//else if (m_iTrigger_Index == 4 && PlayerPos.z >= 364.2f)
-	//{
-	//	m_iTrigger_Index++;
-	//	m_isTrigger_Akaza = true;
-
-	//	m_isFirst_All = true;
-	//	m_dDelay_All = 0.0;
-	//}
-
-		//아카자 만남
-	m_iTrigger_Index = 4;
-	if (m_iTrigger_Index == 4 && PlayerPos.z >= 364.2f)
+		//	m_isFirst_All = true;
+		//	m_dDelay_All = 0.0;
+	}
+	else if (m_iTrigger_Index == 4 && PlayerPos.z >= 364.2f)
 	{
 		m_iTrigger_Index++;
 		m_isTrigger_Akaza = true;
@@ -118,6 +106,9 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_isFirst_All = true;
 		m_dDelay_All = 0.0;
 	}
+
+
+
 #pragma endregion
 
 	/*
@@ -127,7 +118,7 @@ void CWebManager::Tick(_double dTimeDelta)
 		Shoot_WebBall();
 		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
 		Shoot_WideWeb(PlayerPos, Dir);
-		
+
 		Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
 	*/
 
@@ -259,7 +250,7 @@ void CWebManager::Tick(_double dTimeDelta)
 
 		}
 
-		
+
 	}
 #pragma endregion
 
@@ -302,7 +293,7 @@ void CWebManager::Shoot_WebBall()
 
 	_int	iRandomTextures = Random::Generate_Int(0, 3);
 	_int	iIndexTextures = 28;
-	if(iRandomTextures == 0)
+	if (iRandomTextures == 0)
 		iIndexTextures = 28;
 	if (iRandomTextures == 1)
 		iIndexTextures = 22;
@@ -337,7 +328,7 @@ void CWebManager::Shoot_JikWeb()
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 	// index, Pos, Scale, Dir, speed, turn
-	Create_WebShot(32, _float4{Random::Generate_Float(199.07f, 210.00f), 8.5f, PlayerPos.z + 20.0f, 1.0f}, _float3{ 25.0f, 3.5f, 3.5f }, ShotDir, 1.0f, Turn);
+	Create_WebShot(32, _float4{ Random::Generate_Float(199.07f, 210.00f), 8.5f, PlayerPos.z + 20.0f, 1.0f }, _float3{ 25.0f, 3.5f, 3.5f }, ShotDir, 1.0f, Turn);
 }
 
 void CWebManager::Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn)
