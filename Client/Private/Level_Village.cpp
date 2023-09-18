@@ -185,11 +185,11 @@ void CLevel_Village::Tick(_double dTimeDelta)
 
 
 
-    if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
+    /*if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD1))
     {
         COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
         CFadeManager::GetInstance()->Set_Fade_Out(true);
-    }
+    }*/
 
     if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
 
@@ -2085,7 +2085,7 @@ HRESULT CLevel_Village::Ready_Layer_Player_UI(const _tchar* pLayerTag)
     CTiming_UI::UIDESC UIDesc7;
 
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 8; i++) {
         ZeroMemory(&UIDesc7, sizeof UIDesc7);
 
         UIDesc7.m_Type = i;

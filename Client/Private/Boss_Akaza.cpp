@@ -21,6 +21,8 @@
 #include "AlertMesh_Akaza.h"
 #include "HandAura_Akaza.h"
 #include "Fade_Manager.h"
+#include "OptionManager.h"
+
 
 CBoss_Akaza::CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
@@ -1433,6 +1435,18 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				}
 				else {
 					CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
+					_uint iRanNum = Random::Generate_Int(0, 1);
+					if (iRanNum == 0) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect5", m_pTransformCom, &EffectWorldDesc);
+					}
+					else if (iRanNum == 1) {
+						EffectWorldDesc.fScale = 1.4f;
+						CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
+					}
+
+					EffectWorldDesc.fScale = 1.f;
 					EffectWorldDesc.vPosition.y += 0.3f;
 
 					int n = Random::Generate_Int(0, 2);
@@ -1484,14 +1498,12 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1518,14 +1530,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1559,14 +1568,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 0.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			pPlayer->Set_Hit_Success(true);
@@ -1594,14 +1600,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else {
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 				EffectWorldDesc.fScale = 1.f;
 				EffectWorldDesc.vPosition.y += 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-				EffectWorldDesc.vPosition.y -= 2.5f;
-				EffectWorldDesc.vPosition.z -= 1.f;
-
-				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			
@@ -1638,14 +1641,11 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 
 			CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
+
 			EffectWorldDesc.fScale = 1.f;
 			EffectWorldDesc.vPosition.y += 0.3f;
 			CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
-			EffectWorldDesc.vPosition.y -= 2.5f;
-			EffectWorldDesc.vPosition.z -= 1.f;
-
-			CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 
 
 		}
@@ -4052,6 +4052,7 @@ void CBoss_Akaza::Update_Train_JumpStomp(_double dTimeDelta)
 			}
 			if (m_pModelCom->Get_AnimFinish(ANIM_SKILL_DOWNEND))
 			{
+				
 				m_eCurAnimIndex = ANIM_IDLE;
 				//m_bTrain_Stage = false;
 				//Trigger_Interact();
@@ -4447,6 +4448,13 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 				Create_GroundSmoke(CGroundSmoke::SMOKE_DEAD_NORMAL);
 				m_dDeadSmokeAccTime = 0.0;
 			}
+		}
+
+
+		if (m_fDeadTime > 8.0f)
+		{
+			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+			CFadeManager::GetInstance()->Set_Fade_Out(true);
 		}
 
 		if (m_fDeadTime > 20.0f) // Á×´Â ½Ã°£ Á¶Àý ÇØµµ µÊ

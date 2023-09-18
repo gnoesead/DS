@@ -72,7 +72,13 @@ private:
 	_bool                   m_Select = { 0 };
 
 	vector<wstring>         m_szTitle = { };
-	vector<wstring>         m_szContent = { };
+	vector<wstring>         m_szContent_0 = { };
+	vector<wstring>         m_szContent_1 = { };
+	vector<wstring>         m_szContent_2 = { };
+	vector<wstring>         m_szContent_3 = { };
+	vector<wstring>         m_szContent_4 = { };
+
+
 
 	_uint                   m_Loading_Index = { 0 };
 

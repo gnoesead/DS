@@ -12,6 +12,8 @@
 #include "Player.h"
 #include "PlayerManager.h"
 
+#include "WebManager.h"
+
 CMonster_Spider::CMonster_Spider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster(pDevice, pContext)
 {
@@ -72,8 +74,42 @@ void CMonster_Spider::Tick(_double dTimeDelta)
 		First_Initiate();
 	}
 
-	Trigger();
-	Animation_Control(dTimeDelta);
+	if (CWebManager::GetInstance()->Get_Trigger_Akaza())
+	{
+		m_dDelay_Akaza += dTimeDelta;
+		
+	}
+
+	if(m_dDelay_Akaza > 4.7f)
+	{
+		if (m_isFirst_Akaza)
+		{
+			m_isFirst_Akaza = false;
+
+			m_pModelCom->Set_Animation(ANIM_BLOW);
+			Jumping(0.46f, 0.042f);
+		}
+		_float4 Dir;
+		XMStoreFloat4(&Dir, -Calculate_Dir_From_Pos_Vec(_float4{ 204.9f, 6.74f, 380.f, 1.f }));
+		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, Dir, true);
+		Go_Dir_Constant(dTimeDelta, 17, 1.5f, Dir, true);
+		Go_Dir_Constant(dTimeDelta, 18, 1.5f, Dir, true);
+
+		m_pTransformCom->Set_Look(Calculate_Dir_From_Pos(_float4{ 204.9f, 6.74f, 380.f, 1.f }));
+		
+		m_fLand_Y = 0.0f;
+
+		if (m_dDelay_Akaza > 15.0f)
+		{
+			m_isDead = true;
+		}
+	}
+	else
+	{
+
+		Trigger();
+		Animation_Control(dTimeDelta);
+	}
 
 	//애니메이션 처리
 	m_pModelCom->Play_Animation(dTimeDelta);
@@ -374,7 +410,7 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 			Go_Straight_Constant(dTimeDelta, ANIM_RUN, 0.55f);
 		}
 	}
-
+	Ground_Animation_Play(17, 18);
 
 	//플레이어 뒤일때,
 	_float4 PlayerPos;
@@ -398,6 +434,11 @@ void CMonster_Spider::Animation_Control_Idle(_double dTimeDelta)
 			m_eCurState = STATE_ATTACK;
 			m_isFirst_Attack = true;
 		}
+	}
+
+	if (m_pModelCom->Get_iCurrentAnimIndex() == 19)
+	{
+		m_eCurState = STATE_DOWN;
 	}
 }
 
@@ -519,7 +560,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 			if (m_isSpiderFirst_Dead)
 			{
 				m_isSpiderFirst_Dead = false;
-				Jumping(0.45f, 0.04f);
+				Jumping(0.60f, 0.045f);
 			}
 		}
 		else
@@ -541,9 +582,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		}
 
 		Play_HitEffect(_float3(0.f, -0.5f , 0.f));
-		CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
-		EffectWorldDesc.vPosition.y -= 0.5f;
-		CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_SMALL, 2.3f, 0.17f, m_Hit_AtkDir);
 
@@ -559,14 +598,14 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		if (m_StatusDesc.fHp <= 0.0f)
 		{
 			m_pModelCom->Set_Animation(16);
-			Jumping(0.45f, 0.04f);
+			Jumping(0.60f, 0.045f);
 
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
 		else
 		{
 			m_pModelCom->Set_Animation(16);
-			Jumping(0.45f, 0.04f);
+			Jumping(0.65f, 0.045f);
 
 			m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 		}
@@ -576,7 +615,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 
 		//pGameInstance->Time_Slow(0.3, 0.4);
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.10f, m_Hit_AtkDir);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.07f, m_Hit_AtkDir);
 
 
 
@@ -593,7 +632,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		m_isUpperHit = true;
 
 		m_pModelCom->Set_Animation(16);
-		Jumping(1.7f, 0.04f); // 1.65
+		Jumping(1.3f, 0.04f); // 1.65
 
 		m_isSpiderBlow = true;
 
@@ -616,7 +655,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 		m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage() * 2.0f;
 
 		m_pModelCom->Set_Animation(16);
-		Jumping(0.45f, 0.04f);
+		Jumping(0.6f, 0.045f);
 
 		m_Hit_AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
 
@@ -628,7 +667,7 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 	}
 
 	_float4 Dir_To_Monster;
-	XMStoreFloat4(&Dir_To_Monster, -Calculate_Dir());
+	XMStoreFloat4(&Dir_To_Monster, -Calculate_Dir_FixY());
 
 
 	Ground_Animation_Play(17, 18);
@@ -641,10 +680,10 @@ void CMonster_Spider::Animation_Control_Hit(_double dTimeDelta)
 	}
 	else
 	{
-		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.5f, Dir_To_Monster, true);
+		Go_Dir_Constant(dTimeDelta, ANIM_BLOW, 1.8f, Dir_To_Monster, true);
 		//m_pModelCom->Set_EarlyEnd(ANIM_BLOW, true);
-		Go_Dir_Constant(dTimeDelta, 17, 1.5f, Dir_To_Monster, true);
-		Go_Dir_Deceleration(dTimeDelta, 18, 1.5f, 0.15f, Dir_To_Monster, true);
+		Go_Dir_Constant(dTimeDelta, 17, 1.8f, Dir_To_Monster, true);
+		Go_Dir_Deceleration(dTimeDelta, 18, 1.8f, 0.15f, Dir_To_Monster, true);
 	}
 
 	//공중에 떠있을때,
@@ -815,21 +854,28 @@ void CMonster_Spider::RePos()
 	_float4	PlayerPos;
 	XMStoreFloat4(&PlayerPos, Calculate_PlayerPos());
 
-	//left
-	if (0 == (rand() % 2))
+	if (PlayerPos.z < 363.2f) //360? 364.2
 	{
-		PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
+		//left
+		if (0 == (rand() % 2))
+		{
+			PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
 
-		_float4 MyNewPos = { 201.3f, 6.9f, PlayerPos.z, 1.f };
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+			_float4 MyNewPos = { 201.3f, 6.9f, PlayerPos.z, 1.f };
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+		}
+		//right
+		else
+		{
+			PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
+
+			_float4 MyNewPos = { 209.2f, 6.9f, PlayerPos.z, 1.f };
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+		}
 	}
-	//right
 	else
 	{
-		PlayerPos.z += Random::Generate_Float(5.0f, 20.0f);
-
-		_float4 MyNewPos = { 209.2f, 6.9f, PlayerPos.z, 1.f };
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat4(&MyNewPos));
+		m_isDead = true;
 	}
 }
 
