@@ -172,11 +172,19 @@ void CPlayer_Battle_Ult_Effect::LateTick(_double TimeDelta)
 
 	if (m_Pre_Ult_Stack != m_Ult_Stack) {
 
-		if (m_Pre_Ult_Stack < m_Ult_Stack)
+		if (m_Pre_Ult_Stack < m_Ult_Stack) {
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Gauge_Up.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_GAUGE, 0.4f);
 			m_Is_Stack_Up = true;
+		}
+			
 		
-		if(m_Pre_Ult_Stack > m_Ult_Stack)
+		if (m_Pre_Ult_Stack > m_Ult_Stack) {
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Gauge_Use.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_GAUGE, 0.4f);
 			m_Is_Stack_Down = true;
+		}
+			
 		
 
 		m_Pre_Ult_Stack = m_Ult_Stack;

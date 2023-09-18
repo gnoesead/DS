@@ -121,6 +121,12 @@ void CSoundMgr::PlaySound(TCHAR * pSoundKey, CHANNELID eID, _float _vol)
 	FMOD_System_Update(m_pSystem);
 }
 
+void CSoundMgr::Play_Sound_Channel(TCHAR* pSoundKey, CHANNELID eID, _float _vol)
+{
+	CSoundMgr::Get_Instance()->StopSound(eID);
+	CSoundMgr::Get_Instance()->PlaySound(pSoundKey, eID, _vol);
+}
+
 void CSoundMgr::PlayBGM(TCHAR * pSoundKey, _float fVolume)
 {
 	map<TCHAR*, FMOD_SOUND*>::iterator iter;
