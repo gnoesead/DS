@@ -79,6 +79,9 @@ void CLevel_Lobby::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 	{
+		_tchar szSoundFile[MAX_PATH] = TEXT("UI_Select.ogg");
+		CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+
 		CFadeManager::GetInstance()->Set_Fade_Out(true);
 	}
 

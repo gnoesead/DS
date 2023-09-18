@@ -184,6 +184,9 @@ void CPause::LateTick(_double TimeDelta)
 	if (m_Cur_Num == 0) {
 		if (pGameInstance->Get_DIKeyDown(DIK_RETURN)) {
 
+			_tchar szSoundFile[MAX_PATH] = TEXT("UI_Menu_Select.ogg");
+			CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+
 			if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 
 				if (m_Alpha == 1.f) {
@@ -219,6 +222,9 @@ void CPause::LateTick(_double TimeDelta)
 		if (m_Is_Selected) {
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN)) {
 
+				_tchar szSoundFile[MAX_PATH] = TEXT("UI_Menu_Select.ogg");
+				CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+
 				if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 					COptionManager::GetInstance()->Set_Is_Option_On(true);
 					COptionManager::GetInstance()->Set_Is_Reset(false);
@@ -241,6 +247,9 @@ void CPause::LateTick(_double TimeDelta)
 
 			if (pGameInstance->Get_DIKeyDown(DIK_RETURN))
 			{
+				_tchar szSoundFile[MAX_PATH] = TEXT("UI_Menu_Select.ogg");
+				CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
+
 				if (COptionManager::GetInstance()->Get_Is_Option_On() == false) {
 					COptionManager::GetInstance()->Set_Is_Go_Lobby(true);
 					CFadeManager::GetInstance()->Set_Fade_Out(true);

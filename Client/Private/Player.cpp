@@ -354,7 +354,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -402,7 +402,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -447,7 +447,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			
 
@@ -496,7 +496,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -542,7 +542,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -587,7 +587,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 
@@ -1554,13 +1554,15 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A])
 		{
 			vInteractionPos = { 67.f , 3.f , 19.9f , 1.f };
-
+					
 			if (NAVI_HOUSE_0_0 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F4))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
-
-
+			
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
 			}
 			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1568,6 +1570,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1A] = true;
 				m_dChangePositionAccTime = 0.0;
 			}*/
+		
 		}
 
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_HOUSE_1B])
@@ -1605,7 +1608,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 		if (!m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A])
 		{
 			vInteractionPos = { 600.f, 4.5f, 317.f, 1.f };
-
+			
 			if (NAVI_VILLAGE_MAINROAD1 == m_eCurNavi && pGameInstance->Get_DIKeyDown(DIK_F3))
 			{
 				m_bChangePositionTrigger[CHANGE_POSITON_VILLAGE_1A] = true;
@@ -1613,6 +1616,9 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
 
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1621,6 +1627,10 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_dChangePositionAccTime = 0.0;
 
 				CMonsterManager::GetInstance()->Set_BattleOn_Swamp(true);
+
+				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
 			}
 
 		}
@@ -1657,8 +1667,9 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 	_vector vNextPos = { 0.f, 0.f , 0.f , 1.f };
 	_float4 PlayerDir = { 0.0f, 0.0f , 1.0f, 0.0f };
-	_tchar szBGM1[MAX_PATH] = TEXT("");
-	_tchar szBGM2[MAX_PATH] = TEXT("");
+	_tchar szBGM_BattleIn[MAX_PATH] = TEXT("");
+	_tchar szBGM_ZakoEnd[MAX_PATH] = TEXT("");
+	_tchar szBGM_SwampEnd[MAX_PATH] = TEXT("");
 
 	for (_uint i = 0; i < CHANGE_POSITON_END; ++i)
 	{
@@ -1673,6 +1684,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.3f, 0.0f, -1.0f, 0.0f }));
 				m_pTransformCom->Set_Look(PlayerDir);
 				m_pModelCom->Set_Animation(82); // battle_idle
+
+
 				break;
 			case CHANGE_POSITON_HOUSE_1B: // 자코끝
 				vNextPos = XMVectorSet(67.f, 0.f, 19.9f, 1.f);
@@ -1683,8 +1696,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
-				wsprintf(szBGM1, TEXT("BGM_House.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM1, 0.6f);
+				wsprintf(szBGM_ZakoEnd, TEXT("BGM_House.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_ZakoEnd, 0.6f);
 
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // 쿄우가이
@@ -1702,6 +1715,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				XMStoreFloat4(&PlayerDir, XMVector4Normalize(_vector{ 0.0f, 0.0f, -1.0f, 0.0f }));
 				m_pTransformCom->Set_Look(PlayerDir);
 				m_pModelCom->Set_Animation(82); // battle_idle
+
 				break;
 			case CHANGE_POSITON_VILLAGE_1B://스왐프 끝
 				vNextPos = XMVectorSet(600.f, 4.5f, 317.f, 1.f);
@@ -1712,8 +1726,8 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 				m_pModelCom->Set_Animation(0); // Adv_Idle
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
-				wsprintf(szBGM2, TEXT("BGM_Village.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM2, 0.6f);
+				wsprintf(szBGM_SwampEnd, TEXT("BGM_Village.mp3"));
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_SwampEnd, 0.6f);
 
 				break;
 			default:
