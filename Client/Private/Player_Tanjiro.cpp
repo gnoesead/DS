@@ -838,6 +838,15 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super1_Wind2", m_pTransformCom, &EffectWorldDesc);
 
 				Camera_Shake(0.1, 30);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Skill_Normal.mp3");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.8f);
+
+				_tchar szSoundFile1[MAX_PATH] = TEXT("water_01.ogg");
+				Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.7f);
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_04.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
 			}
 			else if (3 == m_iEvent_Index)
 			{
@@ -1319,6 +1328,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				Camera_Shake(0.1);
 				m_pRendererCom->Set_RadialBlur();
 
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_hashira_terop_fire.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::TANJIRO_AWAKE, 0.6f);
+
 			}
 			else if (1 == m_iEvent_Index)	// 0.3
 			{
@@ -1341,6 +1353,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				EffectWorldDesc2.vPosition.x -= 0.3f;
 				EffectWorldDesc2.vPosition.z -= 0.3f;
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Awake_Cutscene_Sword", m_pTransformCom, &EffectWorldDesc2);
+			
+				_tchar szSoundFile[MAX_PATH] = TEXT("st_open_eyes.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::TANJIRO_AWAKE, 0.4f);
 			}
 
 			if (1 == m_iEvent_Index)
@@ -1353,6 +1368,12 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_GaeBang_Particle", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_GaeBang_Particle", m_pTransformCom);
+
+				_tchar szSoundFile[MAX_PATH] = TEXT("awk_eff_water_1.ogg");
+				Play_Sound_Channel(szSoundFile, CSoundMgr::TANJIRO_AWAKE, 0.8f);
+
+				_tchar szSoundFile2[MAX_PATH] = TEXT("cut_cutin_01.ogg");
+				Play_Sound_Channel(szSoundFile2, CSoundMgr::TANJIRO_AWAKE_2, 0.4f);
 			}
 		}
 
@@ -2161,15 +2182,6 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Skill(_double dTimeDelta)
 		Jumping(2.6f * m_fScaleChange, 0.18f * m_fScaleChange);
 
 		Use_Mp_Skill();
-
-		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Skill_Normal.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.8f);
-
-		_tchar szSoundFile1[MAX_PATH] = TEXT("water_01.ogg");
-		Play_Sound_Channel(szSoundFile1, CSoundMgr::SKILL_0, 0.7f);
-
-		_tchar szSoundFile2[MAX_PATH] = TEXT("hit_sword_04.ogg");
-		Play_Sound_Channel(szSoundFile2, CSoundMgr::SKILL_1, 0.4f);
 	}
 
 	Go_Straight_Deceleration(dTimeDelta, ANIM_ATK_SKILL_NORMAL, 2.0f * m_fScaleChange, 0.07f * m_fScaleChange);
