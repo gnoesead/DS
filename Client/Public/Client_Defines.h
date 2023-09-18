@@ -20,3 +20,6 @@ extern bool	g_bSmellReset;
 #include <io.h>
 
 using namespace Client;
+
+#define BGM_Value_0	0.7f
+#define BGM_Value_1	0.8f

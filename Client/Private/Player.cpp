@@ -1567,7 +1567,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1629,7 +1629,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1641,7 +1641,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 
 		}
@@ -1708,7 +1708,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				wsprintf(szBGM_ZakoEnd, TEXT("BGM_House.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_ZakoEnd, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_ZakoEnd, BGM_Value_1);
 
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // Äì¿ì°¡ÀÌ
@@ -1738,7 +1738,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				wsprintf(szBGM_SwampEnd, TEXT("BGM_Village.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_SwampEnd, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_SwampEnd, BGM_Value_1);
 
 				break;
 			default:

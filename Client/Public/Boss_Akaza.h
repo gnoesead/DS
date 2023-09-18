@@ -310,6 +310,7 @@ private:
 	void Train_Dialog_Update(_double dTimeDelta);
 	void Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc);
 	void Step_Sound(_double dSound);
+	void Play_Sound_Dmg(_int iType, _float vol);
 
 private: /* Calculate */
 	void	Land_Anim_Play(ANIM CurAnim, ANIM LandAnim);

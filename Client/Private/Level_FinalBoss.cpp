@@ -136,7 +136,7 @@ HRESULT CLevel_FinalBoss::Initialize()
 
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_FinalBoss_0.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
 	return S_OK;
 }
