@@ -2412,7 +2412,7 @@ void CMonster_Swamp::Animation_Control_Down(_double dTimeDelta)
 	if (iCurAnim == ANIM_DOWN_IDLE || iCurAnim == ANIM_DEATH_IDLE)
 	{
 		m_dDelay_Down += dTimeDelta;
-		if (m_dDelay_Down > 1.7f)
+		if (m_dDelay_Down > 0.5f)
 		{
 			m_dDelay_Down = 0.0;
 

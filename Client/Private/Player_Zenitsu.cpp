@@ -2962,7 +2962,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Thyaa.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Small == 2)
 		{
@@ -2976,7 +2976,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Tehh.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Small == 4)
 		{
@@ -2990,7 +2990,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Sehht.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Small == 6)
 		{
@@ -3004,7 +3004,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Small = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Small_Hot.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 	}
 	//medium
@@ -3022,7 +3022,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Heaaaat.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Medium == 2)
 		{
@@ -3036,7 +3036,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_heeut.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Medium == 4)
 		{
@@ -3050,7 +3050,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Medium_Heyyh.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 	}
 	//big
@@ -3068,7 +3068,7 @@ void CPlayer_Zenitsu::Player_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Big++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Shout_Big_Heuuuh.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Big == 2)
 		{
@@ -3097,7 +3097,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_1.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 2)
 		{
@@ -3111,7 +3111,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_3.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 4)
 		{
@@ -3125,7 +3125,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_5.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 6)
 		{
@@ -3139,7 +3139,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Small_7.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 8)
 		{
@@ -3164,7 +3164,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Medium_1.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Medium == 2)
 		{
@@ -3189,7 +3189,7 @@ void CPlayer_Zenitsu::Player_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Big = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Zenitsu_Dmg_Big_1.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 	}
 }

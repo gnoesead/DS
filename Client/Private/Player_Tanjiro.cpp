@@ -166,8 +166,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			{
 				CBattle_UI_Manager::GetInstance()->Set_Timing_Success(false);
 
-				//m_isFirst_SwampUi = true;
-				m_isFirst_SwampUi = true;
 				Jumping(2.5f, 0.08f);
 				m_pModelCom->Set_Animation(ANIM_BATTLE_JUMP);
 				m_isSwamp_Escape = true;
@@ -194,8 +192,6 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 			{
 				CBattle_UI_Manager::GetInstance()->Set_Timing_Failed(false);
 
-				//m_isFirst_SwampUi = true;
-				m_isFirst_SwampUi = true;
 				Jumping(2.5f, 0.08f);
 				m_pModelCom->Set_Animation(ANIM_FALL);
 				m_isSwamp_Escape = true;
@@ -1654,9 +1650,15 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 	if (m_ePlayerState == PLAYER_BATTLE)
 	{
 		//»ç¸Á½Ã
-		if (m_StatusDesc.fHp <= 0.0f && m_isPlayerTanjiroDead == false)
+		if (m_StatusDesc.fHp <= 0.0f && m_isPlayerTanjiroDead == false )
 		{
-			m_isPlayerTanjiroDead = true;
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if(pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				m_isPlayerTanjiroDead = true;
+
+			Safe_Release(pGameInstance);
 		}
 
 		if (m_isPlayerTanjiroDead)
@@ -3189,7 +3191,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 		}
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.85f);
 
 	}
 
@@ -3249,7 +3251,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 				Jumping(2.15f, 0.087f);
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.85f);
 		}
 
 		m_dDelay_BoxJump += dTimeDelta;
@@ -3283,7 +3285,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Act(_double dTimeDelta)
 				Jumping(2.45f, 0.087f);
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Hue.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.6f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, 0.85f);
 		}
 
 	}
@@ -3786,7 +3788,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Small_Kya.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Small == 2)
 		{
@@ -3804,7 +3806,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Medium_Thiiiaaa.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Medium == 1)
 		{
@@ -3818,7 +3820,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Medium_Tiiiaa.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Medium == 3)
 		{
@@ -3832,7 +3834,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Medium = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Medium_Urya.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 	}
 	//big
@@ -3850,7 +3852,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Big++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Big_Seiya.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Atk_Big == 2)
 		{
@@ -3864,7 +3866,7 @@ void CPlayer_Tanjiro::Play_Sound_Atk(_int iType, _float vol)
 			m_iSound_Atk_Big = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Shout_Big_Yosha.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 
 	}
@@ -3887,7 +3889,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Small_1.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 2)
 		{
@@ -3901,7 +3903,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Small_3.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 4)
 		{
@@ -3915,7 +3917,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Small_6.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 6)
 		{
@@ -3929,7 +3931,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Small++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Small_7.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Small == 8)
 		{
@@ -3947,7 +3949,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Medium++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Medium_0.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Medium == 1)
 		{
@@ -3961,7 +3963,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Medium = 0;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Medium_2.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 	}
 	// Big
@@ -3979,7 +3981,7 @@ void CPlayer_Tanjiro::Play_Sound_Dmg(_int iType, _float vol)
 			m_iSound_Dmg_Big++;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Dmg_Big_1.mp3");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE, vol);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_VOICE_SUB, vol);
 		}
 		else if (m_iSound_Dmg_Big == 2)
 		{
