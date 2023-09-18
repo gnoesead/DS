@@ -165,7 +165,7 @@ void CAtkCollider::LateTick(_double dTimeDelta)
 	else
 	{
 		if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
-		Reset_Dead();
+			Reset_Dead();
 	}
 
 	Safe_Release(pGameInstance);
@@ -649,6 +649,22 @@ void CAtkCollider::Setting_Second_Gimmick_Bullet()
 
 void CAtkCollider::Setting_Third_Gimmick_Bullet()
 {
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vCenterPos = { 150.6f, 0.f, 57.4f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCenterPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 6.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vCenterPos);
+
+	m_vDir = vCenterPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
 }
 
 void CAtkCollider::Setting_Fourth_Gimmick_Bullet()
@@ -664,7 +680,7 @@ void CAtkCollider::Level_House_Dead(_double dTimeDelta)
 			Check_OutLine();
 		}
 	}
-	
+
 
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 		Reset_Dead();
@@ -680,7 +696,7 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGame
 		_float vPosY = XMVectorGetY(vPos);
 		_float vPosZ = XMVectorGetZ(vPos);
 
-		if ( (157.f < vPosX) || (vPosX < 100.f) || (157.f < vPosZ) || (vPosZ < 100.f) || (vPosY < 0.f))
+		if ((157.f < vPosX) || (vPosX < 100.f) || (157.f < vPosZ) || (vPosZ < 100.f) || (vPosY < 0.f))
 		{
 			if (vPosY < 0.1f)
 			{
@@ -690,6 +706,30 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGame
 				EffectDesc.fScale = 0.5f;
 
 				CEffectPlayer::Get_Instance()->Play("Akaza_Stomp_Small", m_pTransformCom, &EffectDesc);
+
+
+				CGameInstance* pGameInstance = CGameInstance::GetInstance();
+				Safe_AddRef(pGameInstance);
+				_uint iCurIdx = pGameInstance->Get_CurLevelIdx();
+
+				CEffectW::EFFECTWDESC EffectWDesc;
+				EffectWDesc.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+				EffectWDesc.eEffectWType = CEffectW_Manager::EFFECT_STONEPARTICLE;
+				EffectWDesc.iNumX = 2; EffectWDesc.iNumY = 2;
+
+				EffectWDesc.vStartPosX = { -0.5f,0.5f }; EffectWDesc.vStartPosY = { -0.00f,0.7f }; EffectWDesc.vStartPosZ = { -0.1f,0.1f };
+				EffectWDesc.vStartSizeX = { 0.02f , 0.20f }; EffectWDesc.vStartSizeY = { 0.05f , 0.20f };
+				EffectWDesc.vSpeedX = { -2.5f , 2.5f }; EffectWDesc.vSpeedY = { 1.f , 10.f }; EffectWDesc.vSpeedZ = { -2.5f , 2.5f };
+				EffectWDesc.vSizeSpeedX = { 0.f , 0.f }; EffectWDesc.vSizeSpeedY = { 0.f , 0.f };
+				EffectWDesc.fGravity = 15.0f;
+				EffectWDesc.vColor = { 0.1f , 0.2f };
+
+				for (_uint i = 0; i < 30; ++i)
+					CEffectW_Manager::Get_Instance()->Play(CEffectW_Manager::EFFECTW_TYPE(EffectWDesc.eEffectWType), &EffectWDesc);
+
+
+				Safe_Release(pGameInstance);
+
 
 				Create_GroundSmoke(CGroundSmoke::SMOKE_JENITSU_HIKI);
 				Create_GroundSmoke(CGroundSmoke::SMOKE_SMESHSPREAD);
@@ -724,7 +764,7 @@ void CAtkCollider::Level_FinalBoss_Dead(_double dTimeDelta, CGameInstance* pGame
 			Reset_Dead();
 		}
 	}
-	
+
 	if (m_AtkCollDesc.dLifeTime < m_dTimeAcc)
 	{
 		//if (m_AtkCollDesc.bBullet == true && m_AtkCollDesc.eBulletType == CAtkCollider::TYPE_AKAZA_BULLET_EFFECT)
@@ -766,8 +806,8 @@ void CAtkCollider::Check_OutLine()
 				_float fPosX = XMVectorGetX(CPlayerManager::GetInstance()->Get_Player_Pos());
 
 				_bool bGimmick_RoomTrigger = (51.f <= fPosZ && fPosZ <= 63.f);
-				if(bGimmick_RoomTrigger == false)
-				Create_GroundSmoke(CGroundSmoke::SMOKE_BLADEDISAPPEAR, vPos);
+				if (bGimmick_RoomTrigger == false)
+					Create_GroundSmoke(CGroundSmoke::SMOKE_BLADEDISAPPEAR, vPos);
 
 				static _uint iIdx = 0;
 
@@ -793,7 +833,7 @@ void CAtkCollider::Check_OutLine()
 				++iIdx;
 				if (iIdx >= 3)
 					iIdx = 0;
-				
+
 				Safe_Release(pGameInstance);
 			}
 		}

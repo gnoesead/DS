@@ -118,11 +118,11 @@ HRESULT CLevel_FinalBoss::Initialize()
 		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
 		return E_FAIL;
 	}
-	
+
 	CFadeManager::GetInstance()->Set_Fade_In(true);
 	CFadeManager::GetInstance()->Set_Is_Battle(true);
 	CCameraManager::GetInstance()->Set_Is_Battle_LockFree(false);
-	
+
 	CFadeManager::GetInstance()->Set_Is_House_Monster_Encounter(false);
 	CFadeManager::GetInstance()->Set_Is_House_Boss_Encounter(false);
 
@@ -150,7 +150,7 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 
 
 	m_Battle_TimeAcc += (_float)dTimeDelta * m_Battle_TimeDir;
-	
+
 	if (m_Battle_TimeAcc > m_Battle_MaxTime) {
 		m_Battle_TimeAcc = 0.f;
 		m_Battle_TimeDir = 0.f;
@@ -396,28 +396,30 @@ void CLevel_FinalBoss::Tick(_double dTimeDelta)
 	}
 
 
-
-	m_dGrassAcc += dTimeDelta;
-
-	if (25.0 < m_dGrassAcc)
+	if (CPlayerManager::GetInstance()->Get_Player_Death() == false)
 	{
-		_float3 vPos = { 128.5f, 10.f, 128.5f };
-		_float3 vMinRange = { -20.f, -10.f,  -20.f };
-		_float3 vMaxRange = { 20.f, 10.f, 20.f };
-		_float3 vTPerD = { -0.2f, -0.5f, -0.2f };
-		_int3	vDirOption = { 1, 0, 1 };
-		// PoolTag, BufferTag, TextureTag, 
-		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
-		// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-		CParticleManager::GetInstance()->PlayParticle("FinalBoss_Grass",
-			TEXT("Prototype_Component_VIBuffer_500_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grass001C")
-			, vPos, 30.f, 0.3f, .5f, 0.5f, 1.5f, vMinRange, vMaxRange , -0.01f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_NONBLEND, 25.f, _int2(4, 4));
+		m_dGrassAcc += dTimeDelta;
 
-		m_dGrassAcc = 0.0;
+		if (25.0 < m_dGrassAcc)
+		{
+			_float3 vPos = { 128.5f, 10.f, 128.5f };
+			_float3 vMinRange = { -20.f, -10.f,  -20.f };
+			_float3 vMaxRange = { 20.f, 10.f, 20.f };
+			_float3 vTPerD = { -0.2f, -0.5f, -0.2f };
+			_int3	vDirOption = { 1, 0, 1 };
+			// PoolTag, BufferTag, TextureTag, 
+			// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
+			// Range, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
+			CParticleManager::GetInstance()->PlayParticle("FinalBoss_Grass",
+				TEXT("Prototype_Component_VIBuffer_500_Particle"), TEXT("Prototype_Component_Texture_T_e_cmn_Grass001C")
+				, vPos, 30.f, 0.3f, .5f, 0.5f, 1.5f, vMinRange, vMaxRange, -0.01f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE_NONBLEND, 25.f, _int2(4, 4));
+
+			m_dGrassAcc = 0.0;
+		}
 	}
 
 	Safe_Release(pGameInstance);
-	
+
 }
 
 HRESULT CLevel_FinalBoss::Render()
@@ -434,13 +436,13 @@ HRESULT CLevel_FinalBoss::Ready_Lights()
 
 	CGameInstance* pGameInstance = CGameInstance::GetInstance();
 	Safe_AddRef(pGameInstance);
-	_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
+	/*_float4 vDiffuse = pGameInstance->Get_Light(0)->vLightDiffuse;
 
 	vDiffuse.x = 0.f;
 	vDiffuse.y = 0.f;
 	vDiffuse.z = 0.f;
 
-	pGameInstance->Set_Light(0, 1, vDiffuse);
+	pGameInstance->Set_Light(0, 1, vDiffuse);*/
 
 	_float fLightRange = pGameInstance->Get_Light(1)->fLightRange;
 
@@ -497,7 +499,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Camera(const _tchar* pLayerTag)
 	CameraDesc.TransformDesc.dSpeedPerSec = 10.0;
 	CameraDesc.TransformDesc.dRadianRotationPerSec = XMConvertToRadians(90.f);
 	CameraDesc.dSensitivity = 0.1;
-	
+
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Camera_Free"), &CameraDesc)))
@@ -519,19 +521,19 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player(const _tchar* pLayerTag)
 	CPlayer::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-    
-    CharacterDesc.WorldInfo.vPosition = _float4(120.6f, 0.f, 139.2f, 1.f);
 
-   
+	CharacterDesc.WorldInfo.vPosition = _float4(120.6f, 0.f, 139.2f, 1.f);
+
+
 	CharacterDesc.Land_Y = 0.f;
 	CharacterDesc.eCurNavi = CLandObject::NAVI_ACAZA;
 
-	
-	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, 
-	    TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
+
+	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
+		TEXT("Prototype_GameObject_Player_Tanjiro"), &CharacterDesc)))
 	{
-	    MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
-	    return E_FAIL;
+		MSG_BOX("Failed to Add_GameObject : CLevel_FinalBoss");
+		return E_FAIL;
 	}
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Player_Zenitsu"), &CharacterDesc)))
@@ -560,10 +562,10 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Boss(const _tchar* pLayerTag)
 	CBoss_Akaza::CHARACTERDESC CharacterDesc;
 	ZeroMemory(&CharacterDesc, sizeof CharacterDesc);
 
-   
-    CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
 
-   
+	CharacterDesc.WorldInfo.vPosition = _float4(140.f, 0.f, 120.f, 1.f);
+
+
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag,
 		TEXT("Prototype_GameObject_Monster_Akaza"), &CharacterDesc)))
 	{
@@ -1067,7 +1069,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 #pragma endregion
 
 
-// FIcon 
+	// FIcon 
 	CFIcon::UIDESC UIDesc8;
 	// 락온 아이콘
 	ZeroMemory(&UIDesc8, sizeof UIDesc8);
@@ -1096,7 +1098,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}*/
 
 
-// Fade
+	// Fade
 	CFade::UIDESC UIDesc11;
 	ZeroMemory(&UIDesc11, sizeof UIDesc11);
 
@@ -1141,7 +1143,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Battle_Signal
+	// Battle_Signal
 	CBattle_Signal::UIDESC UIDesc13;
 	ZeroMemory(&UIDesc13, sizeof UIDesc13);
 
@@ -1188,7 +1190,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
-// Pause
+	// Pause
 	CPause::UIDESC UIDesc14;
 	ZeroMemory(&UIDesc14, sizeof UIDesc14);
 
@@ -1241,7 +1243,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Option
+	// Option
 	COption::UIDESC UIDesc15;
 	ZeroMemory(&UIDesc15, sizeof UIDesc15);
 
@@ -1353,7 +1355,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 		UIDesc15.m_Type = 5;
 		UIDesc15.m_Line_Num = i;
-		
+
 		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
 			Safe_Release(pGameInstance);
 			return E_FAIL;
@@ -1363,7 +1365,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 
 		UIDesc15.m_Type = 6;
 		UIDesc15.m_Line_Num = i;
-	
+
 		if (FAILED(pGameInstance->Add_GameObject(LEVEL_FINALBOSS, pLayerTag, TEXT("Prototype_GameObject_Option"), &UIDesc15))) {
 			Safe_Release(pGameInstance);
 			return E_FAIL;
@@ -1514,8 +1516,8 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 		return E_FAIL;
 	}
 
- 
-// Zenitsu_Awake_UI
+
+	// Zenitsu_Awake_UI
 	Zenitsu_Awake_UI::UIDESC UIDesc16;
 	ZeroMemory(&UIDesc16, sizeof UIDesc16);
 
@@ -1548,7 +1550,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Zenitsu_Awake_UI
+	// Zenitsu_Awake_UI
 	Zenitsu_Awake_UI::UIDESC UIDesc17;
 	ZeroMemory(&UIDesc17, sizeof UIDesc17);
 
@@ -1561,7 +1563,7 @@ HRESULT CLevel_FinalBoss::Ready_Layer_Player_UI(const _tchar* pLayerTag)
 	}
 
 
-// Ending
+	// Ending
 	CEnding::UIDESC UIDesc18;
 	ZeroMemory(&UIDesc18, sizeof UIDesc18);
 
@@ -1733,10 +1735,10 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 
 	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
 
-    for (_uint i = 0; i < iSize; ++i)
-    {
-        CMapObject::MAPOBJECT_INFO tMapObject_Info;
-        ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
+	for (_uint i = 0; i < iSize; ++i)
+	{
+		CMapObject::MAPOBJECT_INFO tMapObject_Info;
+		ZeroMemory(&tMapObject_Info, sizeof tMapObject_Info);
 
 		ReadFile(hFile, &tMapObject_Info.vPos, sizeof(_float4), &dwByte, nullptr);
 		ReadFile(hFile, &tMapObject_Info.vRotAngle, sizeof(_float3), &dwByte, nullptr);
@@ -1760,37 +1762,37 @@ HRESULT CLevel_FinalBoss::Load_MapObject_Info(const _tchar* pPath, const _tchar*
 		ReadFile(hFile, &tMapObject_Info.iInteractionType, sizeof(_uint), &dwByte, nullptr);
 
 
-        ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
-        ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
+		ReadFile(hFile, &dwStrByte, sizeof(_ulong), &dwByte, nullptr);
+		ReadFile(hFile, &tMapObject_Info.szMeshName, dwStrByte, &dwByte, nullptr);
 
 		const _tchar* pMapObjectTypeTag = TEXT("");
 
-        switch (tMapObject_Info.iMapObjectType)
-        {
-        case CMapObject::MAPOBJECT_STATIC:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_TERRAIN:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_ROTATION:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        case CMapObject::MAPOBJECT_INSTANCE:
-            if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
-                TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
-                return E_FAIL;
-            break;
-        default:
-            break;
-        }
-    }
+		switch (tMapObject_Info.iMapObjectType)
+		{
+		case CMapObject::MAPOBJECT_STATIC:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_StaticMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_TERRAIN:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_TerrainMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_ROTATION:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_RotationMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		case CMapObject::MAPOBJECT_INSTANCE:
+			if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, TEXT("Layer_MapObject"),
+				TEXT("Prototype_GameObject_InstanceMapObject"), &tMapObject_Info)))
+				return E_FAIL;
+			break;
+		default:
+			break;
+		}
+	}
 
 	CloseHandle(hFile);
 
