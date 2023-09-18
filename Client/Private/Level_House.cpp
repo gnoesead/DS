@@ -170,7 +170,7 @@ HRESULT CLevel_House::Initialize()
 
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_House.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
 	m_Ending_TimeAcc = { 0.f };
 
@@ -296,7 +296,7 @@ void CLevel_House::Tick(_double dTimeDelta)
 	{
 		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Battle.mp3");
-		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
 		bChangeBattleBGM = true;
 	}
@@ -305,7 +305,7 @@ void CLevel_House::Tick(_double dTimeDelta)
 	{
 		CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 		_tchar szBgm[MAX_PATH] = TEXT("BGM_House_Boss_0.mp3");
-		CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+		CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
 		bChangeBossBGM = true;
 	}

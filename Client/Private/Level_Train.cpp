@@ -80,11 +80,11 @@ HRESULT CLevel_Train::Initialize()
         return E_FAIL;
     }
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Train");
 		return E_FAIL;
-	}*/
+	}
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -141,7 +141,7 @@ HRESULT CLevel_Train::Initialize()
 
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_Train.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
     return S_OK;
 }

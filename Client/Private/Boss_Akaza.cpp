@@ -404,15 +404,15 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				if (0 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_0", m_pTransformCom);
-
-					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					
+					_tchar szSoundFile[MAX_PATH] = TEXT("hit_nezuko_S_1.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 				}
 				else if (3 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_1", m_pTransformCom);
 
-					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("hit_nezuko_S_2.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT_2, 0.4f);
 				}
 				/*else if (4 == (m_iEvent_Index % 6))
@@ -1471,6 +1471,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 					CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 				}
+
+				if (!m_bSuperArmor)
+					Play_Sound_Dmg(0, 0.7f);
 			}
 			else
 			{
@@ -1514,6 +1517,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			}
 
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(1, 0.9f);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -1544,6 +1550,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 				CEffectPlayer::Get_Instance()->Play("Zen_Big_Hit", m_pTransformCom, &EffectWorldDesc);
 
 			}
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(0, 0.7f);
 
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
@@ -1583,6 +1592,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			}
 
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(2, 0.7f);
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 		}
@@ -1615,7 +1627,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			}
 
-
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(0, 0.9f);
+			
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -1642,6 +1656,9 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 			}
 			else
 				m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
+
+			if (!m_bSuperArmor)
+				Play_Sound_Dmg(2, 0.7f);
 
 			pPlayer->Set_Hit_Success(true);
 			pPlayer->Set_Hit_Success_Hekireki(true);
@@ -3696,7 +3713,7 @@ void CBoss_Akaza::Update_Heal(_double dTimeDelta)
 
 			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 			_tchar szBgm[MAX_PATH] = TEXT("BGM_FinalBoss_1.mp3");
-			CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+			CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 		}
 		m_bNoDmg = false;
 
@@ -4714,6 +4731,100 @@ void CBoss_Akaza::Step_Sound(_double dSound)
 		m_iSoundCount = 0;
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Shout_Hup.mp3");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_EFFECT, dSound);
+	}
+}
+
+void CBoss_Akaza::Play_Sound_Dmg(_int iType, _float vol)
+{
+	//small
+	if (iType == 0)
+	{
+		if (m_iSound_Dmg_Small == 0)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Eun.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+		else if (m_iSound_Dmg_Small == 1)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Gu.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT_2, vol);
+		}
+		else if (m_iSound_Dmg_Small == 2)
+		{
+			m_iSound_Dmg_Small++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Ke.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+		else if (m_iSound_Dmg_Small == 3)
+		{
+			//m_iSound_Dmg_Small++;
+			m_iSound_Dmg_Small = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Chae.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT_2, vol);
+		}
+	}
+	// Medium
+	else if (iType == 1)
+	{
+		if (m_iSound_Dmg_Medium == 0)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_DdNuhagh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 1)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Kahu.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT_2, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 2)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Meugh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 3)
+		{
+			m_iSound_Dmg_Medium++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Nuugh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT_2, vol);
+		}
+		else if (m_iSound_Dmg_Medium == 4)
+		{
+			m_iSound_Dmg_Medium = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Oeugh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+	}
+	// Big
+	else if (iType == 2)
+	{
+		if (m_iSound_Dmg_Big == 0)
+		{
+			m_iSound_Dmg_Big++;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Ggeugh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT, vol);
+		}
+		else if (m_iSound_Dmg_Big == 1)
+		{
+			m_iSound_Dmg_Big = 0;
+
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Dmg_Eugh.mp3");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_HIT_2, vol);
+		}
 	}
 }
 

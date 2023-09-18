@@ -1042,7 +1042,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0ÃÊ
 			{
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1050,7 +1050,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0ÃÊ
 			{
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1070,7 +1070,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 
 		}
@@ -1086,7 +1086,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 
 			}
 		}
@@ -1106,7 +1106,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 		else if (73 == m_pModelCom->Get_iCurrentAnimIndex())	// 73
@@ -1122,7 +1122,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 
 			}
 		}
