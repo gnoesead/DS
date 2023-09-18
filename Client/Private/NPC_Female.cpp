@@ -224,10 +224,12 @@ void CNPC_Female::Animation_Control(_double dTimeDelta)
 	}
 	else
 	{
-		if(NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
-			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC && ANIM_SIT_LISTEN != m_CharacterDesc.NPCDesc.eNPC)
+		if (NPC_SIT != m_CharacterDesc.NPCDesc.eNPC && NPC_SITTALK != m_CharacterDesc.NPCDesc.eNPC
+			&& NPC_DOWN != m_CharacterDesc.NPCDesc.eNPC && NPC_DOWNTALK != m_CharacterDesc.NPCDesc.eNPC 
+			&& m_pModelCom->Get_iCurrentAnimIndex() != 9 && m_pModelCom->Get_iCurrentAnimIndex() != 10 && m_pModelCom->Get_iCurrentAnimIndex() != 11)
+		{
 			Sway(dTimeDelta);
-
+		}
 		if (NPC_STAND == m_CharacterDesc.NPCDesc.eNPC || NPC_TALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_SIT == m_CharacterDesc.NPCDesc.eNPC || NPC_SITTALK == m_CharacterDesc.NPCDesc.eNPC
 			|| NPC_DOWN == m_CharacterDesc.NPCDesc.eNPC || NPC_DOWNTALK == m_CharacterDesc.NPCDesc.eNPC)
