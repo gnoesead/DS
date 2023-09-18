@@ -48,6 +48,8 @@ public:
 	void Set_RadialBlur_On(_bool on) { m_bRadialBlur = on; }
 	void Set_GrayScale() { m_bGrayScale = !m_bGrayScale; }
 	void Set_GrayScale_On(_bool on) { m_bGrayScale = on; }
+	void Set_BackGround_GrayScale_On(_bool Is) { m_bBackGround_GrayScale = Is; }
+	void Set_Cha_GrayScale_On(_bool Is) { m_bCha_grayScale = Is; }
 	void Set_Invert() { m_bInvert = !m_bInvert; }
 	void Set_SSAO() { m_bSSAOSwitch = !m_bSSAOSwitch; }
 	void Set_SSAO(_bool Is) { m_bSSAOSwitch = Is; }
@@ -139,6 +141,8 @@ private:
 	_bool					m_bInvert = { false };
 	_bool					m_bRadialBlur = { false };
 	_bool					m_bGrayScale = { false };
+	_bool					m_bBackGround_GrayScale = { false };
+	_bool					m_bCha_grayScale = { false };
 	_bool					m_bVillage_Battle = { false };
 	_bool					m_bBakcLight = { false };
 	_bool					m_bRoomTurn = { false };
@@ -153,6 +157,7 @@ private:
 	_float					m_fParticle_BrightRatio = { 0.8f };
 	_float					m_fBloomPower = { 1.5f };
 	_float					m_fBlurWeight = { 1.f };
+	
 
 private:
 	_uint					m_iPlayerIdx = { 0 };

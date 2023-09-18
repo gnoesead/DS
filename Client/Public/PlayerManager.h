@@ -35,6 +35,7 @@ public:
 	_vector Get_Player_Pos() {
 		return vPlayerPos;
 	}
+	_bool	Get_Player_Death() { return m_isPlayer_Death; }
 
 	void	Set_Hp(_float hp) { fHp = hp; }
 	void	Set_Mp(_float mp) { fMp = mp; }
@@ -42,6 +43,7 @@ public:
 	void	Set_Special(_float special) { fSpecial = special; }
 	void	Set_Support(_float support) { fSupport = support; }
 	void	Set_Player_Pos(_fvector vPos) { vPlayerPos = vPos; }
+	void    Set_Player_Death(_bool Is) { m_isPlayer_Death = Is; }
 
 private: //Ä³¸¯ÅÍ ½º¿Ò Ã¼ÀÎÁö °ü·Ã º¯¼ö
 	_int	iPlayerIndex = { 0 }; // 0 : ÅºÁö·Î, 1: Á¨ÀÌÃ÷, 2:·»°íÄí'
@@ -121,6 +123,7 @@ public:
 private:
 	_bool	m_isHit_WebShot = { false };
 	_bool	m_isKyogaiMap = { false };
+	_bool	m_isPlayer_Death = { false };
 public:
 	_bool	Get_Hit_WebShot() { return m_isHit_WebShot; }
 	void	Set_Hit_WebShot(_bool hit) { m_isHit_WebShot = hit; }

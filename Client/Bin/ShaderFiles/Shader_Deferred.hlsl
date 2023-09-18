@@ -48,6 +48,13 @@ bool		   g_bInvert;
 bool		   g_bGrayScale;
 bool		   g_bRadialBlur;
 bool		   g_bBackLight;
+bool		   g_bChaGrayScale;
+bool		   g_bBackGround_GrayScale;
+
+float		   g_fGrayRatio;
+float		   g_fBackGround_GrayRatio;
+float		   g_fCha_GrayRatio;
+
 //===================================================
 float g_fRadius;
 float g_fBias;
@@ -57,7 +64,7 @@ float g_fStrength = 0.0007f;
 float g_fTotStrength = 1.38f;
 float g_fInvSamples = 1.f / 16.f;
 
-float g_fGrayRatio;
+
 
 float3 g_vRandom[16] =
 {
@@ -313,7 +320,7 @@ PS_OUT_LIGHT PS_MAIN_DIRECTIONAL(PS_IN In)
 	vector      vLook = vWorldPos - g_vCamPosition;
 
 	//Out.vSpecular.xyz = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 30.f);
-	Out.vSpecular.xyz = ( 0.f, 0.f, 0.f );
+	Out.vSpecular.xyz = (0.f, 0.f, 0.f);
 	return Out;
 }
 
@@ -408,11 +415,11 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	if (vDiffuse_Cha.r == 0.f)
 	{
 		Out.vColor = vDiffuse * vShade;
-		
+
 	}
 	else
 	{
-		Out.vColor = vDiffuse_Cha * vShade;		
+		Out.vColor = vDiffuse_Cha * vShade;
 	}
 
 
@@ -429,11 +436,19 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 		Out.vColor.rgb = float3(0.f, 0.f, 0.f);*/
 
 	float grayValue = dot(Out.vColor.rgb, float3(0.3f, 0.59f, 0.11f));
-	
+
 	float3 grayColor = { grayValue , grayValue ,grayValue };
 
 	if (vDiffuse_Cha.r == 0.f)
-	Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
+		Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fGrayRatio);
+
+
+	if (vDiffuse_Cha.r != 0.f)
+		Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, g_fCha_GrayRatio);
+
+
+	/*if (vDiffuse_Cha.r == 0.f)
+		Out.vColor.rgb = lerp(Out.vColor.rgb, grayColor, fBackGround_GrayRatio);*/
 
 	if (true == g_bInvert)
 		Out.vColor = float4(1.0f - Out.vColor.r, 1.0f - Out.vColor.g, 1.0f - Out.vColor.b, Out.vColor.a);
