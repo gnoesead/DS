@@ -688,10 +688,14 @@ void CMonster_StealthZako::Animation_Control_Search(_double dTimeDelta)
 
 			m_isDeath_Stealth = true;
 
-			//배틀스타트
 			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart(true);
 			CMonsterManager::GetInstance()->Set_StealthEnd_BattleStart_Fade(true);
+
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
+			_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
+			CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
 		}
+			//배틀스타트
 	}
 }
 

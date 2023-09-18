@@ -25,4 +25,4 @@ unsigned long	CBase::Release()
 	}
 
 	return m_dwRefCnt--;
-}
+} 
