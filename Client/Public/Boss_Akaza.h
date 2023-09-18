@@ -185,6 +185,8 @@ public:
 
 
 	};
+
+	enum PART{ PART_1 , PART_2 , PART_3, PART_NONE};
 #pragma endregion
 private:
 	CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -340,6 +342,11 @@ private:
 	STATE	m_eCurstate = STATE_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDLE;
 	ANIM	m_ePreAnimIndex = ANIM_IDLE;
+
+private:
+	PART	m_eCurPart = PART_1;
+
+	_double	m_dDialogAccTime3 = { 0.0 };
 
 private:
 	HRESULT Add_Components();
