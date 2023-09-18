@@ -2310,9 +2310,21 @@ void CMonster_Zako::Dialog_Update(_double dTimeDelta)
 		_tchar szSoundFile[MAX_PATH] = TEXT("V_BATTLE#487.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
 
+	}
+	else if (Event_Time(dTimeDelta, 55.5f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(6.f, TEXT("[혈귀]"), TEXT("흐히히... 그냥 둘다 우리들 식사가 되면 된다"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#392.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+
 		m_bDialog = false;
 	}
-	
+	else if (Event_Time(dTimeDelta, 62.f, m_dDialogAccTime))
+	{
+		Set_CharacterDialog(2.f, TEXT("[아가츠마 젠이츠]"), TEXT("후우우우우"));
+		_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN04#394.ogg");
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 1.f);
+	}
 }
 
 HRESULT CMonster_Zako::Add_Components()
