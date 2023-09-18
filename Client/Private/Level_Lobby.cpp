@@ -56,7 +56,7 @@ HRESULT CLevel_Lobby::Initialize()
 	
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_Lobby.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.8f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
 
     return S_OK;
 }
