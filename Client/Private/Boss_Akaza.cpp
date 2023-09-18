@@ -63,8 +63,8 @@ HRESULT CBoss_Akaza::Initialize(void* pArg)
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
 	{
 		m_dDialogAccTime = 0.0;
-		m_StatusDesc.fHp = 100.f;
-		m_StatusDesc.fHp_Max = 100.f;
+		m_StatusDesc.fHp = 300.f;
+		m_StatusDesc.fHp_Max = 300.f;
 		m_eCurAnimIndex = ANIM_IDLE;
 		m_eCurstate = STATE_BEGIN;
 		m_eCurPhase = BEGIN;
@@ -4646,10 +4646,9 @@ void CBoss_Akaza::Train_Dialog_Update(_double dTimeDelta)
 	else if (Event_Time(dTimeDelta, 23.0, m_dDialogAccTime))
 	{
 		m_dDialogAccTime = 0.0;
-		//m_bTrain_Stage = false;
+		m_bTrain_Stage = false;
 	}
-	if (m_dDialogAccTime > 23.0)
-		m_dDialogAccTime = 0.0;
+	
 
 }
 
