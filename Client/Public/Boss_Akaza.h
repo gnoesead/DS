@@ -185,6 +185,8 @@ public:
 
 
 	};
+
+	enum PART{ PART_1 , PART_2 , PART_3, PART_NONE};
 #pragma endregion
 private:
 	CBoss_Akaza(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -208,7 +210,7 @@ public:
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
-	void Update_Train_Stage();
+	void Update_Train_Stage(_double dTimeDelta);
 
 	
 	void Update_Phase_1(_double dTimeDelta);
@@ -305,6 +307,8 @@ private: //패턴 함수들
 
 private:
 	void Dialog_Update(_double dTimeDelta);
+	void Train_Dialog_Update(_double dTimeDelta);
+	void Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc);
 	void Step_Sound(_double dSound);
 
 private: /* Calculate */
@@ -340,6 +344,11 @@ private:
 	STATE	m_eCurstate = STATE_IDLE;
 	ANIM    m_eCurAnimIndex = ANIM_IDLE;
 	ANIM	m_ePreAnimIndex = ANIM_IDLE;
+
+private:
+	PART	m_eCurPart = PART_1;
+
+	_double	m_dDialogAccTime3 = { 0.0 };
 
 private:
 	HRESULT Add_Components();
