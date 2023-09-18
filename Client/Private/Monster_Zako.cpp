@@ -1287,7 +1287,7 @@ void CMonster_Zako::Animation_Control_Attack_Claws(_double dTimeDelta)
 		if(!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.8f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1335,7 +1335,7 @@ void CMonster_Zako::Animation_Control_Attack_Tackle(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
@@ -1380,7 +1380,7 @@ void CMonster_Zako::Animation_Control_Attack_Spinkick(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1410,7 +1410,7 @@ void CMonster_Zako::Animation_Control_Attack_Jumpkick(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1470,7 +1470,7 @@ void CMonster_Zako::Animation_Control_Attack_ButterFly(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1518,7 +1518,7 @@ void CMonster_Zako::Animation_Control_Attack_Cross(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
@@ -1555,7 +1555,7 @@ void CMonster_Zako::Animation_Control_Attack_SpinMove(_double dTimeDelta)
 		if (!m_bDialog)
 			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.7f);
 		else
-			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.3f);
+			Play_Sound_Channel(szSoundFile, m_SoundChr, 0.1f);
 	}
 	_int iCurAnim = m_pModelCom->Get_iCurrentAnimIndex();
 
