@@ -80,11 +80,11 @@ HRESULT CLevel_Train::Initialize()
         return E_FAIL;
     }
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 	{
 		MSG_BOX("Failed to Ready_Layer_Monster : CLevel_Train");
 		return E_FAIL;
-	}
+	}*/
 
 	if (FAILED(Ready_Layer_Boss(TEXT("Layer_Boss"))))
 	{
@@ -116,6 +116,11 @@ HRESULT CLevel_Train::Initialize()
 		return E_FAIL;
 	}
 
+	if (FAILED(Ready_Layer_Character_Dialog(TEXT("Layer_Character_Dialog"))))
+	{
+		MSG_BOX("Failed to Ready_Layer_Camera : CLevel_FinalBoss");
+		return E_FAIL;
+	}
     CFadeManager::GetInstance()->Set_Fade_In(true);
     CFadeManager::GetInstance()->Set_Is_Battle(true);
 
@@ -1353,6 +1358,25 @@ HRESULT CLevel_Train::Ready_Layer_Player_Battle_UI(const _tchar* pLayerTag)
 	UIDesc10.m_Type = 6;
 
 	if (FAILED(pGameInstance->Add_GameObject(LEVEL_TRAIN, pLayerTag, TEXT("Prototype_GameObject_Pause"), &UIDesc10))) {
+		Safe_Release(pGameInstance);
+		return E_FAIL;
+	}
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CLevel_Train::Ready_Layer_Character_Dialog(const _tchar* pLayerTag)
+{
+	CGameInstance* pGameInstance = CGameInstance::GetInstance();
+	Safe_AddRef(pGameInstance);
+
+	_uint iLevelIdx = pGameInstance->Get_CurLevelIdx();
+
+	if (FAILED(pGameInstance->Add_GameObject(iLevelIdx, pLayerTag,
+		TEXT("Prototype_GameObject_Character_Dialog"))))
+	{
 		Safe_Release(pGameInstance);
 		return E_FAIL;
 	}

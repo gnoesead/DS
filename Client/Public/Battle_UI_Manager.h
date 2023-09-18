@@ -81,6 +81,14 @@ public: // Web
 	_bool Get_Web_UI_On();
 	_int Get_Web_UI_Num();
 
+public: // Endning
+	void Set_Ending_UI_Num(_int On);
+	_int Get_Ending_UI_Num();
+
+
+public: // Loading
+	void Set_Loading_Num(_int num);
+	_int Get_Loading_Num();
 	
 public: // Timing
 	
@@ -92,6 +100,9 @@ public: // Timing
 
 	void Set_Timing_Failed(_bool Is);
 	_bool Get_Timing_Failed();
+
+	void Set_Timing_Failed_UI(_bool Is);
+	_bool Get_Timing_Failed_UI();
 
 	void Set_Timing_Sprite1(_bool Is);
 	_bool Get_Timing_Sprite1();
@@ -156,10 +167,17 @@ private: // Timing
 
 	_bool m_Timing_Light = { false };
 
+	_bool m_Timing_Failed_UI = { false };
 
 private: // Web
 	_bool m_Web_On = { false };
 	_int m_Web_UI_Num = { 0 };
+
+private: // Ending
+	_int m_Ending_UI_Num = { 2 };
+
+private: // Loading
+	_int m_Loading_Num = { -2 };
 
 
 public:

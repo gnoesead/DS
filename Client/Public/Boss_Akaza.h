@@ -208,7 +208,7 @@ public:
 	void Update_AnimIndex(_uint iAnimIndex);
 	void Update_Hit_Messenger(_double dTimeDelta);
 	void Update_Trigger(_double dTimeDelta);
-	void Update_Train_Stage();
+	void Update_Train_Stage(_double dTimeDelta);
 
 	
 	void Update_Phase_1(_double dTimeDelta);
@@ -305,6 +305,8 @@ private: //패턴 함수들
 
 private:
 	void Dialog_Update(_double dTimeDelta);
+	void Train_Dialog_Update(_double dTimeDelta);
+	void Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc);
 	void Step_Sound(_double dSound);
 
 private: /* Calculate */

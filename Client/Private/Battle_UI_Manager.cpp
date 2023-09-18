@@ -82,6 +82,12 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	if (m_Timing_Success == true) {
 
 		if (m_Timing_Sprite1 == false) {
+
+			_tchar szSoundFile2[MAX_PATH] = TEXT("ui_qte_success.ogg");
+			CSoundMgr::Get_Instance()->StopSound(CSoundMgr::UI);
+			CSoundMgr::Get_Instance()->PlaySound(szSoundFile2, CSoundMgr::UI, 0.7f);
+
+
 			m_Timing_Sprite1 = true;
 		}
 		if (m_Timing_Sprite2 == false) {
@@ -96,7 +102,13 @@ void CBattle_UI_Manager::Tick(_double dTimeDelta)
 	}
 
 	
-	
+	if (m_Timing_Failed == true) {
+
+		if (m_Timing_Failed_UI == false) {
+			m_Timing_Failed_UI = true;
+		}
+
+	}
 
 
 	Safe_Release(pGameInstance);
@@ -286,6 +298,26 @@ _int CBattle_UI_Manager::Get_Web_UI_Num()
 	return m_Web_UI_Num;
 }
 
+void CBattle_UI_Manager::Set_Ending_UI_Num(_int On)
+{
+	m_Ending_UI_Num = On;
+}
+
+_int CBattle_UI_Manager::Get_Ending_UI_Num()
+{
+	return m_Ending_UI_Num;
+}
+
+void CBattle_UI_Manager::Set_Loading_Num(_int num)
+{
+	m_Loading_Num++;
+}
+
+_int CBattle_UI_Manager::Get_Loading_Num()
+{
+	return m_Loading_Num;
+}
+
 void CBattle_UI_Manager::Set_Web_UI_On(_int num)
 {
 
@@ -336,6 +368,17 @@ void CBattle_UI_Manager::Set_Timing_Failed(_bool Is)
 _bool CBattle_UI_Manager::Get_Timing_Failed()
 {
 	return m_Timing_Failed;
+}
+
+void CBattle_UI_Manager::Set_Timing_Failed_UI(_bool Is)
+{
+	m_Timing_Failed_UI = Is;
+}
+
+_bool CBattle_UI_Manager::Get_Timing_Failed_UI()
+{
+
+	return m_Timing_Failed_UI;
 }
 
 void CBattle_UI_Manager::Set_Timing_Sprite1(_bool Is)

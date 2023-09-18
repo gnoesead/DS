@@ -144,9 +144,9 @@ void CWebShot::LateTick(_double dTimeDelta)
 		// PoolTag, BufferTag, TextureTag, 
 		// Pos, LifeTime, MinScale, MaxScale, MinSpeed, MaxSpeed, 
 		// MinRange, MaxRange, TickPerSize, TickPerDir, ShaderPass, SpriteSpeed, SpriteXY
-		CParticleManager::GetInstance()->PlayParticle("WebSprite",
+		/*CParticleManager::GetInstance()->PlayParticle("WebSprite",
 			TEXT("Prototype_Component_VIBuffer_5_Particle"), TEXT("Prototype_Component_Texture_T_e_Plc_P1007_Atk_Spiderweb010")
-			, vPos, 1.f, 0.1f, 0.2f, 1.f, 1.5f, vMinRange, vMaxRange, 1.f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE, 0.f, _int2(2, 2), true);
+			, vPos, 1.f, 0.1f, 0.2f, 1.f, 1.5f, vMinRange, vMaxRange, 1.f, vTPerD, vDirOption, CCustomParticle::PASS_SPRITE, 0.f, _int2(2, 2), true);*/
 
 		m_fAlphaCut += 0.05f;
 		if (1.0f <= m_fAlphaCut )

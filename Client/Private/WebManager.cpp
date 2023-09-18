@@ -21,27 +21,27 @@ CWebManager::CWebManager()
 void CWebManager::Initialize()
 {
 	//공용 제어용
-	m_isFirst_All =  true;
-	m_dDelay_All =  0.0;
+	m_isFirst_All = true;
+	m_dDelay_All = 0.0;
 
 	//트리거 제어용
 	m_iTrigger_Index = 1;
 
-	m_isTrigger_First =  false;
-	m_dDelay_First =  0.0;
-	m_fLimit_First =  0.0f;
+	m_isTrigger_First = false;
+	m_dDelay_First = 0.0;
+	m_fLimit_First = 0.0f;
 
-	m_isTrigger_Second =  false;
-	m_dDelay_Second =  0.0;
+	m_isTrigger_Second = false;
+	m_dDelay_Second = 0.0;
 
-	m_isTrigger_Third =  false;
+	m_isTrigger_Third = false;
 	m_dDelay_Third = 0.0;
 
 	m_isTrigger_Akaza = false;
 	m_dDelay_Akaza = 0.0;
 	m_isFirst_Akaza = true;
 
-	
+
 
 	m_WebBallPos[0] = { 199.07f, 7.44f, 404.06f, 1.0f };
 	m_WebBallPos[1] = { 200.1f, 7.6f, 404.06f, 1.0f };
@@ -61,7 +61,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	Safe_AddRef(pGameInstance);
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
-	
+
 	if (pPlayer != nullptr)
 	{
 		m_pTransformCom = pPlayer->Get_TransformCom();
@@ -69,12 +69,12 @@ void CWebManager::Tick(_double dTimeDelta)
 	_float4 PlayerPos;
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 	_float4 Dir = { 0.0f, 0.0f , -1.0f, 0.0f };
-	
+
 	Safe_Release(pGameInstance);
 
 #pragma region TriggerSet
 	//Trigger onoff
-	if (m_iTrigger_Index == 1 && PlayerPos.z >= 263.5f)
+	if (m_iTrigger_Index == 1 && PlayerPos.z >= 260.5f)
 	{
 		m_iTrigger_Index++;
 		m_isTrigger_First = true;
@@ -82,7 +82,7 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_isFirst_All = true;
 		m_dDelay_All = 0.0;
 	}
-	else if (m_iTrigger_Index == 2 && PlayerPos.z >= 297.0f)
+	else if (m_iTrigger_Index == 2 && PlayerPos.z >= 294.0f)
 	{
 		m_iTrigger_Index++;
 		m_isTrigger_Second = true;
@@ -90,15 +90,14 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_isFirst_All = true;
 		m_dDelay_All = 0.0;
 	}
-	else if (m_iTrigger_Index == 3 && PlayerPos.z >= 330.5f)
+	else if (m_iTrigger_Index == 3 && PlayerPos.z >= 327.5f)
 	{
 		m_iTrigger_Index++;
 		m_isTrigger_Third = true;
 
-		m_isFirst_All = true;
-		m_dDelay_All = 0.0;
+		//	m_isFirst_All = true;
+		//	m_dDelay_All = 0.0;
 	}
-	//아카자 만남
 	else if (m_iTrigger_Index == 4 && PlayerPos.z >= 364.2f)
 	{
 		m_iTrigger_Index++;
@@ -107,6 +106,9 @@ void CWebManager::Tick(_double dTimeDelta)
 		m_isFirst_All = true;
 		m_dDelay_All = 0.0;
 	}
+
+
+
 #pragma endregion
 
 	/*
@@ -116,46 +118,48 @@ void CWebManager::Tick(_double dTimeDelta)
 		Shoot_WebBall();
 		Shoot_JikWeb(PlayerPos, Dir, -45.0f);
 		Shoot_WideWeb(PlayerPos, Dir);
-		
+
 		Shoot_SlideWeb(PlayerPos, Dir, 180.0f);
 	*/
 
 #pragma region Event
-	m_dDelay_Sub += dTimeDelta;
-	if (m_dDelay_Sub >= m_fLimit_Sub)
+	if (m_isJugi)
 	{
-		m_dDelay_Sub = 0.0;
-
-		m_fLimit_Sub = Random::Generate_Float(4.0f, 6.0f);
-		m_isWeb_Sub_2 = true;
-		Shoot_JikWeb();
-	}
-	if (m_isWeb_Sub_2)
-	{
-		m_dDelay_Sub_2 += dTimeDelta;
-		if (m_dDelay_Sub_2 > 0.3f)
+		m_dDelay_Sub += dTimeDelta;
+		if (m_dDelay_Sub >= m_fLimit_Sub)
 		{
-			m_dDelay_Sub_2 = 0.0;
-			Shoot_JikWeb();
-			m_isWeb_Sub_2 = false;
+			m_dDelay_Sub = 0.0;
 
-			if (Random::Generate_Int(0, 1) == 0)
-				m_isWeb_Sub_3 = true;
-			else
+			m_fLimit_Sub = Random::Generate_Float(4.0f, 6.0f);
+			m_isWeb_Sub_2 = true;
+			Shoot_JikWeb();
+		}
+		if (m_isWeb_Sub_2)
+		{
+			m_dDelay_Sub_2 += dTimeDelta;
+			if (m_dDelay_Sub_2 > 0.3f)
+			{
+				m_dDelay_Sub_2 = 0.0;
+				Shoot_JikWeb();
+				m_isWeb_Sub_2 = false;
+
+				if (Random::Generate_Int(0, 1) == 0)
+					m_isWeb_Sub_3 = true;
+				else
+					m_isWeb_Sub_3 = false;
+			}
+		}
+		if (m_isWeb_Sub_3)
+		{
+			m_dDelay_Sub_3 += dTimeDelta;
+			if (m_dDelay_Sub_3 > 0.14f)
+			{
+				m_dDelay_Sub_3 = 0.0;
+				Shoot_JikWeb();
 				m_isWeb_Sub_3 = false;
+			}
 		}
 	}
-	if (m_isWeb_Sub_3)
-	{
-		m_dDelay_Sub_3 += dTimeDelta;
-		if (m_dDelay_Sub_3 > 0.14f)
-		{
-			m_dDelay_Sub_3 = 0.0;
-			Shoot_JikWeb();
-			m_isWeb_Sub_3 = false;
-		}
-	}
-
 
 
 	m_dDelay_All += dTimeDelta;
@@ -163,7 +167,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	//첫 거미줄 웨이브
 	if (m_isTrigger_First)
 	{
-		if (m_dDelay_All > 7.0f)
+		if (m_dDelay_All > 5.0f)
 		{
 			m_dDelay_All = 0.0;
 			m_isTrigger_First = false;
@@ -174,7 +178,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.2f, 0.55f);
+				m_fLimit_First = Random::Generate_Float(0.3f, 0.65f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -184,7 +188,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	//둘 거미줄 웨이브
 	if (m_isTrigger_Second)
 	{
-		if (m_dDelay_All > 10.0f)
+		if (m_dDelay_All > 7.0f)
 		{
 			m_dDelay_All = 0.0;
 			m_isTrigger_Second = false;
@@ -195,7 +199,7 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.15f, 0.55f);
+				m_fLimit_First = Random::Generate_Float(0.25f, 0.55f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
@@ -205,7 +209,7 @@ void CWebManager::Tick(_double dTimeDelta)
 	//셋 거미줄 웨이브
 	if (m_isTrigger_Third)
 	{
-		if (m_dDelay_All > 14.0f)
+		if (m_dDelay_All > 9.0f)
 		{
 			m_dDelay_All = 0.0;
 			m_isTrigger_Third = false;
@@ -216,12 +220,14 @@ void CWebManager::Tick(_double dTimeDelta)
 			if (m_fLimit_First < m_dDelay_First)
 			{
 				m_dDelay_First = 0.0;
-				m_fLimit_First = Random::Generate_Float(0.15f, 0.50f);
+				m_fLimit_First = Random::Generate_Float(0.2f, 0.50f);
 
 				//Shoot_WebBall();
 				Shoot_JikWeb();
 			}
 		}
+
+		m_isJugi = false;
 	}
 	//아카자 이벤트
 	if (m_isTrigger_Akaza)
@@ -241,7 +247,10 @@ void CWebManager::Tick(_double dTimeDelta)
 
 			Safe_Release(pGameInstance);
 
+
 		}
+
+
 	}
 #pragma endregion
 
@@ -284,7 +293,7 @@ void CWebManager::Shoot_WebBall()
 
 	_int	iRandomTextures = Random::Generate_Int(0, 3);
 	_int	iIndexTextures = 28;
-	if(iRandomTextures == 0)
+	if (iRandomTextures == 0)
 		iIndexTextures = 28;
 	if (iRandomTextures == 1)
 		iIndexTextures = 22;
@@ -319,7 +328,7 @@ void CWebManager::Shoot_JikWeb()
 	XMStoreFloat4(&PlayerPos, m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
 	// index, Pos, Scale, Dir, speed, turn
-	Create_WebShot(32, _float4{Random::Generate_Float(199.07f, 210.00f), 8.5f, PlayerPos.z + 20.0f, 1.0f}, _float3{ 25.0f, 3.5f, 3.5f }, ShotDir, 1.0f, Turn);
+	Create_WebShot(32, _float4{ Random::Generate_Float(199.07f, 210.00f), 8.5f, PlayerPos.z + 20.0f, 1.0f }, _float3{ 25.0f, 3.5f, 3.5f }, ShotDir, 1.0f, Turn);
 }
 
 void CWebManager::Shoot_SlideWeb(_float4 CreatePos, _float4 ShotDir, _float Turn)

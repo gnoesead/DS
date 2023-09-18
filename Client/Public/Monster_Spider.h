@@ -69,11 +69,14 @@ private:
 	_float	m_fDeadTime = { 0.0f };
 	_bool	m_isSpiderDead = { false };
 
-
-
 	_bool	m_isSpiderBlow = { false };
 	_bool	m_isSpiderBlow_Outer = { false };
 	_bool	m_isSpiderFirst_Dead = { true };
+
+	//아카자 등장 트리거
+	_double m_dDelay_Akaza = { 0.0 };
+	_bool	m_isFirst_Akaza = { true };
+	
 
 private: //애니메이션 제어용 변수들
 	STATE  m_eCurState = { STATE_IDLE };
