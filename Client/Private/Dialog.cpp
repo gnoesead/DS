@@ -637,7 +637,7 @@ HRESULT CDialog::Render()
 						return E_FAIL;
 				}
 				else {
-					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[MAN].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
+					if (FAILED(pGameInstance->Draw_Font(TEXT("Font_DM"), m_szName[GIRL].c_str(), _float2((_float)m_fX - 100.f + 4.f, (_float)m_fY - 12.f), _float2(0.5f, 0.5f))))
 						return E_FAIL;
 				}
 
