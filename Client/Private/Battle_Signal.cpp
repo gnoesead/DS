@@ -140,6 +140,28 @@ void CBattle_Signal::Tick(_double TimeDelta)
 		if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_On()) {
 
 			if (CBattle_UI_Manager::GetInstance()->Get_Battle_Result_Size_Reset() == true) {
+
+				if (m_UI_Desc.m_Rank == 4) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("Result_Rank_S.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI, 0.5f);
+				}
+				else if (m_UI_Desc.m_Rank == 0) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("Result_Rank_A.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI, 0.5f);
+				}
+				else if (m_UI_Desc.m_Rank == 1) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("Result_Rank_B.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI, 0.5f);
+				}
+				else if (m_UI_Desc.m_Rank == 2) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("Result_Rank_C.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI, 0.5f);
+				}
+				else if (m_UI_Desc.m_Rank == 3) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("Result_Rank_D.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI, 0.5f);
+				}
+
 				m_Size_Change = 0.25f;
 				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Size_Reset(false);
 			}
@@ -171,6 +193,9 @@ void CBattle_Signal::Tick(_double TimeDelta)
 			}
 
 			if (m_Alpha == 0.f) {
+
+				// 사운드 시작
+
 				CBattle_UI_Manager::GetInstance()->Set_Battle_Result_Off(false);
 			}
 

@@ -2786,8 +2786,15 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			m_pTransformCom->Set_Look(reverseAtkDir);
 
-			Jumping(1.7f, 0.03f);
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+			
+			if(pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				Jumping(1.7f, 0.03f);
+			else
+				Jumping(2.2f, 0.075f);
 
+			Safe_Release(pGameInstance);
 			Play_Sound_Dmg(1, 0.8f);
 		}
 	}

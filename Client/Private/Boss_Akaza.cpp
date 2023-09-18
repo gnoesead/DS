@@ -142,7 +142,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 
-		
+
 		Dialog_Update(dTimeDelta);
 	}
 
@@ -405,7 +405,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				if (0 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_0", m_pTransformCom);
-					
+
 					_tchar szSoundFile[MAX_PATH] = TEXT("hit_nezuko_S_1.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 				}
@@ -1630,7 +1630,7 @@ void CBoss_Akaza::Update_Hit_Messenger(_double dTimeDelta)
 
 			if (!m_bSuperArmor)
 				Play_Sound_Dmg(0, 0.9f);
-			
+
 			pPlayer->Set_Hit_Success(true);
 			m_StatusDesc.fHp -= m_pColliderCom[COLL_SPHERE]->Get_fDamage();
 
@@ -3771,7 +3771,7 @@ void CBoss_Akaza::Update_Awake(_double dTimeDelta)
 		Camera_Shake(1.2, 30);
 		if (m_bFirstAwake == true && m_bSecondAwake == false)
 		{
-			Set_CharacterDialog(6.f, TEXT("[아카자(실성)]"), TEXT("하하하하하하하하하하하하하하하"));
+			Set_CharacterDialog(6.f, TEXT("[아카자]"), TEXT("하하하하하하하하하하하하하하하"));
 			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Hehahahaha.mp3");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_VOICE_TALK, 0.5);
 		}
@@ -4439,14 +4439,10 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 	{
 		m_bAnimFinish = true;
 		m_dTimeAcc = 0.0;
-		m_eCurAnimIndex = ANIM_IDLE;
-		//m_eCurAnimIndex = ANIM_DEATH;
-	}
-	m_dTimeAcc += dTimeDelta;
-	if (Event_Time(dTimeDelta, 13.5, m_dTimeAcc))
-	{
+
 		m_eCurAnimIndex = ANIM_DEATH;
 	}
+
 
 	if (m_pModelCom->Get_AnimFinish(ANIM_DEATH))
 	{
@@ -4479,18 +4475,18 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 		}
 
 
-		if (m_fDeadTime > 9.0f)
+		if (m_fDeadTime > 12.0f)
 		{
 			COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
 			CFadeManager::GetInstance()->Set_Fade_Out(true);
 		}
 
-		if (m_fDeadTime > 10.0f) // 죽는 시간 조절 해도 됨
+		if (m_fDeadTime > 13.0f) // 죽는 시간 조절 해도 됨
 			m_isDead = true;
 
 
 	}
-	Dead_Dialog_Update(dTimeDelta, m_dTimeAcc);
+	Dead_Dialog_Update(dTimeDelta, m_fDeadTime);
 	m_pTransformCom->LookAt_FixY(m_pPlayerTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
@@ -4652,53 +4648,39 @@ void CBoss_Akaza::Train_Dialog_Update(_double dTimeDelta)
 	}
 	else if (Event_Time(dTimeDelta, 23.0, m_dDialogAccTime))
 	{
+		COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
+		CFadeManager::GetInstance()->Set_Fade_Out(true);
+
 		m_dDialogAccTime = 0.0;
 		m_bTrain_Stage = false;
 	}
-	
+
 
 }
 
 void CBoss_Akaza::Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc)
 {
 	_double dDialogAcc = dTimeAcc;
+
 	if (Event_Time(dTimeDelta, 0.5, dDialogAcc))
-	{
-		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("하하하하하하하하하하하하하하하하!!!!!!!!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Hehahahaha.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 3.5, dDialogAcc))
-	{
-		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("대단하구나!! 정말 대단해!!!!!!!!!!!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Subarashi_Hontoni_Subarashi.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 7.0, dDialogAcc))
-	{
-		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("어떠냐!! 너도 즐겁지 않느냐"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Doda_Omaeno_Tanoshidaro.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 10.5, dDialogAcc))
-	{
-		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("좀 더 놀아보자꾸나!"));
-		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Ja_Moto_Yariyauzo.mp3");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-	}
-	else if (Event_Time(dTimeDelta, 13.5, dDialogAcc))
 	{
 		Set_CharacterDialog(2.f, TEXT("[아카자]"), TEXT("어...?"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Death_2.mp3");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
+		m_bStopAnim = false;
+		m_pRendererCom->Set_Invert();
 	}
-	else if (Event_Time(dTimeDelta, 16.0, dDialogAcc))
+	else if (Event_Time(dTimeDelta, 1.0, dDialogAcc))
+	{
+		m_pRendererCom->Set_Invert();
+	}
+	else if (Event_Time(dTimeDelta, 3.0, dDialogAcc))
 	{
 		Set_CharacterDialog(4.f, TEXT("[아카자]"), TEXT("젠장. 몸이 움직이지 않아..."));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Kshow.ogg");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 	}
-	else if (Event_Time(dTimeDelta, 21.0, dDialogAcc))
+	else if (Event_Time(dTimeDelta, 7.5, dDialogAcc))
 	{
 		Set_CharacterDialog(5.f, TEXT("[아카자]"), TEXT("(그렇군. 약자는 나였나...)"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Mosi_Yowai.ogg");

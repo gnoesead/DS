@@ -165,11 +165,11 @@ void CLevel_Train::Tick(_double dTimeDelta)
     Safe_AddRef(pGameInstance);
 
    
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3))
+	/*if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD3))
 	{
 		COptionManager::GetInstance()->Set_Is_Go_Lobby(false);
 		CFadeManager::GetInstance()->Set_Fade_Out(true);
-	}
+	}*/
 
 	if (COptionManager::GetInstance()->Get_Is_Go_Lobby() == false) {
 

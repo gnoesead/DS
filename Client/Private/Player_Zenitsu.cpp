@@ -2591,7 +2591,17 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 		if (m_isSkilling == false)
 		{
-			Jumping(1.85f, 0.03f);
+			CGameInstance* pGameInstance = CGameInstance::GetInstance();
+			Safe_AddRef(pGameInstance);
+
+			if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+				Jumping(1.85f, 0.03f);
+			else
+				Jumping(2.2f, 0.075f);
+
+			Safe_Release(pGameInstance);
+
+			//Jumping(1.85f, 0.03f);
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 

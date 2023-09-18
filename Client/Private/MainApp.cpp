@@ -184,8 +184,8 @@ HRESULT CMainApp::Render()
 
 	if (true == m_isRenderFPS)
 	{
-		if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
-			return E_FAIL;
+		/*if (FAILED(m_pGameInstance->Draw_Font(TEXT("Font_Default"), m_szFPS, _float2(0.f, 0.f), _float2(0.5f, 0.5f))))
+			return E_FAIL;*/
 	}
 
 #ifdef _DEBUG

@@ -326,7 +326,7 @@ private: // _bool
 	_bool	m_bRunPunch = { false };
 	_bool	m_bDashOn = { false };
 	_bool	m_bJump = { false };
-	_bool	m_bTrigger = { false };
+	_bool	m_bTrigger = { false };	
 
 	_bool	m_bTrain_Stomp = { false };
 	_bool	m_bTrain_Stage = { false };
