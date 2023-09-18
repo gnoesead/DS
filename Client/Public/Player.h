@@ -214,11 +214,14 @@ protected:
 	_bool	m_isJump_Room_X = { false };
 	_bool	m_isJump_Room_Z = { false };
 
+	_bool	m_isADV_KyoBlade_Hit = { false };
+
 	//소리용 데미지용
 	_bool	m_isKyoRoomSuccess = { false };
 	_bool	m_isKyoRoomDmg = { false };
 
-
+	//자코방 전투 후,
+	_bool	m_isZakoAfterBattle = { false };
 
 protected:
 	PLAYERSTATE		m_ePlayerState = { PLAYER_ADVENTURE };
