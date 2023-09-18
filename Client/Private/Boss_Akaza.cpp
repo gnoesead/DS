@@ -4669,7 +4669,7 @@ void CBoss_Akaza::Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc)
 	}
 	else if (Event_Time(dTimeDelta, 7.0, dDialogAcc))
 	{
-		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("어떠냐!! 너도 즐겁지 않느냐ㅎㅎ"));
+		Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("어떠냐!! 너도 즐겁지 않느냐"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_Doda_Omaeno_Tanoshidaro.mp3");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 	}

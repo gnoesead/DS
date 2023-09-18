@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "ParticleManager.h"
+#include "PlayerManager.h"
 
 CCustomParticle::CCustomParticle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -57,60 +58,64 @@ void CCustomParticle::Tick(_double dTimeDelta)
 {
 	if (true == m_isDead)
 		return;
-
-	__super::Tick(dTimeDelta);
-
-	/*if (m_CustomPartDesc.fLifeTime * 0.7f > m_dTimeAcc)
+	if (CPlayerManager::GetInstance()->Get_Player_Death() == false)
 	{
-		m_fAlpha += (_float)dTimeDelta * 1.5f;
+		__super::Tick(dTimeDelta);
 
-		if (1.f < m_fAlpha)
-			m_fAlpha = 1.f;
+		/*if (m_CustomPartDesc.fLifeTime * 0.7f > m_dTimeAcc)
+		{
+			m_fAlpha += (_float)dTimeDelta * 1.5f;
+
+			if (1.f < m_fAlpha)
+				m_fAlpha = 1.f;
+		}
+		else
+		{
+			m_fAlpha -= (_float)dTimeDelta * 0.3f;
+
+			if (0.f > m_fAlpha)
+				m_fAlpha = 0.f;
+		}*/
+
+		//m_fScale += (_float)dTimeDelta * 0.7f;
+
+		/*if (1.f < m_fScale)
+			m_fScale = 1.f;
+
+		m_pTransformCom->Scaling(m_fScale);*/
+
+		//m_pTransformCom->Turn(XMConvertToRadians(90.f * (_float)dTimeDelta), XMVectorSet(0.f, 1.f, 0.f, 0.f));
+
+		m_pVIBufferCom->Tick(dTimeDelta);
+
+		m_dTimeAcc += dTimeDelta;
 	}
-	else
-	{
-		m_fAlpha -= (_float)dTimeDelta * 0.3f;
-
-		if (0.f > m_fAlpha)
-			m_fAlpha = 0.f;
-	}*/
-
-	//m_fScale += (_float)dTimeDelta * 0.7f;
-
-	/*if (1.f < m_fScale)
-		m_fScale = 1.f;
-
-	m_pTransformCom->Scaling(m_fScale);*/
-
-	//m_pTransformCom->Turn(XMConvertToRadians(90.f * (_float)dTimeDelta), XMVectorSet(0.f, 1.f, 0.f, 0.f));
-
-	m_pVIBufferCom->Tick(dTimeDelta);
-
-	m_dTimeAcc += dTimeDelta;
 }
 
 void CCustomParticle::LateTick(_double dTimeDelta)
 {
-	__super::LateTick(dTimeDelta);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_CustomPartDesc.vPosition));
-
-	/*_int iCount = _int(m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed));
-
-	m_vTexCoord.x = _float(iCount % m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.x));
-
-	m_vTexCoord.y = _float(iCount / m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.y));*/
-	
-	if (m_CustomPartDesc.VIB_CustomPartDesc.fLifeTime < m_dTimeAcc)
+	if (CPlayerManager::GetInstance()->Get_Player_Death() == false)
 	{
-		CParticleManager::GetInstance()->Collect_Particle(m_CustomPartDesc.szPoolTag, this);
-		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+		__super::LateTick(dTimeDelta);
 
-		m_dTimeAcc = 0.0;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, Convert::ToVector_W1(m_CustomPartDesc.vPosition));
 
-		Set_Dead();
+		/*_int iCount = _int(m_dTimeAcc / (m_dCycle / m_CustomPartDesc.dSpriteSpeed));
+
+		m_vTexCoord.x = _float(iCount % m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.x));
+
+		m_vTexCoord.y = _float(iCount / m_CustomPartDesc.vSpriteCount.x) * (1.f / (_float)(m_CustomPartDesc.vSpriteCount.y));*/
+
+		if (m_CustomPartDesc.VIB_CustomPartDesc.fLifeTime < m_dTimeAcc)
+		{
+			CParticleManager::GetInstance()->Collect_Particle(m_CustomPartDesc.szPoolTag, this);
+			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+			m_dTimeAcc = 0.0;
+
+			Set_Dead();
+		}
 	}
-
 	if (FAILED(m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_Effect_Particle, this)))
 		return;
 }
