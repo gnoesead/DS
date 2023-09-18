@@ -245,6 +245,8 @@ void CMission::Tick(_double TimeDelta)
 
 
 				if (m_Is_Num_Change_Reset == false) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("UI_Quest_Update_0.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
 					m_Origin_X = 535.f;
 					m_Alpha = 1.f;
 					m_Is_Num_Change_Reset = true;
@@ -267,6 +269,8 @@ void CMission::Tick(_double TimeDelta)
 			if (m_UI_Desc.m_Eff_Type == 1) {
 
 				if (m_Is_Num_Change_Reset == false) {
+					_tchar szSoundFile[MAX_PATH] = TEXT("UI_Quest_Update_1.ogg");
+					CSoundMgr::Get_Instance()->Play_Sound_Channel(szSoundFile, CSoundMgr::UI_SELECT, 0.7f);
 					m_Origin_X = 356 * 1.9f;
 					m_Alpha = 1.f;
 					m_Is_Num_Change_Reset = true;
