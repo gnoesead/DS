@@ -167,7 +167,7 @@ HRESULT CLevel_Village::Initialize()
 
     CSoundMgr::Get_Instance()->StopAll();
     _tchar szBgm[MAX_PATH] = TEXT("BGM_Village.mp3");
-    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+    CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.8f);
 
     return S_OK;
 }

@@ -170,7 +170,7 @@ HRESULT CLevel_House::Initialize()
 
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_House.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.65f);
 
 	m_Ending_TimeAcc = { 0.f };
 

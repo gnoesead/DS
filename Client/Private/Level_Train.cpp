@@ -141,7 +141,7 @@ HRESULT CLevel_Train::Initialize()
 
 	CSoundMgr::Get_Instance()->StopAll();
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_Train.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.6f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.7f);
 
     return S_OK;
 }
