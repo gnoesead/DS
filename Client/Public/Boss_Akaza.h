@@ -306,6 +306,7 @@ private: //패턴 함수들
 private:
 	void Dialog_Update(_double dTimeDelta);
 	void Train_Dialog_Update(_double dTimeDelta);
+	void Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc);
 	void Step_Sound(_double dSound);
 
 private: /* Calculate */
