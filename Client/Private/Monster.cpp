@@ -188,8 +188,6 @@ _bool CMonster::Check_Player_Y()
 	}
 	else
 		return false;
-
-
 }
 
 _vector CMonster::Calculate_PlayerPos()

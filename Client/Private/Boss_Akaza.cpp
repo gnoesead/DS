@@ -1226,6 +1226,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index) // 0.00
 			{
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom);
+
 				//Sound
 				Step_Sound(dVol);
 			}
@@ -1239,6 +1241,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom);
 				Step_Sound(dVol);
 			}
 		}
@@ -1251,6 +1254,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom);
 				Step_Sound(dVol);
 			}
 		}
@@ -1263,6 +1267,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom);
 				Step_Sound(dVol);
 			}
 		}
@@ -1275,6 +1280,7 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				CEffectPlayer::EFFECTWORLDDESC EffectSideStepDesc;
 				EffectSideStepDesc.fScale = 1.8f;
 				CEffectPlayer::Get_Instance()->Play("Step_Effect", m_pTransformCom, &EffectSideStepDesc);
+				CEffectPlayer::Get_Instance()->Play("Monster_Dash_Particle", m_pTransformCom);
 				Step_Sound(dVol);
 			}
 		}
