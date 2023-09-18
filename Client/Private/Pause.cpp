@@ -145,7 +145,7 @@ void CPause::LateTick(_double TimeDelta)
 	Safe_AddRef(pGameInstance);
 
 
-	if (pGameInstance->Get_DIKeyDown(DIK_0)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_5)) {
 
 		pGameInstance->Time_Stop();
 
