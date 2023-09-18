@@ -211,7 +211,7 @@ HRESULT CLoading::Initialize(void* pArg)
 	
 	m_szContent_4.push_back(L"십이귀월중에서도 높은 급인 상현의 3");
 	m_szContent_4.push_back(L"무예가로서 강자를 매우 좋아하며");
-	m_szContent_4.push_back(L"무약자는 혐오하는 경향이 있다.");
+	m_szContent_4.push_back(L"약자는 혐오하는 경향이 있다.");
 
 
 	m_Is_TimeFree = true;

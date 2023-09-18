@@ -20,7 +20,7 @@ private:
 	virtual ~CPlayerManager() = default;
 	
 private: // ½ºÅÈ°ü·Ã °øÀ¯
-	_float	fHp = { 100.0f };
+	_float	fHp = { 200.0f };
 	_float	fMp = { 100.0f };
 	_int	iSpecial_Cnt = { 0 };
 	_float	fSpecial = { 0.0f };
@@ -35,6 +35,9 @@ public:
 	_vector Get_Player_Pos() {
 		return vPlayerPos;
 	}
+	_bool	Get_Player_Death() { return m_isPlayer_Death; }
+
+
 
 	void	Set_Hp(_float hp) { fHp = hp; }
 	void	Set_Mp(_float mp) { fMp = mp; }
@@ -42,6 +45,7 @@ public:
 	void	Set_Special(_float special) { fSpecial = special; }
 	void	Set_Support(_float support) { fSupport = support; }
 	void	Set_Player_Pos(_fvector vPos) { vPlayerPos = vPos; }
+	void    Set_Player_Death(_bool Is) { m_isPlayer_Death = Is; }
 
 private: //Ä³¸¯ÅÍ ½º¿Ò Ã¼ÀÎÁö °ü·Ã º¯¼ö
 	_int	iPlayerIndex = { 0 }; // 0 : ÅºÁö·Î, 1: Á¨ÀÌÃ÷, 2:·»°íÄí'
@@ -121,9 +125,15 @@ public:
 private:
 	_bool	m_isHit_WebShot = { false };
 	_bool	m_isKyogaiMap = { false };
+	_bool	m_isPlayer_Death = { false };
+
+	_bool	m_isHpMaxChange_300 = { false };
 public:
 	_bool	Get_Hit_WebShot() { return m_isHit_WebShot; }
 	void	Set_Hit_WebShot(_bool hit) { m_isHit_WebShot = hit; }
+
+	_bool	Get_HpMaxChange_300() { return m_isHpMaxChange_300; }
+	void	Set_HpMaxChange_300(_bool change) { m_isHpMaxChange_300 = change; }
 
 public:
 	virtual void Free() override;

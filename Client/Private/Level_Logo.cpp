@@ -35,7 +35,7 @@ HRESULT CLevel_Logo::Initialize()
 	Ready_Layer_Effect();
 
 	_tchar szBgm[MAX_PATH] = TEXT("BGM_Intro.mp3");
-	CSoundMgr::Get_Instance()->PlayBGM(szBgm, 0.9f);
+	CSoundMgr::Get_Instance()->PlayBGM(szBgm, BGM_Value_1);
 
     return S_OK;
 }

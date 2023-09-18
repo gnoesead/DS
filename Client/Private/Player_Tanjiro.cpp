@@ -117,9 +117,13 @@ HRESULT CPlayer_Tanjiro::Initialize(void* pArg)
 	else*/
 	m_fFar2 = 1.f;
 
+	
 	Safe_Release(pGameInstance);
 
 	m_pModelCom->Set_LinearDuration(ANIM_BATTLE_IDLE, 0.4);
+
+
+	
 
 	return S_OK;
 }
@@ -142,8 +146,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 		if (pGameInstance->Get_DIKeyDown(DIK_X))
 		{
 			m_bSmell_Detection = true;
-			m_pRendererCom->Set_GrayScale();
-
+			m_pRendererCom->Set_GrayScale_On(true);
 			_tchar szSoundFile[MAX_PATH] = TEXT("ui_smellsense.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::MONSTER_SPECIAL, 0.4f);
 
@@ -153,8 +156,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 
 	if (pGameInstance->Get_DIKeyDown(DIK_C))
 	{
-		m_pRendererCom->Set_RadialBlur();
-		//m_pRendererCom->Set_GrayScale_On(false);
+		m_pRendererCom->Set_RadialBlur();				
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() == LEVEL_VILLAGE)
@@ -588,7 +590,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			{
 				//tag, size3, Pos3(left, up, front), duration, vDIr, fDmg
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(2.0f, 2.0f, 2.0f), _float3(0.f, 1.0f, 2.0f), 0.1,
-					CAtkCollider::TYPE_BIG, vPlayerDir, 2.0f * fDmg);
+					CAtkCollider::TYPE_SMALL, vPlayerDir, 2.0f * fDmg);
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("hit_S.ogg");//hit_S
 				Play_Sound_Channel(szSoundFile, CSoundMgr::SWORD_0, 0.4f);
@@ -1079,7 +1081,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
 
 				m_pRendererCom->Set_BloomRatio();
 			}
@@ -1092,7 +1094,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 3.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 2.0f * fDmg);
 			}
 			if (2 == m_iEvent_Index)
 			{
@@ -1101,7 +1103,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 5.0f * fDmg);
+					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 4.0f * fDmg);
 
 				Camera_Shake(0.1, 50);
 			}
@@ -1114,7 +1116,7 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 				CBattle_UI_Manager::GetInstance()->Set_Player_Type(0);
 				CBattle_UI_Manager::GetInstance()->Set_Player_Skill_Type(2);
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(5.5f, 5.5f, 5.5f), _float3(0.f, 0.0f, 0.0f), 0.3,
-					CAtkCollider::TYPE_UPPER, vPlayerDir, 9.0f * fDmg);
+					CAtkCollider::TYPE_UPPER, vPlayerDir, 7.0f * fDmg);
 			}
 			if (4 == m_iEvent_Index)
 			{
@@ -1704,6 +1706,7 @@ void CPlayer_Tanjiro::Animation_Control(_double dTimeDelta)
 		if (m_isPlayerTanjiroDead)
 		{
 			Event_Tanjiro_Death(dTimeDelta);
+			CPlayerManager::GetInstance()->Set_Player_Death(m_isPlayerTanjiroDead);
 		}
 		else
 		{
@@ -2026,7 +2029,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 	}
 
 
-
+	/*
 	//각성상태 일때 + 노말히트마지막
 	if (m_Moveset.m_iAwaken == 1 || m_Moveset.m_iAwaken == 2)
 	{
@@ -2101,19 +2104,19 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Attack(_double dTimeDelta)
 			Go_Straight_Deceleration(dTimeDelta, 28, 4.5f, 0.1f);
 		}
 
-		/*
-		if (0.5f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 0.7f)
-		{
-			m_pTransformCom->Go_Left(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
-		}
-		else if (0.7f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 1.0f)
-		{
-			m_pTransformCom->Go_Right(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
-		}*/
+		//이동
+		//if (0.5f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 0.7f)
+		//{
+		//	m_pTransformCom->Go_Left(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
+		//}
+		//else if (0.7f < m_dDelay_SurgeCutScene && m_dDelay_SurgeCutScene <= 1.0f)
+		//{
+		//	m_pTransformCom->Go_Right(dTimeDelta, m_pNavigationCom[m_eCurNavi]);
+		//}
 
 	}
 	else
-		m_dDelay_SurgeCutScene = 0.0;
+		m_dDelay_SurgeCutScene = 0.0;*/
 }
 
 void CPlayer_Tanjiro::Animation_Control_Battle_Charge(_double dTimeDelta)
@@ -2571,7 +2574,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Special(_double dTimeDelta)
 void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 {
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	_vector vAtkDir = XMLoadFloat4(&AtkDir);
+	//0고정
+	AtkDir.y = 0.0f;
+
+	_vector vAtkDir = XMVector4Normalize(XMLoadFloat4(&AtkDir));
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
@@ -2673,8 +2679,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 					m_iSmallHit_Index = 0;
 				}
 			}
+			Play_Sound_Dmg(0, 0.8f);
 		}
-		Play_Sound_Dmg(0, 0.8f);
+		
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2706,8 +2713,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 			}
+			Play_Sound_Dmg(1, 0.8f);
 		}
-		Play_Sound_Dmg(1, 0.8f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
 
@@ -2727,8 +2734,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			m_pTransformCom->Set_Look(reverseAtkDir);
 			Jumping(1.2f, 0.05f);
+
+			Play_Sound_Dmg(2, 0.8f);
 		}
-		Play_Sound_Dmg(2, 0.8f);
+		
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 120, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -2750,8 +2759,9 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 
 			Jumping(1.2f, 0.05f);
+
+			Play_Sound_Dmg(2, 0.8f);
 		}
-		Play_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 132, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -2785,8 +2795,8 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				Jumping(2.2f, 0.075f);
 
 			Safe_Release(pGameInstance);
+			Play_Sound_Dmg(1, 0.8f);
 		}
-		Play_Sound_Dmg(1, 0.8f);
 	}
 
 	if (m_isConnectHitting == false)
@@ -2821,9 +2831,10 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 
 			Jumping(2.0f, 0.075f);
 			m_isSwampUpper = true;
+
+			Play_Sound_Dmg(1, 0.8f);
 		}
 
-		Play_Sound_Dmg(1, 0.8f);
 	}
 
 #pragma endregion
@@ -2944,7 +2955,7 @@ void CPlayer_Tanjiro::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_iSmallHit_Index = 0;
 		}
 
-		Play_Sound_Dmg(1, 0.8);
+		Play_Sound_Dmg(1, 0.8f);
 	}
 #pragma endregion
 
@@ -3749,7 +3760,7 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_GBLOW);
 
 		_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_0_Spak.ogg");
-		Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 		Set_CharacterDialog(10.3f, TEXT("[탄지로]"), TEXT("끄아아아아악... "));
 	}
@@ -3767,23 +3778,26 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 			m_isFirst_Dead_0 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_1.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 			Set_CharacterDialog(45.0f, TEXT("[탄지로]"), TEXT("몸이.....  움직이지 않아..... "));
+
+			m_pRendererCom->Set_GrayScale();
+			m_pRendererCom->Set_Cha_GrayScale_On(true);
 		}
 		else if (m_dDelay_TanjiroDead > 4.5f && m_isFirst_Dead_1)
 		{
 			m_isFirst_Dead_1 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_2.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 		}
 		else if (m_dDelay_TanjiroDead > 7.5f && m_isFirst_Dead_2)
 		{
 			m_isFirst_Dead_2 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_3_Uroko.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 			Set_CharacterDialog(45.0f, TEXT("[우로코다키]"), TEXT("왜 그러고 있지? 탄지로!"), TEXT("넌 뭘 위해 여기있는거냐?"));
 		}
@@ -3792,7 +3806,7 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 			m_isFirst_Dead_3 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_4_Uroko.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 		}
 		else if (m_dDelay_TanjiroDead > 13.0f && m_isFirst_Dead_4)
@@ -3800,7 +3814,7 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 			m_isFirst_Dead_4 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_5_Uroko.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 			Set_CharacterDialog(45.0f, TEXT("[우로코다키]"), TEXT("그러고 있으면 지금까지 해온 모든게 의미없어 진다!!!"), TEXT("일어나거라! 정신 차려! 마지막까지 포기하지 마라!"));
 
@@ -3810,48 +3824,52 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 			m_isFirst_Dead_5 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_6_Uroko.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 		}
 		else if (m_dDelay_TanjiroDead > 19.0f && m_isFirst_Dead_6)
 		{
 			m_isFirst_Dead_6 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_7_Uroko.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 		}
 		else if (m_dDelay_TanjiroDead > 23.0f && m_isFirst_Dead_7)
 		{
 			m_isFirst_Dead_7 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_8.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 
 			Set_CharacterDialog(45.0f, TEXT("[탄지로]"), TEXT("몸이 너무 아파.... 분해... 하지만 할수밖에 없어!!!"), TEXT("집중해야해! 호흡을 가다듬어야 해!!"));
-		}//완료
+			
+		}//완료		
 		else if (m_dDelay_TanjiroDead > 32.5f && m_isFirst_Dead_8)
 		{
 			m_isFirst_Dead_8 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_9.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
+			m_pRendererCom->Set_Cha_GrayScale_On(false);
 		}
 		else if (m_dDelay_TanjiroDead > 37.0f && m_isFirst_Dead_9)
 		{
 			m_isFirst_Dead_9 = false;
 
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_10_Gihap.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_1, 0.7f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.7f);
 
 			Set_CharacterDialog(45.0f, TEXT("[탄지로]"), TEXT("으아아아아아아!!!"), TEXT("난 절대로 포기하지 않아!"));
 
 			m_pModelCom->Set_Animation(ANIM_DOWN_GETUP);
+
+			
 		}
 		else if (m_dDelay_TanjiroDead > 40.0f && m_isFirst_Dead_10)
 		{
 			m_isFirst_Dead_10 = false;
-
+			m_pRendererCom->Set_GrayScale();
 			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Death_11.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::PLAYER_DEATH_0, 0.75f);
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.75f);
 		}
 		
 
@@ -3861,7 +3879,9 @@ void CPlayer_Tanjiro::Event_Tanjiro_Death(_double dTimeDelta)
 	if (m_dDelay_TanjiroDead > 37.0f)
 	{
 		m_StatusDesc.fHp_Max = 300.0f;
-		m_StatusDesc.fHp += 0.8f;
+		m_StatusDesc.fHp += 1.5f;
+
+		CPlayerManager::GetInstance()->Set_HpMaxChange_300(true);
 
 		if (m_StatusDesc.fHp >= m_StatusDesc.fHp_Max)
 		{
@@ -3881,7 +3901,7 @@ void CPlayer_Tanjiro::Smell_Detection(_double dTimeDelta)
 		{
 			m_bSmell_Detection = false;
 			m_dSmellTime = 0.0;
-			m_pRendererCom->Set_GrayScale_On(false);
+			m_pRendererCom->Set_GrayScale_On(false);			
 		}
 	}
 }

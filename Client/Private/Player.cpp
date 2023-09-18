@@ -67,7 +67,15 @@ HRESULT CPlayer::Initialize(void* pArg)
 	pGameInstance->Add_Light(m_pDevice, m_pContext, tLightInfo, m_pTransformCom);*/
 
 	//level판명
-	m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+	//m_iLevelCur = pGameInstance->Get_CurLevelIdx();
+
+	
+	if (pGameInstance->Get_CurLevelIdx() == LEVEL_FINALBOSS)
+	{
+		m_StatusDesc.fHp = 20.0f;
+		m_StatusDesc.fHp_Max = 20.0f;
+	}
+	
 
 	Safe_Release(pGameInstance);
 
@@ -99,14 +107,14 @@ void CPlayer::Tick(_double dTimeDelta)
 		m_ePlayerState = { PLAYER_ADVENTURE };
 	}
 	else {
-		m_ePlayerState = { PLAYER_BATTLE };		
+		m_ePlayerState = { PLAYER_BATTLE };
 	}
 
 	if (pGameInstance->Get_CurLevelIdx() != LEVEL_VILLAGE && pGameInstance->Get_CurLevelIdx() != LEVEL_HOUSE) {
 		m_ePlayerState = { PLAYER_BATTLE };
 		CFadeManager::GetInstance()->Set_Is_Battle(true);
 	}
-	
+
 
 	Safe_Release(pGameInstance);
 
@@ -117,26 +125,28 @@ void CPlayer::Tick(_double dTimeDelta)
 	if (m_isSwampBinding == false)
 		Key_Input(dTimeDelta);
 
-	m_ePlayerType;
 
-	if (m_ePlayerState == PLAYER_BATTLE)
+	if (CPlayerManager::GetInstance()->Get_Player_Death() == false)
 	{
-		if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_ePlayerType == PLAYER_TANJIRO)
+		if (m_ePlayerState == PLAYER_BATTLE)
 		{
-			if (m_Moveset.m_iAwaken == 2) {
-				m_pRendererCom->Set_GrayScale_On(true);
+			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0 && m_ePlayerType == PLAYER_TANJIRO)
+			{
+				if (m_Moveset.m_iAwaken == 2) {
+					m_pRendererCom->Set_GrayScale_On(true);
+				}
+				else {
+					m_pRendererCom->Set_GrayScale_On(false);
+				}
 			}
-			else {
-				m_pRendererCom->Set_GrayScale_On(false);
-			}
-		}
-		else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_ePlayerType == PLAYER_ZENITSU)
-		{
-			if (m_Moveset.m_iAwaken == 2) {
-				m_pRendererCom->Set_GrayScale_On(true);
-			}
-			else {
-				m_pRendererCom->Set_GrayScale_On(false);
+			else if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1 && m_ePlayerType == PLAYER_ZENITSU)
+			{
+				if (m_Moveset.m_iAwaken == 2) {
+					m_pRendererCom->Set_GrayScale_On(true);
+				}
+				else {
+					m_pRendererCom->Set_GrayScale_On(false);
+				}
 			}
 		}
 	}
@@ -326,7 +336,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Small())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Small(false);
-		
+
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
@@ -397,7 +407,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 					EffectWorldDesc.fScale = 1.4f;
 					CEffectPlayer::Get_Instance()->Play("Hit_Effect7", m_pTransformCom, &EffectWorldDesc);
 				}
-				
+
 				EffectWorldDesc.fScale = 0.7f;
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
@@ -420,7 +430,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Big(false);
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-			
+
 				CEffectPlayer::Get_Instance()->Play("Hit_Particle_Up", m_pTransformCom);
 				Play_HitEffect();
 				CEffectPlayer::EFFECTWORLDDESC EffectWorldDesc;
@@ -449,7 +459,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
-			
+
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -607,7 +617,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Swamp(false);
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				
+
 			}
 
 			m_Moveset.m_Down_Dmg_Swamp = true;
@@ -618,7 +628,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Web(false);
 
 			if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 0) {
-				
+
 			}
 
 			m_Moveset.m_Down_Dmg_Web = true;
@@ -652,7 +662,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 		if (m_pColliderCom[COLL_SPHERE]->Get_Hit_Hekireki())
 		{
 			m_pColliderCom[COLL_SPHERE]->Set_Hit_Hekireki(false);
-			
+
 
 			m_dDelay_ComboReset_2 = 0.0;
 
@@ -1097,7 +1107,7 @@ void CPlayer::Key_Input_Battle_Guard(_double dTimeDelta)
 	CameraLook.w = 0.0f;
 	_vector vLook = XMVector4Normalize(XMLoadFloat4(&CameraLook));
 
-	if (m_isCan_GuardCancel || (m_Moveset.m_isRestrict_Throw == false  && m_isComboing == false && m_isJumpOn == false && m_Moveset.m_isRestrict_KeyInput == false))
+	if (m_isCan_GuardCancel || (m_Moveset.m_isRestrict_Throw == false && m_isComboing == false && m_isJumpOn == false && m_Moveset.m_isRestrict_KeyInput == false))
 	{
 		if (pGameInstance->Get_DIKeyDown(DIK_O))
 		{
@@ -1567,7 +1577,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 			
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 			/*
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1629,7 +1639,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 
 			if (Compute::DistCheck(vPlayerPos, vInteractionPos, 4.f))
@@ -1641,7 +1651,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				_tchar szBGM_BattleIn[MAX_PATH] = TEXT("Battle_In.ogg");
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_BattleIn, BGM_Value_0);
 			}
 
 		}
@@ -1708,7 +1718,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				wsprintf(szBGM_ZakoEnd, TEXT("BGM_House.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_ZakoEnd, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_ZakoEnd, BGM_Value_1);
 
 				break;
 			case CHANGE_POSITON_HOUSE_2A: // 쿄우가이
@@ -1738,7 +1748,7 @@ void CPlayer::Check_Change_Position(_double TimeDelta)
 
 				CSoundMgr::Get_Instance()->StopSound(CSoundMgr::BGM);
 				wsprintf(szBGM_SwampEnd, TEXT("BGM_Village.mp3"));
-				CSoundMgr::Get_Instance()->PlayBGM(szBGM_SwampEnd, 0.6f);
+				CSoundMgr::Get_Instance()->PlayBGM(szBGM_SwampEnd, BGM_Value_1);
 
 				break;
 			default:

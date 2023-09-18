@@ -184,6 +184,12 @@ void CPlayer_Zenitsu::LateTick(_double dTimeDelta)
 		Player_Sound_Dmg(1, 0.75f);
 	}
 
+	if (CPlayerManager::GetInstance()->Get_HpMaxChange_300())
+	{
+		m_StatusDesc.fHp_Max = 300.0f;
+		CPlayerManager::GetInstance()->Set_HpMaxChange_300(false);
+	}
+
 	//playerswap
 	if (CPlayerManager::GetInstance()->Get_PlayerIndex() == 1) // Á¨ÀÌÃ÷
 	{
@@ -1042,7 +1048,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0ÃÊ
 			{
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1050,7 +1056,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)	// 0ÃÊ
 			{
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 
@@ -1070,7 +1076,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 
 		}
@@ -1086,7 +1092,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash_Rev", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 
 			}
 		}
@@ -1106,7 +1112,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 				m_pRendererCom->Set_BloomRatio(1.1f);
 				CEffectPlayer::Get_Instance()->Play("Zen_Dash_New", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 			}
 		}
 		else if (73 == m_pModelCom->Get_iCurrentAnimIndex())	// 73
@@ -1122,7 +1128,7 @@ void CPlayer_Zenitsu::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Zen_Air_Dash", m_pTransformCom, &EffectWorldDesc);
 
-				Player_Sound_Atk(0, 0.7);
+				Player_Sound_Atk(0, 0.7f);
 
 			}
 		}
@@ -2375,7 +2381,11 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Special(_double dTimeDelta)
 void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 {
 	_float4 AtkDir = m_pColliderCom[COLL_SPHERE]->Get_AtkDir();
-	_vector vAtkDir = XMLoadFloat4(&AtkDir);
+
+	//0°íÁ¤
+	AtkDir.y = 0.0f;
+
+	_vector vAtkDir = XMVector4Normalize( XMLoadFloat4(&AtkDir));
 	_float4 reverseAtkDir;
 	XMStoreFloat4(&reverseAtkDir, -vAtkDir);
 
@@ -2386,6 +2396,7 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 	if (m_isGuardHit)
 	{
 		m_isGuardHit = false;
+
 
 		m_pTransformCom->Set_Look(reverseAtkDir);
 
@@ -2479,8 +2490,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 					m_iSmallHit_Index = 0;
 				}
 			}
+			Player_Sound_Dmg(0, 0.8f);
 		}
-		Player_Sound_Dmg(0, 0.8f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2511,8 +2522,8 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			{
 				m_pModelCom->Set_Animation(ANIM_DMG_BIG); 
 			}
+			Player_Sound_Dmg(1, 0.8f);
 		}
-		Player_Sound_Dmg(1, 0.8f);
 	}
 	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.035f, AtkDir);
 
@@ -2533,8 +2544,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pTransformCom->Set_Look(reverseAtkDir);
 			Jumping(1.2f, 0.05f);
 			m_pModelCom->Set_Animation(ANIM_DMG_BLOW);
+
+			Player_Sound_Dmg(2, 0.8f);
 		}
-		Player_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_BLOW, 2.5f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 85, 2.5f * m_fDmg_Move_Ratio, AtkDir);
@@ -2557,8 +2569,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			m_pModelCom->Set_Animation(ANIM_DMG_SPIN);
 			//m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
 			m_pTransformCom->Set_Look(reverseAtkDir);
+
+			Player_Sound_Dmg(2, 0.8f);
 		}
-		Player_Sound_Dmg(2, 0.8f);
 	}
 	Go_Dir_Constant(dTimeDelta, ANIM_DMG_SPIN, 3.0f * m_fDmg_Move_Ratio, AtkDir);
 	Go_Dir_Constant(dTimeDelta, 110, 3.0f * m_fDmg_Move_Ratio, AtkDir);
@@ -2591,8 +2604,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			//Jumping(1.85f, 0.03f);
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+
+			Player_Sound_Dmg(1, 0.8f);
 		}
-		Player_Sound_Dmg(1, 0.8f);
 	}
 	if (m_isConnectHitting == false)
 	{
@@ -2613,8 +2627,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 			Jumping(2.0f, 0.075f);
 			m_pModelCom->Set_Animation(ANIM_FALL);
 			m_pTransformCom->LerpVector(XMLoadFloat4(&reverseAtkDir), 0.8f);
+
+			Player_Sound_Dmg(1, 0.75);
 		}
-		Player_Sound_Dmg(1, 0.75);
 	}
 
 #pragma endregion
@@ -2650,8 +2665,9 @@ void CPlayer_Zenitsu::Animation_Control_Battle_Dmg(_double dTimeDelta)
 				m_pModelCom->Set_Animation(141);
 				m_iSmallHit_Index = 0;
 			}
+
+			Player_Sound_Dmg(0, 0.75);
 		}
-		Player_Sound_Dmg(0, 0.75);
 	}
 #pragma endregion
 
