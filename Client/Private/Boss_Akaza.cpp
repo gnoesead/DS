@@ -405,14 +405,14 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_0", m_pTransformCom);
 					
-					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("hit_nezuko_S_1.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
 				}
 				else if (3 == (m_iEvent_Index % 6))
 				{
 					CEffectPlayer::Get_Instance()->Play("Akaza_Part_Combo_Punch_1", m_pTransformCom);
 
-					_tchar szSoundFile[MAX_PATH] = TEXT("swing_08.ogg");
+					_tchar szSoundFile[MAX_PATH] = TEXT("hit_nezuko_S_2.ogg");
 					Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT_2, 0.4f);
 				}
 				/*else if (4 == (m_iEvent_Index % 6))
