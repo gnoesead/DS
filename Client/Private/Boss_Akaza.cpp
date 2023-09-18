@@ -134,7 +134,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 	if (m_bTanjiroAwake == false && m_bZenitsuAwake == false)
 	{
 		Update_Hit_Messenger(dTimeDelta);
-		//Update_Trigger(dTimeDelta);
+		Update_Trigger(dTimeDelta);
 		Update_State(dTimeDelta);
 
 		m_pModelCom->Set_Animation(m_eCurAnimIndex);
