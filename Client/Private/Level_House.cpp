@@ -365,31 +365,31 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 
 			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 			}
 			else if (Event_Time(dTimeDelta, 1.6, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 1.5,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk_15");
 			}
 			else if (Event_Time(dTimeDelta, 3.0, m_dTimeAcc))
 			{
@@ -409,11 +409,12 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 
 			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
 
-			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			
+			if (Event_Time(dTimeDelta, 1.0, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 1.0f, 0.f), 2.0,
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 1.0f, 0.f), 1.5,
 					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
-			}		
+			}
 			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
 			{
 				m_dTimeAcc = 0.0;
@@ -429,18 +430,101 @@ void CLevel_House::House_Gimmick(_double dTimeDelta)
 			m_dTimeAcc += dTimeDelta;
 			_vector vCenterPos = { 150.6f, 0.f, 57.4f, 1.f };
 			_vector vVerticalPos = { 144.6f, 0.f, 57.4f, 1.f };
+			_vector vHorizonPos = { 150.6f, 0.f, 51.4f, 1.f };
 
 			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
+			_vector vHorizonDir = XMVector3Normalize(vHorizonPos - vCenterPos);
 
-			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+
+			if (Event_Time(dTimeDelta, 1.0, m_dTimeAcc))
 			{
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(6.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(5.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
 
-				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-6.f, 1.0f, 0.f), 2.0,
-					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-5.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+			}
+			else if (Event_Time(dTimeDelta, 2.5, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(4.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-4.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
 			}
 			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 5.5, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(2.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-2.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 7.0, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(1.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-1.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 8.5, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-0.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 9.0, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-0.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 10.5, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-1.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(1.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 12.0, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-2.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(2.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 13.5, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 15.0, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-4.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(4.5f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_THIRD, "Kyogai_BladeAtk_15");				
+			}
+			else if (Event_Time(dTimeDelta, 16.5, m_dTimeAcc))
 			{
 				m_dTimeAcc = 0.0;
 			}
@@ -489,7 +573,9 @@ void CLevel_House::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _fl
 	}
 
 	if (nullptr != pEffectWorldDesc)
+	{
 		AtkCollDesc.EffectWorldDesc = *pEffectWorldDesc;
+	}
 	else
 	{
 		AtkCollDesc.EffectWorldDesc = CEffectPlayer::EFFECTWORLDDESC();
@@ -2484,6 +2570,12 @@ HRESULT CLevel_House::Ready_Layer_Effect()
 	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk.bin"))))
 	{
 		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk");
+		return E_FAIL;
+	}
+
+	if (FAILED(LoadEffects(TEXT("../Bin/DataFiles/Effect/Kyogai/Kyogai_BladeAtk_15.bin"))))
+	{
+		MSG_BOX("Failed to Load Effect : Kyogai_BladeAtk_15");
 		return E_FAIL;
 	}
 

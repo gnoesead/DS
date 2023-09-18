@@ -648,7 +648,23 @@ void CAtkCollider::Setting_Second_Gimmick_Bullet()
 }
 
 void CAtkCollider::Setting_Third_Gimmick_Bullet()
-{
+{	
+	m_pTransformCom->Set_WorldMatrix(m_pTransformCom->Get_WorldMatrix() * m_AtkCollDesc.pParentTransform->Get_WorldMatrix());
+
+	_vector vCenterPos = { 150.6f, 0.f, 57.4f, 1.f };
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vCenterPos);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos += XMVector3Normalize(XMLoadFloat4(&m_AtkCollDesc.AtkDir)) * 6.f;
+	vPos = XMVectorSetY(vPos, 0.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_pTransformCom->LookAt_FixY(vCenterPos);
+
+	m_vDir = vCenterPos - vPos;
+	m_vDir = XMVector3Normalize(m_vDir);
 }
 
 void CAtkCollider::Setting_Fourth_Gimmick_Bullet()
