@@ -67,11 +67,13 @@ _uint CMissionManager::Get_Sub_Num()
 
 void CMissionManager::Plus_Main_Sub_Num()
 {
+
 	m_Main_Sub_Num++;
 }
 
 void CMissionManager::Plus_Sub_Num()
 {
+	
 	m_Sub_Num++;
 }
 

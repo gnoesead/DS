@@ -467,7 +467,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_Decal", m_pTransformCom);
+				if(pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo1_DecalParticle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -510,7 +511,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_Decal", m_pTransformCom);
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo2_DecalParticle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -546,7 +548,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_Decal", m_pTransformCom);
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo3_DecalParticle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -593,7 +596,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (2 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1", m_pTransformCom);
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal1Particle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -614,7 +618,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			else if (3 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2", m_pTransformCom);
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Down_Decal2Particle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -693,7 +698,8 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_Decal", m_pTransformCom);
+				if (pGameInstance->Get_CurLevelIdx() != LEVEL_TRAIN)
+					CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_Decal", m_pTransformCom);
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_BasicCombo4_Up_DecalParticle", m_pTransformCom);
 
 				if (m_Moveset.m_iAwaken != 0)
@@ -973,14 +979,16 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 
 				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2", m_pTransformCom);
 
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
 			}
 		}
 		if (40 == m_pModelCom->Get_iCurrentAnimIndex()) // SKILL_MOVE µµÁß
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle2", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
@@ -993,7 +1001,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (2 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle2", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_CONNECTSMALL, vPlayerDir, 1.0f * fDmg);
@@ -1011,7 +1021,9 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 		{
 			if (0 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle2", m_pTransformCom);
 
 				Make_AttackColl(TEXT("Layer_PlayerAtk"), _float3(3.0f, 3.0f, 3.0f), _float3(0.f, 1.0f, 0.0f), 0.1,
 					CAtkCollider::TYPE_BIG, vPlayerDir, 10.0f * fDmg);
@@ -1020,19 +1032,24 @@ void CPlayer_Tanjiro::EventCall_Control(_double dTimeDelta)
 			}
 			if (1 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle2", m_pTransformCom);
 
 				m_pRendererCom->Set_BloomRatio(1.f);
 			}
 			if (2 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
+
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle2", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_DecalParticle1", m_pTransformCom);
 
 				m_pRendererCom->Set_BloomRatio(1.f);
 			}
 			if (3 == m_iEvent_Index)
 			{
-				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmoke", m_pTransformCom);
+				CEffectPlayer::Get_Instance()->Play("Tanjiro_Super2_ParticleSmokeStone", m_pTransformCom);
 			}
 			if (4 == m_iEvent_Index)
 			{
@@ -2956,7 +2973,7 @@ void CPlayer_Tanjiro::Animation_Control_Adventure_Move(_double dTimeDelta)
 		m_pModelCom->Set_Animation(ANIM_DMG_BIG);
 		Play_Sound_Dmg(1, 0.8f);
 	}
-	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.042f, reverseAtkDir_KyoBlade);
+	Go_Dir_Deceleration(dTimeDelta, ANIM_DMG_BIG, 2.0f, 0.05f, reverseAtkDir_KyoBlade);
 
 	if (m_isADV_KyoBlade_Hit)
 	{

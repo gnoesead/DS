@@ -354,7 +354,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -402,7 +402,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -447,7 +447,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 			
 
@@ -496,7 +496,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -542,7 +542,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 			m_dDelay_ComboReset_2 = 0.0;
@@ -587,7 +587,7 @@ void CPlayer::Trigger_Hit(_double dTimeDelta)
 				EffectWorldDesc.vPosition.y -= 2.5f;
 				EffectWorldDesc.vPosition.z -= 0.f;
 
-				//CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
+				CEffectPlayer::Get_Instance()->Play("Zen_Hit_Particle", m_pTransformCom, &EffectWorldDesc);
 			}
 
 
