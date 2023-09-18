@@ -83,7 +83,7 @@ public:
 		isFirst_Player_Change = true ;
 		isFirst_Setting_Status =  true ;
 		PlayerPos_Change = { 0.0f, 0.0f, 0.0f,  1.0f };
-	}
+	}	
 
 private:
 	_bool	m_isSlow = { false };

@@ -46,6 +46,7 @@
 #include "DialogManager.h"
 #include "OptionManager.h"
 #include "MissionManager.h"
+#include "AtkCollManager.h"
 #include "SmellBundle.h"
 
 
@@ -309,15 +310,44 @@ void CLevel_House::Tick(_double dTimeDelta)
 		bChangeBossBGM = true;
 	}
 
+	House_Gimmick(dTimeDelta);
+
+
+	Safe_Release(pGameInstance);
+}
+
+HRESULT CLevel_House::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CLevel_House::House_Gimmick(_double dTimeDelta)
+{
 	_float fPosZ = XMVectorGetZ(CPlayerManager::GetInstance()->Get_Player_Pos());
 	_float fPosX = XMVectorGetX(CPlayerManager::GetInstance()->Get_Player_Pos());
+
 	_bool bGimmick_RoomTrigger = (51.f <= fPosZ && fPosZ <= 63.f);
+
 	if (true == bGimmick_RoomTrigger)
 	{
 		_bool bFirst_Trigger = (170.f < fPosX && fPosX <= 182.f);
 		_bool bSecond_Trigger = (158.f < fPosX && fPosX <= 170.f);
 		_bool bThird_Trigger = (144.f < fPosX && fPosX <= 158.f);
 		_bool bFourth_Trigger = (131.f < fPosX && fPosX <= 144.f);
+
+		CGameInstance* pGameInstance = CGameInstance::GetInstance();
+		Safe_AddRef(pGameInstance);
+
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(pGameInstance->Get_GameObject(pGameInstance->Get_CurLevelIdx(), TEXT("Layer_Player"), CPlayerManager::GetInstance()->Get_PlayerIndex()));
+		CTransform* pPlayerTransform = nullptr;
+
+		if (pPlayer != nullptr)
+		{
+			pPlayerTransform = pPlayer->Get_TransformCom();
+		}
 
 		if (true == bFirst_Trigger)
 		{
@@ -327,11 +357,44 @@ void CLevel_House::Tick(_double dTimeDelta)
 				m_dTimeAcc = 0.0;
 			}
 			m_dTimeAcc += dTimeDelta;
+			_vector vCenterPos = { 176.6f, 0.f, 57.4f, 1.f };
+			_vector vHorizonPos = { 176.6f, 0.f, 51.4f, 1.f };
+
+			_vector vHorizonDir = XMVector3Normalize(vHorizonPos - vCenterPos);
+
+
 			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
 			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 			}
+			else if (Event_Time(dTimeDelta, 1.6, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
 
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-3.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, -vHorizonDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_FIRST, "Kyogai_BladeAtk");
+			}
+			else if (Event_Time(dTimeDelta, 3.0, m_dTimeAcc))
+			{
+				m_dTimeAcc = 0.0;
+			}
 		}
 		else if (true == bSecond_Trigger)
 		{
@@ -341,6 +404,20 @@ void CLevel_House::Tick(_double dTimeDelta)
 				m_dTimeAcc = 0.0;
 			}
 			m_dTimeAcc += dTimeDelta;
+			_vector vCenterPos = { 164.6f, 0.f, 57.4f, 1.f };
+			_vector vVerticalPos = { 158.6f, 0.f, 57.4f, 1.f };
+
+			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
+
+			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(0.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+			}		
+			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
+			{
+				m_dTimeAcc = 0.0;
+			}
 		}
 		else if (true == bThird_Trigger)
 		{
@@ -350,6 +427,23 @@ void CLevel_House::Tick(_double dTimeDelta)
 				m_dTimeAcc = 0.0;
 			}
 			m_dTimeAcc += dTimeDelta;
+			_vector vCenterPos = { 150.6f, 0.f, 57.4f, 1.f };
+			_vector vVerticalPos = { 144.6f, 0.f, 57.4f, 1.f };
+
+			_vector vVerticalDir = XMVector3Normalize(vVerticalPos - vCenterPos);
+
+			if (Event_Time(dTimeDelta, 0.1, m_dTimeAcc))
+			{
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(6.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+
+				Make_AtkBulletColl(TEXT("Layer_MonsterAtk"), _float3(0.5f, 0.5f, 0.5f), _float3(-6.f, 1.0f, 0.f), 2.0,
+					CAtkCollider::TYPE_SMALL, vVerticalDir, 0.f, pPlayerTransform, 3.0, CAtkCollider::TYPE_GIMMICK_SECOND, "Kyogai_BladeAtk");
+			}
+			else if (Event_Time(dTimeDelta, 4.0, m_dTimeAcc))
+			{
+				m_dTimeAcc = 0.0;
+			}
 		}
 		else if (true == bFourth_Trigger)
 		{
@@ -365,17 +459,46 @@ void CLevel_House::Tick(_double dTimeDelta)
 			m_dTimeAcc = 0.0;
 			m_bReset_TimeAcc = false;
 		}
+		Safe_Release(pGameInstance);
 	}
 
-	Safe_Release(pGameInstance);
 }
 
-HRESULT CLevel_House::Render()
+void CLevel_House::Make_AtkBulletColl(const _tchar* pLayerTag, _float3 Size, _float3 Pos, _double DurationTime, CAtkCollider::ATK_TYPE AtkType, _vector vAtkDir, _float fDmg, CTransform* pTransform, _double Speed, CAtkCollider::BULLET_TYPE eBulletType, const char* pEffectTag, CEffectPlayer::EFFECTWORLDDESC* pEffectWorldDesc)
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
+	CAtkCollider::ATKCOLLDESC AtkCollDesc;
+	ZeroMemory(&AtkCollDesc, sizeof AtkCollDesc);
 
-	return S_OK;
+	AtkCollDesc.ColliderDesc.vSize = Size;
+	AtkCollDesc.ColliderDesc.vPosition = Pos;
+
+	AtkCollDesc.dLifeTime = DurationTime;
+
+	AtkCollDesc.pParentTransform = pTransform;
+
+	AtkCollDesc.eAtkType = AtkType;
+	AtkCollDesc.eBulletType = eBulletType;
+
+	AtkCollDesc.fDamage = fDmg;
+	AtkCollDesc.Speed = Speed;
+
+	AtkCollDesc.bBullet = true;
+	//if (true == AtkCollDesc.bBullet)
+	{
+		strcpy_s(AtkCollDesc.pEffectTag, pEffectTag);
+	}
+
+	if (nullptr != pEffectWorldDesc)
+		AtkCollDesc.EffectWorldDesc = *pEffectWorldDesc;
+	else
+	{
+		AtkCollDesc.EffectWorldDesc = CEffectPlayer::EFFECTWORLDDESC();
+		AtkCollDesc.EffectWorldDesc.vPosition.x += AtkCollDesc.ColliderDesc.vPosition.x;
+	}
+
+	XMStoreFloat4(&AtkCollDesc.AtkDir, XMVector3Normalize(vAtkDir));
+
+	CAtkCollManager::GetInstance()->Reuse_Collider(pLayerTag, &AtkCollDesc);
 }
 
 HRESULT CLevel_House::Ready_Lights()
