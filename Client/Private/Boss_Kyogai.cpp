@@ -262,10 +262,10 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		{
 			Trigger_AtkStep();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_5))
+		/*if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
 			Trigger_Awake();
-		}
+		}*/
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
 			Trigger_AtkPunch();
@@ -292,10 +292,10 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		{
 			Trigger_Awake_AtkskCmb();
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_5))
+		/*if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
 			Trigger_AtkCmb2();
-		}
+		}*/
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
 			pGameInstance->Time_Slow(0.5, 0.2);
@@ -320,10 +320,10 @@ void CBoss_Kyogai::Debug_State(_double dTimeDelta)
 		{
 
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_5))
+		/*if (pGameInstance->Get_DIKeyDown(DIK_5))
 		{
 
-		}
+		}*/
 		if (pGameInstance->Get_DIKeyDown(DIK_6))
 		{
 
