@@ -142,7 +142,7 @@ void CBoss_Akaza::Tick(_double dTimeDelta)
 
 		EventCall_Control(dTimeDelta);
 
-		//Dialog_Update(dTimeDelta);
+		Dialog_Update(dTimeDelta);
 	}
 
 	if (m_isAuroraOn && !m_bAwake)
@@ -595,6 +595,8 @@ void CBoss_Akaza::EventCall_Control(_double dTimeDelta)
 
 				_tchar szSoundFile[MAX_PATH] = TEXT("aura_02.ogg");
 				Play_Sound_Channel(szSoundFile, CSoundMgr::AKAZA_ATK_EFFECT, 0.4f);
+
+				m_eCurPart = PART_2;
 			}
 		}
 		if (ANIM_AWAKE_PUSHAWAY == m_pModelCom->Get_iCurrentAnimIndex())
@@ -1966,6 +1968,7 @@ void CBoss_Akaza::Update_Phase_2(_double dTimeDelta)
 		m_bPatternStart = false;
 		m_dTriggerTime = 0.0;
 
+		m_eCurPart = PART_3;
 
 	}
 	if ((m_StatusDesc.fHp / m_StatusDesc.fHp_Max) <= 0.3f && m_bSecondAwake == false)
@@ -4475,158 +4478,119 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 
 void CBoss_Akaza::Dialog_Update(_double dTimeDelta)
 {
-	m_dDialogAccTime += dTimeDelta;
-
-	//if (!m_bPart2)
+	if (PART_1 == m_eCurPart)
 	{
-		if (Event_Time(dTimeDelta, 7.f, m_dDialogAccTime))
-		{
-			Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("인간 주제에 날 이길 수 있을 거라고 생각하지 마라!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_TakagaNingen.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		}
+		m_dDialogAccTime += dTimeDelta;
 
-		else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime))
+		if (Event_Time(dTimeDelta, 10.f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("네놈들 따윈 지금 당장 찢어발겨 주마!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_SonoTsurani.ogg");
+			Set_CharacterDialog(8.f, TEXT("[아카자]"), TEXT("지금까지 나한테 덤벼드는 여러 인간들을 죽였지만") , TEXT("혈귀가 되라는 내 제안에 응하는 자도 없었지!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_0.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-
-		else if (Event_Time(dTimeDelta, 20.f, m_dDialogAccTime))
+		else if(Event_Time(dTimeDelta, 18.5f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(5.f, TEXT("[늪 혈귀 (뿔 1개)]"), TEXT("...이 녀석, 인간 주제에 그럭저럭 강하군"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Aitus.ogg");
+			Set_CharacterDialog(6.f, TEXT("[아카자]"), TEXT("왜지? 똑같이 무의 길을"), TEXT("걷는 자로서 이해가 안돼!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_1.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-
-		else if (Event_Time(dTimeDelta, 26.f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 25.0f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(5.f, TEXT("[카마도 탄지로]"), TEXT("(지금까지는 셋을 상대로 잘 싸우고 있어..!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Coco.ogg");
+			Set_CharacterDialog(4.f, TEXT("[아카자]"), TEXT("선택받은 자만이 혈귀가 될 수 있는데!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_2.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-
-		else if (Event_Time(dTimeDelta, 31.5f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 29.5f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("좋아! 이대로 한 번에 끝낸다..!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Yosi.ogg");
+			Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("이 훌륭한 반응 속도!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_3.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-
-		else if (Event_Time(dTimeDelta, 38.f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 33.f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("너희한테선 썩은 기름 같은 냄새가 나!"), TEXT("지독한 악취다!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Akchi.ogg");
+			Set_CharacterDialog(6.f, TEXT("[아카자]"), TEXT("이 멋진 검술도 잃게 될거다.") , TEXT("슬프지 않나?!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_4.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 44.5f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 39.5f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 죽인거야?!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai.ogg");
+			Set_CharacterDialog(3.f, TEXT("[카마도 탄지로]"), TEXT("닥쳐! 혈귀가 되는건 싫어!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_5_Tanjiro.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 49.0f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 43.f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("대체 사람을 얼마나 먹은거야?!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Itai2.ogg");
+			Set_CharacterDialog(8.f, TEXT("[아카자]"), TEXT("훌륭한 재능을 지닌 자가 형편없이 쇠약해져!") , TEXT("나는 괴롭다! 견딜 수 없어!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_5.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 54.0f, m_dDialogAccTime))
+		else if (Event_Time(dTimeDelta, 52.f, m_dDialogAccTime))
 		{
-			Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("여자들은!! 그 이상 살아 있으면"), TEXT("추하고 맛없어진단 말이다!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Honna.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		}
-		else if (Event_Time(dTimeDelta, 60.5f, m_dDialogAccTime))
-		{
-			Set_CharacterDialog(6.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("그래서 먹어준 거다!!"), TEXT("우리 혈귀한테 감사하라고!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Kata.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		}
-		else if (Event_Time(dTimeDelta, 68.f, m_dDialogAccTime))
-		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(셋이 연계를 취하고 있어..!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp0.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		}
-		else if (Event_Time(dTimeDelta, 73.f, m_dDialogAccTime))
-		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(선수를 빼앗기면 안돼! 앞을 내다봐!!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp1.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		}
-		else if (Event_Time(dTimeDelta, 78.f, m_dDialogAccTime))
-		{
-			Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("(다음에 뭘 할지 예측해! 그리고 반응하는 거야!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp2.ogg");
+			Set_CharacterDialog(4.f, TEXT("[아카자]"), TEXT("죽어라. 젊고 강한 지금 이대로!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_6.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
 	}
 
-	//if (m_bPart2)
+	if (PART_2 == m_eCurPart)
 	{
 		m_dDialogAccTime2 += dTimeDelta;
 
-		if (Event_Time(dTimeDelta, 0.f, m_dDialogAccTime2))
+		if (Event_Time(dTimeDelta, 3.f, m_dDialogAccTime2))
 		{
-			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("으아아아아악!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Part2_0.ogg");
+			Set_CharacterDialog(6.f, TEXT("[아카자]"), TEXT("뼈를 깎는 마음으로 싸운다고 해도"), TEXT("전부 헛수고다"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_8.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 5.f, m_dDialogAccTime2))
+		else if (Event_Time(dTimeDelta, 9.5f, m_dDialogAccTime2))
 		{
-			Set_CharacterDialog(7.f, TEXT("[카마도 탄지로]"), TEXT("(자포자기 상태야..!"), TEXT("이 상태로는 무슨 짓을 할지 몰라.. 위험해...!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_0.ogg");
+			Set_CharacterDialog(10.f, TEXT("[아카자]"), TEXT("그런데 넌 어떻지? 멀어버린 왼쪽 눈, 부서진 갈비뼈,"), TEXT("부상당한 내장, 이제 돌이킬 수가 없어"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_9.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 13.f, m_dDialogAccTime2))
+		else if (Event_Time(dTimeDelta, 20.f, m_dDialogAccTime2))
 		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(어서 녀석의 목을 베자..!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_1.ogg");
+			Set_CharacterDialog(6.f, TEXT("[아카자]"), TEXT("혈귀였으면 눈 깜짝할 새에 나았다"), TEXT("그 정도는 혈귀한텐 상처도 아니다"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_10.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 18.f, m_dDialogAccTime2))
+		
+	}
+
+	if (PART_3 == m_eCurPart)
+	{
+		m_dDialogAccTime3 += dTimeDelta;
+
+		if (Event_Time(dTimeDelta, 7.0f, m_dDialogAccTime2))
 		{
-			Set_CharacterDialog(4.f, TEXT("[늪 혈귀 (뿔 2개)]"), TEXT("하하! 어디 한번 공격해봐라!!"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Talk_Part2_2.ogg");
+			Set_CharacterDialog(5.f, TEXT("[아카자]"), TEXT("아무리 발버둥 쳐도 인간은 혈귀를 이길 수 없어!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Talk_11.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 23.f, m_dDialogAccTime2))
+
+		else if (Event_Time(dTimeDelta, 12.5f, m_dDialogAccTime3))
 		{
-			Set_CharacterDialog(4.f, TEXT("[카마도 탄지로]"), TEXT("(어디서 튀어나올지 전혀 감이 안와!)"));
-			_tchar szSoundFile[MAX_PATH] = TEXT("Tanjiro_Talk_Swamp_Part2_2.ogg");
+			Set_CharacterDialog(6.f, TEXT("[카마도 탄지로]"), TEXT("내가 있는 한 그 누구도 죽게 놔두지 않는다!!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("Kyogai_Talk_40_Tanjiro.ogg");
 			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 29.f, m_dDialogAccTime2))
+		else if (Event_Time(dTimeDelta, 18.0f, m_dDialogAccTime3))
 		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_SonoOnna.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+			Set_CharacterDialog(3.f, TEXT("[아카자]"), TEXT("멋진 투기야......!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN09#62.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 33.f, m_dDialogAccTime2))
+		else if (Event_Time(dTimeDelta, 21.5f, m_dDialogAccTime3))
 		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Yeeee.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+			Set_CharacterDialog(7.f, TEXT("[아카자]"), TEXT("그렇게 부상을 입었는데도 엄청난 기백이야!"), TEXT("그 정신력! 한 치의 틈도 없는 자세!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN09#63.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
-		else if (Event_Time(dTimeDelta, 38.f, m_dDialogAccTime2))
+		else if (Event_Time(dTimeDelta, 29.0f, m_dDialogAccTime3))
 		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Onore.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
-		}
-		else if (Event_Time(dTimeDelta, 41.f, m_dDialogAccTime2))
-		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Laugh.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
-		}
-		else if (Event_Time(dTimeDelta, 44.f, m_dDialogAccTime2))
-		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_SonoOnna.ogg.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
-		}
-		else if (Event_Time(dTimeDelta, 48.f, m_dDialogAccTime2))
-		{
-			_tchar szSoundFile[MAX_PATH] = TEXT("Swamp_Shout_Onore.ogg");
-			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.4f);
+			Set_CharacterDialog(5.f, TEXT("[아카자]"), TEXT("역시 넌 혈귀가 되어라!"), TEXT("나와 영원히 싸우는 거다!"));
+			_tchar szSoundFile[MAX_PATH] = TEXT("V_MAIN09#64.ogg");
+			Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
 		}
 	}
 }

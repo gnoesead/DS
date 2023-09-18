@@ -54,7 +54,7 @@ HRESULT CSwamp_AlertRect::Initialize(void* pArg)
 	m_iNum = i;
 	++i;
 
-	_vector vPos = XMVectorSetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION), 3.31f + m_iNum * 0.001f);
+	_vector vPos = XMVectorSetY(m_EffectDesc.pOwnerTransform->Get_State(CTransform::STATE_POSITION), 3.36f + m_iNum * 0.001f);
 	m_pTransformCom->Scaling(_float3(0.03f, 1.f, 0.10f));
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
