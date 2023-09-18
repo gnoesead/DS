@@ -4186,7 +4186,7 @@ void CBoss_Kyogai::Wave_Bullet(_double dTimeDelta, _double dTime, _fvector vDir)
 		_tchar szSoundFile2[MAX_PATH] = TEXT("cut_finalHit_01.ogg");
 		Play_Sound_Channel(szSoundFile2, CSoundMgr::KYOGAI_BLADE_3, 0.4f);
 	}
-	if (dTime + dLifeTime < m_dTurnTime && m_dTurnTime <= dTime + dLifeTime + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
+	if (dTime + 4.0 < m_dTurnTime && m_dTurnTime <= dTime + 4.0 + dTimeDelta) // 이 패턴은 나아 가는 방향 그대로 표시 해주면 됨
 	{
 		RandomNum = Random::Generate_Int(1, 2);
 		//if (RandomNum == 1)

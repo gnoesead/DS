@@ -221,7 +221,6 @@ private: //패턴 함수들
 	void Update_Awake_AtkskCmb(_double dTimeDelta);	//와다다다 패턴임
 	void Update_AtkSk(_double dTimeDelta);
 	void Update_AtkPangPang(_double dTimeDelta);
-
 	void Update_Hit_Small(_double dTimeDelta);
 	void Update_Hit_Upper(_double dTimeDelta);
 	void Update_Hit_Big(_double dTimeDelta);
@@ -235,7 +234,6 @@ private: //패턴 함수들
 	void Update_Hit_BigGetUp(_double dTimeDelta);
 	void Update_Hit_Hekireki(_double dTimeDelta);
 	void Update_Hit_Dead(_double dTimeDelta);
-
 	void Update_RoomChange(_double dTimeDelta);
 	void Update_RoomChange_2(_double dTimeDelta);
 

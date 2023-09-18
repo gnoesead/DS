@@ -223,7 +223,7 @@ void CPlayer_Tanjiro::Tick(_double dTimeDelta)
 	}
 
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD8))
+	if (pGameInstance->Get_DIKeyDown(DIK_6))
 	{
 		if (m_isStealthMode)
 			m_isStealthMode = false;

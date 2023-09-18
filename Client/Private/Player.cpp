@@ -1087,7 +1087,7 @@ void CPlayer::Key_Input_Battle_Skill(_double dTimeDelta)
 				m_Moveset.m_Down_Skill_Normal = true;
 			}
 		}
-		if (pGameInstance->Get_DIKeyDown(DIK_P) /* && m_isCan_Air_Hekireki == false */)
+		if (pGameInstance->Get_DIKeyDown(DIK_E) /* && m_isCan_Air_Hekireki == false */)
 		{
 			m_Moveset.m_Down_Skill_Guard = true;
 		}
@@ -1313,10 +1313,10 @@ void CPlayer::Key_Input_Battle_Special(_double dTimeDelta)
 	{
 		if (m_Moveset.m_isRestrict_Step == false)
 		{
-			if (pGameInstance->Get_DIKeyDown(DIK_E))
+			/*if (pGameInstance->Get_DIKeyDown(DIK_E))
 			{
 				m_Moveset.m_Down_Battle_Special = true;
-			}
+			}*/
 		}
 	}
 

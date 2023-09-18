@@ -4453,7 +4453,7 @@ void CBoss_Akaza::Update_Hit_Dead(_double dTimeDelta)
 		m_dDeadParticleAccTime += dTimeDelta;
 		m_dDeadSmokeAccTime += dTimeDelta;
 
-		if (m_fDeadTime > 1.8f && m_fDeadTime < 7.5f)
+		if (m_fDeadTime > 1.8f && m_fDeadTime < 10.5f)
 		{
 			if (m_fDeadTime > 2.2f)
 			{
@@ -4667,7 +4667,6 @@ void CBoss_Akaza::Dead_Dialog_Update(_double dTimeDelta, _double dTimeAcc)
 		Set_CharacterDialog(2.f, TEXT("[아카자]"), TEXT("어...?"));
 		_tchar szSoundFile[MAX_PATH] = TEXT("Akaza_Death_2.mp3");
 		Play_Sound_Channel(szSoundFile, CSoundMgr::CHARACTER_DIALOG, 0.8f);
-		m_bStopAnim = false;
 		m_pRendererCom->Set_Invert();
 	}
 	else if (Event_Time(dTimeDelta, 1.0, dDialogAcc))

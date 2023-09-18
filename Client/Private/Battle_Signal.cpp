@@ -122,12 +122,12 @@ void CBattle_Signal::Tick(_double TimeDelta)
 	}
 
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD5)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_7)) {
 
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Start_On(true);
 	}
 
-	if (pGameInstance->Get_DIKeyDown(DIK_NUMPAD6)) {
+	if (pGameInstance->Get_DIKeyDown(DIK_8)) {
 
 		CBattle_UI_Manager::GetInstance()->Set_Battle_Finish_On(true);
 	}
