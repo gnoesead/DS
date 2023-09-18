@@ -935,9 +935,9 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 		}
 		else
 		{
-			m_iIndex_Rage = 2;
-			if (m_iIndex_Rage == 2)
-			{
+			//m_iIndex_Rage = 2;
+			//if (m_iIndex_Rage == 2)
+			//{
 				if (m_dCooltime_Atk_Pattern > 0.1f)
 				{
 					m_dCooltime_Atk_Pattern = 0.0;
@@ -957,7 +957,7 @@ void CMonster_Swamp::Animation_Control_Idle(_double dTimeDelta)
 						m_eCurPattern = PATTERN_RAGE_DUDUGE_ATK;
 					}
 				}
-			}
+			//}
 
 		}
 
@@ -2355,6 +2355,8 @@ void CMonster_Swamp::Animation_Control_Hit(_double dTimeDelta)
 
 				pGameInstance->Time_Slow(0.6, 0.3);
 				Play_Sound_Dmg(1, 0.7f);
+
+				m_iIndex_Rage = 0;
 			}
 		}
 		else if (CSwampManager::GetInstance()->Get_Hp_Phase() == 2)
